@@ -18,8 +18,7 @@
 }
 
 .display-messages {
-  min-height: 500px;
-  height: calc(100% - 80px);
+  height: calc(100vh - 100px);
 }
 
 .chat-user {
@@ -100,6 +99,10 @@
   .new-message-user-list {
     height: 500px;
     overflow-y: auto;
+  }
+
+  .chat-section {
+    max-height: calc(100vh - 70px);
   }
 }
 

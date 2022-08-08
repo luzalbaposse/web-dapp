@@ -106,7 +106,7 @@ const MessageExchange = (props) => {
     const { user, username, messengerWithTalent } = props;
 
     if (mine(message)) {
-      if (user.withTalent) {
+      if (user.receiver_with_talent) {
         return `u/${user.username}`;
       }
     } else {
@@ -117,7 +117,7 @@ const MessageExchange = (props) => {
   };
 
   return (
-    <div className="d-flex flex-column">
+    <div className="d-flex flex-column lg-h-100">
       {props.smallScreen && (
         <>
           <div className="d-flex flex-row align-items-center w-100 py-2">
@@ -150,7 +150,7 @@ const MessageExchange = (props) => {
       )}
       <div
         id="messages"
-        className="px-3 overflow-y-scroll display-messages d-flex flex-column pb-3"
+        className="px-3 overflow-y-scroll d-flex flex-column pb-3 display-messages"
       >
         {props.messages.length === 0 && props.activeUserId === 0 && (
           <CommunicateFirst />

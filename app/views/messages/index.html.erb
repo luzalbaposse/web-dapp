@@ -1,20 +1,13 @@
 <main class="main-content">
 <%= react_component("Chat",
   props: {
-    users: @users.map { |user|
-      {
-        id: user.id,
-        username: user.username,
-        ticker: user.talent&.token&.ticker,
-        withTalent: user.talent.present?,
-        lastOnline: user.updated_at,
-        last_message: current_user.last_message_with(user)&.text,
-        last_message_date: current_user.last_message_with(user)&.created_at,
-        profilePictureUrl: user.talent&.profile_picture_url || user.investor&.profile_picture_url,
-        unreadMessagesCount: @unread_messages_counts[user],
-        messagingDisabled: user.messaging_disabled
-      }
+    pagination: {
+      totalItems: @pagy.count,
+      currentPage: @pagy.page,
+      lastPage: @pagy.last,
+      recordsPerPage: @pagy.vars[:items]
     },
+    chats: @chats,
     user: {
       id: current_user.id,
       username: current_user.username,

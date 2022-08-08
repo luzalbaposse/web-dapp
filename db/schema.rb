@@ -82,6 +82,20 @@ ActiveRecord::Schema.define(version: 2022_08_04_094323) do
     t.index ["talent_id"], name: "index_career_goals_on_talent_id"
   end
 
+  create_table "chats", force: :cascade do |t|
+    t.datetime "last_message_at", null: false
+    t.bigint "sender_id", null: false
+    t.bigint "receiver_id", null: false
+    t.integer "sender_unread_messages_count", default: 0
+    t.integer "receiver_unread_messages_count", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.text "last_message_text_ciphertext"
+    t.index ["receiver_id"], name: "index_chats_on_receiver_id"
+    t.index ["sender_id", "receiver_id"], name: "index_chats_on_sender_id_and_receiver_id", unique: true
+    t.index ["sender_id"], name: "index_chats_on_sender_id"
+  end
+
   create_table "comments", force: :cascade do |t|
     t.text "text"
     t.datetime "created_at", precision: 6, null: false
@@ -220,6 +234,8 @@ ActiveRecord::Schema.define(version: 2022_08_04_094323) do
     t.text "text_ciphertext"
     t.boolean "is_read", default: false, null: false
     t.boolean "sent_to_supporters", default: false
+    t.bigint "chat_id"
+    t.index ["chat_id"], name: "index_messages_on_chat_id"
     t.index ["receiver_id"], name: "index_messages_on_receiver_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"
   end
@@ -490,6 +506,8 @@ ActiveRecord::Schema.define(version: 2022_08_04_094323) do
   end
 
   add_foreign_key "career_goals", "talent"
+  add_foreign_key "chats", "users", column: "receiver_id"
+  add_foreign_key "chats", "users", column: "sender_id"
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
   add_foreign_key "discovery_rows", "partnerships"
@@ -502,6 +520,7 @@ ActiveRecord::Schema.define(version: 2022_08_04_094323) do
   add_foreign_key "impersonations", "users", column: "impersonated_id"
   add_foreign_key "invites", "users"
   add_foreign_key "marketing_articles", "users"
+  add_foreign_key "messages", "chats"
   add_foreign_key "milestones", "talent"
   add_foreign_key "partnerships", "invites"
   add_foreign_key "perks", "talent"

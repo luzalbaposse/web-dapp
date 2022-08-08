@@ -10,9 +10,9 @@ RSpec.describe EmailReminders::SendTokenPurchaseReminderJob, type: :job do
     ENV["EMAIL_REMINDER_DAYS"] = "7"
   end
 
-  context "supporter created 7 days ago" do
+  context "supporter created 8 days ago" do
     before do
-      @investor = create :investor, created_at: 7.days.ago, user: user
+      @investor = create :investor, created_at: 8.days.ago, user: user
     end
 
     it "should send email if no token is purchased" do

@@ -10,8 +10,8 @@ RSpec.describe EmailReminders::SendTokenLaunchReminderJob, type: :job do
     ENV["EMAIL_REMINDER_DAYS"] = "10"
   end
 
-  context "talent created 10 days ago" do
-    let(:talent) { create :talent, created_at: 10.days.ago, user: user }
+  context "talent created 11 days ago" do
+    let(:talent) { create :talent, created_at: 11.days.ago, user: user }
 
     it "should email talent who did not launch token" do
       create :token, talent: talent, deployed: false
