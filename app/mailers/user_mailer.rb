@@ -47,6 +47,8 @@ class UserMailer < ApplicationMailer
     @notification = indifferent_access_params[:record].to_notification
     @notification.record.mark_as_emailed
 
+    set_profile_pictures_attachments([@sender])
+
     # we need to check if the user has unread messages
     should_sent = @user.has_unread_messages?
 
@@ -79,11 +81,12 @@ class UserMailer < ApplicationMailer
 
     invested_in_users = @user.portfolio(including_self: false, invested_after: digest_email_sent_at).limit(3)
     @invested_in_talents = Talent.where(user: invested_in_users).includes(:user)
-    set_talent_profile_pictures_attachments(@invested_in_talents)
+    set_profile_pictures_attachments(invested_in_users)
 
     @talents = Talent.base.active.where("tokens.deployed_at > ?", 2.weeks.ago).includes(:user).limit(3)
+    talent_users = User.where(id: @talents.pluck(:user_id))
 
-    set_talent_profile_pictures_attachments(@talents)
+    set_profile_pictures_attachments(talent_users)
 
     user_talent_supporters = TalentSupporter.where(supporter_wallet_id: @user.wallet_id)
 
@@ -119,11 +122,11 @@ class UserMailer < ApplicationMailer
     @indifferent_access_params ||= params.with_indifferent_access
   end
 
-  def set_talent_profile_pictures_attachments(talents)
-    talents.each do |talent|
-      attachments.inline["profile_picture-#{talent.id}.png"] = Down.download(talent.user.profile_picture_url).read
+  def set_profile_pictures_attachments(users)
+    users.each do |user|
+      attachments.inline["profile_picture-#{user.id}.png"] = Down.download(user.profile_picture_url).read
     end
   rescue => e
-    Rollbar.error(e, "Error downloading picture of talents: ##{talents.map(&:id).join(", ")}")
+    Rollbar.error(e, "Error downloading picture of users: ##{users.map(&:id).join(", ")}")
   end
 end

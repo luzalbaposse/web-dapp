@@ -1,5 +1,5 @@
-<% profile_picture_url = attachments["profile_picture-#{talent.id}.png"]&.url %>
 <% user = talent.user %>
+<% profile_picture_url = attachments["profile_picture-#{user.id}.png"]&.url %>
 
 <%= link_to edit_profile_url(username: @user.username) do %>
   <div class="row mb-5 border rounded-xl mx-0 gap-2">

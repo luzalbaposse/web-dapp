@@ -87,4 +87,19 @@ RSpec.describe UserMailer, type: :mailer do
       expect(mail.to).to eql([user.email])
     end
   end
+
+  describe "send message received email" do
+    let(:sender) { create :user }
+    let(:notification) { create :notification, type: "MessageReceivedNotification", recipient: user }
+    let(:mail) { described_class.with(recipient: user, sender_id: sender.id, record: notification).send_message_received_email }
+
+    before do
+      allow(user).to receive(:has_unread_messages?).and_return(true)
+    end
+
+    it "renders the header" do
+      expect(mail.subject).to eql("You've got a new message")
+      expect(mail.to).to eql([user.email])
+    end
+  end
 end
