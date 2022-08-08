@@ -11,17 +11,21 @@ import MessageUserList from "./MessageUserList";
 import MessageExchange from "./MessageExchange";
 import { useWindowDimensionsHook } from "../../utils/window";
 
-const Chat = ({ users, user }) => {
+const Chat = ({ chats, user, pagination }) => {
   const url = new URL(document.location);
   const [activeUserId, setActiveUserId] = useState(
     url.searchParams.get("user") || 0
   );
-  const [localUsers, setLocalUsers] = useState(users);
+  const [localChats, setLocalChats] = useState(chats);
+  const [localPagination, setLocalPagination] = useState(pagination);
   const [perkId, setPerkId] = useState(url.searchParams.get("perk") || 0);
   const [activeChannel, setActiveChannel] = useState(null); // @TODO: Refactor chat
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [lastMessageId, setLastMessageId] = useState(0);
+  const [searchValue, setSearchValue] = useState(
+    url.searchParams.get("q") || ""
+  );
   const [chatId, setChatId] = useState("");
   const [sendingMessage, setSendingMessage] = useState(false);
   const [gettingMessages, setGettingMessages] = useState(false);
@@ -94,19 +98,19 @@ const Chat = ({ users, user }) => {
     setLastMessageId(response.message.id);
   };
 
-  const updateUsers = (prevUsers, response) => {
-    const receiverIndex = prevUsers.findIndex(
-      (user) => user.id === response.receiver_id
+  const updateChats = (previousChats, response) => {
+    const receiverIndex = previousChats.findIndex(
+      (chat) => chat.receiver_id === response.receiver_id
     );
 
     return [
-      ...prevUsers.slice(0, receiverIndex),
       {
-        ...prevUsers[receiverIndex],
-        last_message: response.text,
-        last_message_date: response.created_at,
+        ...previousChats[receiverIndex],
+        last_message_text: response.text,
+        last_message_at: response.created_at,
       },
-      ...prevUsers.slice(receiverIndex + 1),
+      ...previousChats.slice(0, receiverIndex),
+      ...previousChats.slice(receiverIndex + 1),
     ];
   };
 
@@ -122,7 +126,7 @@ const Chat = ({ users, user }) => {
         console.log(response.error);
         // setError("Unable to send message, try again") // @TODO: Create error box (absolute positioned)
       } else {
-        setLocalUsers((prevUsers) => updateUsers(prevUsers, response));
+        setLocalChats((previousChats) => updateChats(previousChats, response));
         setMessages([...messages, response]);
         setLastMessageId(response.id);
         setMessage("");
@@ -155,59 +159,87 @@ const Chat = ({ users, user }) => {
   });
 
   useEffect(() => {
-    const currentUserId = localUsers.findIndex(
-      (user) => user.id === activeUserId
+    const currentUserId = localChats.findIndex(
+      (chat) => chat.receiver_id === activeUserId
     );
 
     if (
       currentUserId > 0 &&
-      localUsers.length > 0 &&
-      localUsers[currentUserId].unreadMessagesCount > 0
+      localChats.length > 0 &&
+      localChats[currentUserId].unreadMessagesCount > 0
     ) {
-      const newUsers = [
-        ...localUsers.slice(0, currentUserId),
+      const newChats = [
+        ...localChats.slice(0, currentUserId),
         {
-          ...localUsers[currentUserId],
+          ...localChats[currentUserId],
           unreadMessagesCount: 0,
         },
-        ...localUsers.slice(currentUserId + 1),
+        ...localChats.slice(currentUserId + 1),
       ];
-      setLocalUsers(newUsers);
+      setLocalChats(newChats);
     }
   }, [activeUserId]);
 
   const messagingDisabled = () => {
-    const activeUser = users.find((user) => user.id == activeUserId);
+    const activeUser = chats.find((chat) => chat.receiver_id == activeUserId);
     return (
       user.messagingDisabled || (activeUser && activeUser.messagingDisabled)
     );
   };
 
   const activeUserWithTalent = () => {
-    const activeUser = users.find((user) => user.id == activeUserId);
-    return activeUser && activeUser.withTalent;
+    const activeUser = chats.find((chat) => chat.receiver_id == activeUserId);
+    return activeUser && activeUser.receiver_with_talent;
   };
+
+  const loadMoreChats = () => {
+    const nextPage = localPagination.currentPage + 1;
+
+    get(`messages?page=${nextPage}&q=${searchValue}`).then((response) => {
+      const newChats = [...localChats, ...response.chats];
+      setLocalChats(newChats);
+      setLocalPagination(response.pagination);
+    });
+  };
+
+  const showLoadMoreChats = () => {
+    return localPagination.currentPage < localPagination.lastPage;
+  };
+
+  const searchChats = (value) => {
+    setSearchValue(value);
+    get(`messages?page=1&q=${value}`).then((response) => {
+      setLocalChats(response.chats);
+      setLocalPagination(response.pagination);
+    });
+  };
+
+  const debouncedSearchChats = debounce(searchChats, 300);
 
   return (
     <>
       <div className="d-flex flex-column w-100 h-100 themed-border-top">
         <main className="d-flex flex-row h-100 themed-border-left chat-container">
           {(!mobile || activeUserId == 0) && (
-            <section className="col-lg-4 mx-auto mx-lg-0 px-0 d-flex flex-column themed-border-right">
+            <section className="col-lg-4 mx-auto mx-lg-0 px-0 d-flex flex-column themed-border-right chat-section">
               <MessageUserList
                 onClick={(userId) => setActiveUser(userId)}
                 activeUserId={activeUserId}
-                users={localUsers}
-                setUsers={setLocalUsers}
+                chats={localChats}
+                setChats={setLocalChats}
                 mode={theme.mode()}
                 mobile={mobile}
-                messengerWithTalent={user.withTalent}
+                messengerWithTalent={user.receiver_with_talent}
                 supportersCount={user.supportersCount}
+                showLoadMoreChats={showLoadMoreChats()}
+                loadMoreChats={loadMoreChats}
+                searchChats={debouncedSearchChats}
+                searchValue={searchValue}
               />
             </section>
           )}
           {(!mobile || activeUserId > 0) && !gettingMessages && (
-            <section className="col-lg-8 px-0 lg-overflow-y-hidden themed-border-right">
+            <section className="col-lg-8 px-0 lg-overflow-y-hidden themed-border-right chat-section">
               <MessageExchange
                 smallScreen={mobile}
                 activeUserId={activeUserId}

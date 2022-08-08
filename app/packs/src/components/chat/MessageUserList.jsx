@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -22,13 +22,13 @@ const lastMessageText = (lastMessage) => {
   }
 };
 
-const UserMessage = ({ user, activeUserId, onClick, mode }) => {
-  const message = lastMessageText(user.last_message);
-  const active = user.id == activeUserId ? " active" : "";
+const ChatMessage = ({ chat, activeUserId, onClick }) => {
+  const message = lastMessageText(chat.last_message_text);
+  const active = chat.receiver_id == activeUserId ? " active" : "";
 
   const displayTime = () => {
-    if (user.last_message_date) {
-      return dayjs(user.last_message_date).fromNow();
+    if (chat.last_message_at) {
+      return dayjs(chat.last_message_at).fromNow();
     } else {
       return "";
     }
@@ -37,21 +37,24 @@ const UserMessage = ({ user, activeUserId, onClick, mode }) => {
   return (
     <a
       className={`pt-3 pl-6 pr-6 chat-user ${active} text-reset`}
-      onClick={() => onClick(user.id)}
+      onClick={() => onClick(chat.receiver_id)}
     >
       <div className="d-flex flex-row justify-content-between themed-border-bottom">
-        <TalentProfilePicture src={user.profilePictureUrl} height={48} />
+        <TalentProfilePicture
+          src={chat.receiver_profile_picture_url}
+          height={48}
+        />
         <div className="d-flex flex-column w-100 h-100 pl-2 pb-3 ml-2">
           <div style={{ minHeight: 48 }}>
             <div className="d-flex flex-row justify-content-between">
               <div className="d-flex flex-row">
-                <P2 text={user.username} bold className="mr-2" />
+                <P2 text={chat.receiver_username} bold className="mr-2" />
               </div>
               <P3 text={displayTime()} />
             </div>
             <div className="d-flex flex-row mb-0 justify-content-between">
               <P2 text={message} className="mr-2" />
-              <UnreadMessagesCount count={user.unreadMessagesCount} />
+              <UnreadMessagesCount count={chat.unread_messages_count} />
             </div>
           </div>
         </div>
@@ -71,12 +74,7 @@ const UnreadMessagesCount = ({ count }) => {
   }
 };
 
-const filteredUsers = (users, search) =>
-  users.filter((user) =>
-    user.username.toLowerCase().includes(search.toLowerCase())
-  );
-
-const EmptyUsers = ({ mode }) => (
+const EmptyChats = ({ mode }) => (
   <div className="w-100 p-3 themed-border-top d-flex flex-column align-items-center">
     <ThemedButton
       onClick={() => (window.location.href = "/talent")}
@@ -88,38 +86,35 @@ const EmptyUsers = ({ mode }) => (
   </div>
 );
 
-const sortUsers = (user1, user2) => {
-  const date1 = dayjs(user1.last_message_date);
-  const date2 = dayjs(user2.last_message_date);
-
-  if (date1.isBefore(date2)) {
-    return 1;
-  } else if (date1.isAfter(date2)) {
-    return -1;
-  }
-  return 0;
-};
-
 const MessageUserList = ({
-  users,
-  setUsers,
+  chats,
+  setChats,
   activeUserId,
   onClick,
   mode,
   mobile,
   messengerWithTalent,
   supportersCount,
+  loadMoreChats,
+  showLoadMoreChats,
+  searchChats,
+  searchValue,
 }) => {
-  const [search, setSearch] = useState("");
   const [showNewMessageModal, setShowNewMessageModal] = useState(false);
   const [showNewMessageToAllSupporters, setShowNewMessageToAllSupporters] =
     useState(false);
 
   const onNewMessageUser = (user) => {
     onClick(user.id);
-    const index = users.findIndex((u) => u.id == user.id);
+    const index = chats.findIndex((chat) => chat.receiver_id == user.id);
+    const newChat = {
+      receiver_id: user.id,
+      receiver_username: user.username,
+      receiver_profile_picture_url: user.profilePictureUrl,
+    };
+
     if (index < 0) {
-      setUsers((prev) => [...prev, user]);
+      setChats((prev) => [newChat, ...prev]);
     }
     setShowNewMessageModal(false);
   };
@@ -129,7 +124,6 @@ const MessageUserList = ({
     setShowNewMessageToAllSupporters(true);
   };
 
-  const sortedUsers = users.sort(sortUsers);
   return (
     <>
       <NewMessageModal
@@ -150,9 +144,9 @@ const MessageUserList = ({
         <div className="w-100 d-flex flex-row themed-border-bottom align-items-center py-4 pl-6 pr-6">
           <div className="position-relative w-100">
             <TextInput
-              disabled={users.length == 0}
-              onChange={(e) => setSearch(e.target.value)}
-              value={search}
+              disabled={chats.length == 0 && searchValue.length == 0}
+              onChange={(e) => searchChats(e.target.value)}
+              value={searchValue}
               placeholder="Search in messages..."
               inputClassName="pl-5"
               className="w-100"
@@ -172,17 +166,29 @@ const MessageUserList = ({
             <NewChat color="currentColor" />
           </ThemedButton>
         </div>
-        {sortedUsers.length == 0 && <EmptyUsers mode={mode} />}
-        <div className="w-100 d-flex flex-column lg-overflow-y-auto">
-          {filteredUsers(sortedUsers, search).map((user) => (
-            <UserMessage
+        {chats.length == 0 && searchValue.length == 0 && (
+          <EmptyChats mode={mode} />
+        )}
+        <div className="w-100 d-flex flex-column lg-overflow-y-scroll lg-h-50">
+          {chats.map((chat) => (
+            <ChatMessage
               onClick={onClick}
-              key={`user-message-list-${user.id}`}
-              user={user}
+              key={`user-message-list-${chat.receiver_id}`}
+              chat={chat}
               activeUserId={activeUserId}
               mode={mode}
             />
           ))}
+          {showLoadMoreChats && (
+            <ThemedButton
+              onClick={() => loadMoreChats()}
+              type="white-subtle"
+              mode={mode}
+              className="mx-6 mt-4"
+            >
+              Load more
+            </ThemedButton>
+          )}
         </div>
       </div>
     </>
