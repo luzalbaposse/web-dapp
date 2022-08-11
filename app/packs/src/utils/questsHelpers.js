@@ -21,10 +21,6 @@ export const questDescription = (type) => {
       return "Schedule a call with a member of Talent Protocol’s core team. Get verified and earn your badge.";
     case "Quests::TalentToken":
       return "Complete the mandatory fields of your profile and apply to be verified.";
-    case "Quests::Ambassador":
-      return "Share your personal invite code and get 5 talented friends to join Talent Protocol";
-    case "Quests::Scout":
-      return "Share your personal Talent invite code with talented friends, and be rewarded when they launch a token.";
     default:
       return "";
   }
@@ -76,13 +72,6 @@ export const taskDescription = (type) => {
           text="Launch your token so people can start investing in you"
         />
       );
-    case "Tasks::Register":
-      return (
-        <P2
-          className="text-primary-03"
-          text="Use your personal talent invite code to invite new users."
-        />
-      );
     case "Tasks::Highlights":
       return (
         <P2
@@ -104,13 +93,6 @@ export const taskDescription = (type) => {
     case "Tasks::Perks":
       return (
         <P2 className="text-primary-03" text="Add perks to your profile." />
-      );
-    case "Tasks::InviteTokenLaunch":
-      return (
-        <P2
-          className="text-primary-03"
-          text="Your talented friends launch their token."
-        />
       );
     default:
       return "";
@@ -149,27 +131,6 @@ export const taskReward = (type, disabled) => {
         <P2
           className={cx(disabled ? "text-primary-04" : "text-black")}
           text="2,000 Talent Tokens (worth $200)"
-        />
-      );
-    case "Tasks::Register":
-      return (
-        <P2
-          className={cx(disabled ? "text-primary-04" : "text-black")}
-          text="1500 TAL"
-        />
-      );
-    case "Tasks::InviteTokenLaunch":
-      return (
-        <P2
-          className={cx(disabled ? "text-primary-04" : "text-black")}
-          text="250 TAL"
-        />
-      );
-    case "Tasks::InviteTokenLaunch":
-      return (
-        <P2
-          className={cx(disabled ? "text-primary-04" : "text-black")}
-          text="250 TAL"
         />
       );
     case "Tasks::Verified":

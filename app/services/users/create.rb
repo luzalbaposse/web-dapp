@@ -15,7 +15,6 @@ module Users
 
         create_investor(user)
         create_feed(user)
-        give_reward_to_inviter(invite) if invite
         create_talent(user)
         create_token(user)
 
@@ -126,14 +125,6 @@ module Users
 
     def create_tasks(user)
       Tasks::PopulateForUser.new.call(user: user)
-    end
-
-    def give_reward_to_inviter(invite)
-      return unless invite.user
-
-      if invite.user.invites.where(talent_invite: true).sum(:uses) > 4
-        UpdateTasksJob.perform_later(type: "Tasks::Register", user_id: invite.user.id)
-      end
     end
 
     def update_profile_type(user)

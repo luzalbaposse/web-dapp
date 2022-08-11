@@ -33,21 +33,6 @@ RSpec.describe Users::Create do
     end
   end
 
-  context "when the invite already has enough uses for the scout reward" do
-    let(:invite) { create(:invite, user: user, talent_invite: true, uses: 4) }
-
-    it "it enqueues the job to calculate rewards" do
-      Sidekiq::Testing.inline! do
-        create_user
-
-        expect(enqueued_jobs.size).to eq 2
-        job = enqueued_jobs[0]
-        expect(job["arguments"][0]["type"]).to eq("Tasks::Register")
-        expect(job["arguments"][0]["user_id"]).to eq(user.id)
-      end
-    end
-  end
-
   context "when it is a talent invite" do
     let(:invite) { create(:invite, user: user, talent_invite: true) }
 

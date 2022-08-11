@@ -12,12 +12,8 @@ class AddRewardToInviterJob < ApplicationJob
 
       return if user.admin?
 
-      Reward.create!(user: user, amount: 250, category: "talent_invite")
-
-      Tasks::Update.new.call(type: "Tasks::InviteTokenLaunch", user: user) if invite.uses >= 5
-
       invite.max_uses = invite.uses + 1
-      invite.save
+      invite.save!
     end
   end
 end

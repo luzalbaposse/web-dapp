@@ -7,8 +7,6 @@ namespace :quests do
     User.all.order(:id).find_in_batches(start: ENV["START"]) do |batch|
       batch.each do |user|
         talent = user.try(:talent)
-        talent_invite = user.invites.find_by(talent_invite: true)
-        invitees_token_count = talent_invite.present? ? talent_invite.invitees.joins(talent: [:token]).where(tokens: {deployed: true}).count : 0
 
         # ---------------------------------------------------
 
@@ -39,24 +37,6 @@ namespace :quests do
 
         Tasks::Perks.find_or_create_by!(quest: talent_token_quest)
         service.call(type: "Tasks::Perks", user: user, normal_update: false) if (talent.try(:perks).try(:length) || 0) > 0
-
-        # ---------------------------------------------------
-
-        ambassdor_quest = Quests::Ambassador.find_or_create_by!(user: user)
-
-        scout_quest = Quests::Scout.find_by(user: user)
-        if scout_quest.present?
-          register_task = Tasks::Register.find_by(quest: scout_quest)
-          register_task.update!(quest: ambassdor_quest) if register_task.present?
-        else
-          Tasks::Register.find_or_create_by!(quest: ambassdor_quest)
-        end
-        service.call(type: "Tasks::Register", user: user, normal_update: false) if (talent_invite.try(:uses) || 0) > 4
-
-        # ---------------------------------------------------
-
-        Tasks::InviteTokenLaunch.find_or_create_by!(quest: scout_quest)
-        service.call(type: "Tasks::InviteTokenLaunch", user: user, normal_update: false) if invitees_token_count > 4
 
       rescue
         puts "error populating quests for user #{user.username} - #{user.id}"
