@@ -16,11 +16,9 @@ class Linkedin::OauthHandler
     user = User.find_by(email: email_address)
     retrieve_lite_profile!
 
-    unless user
-      user = create_user
-    end
+    user ||= create_user
 
-    user.update!(linkedin_id: lite_profile['id'])
+    user.update!(linkedin_id: lite_profile["id"])
 
     upload_profile_picture(user) if lite_profile_request.success?
 
