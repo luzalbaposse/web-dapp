@@ -37,4 +37,10 @@ class Chat < ApplicationRecord
 
     sender
   end
+
+  def mark_as_read!(user)
+    return update!(sender_unread_messages_count: 0) if sender_id == user.id
+
+    update!(receiver_unread_messages_count: 0)
+  end
 end

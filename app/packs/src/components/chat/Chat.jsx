@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from "react";
-import dayjs from "dayjs";
 import debounce from "lodash/debounce";
 
 import { post, get } from "src/utils/requests";
@@ -35,6 +34,23 @@ const Chat = ({ chats, user, pagination }) => {
   const { mobile } = useWindowDimensionsHook();
   const theme = useContext(ThemeContext);
 
+  const updateChats = (previousChats, newChat) => {
+    const receiverIndex = previousChats.findIndex(
+      (chat) => chat.receiver_id === newChat.receiver_id
+    );
+
+    const newChats = [
+      {
+        ...previousChats[receiverIndex],
+        ...newChat,
+      },
+      ...previousChats.slice(0, receiverIndex),
+      ...previousChats.slice(receiverIndex + 1),
+    ];
+
+    return newChats;
+  };
+
   // Get user from URL
   useEffect(() => {
     if (activeUserId == 0) {
@@ -52,11 +68,16 @@ const Chat = ({ chats, user, pagination }) => {
     get(`messages/${activeUserId}`).then((response) => {
       setMessages(response.messages);
       setLastMessageId(response.messages[response.messages.length - 1]?.id);
-      setChatId(response.chat_id);
+      setChatId(response.chat_id || "");
       setMessengerProfilePicture(response.profilePictureUrl);
       setMessengerUsername(response.username);
       setLastOnline(response.lastOnline);
       setGettingMessages(false);
+      if (response.readChat) {
+        setLocalChats((previousChats) =>
+          updateChats(previousChats, response.readChat)
+        );
+      }
     });
   }, [activeUserId]);
 
@@ -98,22 +119,6 @@ const Chat = ({ chats, user, pagination }) => {
     setLastMessageId(response.message.id);
   };
 
-  const updateChats = (previousChats, response) => {
-    const receiverIndex = previousChats.findIndex(
-      (chat) => chat.receiver_id === response.receiver_id
-    );
-
-    return [
-      {
-        ...previousChats[receiverIndex],
-        last_message_text: response.text,
-        last_message_at: response.created_at,
-      },
-      ...previousChats.slice(0, receiverIndex),
-      ...previousChats.slice(receiverIndex + 1),
-    ];
-  };
-
   const sendNewMessage = () => {
     if (message.replace(/\s+/g, "") == "") {
       return;
@@ -126,9 +131,11 @@ const Chat = ({ chats, user, pagination }) => {
         console.log(response.error);
         // setError("Unable to send message, try again") // @TODO: Create error box (absolute positioned)
       } else {
-        setLocalChats((previousChats) => updateChats(previousChats, response));
-        setMessages([...messages, response]);
-        setLastMessageId(response.id);
+        setLocalChats((previousChats) =>
+          updateChats(previousChats, response.chat)
+        );
+        setMessages([...messages, response.message]);
+        setLastMessageId(response.message.id);
         setMessage("");
       }
       setSendingMessage(false);

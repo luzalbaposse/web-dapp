@@ -3,9 +3,10 @@ module Messages
     def call(sender:, receiver:, message:, sent_to_supporters: false)
       return if sender.id == receiver.id
 
-      message = create_message(sender, receiver, message, sent_to_supporters)
+      chat = upsert_chat(sender, receiver, message)
+      message = create_message(chat, sender, receiver, message, sent_to_supporters)
       create_notification_for(receiver, sender)
-      broadcast(message)
+      broadcast(chat, message)
 
       message
     end
@@ -14,10 +15,8 @@ module Messages
 
     attr_reader :sender, :receiver, :message
 
-    def create_message(sender, receiver, message, sent_to_supporters)
+    def create_message(chat, sender, receiver, message, sent_to_supporters)
       ActiveRecord::Base.transaction do
-        chat = upsert_chat(sender, receiver, message)
-
         Message.create!(
           chat: chat,
           sender: sender,
@@ -56,8 +55,8 @@ module Messages
       @create_notification_service ||= CreateNotification.new
     end
 
-    def broadcast(message)
-      ActionCable.server.broadcast("message_channel_#{message.receiver_chat_id}", message: message.to_json)
+    def broadcast(chat, message)
+      ActionCable.server.broadcast("message_channel_#{chat.id}", message: message.to_json)
     end
   end
 end
