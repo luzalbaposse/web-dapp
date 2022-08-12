@@ -20,6 +20,42 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_many(:posts) }
   end
 
+  describe "email_and_credentials validation" do
+    context "when the user does not have an email" do
+      it "raises a RecordInvalid error" do
+        expect { create :user, email: "" }
+          .to raise_error(
+            ActiveRecord::RecordInvalid,
+            "Validation failed: The user doesn't respect the required login requirements"
+          )
+      end
+    end
+
+    context "when the user has an email" do
+      context "when the user has a password but no LinkedIn id" do
+        it "does not raise an error" do
+          expect { create :user, linkedin_id: nil }.not_to raise_error
+        end
+      end
+
+      context "when the user has a LinkedIn id but no password" do
+        it "does not raise an error" do
+          expect { create :user, linkedin_id: "user_132298", password: nil }.not_to raise_error
+        end
+      end
+
+      context "when the user does not have a password or LinkedIn id" do
+        it "raises a RecordInvalid error" do
+          expect { create :user, linkedin_id: nil, password: nil }
+            .to raise_error(
+              ActiveRecord::RecordInvalid,
+              "Validation failed: The user doesn't respect the required login requirements"
+            )
+        end
+      end
+    end
+  end
+
   describe "uniqueness validation" do
     it "does not allow multiple users with same email" do
       create(:user, email: "john.doe@talentprotocol.com")

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_04_094323) do
+ActiveRecord::Schema.define(version: 2022_08_05_171520) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -476,8 +476,10 @@ ActiveRecord::Schema.define(version: 2022_08_04_094323) do
     t.datetime "digest_email_sent_at"
     t.datetime "token_launch_reminder_sent_at"
     t.datetime "token_purchase_reminder_sent_at"
+    t.string "linkedin_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invite_id"], name: "index_users_on_invite_id"
+    t.index ["linkedin_id"], name: "index_users_on_linkedin_id", unique: true
     t.index ["race_id"], name: "index_users_on_race_id"
     t.index ["remember_token"], name: "index_users_on_remember_token"
     t.index ["username"], name: "index_users_on_username", unique: true

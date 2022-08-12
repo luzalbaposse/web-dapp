@@ -112,6 +112,8 @@ Rails.application.routes.draw do
     get "/confirm_email(/:token)" => "email_confirmations#update", :as => "confirm_email"
   end
 
+  get "/auth/linkedin/callback", to: "oauth_callbacks#linkedin"
+
   delete "/sign_out" => "sessions#destroy", :as => "sign_out"
   # end Auth
 

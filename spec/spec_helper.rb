@@ -1,4 +1,5 @@
 require "active_support/testing/time_helpers"
+require "webmock/rspec"
 
 RSpec.configure do |config|
   config.include ActiveSupport::Testing::TimeHelpers
