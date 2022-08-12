@@ -8,42 +8,78 @@ RSpec.describe Users::Create do
   let(:user_creation_params) {
     {
       email: email,
-      username: username,
       password: password,
-      invite_code: invite_code,
-      theme_preference: theme_preference
+      username: username,
+      invite_code: invite_code
     }
   }
 
   let(:email) { "test@talentprotocol.com" }
-  let(:username) { "test" }
   let(:password) { "password" }
+  let(:username) { "test" }
   let(:invite_code) { invite.code }
-  let(:theme_preference) { "light" }
 
   let(:user) { create :user, username: "jack" }
   let!(:invite) { create :invite, user: user }
 
   context "when a valid invite is provided" do
-    it "it creates a new user" do
+    it "creates a new user" do
       result = create_user
+      user = result[:user]
 
       expect(result[:success]).to be(true)
-      expect(result[:user]).to be_persisted
+      expect(user).to be_persisted
+      expect(user.email).to eq(email)
+      expect(user.email_confirmation_token).not_to be_nil
+      expect(user.invited).to eq(invite)
+      expect(user.password).not_to be_nil
+      expect(user.role).to eq("basic")
+      expect(user.theme_preference).to eq("light")
+      expect(user.username).to eq(username)
     end
-  end
 
-  context "when the invite already has enough uses for the scout reward" do
-    let(:invite) { create(:invite, user: user, talent_invite: true, uses: 4) }
+    context "when a display name is provided" do
+      let(:display_name) { "Jack Smith" }
 
-    it "it enqueues the job to calculate rewards" do
-      Sidekiq::Testing.inline! do
-        create_user
+      let(:user_creation_params) do
+        super().tap { |params| params[:display_name] = display_name }
+      end
 
-        expect(enqueued_jobs.size).to eq 2
-        job = enqueued_jobs[0]
-        expect(job["arguments"][0]["type"]).to eq("Tasks::Register")
-        expect(job["arguments"][0]["user_id"]).to eq(user.id)
+      it "persists the display name" do
+        result = create_user
+
+        expect(result[:user].display_name).to eq(display_name)
+      end
+    end
+
+    context "when a theme preference is provided" do
+      let(:theme_preference) { "dark" }
+
+      let(:user_creation_params) do
+        super().tap { |params| params[:theme_preference] = theme_preference }
+      end
+
+      it "persists the theme preference" do
+        result = create_user
+
+        expect(result[:user].theme_preference).to eq(theme_preference)
+      end
+    end
+
+    context "when a LinkedIn id is provided" do
+      let(:linkedin_id) { SecureRandom.hex(8) }
+      let(:password) { nil }
+
+      let(:user_creation_params) do
+        super().tap { |params| params[:linkedin_id] = linkedin_id }
+      end
+
+      it "persists the LinkedIn id" do
+        result = create_user
+        user = result[:user]
+
+        expect(user.linkedin_id).to eq(linkedin_id)
+        expect(user.password).to be_nil
       end
     end
   end

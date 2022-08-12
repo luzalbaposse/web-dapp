@@ -63,15 +63,20 @@ class MessagesController < ApplicationController
     received = Message.where(sender_id: receiver.id, receiver_id: current_user.id)
     @messages = sent.or(received).order(:created_at)
     received.update_all(is_read: true)
+    chat = Chat.between(current_user, receiver)
 
-    @chat_id = current_user.sender_chat_id(receiver)
+    chat&.mark_as_read!(current_user)
+
+    @chat = chat ? ChatBlueprint.render_as_json(chat, view: :normal, current_user: current_user) : nil
+    @chat_id = chat&.id
 
     render json: {
+      readChat: @chat,
       messages: @messages.map(&:to_json),
       chat_id: @chat_id,
       current_user_id: @sender.id,
       lastOnline: receiver.updated_at,
-      profilePictureUrl: receiver.talent&.profile_picture_url || receiver.investor&.profile_picture_url,
+      profilePictureUrl: receiver.profile_picture_url,
       username: receiver.username
     }
   end
@@ -96,7 +101,12 @@ class MessagesController < ApplicationController
       message: message_params[:message]
     )
 
-    render json: message.to_json
+    chat = message.chat
+
+    render json: {
+      message: message.to_json,
+      chat: ChatBlueprint.render_as_json(chat, view: :normal, current_user: current_user)
+    }
   end
 
   def send_to_all_supporters

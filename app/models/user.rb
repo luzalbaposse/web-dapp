@@ -4,7 +4,7 @@ class User < ApplicationRecord
   include Clearance::User
 
   validate :role_is_valid, if: -> { role.present? }
-  validate :email_and_password
+  validate :email_and_credentials
   validate :validate_notification_preferences
   validate :username_is_valid
 
@@ -215,8 +215,8 @@ class User < ApplicationRecord
     true
   end
 
-  def email_and_password
-    return if email.present? && encrypted_password.present?
+  def email_and_credentials
+    return if email.present? && (encrypted_password.present? || linkedin_id.present?)
 
     errors.add(:base, "The user doesn't respect the required login requirements")
   end

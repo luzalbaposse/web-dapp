@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import TextInput from "src/components/design_system/fields/textinput";
 import RegistrationContainer from "src/components/registration/RegistrationContainer";
 import Link from "src/components/design_system/link";
+import LinkedinSignInButton from "src/components/button/LinkedinSignInButton"
 import { useTheme } from "src/contexts/ThemeContext";
 import { useWindowDimensionsHook } from "src/utils/window";
 import { H5, P2, P3 } from "src/components/design_system/typography";
@@ -10,7 +11,9 @@ import { post } from "src/utils/requests";
 
 import cx from "classnames";
 
-const Login = () => {
+const Login = (props) => {
+  const { linkedinClientId, linkedinRedirectUri } = props
+
   const { mobile } = useWindowDimensionsHook();
   const { mode } = useTheme();
 
@@ -79,6 +82,7 @@ const Login = () => {
           </button>
         </form>
       </div>
+      <LinkedinSignInButton clientId={linkedinClientId} redirectUri={linkedinRedirectUri} />
       <div className={cx("mt-6 pb-4", mobile && "align-self-center")}>
         <div className="d-flex mb-2">
           <P2 className="text-black mr-1" text="Don't have an account yet?" />

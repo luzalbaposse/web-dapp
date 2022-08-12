@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_04_094323) do
+ActiveRecord::Schema.define(version: 2022_08_05_171520) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -456,8 +457,8 @@ ActiveRecord::Schema.define(version: 2022_08_04_094323) do
     t.boolean "welcome_pop_up", default: false
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.boolean "disabled", default: false
     t.string "theme_preference", default: "light"
+    t.boolean "disabled", default: false
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"
@@ -473,11 +474,14 @@ ActiveRecord::Schema.define(version: 2022_08_04_094323) do
     t.boolean "first_quest_popup", default: false, null: false
     t.datetime "last_access_at"
     t.datetime "complete_profile_reminder_sent_at"
-    t.datetime "digest_email_sent_at"
     t.datetime "token_launch_reminder_sent_at"
     t.datetime "token_purchase_reminder_sent_at"
+    t.datetime "digest_email_sent_at"
+    t.string "ens_domain"
+    t.string "linkedin_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invite_id"], name: "index_users_on_invite_id"
+    t.index ["linkedin_id"], name: "index_users_on_linkedin_id", unique: true
     t.index ["race_id"], name: "index_users_on_race_id"
     t.index ["remember_token"], name: "index_users_on_remember_token"
     t.index ["username"], name: "index_users_on_username", unique: true
@@ -518,6 +522,7 @@ ActiveRecord::Schema.define(version: 2022_08_04_094323) do
   add_foreign_key "follows", "users", column: "follower_id"
   add_foreign_key "goals", "career_goals"
   add_foreign_key "impersonations", "users", column: "impersonated_id"
+  add_foreign_key "impersonations", "users", column: "impersonator_id"
   add_foreign_key "invites", "users"
   add_foreign_key "marketing_articles", "users"
   add_foreign_key "messages", "chats"

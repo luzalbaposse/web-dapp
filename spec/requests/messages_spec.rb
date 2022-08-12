@@ -212,7 +212,8 @@ RSpec.describe "Messages", type: :request do
 
     let(:send_message_class) { Messages::Send }
     let(:send_message_instance) { instance_double(send_message_class, call: message_sent) }
-    let(:message_sent) { build :message, sender: current_user, receiver: receiver }
+    let(:message_sent) { build :message, sender: current_user, receiver: receiver, chat: chat }
+    let(:chat) { create :chat, sender: current_user, receiver: receiver }
 
     before do
       allow(send_message_class).to receive(:new).and_return(send_message_instance)
@@ -232,7 +233,7 @@ RSpec.describe "Messages", type: :request do
     it "renders a json response with the messages sent" do
       post messages_path(params: params, as: current_user)
 
-      expect(json).to eq(message_sent.to_json)
+      expect(json[:message]).to eq(message_sent.to_json)
     end
 
     context "when the message is empty" do

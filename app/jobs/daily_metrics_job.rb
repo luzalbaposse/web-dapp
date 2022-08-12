@@ -14,7 +14,6 @@ class DailyMetricsJob < ApplicationJob
       total_scouts: total_scouts,
       total_beginner_quests_completed: total_beginner_quests_completed,
       total_complete_profile_quests_completed: total_complete_profile_quests_completed,
-      total_ambassador_quests_completed: total_ambassador_quests_completed,
       total_supporter_quests_completed: total_supporter_quests_completed,
       total_celo_tokens: total_celo_tokens,
       total_celo_supporters: total_celo_supporters,
@@ -163,10 +162,6 @@ class DailyMetricsJob < ApplicationJob
 
   def total_complete_profile_quests_completed
     Quest.where(type: "Quests::TalentProfile", status: "done").count
-  end
-
-  def total_ambassador_quests_completed
-    Quest.where(type: "Quests::Ambassador", status: "done").count
   end
 
   def total_supporter_quests_completed

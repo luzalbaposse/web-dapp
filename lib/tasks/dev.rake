@@ -22,8 +22,7 @@ if Rails.env.development?
         email: "investor@talentprotocol.com",
         username: "investor",
         password: "password",
-        invite_code: investor_invite.code,
-        theme_preference: "light"
+        invite_code: investor_invite.code
       )
       investor_result[:user].confirm_email
 
@@ -31,8 +30,7 @@ if Rails.env.development?
         email: "investor2@talentprotocol.com",
         username: "investor2",
         password: "password",
-        invite_code: investor_invite.code,
-        theme_preference: "light"
+        invite_code: investor_invite.code
       )
       investor_result2[:user].confirm_email
 
@@ -40,8 +38,7 @@ if Rails.env.development?
         email: "investor3@talentprotocol.com",
         username: "investor3",
         password: "password",
-        invite_code: investor_invite.code,
-        theme_preference: "light"
+        invite_code: investor_invite.code
       )
       investor_result3[:user].confirm_email
 
@@ -49,8 +46,7 @@ if Rails.env.development?
         email: "elon@talentprotocol.com",
         username: "elon",
         password: "password",
-        invite_code: talent_invite.code,
-        theme_preference: "light"
+        invite_code: talent_invite.code
       )
       elon_result[:user].confirm_email
 
@@ -58,8 +54,7 @@ if Rails.env.development?
         email: "karl@talentprotocol.com",
         username: "karl",
         password: "password",
-        invite_code: talent_invite.code,
-        theme_preference: "light"
+        invite_code: talent_invite.code
       )
       karl_result[:user].confirm_email
 

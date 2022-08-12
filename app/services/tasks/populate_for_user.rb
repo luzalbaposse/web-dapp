@@ -42,18 +42,6 @@ module Tasks
 
       # ---------------------------------------------------
 
-      ambassador_quest = Quests::Ambassador.find_or_create_by!(user: user)
-
-      Tasks::Register.find_or_create_by!(quest: ambassador_quest)
-
-      # ---------------------------------------------------
-
-      scout_quest = Quests::Scout.find_or_create_by!(user: user)
-
-      Tasks::InviteTokenLaunch.find_or_create_by!(quest: scout_quest)
-
-      # ---------------------------------------------------
-
       verify_profile_quest = Quests::VerifiedProfile.find_or_create_by!(user: user)
 
       Tasks::Verified.find_or_create_by!(quest: verify_profile_quest)

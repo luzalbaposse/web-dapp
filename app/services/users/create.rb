@@ -6,16 +6,15 @@ module Users
       @result = {}
     end
 
-    def call(email:, username:, password:, invite_code:, theme_preference:)
+    def call(params)
       ActiveRecord::Base.transaction do
-        invite = Invite.find_by(code: invite_code)
-
+        invite = Invite.find_by(code: params[:invite_code])
         invite&.update(uses: invite.uses + 1)
-        user = create_user(email, username, password, invite, theme_preference)
+        params[:invite] = invite if invite
+        user = create_user(params)
 
         create_investor(user)
         create_feed(user)
-        give_reward_to_inviter(invite) if invite
         create_talent(user)
         create_token(user)
 
@@ -49,8 +48,8 @@ module Users
         Rollbar.error(
           e,
           "Unable to create user with unexpected error.",
-          email: email,
-          username: username
+          email: params[:email],
+          username: params[:username]
         )
 
         raise e
@@ -59,18 +58,24 @@ module Users
 
     private
 
-    def create_user(email, username, password, invite, theme_preference)
-      user = User.new
-      user.email = email.downcase
-      user.password = password
-      user.username = username.downcase.delete(" ", "")
-      user.email_confirmation_token = Clearance::Token.new
-      user.invited = invite if invite
-      user.theme_preference = theme_preference
-      user.role = "basic"
-
+    def create_user(params)
+      user = User.new(attributes(params))
       user.save!
       user
+    end
+
+    def attributes(params)
+      {
+        display_name: params[:display_name],
+        email_confirmation_token: Clearance::Token.new,
+        email: params[:email].downcase,
+        invited: params[:invite],
+        linkedin_id: params[:linkedin_id],
+        password: params[:password],
+        role: "basic",
+        theme_preference: params[:theme_preference],
+        username: params[:username].downcase.delete(" ", "")
+      }.compact
     end
 
     def create_talent(user)
@@ -126,14 +131,6 @@ module Users
 
     def create_tasks(user)
       Tasks::PopulateForUser.new.call(user: user)
-    end
-
-    def give_reward_to_inviter(invite)
-      return unless invite.user
-
-      if invite.user.invites.where(talent_invite: true).sum(:uses) > 4
-        UpdateTasksJob.perform_later(type: "Tasks::Register", user_id: invite.user.id)
-      end
     end
 
     def update_profile_type(user)

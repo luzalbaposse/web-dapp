@@ -5,7 +5,7 @@ class SendMessageJob < ApplicationJob
     message = Message.find(message_id)
 
     unless message.created_at.to_s == created_at
-      ActionCable.server.broadcast("message_channel_#{message.receiver_chat_id}", message: message)
+      ActionCable.server.broadcast("message_channel_#{message.chat_id}", message: message)
     end
   end
 end
