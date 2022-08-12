@@ -164,14 +164,10 @@ RSpec.describe Linkedin::OauthHandler do
 
       it_behaves_like "a profile picture uploader"
 
-      context "when the client returns an unsuccessful response when retrieving the lite profile" do
-        let(:retrieve_lite_profile_response) do
-          OpenStruct.new(success?: false)
-        end
+      it "updates the user linked_in" do
+        handle_linkedin_oauth
 
-        it "returns a success response with the user" do
-          expect(handle_linkedin_oauth).to eq({success: true, user: user})
-        end
+        expect(user.reload.linkedin_id).to eq("8U-184SDzjs")
       end
     end
 
@@ -196,7 +192,6 @@ RSpec.describe Linkedin::OauthHandler do
             .with(
               display_name: "John Doe",
               email: "john-doe@gmail.com",
-              linkedin_id: "8U-184SDzjs",
               password: nil,
               username: "johndoe"
             )
@@ -218,7 +213,6 @@ RSpec.describe Linkedin::OauthHandler do
               .with(
                 display_name: "John Doe",
                 email: "john-doe@gmail.com",
-                linkedin_id: "8U-184SDzjs",
                 password: nil,
                 username: "johndoe414835"
               )
@@ -239,7 +233,6 @@ RSpec.describe Linkedin::OauthHandler do
               .with(
                 display_name: "Rúben| Doe",
                 email: "john-doe@gmail.com",
-                linkedin_id: "8U-184SDzjs",
                 password: nil,
                 username: "rubendoe"
               )
