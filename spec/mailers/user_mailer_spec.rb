@@ -102,4 +102,20 @@ RSpec.describe UserMailer, type: :mailer do
       expect(mail.to).to eql([user.email])
     end
   end
+
+  describe "send invite used email" do
+    let(:invitee) { create :user }
+    let(:notification) { create :notification, emailed_at: nil, recipient: user }
+
+    let(:mail) do
+      described_class
+        .with(recipient: user, record: notification, source_id: invitee.id)
+        .send_invite_used_email
+    end
+
+    it "renders the header" do
+      expect(mail.subject).to eql("#{invitee.username} signed up with your invite!")
+      expect(mail.to).to eql([user.email])
+    end
+  end
 end
