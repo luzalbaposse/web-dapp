@@ -56,4 +56,19 @@ class UserMailerPreview < ActionMailer::Preview
   def send_application_approved_email
     UserMailer.with(user: User.first).send_application_approved_email
   end
+
+  def send_invite_used_email
+    recipient = User.first
+    source_id = User.second.id
+
+    notification = Notification.create(
+      params: {"source_id" => source_id},
+      recipient: recipient,
+      type: "InviteUsedNotification"
+    )
+
+    UserMailer
+      .with(recipient: recipient, record: notification, source_id: source_id)
+      .send_invite_used_email
+  end
 end

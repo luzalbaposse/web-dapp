@@ -22,6 +22,13 @@ RSpec.describe Users::Create do
   let(:user) { create :user, username: "jack" }
   let!(:invite) { create :invite, user: user }
 
+  let(:notification_creator_class) { CreateNotification }
+  let(:notification_creator) { instance_double(notification_creator_class, call: true) }
+
+  before do
+    allow(notification_creator_class).to receive(:new).and_return(notification_creator)
+  end
+
   context "when a valid invite is provided" do
     it "creates a new user" do
       result = create_user
@@ -80,6 +87,21 @@ RSpec.describe Users::Create do
 
         expect(user.linkedin_id).to eq(linkedin_id)
         expect(user.password).to be_nil
+      end
+    end
+
+    it "initializes and calls the notification creator with the correct arguments" do
+      result = create_user
+
+      aggregate_failures do
+        expect(notification_creator_class).to have_received(:new)
+
+        expect(notification_creator).to have_received(:call)
+          .with(
+            recipient: invite.user,
+            source_id: result[:user].id,
+            type: InviteUsedNotification
+          )
       end
     end
   end

@@ -32,6 +32,9 @@
 en:
   hello: "Hello world"
   notifications:
+    invite_used_notification:
+      title: "Invite"
+      body: "Your invite has been used by %{name}!"
     message_received_notification:
       title: "New messages"
       body: "You have new messages"

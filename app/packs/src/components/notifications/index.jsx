@@ -28,6 +28,7 @@ const Notification = ({ notification, mode }) => {
       case "TalentApplicationRejectedNotification":
       case "TalentChangedNotification":
         return "star";
+      case "InviteUsedNotification":
       case "QuestCompletedNotification":
         return "rewards";
       default:

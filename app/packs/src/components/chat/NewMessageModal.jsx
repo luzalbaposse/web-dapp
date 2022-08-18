@@ -10,7 +10,7 @@ import { P1, P2 } from "src/components/design_system/typography";
 import TextInput from "src/components/design_system/fields/textinput";
 import Link from "src/components/design_system/link";
 import { Search } from "src/components/icons";
-import { Send, ChatLight, ChatDark } from "src/components/icons";
+import { ChatLight, ChatDark } from "src/components/icons";
 
 const NewMessageModal = ({
   show,

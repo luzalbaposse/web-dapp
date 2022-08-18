@@ -124,6 +124,10 @@ const MessageUserList = ({
     setShowNewMessageToAllSupporters(true);
   };
 
+  const showMessageToAllSupporters = () => {
+    return messengerWithTalent && supportersCount > 0;
+  };
+
   return (
     <>
       <NewMessageModal
@@ -132,7 +136,7 @@ const MessageUserList = ({
         onUserChosen={onNewMessageUser}
         setShowMessageToAllSupporters={onSendMessageToAllSupporters}
         mobile={mobile}
-        showMessageToAllSupporter={messengerWithTalent && supportersCount > 0}
+        showMessageToAllSupporter={showMessageToAllSupporters()}
         mode={mode}
       />
       <NewMessageToAllSupportersModal

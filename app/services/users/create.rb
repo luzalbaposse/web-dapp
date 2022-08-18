@@ -17,6 +17,7 @@ module Users
         create_feed(user)
         create_talent(user)
         create_token(user)
+        create_invite_used_notification(invite, user) if invite
 
         if invite&.talent_invite?
           update_profile_type(user)
@@ -131,6 +132,13 @@ module Users
 
     def create_tasks(user)
       Tasks::PopulateForUser.new.call(user: user)
+    end
+
+    def create_invite_used_notification(invite, user)
+      inviter = invite.user
+      return unless inviter
+
+      CreateNotification.new.call(recipient: inviter, source_id: user.id, type: InviteUsedNotification)
     end
 
     def update_profile_type(user)
