@@ -236,7 +236,7 @@ const Chat = ({ chats, user, pagination }) => {
                 setChats={setLocalChats}
                 mode={theme.mode()}
                 mobile={mobile}
-                messengerWithTalent={user.receiver_with_talent}
+                messengerWithTalent={user.withTalent}
                 supportersCount={user.supportersCount}
                 showLoadMoreChats={showLoadMoreChats()}
                 loadMoreChats={loadMoreChats}
