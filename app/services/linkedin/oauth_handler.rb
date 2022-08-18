@@ -26,6 +26,17 @@ class Linkedin::OauthHandler
   rescue BadResponseError => error
     Rollbar.error(error, "Unable to handle LinkedIn OAuth")
     {success: false}
+  rescue => error
+    Rollbar.error(
+      error,
+      email_address: email_address,
+      display_name: display_name,
+      username: username,
+      linkedin_id: lite_profile["id"],
+      lite_profile_request_body: lite_profile,
+      email_address_request_body: email_address_request_body
+    )
+    {success: false}
   end
 
   private
@@ -57,8 +68,11 @@ class Linkedin::OauthHandler
   end
 
   def email_address
-    @email_address ||=
-      JSON.parse(email_address_request.body).dig("elements", 0, "handle~", "emailAddress")
+    @email_address ||= email_address_request_body.dig("elements", 0, "handle~", "emailAddress")
+  end
+
+  def email_address_request_body
+    @email_address_request_body ||= JSON.parse(email_address_request.body)
   end
 
   def retrieve_lite_profile!
@@ -73,6 +87,7 @@ class Linkedin::OauthHandler
     result = Users::Create.new.call(
       display_name: display_name,
       email: email_address,
+      linkedin_id: lite_profile["id"],
       password: nil,
       username: username
     )

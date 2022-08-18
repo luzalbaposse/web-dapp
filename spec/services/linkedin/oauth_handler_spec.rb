@@ -66,7 +66,7 @@ RSpec.describe Linkedin::OauthHandler do
   let(:retrieve_lite_profile_response) do
     OpenStruct.new(
       body: {
-        "id" => "8U-184SDzjs",
+        "id" => linkedin_id,
         "localizedFirstName" => localized_first_name,
         "localizedLastName" => "Doe",
         "profilePicture" => profile_picture
@@ -74,6 +74,8 @@ RSpec.describe Linkedin::OauthHandler do
       success?: true
     )
   end
+
+  let(:linkedin_id) { "8U-184SDzjs" }
 
   let(:localized_first_name) { "John" }
 
@@ -151,6 +153,33 @@ RSpec.describe Linkedin::OauthHandler do
       end
     end
 
+    context "when the user creator class raises an error" do
+      let(:error) { StandardError.new }
+
+      before do
+        allow(creator).to receive(:call).and_raise(error)
+        allow(Rollbar).to receive(:error)
+      end
+
+      it "returns an unsuccessful response" do
+        expect(handle_linkedin_oauth).to eq({success: false})
+      end
+
+      it "raises the error to Rollbar with extra data" do
+        handle_linkedin_oauth
+
+        expect(Rollbar).to have_received(:error).with(
+          error,
+          email_address: "john-doe@gmail.com",
+          display_name: "John Doe",
+          username: "johndoe",
+          linkedin_id: "8U-184SDzjs",
+          lite_profile_request_body: JSON.parse(retrieve_lite_profile_response.body),
+          email_address_request_body: JSON.parse(retrieve_email_address_response.body)
+        )
+      end
+    end
+
     it "calls #retrieve_lite_profile on the client with the access token" do
       handle_linkedin_oauth
 
@@ -192,6 +221,7 @@ RSpec.describe Linkedin::OauthHandler do
             .with(
               display_name: "John Doe",
               email: "john-doe@gmail.com",
+              linkedin_id: "8U-184SDzjs",
               password: nil,
               username: "johndoe"
             )
@@ -213,6 +243,7 @@ RSpec.describe Linkedin::OauthHandler do
               .with(
                 display_name: "John Doe",
                 email: "john-doe@gmail.com",
+                linkedin_id: "8U-184SDzjs",
                 password: nil,
                 username: "johndoe414835"
               )
@@ -233,6 +264,7 @@ RSpec.describe Linkedin::OauthHandler do
               .with(
                 display_name: "Rúben| Doe",
                 email: "john-doe@gmail.com",
+                linkedin_id: "8U-184SDzjs",
                 password: nil,
                 username: "rubendoe"
               )
