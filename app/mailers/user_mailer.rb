@@ -119,11 +119,11 @@ class UserMailer < ApplicationMailer
   def send_invite_used_email
     @user = indifferent_access_params[:recipient]
     @invitee = User.find(indifferent_access_params[:source_id])
-    @invitee_name = @invitee.display_name || @invitee.username
+    @invitee_username = @invitee.username
     @notification = indifferent_access_params[:record].to_notification
     @notification.record.mark_as_emailed
 
-    bootstrap_mail(to: @user.email, subject: "#{@invitee_name} signed up with your invite!")
+    bootstrap_mail(to: @user.email, subject: "#{@invitee_username} signed up with your invite!")
   end
 
   private

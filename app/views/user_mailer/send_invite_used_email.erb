@@ -1,6 +1,6 @@
 <h3 class="mb-10 main-title">Hey <%= @user.display_name || @user.username || "talented human" %>! 👋</h3>
 <p class="w-full mb-6 primary-3 paragraph">
-  We're writing to let you know that <%= @invitee_name %> used your invite to sign up for Talent Protocol.
+  We're writing to let you know that <%= link_to @invitee_username, user_url(username: @invitee_username, tab: "supporters") %> used your invite to sign up for Talent Protocol.
 </p>
 <p class="w-full mb-10 primary-3 paragraph">
   We can't tell you how much we appreciate your help in ensuring the growth of our community.
