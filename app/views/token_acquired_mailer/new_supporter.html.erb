@@ -1,4 +1,4 @@
-<%= render "shared_mailer/user", profile_picture_url: attachments['profile_picture.png']&.url, user: @staking_user %>
+<%= render "shared_mailer/user", user: @staking_user %>
 <h2 class="mb-6 main-title mt-4">Has invested in your journey!</h2>
 <h3 class="w-full mb-6 sub-title">
   <%= @user.display_name || @user.username %>, you have a new supporter, congrats! <%= @staking_user.display_name || @staking_user.username %> has just bought $<%= @user.talent&.token&.ticker %> for the first time.
