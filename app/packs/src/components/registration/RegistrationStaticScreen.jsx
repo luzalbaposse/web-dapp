@@ -20,14 +20,14 @@ const RegistrationStaticScreen = () => {
             />
           </div>
           <div className="registration-talent-text permanent-text-white">
-            <H1 className="d-inline" text="Support" bold />
+            <H1 className="d-inline" text="The web3 " bold />
             <H1
               className="d-inline text-yellow"
-              text=" undiscovered talent"
+              text="professional community "
               bold
             />
-            <H1 className="d-inline" text=" and be rewarded as they" bold />
-            <H1 className="d-inline text-yellow" text=" grow." bold />
+            <H1 className="d-inline" text="for high-potential" bold />
+            <H1 className="d-inline text-yellow" text=" builders." bold />
           </div>
         </>
       )}
