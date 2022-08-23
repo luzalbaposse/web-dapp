@@ -23,7 +23,12 @@ module Invites
       count = 0
 
       begin
-        invite.code = "#{prefix(invite)}-#{Invite.generate_code}"
+        invite.code =
+          if Invite.where(code: user.username).exists?
+            "#{prefix(invite)}-#{Invite.generate_code}"
+          else
+            user.username
+          end
 
         invite.save!
       rescue ActiveRecord::RecordNotUnique

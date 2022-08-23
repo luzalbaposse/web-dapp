@@ -1,7 +1,7 @@
 require "linkedin/client"
 require "rails_helper"
 
-RSpec.describe ::Linkedin::Client do
+RSpec.describe Linkedin::Client do
   let(:client) { described_class.new }
 
   describe "#retrieve_access_token" do

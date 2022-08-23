@@ -64,14 +64,6 @@ const EarnMenu = () => {
           <Invite pathClassName="icon-dropdown-item" />
           <P2 bold text="Invites" className="text-black ml-3" />
         </Dropdown.Item>
-        <Dropdown.Item
-          key="races-dropdown-theme"
-          className="text-black d-flex flex-row align-items-center user-menu-dropdown-item"
-          href="/earn?tab=race"
-        >
-          <Rocket pathClassName="icon-dropdown-item" />
-          <P2 bold text="Referral Race" className="text-black ml-3" />
-        </Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
   );

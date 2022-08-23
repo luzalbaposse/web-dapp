@@ -4,7 +4,7 @@ class UserBlueprint < Blueprinter::Base
   view :normal do
     fields :username, :display_name, :profile_type
     field :name do |user, _options|
-      user.display_name || user.username
+      user.name
     end
     field :is_talent do |user, _options|
       user.talent.present?
@@ -22,7 +22,27 @@ class UserBlueprint < Blueprinter::Base
   view :with_pictures do
     include_view :normal
     field :profilePictureUrl do |user, _options|
-      user.talent&.profile_picture_url || user.investor.profile_picture_url
+      user.profile_picture_url
+    end
+  end
+
+  view :rewards do
+    include_view :with_pictures
+
+    fields :created_at
+
+    field :ticker do |user, _options|
+      user.talent&.token&.ticker
+    end
+
+    field :status do |user, _options|
+      if user&.talent&.token&.deployed?
+        "Token Launched"
+      elsif user.beginner_quest_completed?
+        "Profile Complete"
+      else
+        "Registered"
+      end
     end
   end
 end

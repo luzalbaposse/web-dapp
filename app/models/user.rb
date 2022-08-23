@@ -55,6 +55,8 @@ class User < ApplicationRecord
     METHODS = [DISABLED = 0, IMMEDIATE = 1, DIGEST = 2]
   end
 
+  scope :beginner_quest_completed, -> { joins(:quests).where(quests: {type: "Quests::User", status: "done"}) }
+
   # [CLEARANCE] override email writing to allow nil but not two emails ""
   def self.normalize_email(email)
     if email.nil?
@@ -64,60 +66,6 @@ class User < ApplicationRecord
     end
   end
   # [CLEARANCE] end
-
-  def admin?
-    role == "admin"
-  end
-
-  def talent?
-    talent.present?
-  end
-
-  def investor?
-    investor.present?
-  end
-
-  def public_displayable?
-    profile_type == "talent" || profile_type == "approved"
-  end
-
-  def display_wallet_id
-    wallet_id ? "#{wallet_id[0..10]}..." : ""
-  end
-
-  def sender_chat_id(chat_user)
-    [id, chat_user.id].join("")
-  end
-
-  def receiver_chat_id(chat_user)
-    [id, chat_user.id].join("")
-  end
-
-  def last_message_with(chat_user)
-    result = Message.where(sender_id: id, receiver_id: chat_user.id)
-      .or(Message.where(sender_id: chat_user.id, receiver_id: id)).order(id: :desc).limit(1)
-
-    if result.length > 0
-      result[0]
-    end
-  end
-
-  def confirm_email
-    self.email_confirmed_at = Time.current
-    save
-  end
-
-  def active_theme
-    if theme_preference == "light"
-      "light-body"
-    else
-      "dark-body"
-    end
-  end
-
-  def has_unread_messages?
-    messagee.unread.any?
-  end
 
   def self.valid_username?(new_username)
     new_username && new_username.length > 0 && new_username.match?(/^[a-z0-9]*$/)
@@ -133,30 +81,59 @@ class User < ApplicationRecord
     end
   end
 
+  def active_supporter?
+    TalentSupporter.where(supporter_wallet_id: wallet_id).present?
+  end
+
+  def active_theme
+    if theme_preference == "light"
+      "light-body"
+    else
+      "dark-body"
+    end
+  end
+
+  def admin?
+    role == "admin"
+  end
+
   def as_json(options = {})
     options[:except] ||= [:remember_token, :encrypted_password, :confirmation_token, :last_sign_in_at, :nounce, :email_confirmation_token]
     super(options)
   end
 
-  def prefers_digest_notification?(type)
-    notification_preferences[type.name] == Delivery::DIGEST
+  def beginner_quest_completed?
+    quests.where(type: "Quests::User", status: "done").any?
   end
 
-  def prefers_immediate_notification?(type)
-    notification_preferences[type.name].nil? ||
-      notification_preferences[type.name] == Delivery::IMMEDIATE
+  def confirm_email
+    self.email_confirmed_at = Time.current
+    save
   end
 
-  def supporters(including_self: true, invested_after: nil)
-    return User.none unless talent&.token&.deployed?
+  def display_wallet_id
+    wallet_id ? "#{wallet_id[0..10]}..." : ""
+  end
 
-    talent_supporters = TalentSupporter.where(talent_contract_id: talent.token.contract_id)
-    talent_supporters = talent_supporters.where("last_time_bought_at > ?", invested_after) if invested_after
+  def has_unread_messages?
+    messagee.unread.any?
+  end
 
-    supporters_wallet_ids = talent_supporters.pluck(:supporter_wallet_id)
-    supporters = User.where(wallet_id: supporters_wallet_ids)
+  def investor?
+    investor.present?
+  end
 
-    including_self ? supporters : supporters.where.not(id: id)
+  def last_message_with(chat_user)
+    result = Message.where(sender_id: id, receiver_id: chat_user.id)
+      .or(Message.where(sender_id: chat_user.id, receiver_id: id)).order(id: :desc).limit(1)
+
+    if result.length > 0
+      result[0]
+    end
+  end
+
+  def name
+    display_name.present? ? display_name : username
   end
 
   def portfolio(including_self: true, invested_after: nil)
@@ -171,28 +148,61 @@ class User < ApplicationRecord
     including_self ? supporting_users : supporting_users.where.not(id: id)
   end
 
-  def active_supporter?
-    TalentSupporter.where(supporter_wallet_id: wallet_id).present?
+  def prefers_digest_notification?(type)
+    notification_preferences[type.name] == Delivery::DIGEST
+  end
+
+  def prefers_immediate_notification?(type)
+    notification_preferences[type.name].nil? ||
+      notification_preferences[type.name] == Delivery::IMMEDIATE
   end
 
   def profile_picture_url
     talent&.profile_picture_url || investor&.profile_picture_url
   end
 
+  def public_displayable?
+    profile_type == "talent" || profile_type == "approved"
+  end
+
+  def receiver_chat_id(chat_user)
+    [id, chat_user.id].join("")
+  end
+
+  def sender_chat_id(chat_user)
+    [id, chat_user.id].join("")
+  end
+
+  def supporters(including_self: true, invested_after: nil)
+    return User.none unless talent&.token&.deployed?
+
+    talent_supporters = TalentSupporter.where(talent_contract_id: talent.token.contract_id)
+    talent_supporters = talent_supporters.where("last_time_bought_at > ?", invested_after) if invested_after
+
+    supporters_wallet_ids = talent_supporters.pluck(:supporter_wallet_id)
+    supporters = User.where(wallet_id: supporters_wallet_ids)
+
+    including_self ? supporters : supporters.where.not(id: id)
+  end
+
+  def talent?
+    talent.present?
+  end
+
   private
 
-  def validate_notification_preferences
-    valid = false
+  def email_and_password
+    return if email.present? && encrypted_password.present?
 
-    if notification_preferences.is_a?(Hash)
-      valid = notification_preferences.all? do |type, value|
-        Delivery::TYPES.include?(type) && Delivery::METHODS.include?(value)
-      end
-    end
+    errors.add(:base, "The user doesn't respect the required login requirements")
+  end
 
-    if !valid
-      errors.add(:notification_preferences, "Invalid notification preferences.")
-    end
+  def email_optional?
+    true
+  end
+
+  def password_optional?
+    true
   end
 
   def role_is_valid
@@ -207,17 +217,23 @@ class User < ApplicationRecord
     end
   end
 
-  def email_optional?
-    true
-  end
-
-  def password_optional?
-    true
-  end
-
   def email_and_credentials
     return if email.present? && (encrypted_password.present? || linkedin_id.present?)
 
     errors.add(:base, "The user doesn't respect the required login requirements")
+  end
+
+  def validate_notification_preferences
+    valid = false
+
+    if notification_preferences.is_a?(Hash)
+      valid = notification_preferences.all? do |type, value|
+        Delivery::TYPES.include?(type) && Delivery::METHODS.include?(value)
+      end
+    end
+
+    if !valid
+      errors.add(:notification_preferences, "Invalid notification preferences.")
+    end
   end
 end

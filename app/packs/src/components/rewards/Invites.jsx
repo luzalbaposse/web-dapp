@@ -32,7 +32,7 @@ const InviteHeader = ({ investorId, username }) => {
           This is a special type of invite that allows you to refer a talented
           friend to launch a token immediately. They skip the traditional
           application process and receive $200, while you earn 250 $TAL per
-          talent invited. To unlock Talent Invites you must have launched a 
+          talent invited. To unlock Talent Invites you must have launched a
           talent token.
         </P1>
       </div>
@@ -95,7 +95,7 @@ const Overview = ({ inviteType, invites }) => {
     }
 
     if (full) {
-      return `https://beta.talentprotocol.com/sign_up?code=${invite.code}`;
+      return `https://beta.talentprotocol.com/join/${invite.code}`;
     } else {
       const start = invite.code.length > 5 ? invite.code.length - 5 : 0;
       return `https://beta.talentprotocol...${invite.code.substring(

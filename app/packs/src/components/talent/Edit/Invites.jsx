@@ -71,7 +71,7 @@ const Invites = (props) => {
   const addInviteToClipboard = (invite) => {
     setCopied((prev) => ({ ...prev, [invite.id]: true }));
     navigator.clipboard.writeText(
-      `${window.location.origin}/sign_up?code=${invite.code}`
+      `${window.location.origin}/join/${invite.code}`
     );
 
     setTimeout(

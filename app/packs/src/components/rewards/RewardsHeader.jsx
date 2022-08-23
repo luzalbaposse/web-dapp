@@ -41,8 +41,11 @@ const RewardsHeader = ({ rewards }) => {
   return (
     <div className="talent-rewards-header-row mb-6">
       <div className="d-flex flex-column col-lg-5 p-4 px-lg-0">
-        <H3 bold>Invite friends. Earn rewards.</H3>
-        <P1>Invite them to Talent Protocol and earn $TAL.</P1>
+        <H3 bold>Complete tasks. Earn crypto.</H3>
+        <P1>
+          Complete quests and invite your most talented friends to start earning
+          crypto.
+        </P1>
       </div>
       <div className="d-flex flex-column col-lg-5 talent-rewards-header-box px-4 px-lg-0">
         <div className="talent-rewards-highlight p-4">

@@ -88,6 +88,46 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe ".beginner_quest_completed" do
+    let(:user_1) { create :user }
+    let(:user_2) { create :user }
+    let(:user_3) { create :user }
+
+    before do
+      create :quest, type: "Quests::User", status: "done", user: user_1
+      create :quest, type: "Quests::Scout", status: "done", user: user_3
+      create :quest, type: "Quests::User", status: "pending", user: user_3
+    end
+
+    it "only returns users with the beginner quest completed" do
+      expect(User.beginner_quest_completed).to eq [user_1]
+    end
+  end
+
+  describe "#beginner_quest_completed?" do
+    let(:user) { create :user }
+
+    before do
+      create :quest, type: "Quests::User", status: quest_status, user: user
+    end
+
+    context "when the quest status is done" do
+      let(:quest_status) { "done" }
+
+      it "returns true" do
+        expect(user.beginner_quest_completed?).to eq true
+      end
+    end
+
+    context "when the quest status is not done" do
+      let(:quest_status) { "pending" }
+
+      it "returns false" do
+        expect(user.beginner_quest_completed?).to eq false
+      end
+    end
+  end
+
   describe "#supporters" do
     let(:user) { create :user, talent: talent }
     let(:talent) { create :talent }
