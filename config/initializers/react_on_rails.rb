@@ -9,7 +9,8 @@ module RenderingExtension
       contractsEnv: ENV["CONTRACTS_ENV"],
       transakApiKey: ENV["TRANSAK_API_KEY"],
       emailRegexWithoutAliases: ENV["EMAIL_REGEX_WITHOUT_ALIASES"],
-      disableSmartContracts: ENV["DISABLE_SMART_CONTRACTS"]
+      disableSmartContracts: ENV["DISABLE_SMART_CONTRACTS"],
+      etherscanApiKey: ENV["ETHERSCAN_API_KEY"]
     }
   end
 end

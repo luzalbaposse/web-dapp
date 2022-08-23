@@ -8,10 +8,10 @@ export const ipfsToURL = (ipfsAddress) => {
   return "https://ipfs.io/" + ipfsAddress.replace("://", "/");
 };
 
-export const getENSFromAddress = async (walletAddress) => {
+export const getENSFromAddress = async (walletAddress, apiKey) => {
   let name = null;
   try {
-    const provider = new ethers.providers.EtherscanProvider();
+    const provider = new ethers.providers.EtherscanProvider("mainnet", apiKey);
     name = await provider.lookupAddress(walletAddress);
   } catch (err) {
     console.log(err);
