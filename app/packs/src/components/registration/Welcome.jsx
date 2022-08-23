@@ -108,7 +108,7 @@ const Welcome = ({
             <H5 text="Welcome to Talent Protocol!" bold />
             <P2
               className="text-primary-03"
-              text="Sign up with your email to start building your web3 resume and launch a talent token."
+              text="Sign up to build your web3 on-chain resume that gives you priority access to scholarships, opportunities, mentors and more."
             />
           </>
         )}
@@ -116,10 +116,13 @@ const Welcome = ({
           <div className="d-flex flex-row align-items-center">
             <TalentProfilePicture src={profilePictureUrl} height={120} />
             <div className="d-flex flex-column ml-3">
-              <H5 text="Welcome to Talent Protocol!" bold />
+              <H5
+                text={`${name} is inviting you to join Talent Protocol!`}
+                bold
+              />
               <P2
                 className="text-primary-03"
-                text={`Sign up with your email to join ${name} in building your web3 resume and launch a talent token.`}
+                text="Sign up to build your web3 on-chain resume that gives you priority access to scholarships, opportunities, mentors and more."
               />
             </div>
           </div>
@@ -128,7 +131,7 @@ const Welcome = ({
       <form onSubmit={submitWelcomeForm} className="d-flex flex-column w-100">
         <div className="form-group position-relative">
           <label htmlFor="inputEmail">
-            <P2 className="text-black" text="Email Address" bold />
+            <P2 className="text-black" text="Drop your email address" bold />
           </label>
           <TextInput
             mode={themePreference}
@@ -219,7 +222,7 @@ const Welcome = ({
         className={cx("d-flex w-100 mt-6", mobile && "justify-content-center")}
       >
         <P2 className="text-black mr-1" text="Already have an account?" />
-        <Link text="Login" href="/" bold />
+        <Link text="Login." href="/" bold />
       </div>
       <div
         className={cx(
@@ -232,7 +235,7 @@ const Welcome = ({
           bold
           href={USER_GUIDE}
           target="_blank"
-          text="Check our user guide"
+          text="Check the user guide."
         />
       </div>
     </>

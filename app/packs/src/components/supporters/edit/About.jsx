@@ -192,7 +192,7 @@ const About = ({
         response.map((tag) => ({
           value: tag.description,
           label: tag.description,
-          count: tag.user_count,
+          count: tag.user_tags_count,
         }))
       );
     });

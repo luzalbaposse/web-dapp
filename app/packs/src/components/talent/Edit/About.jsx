@@ -24,6 +24,8 @@ import LoadingButton from "src/components/button/LoadingButton";
 import Divider from "src/components/design_system/other/Divider";
 import { getENSFromAddress } from "../../../onchain/utils";
 
+import { railsContextStore } from "src/contexts/state";
+
 import cx from "classnames";
 
 import {
@@ -79,6 +81,7 @@ const About = (props) => {
     trackChanges,
     buttonText,
   } = props;
+  const railsContext = railsContextStore((state) => state.railsContext);
   const [errorTracking, setErrorTracking] = useState({});
   const [uploadingFileS3, setUploadingFileS3] = useState(false);
   const [uploaded, setUploaded] = useState({ banner: false, profile: false });
@@ -90,7 +93,7 @@ const About = (props) => {
 
   const [fetchENS, setFetchENS] = useState({
     loading: false,
-    hasAlreadyFetched: false
+    hasAlreadyFetched: false,
   });
   const [openToJobOffers, setOpenToJobOffers] = useState(
     props.talent.open_to_job_offers
@@ -184,15 +187,17 @@ const About = (props) => {
 
   const updateUserENS = async () => {
     if (props.user.wallet_id) {
-      setFetchENS((prev) => ({ ...prev, loading: true}));
-      const name = await getENSFromAddress(props.user.wallet_id);
-      if(name){
+      setFetchENS((prev) => ({ ...prev, loading: true }));
+      const name = await getENSFromAddress(
+        props.user.wallet_id,
+        railsContext.etherscanApiKey
+      );
+      if (name) {
         changeUserAttribute("ens_domain", name);
       }
     }
-    setFetchENS((prev) => ({ loading: false, hasAlreadyFetched: true}));
+    setFetchENS((prev) => ({ loading: false, hasAlreadyFetched: true }));
   };
-
 
   const changeOpenToOffersAttribute = (value) => {
     trackChanges(true);
@@ -241,7 +246,7 @@ const About = (props) => {
         response.map((tag) => ({
           value: tag.description,
           label: tag.description,
-          count: tag.user_count,
+          count: tag.user_tags_count,
         }))
       );
     });
@@ -398,10 +403,12 @@ const About = (props) => {
         <TextInput
           title={"ENS"}
           mode={mode}
-          onChange={(e) =>
-            changeTalentProfileAttribute("occupation", e.target.value)
+          value={
+            props.user.ens_domain ||
+            (fetchENS["hasAlreadyFetched"]
+              ? "Domain not found. Ensure it is marked as primary."
+              : "")
           }
-          value={props.user.ens_domain || (fetchENS["hasAlreadyFetched"] ? "No domain available" : "")}
           disabled
           className="flex-fill mr-3"
         />
@@ -412,8 +419,19 @@ const About = (props) => {
           disabled={!props.user.wallet_id || fetchENS["loading"]}
           loading={fetchENS["loading"]}
         >
-          Update
+          Refresh ENS domain
         </LoadingButton>
+        <p className="short-caption">
+          {" "}
+          The domain needs to be associated with the wallet connected and marked
+          as{" "}
+          <a
+            href="https://app.ens.domains/faq#what-is-a-primary-ens-name-record"
+            target="_blank"
+          >
+            primary
+          </a>
+        </p>
       </div>
       <div className="d-flex flex-row w-100 justify-content-between mt-4 flex-wrap">
         <TextInput
