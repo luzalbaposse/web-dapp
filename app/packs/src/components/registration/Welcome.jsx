@@ -11,8 +11,7 @@ import { get } from "src/utils/requests";
 import { TERMS_HREF, PRIVACY_HREF, USER_GUIDE } from "src/utils/constants";
 import { useWindowDimensionsHook } from "src/utils/window";
 import { emailRegex, emailRegexWithAliases } from "src/utils/regexes";
-import Tooltip from "src/components/design_system/tooltip";
-import { Help } from "src/components/icons";
+import TalentProfilePicture from "src/components/talent/TalentProfilePicture";
 
 import cx from "classnames";
 
@@ -25,6 +24,9 @@ const Welcome = ({
   setCaptcha,
   captchaKey,
   railsContext,
+  inviteCode,
+  name,
+  profilePictureUrl,
 }) => {
   const { width } = useWindowDimensionsHook();
   const mobile = width < 992;
@@ -35,8 +37,7 @@ const Welcome = ({
   const [emailValidated, setEmailValidated] = useState(null);
   const [emailExists, setEmailExists] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
-  const url = new URL(document.location);
-  const [localCode, setCode] = useState(url.searchParams.get("code") || "");
+  const [localCode, setCode] = useState(inviteCode || "");
 
   const validEmail = () => {
     if (railsContext.emailRegexWithoutAliases === "true") {
@@ -97,14 +98,32 @@ const Welcome = ({
     setLocalCaptcha(value);
   };
 
+  const shouldRenderInvitedBy = inviteCode !== "" && !!name;
+
   return (
     <>
       <div className="mb-6">
-        <H5 text="Welcome to Talent Protocol!" bold />
-        <P2
-          className="text-primary-03"
-          text="Sign up with your email to start building your web3 resume and launch a talent token."
-        />
+        {!shouldRenderInvitedBy && (
+          <>
+            <H5 text="Welcome to Talent Protocol!" bold />
+            <P2
+              className="text-primary-03"
+              text="Sign up with your email to start building your web3 resume and launch a talent token."
+            />
+          </>
+        )}
+        {shouldRenderInvitedBy && (
+          <div className="d-flex flex-row align-items-center">
+            <TalentProfilePicture src={profilePictureUrl} height={120} />
+            <div className="d-flex flex-column ml-3">
+              <H5 text="Welcome to Talent Protocol!" bold />
+              <P2
+                className="text-primary-03"
+                text={`Sign up with your email to join ${name} in building your web3 resume and launch a talent token.`}
+              />
+            </div>
+          </div>
+        )}
       </div>
       <form onSubmit={submitWelcomeForm} className="d-flex flex-column w-100">
         <div className="form-group position-relative">
@@ -158,26 +177,6 @@ const Welcome = ({
               We already have that email in the system.
             </small>
           )}
-          <label htmlFor="inputCode" className="d-flex mt-4">
-            <P2 className="text-black" text="Invite Code" bold />
-            <Tooltip
-              body="If you have a referral code insert it here to access additional features.
-                If you don't have one, you can leave this blank."
-              popOverAccessibilityId={"invite_code_tooltip"}
-              placement="top"
-            >
-              <div className="cursor-pointer d-flex align-items-center ml-2">
-                <Help color="#536471" />
-              </div>
-            </Tooltip>
-          </label>
-          <TextInput
-            mode={themePreference}
-            id="inputCode"
-            ariaDescribedBy="codeHelp"
-            value={localCode}
-            onChange={(e) => setCode(e.target.value)}
-          />
           <div className="d-flex flex-row w-100 mt-4">
             <ReCAPTCHA sitekey={captchaKey} onChange={recaptchaSubmition} />
           </div>

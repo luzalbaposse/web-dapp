@@ -4,7 +4,6 @@ import { urlStore } from "src/contexts/state";
 
 import ReferralRace from "./ReferralRace";
 import RewardsHeader from "./RewardsHeader";
-import Invites from "./Invites";
 import Quests from "./quests";
 
 const Tabs = ({ changeTab, activeTab }) => {
@@ -26,33 +25,24 @@ const Tabs = ({ changeTab, activeTab }) => {
       >
         Invites
       </div>
-      <div
-        onClick={() => changeTab("race")}
-        className={`text-no-wrap talent-table-tab${
-          activeTab == "race" ? " active-talent-table-tab" : ""
-        }`}
-      >
-        Referral Race
-      </div>
     </div>
   );
 };
 
 const Rewards = ({
   user,
-  racesCount,
+  allRaces,
   userRewards,
   raceRewards,
-  talentInvites,
-  talentList,
-  supporterInvites,
   quests,
-  raceRegisteredUsersCount,
-  usersThatBoughtTokensCount,
+  race,
+  invitedUsers,
+  leaderboardResults,
+  raceInvitesCount,
 }) => {
   const changeURL = urlStore((state) => state.changeURL);
 
-  const { isTalent, isEligible } = user;
+  const { isEligible } = user;
   const url = new URL(window.location);
   const searchParams = new URLSearchParams(url.search);
   const [activeTab, setTab] = useState("quests");
@@ -88,24 +78,16 @@ const Rewards = ({
     <>
       <RewardsHeader rewards={userRewards} />
       <Tabs activeTab={activeTab} changeTab={changeTab} />
-      {activeTab == "race" && (
-        <ReferralRace
-          raceRewards={raceRewards}
-          raceRegisteredUsersCount={raceRegisteredUsersCount}
-          usersThatBoughtTokensCount={usersThatBoughtTokensCount}
-          racesCount={racesCount}
-          isEligible={isEligible}
-          investorId={user.investorId}
-          username={user.username}
-        />
-      )}
       {activeTab == "talent" && (
-        <Invites
-          username={user.username}
-          investorId={user.investorId}
-          talentInvites={talentInvites}
-          supporterInvites={supporterInvites}
-          talentList={talentList}
+        <ReferralRace
+          allRaces={allRaces}
+          raceRewards={raceRewards}
+          isEligible={isEligible}
+          race={race}
+          user={user}
+          leaderboardResults={leaderboardResults}
+          invitedUsers={invitedUsers}
+          raceInvitesCount={raceInvitesCount}
         />
       )}
       {activeTab == "quests" && (

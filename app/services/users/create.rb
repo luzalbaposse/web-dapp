@@ -26,6 +26,7 @@ module Users
 
         create_invite(user)
         create_tasks(user)
+        create_follow(invite, user)
 
         UserMailer.with(user: user).send_welcome_email.deliver_later(wait: 5.seconds)
 
@@ -144,6 +145,14 @@ module Users
     def update_profile_type(user)
       Users::UpdateProfileType.new.call(user: user, new_profile_type: "talent")
       user.reload
+    end
+
+    def create_follow(invite, user)
+      invited_by_user = invite.user
+      follow = Follow.find_or_initialize_by(user_id: user.id, follower_id: invited_by_user.id)
+      unless follow.persisted? # validate if the watchlist quest is completed
+        UpdateTasksJob.perform_later(type: "Tasks::Watchlist", user_id: invited_by_user.id)
+      end
     end
   end
 end

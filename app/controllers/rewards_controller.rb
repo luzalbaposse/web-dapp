@@ -1,22 +1,32 @@
 class RewardsController < ApplicationController
   def index
-    invites = current_acting_user.invites
-    @talent_invites = invites.select { |i| i.talent_invite }
-    @supporter_invites = invites.select { |i| !i.talent_invite }
+    @invites = current_acting_user.invites.common
 
     @races_count = Race.count
     @user_rewards = current_acting_user.rewards
+    @current_race = Race.active_race || Race.where("started_at >= ?", Date.new(2022, 8, 15)).order(started_at: :asc).first
+    # Only show races after the second batch of races
+    @races = Race.where("started_at >= ? AND ends_at < ?", Date.new(2022, 8, 15), Date.current).or(Race.where(id: @current_race&.id))
+
     race_registered_users = User.where.not(race_id: nil)
     @race_registered_users_count = race_registered_users.count
-    @users_that_bought_tokens_count = race_registered_users.where(tokens_purchased: true).count
+    @users_that_invited_others_count = race_registered_users.includes(:invites).where(invites: {talent_invite: false}).where("users.username = invites.code").count
     race_rewards = Reward.race.order(amount: :desc).includes(:user)
     @race_rewards = RewardBlueprint.render_as_json(race_rewards, view: :normal)
 
-    if @talent_invites.length > 0
-      invite_ids = @talent_invites.map(&:id)
-      talents = Talent.joins(:user).where(user: {invite_id: invite_ids})
+    invited_users = User.where(invited: @invites)
+    @invited_users = UserBlueprint.render_as_json(invited_users.order(created_at: :desc), view: :rewards)
 
-      @talent_list = TalentBlueprint.render_as_json(talents, view: :short_meta, current_user_watchlist: current_user_watchlist)
+    service = Races::PrepareRaceResults.new(race: @current_race, user: current_acting_user)
+    @race_leaderboard_results = service.call
+
+    @race_invites_count = if @current_race
+      User.includes(:invites)
+        .where(invites: {talent_invite: false})
+        .where("users.username = invites.code and users.created_at >= ?", @current_race.started_at)
+        .count
+    else
+      0
     end
 
     quests = Quest.where(user: current_acting_user).order(:id)

@@ -3,7 +3,7 @@ class API::V1::RacesController < ApplicationController
 
   def show
     if @race
-      service = PrepareRaceResults.new(race: @race, user: current_user)
+      service = Races::PrepareRaceResults.new(race: @race, user: current_user)
       @race_results = service.call
 
       render json: @race_results, status: :ok

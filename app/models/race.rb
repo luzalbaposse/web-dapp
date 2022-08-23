@@ -11,22 +11,10 @@ class Race < ApplicationRecord
     # We now only want to include users that have purchased tokens
     query = if id <= 4
       Races::ResultsWithWalletConnected.new.call(race: self)
+    elsif started_at < Date.new(2022, 8, 15)
+      Races::ResultsWithWalletConnectedAndTokensBought.new.call(race: self)
     else
-      <<~SQL
-        SELECT count(users.id) as overall_result, invited_by.id FROM users
-        INNER JOIN invites ON users.invite_id = invites.id
-        INNER JOIN users AS invited_by ON invited_by.id = invites.user_id
-        WHERE users.race_id = '#{id}'
-        AND invited_by.role != 'admin'
-        AND users.email_confirmed_at IS NOT null
-        AND users.wallet_id IS NOT null
-        AND users.tokens_purchased IS TRUE
-        AND invited_by.id NOT IN (
-          SELECT rewards.user_id FROM rewards WHERE rewards.category = 'race' AND rewards.amount = 1200
-        )
-        GROUP BY invited_by.id
-        ORDER BY overall_result DESC
-      SQL
+      Races::ResultsWithBeginnerQuestCompleted.new.call(race: self)
     end
 
     ActiveRecord::Base.connection.execute(query)

@@ -44,7 +44,7 @@ const Footer = () => {
             </a>
             <P2
               className="text-primary-03 mt-2"
-              text="The web3 professional network for high-potential talent."
+              text="The web3 professional community for high-potential builders."
             />
           </div>
           <div className="col-lg-3"></div>

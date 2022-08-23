@@ -4,19 +4,19 @@
       <%= react_component("Rewards",
         props: {
           user: {
-            isTalent: current_acting_user.talent.present?,
-            isEligible: current_acting_user.wallet_id.present?,
+            isEligible: current_acting_user.beginner_quest_completed?,
             username: current_acting_user.username,
             investorId: current_acting_user.investor&.id
           },
-          talentInvites: @talent_invites,
-          supporterInvites: @supporter_invites,
+          allRaces: @races,
+          invites: @invites,
+          leaderboardResults: @race_leaderboard_results,
           racesCount: @races_count,
+          race: @current_race,
           userRewards: @user_rewards,
           raceRewards: @race_rewards,
-          raceRegisteredUsersCount: @race_registered_users_count,
-          usersThatBoughtTokensCount: @users_that_bought_tokens_count,
-          talentList: @talent_list,
+          invitedUsers: @invited_users,
+          raceInvitesCount: @race_invites_count,
           quests: @quests
         },
         prerender: false) %>

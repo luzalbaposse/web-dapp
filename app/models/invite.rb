@@ -8,6 +8,8 @@ class Invite < ApplicationRecord
 
   INVITE_CODE_SIZE = 8
 
+  scope :common, -> { where(talent_invite: false) }
+
   def active?
     max_uses.nil? || uses < max_uses
   end

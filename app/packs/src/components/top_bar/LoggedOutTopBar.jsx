@@ -30,7 +30,7 @@ export const LoggedOutTopBar = ({}) => {
           <Button
             text="Sign up"
             type="primary-default"
-            onClick={() => (window.location.href = "/sign_up")}
+            onClick={() => (window.location.href = "/join")}
           />
           <Button
             type="white-subtle"

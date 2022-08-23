@@ -2,7 +2,10 @@
   <%= react_component("RegistrationFlow",
     props: {
       step: 1,
-      captchaKey: ENV["RECAPTCHA_SITE_KEY"]
+      captchaKey: ENV["RECAPTCHA_SITE_KEY"],
+      inviteCode: @invite&.code,
+      profilePicture: @user&.profile_picture_url,
+      name: @user&.display_name || @user&.username,
     },
     prerender: false, html_options: { class: "h-100"})
   %>

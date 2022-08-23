@@ -64,6 +64,12 @@ class API::V1::UsersController < ApplicationController
           return render json: {errors: {email: "Email is not valid"}}, status: :conflict
         end
 
+        # username should always match the invite code
+        if !!user_params[:username] && user_params[:username] != current_user.username
+          invite = Invite.find_by(code: current_user.username)
+          invite&.update(code: user_params[:username])
+        end
+
         current_user.update!(user_params)
 
         if investor_params.present?
