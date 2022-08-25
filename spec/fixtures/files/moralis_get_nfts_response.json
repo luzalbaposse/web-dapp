@@ -1,0 +1,73 @@
+{
+  "total": 11,
+  "page": 1,
+  "page_size": 100,
+  "cursor": null,
+  "result": [
+    {
+      "token_address": "0x951416cb5a9c5379ae696acb07cb8e25aefad370",
+      "token_id": "2919",
+      "owner_of": "0x58a35cf59dadasbda7yd27bsqw7qw7basa71",
+      "block_number": "15277977",
+      "block_number_minted": "15277977",
+      "token_hash": "d0410a10600d7b6b2c30c7891d6d3a33",
+      "amount": "1",
+      "contract_type": "ERC721",
+      "name": "Crypto Nomads Club",
+      "symbol": "CNC",
+      "token_uri": "https://ipfs.moralis.io:2053/ipfs/QmRgvuYv5Y4qjQfXz7KshzQpSne1kM5dP4jAWuFyyTzZGH/LISBON.json",
+      "metadata": null,
+      "last_token_uri_sync": "2022-08-04T20:21:45.315Z",
+      "last_metadata_sync": "2022-08-04T20:21:54.568Z"
+    },
+    {
+      "token_address": "0x7ffd8c64587026bf1a2c54bc77fa7d74f87d3338",
+      "token_id": "122",
+      "owner_of": "0x58a35cf59dadasbda7yd27bsqw7qw7basa71",
+      "block_number": "13322766",
+      "block_number_minted": "13316551",
+      "token_hash": "22bdf889d53f1b183881d34056e219ab",
+      "amount": "1",
+      "contract_type": "ERC721",
+      "name": "MusicFund",
+      "symbol": "MUSICFUND",
+      "token_uri": "https://musicfund-backend.herokuapp.com/nfts/placeholders/122",
+      "metadata": null,
+      "last_token_uri_sync": null,
+      "last_metadata_sync": null
+    },
+    {
+      "token_address": "0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85",
+      "token_id": "32543023788032106523154235704456267944048946694964671196751682842436162158497",
+      "owner_of": "0x58a35cf59dadasbda7yd27bsqw7qw7basa71",
+      "block_number": "13198388",
+      "block_number_minted": "13198388",
+      "token_hash": "a510f6a79cec677fc693a8542df7e8f7",
+      "amount": "1",
+      "contract_type": "ERC721",
+      "name": "Ethereum Name Service",
+      "symbol": "ENS",
+      "token_uri": "https://metadata.ens.domains/mainnet/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/32543023788032106523154235704456267944048946694964671196751682842436162158497",
+      "metadata": "{\"is_normalized\":true,\"name\":\"asd.eth\",\"description\":\"asd.eth, an ENS name.\",\"attributes\":[{\"trait_type\":\"Created Date\",\"display_type\":\"date\",\"value\":null},{\"trait_type\":\"Length\",\"display_type\":\"number\",\"value\":6},{\"trait_type\":\"Registration Date\",\"display_type\":\"date\",\"value\":1631282170000},{\"trait_type\":\"Expiration Date\",\"display_type\":\"date\",\"value\":1946851690000}],\"name_length\":6,\"url\":\"https://app.ens.domains/name/asd.eth\",\"version\":0,\"background_image\":\"https://metadata.ens.domains/mainnet/avatar/asd.eth\",\"image_url\":\"https://metadata.ens.domains/mainnet/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/0x47f2b2dff721ac5f3ee7a3cd1703223fcc36a9ad9b03b2654ecaf94a8cddffa1/image\"}",
+      "last_token_uri_sync": null,
+      "last_metadata_sync": null
+    },
+    {
+      "token_address": "0x9213256fe89fa0428e8546910a8d78180dbbdc38",
+      "token_id": "903",
+      "owner_of": "0x58a35cf59dadasbda7yd27bsqw7qw7basa71",
+      "block_number": "13842486",
+      "block_number_minted": "13842486",
+      "token_hash": "90c390421aefc7de9e8d75853e2f8bd4",
+      "amount": "1",
+      "contract_type": "ERC721",
+      "name": "Storyteller Card",
+      "symbol": "FILMMAKER",
+      "token_uri": "Invalid uri",
+      "metadata": "",
+      "last_token_uri_sync": "2022-08-04T05:11:53.116Z",
+      "last_metadata_sync": "2022-08-04T05:11:53.117Z"
+    }
+  ],
+  "status": "SYNCED"
+}

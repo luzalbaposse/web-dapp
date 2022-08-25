@@ -1,7 +1,7 @@
-require "celo_explorer/client"
+require "web3/celo_explorer/client"
 require "rails_helper"
 
-RSpec.describe CeloExplorer::Client do
+RSpec.describe Web3::CeloExplorer::Client do
   let(:client) { described_class.new }
 
   describe "#retrieve_tokens" do
