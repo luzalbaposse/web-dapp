@@ -149,6 +149,8 @@ module Users
 
     def create_follow(invite, user)
       invited_by_user = invite.user
+      return if invited_by_user.nil?
+
       follow = Follow.find_or_initialize_by(user_id: user.id, follower_id: invited_by_user.id)
       unless follow.persisted? # validate if the watchlist quest is completed
         UpdateTasksJob.perform_later(type: "Tasks::Watchlist", user_id: invited_by_user.id)
