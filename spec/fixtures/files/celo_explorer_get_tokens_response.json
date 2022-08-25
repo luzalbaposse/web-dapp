@@ -1,0 +1,45 @@
+{
+  "message": "OK",
+  "result": [
+    {
+      "balance": "200000000000000000000",
+      "contractAddress": "0x4c66010e91409589de79b0d67f078c87e01f4d96",
+      "decimals": "18",
+      "name": "caelin",
+      "symbol": "CAELIN",
+      "type": "ERC-20"
+    },
+    {
+      "balance": "427124874055627212581",
+      "contractAddress": "0x00be915b9dcf56a3cbe739d9b9c202ca692409ec",
+      "decimals": "18",
+      "name": "Ubeswap",
+      "symbol": "UBE",
+      "type": "ERC-20"
+    },
+    {
+      "balance": "1",
+      "contractAddress": "0x1427626c85b96a9288f8f420530c11e4e1efde9f",
+      "decimals": "",
+      "name": "Talent Protocol Community Member",
+      "symbol": "TALMEMBERS1",
+      "type": "ERC-721"
+    },
+    {
+      "balance": "1",
+      "contractAddress": "0x68d8077a0f8f653fd811063d796ceeecd0f8d746",
+      "decimals": "",
+      "name": "Talent Protocol Community User",
+      "symbol": "TALUSERS1",
+      "type": "ERC-721"
+    },
+    {
+      "balance": "100000000000000000000",
+      "contractAddress": "0x9d65cb7b629c16c939fcc2c731ad22a212704800",
+      "decimals": "18",
+      "name": "hustleelio",
+      "symbol": "ELI",
+      "type": "ERC-20"
+    }
+  ]
+}

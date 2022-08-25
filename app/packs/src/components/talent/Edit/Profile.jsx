@@ -8,6 +8,7 @@ import {
   profileProgress,
   missingFields,
 } from "src/components/talent/utils/talent";
+import { railsContextStore } from "src/contexts/state";
 
 import Button from "src/components/design_system/button";
 import P2 from "src/components/design_system/typography/p2";
@@ -66,6 +67,12 @@ const Profile = (props) => {
   const [sharedState, setSharedState] = useState({ ...props });
   const progress = profileProgress(sharedState);
   const requiredFields = missingFields(sharedState);
+
+  const setRailsContext = railsContextStore((state) => state.setRailsContext);
+
+  useEffect(() => {
+    setRailsContext(props.railsContext);
+  }, []);
 
   useEffect(() => {
     if (activeTab != "") {

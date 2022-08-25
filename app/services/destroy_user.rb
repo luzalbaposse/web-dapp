@@ -48,6 +48,8 @@ class DestroyUser
       Message.where(receiver_id: user.id).destroy_all
       Quest.where(user: user).destroy_all
       UserTag.where(user: user).destroy_all
+      UserProfileTypeChange.where(user: user).destroy_all
+      ProfilePageVisitor.where(user: user).destroy_all
 
       user.destroy!
     end
