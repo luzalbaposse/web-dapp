@@ -148,6 +148,8 @@ module Users
     end
 
     def create_follow(invite, user)
+      return if invite.nil?
+
       invited_by_user = invite.user
       follow = Follow.find_or_initialize_by(user_id: user.id, follower_id: invited_by_user.id)
       unless follow.persisted? # validate if the watchlist quest is completed
