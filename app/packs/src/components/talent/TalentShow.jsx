@@ -221,7 +221,12 @@ const TalentShow = ({
     });
 
     if (response && !response.error) {
-      toast.success(<ToastBody heading="Success!" body="Impersonation started successfully!" />);
+      toast.success(
+        <ToastBody
+          heading="Success!"
+          body="Impersonation started successfully!"
+        />
+      );
       window.location.reload();
     }
   };
@@ -443,6 +448,17 @@ const TalentShow = ({
         (sharedState.user.profile_type == "waiting_for_approval" ||
           sharedState.user.profile_type == "talent")));
 
+  const socialProfile = () => {
+    const profile = sharedState.talent.profile;
+    return {
+      github: profile.github,
+      twitter: profile.twitter,
+      telegram: profile.telegram,
+      linkedin: profile.linkedin,
+      website: profile.website,
+    };
+  };
+
   return (
     <div className="d-flex flex-column lg-h-100 p-0">
       <RejectTalentModal
@@ -529,7 +545,7 @@ const TalentShow = ({
                 text={sharedState.talent.profile.occupation}
                 className="mb-2 mb-lg-0 text-primary-01"
               />
-              {!mobile && <SocialRow profile={sharedState.talent.profile} />}
+              {!mobile && <SocialRow profile={socialProfile()} />}
             </div>
             <div className="d-flex justify-content-between">
               <UserTags
@@ -539,7 +555,7 @@ const TalentShow = ({
               />
             </div>
 
-            {mobile && <SocialRow profile={sharedState.talent.profile} />}
+            {mobile && <SocialRow profile={socialProfile()} />}
           </div>
         </div>
         {!mobile && !publicPageViewer && actionButtons()}

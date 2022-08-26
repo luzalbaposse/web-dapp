@@ -235,7 +235,9 @@ const Overview = ({ totalInvitesCount, raceInvitesCount, username }) => {
           style={{ flex: 1 }}
         >
           <Tooltip
-            body={"The number of invites you made this race."}
+            body={
+              "The number of users that registered with your invite during this race. For an invite to count as used, the new user has to complete the Beginner Quest."
+            }
             popOverAccessibilityId={"talent_invites_available"}
             placement="left"
           >

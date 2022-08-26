@@ -21,8 +21,8 @@ class RewardsController < ApplicationController
     @race_leaderboard_results = service.call
 
     @race_invites_count = if @current_race
-      User.includes(:invites)
-        .where(invites: {talent_invite: false})
+      User.joins(:invites)
+        .where(invite_id: current_acting_user.invites.pluck(:id))
         .where("users.username = invites.code and users.created_at >= ?", @current_race.started_at)
         .count
     else

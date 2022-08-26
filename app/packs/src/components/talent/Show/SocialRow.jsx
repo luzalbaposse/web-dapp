@@ -88,7 +88,6 @@ const SocialRow = ({ profile, className }) => {
           <FontAwesomeIcon icon={faTelegram} />
         </a>
       )}
-      {/* discord links are actually broken
       {profile.discord && (
         <a
           href={profile.discord}
@@ -97,7 +96,7 @@ const SocialRow = ({ profile, className }) => {
         >
           <FontAwesomeIcon icon={faDiscord} />
         </a>
-      )} */}
+      )}
     </div>
   );
 };
