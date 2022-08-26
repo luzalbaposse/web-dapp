@@ -59,7 +59,16 @@ const RewardsHeader = ({ rewards }) => {
         </div>
 
         <div className="talent-rewards-header-item px-4 pb-3">
-          <P2>Talent Invites Earnings</P2>
+          <Tooltip
+            body="The total amount you earned by inviting friends to Talent Protocol."
+            popOverAccessibilityId={"invite_earnings"}
+            placement="top"
+          >
+            <div className="cursor-pointer d-flex align-items-center">
+              <P2 className="mr-1">Invite Earnings</P2>
+              <Help color="#536471" />
+            </div>
+          </Tooltip>
           <P2 className="text-black">
             {amountToTal(userRewards.talent_invites)}
           </P2>
