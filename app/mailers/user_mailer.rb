@@ -126,6 +126,13 @@ class UserMailer < ApplicationMailer
     bootstrap_mail(to: @user.email, subject: "#{@invitee_username} signed up with your invite!")
   end
 
+  def send_confirm_account_deletion_email
+    @token = indifferent_access_params[:token]
+    @user = indifferent_access_params[:user]
+
+    bootstrap_mail(to: @user.email, subject: "Is this goodbye?")
+  end
+
   private
 
   def indifferent_access_params

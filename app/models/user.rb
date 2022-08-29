@@ -189,6 +189,12 @@ class User < ApplicationRecord
     talent.present?
   end
 
+  def valid_delete_account_token?(token)
+    return false unless delete_account_token && delete_account_token_expires_at
+
+    delete_account_token == token && delete_account_token_expires_at > Time.current
+  end
+
   private
 
   def email_and_password

@@ -59,7 +59,11 @@ Rails.application.routes.draw do
     namespace :api, defaults: {format: :json} do
       namespace :v1 do
         resources :tokens, only: [:show]
-        resources :users, only: [:index, :update, :destroy]
+
+        resources :users, only: [:index, :update] do
+          resources :delete_account_tokens, module: "users", only: [:create]
+        end
+
         resources :follows, only: [:index, :create]
         delete "follows", to: "follows#destroy"
         resources :notifications, only: [] do
@@ -120,6 +124,7 @@ Rails.application.routes.draw do
 
   resources :wait_list, only: [:create, :index]
 
+  get "/u/:username/delete_account" => "users#destroy", :as => "delete_account", :constraints => {username: /[^\/]+/}
   get "/u/:username" => "users#show", :as => "user", :constraints => {username: /[^\/]+/}
   # redirect /talent to /u so we have the old route still working
   get "/talent/:username", to: redirect("/u/%{username}"), as: "talent_profile"

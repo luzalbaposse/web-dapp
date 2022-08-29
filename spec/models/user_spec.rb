@@ -231,6 +231,39 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe "#valid_delete_account_token?" do
+    let(:user) { create :user, delete_account_token: token, delete_account_token_expires_at: expires_at }
+    let(:expires_at) { Time.now + 1.hour }
+    let(:token) { "token" }
+
+    it "returns true" do
+      expect(user.valid_delete_account_token?("token"))
+    end
+
+    context "when the tokens do not match" do
+      it "returns false" do
+        expect(user.valid_delete_account_token?("invalid-token"))
+      end
+    end
+
+    context "when the token has expired" do
+      let(:expires_at) { Time.now - 1.hour }
+
+      it "returns false" do
+        expect(user.valid_delete_account_token?("token"))
+      end
+    end
+
+    context "when the user does not have a delete account token and expiry" do
+      let(:expires_at) { nil }
+      let(:token) { nil }
+
+      it "returns false" do
+        expect(user.valid_delete_account_token?("token"))
+      end
+    end
+  end
+
   describe "helper methods" do
     it "shortens the wallet id for displaying" do
       user = build(:user, wallet_id: "0x123456789101234567890")

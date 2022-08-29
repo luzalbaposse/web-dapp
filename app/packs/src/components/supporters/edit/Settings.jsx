@@ -1,19 +1,22 @@
-import React, { useState } from "react";
+import { toast } from "react-toastify";
 import Form from "react-bootstrap/Form";
+import React, { useState } from "react";
 
 import "@uppy/core/dist/style.css";
 import "@uppy/file-input/dist/style.css";
 
-import { patch, destroy } from "src/utils/requests";
+import { patch, post } from "src/utils/requests";
 
 import { ArrowLeft } from "src/components/icons";
 import { H5, P2, P3 } from "src/components/design_system/typography";
-import TextInput from "src/components/design_system/fields/textinput";
-import Checkbox from "src/components/design_system/checkbox";
+import { ToastBody } from "src/components/design_system/toasts";
 import Button from "src/components/design_system/button";
-import LoadingButton from "src/components/button/LoadingButton";
+import Checkbox from "src/components/design_system/checkbox";
 import Divider from "src/components/design_system/other/Divider";
+import Link from "src/components/design_system/link";
+import LoadingButton from "src/components/button/LoadingButton";
 import Tag from "src/components/design_system/tag";
+import TextInput from "src/components/design_system/fields/textinput";
 
 import { passwordMatchesRequirements } from "src/utils/passwordRequirements";
 import { emailRegex, usernameRegex } from "src/utils/regexes";
@@ -86,17 +89,11 @@ const Settings = ({
     trackChanges(false);
   };
 
-  const deleteUser = async () => {
-    const response = await destroy(`/api/v1/users/${id}`, {
-      user: { current_password: deletePassword },
-    }).catch(() =>
-      setValidationErrors((prev) => ({ ...prev, deleting: true }))
-    );
+  const sendDeleteAccountEmail = async () => {
+    const response = await post(`/api/v1/users/${id}/delete_account_tokens`)
 
     if (response && response.success) {
-      window.location.href = "/";
-    } else {
-      setValidationErrors((prev) => ({ ...prev, deleting: true }));
+      toast.success(<ToastBody heading="Success!" body="Email sent!" />);
     }
   };
 
@@ -341,29 +338,11 @@ const Settings = ({
         <H5 className="w-100 text-left" text="Close Account" bold />
         <P2
           className="w-100 text-left"
-          text="Delete your account and account data"
+          text="To permanently delete your account and account data, you'll need to confirm your decision in an email we send you."
         />
-        <TextInput
-          title={"Password"}
-          type="password"
-          placeholder={"*********"}
-          onChange={(e) => changeAttribute("deletePassword", e.target.value)}
-          value={deletePassword}
-          className="w-100 mt-4"
-          required
-          error={validationErrors.deleting}
-        />
-        {validationErrors?.deleting && (
-          <P3 className="text-danger" text="Wrong password." />
-        )}
-        <Button
-          onClick={() => deleteUser()}
-          type="danger-default"
-          className="w-100 mt-3"
-          disabled={deletePassword == ""}
-        >
-          Delete Account
-        </Button>
+        <button className="button-link w-100 mt-4 mb-2" onClick={sendDeleteAccountEmail}>
+          <Link text="Send delete account confirmation email" className="text-primary" />
+        </button>
       </div>
       {mobile && (
         <>

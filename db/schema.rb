@@ -13,6 +13,7 @@
 ActiveRecord::Schema.define(version: 2022_08_23_152927) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
 
   create_table "blazer_audits", force: :cascade do |t|
@@ -458,8 +459,8 @@ ActiveRecord::Schema.define(version: 2022_08_23_152927) do
     t.boolean "welcome_pop_up", default: false
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.string "theme_preference", default: "light"
     t.boolean "disabled", default: false
+    t.string "theme_preference", default: "light"
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"
@@ -480,6 +481,8 @@ ActiveRecord::Schema.define(version: 2022_08_23_152927) do
     t.datetime "digest_email_sent_at"
     t.string "ens_domain"
     t.string "linkedin_id"
+    t.string "delete_account_token"
+    t.datetime "delete_account_token_expires_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invite_id"], name: "index_users_on_invite_id"
     t.index ["linkedin_id"], name: "index_users_on_linkedin_id", unique: true

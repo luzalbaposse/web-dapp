@@ -71,4 +71,11 @@ class UserMailerPreview < ActionMailer::Preview
       .with(recipient: recipient, record: notification, source_id: source_id)
       .send_invite_used_email
   end
+
+  def send_confirm_account_deletion_email
+    user = User.first
+    user.update(profile_type: "talent")
+
+    UserMailer.with(token: "token", user: user).send_confirm_account_deletion_email
+  end
 end

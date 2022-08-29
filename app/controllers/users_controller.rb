@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit_profile]
+  before_action :set_user, only: %i[destroy edit_profile show]
 
   def index
     if user_params[:email].present?
@@ -84,6 +84,19 @@ class UsersController < ApplicationController
     UserMailer.with(user_id: params[:user_id]).send_sign_up_email.deliver_later
 
     render json: {id: params[:user_id]}, status: :ok
+  end
+
+  def destroy
+    return redirect_to root_url unless @user == current_acting_user
+
+    if @user.valid_delete_account_token?(params[:token])
+      result = DestroyUser.new(user_id: @user.id).call
+      return redirect_to root_url, flash: {success: "Account deleted"} if result
+
+      redirect_to edit_profile_path(tab: "Settings", username: @user.username), flash: {error: "Unable to delete account"}
+    else
+      redirect_to edit_profile_path(tab: "Settings", username: @user.username), flash: {error: "Invalid token"}
+    end
   end
 
   private
