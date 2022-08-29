@@ -46,6 +46,8 @@ class DestroyUser
       Transfer.where(user: user).update_all(user_id: nil)
       Message.where(sender_id: user.id).destroy_all
       Message.where(receiver_id: user.id).destroy_all
+      Chat.where(sender_id: user.id).destroy_all
+      Chat.where(receiver_id: user.id).destroy_all
       Quest.where(user: user).destroy_all
       UserTag.where(user: user).destroy_all
       UserProfileTypeChange.where(user: user).destroy_all
