@@ -1,5 +1,6 @@
 require "web3/moralis/client"
 require "web3/celo_explorer/client"
+require "web3/gnosis_chain_explorer/client"
 require "web3/api_proxy"
 require "rails_helper"
 
@@ -294,9 +295,64 @@ RSpec.shared_examples "a celo explorer client get nfts request" do
   end
 end
 
-RSpec.shared_examples "an unsupported chain request" do
+RSpec.shared_examples "a gnosis chain explorer client get tokens request" do
+  let(:client_class) { Web3::GnosisChainExplorer::Client }
+  let(:client) { instance_double(client_class) }
+
+  before do
+    allow(client_class).to receive(:new).and_return(client)
+    allow(client).to receive(:retrieve_tokens).and_return(response)
+  end
+
+  let(:response) do
+    OpenStruct.new(
+      success?: response_success,
+      body: body
+    )
+  end
+  let(:response_success) { true }
+  let(:body) { file_fixture("gnosis_chain_get_poaps_response.json").read }
+
+  it "initializes and calls the moralis client with the correct arguments" do
+    api_proxy.retrieve_poaps
+
+    expect(client_class).to have_received(:new)
+    expect(client).to have_received(:retrieve_tokens).with(
+      wallet_address: wallet_address
+    )
+  end
+
+  it "returns a json array with the nfts" do
+    expect(api_proxy.retrieve_poaps).to match_array(
+      [
+        {
+          contract_address: "0x22c1f6050e56d2876009903609a2cc3fef83b415",
+          token_id: "5096568"
+        },
+        {
+          contract_address: "0x22c1f6050e56d2876009903609a2cc3fef83b415",
+          token_id: "4826386"
+        },
+        {
+          contract_address: "0x22c1f6050e56d2876009903609a2cc3fef83b415",
+          token_id: "4618978"
+        }
+      ]
+    )
+  end
+
+  context "when the request is not successful" do
+    let(:response_success) { false }
+
+    it "raises an api client error" do
+      expect { api_proxy.retrieve_poaps }.to raise_error(described_class::ApiClientRequestError)
+    end
+  end
+end
+
+RSpec.shared_examples "an unsupported chain request" do |request|
   it "raises an unsupported chain error" do
-    expect { described_class.new(wallet_address: wallet_address, chain: chain) }.to raise_error(described_class::UnsupportedChainError)
+    expect { api_proxy.public_send(request) }.to raise_error(described_class::UnsupportedChainError)
   end
 end
 
@@ -323,33 +379,91 @@ RSpec.describe Web3::ApiProxy do
 
       it_behaves_like "a celo explorer client get tokens request"
     end
+
+    context "when the chain is not yet supported" do
+      let(:chain) { "bsc" }
+
+      it_behaves_like "an unsupported chain request", :retrieve_tokens
+    end
   end
 
   describe "#retrieve_nfts" do
     subject(:api_proxy) { described_class.new(wallet_address: wallet_address, chain: chain) }
 
-    context "when the chain is eth" do
-      let(:chain) { "eth" }
+    context "when the chain matches ethereum network" do
+      context "when the chain is eth" do
+        let(:chain) { "eth" }
 
-      it_behaves_like "a moralis client get nfts request"
+        it_behaves_like "a moralis client get nfts request"
+      end
+
+      context "when the chain is 1" do
+        let(:chain) { 1 }
+
+        it_behaves_like "a moralis client get nfts request"
+      end
+
+      context "when the chain is 0x1" do
+        let(:chain) { "0x1" }
+
+        it_behaves_like "a moralis client get nfts request"
+      end
     end
 
-    context "when the chain is polygon" do
+    context "when the chain matches the polygon network" do
       let(:chain) { "polygon" }
 
-      it_behaves_like "a moralis client get nfts request"
+      context "when the chain is polygon" do
+        let(:chain) { "polygon" }
+
+        it_behaves_like "a moralis client get nfts request"
+      end
+
+      context "when the chain is 0x89" do
+        let(:chain) { "0x89" }
+
+        it_behaves_like "a moralis client get nfts request"
+      end
+
+      context "when the chain is 137" do
+        let(:chain) { 137 }
+
+        it_behaves_like "a moralis client get nfts request"
+      end
     end
 
-    context "when the chain is celo" do
+    context "when the chain matches the celo network" do
       let(:chain) { "celo" }
 
-      it_behaves_like "a celo explorer client get nfts request"
+      context "when the chain is celo" do
+        let(:chain) { "celo" }
+
+        it_behaves_like "a celo explorer client get nfts request"
+      end
+
+      context "when the chain is 0xa4ec" do
+        let(:chain) { "0xa4ec" }
+
+        it_behaves_like "a celo explorer client get nfts request"
+      end
+
+      context "when the chain is 42220" do
+        let(:chain) { 42220 }
+
+        it_behaves_like "a celo explorer client get nfts request"
+      end
+    end
+
+    context "when the chain is not yet supported" do
+      let(:chain) { "bsc" }
+
+      it_behaves_like "an unsupported chain request", :retrieve_nfts
     end
   end
 
-  context "when the chain is not yet supported" do
-    let(:chain) { "bsc" }
+  describe "#retrieve_poaps" do
+    subject(:api_proxy) { described_class.new(wallet_address: wallet_address) }
 
-    it_behaves_like "an unsupported chain request"
+    it_behaves_like "a gnosis chain explorer client get tokens request"
   end
 end

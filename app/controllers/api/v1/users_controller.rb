@@ -1,5 +1,5 @@
 class API::V1::UsersController < ApplicationController
-  before_action :set_user, only: [:update, :destroy]
+  before_action :set_user, only: :update
 
   def index
     @users = search_params[:name].present? ? filtered_users : filtered_users.limit(20)
@@ -89,25 +89,6 @@ class API::V1::UsersController < ApplicationController
       render json: {errors: {email: "Email is taken"}}, status: :conflict
     else
       render json: {errors: "Wallet already exists in the system"}, status: :conflict
-    end
-  end
-
-  def destroy
-    if @user.id != current_user.id
-      return render json: {error: "You don't have access to perform that action"}, status: :unauthorized
-    end
-
-    if current_user.authenticated?(password_params[:current_password])
-      service = DestroyUser.new(user_id: current_user.id)
-      result = service.call
-
-      if result
-        render json: {success: "User destroyed."}, status: :ok
-      else
-        render json: {errors: "Unabled to destroy user"}, status: :conflict
-      end
-    else
-      render json: {errors: "Unabled to destroy user"}, status: :conflict
     end
   end
 

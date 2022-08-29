@@ -9,33 +9,51 @@ module Web3
 
     class ApiClientRequestError < Error; end
 
-    SUPPORTED_CHAINS = %w[eth polygon celo]
+    ETH_CHAIN = %w[eth 0x1]
+    CELO_CHAIN = %w[celo 0xa4ec]
+    POLYGON_CHAIN = %w[polygon 0x89]
 
-    def initialize(wallet_address:, chain:)
-      raise UnsupportedChainError.new("Invalid chain: #{chain}") unless SUPPORTED_CHAINS.include?(chain)
+    SUPPORTED_CHAINS = ETH_CHAIN + CELO_CHAIN + POLYGON_CHAIN
 
+    def initialize(wallet_address:, chain: nil)
       @wallet_address = wallet_address
       @chain = chain
     end
 
     def retrieve_tokens
+      validate_chain!
+
       return celo_explorer_tokens if celo_chain?
 
       moralis_tokens
     end
 
     def retrieve_nfts
+      validate_chain!
+
       return celo_explorer_nfts if celo_chain?
 
       moralis_nfts
+    end
+
+    def retrieve_poaps
+      gnosis_poaps
     end
 
     private
 
     attr_reader :wallet_address, :chain
 
+    def validate_chain!
+      raise UnsupportedChainError.new("Invalid chain: #{chain}/#{formatted_chain}, valid chains: #{SUPPORTED_CHAINS.join(", ")}") unless SUPPORTED_CHAINS.include?(formatted_chain)
+    end
+
     def celo_chain?
-      chain == "celo"
+      CELO_CHAIN.include?(formatted_chain)
+    end
+
+    def formatted_chain
+      @formatted_chain ||= chain.is_a?(Integer) ? "0x#{chain.to_s(16).downcase}" : chain.downcase
     end
 
     def celo_explorer_tokens
@@ -120,6 +138,21 @@ module Web3
       tokens.compact
     end
 
+    def gnosis_poaps
+      response = gnosis_chain_explorer_client.retrieve_tokens(wallet_address: wallet_address)
+      validate_response!(response)
+
+      response_body = JSON.parse(response.body)
+
+      token_ids_and_contract_address = response_body["result"].map do |result|
+        next if result["tokenName"] != "POAP"
+
+        {token_id: result["tokenID"], contract_address: result["contractAddress"]}
+      end
+
+      token_ids_and_contract_address.compact
+    end
+
     def celo_explorer_tokens_response
       @celo_explorer_tokens_response ||= celo_explorer_api_client.retrieve_tokens(wallet_address: wallet_address)
     end
@@ -142,6 +175,10 @@ module Web3
 
     def celo_explorer_api_client
       @celo_explorer_api_client ||= CeloExplorer::Client.new
+    end
+
+    def gnosis_chain_explorer_client
+      @gnosis_chain_explorer_client ||= GnosisChainExplorer::Client.new
     end
   end
 end

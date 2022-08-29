@@ -118,4 +118,15 @@ RSpec.describe UserMailer, type: :mailer do
       expect(mail.to).to eql([user.email])
     end
   end
+
+  describe "send confirm account deletion email" do
+    let(:mail) do
+      described_class.with(token: "token", user: user).send_confirm_account_deletion_email
+    end
+
+    it "renders the header" do
+      expect(mail.subject).to eql("Is this goodbye?")
+      expect(mail.to).to eql([user.email])
+    end
+  end
 end
