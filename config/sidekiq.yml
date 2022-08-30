@@ -38,3 +38,6 @@
   daily_metrics:
     cron: "1 0 * * *" # runs once every day at 8am
     class: DailyMetricsJob
+  setup_next_race:
+    cron: "1 0 * * 4" # Runs every Thursday at 00:01
+    class: SetupNextRaceJob
