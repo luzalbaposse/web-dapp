@@ -1,27 +1,30 @@
-require "gnosis_chain_explorer/client"
+require "web3/tatum/client"
 require "rails_helper"
 
-RSpec.describe GnosisChainExplorer::Client do
+RSpec.describe Web3::Tatum::Client do
   let(:client) { described_class.new }
 
   describe "#retrieve_tokens" do
     let(:wallet_address) { SecureRandom.hex }
+    let(:chain) { "CELO" }
 
-    let(:request_path) { "#{described_class::BASE_URI}?action=tokentx&address=#{wallet_address}&module=account" }
+    let(:request_path) { "#{described_class::BASE_URI}/blockchain/token/address/#{chain}/#{wallet_address}" }
 
     before do
       stub_request(:get, request_path)
+      ENV["TATUM_API_KEY"] = "123"
     end
 
     let(:expected_headers) do
       {
         "Content-Type": "application/json",
-        Accept: "application/json"
+        Accept: "application/json",
+        "x-api-key": "123"
       }
     end
 
     it "makes a request to retrieve the wallet tokens" do
-      client.retrieve_tokens(wallet_address: wallet_address)
+      client.retrieve_nfts(wallet_address: wallet_address, chain: chain)
 
       expect(
         a_request(:get, request_path)
