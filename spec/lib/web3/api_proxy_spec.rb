@@ -1,6 +1,7 @@
 require "web3/moralis/client"
 require "web3/celo_explorer/client"
 require "web3/gnosis_chain_explorer/client"
+require "web3/tatum/client"
 require "web3/api_proxy"
 require "rails_helper"
 
@@ -235,6 +236,134 @@ RSpec.shared_examples "a moralis client get nfts request" do
   end
 end
 
+RSpec.shared_examples "a tatum client get nfts request" do |expected_chain|
+  let(:client_class) { Web3::Tatum::Client }
+  let(:client) { instance_double(client_class) }
+
+  before do
+    allow(client_class).to receive(:new).and_return(client)
+    allow(client).to receive(:retrieve_nfts).and_return(response)
+  end
+
+  let(:response) do
+    OpenStruct.new(
+      success?: response_success,
+      body: file_fixture("tatum_get_nfts_response.json").read
+    )
+  end
+  let(:response_success) { true }
+
+  it "initializes and calls the moralis client with the correct arguments" do
+    api_proxy.retrieve_nfts
+
+    expect(client_class).to have_received(:new)
+    expect(client).to have_received(:retrieve_nfts).with(
+      wallet_address: wallet_address,
+      chain: expected_chain
+    )
+  end
+
+  it "returns a json array with the nfts" do
+    expect(api_proxy.retrieve_nfts).to eq(
+      [
+        {
+          address: "0x1ecd77075f7504ba849d47dce4cdc9695f1fe942",
+          token_id: "627",
+          amount: 1,
+          name: "CeloApesKingdom #627",
+          symbol: "CeloApesKingdom #627",
+          token_uri: "https://ipfs.io/ipfs/bafybeih6g4g7ul4s3l2b6axygpf7s6fkpwhd6e5elgl2t7gmdwlc6lsmjq/metadata/627.json",
+          metadata: {
+            "dna" => "030000070000001200000000",
+            "edition" => 627,
+            "attributes" => [
+              {
+                "trait_type" => "Species",
+                "value" => "Blue Citizen Ape"
+              },
+              {
+                "trait_type" => "Background",
+                "value" => "Light Purple"
+              },
+              {
+                "trait_type" => "Head",
+                "value" => "Bunny Ear"
+              }
+            ],
+            "name" => "CeloApesKingdom #627",
+            "date" => 1635923686814,
+            "description" => "Celo Apes are native Apes NFT on the Celo Blockchain. All the NFT holders will be part of the Ape Kingdom. Only 10000 Apes will be minted with new and unique traits!",
+            "image" => "ipfs://bafybeiasnbk7bztvmytiqf2a5aw5jmivvnxhrdwtp72ihbpjrlh33g32ee/apes/627.png"
+          }
+        },
+        {
+          address: "0x1ecd77075f7504ba849d47dce4cdc9695f1fe942",
+          token_id: "628",
+          amount: 1,
+          name: "CeloApesKingdom #628",
+          symbol: "CeloApesKingdom #628",
+          token_uri: "https://ipfs.io/ipfs/bafybeih6g4g7ul4s3l2b6axygpf7s6fkpwhd6e5elgl2t7gmdwlc6lsmjq/metadata/628.json",
+          metadata: {
+            "dna" => "120001080003030010000002",
+            "edition" => 628,
+            "attributes" => [
+              {
+                "trait_type" => "Species",
+                "value" => "Pink Ape"
+              },
+              {
+                "trait_type" => "Eyes",
+                "value" => "BloodShot"
+              },
+              {
+                "trait_type" => "Background",
+                "value" => "Purple"
+              },
+              {
+                "trait_type" => "Glasses",
+                "value" => "Modern Glasses"
+              },
+              {
+                "trait_type" => "Clothes",
+                "value" => "Dark Half Sleve"
+              },
+              {
+                "trait_type" => "Beams",
+                "value" => "Straight Yellow"
+              },
+              {
+                "trait_type" => "Mouth Props",
+                "value" => "Cigarette"
+              }
+            ],
+            "name" => "CeloApesKingdom #628",
+            "date" => 1635923686814,
+            "description" => "Celo Apes are native Apes NFT on the Celo Blockchain. All the NFT holders will be part of the Ape Kingdom. Only 10000 Apes will be minted with new and unique traits!",
+            "image" => "ipfs://bafybeiasnbk7bztvmytiqf2a5aw5jmivvnxhrdwtp72ihbpjrlh33g32ee/apes/628.png"
+          }
+        },
+        {
+          address: "0xdf204de57532242700d988422996e9ced7aba4cb",
+          token_id: "80933583340990441618616735003812808159743996514813210066433383033497073517002",
+          amount: 1,
+          name: nil,
+          symbol: nil,
+          token_uri: nil,
+          metadata: nil
+        }
+      ]
+    )
+  end
+
+  context "when the request is not successful" do
+    let(:response_success) { false }
+
+    it "raises an api client error" do
+      expect { api_proxy.retrieve_nfts }.to raise_error(described_class::ApiClientRequestError)
+    end
+  end
+end
+
 RSpec.shared_examples "a celo explorer client get nfts request" do
   let(:client_class) { Web3::CeloExplorer::Client }
   let(:client) { instance_double(client_class) }
@@ -438,19 +567,19 @@ RSpec.describe Web3::ApiProxy do
       context "when the chain is celo" do
         let(:chain) { "celo" }
 
-        it_behaves_like "a celo explorer client get nfts request"
+        it_behaves_like "a tatum client get nfts request", "CELO"
       end
 
       context "when the chain is 0xa4ec" do
         let(:chain) { "0xa4ec" }
 
-        it_behaves_like "a celo explorer client get nfts request"
+        it_behaves_like "a tatum client get nfts request", "CELO"
       end
 
       context "when the chain is 42220" do
         let(:chain) { 42220 }
 
-        it_behaves_like "a celo explorer client get nfts request"
+        it_behaves_like "a tatum client get nfts request", "CELO"
       end
     end
 

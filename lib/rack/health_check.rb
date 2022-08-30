@@ -10,9 +10,6 @@ module Rack
         },
         postgres: {
           connected: postgres_connected
-        },
-        the_graph: {
-          connected: the_graph_connected
         }
       }
 
@@ -37,12 +34,6 @@ module Rack
       ApplicationRecord.establish_connection
       ApplicationRecord.connection
       ApplicationRecord.connected?
-    rescue
-      false
-    end
-
-    def the_graph_connected
-      !!TheGraphAPI::Client.query(TheGraph::HEALTH_CHECK_QUERY, variables: {})
     rescue
       false
     end
