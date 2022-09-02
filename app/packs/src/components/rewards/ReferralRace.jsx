@@ -263,8 +263,9 @@ const RaceDropdown = ({ allRaces, race, setRace }) => {
     const raceStart = dayjs(race.started_at).utc();
     const raceEnd = dayjs(race.ends_at).utc();
     const currentTime = dayjs().utc();
+
     if (
-      (raceStart <= currentTime && raceEnd < currentTime) ||
+      (raceStart <= currentTime && raceEnd > currentTime) ||
       allRaces.length == 1
     ) {
       return "Current Race";
