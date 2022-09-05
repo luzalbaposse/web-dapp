@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_25_100820) do
+ActiveRecord::Schema.define(version: 2022_08_25_150432) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -381,16 +381,7 @@ ActiveRecord::Schema.define(version: 2022_08_25_100820) do
     t.index ["supporter_wallet_id", "talent_contract_id"], name: "talent_supporters_wallet_token_contract_uidx", unique: true
   end
 
-  create_table "tasks", force: :cascade do |t|
-    t.string "status", default: "pending"
-    t.string "type"
-    t.bigint "quest_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["quest_id"], name: "index_tasks_on_quest_id"
-  end
-
-  create_table "tokens", force: :cascade do |t|
+  create_table "talent_tokens", force: :cascade do |t|
     t.string "ticker"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -399,9 +390,18 @@ ActiveRecord::Schema.define(version: 2022_08_25_100820) do
     t.string "contract_id"
     t.datetime "deployed_at"
     t.integer "chain_id"
-    t.index ["chain_id"], name: "index_tokens_on_chain_id"
-    t.index ["talent_id"], name: "index_tokens_on_talent_id"
-    t.index ["ticker"], name: "index_tokens_on_ticker", unique: true
+    t.index ["chain_id"], name: "index_talent_tokens_on_chain_id"
+    t.index ["talent_id"], name: "index_talent_tokens_on_talent_id"
+    t.index ["ticker"], name: "index_talent_tokens_on_ticker", unique: true
+  end
+
+  create_table "tasks", force: :cascade do |t|
+    t.string "status", default: "pending"
+    t.string "type"
+    t.bigint "quest_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["quest_id"], name: "index_tasks_on_quest_id"
   end
 
   create_table "transfers", force: :cascade do |t|
@@ -460,8 +460,8 @@ ActiveRecord::Schema.define(version: 2022_08_25_100820) do
     t.boolean "welcome_pop_up", default: false
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.boolean "disabled", default: false
     t.string "theme_preference", default: "light"
+    t.boolean "disabled", default: false
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"
@@ -539,8 +539,8 @@ ActiveRecord::Schema.define(version: 2022_08_25_100820) do
   add_foreign_key "quests", "users"
   add_foreign_key "rewards", "users"
   add_foreign_key "tags", "discovery_rows"
+  add_foreign_key "talent_tokens", "talent"
   add_foreign_key "tasks", "quests"
-  add_foreign_key "tokens", "talent"
   add_foreign_key "transfers", "users"
   add_foreign_key "user_profile_type_changes", "users"
   add_foreign_key "user_profile_type_changes", "users", column: "who_dunnit_id"

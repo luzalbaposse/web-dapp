@@ -36,7 +36,7 @@ class Mailerlite::SyncSubscriber
       username: user.username,
       account_type: account_type(user),
       status: status(user),
-      ticker: user.talent&.token&.ticker,
+      ticker: user.talent&.talent_token&.ticker,
       invite_link: invite_link(user)
     }
   end

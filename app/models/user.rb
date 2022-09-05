@@ -143,7 +143,7 @@ class User < ApplicationRecord
     talent_supporters = talent_supporters.where("last_time_bought_at > ?", invested_after) if invested_after
 
     token_contract_ids = talent_supporters.pluck(:talent_contract_id)
-    supporting_users = User.joins(talent: :token).where(tokens: {contract_id: token_contract_ids})
+    supporting_users = User.joins(talent: :talent_token).where(talent_tokens: {contract_id: token_contract_ids})
 
     including_self ? supporting_users : supporting_users.where.not(id: id)
   end
@@ -174,9 +174,9 @@ class User < ApplicationRecord
   end
 
   def supporters(including_self: true, invested_after: nil)
-    return User.none unless talent&.token&.deployed?
+    return User.none unless talent&.talent_token&.deployed?
 
-    talent_supporters = TalentSupporter.where(talent_contract_id: talent.token.contract_id)
+    talent_supporters = TalentSupporter.where(talent_contract_id: talent.talent_token.contract_id)
     talent_supporters = talent_supporters.where("last_time_bought_at > ?", invested_after) if invested_after
 
     supporters_wallet_ids = talent_supporters.pluck(:supporter_wallet_id)

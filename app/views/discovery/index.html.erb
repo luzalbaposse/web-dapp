@@ -42,7 +42,7 @@
           walletId: current_user.wallet_id,
           profileType: current_user.profile_type,
           talent: current_user.talent.present?,
-          tokenLaunched: current_user.talent&.token&.deployed,
+          tokenLaunched: current_user.talent&.talent_token&.deployed,
           activeSupporter: current_user.active_supporter?
         }
       },

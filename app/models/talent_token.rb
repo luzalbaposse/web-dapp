@@ -1,4 +1,4 @@
-class Token < ApplicationRecord
+class TalentToken < ApplicationRecord
   belongs_to :talent
   validates :ticker, length: {in: 3..8}, if: :ticker_exists?
   validates :ticker, uniqueness: {message: "already taken."}, if: :ticker_exists?

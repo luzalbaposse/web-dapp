@@ -16,7 +16,7 @@ module Users
         create_investor(user)
         create_feed(user)
         create_talent(user)
-        create_token(user)
+        create_talent_token(user)
         create_invite_used_notification(invite, user) if invite
 
         if invite&.talent_invite?
@@ -85,8 +85,8 @@ module Users
       user.talent.create_career_goal!
     end
 
-    def create_token(user)
-      user.talent.create_token!
+    def create_talent_token(user)
+      user.talent.create_talent_token!
     end
 
     def upsert_discovery_row(invite, user)

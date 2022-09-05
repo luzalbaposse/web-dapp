@@ -83,15 +83,15 @@ class UserMailer < ApplicationMailer
     @invested_in_talents = Talent.where(user: invested_in_users).includes(:user)
     set_profile_pictures_attachments(invested_in_users)
 
-    @talents = Talent.base.active.where("tokens.deployed_at > ?", 2.weeks.ago).includes(:user).limit(3)
+    @talents = Talent.base.active.where("talent_tokens.deployed_at > ?", 2.weeks.ago).includes(:user).limit(3)
     talent_users = User.where(id: @talents.pluck(:user_id))
 
     set_profile_pictures_attachments(talent_users)
 
     user_talent_supporters = TalentSupporter.where(supporter_wallet_id: @user.wallet_id)
 
-    @tal_amount = user_talent_supporters.map { |t| t.tal_amount.to_i }.sum / Token::TAL_DECIMALS
-    @usd_amount = (@tal_amount * Token::TAL_VALUE_IN_USD).round
+    @tal_amount = user_talent_supporters.map { |t| t.tal_amount.to_i }.sum / TalentToken::TAL_DECIMALS
+    @usd_amount = (@tal_amount * TalentToken::TAL_VALUE_IN_USD).round
 
     @user.update!(digest_email_sent_at: Time.zone.now)
 
