@@ -10,10 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_23_152927) do
+ActiveRecord::Schema.define(version: 2022_08_25_100820) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
 
   create_table "blazer_audits", force: :cascade do |t|
@@ -399,6 +398,8 @@ ActiveRecord::Schema.define(version: 2022_08_23_152927) do
     t.boolean "deployed", default: false
     t.string "contract_id"
     t.datetime "deployed_at"
+    t.integer "chain_id"
+    t.index ["chain_id"], name: "index_tokens_on_chain_id"
     t.index ["talent_id"], name: "index_tokens_on_talent_id"
     t.index ["ticker"], name: "index_tokens_on_ticker", unique: true
   end

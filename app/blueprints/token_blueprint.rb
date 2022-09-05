@@ -1,5 +1,5 @@
 class TokenBlueprint < Blueprinter::Base
-  fields :id, :contract_id, :ticker, :deployed_at
+  fields :id, :contract_id, :ticker, :deployed_at, :chain_id
 
   view :normal do
     fields :deployed

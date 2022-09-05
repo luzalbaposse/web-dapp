@@ -50,7 +50,8 @@ class API::V1::Talent::TokensController < ApplicationController
     params.require(:token).permit(
       :ticker,
       :contract_id,
-      :deployed
+      :deployed,
+      :chain_id
     )
   end
 

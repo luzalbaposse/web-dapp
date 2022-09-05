@@ -7,8 +7,19 @@ class Token < ApplicationRecord
   TAL_DECIMALS = 10**18
   TAL_VALUE_IN_USD = 0.02
 
+  CHAIN_INFO = {
+    137 => "POLYGON (Matic)",
+    42220 => "CELO",
+    44787 => "CELO (Alfajores)",
+    80001 => "POLYGON (Mumbai)"
+  }
+
   def display_ticker
     "$#{ticker}"
+  end
+
+  def chain_name
+    CHAIN_INFO[chain_id]
   end
 
   private

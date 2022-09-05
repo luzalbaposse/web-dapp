@@ -10,6 +10,16 @@ class API::V1::StakesController < ApplicationController
     render json: {success: "Stake created."}, status: :ok
   end
 
+  def reward_claiming
+    claimed_token = Token.find_by(contract_id: stake_params[:token_id].downcase)
+
+    return render json: {error: "Not found."}, status: :not_found unless claimed_token
+
+    Stakes::RewardClaim.new(token: claimed_token).call
+
+    render json: {success: "Rewards claimed successfuly."}, status: :ok
+  end
+
   private
 
   def token

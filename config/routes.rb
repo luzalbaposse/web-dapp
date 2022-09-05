@@ -81,6 +81,7 @@ Rails.application.routes.draw do
           resources :career_goals, only: [:update, :create], module: "talent"
         end
         resources :stakes, only: [:create]
+        post "reward_claiming", to: "stakes#reward_claiming"
         resources :investor, only: [:update]
         resources :perks, only: [:show]
         resources :races, only: [:show]

@@ -525,7 +525,9 @@ const About = (props) => {
           >
             <option value=""></option>
             {genderOptions.map((gender) => (
-              <option value={gender}>{gender}</option>
+              <option value={gender} key={gender}>
+                {gender}
+              </option>
             ))}
           </Form.Control>
           <p className="short-caption">What gender do you identify as?</p>

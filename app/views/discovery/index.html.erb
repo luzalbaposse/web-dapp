@@ -21,6 +21,9 @@
             userId: talent["user_id"],
             supportersCount: talent["supporters_count"],
             profileType: talent["user"]["profile_type"],
+            supporterCounter: talent["supporters_count"],
+            totalSupply: talent["total_supply"],
+            chainId: talent["token"]["chain_id"],
           }}
         }},
         marketingArticles: @marketing_articles.map { |article| {

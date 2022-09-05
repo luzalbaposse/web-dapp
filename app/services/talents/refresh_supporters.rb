@@ -1,4 +1,6 @@
-require "the_graph/client"
+require "the_graph/celo/client"
+require "the_graph/mumbai/client"
+require "the_graph/alfajores/client"
 
 module Talents
   class RefreshSupporters
@@ -33,7 +35,7 @@ module Talents
     attr_reader :token
 
     def talent_supporters(offset: 0)
-      the_graph_client.talent_supporters(talent_address: token.contract_id, offset: offset)
+      the_graph_client(token.chain_id).talent_supporters(talent_address: token.contract_id, offset: offset)
     end
 
     def upsert_talent_info(supporters_count, total_supply)
@@ -63,8 +65,9 @@ module Talents
       end
     end
 
-    def the_graph_client
-      @the_graph_client ||= TheGraph::Client.new
+    def the_graph_client(chain_id)
+      @the_graph_client ||=
+        "TheGraph::#{TheGraphAPI::CHAIN_TO_NAME[chain_id]}::Client".constantize.new
     end
   end
 end
