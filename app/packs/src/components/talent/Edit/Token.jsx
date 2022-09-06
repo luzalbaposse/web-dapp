@@ -248,8 +248,11 @@ const Token = (props) => {
     changeSharedState,
     requiredFields,
   } = props;
+  if (user.profile_type !== "approved" && user.profile_type !== "talent") {
+    window.location.href = "edit_profile";
+    return;
+  }
 
-  console.log("RAILS CONTEXT: ", railsContext);
   const [ticker, setTicker] = useState(token.ticker || "");
   const [show, setShow] = useState(false);
   const [deploying, setDeploying] = useState(false);

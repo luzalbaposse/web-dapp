@@ -20,7 +20,7 @@ module Users
         create_invite_used_notification(invite, user) if invite
 
         if invite&.talent_invite?
-          update_profile_type(user)
+          update_profile_type(user, invite)
           upsert_discovery_row(invite, user) if invite.partnership.present?
         end
 
@@ -142,8 +142,8 @@ module Users
       CreateNotification.new.call(recipient: inviter, source_id: user.id, type: InviteUsedNotification)
     end
 
-    def update_profile_type(user)
-      Users::UpdateProfileType.new.call(user: user, new_profile_type: "talent")
+    def update_profile_type(user, invite)
+      Users::UpdateProfileType.new.call(user: user, who_dunnit_id: invite.user_id, new_profile_type: "talent")
       user.reload
     end
 
