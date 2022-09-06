@@ -14,9 +14,11 @@ class UserProfileTypeChange < ApplicationRecord
   end
 
   def invalid_new_profile_type
-    return if previous_profile_type == "approved" && new_profile_type == "talent"
-    return unless user_id == who_dunnit_id && new_profile_type == "approved"
+    return if user_id != who_dunnit_id
 
-    errors.add(:base, "The new profile type is not valid")
+    if (previous_profile_type != "approved" && new_profile_type == "talent") ||
+        new_profile_type == "approved"
+      errors.add(:base, "The new profile type is not valid")
+    end
   end
 end
