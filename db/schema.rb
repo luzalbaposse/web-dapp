@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_25_150432) do
+ActiveRecord::Schema.define(version: 2022_08_30_134506) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
 
   create_table "blazer_audits", force: :cascade do |t|
@@ -140,6 +141,41 @@ ActiveRecord::Schema.define(version: 2022_08_25_150432) do
     t.text "description"
     t.bigint "partnership_id"
     t.index ["partnership_id"], name: "index_discovery_rows_on_partnership_id"
+  end
+
+  create_table "erc20_tokens", force: :cascade do |t|
+    t.string "address", null: false
+    t.string "name"
+    t.string "symbol"
+    t.string "logo"
+    t.string "thumbnail"
+    t.integer "decimals"
+    t.string "balance"
+    t.integer "chain_id", null: false
+    t.boolean "show", default: false
+    t.bigint "user_id", null: false
+    t.datetime "last_sync_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_erc20_tokens_on_user_id"
+  end
+
+  create_table "erc721_tokens", force: :cascade do |t|
+    t.string "address", null: false
+    t.string "name"
+    t.string "symbol"
+    t.string "url"
+    t.json "metadata"
+    t.string "token_id"
+    t.string "amount"
+    t.integer "chain_id", null: false
+    t.boolean "show", default: false
+    t.string "nft_type", null: false
+    t.bigint "user_id", null: false
+    t.datetime "last_sync_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_erc721_tokens_on_user_id"
   end
 
   create_table "feed_posts", force: :cascade do |t|
@@ -460,8 +496,8 @@ ActiveRecord::Schema.define(version: 2022_08_25_150432) do
     t.boolean "welcome_pop_up", default: false
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.string "theme_preference", default: "light"
     t.boolean "disabled", default: false
+    t.string "theme_preference", default: "light"
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"
@@ -520,6 +556,8 @@ ActiveRecord::Schema.define(version: 2022_08_25_150432) do
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
   add_foreign_key "discovery_rows", "partnerships"
+  add_foreign_key "erc20_tokens", "users"
+  add_foreign_key "erc721_tokens", "users"
   add_foreign_key "feed_posts", "feeds"
   add_foreign_key "feed_posts", "posts"
   add_foreign_key "feeds", "users"

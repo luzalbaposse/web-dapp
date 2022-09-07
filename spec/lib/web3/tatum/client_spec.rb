@@ -8,7 +8,7 @@ RSpec.describe Web3::Tatum::Client do
     let(:wallet_address) { SecureRandom.hex }
     let(:chain) { "CELO" }
 
-    let(:request_path) { "#{described_class::BASE_URI}/blockchain/token/address/#{chain}/#{wallet_address}" }
+    let(:request_path) { "#{described_class::BASE_URI}/nft/address/balance/#{chain}/#{wallet_address}" }
 
     before do
       stub_request(:get, request_path)

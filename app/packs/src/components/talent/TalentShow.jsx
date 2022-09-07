@@ -363,6 +363,16 @@ const TalentShow = ({
           </Button>
         </Tooltip>
       )}
+      {sharedState.admin && (
+        <Button
+          onClick={() => (window.location.href = `/profiles/${user.username}`)}
+          type="white-subtle"
+          className="ml-2"
+          mode={theme.mode()}
+        >
+          New profile
+        </Button>
+      )}
     </div>
   );
 

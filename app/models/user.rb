@@ -35,6 +35,10 @@ class User < ApplicationRecord
   # Rewards
   has_many :rewards
 
+  # web3
+  has_many :erc20_tokens
+  has_many :erc721_tokens
+
   VALID_ROLES = ["admin", "basic"].freeze
 
   enum profile_type: {

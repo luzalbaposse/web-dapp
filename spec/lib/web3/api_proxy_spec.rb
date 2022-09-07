@@ -23,7 +23,7 @@ RSpec.shared_examples "a moralis client get tokens request" do
   let(:response_success) { true }
 
   it "initializes and calls the moralis client with the correct arguments" do
-    api_proxy.retrieve_tokens
+    request
 
     expect(client_class).to have_received(:new)
     expect(client).to have_received(:retrieve_tokens).with(
@@ -33,7 +33,7 @@ RSpec.shared_examples "a moralis client get tokens request" do
   end
 
   it "returns a json array with the tokens" do
-    expect(api_proxy.retrieve_tokens).to eq(
+    expect(request).to eq(
       [
         {
           address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
@@ -70,7 +70,7 @@ RSpec.shared_examples "a moralis client get tokens request" do
     let(:response_success) { false }
 
     it "raises an api client error" do
-      expect { api_proxy.retrieve_tokens }.to raise_error(described_class::ApiClientRequestError)
+      expect { request }.to raise_error(described_class::ApiClientRequestError)
     end
   end
 end
@@ -93,7 +93,7 @@ RSpec.shared_examples "a celo explorer client get tokens request" do
   let(:response_success) { true }
 
   it "initializes and calls the moralis client with the correct arguments" do
-    api_proxy.retrieve_tokens
+    request
 
     expect(client_class).to have_received(:new)
     expect(client).to have_received(:retrieve_tokens).with(
@@ -102,7 +102,7 @@ RSpec.shared_examples "a celo explorer client get tokens request" do
   end
 
   it "returns a json array with the tokens" do
-    expect(api_proxy.retrieve_tokens).to eq(
+    expect(request).to eq(
       [
         {
           balance: "200000000000000000000",
@@ -139,7 +139,7 @@ RSpec.shared_examples "a celo explorer client get tokens request" do
     let(:response_success) { false }
 
     it "raises an api client error" do
-      expect { api_proxy.retrieve_tokens }.to raise_error(described_class::ApiClientRequestError)
+      expect { request }.to raise_error(described_class::ApiClientRequestError)
     end
   end
 end
@@ -162,7 +162,7 @@ RSpec.shared_examples "a moralis client get nfts request" do
   let(:response_success) { true }
 
   it "initializes and calls the moralis client with the correct arguments" do
-    api_proxy.retrieve_nfts
+    request
 
     expect(client_class).to have_received(:new)
     expect(client).to have_received(:retrieve_nfts).with(
@@ -172,7 +172,7 @@ RSpec.shared_examples "a moralis client get nfts request" do
   end
 
   it "returns a json array with the nfts" do
-    expect(api_proxy.retrieve_nfts).to eq(
+    expect(request).to eq(
       [
         {
           address: "0x951416cb5a9c5379ae696acb07cb8e25aefad370",
@@ -231,7 +231,7 @@ RSpec.shared_examples "a moralis client get nfts request" do
     let(:response_success) { false }
 
     it "raises an api client error" do
-      expect { api_proxy.retrieve_nfts }.to raise_error(described_class::ApiClientRequestError)
+      expect { request }.to raise_error(described_class::ApiClientRequestError)
     end
   end
 end
@@ -254,7 +254,7 @@ RSpec.shared_examples "a tatum client get nfts request" do |expected_chain|
   let(:response_success) { true }
 
   it "initializes and calls the moralis client with the correct arguments" do
-    api_proxy.retrieve_nfts
+    request
 
     expect(client_class).to have_received(:new)
     expect(client).to have_received(:retrieve_nfts).with(
@@ -264,7 +264,7 @@ RSpec.shared_examples "a tatum client get nfts request" do |expected_chain|
   end
 
   it "returns a json array with the nfts" do
-    expect(api_proxy.retrieve_nfts).to eq(
+    expect(request).to eq(
       [
         {
           address: "0x1ecd77075f7504ba849d47dce4cdc9695f1fe942",
@@ -359,7 +359,7 @@ RSpec.shared_examples "a tatum client get nfts request" do |expected_chain|
     let(:response_success) { false }
 
     it "raises an api client error" do
-      expect { api_proxy.retrieve_nfts }.to raise_error(described_class::ApiClientRequestError)
+      expect { request }.to raise_error(described_class::ApiClientRequestError)
     end
   end
 end
@@ -382,7 +382,7 @@ RSpec.shared_examples "a celo explorer client get nfts request" do
   let(:response_success) { true }
 
   it "initializes and calls the moralis client with the correct arguments" do
-    api_proxy.retrieve_nfts
+    request
 
     expect(client_class).to have_received(:new)
     expect(client).to have_received(:retrieve_tokens).with(
@@ -391,7 +391,7 @@ RSpec.shared_examples "a celo explorer client get nfts request" do
   end
 
   it "returns a json array with the nfts" do
-    expect(api_proxy.retrieve_nfts).to eq(
+    expect(request).to eq(
       [
         {
           amount: "1",
@@ -419,7 +419,7 @@ RSpec.shared_examples "a celo explorer client get nfts request" do
     let(:response_success) { false }
 
     it "raises an api client error" do
-      expect { api_proxy.retrieve_nfts }.to raise_error(described_class::ApiClientRequestError)
+      expect { request }.to raise_error(described_class::ApiClientRequestError)
     end
   end
 end
@@ -443,7 +443,7 @@ RSpec.shared_examples "a gnosis chain explorer client get tokens request" do
   let(:body) { file_fixture("gnosis_chain_get_poaps_response.json").read }
 
   it "initializes and calls the moralis client with the correct arguments" do
-    api_proxy.retrieve_poaps
+    request
 
     expect(client_class).to have_received(:new)
     expect(client).to have_received(:retrieve_tokens).with(
@@ -452,18 +452,18 @@ RSpec.shared_examples "a gnosis chain explorer client get tokens request" do
   end
 
   it "returns a json array with the nfts" do
-    expect(api_proxy.retrieve_poaps).to match_array(
+    expect(request).to match_array(
       [
         {
-          contract_address: "0x22c1f6050e56d2876009903609a2cc3fef83b415",
+          address: "0x22c1f6050e56d2876009903609a2cc3fef83b415",
           token_id: "5096568"
         },
         {
-          contract_address: "0x22c1f6050e56d2876009903609a2cc3fef83b415",
+          address: "0x22c1f6050e56d2876009903609a2cc3fef83b415",
           token_id: "4826386"
         },
         {
-          contract_address: "0x22c1f6050e56d2876009903609a2cc3fef83b415",
+          address: "0x22c1f6050e56d2876009903609a2cc3fef83b415",
           token_id: "4618978"
         }
       ]
@@ -474,22 +474,23 @@ RSpec.shared_examples "a gnosis chain explorer client get tokens request" do
     let(:response_success) { false }
 
     it "raises an api client error" do
-      expect { api_proxy.retrieve_poaps }.to raise_error(described_class::ApiClientRequestError)
+      expect { request }.to raise_error(described_class::ApiClientRequestError)
     end
   end
 end
 
-RSpec.shared_examples "an unsupported chain request" do |request|
+RSpec.shared_examples "an unsupported chain request" do
   it "raises an unsupported chain error" do
-    expect { api_proxy.public_send(request) }.to raise_error(described_class::UnsupportedChainError)
+    expect { request }.to raise_error(described_class::UnsupportedChainError)
   end
 end
 
 RSpec.describe Web3::ApiProxy do
   let(:wallet_address) { SecureRandom.hex }
+  let(:api_proxy) { described_class.new }
 
   describe "#retrieve_tokens" do
-    subject(:api_proxy) { described_class.new(wallet_address: wallet_address, chain: chain) }
+    subject(:request) { api_proxy.retrieve_tokens(wallet_address: wallet_address, chain: chain) }
 
     context "when the chain is eth" do
       let(:chain) { "eth" }
@@ -512,12 +513,12 @@ RSpec.describe Web3::ApiProxy do
     context "when the chain is not yet supported" do
       let(:chain) { "bsc" }
 
-      it_behaves_like "an unsupported chain request", :retrieve_tokens
+      it_behaves_like "an unsupported chain request"
     end
   end
 
   describe "#retrieve_nfts" do
-    subject(:api_proxy) { described_class.new(wallet_address: wallet_address, chain: chain) }
+    subject(:request) { api_proxy.retrieve_nfts(wallet_address: wallet_address, chain: chain) }
 
     context "when the chain matches ethereum network" do
       context "when the chain is eth" do
@@ -591,7 +592,7 @@ RSpec.describe Web3::ApiProxy do
   end
 
   describe "#retrieve_poaps" do
-    subject(:api_proxy) { described_class.new(wallet_address: wallet_address) }
+    subject(:request) { api_proxy.retrieve_poaps(wallet_address: wallet_address) }
 
     it_behaves_like "a gnosis chain explorer client get tokens request"
   end

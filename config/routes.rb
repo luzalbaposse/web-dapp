@@ -50,6 +50,8 @@ Rails.application.routes.draw do
       resources :comments, only: [:index, :create, :destroy], module: "posts"
     end
 
+    resources :profiles, only: [:show], param: :username
+
     # Edit profile
     get "/u/:username/edit_profile", to: "users#edit_profile", as: "edit_profile"
 
@@ -62,6 +64,19 @@ Rails.application.routes.draw do
 
         resources :users, only: [:index, :update] do
           resources :delete_account_tokens, module: "users", only: [:create]
+
+          namespace :profile do
+            resources :web3, param: :token_id, controller: :web3, only: [:update]
+
+            scope :web3 do
+              get :tokens, to: "web3#tokens"
+              post :refresh_tokens, to: "web3#refresh_tokens"
+              get :nfts, to: "web3#nfts"
+              post :refresh_nfts, to: "web3#refresh_nfts"
+              get :poaps, to: "web3#poaps"
+              post :refresh_poaps, to: "web3#refresh_poaps"
+            end
+          end
         end
 
         resources :follows, only: [:index, :create]
