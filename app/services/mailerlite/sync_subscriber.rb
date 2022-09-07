@@ -54,7 +54,7 @@ class Mailerlite::SyncSubscriber
   end
 
   def status(user)
-    if user.talent? && user.talent.token.contract_id.present?
+    if user.talent? && user.talent.talent_token.contract_id.present?
       if user.talent.public?
         "Token Live Public"
       else
