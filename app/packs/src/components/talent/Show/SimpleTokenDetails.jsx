@@ -39,7 +39,7 @@ const SimpleTokenDetails = ({
     totalSupply: 0,
   });
 
-  const chainName = chainIdToName(token.chain_id, railsContext.contractsEnv);
+  const chainName = chainIdToName(token?.chain_id, railsContext.contractsEnv);
 
   useEffect(() => {
     if (loading || !data || !data.talentToken) {
@@ -160,7 +160,7 @@ const SimpleTokenDetails = ({
 };
 
 export default (props) => (
-  <ApolloProvider client={client(props.token.chain_id)}>
+  <ApolloProvider client={client(props.token?.chain_id)}>
     <SimpleTokenDetails {...props} />
   </ApolloProvider>
 );
