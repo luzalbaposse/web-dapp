@@ -147,6 +147,7 @@ const NewPortfolio = ({
   walletConnected,
   setWalletConnected,
   localAccount,
+  currentChain,
   setLocalAccount,
 }) => {
   // --- On chain variables ---
@@ -565,7 +566,7 @@ const NewPortfolio = ({
             Supporters
           </div>
         )}
-        {!!userNFT.id && (
+        {!!userNFT.id && currentChain == "Celo" && (
           <div
             onClick={() => setActiveTab("NFTs")}
             className={`talent-table-tab${
@@ -674,7 +675,7 @@ const PortfolioWrapper = (props) => {
 
   return (
     <>
-      <div className="d-flex flex-row justify-content-center">
+      <div className="d-flex flex-row mb-3 mt-3 mt-lg-0 ml-3 ml-lg-0">
         {getAllChainOptions(props.railsContext.contractsEnv).map((option) => (
           <Button
             key={option.id}
@@ -706,6 +707,7 @@ const PortfolioWrapper = (props) => {
         chainId={chainId}
         localAccount={localAccount}
         setLocalAccount={setLocalAccount}
+        currentChain={currentChain}
       />
     </>
   );

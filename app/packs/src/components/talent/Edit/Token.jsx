@@ -16,6 +16,7 @@ import Button from "src/components/design_system/button";
 import TokenDetails from "src/components/talent/Show/TokenDetails";
 import Caption from "src/components/design_system/typography/caption";
 import ChainSelectionDropdown from "src/components/design_system/dropdowns/chain_selection_dropdown";
+import Link from "src/components/design_system/link";
 import {
   ArrowRight,
   ArrowLeft,
@@ -40,9 +41,9 @@ const LaunchTokenModal = ({
         <Modal.Title className="px-3">Launch your Talent Token</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div className="d-flex flex-column w-100 p-3">
+        <div className="d-flex flex-column w-100 px-3 pb-3">
           <P2 mode={mode}>
-            All Talent Tokens have a 1,000,000.00 maximum Supply. Until your
+            All Talent Tokens have a 1,000,000.00 Maximum Supply. Until your
             token reaches the maximum supply it will have a fixed price of 5
             TAL.
           </P2>
@@ -53,7 +54,7 @@ const LaunchTokenModal = ({
             shortCaption={"Upcase letters only. 3 to 8 characters"}
             onChange={(e) => setTicker(e.target.value)}
             value={ticker || ""}
-            className="w-100 mt-3"
+            className="w-100 mt-4"
             maxLength={8}
             required={true}
             error={error?.length || error?.characters || error?.tickerTaken}
@@ -72,12 +73,12 @@ const LaunchTokenModal = ({
             <P2 className="text-danger">Your ticker is already taken.</P2>
           )}
           <ChainSelectionDropdown
-            className="mb-2"
+            className="my-3"
             selectedNetwork={selectedNetwork}
             setSelectedNetwork={setSelectedNetwork}
           />
           <div className={`divider ${mode} my-3`}></div>
-          <P2 className="mb-2">
+          <P2>
             Deploying a Talent Token requires you to confirm a transaction and
             pay a small transaction fee. After you launch your token we'll send
             you 2,000 of your own token!
@@ -85,7 +86,7 @@ const LaunchTokenModal = ({
           <Button
             onClick={() => setSelectedChain(selectedNetwork)}
             type="primary-default"
-            className="w-100"
+            className="w-100 mt-5"
             mode={mode}
           >
             Create your Talent Token
@@ -124,26 +125,21 @@ const UnrecognizedChain = ({ mode, switchNetwork, env }) => {
             You're currently connected to a network that we do not support.
             Please switch to one of the networks below.
           </P2>
-          <div className="d-flex flex-column">
+          <div className="d-flex flex-column flex-lg-row">
             {chainOptions.map((option) => (
-              <div
-                className="d-flex flex-row justify-content-between align-items-center"
-                key={option.id}
+              <Button
+                onClick={() => switchNetwork(option.id)}
+                mode={mode}
+                type="primary-outline"
+                className="ml-lg-2 mb-lg-0 mb-2"
               >
                 {option.name == "Polygon" ? (
-                  <Polygon width={42} />
+                  <Polygon width={24} />
                 ) : (
-                  <Celo width={42} />
-                )}
-                <P2 className="mx-3">{option.name}</P2>
-                <Button
-                  onClick={() => switchNetwork(option.id)}
-                  mode={mode}
-                  type="primary-default"
-                >
-                  Switch
-                </Button>
-              </div>
+                  <Celo width={24} />
+                )}{" "}
+                Switch to {option.name}
+              </Button>
             ))}
           </div>
         </div>
@@ -152,22 +148,34 @@ const UnrecognizedChain = ({ mode, switchNetwork, env }) => {
   );
 };
 
-const WrongNetwork = ({ chainId, mode, hide, switchNetwork, env }) => {
+const WrongNetwork = ({
+  chainId,
+  mode,
+  hide,
+  switchNetwork,
+  selectedChain,
+  env,
+}) => {
   const chainName = chainIdToName(chainId, env);
+  const selectedChainName = chainIdToName(selectedChain, env);
+  const areDifferent = chainName != selectedChainName;
+  const realDesiredChain = areDifferent ? selectedChainName : chainName;
+  const realDesiredChainId = areDifferent ? selectedChain : chainId;
+
   return (
     <>
       <Modal.Header closeButton></Modal.Header>
       <Modal.Body>
         <div className="d-flex flex-column justify-content-center align-items-center w-100 px-3 pb-3">
-          {chainName == "Polygon" ? (
-            <Polygon width="48" />
+          {realDesiredChain == "Polygon" ? (
+            <Polygon width={48} />
           ) : (
-            <Celo width="48" />
+            <Celo width={48} />
           )}
           <H5 className="mt-4">Switch Network</H5>
           <P2 className="mb-3 text-center">
-            To launch your talent token on the {chainName} network please change
-            your current network.
+            To launch your talent token on the {realDesiredChain} network please
+            change your current network.
           </P2>
           <div className="d-flex flex-row justify-content-between w-100 align-items-center">
             <Button
@@ -179,12 +187,12 @@ const WrongNetwork = ({ chainId, mode, hide, switchNetwork, env }) => {
               Back
             </Button>
             <Button
-              onClick={() => switchNetwork(chainId)}
+              onClick={() => switchNetwork(realDesiredChainId)}
               mode={mode}
               type="primary-default"
               className="w-100 mt-3"
             >
-              Switch to {chainName}
+              Switch to {realDesiredChain}
             </Button>
           </div>
         </div>
@@ -219,15 +227,16 @@ const SuccessConfirmation = ({ mode, hide }) => {
       </Modal.Header>
       <Modal.Body>
         <div className="d-flex flex-column justify-content-center align-items-center w-100 p-3">
-          <P2 className="w-100 text-center mb-3">
-            You've successfully deployed your token!
+          <P2 className="w-100 mx-5 mb-5">
+            You've successfully deployed your token! You can track your token
+            activity in your portfolio.
           </P2>
           <GreenCheck mode={mode} />
           <Button
             onClick={hide}
             type="primary-default"
             mode={mode}
-            className="w-100 mt-3"
+            className="w-100 mt-5"
           >
             Confirm
           </Button>
@@ -527,6 +536,7 @@ const Token = (props) => {
           backdrop={false}
           setShow={setShow}
           chainId={currentChain}
+          selectedChain={selectedChain}
           setSelectedChain={deployOrChangeNetwork}
           switchNetwork={switchNetwork}
           env={railsContext.contractsEnv}
