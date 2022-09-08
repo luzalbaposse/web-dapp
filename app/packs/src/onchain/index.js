@@ -103,6 +103,16 @@ class OnChain {
     return network.chainId;
   }
 
+  getEnvBlockExplorerUrls(chainId = 42220) {
+    if (Addresses[this.env][chainId]) {
+      return Addresses[this.env][chainId]["paramsForMetamask"][
+        "blockExplorerUrls"
+      ][0];
+    } else {
+      return "/";
+    }
+  }
+
   async switchChain(chainId = 42220) {
     const chainHex = ethers.utils.hexValue(ethers.utils.hexlify(chainId));
 

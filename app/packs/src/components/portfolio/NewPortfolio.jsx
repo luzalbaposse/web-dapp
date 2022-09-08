@@ -149,6 +149,7 @@ const NewPortfolio = ({
   localAccount,
   currentChain,
   setLocalAccount,
+  chainId,
 }) => {
   // --- On chain variables ---
 
@@ -437,6 +438,7 @@ const NewPortfolio = ({
             currentUserId={currentUserId}
             userNFT={userNFT}
             memberNFT={memberNFT}
+            chainId={chainId}
           />
         ) : (
           <LoadingPortfolio />
@@ -604,6 +606,7 @@ const NewPortfolio = ({
           memberNFT={memberNFT}
           chainAPI={chainAPI}
           mode={theme.mode()}
+          chainId={chainId}
         />
       )}
     </div>
