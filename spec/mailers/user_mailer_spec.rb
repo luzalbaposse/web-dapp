@@ -129,4 +129,30 @@ RSpec.describe UserMailer, type: :mailer do
       expect(mail.to).to eql([user.email])
     end
   end
+
+  describe "send goal deadline reminder email" do
+    let(:mail) do
+      described_class.with(goal: goal, user: user).send_goal_deadline_reminder_email
+    end
+
+    let(:goal) { create :goal, due_date: Date.current }
+
+    it "renders the header" do
+      expect(mail.subject).to eql("Your goal's deadline is today!")
+      expect(mail.to).to eql([user.email])
+    end
+  end
+
+  describe "send goal half-way reminder email" do
+    let(:mail) do
+      described_class.with(goal: goal, user: user).send_goal_halfway_reminder_email
+    end
+
+    let(:goal) { create :goal, due_date: Date.tomorrow }
+
+    it "renders the header" do
+      expect(mail.subject).to eql("Your goal's half-way there!")
+      expect(mail.to).to eql([user.email])
+    end
+  end
 end

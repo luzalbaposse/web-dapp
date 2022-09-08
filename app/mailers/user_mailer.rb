@@ -133,6 +133,20 @@ class UserMailer < ApplicationMailer
     bootstrap_mail(to: @user.email, subject: "Is this goodbye?")
   end
 
+  def send_goal_deadline_reminder_email
+    @goal = indifferent_access_params[:goal]
+    @user = indifferent_access_params[:user]
+
+    bootstrap_mail(to: @user.email, subject: "Your goal's deadline is today!")
+  end
+
+  def send_goal_halfway_reminder_email
+    @goal = indifferent_access_params[:goal]
+    @user = indifferent_access_params[:user]
+
+    bootstrap_mail(to: @user.email, subject: "Your goal's half-way there!")
+  end
+
   private
 
   def indifferent_access_params
