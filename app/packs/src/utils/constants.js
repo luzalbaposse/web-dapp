@@ -4,10 +4,10 @@ export const PRIVACY_HREF =
   "https://drive.google.com/file/d/1Cts7FcmstLa_IISHFeO6vizy8Um5rKZE/view";
 
 export const THE_GRAPH_ENDPOINTS = {
+  137: "https://api.thegraph.com/subgraphs/name/talent-protocol/polygon-prod",
   44787: "https://api.thegraph.com/subgraphs/name/talent-protocol/dev",
   42220: "https://api.thegraph.com/subgraphs/name/talent-protocol/prod",
-  80001:
-    "https://api.thegraph.com/subgraphs/name/francisco-leal/talent-protocol-polygon-dev",
+  80001: "https://api.thegraph.com/subgraphs/name/talent-protocol/mumbai-dev",
 };
 
 export const SUPPORTER_GUIDE =
