@@ -1,6 +1,7 @@
 require "the_graph/celo/client"
 require "the_graph/mumbai/client"
 require "the_graph/alfajores/client"
+require "the_graph/polygon/client"
 
 module Talents
   class RefreshSupporters

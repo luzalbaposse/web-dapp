@@ -72,9 +72,10 @@
     "137": {
       "chainId": 137,
       "chainName": "Polygon",
-      "factory": "",
-      "staking": "",
+      "factory": "0x8Db20Bc35b3AB78CbCC27c1674a26780cBB80918",
+      "staking": "0xb477A9BD2547ad61f4Ac22113172Dd909E5B2331",
       "rpcURL": "https://polygon-rpc.com/",
+      "stableAddress": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
       "icon": "polygon",
       "paramsForMetamask": {
         "chainId": "0x89",
