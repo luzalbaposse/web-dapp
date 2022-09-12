@@ -76,6 +76,7 @@
       "staking": "0xE23104E89fF4c93A677136C4cBdFD2037B35BE67",
       "rpcURL": "https://polygon-rpc.com/",
       "stableAddress": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+      "stableDecimals": 6,
       "icon": "polygon",
       "paramsForMetamask": {
         "chainId": "0x89",

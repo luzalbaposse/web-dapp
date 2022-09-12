@@ -29,6 +29,7 @@ class OnChain {
     this.talentFactory = null;
     this.staking = null;
     this.stabletoken = null;
+    this.stableDecimals = null;
     this.celoKit = null;
     this.signer = null;
     this.env = env || "development";
@@ -279,8 +280,11 @@ class OnChain {
           stableTokenAddress = await this.celoKit.registry.addressFor(
             CeloContract.StableToken
           );
+          this.stableDecimals = 18;
         } else {
           stableTokenAddress = Addresses[this.env][chainId]["stableAddress"];
+          this.stableDecimals =
+            Addresses[this.env][chainId]["stableDecimals"] || 18;
         }
 
         this.stabletoken = new ethers.Contract(
@@ -371,7 +375,7 @@ class OnChain {
       return;
     }
 
-    const amount = ethers.utils.parseUnits(_amount);
+    const amount = ethers.utils.parseUnits(_amount, this.stableDecimals);
 
     // estimate the gas price before submitting the TX
     // so that we can manually override the gas limit
@@ -411,7 +415,10 @@ class OnChain {
 
     const tx = await this.stabletoken
       .connect(this.signer)
-      .approve(this.staking.address, ethers.utils.parseUnits(_amount));
+      .approve(
+        this.staking.address,
+        ethers.utils.parseUnits(_amount, this.stableDecimals)
+      );
 
     const result = await tx.wait();
 
@@ -429,7 +436,7 @@ class OnChain {
     );
 
     if (formatted) {
-      return ethers.utils.formatUnits(result);
+      return ethers.utils.formatUnits(result, this.stableDecimals);
     } else {
       return result;
     }
@@ -443,7 +450,7 @@ class OnChain {
     const result = await this.stabletoken.balanceOf(this.account);
 
     if (formatted) {
-      return ethers.utils.formatUnits(result);
+      return ethers.utils.formatUnits(result, this.stableDecimals);
     } else {
       return result;
     }
