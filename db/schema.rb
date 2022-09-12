@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_23_152927) do
+ActiveRecord::Schema.define(version: 2022_08_30_134506) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -141,6 +141,41 @@ ActiveRecord::Schema.define(version: 2022_08_23_152927) do
     t.text "description"
     t.bigint "partnership_id"
     t.index ["partnership_id"], name: "index_discovery_rows_on_partnership_id"
+  end
+
+  create_table "erc20_tokens", force: :cascade do |t|
+    t.string "address", null: false
+    t.string "name"
+    t.string "symbol"
+    t.string "logo"
+    t.string "thumbnail"
+    t.integer "decimals"
+    t.string "balance"
+    t.integer "chain_id", null: false
+    t.boolean "show", default: false
+    t.bigint "user_id", null: false
+    t.datetime "last_sync_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_erc20_tokens_on_user_id"
+  end
+
+  create_table "erc721_tokens", force: :cascade do |t|
+    t.string "address", null: false
+    t.string "name"
+    t.string "symbol"
+    t.string "url"
+    t.json "metadata"
+    t.string "token_id"
+    t.string "amount"
+    t.integer "chain_id", null: false
+    t.boolean "show", default: false
+    t.string "nft_type", null: false
+    t.bigint "user_id", null: false
+    t.datetime "last_sync_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_erc721_tokens_on_user_id"
   end
 
   create_table "feed_posts", force: :cascade do |t|
@@ -382,16 +417,7 @@ ActiveRecord::Schema.define(version: 2022_08_23_152927) do
     t.index ["supporter_wallet_id", "talent_contract_id"], name: "talent_supporters_wallet_token_contract_uidx", unique: true
   end
 
-  create_table "tasks", force: :cascade do |t|
-    t.string "status", default: "pending"
-    t.string "type"
-    t.bigint "quest_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["quest_id"], name: "index_tasks_on_quest_id"
-  end
-
-  create_table "tokens", force: :cascade do |t|
+  create_table "talent_tokens", force: :cascade do |t|
     t.string "ticker"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -399,8 +425,19 @@ ActiveRecord::Schema.define(version: 2022_08_23_152927) do
     t.boolean "deployed", default: false
     t.string "contract_id"
     t.datetime "deployed_at"
-    t.index ["talent_id"], name: "index_tokens_on_talent_id"
-    t.index ["ticker"], name: "index_tokens_on_ticker", unique: true
+    t.integer "chain_id"
+    t.index ["chain_id"], name: "index_talent_tokens_on_chain_id"
+    t.index ["talent_id"], name: "index_talent_tokens_on_talent_id"
+    t.index ["ticker"], name: "index_talent_tokens_on_ticker", unique: true
+  end
+
+  create_table "tasks", force: :cascade do |t|
+    t.string "status", default: "pending"
+    t.string "type"
+    t.bigint "quest_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["quest_id"], name: "index_tasks_on_quest_id"
   end
 
   create_table "transfers", force: :cascade do |t|
@@ -519,6 +556,8 @@ ActiveRecord::Schema.define(version: 2022_08_23_152927) do
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
   add_foreign_key "discovery_rows", "partnerships"
+  add_foreign_key "erc20_tokens", "users"
+  add_foreign_key "erc721_tokens", "users"
   add_foreign_key "feed_posts", "feeds"
   add_foreign_key "feed_posts", "posts"
   add_foreign_key "feeds", "users"
@@ -538,8 +577,8 @@ ActiveRecord::Schema.define(version: 2022_08_23_152927) do
   add_foreign_key "quests", "users"
   add_foreign_key "rewards", "users"
   add_foreign_key "tags", "discovery_rows"
+  add_foreign_key "talent_tokens", "talent"
   add_foreign_key "tasks", "quests"
-  add_foreign_key "tokens", "talent"
   add_foreign_key "transfers", "users"
   add_foreign_key "user_profile_type_changes", "users"
   add_foreign_key "user_profile_type_changes", "users", column: "who_dunnit_id"

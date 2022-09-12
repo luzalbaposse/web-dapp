@@ -1,4 +1,3 @@
-require "the_graph/client"
 require "json"
 
 module Rack

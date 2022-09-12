@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe Token, type: :model do
-  subject { build :token, ticker: "TALENT" }
+RSpec.describe TalentToken, type: :model do
+  subject { build :talent_token, ticker: "TALENT" }
 
   describe "associations" do
     it { is_expected.to belong_to(:talent) }
@@ -26,7 +26,7 @@ RSpec.describe Token, type: :model do
 
     context "when there is an existing token with the same ticker" do
       before do
-        create :token, ticker: "DINIS"
+        create :talent_token, ticker: "DINIS"
       end
 
       it "show the correct error message" do

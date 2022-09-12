@@ -5,12 +5,12 @@ class API::V1::UsersController < ApplicationController
     @users = search_params[:name].present? ? filtered_users : filtered_users.limit(20)
 
     render json: {
-      users: @users.includes(:investor, talent: :token).map { |u|
+      users: @users.includes(:investor, talent: :talent_token).map { |u|
         {
           id: u.id,
           profilePictureUrl: u&.talent&.profile_picture_url || u.investor&.profile_picture_url,
           username: u.username,
-          ticker: u.talent&.token&.display_ticker
+          ticker: u.talent&.talent_token&.display_ticker
         }
       }
     }, status: :ok
