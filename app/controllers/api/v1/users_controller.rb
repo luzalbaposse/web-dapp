@@ -51,6 +51,13 @@ class API::V1::UsersController < ApplicationController
         current_user.update!(welcome_pop_up: true)
       elsif params[:first_quest_popup]
         current_user.update!(first_quest_popup: true)
+      elsif user_params[:email]
+        if current_user.authenticated?(password_params[:current_password])
+          current_user.update!(user_params)
+          current_user.update!(confirmation_token: Clearance::Token.new)
+        else
+          return render json: {errors: {currentPassword: "Current password is incorrect"}}, status: :conflict
+        end
       else
         if password_params[:new_password]&.length&.positive?
           if current_user.authenticated?(password_params[:current_password])

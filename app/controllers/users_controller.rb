@@ -18,7 +18,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    if @user.talent&.hide_profile && current_user.role != "admin" && current_user.id != @user.id
+    if @user.talent&.hide_profile && current_user&.role != "admin" && current_user&.id != @user.id
       redirect_to root_url
     end
 
@@ -81,6 +81,8 @@ class UsersController < ApplicationController
   end
 
   def send_confirmation_email
+    User.find_by!(id: params[:user_id]).update(email_confirmation_token: Clearance::Token.new)
+
     UserMailer.with(user_id: params[:user_id]).send_sign_up_email.deliver_later
 
     render json: {id: params[:user_id]}, status: :ok

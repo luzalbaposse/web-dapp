@@ -128,7 +128,9 @@ const Settings = (props) => {
   };
 
   const sendDeleteAccountEmail = async () => {
-    const response = await post(`/api/v1/users/${user.id}/delete_account_tokens`)
+    const response = await post(
+      `/api/v1/users/${user.id}/delete_account_tokens`
+    );
 
     if (response && response.success) {
       toast.success(<ToastBody heading="Success!" body="Email sent!" />);
@@ -174,7 +176,8 @@ const Settings = (props) => {
     !!validationErrors.username ||
     !!validationErrors.currentPassword ||
     !!validationErrors.newPassword ||
-    (!!settings.newPassword && !validPassword);
+    (!!settings.newPassword && !validPassword) ||
+    !settings.currentPassword;
 
   const cannotChangePassword = () =>
     !!validationErrors.currentPassword ||
@@ -269,7 +272,7 @@ const Settings = (props) => {
           error={validationErrors.currentPassword}
         />
         {validationErrors?.currentPassword && (
-          <P3 className="text-danger" text="Password doesn't match." />
+          <P3 className="text-danger" text={validationErrors.currentPassword} />
         )}
       </div>
       <div className="d-flex flex-row w-100 justify-content-between mt-4">
@@ -393,7 +396,7 @@ const Settings = (props) => {
         ))}
         <div
           className={`d-flex flex-row ${
-            mobile ? "justify-content-between" : "mt-4"
+            mobile ? "justify-content-between mt-4" : "mt-4"
           } w-100 pb-4`}
         >
           <LoadingButton
@@ -417,8 +420,14 @@ const Settings = (props) => {
           mode={mode}
           text="To permanently delete your account and account data, you'll need to confirm your decision in an email we send you."
         />
-        <button className="button-link w-100 mt-4 mb-2" onClick={sendDeleteAccountEmail}>
-          <Link text="Send delete account confirmation email" className="text-primary" />
+        <button
+          className="button-link w-100 mt-4 mb-2"
+          onClick={sendDeleteAccountEmail}
+        >
+          <Link
+            text="Send delete account confirmation email"
+            className="text-primary"
+          />
         </button>
       </div>
     </>

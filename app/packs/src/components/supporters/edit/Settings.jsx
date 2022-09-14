@@ -90,7 +90,7 @@ const Settings = ({
   };
 
   const sendDeleteAccountEmail = async () => {
-    const response = await post(`/api/v1/users/${id}/delete_account_tokens`)
+    const response = await post(`/api/v1/users/${id}/delete_account_tokens`);
 
     if (response && response.success) {
       toast.success(<ToastBody heading="Success!" body="Email sent!" />);
@@ -129,7 +129,8 @@ const Settings = ({
     !!validationErrors.username ||
     !!validationErrors.currentPassword ||
     !!validationErrors.newPassword ||
-    (!!newPassword && !validPassword);
+    (!!newPassword && !validPassword) ||
+    !currentPassword;
 
   const cannotChangePassword = () =>
     !!validationErrors.currentPassword ||
@@ -229,17 +230,6 @@ const Settings = ({
         </Checkbox>
       </div>
 
-      <div className={"d-flex flex-row justify-content-start w-100 mt-4"}>
-        <LoadingButton
-          onClick={() => updateUser()}
-          type="primary-default"
-          disabled={saving.loading || cannotSaveSettings()}
-          loading={saving.loading}
-          success={saving.profile}
-        >
-          Save Profile
-        </LoadingButton>
-      </div>
       <div className="d-flex flex-row w-100 mt-4">
         <TextInput
           title={"Current Password"}
@@ -252,7 +242,7 @@ const Settings = ({
           error={validationErrors?.currentPassword}
         />
         {validationErrors?.currentPassword && (
-          <P3 className="text-danger" text="Password doesn't match." />
+          <P3 className="text-danger" text={validationErrors.currentPassword} />
         )}
       </div>
       <div className="d-flex flex-row w-100 mt-4">
@@ -285,6 +275,17 @@ const Settings = ({
       >
         Change password
       </Button>
+      <div className={"d-flex flex-row justify-content-start w-100 my-4"}>
+        <LoadingButton
+          onClick={() => updateUser()}
+          type="primary-default"
+          disabled={saving.loading || cannotSaveSettings()}
+          loading={saving.loading}
+          success={saving.profile}
+        >
+          Save Profile
+        </LoadingButton>
+      </div>
       <Divider className="mb-4" />
       <div className="d-flex flex-column w-100 my-3">
         <H5
@@ -340,8 +341,14 @@ const Settings = ({
           className="w-100 text-left"
           text="To permanently delete your account and account data, you'll need to confirm your decision in an email we send you."
         />
-        <button className="button-link w-100 mt-4 mb-2" onClick={sendDeleteAccountEmail}>
-          <Link text="Send delete account confirmation email" className="text-primary" />
+        <button
+          className="button-link w-100 mt-4 mb-2"
+          onClick={sendDeleteAccountEmail}
+        >
+          <Link
+            text="Send delete account confirmation email"
+            className="text-primary"
+          />
         </button>
       </div>
       {mobile && (
