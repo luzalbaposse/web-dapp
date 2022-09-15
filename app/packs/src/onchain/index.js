@@ -9,19 +9,11 @@ import Staking from "../abis/recent/Staking.json";
 import TalentFactory from "../abis/recent/TalentFactory.json";
 import StableToken from "../abis/recent/StableToken.json";
 import CommunityUser from "../abis/recent/CommunityUser.json";
-import POAP from "../abis/POAP.json";
 
 import Addresses from "./addresses.json";
 import { ERROR_MESSAGES } from "../utils/constants";
 import { ipfsToURL } from "./utils";
 import { externalGet } from "src/utils/requests";
-
-const XDAI_PARAMS = {
-  chainId: "0x64",
-  chainName: "Gnosis Chain",
-  rpcUrl: "https://rpc.gnosischain.com",
-  blockExplorerUrls: ["https://blockscout.com/xdai/mainnet/"],
-};
 
 class OnChain {
   constructor(env) {
@@ -538,15 +530,6 @@ class OnChain {
     const imageUrl = ipfsToURL(result.image);
 
     return imageUrl;
-  }
-
-  async getPOAPImg(contractId, tokenId) {
-    const provider = new ethers.providers.JsonRpcProvider(XDAI_PARAMS.rpcUrl);
-    const poap = new ethers.Contract(contractId, POAP, provider);
-    const uri = await poap.tokenURI(tokenId);
-    const result = await externalGet(uri);
-
-    return result.image_url;
   }
 }
 
