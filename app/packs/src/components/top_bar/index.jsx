@@ -210,6 +210,7 @@ export const TopBar = ({
     <Button
       onClick={copyAddressToClipboard}
       type="white-subtle"
+      size="icon"
       mode={theme.mode()}
       className={extraClasses}
     >
