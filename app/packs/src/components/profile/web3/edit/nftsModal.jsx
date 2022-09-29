@@ -13,6 +13,7 @@ import { Spinner } from "src/components/icons";
 
 import Modal from "react-bootstrap/Modal";
 import PickNetworkModal from "./pickNetworkModal";
+import EmptyStateModal from "./emptyStateModal";
 
 const DisplayNftsModal = ({
   nfts,
@@ -20,6 +21,8 @@ const DisplayNftsModal = ({
   loading,
   showLoadMoreNfts,
   loadMoreNfts,
+  back,
+  closeModal,
 }) => (
   <>
     <Modal.Header className="py-3 px-4 modal-border mb-4" closeButton>
@@ -72,6 +75,25 @@ const DisplayNftsModal = ({
         </div>
       )}
     </Modal.Body>
+    <Modal.Footer>
+      <ThemedButton
+        onClick={() => back()}
+        type="primary-outline"
+        className="mr-auto"
+      >
+        Back
+      </ThemedButton>
+      <a onClick={() => closeModal()} className="mr-3">
+        Cancel
+      </a>
+      <ThemedButton
+        onClick={() => closeModal()}
+        type="primary-default"
+        className="ml-2"
+      >
+        Save
+      </ThemedButton>
+    </Modal.Footer>
   </>
 );
 
@@ -107,7 +129,7 @@ const NftsModal = ({
 
         response.tokens.map((nft) => {
           getNftData(nft).then((result) => {
-            if (result?.name && result?.image) {
+            if (result?.name && result?.image && result?.imageType == "image") {
               const newNft = {
                 ...nft,
                 imageUrl: result.image,
@@ -119,9 +141,12 @@ const NftsModal = ({
           });
         });
       }
-      setLoading(false);
     });
   }, [userId, chain]);
+
+  useEffect(() => {
+    setLoading(false);
+  }, [nfts]);
 
   const updateNfts = (previousNfts, newNft) => {
     const nftIndex = previousNfts.findIndex((nft) => nft.id === newNft.id);
@@ -203,17 +228,24 @@ const NftsModal = ({
   };
 
   const getCurrentModal = () => {
-    if (!!chain) {
+    if ((!!chain && nfts.length > 0) || loading) {
       return DisplayNftsModal;
+    } else if (!chain) {
+      return PickNetworkModal;
     }
 
-    return PickNetworkModal;
+    return EmptyStateModal;
   };
 
   const CurrentModal = getCurrentModal();
 
   const closeModal = () => {
     setShow(false);
+    setChain(0);
+    setNfts([]);
+  };
+
+  const back = () => {
     setChain(0);
     setNfts([]);
   };
@@ -238,6 +270,14 @@ const NftsModal = ({
         updateNft={updateNft}
         showLoadMoreNfts={showLoadMoreNfts()}
         loadMoreNfts={loadMoreNfts}
+        back={back}
+        closeModal={closeModal}
+        emptyStateHeader={"No NFTs"}
+        emptyStateClickAction={back}
+        emptyStateActionTitle={"Choose another network"}
+        emptyStateMessage={
+          "Oh no! It seems you don't have any nft to showcase. Please, choose another network."
+        }
       />
     </Modal>
   );

@@ -3,7 +3,6 @@ import Modal from "react-bootstrap/Modal";
 import Button from "src/components/design_system/button";
 import { Celo, Polygon } from "src/components/icons";
 import ethLogo from "images/eth-logo.png";
-import gnosisLogo from "images/gnosis-logo.png";
 
 const PickNetworkModal = ({ setChain }) => (
   <>
@@ -36,7 +35,7 @@ const PickNetworkModal = ({ setChain }) => (
             </Button>
           </div>
         </div>
-        <div className="row">
+        <div className="row justify-content-center">
           <div className="col-12 col-md-6 mb-4">
             <Button
               type={"white-subtle"}
@@ -46,17 +45,6 @@ const PickNetworkModal = ({ setChain }) => (
             >
               <Celo className="mr-3" width={48} />
               Celo
-            </Button>
-          </div>
-          <div className="col-12 col-md-6 mb-4">
-            <Button
-              type={"white-subtle"}
-              onClick={() => setNetwork(100)}
-              className="network-button"
-              size="extra-big"
-            >
-              <img src={gnosisLogo} className="token-img mr-3" />
-              Gnosis
             </Button>
           </div>
         </div>

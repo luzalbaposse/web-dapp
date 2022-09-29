@@ -38,7 +38,7 @@ const Nfts = ({ userId, canUpdate }) => {
         setNfts((prev) => [...prev, nft]);
       } else {
         getNftData(nft).then((result) => {
-          if (result?.name && result?.image) {
+          if (result?.name && result?.image && result?.imageType == "image") {
             const newNft = {
               ...nft,
               local_image_url: result.image,

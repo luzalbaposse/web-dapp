@@ -11,6 +11,7 @@ import ThemedButton from "src/components/design_system/button";
 import { Spinner } from "src/components/icons";
 
 import Modal from "react-bootstrap/Modal";
+import EmptyStateModal from "./emptyStateModal";
 
 const DisplayPoapsModal = ({
   poaps,
@@ -18,6 +19,7 @@ const DisplayPoapsModal = ({
   loading,
   showLoadMorePoaps,
   loadMorePoaps,
+  closeModal,
 }) => (
   <>
     <Modal.Header className="py-3 px-4 modal-border mb-4" closeButton>
@@ -70,6 +72,18 @@ const DisplayPoapsModal = ({
         </div>
       )}
     </Modal.Body>
+    <Modal.Footer>
+      <a onClick={() => closeModal()} className="mr-3">
+        Cancel
+      </a>
+      <ThemedButton
+        onClick={() => closeModal()}
+        type="primary-default"
+        className="ml-2"
+      >
+        Save
+      </ThemedButton>
+    </Modal.Footer>
   </>
 );
 
@@ -108,9 +122,12 @@ const PoapsModal = ({ userId, show, setShow, mobile, appendPoap }) => {
           });
         });
       }
-      setLoading(false);
     });
   }, [userId]);
+
+  useEffect(() => {
+    setLoading(false);
+  }, [poaps]);
 
   const updatePoaps = (previousPoaps, newPoap) => {
     const poapIndex = previousPoaps.findIndex((poap) => poap.id === newPoap.id);
@@ -192,6 +209,20 @@ const PoapsModal = ({ userId, show, setShow, mobile, appendPoap }) => {
     return pagination.currentPage < pagination.lastPage;
   };
 
+  const closeModal = () => {
+    setShow(false);
+  };
+
+  const getCurrentModal = () => {
+    if (poaps.length == 0 && !loading) {
+      return EmptyStateModal;
+    }
+
+    return DisplayPoapsModal;
+  };
+
+  const CurrentModal = getCurrentModal();
+
   return (
     <Modal
       scrollable={true}
@@ -203,12 +234,19 @@ const PoapsModal = ({ userId, show, setShow, mobile, appendPoap }) => {
       }
       fullscreen={"md-down"}
     >
-      <DisplayPoapsModal
+      <CurrentModal
         poaps={poaps}
         loading={loading}
         updatePoap={updatePoap}
         showLoadMorePoaps={showLoadMorePoaps()}
         loadMorePoaps={loadMorePoaps}
+        closeModal={setShow}
+        emptyStateHeader={"No POAPs"}
+        emptyStateClickAction={closeModal}
+        emptyStateActionTitle={"Back to Profile"}
+        emptyStateMessage={
+          "Oh no! It seems you don't have any poaps to showcase."
+        }
       />
     </Modal>
   );

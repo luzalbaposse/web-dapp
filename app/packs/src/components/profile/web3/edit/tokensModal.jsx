@@ -12,6 +12,7 @@ import { Spinner } from "src/components/icons";
 
 import Modal from "react-bootstrap/Modal";
 import PickNetworkModal from "./pickNetworkModal";
+import EmptyStateModal from "./emptyStateModal";
 
 const DisplayTokensModal = ({
   tokens,
@@ -20,6 +21,8 @@ const DisplayTokensModal = ({
   showLoadMoreTokens,
   loadMoreTokens,
   tokenLogo,
+  back,
+  closeModal,
 }) => (
   <>
     <Modal.Header className="py-3 px-4 modal-border mb-4" closeButton>
@@ -69,6 +72,25 @@ const DisplayTokensModal = ({
         </div>
       )}
     </Modal.Body>
+    <Modal.Footer>
+      <ThemedButton
+        onClick={() => back()}
+        type="primary-outline"
+        className="mr-auto"
+      >
+        Back
+      </ThemedButton>
+      <a onClick={() => closeModal()} className="mr-3">
+        Cancel
+      </a>
+      <ThemedButton
+        onClick={() => closeModal()}
+        type="primary-default"
+        className="ml-2"
+      >
+        Save
+      </ThemedButton>
+    </Modal.Footer>
   </>
 );
 
@@ -104,9 +126,12 @@ const TokensModal = ({
         setPagination(response.pagination);
         setTokens(response.tokens);
       }
-      setLoading(false);
     });
   }, [userId, chain]);
+
+  useEffect(() => {
+    setLoading(false);
+  }, [tokens]);
 
   const updateTokens = (previousTokens, newToken) => {
     const tokenIndex = previousTokens.findIndex(
@@ -168,17 +193,24 @@ const TokensModal = ({
   };
 
   const getCurrentModal = () => {
-    if (!!chain) {
+    if ((!!chain && tokens.length > 0) || loading) {
       return DisplayTokensModal;
+    } else if (!chain) {
+      return PickNetworkModal;
     }
 
-    return PickNetworkModal;
+    return EmptyStateModal;
   };
 
   const CurrentModal = getCurrentModal();
 
   const closeModal = () => {
     setShow(false);
+    setChain(0);
+    setTokens([]);
+  };
+
+  const back = () => {
     setChain(0);
     setTokens([]);
   };
@@ -204,6 +236,14 @@ const TokensModal = ({
         showLoadMoreTokens={showLoadMoreTokens()}
         loadMoreTokens={loadMoreTokens}
         tokenLogo={tokenLogo}
+        back={back}
+        closeModal={closeModal}
+        emptyStateHeader={"No tokens"}
+        emptyStateClickAction={back}
+        emptyStateActionTitle={"Choose another network"}
+        emptyStateMessage={
+          "Oh no! It seems you don't have any token to showcase. Please, choose another network."
+        }
       />
     </Modal>
   );
