@@ -139,7 +139,7 @@ module Web3
           amount: item["amount"],
           name: item["name"],
           symbol: item["symbol"],
-          token_uri: item["token_uri"].start_with?("http") ? item["token_uri"] : nil,
+          token_uri: item["token_uri"]&.start_with?("http") ? item["token_uri"] : nil,
           metadata: item["metadata"].present? ? JSON.parse(item["metadata"]) : nil
         }
       end

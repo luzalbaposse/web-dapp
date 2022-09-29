@@ -10,7 +10,7 @@ import { useWindowDimensionsHook } from "src/utils/window";
 
 import PoapsModal from "./edit/poapsModal";
 
-const Poaps = ({ userId }) => {
+const Poaps = ({ userId, canUpdate }) => {
   const [poaps, setPoaps] = useState([]);
   const [editShow, setEditShow] = useState(false);
   const [pagination, setPagination] = useState({});
@@ -90,19 +90,21 @@ const Poaps = ({ userId }) => {
       <PoapsModal
         userId={userId}
         appendPoap={appendPoap}
-        show={editShow}
+        show={editShow && canUpdate}
         setShow={setEditShow}
         mobile={mobile}
       />
       <div className="container">
         <div className="d-flex w-100 mb-3">
           <H3 className="w-100 text-center mr-3">Poaps</H3>
-          <a onClick={() => setEditShow(true)} className="ml-auto">
-            <Edit />
-          </a>
+          {canUpdate && (
+            <a onClick={() => setEditShow(true)} className="ml-auto">
+              <Edit />
+            </a>
+          )}
         </div>
         <P2 className="text-center mb-6">A curated list of my main Poaps</P2>
-        <div className="row d-flex flex-row justify-content-between mb-3">
+        <div className="row d-flex flex-row justify-content-center mb-3">
           {poaps.map((poap) => (
             <div className="col-12 col-md-4 mb-4" key={poap.id}>
               <div className="web3-card">

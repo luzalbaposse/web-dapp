@@ -40,6 +40,7 @@
             display_name: @profile["user"]["display_name"],
             wallet_id: @profile["user"]["wallet_id"],
             profile_type: @profile["user"]["profile_type"],
+            can_update: @profile["user_id"] == current_acting_user&.id
           },
         }, prerender: false)
       %>

@@ -14,7 +14,7 @@ import { useWindowDimensionsHook } from "src/utils/window";
 
 import TokensModal from "./edit/tokensModal";
 
-const Tokens = ({ userId }) => {
+const Tokens = ({ userId, canUpdate }) => {
   const [tokens, setTokens] = useState([]);
   const [editShow, setEditShow] = useState(false);
   const [chain, setChain] = useState(0);
@@ -93,7 +93,7 @@ const Tokens = ({ userId }) => {
       <TokensModal
         userId={userId}
         appendToken={appendToken}
-        show={editShow}
+        show={editShow && canUpdate}
         setShow={setEditShow}
         mobile={mobile}
         tokenLogo={tokenLogo}
@@ -103,12 +103,14 @@ const Tokens = ({ userId }) => {
       <div className="container">
         <div className="d-flex w-100 mb-3">
           <H3 className="w-100 text-center mr-3">Tokens</H3>
-          <a onClick={() => setEditShow(true)} className="ml-auto">
-            <Edit />
-          </a>
+          {canUpdate && (
+            <a onClick={() => setEditShow(true)} className="ml-auto">
+              <Edit />
+            </a>
+          )}
         </div>
         <P2 className="text-center mb-6">A curated list of my main Tokens</P2>
-        <div className="row d-flex flex-row justify-content-between mb-3">
+        <div className="row d-flex flex-row justify-content-center mb-3">
           {tokens.map((token) => (
             <div
               className="col-12 col-md-4 mb-4"

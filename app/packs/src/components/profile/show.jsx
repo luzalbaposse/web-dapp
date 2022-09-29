@@ -34,9 +34,9 @@ const Show = ({
 
   return (
     <div className="d-flex flex-column lg-h-100 p-0">
-      <Poaps userId={user.id} />
-      <Nfts userId={user.id} />
-      <Tokens userId={user.id} />
+      <Poaps userId={user.id} canUpdate={user.can_update} />
+      <Nfts userId={user.id} canUpdate={user.can_update} />
+      <Tokens userId={user.id} canUpdate={user.can_update} />
     </div>
   );
 };

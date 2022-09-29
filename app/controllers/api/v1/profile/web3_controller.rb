@@ -13,13 +13,13 @@ class API::V1::Profile::Web3Controller < ApplicationController
       e,
       "Unable to update token with unexpected error.",
       token_id: token.id,
-      user_id: current_acting_user.id
+      user_id: user.id
     )
     render json: {error: "Something went wrong while updating the token"}, status: :bad_request
   end
 
   def tokens
-    tokens = current_acting_user.erc20_tokens
+    tokens = user.erc20_tokens
     tokens = tokens.visible if only_visible_tokens?
     tokens = tokens.where(chain_id: refresh_params[:chain_id]) if refresh_params[:chain_id].present?
 
@@ -36,7 +36,7 @@ class API::V1::Profile::Web3Controller < ApplicationController
   end
 
   def nfts
-    nfts = current_acting_user.erc721_tokens.nft
+    nfts = user.erc721_tokens.nft
     nfts = nfts.where(chain_id: refresh_params[:chain_id]) if refresh_params[:chain_id].present?
     nfts = nfts.visible if only_visible_tokens?
 
@@ -53,7 +53,7 @@ class API::V1::Profile::Web3Controller < ApplicationController
   end
 
   def poaps
-    poaps = current_acting_user.erc721_tokens.poap
+    poaps = user.erc721_tokens.poap
     poaps = poaps.visible if only_visible_tokens?
 
     @pagy, poaps = pagy(poaps, items: per_page)
@@ -111,13 +111,13 @@ class API::V1::Profile::Web3Controller < ApplicationController
       },
       status: :ok
     )
-  rescue => e
-    Rollbar.error(
-      e,
-      "Error while refreshing nfts",
-      user_id: current_acting_user.id
-    )
-    render json: {error: "Something went wrong while refreshing nfts"}, status: :bad_request
+    # rescue => e
+    #   Rollbar.error(
+    #     e,
+    #     "Error while refreshing nfts",
+    #     user_id: current_acting_user.id
+    #   )
+    #   render json: {error: "Something went wrong while refreshing nfts"}, status: :bad_request
   end
 
   def refresh_poaps
@@ -146,6 +146,10 @@ class API::V1::Profile::Web3Controller < ApplicationController
   end
 
   private
+
+  def user
+    @user ||= User.find(params[:user_id])
+  end
 
   def token
     @token ||= erc_20_token || erc_721_token

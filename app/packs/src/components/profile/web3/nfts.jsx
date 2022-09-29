@@ -10,7 +10,7 @@ import { useWindowDimensionsHook } from "src/utils/window";
 
 import NftsModal from "./edit/nftsModal";
 
-const Nfts = ({ userId }) => {
+const Nfts = ({ userId, canUpdate }) => {
   const [nfts, setNfts] = useState([]);
   const [editShow, setEditShow] = useState(false);
   const [pagination, setPagination] = useState({});
@@ -74,7 +74,7 @@ const Nfts = ({ userId }) => {
       <NftsModal
         userId={userId}
         appendNft={appendNft}
-        show={editShow}
+        show={editShow && canUpdate}
         setShow={setEditShow}
         mobile={mobile}
         setChain={setChain}
@@ -83,12 +83,14 @@ const Nfts = ({ userId }) => {
       <div className="container">
         <div className="d-flex w-100 mb-3">
           <H3 className="w-100 text-center mr-3">Nfts</H3>
-          <a onClick={() => setEditShow(true)} className="ml-auto">
-            <Edit />
-          </a>
+          {canUpdate && (
+            <a onClick={() => setEditShow(true)} className="ml-auto">
+              <Edit />
+            </a>
+          )}
         </div>
         <P2 className="text-center mb-6">A curated list of my main nfts</P2>
-        <div className="row d-flex flex-row justify-content-between mb-3">
+        <div className="row d-flex flex-row justify-content-center mb-3">
           {nfts.map((nft) => (
             <div className="col-12 col-md-4 mb-4" key={nft.id}>
               <div className="web3-card">
