@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_30_134506) do
+ActiveRecord::Schema.define(version: 2022_09_28_085710) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -157,6 +157,7 @@ ActiveRecord::Schema.define(version: 2022_08_30_134506) do
     t.datetime "last_sync_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.text "token_image_data"
     t.index ["user_id"], name: "index_erc20_tokens_on_user_id"
   end
 
@@ -175,6 +176,8 @@ ActiveRecord::Schema.define(version: 2022_08_30_134506) do
     t.datetime "last_sync_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.text "token_image_data"
+    t.text "description"
     t.index ["user_id"], name: "index_erc721_tokens_on_user_id"
   end
 

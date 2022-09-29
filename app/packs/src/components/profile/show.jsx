@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 
 import ThemeContainer, { ThemeContext } from "src/contexts/ThemeContext";
+import { useWindowDimensionsHook } from "src/utils/window";
 
 import Poaps from "./web3/poaps";
 import Nfts from "./web3/nfts";

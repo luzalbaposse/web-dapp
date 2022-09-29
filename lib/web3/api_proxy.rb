@@ -14,9 +14,9 @@ module Web3
     SUPPORTED_CHAIN_IDS = %w[0x1 0xa4ec 0x89]
     SUPPORTED_CHAIN_NAMES = %w[celo eth polygon]
 
-    CELO_CHAIN = %w[celo 0xa4ec 44787]
+    CELO_CHAIN = %w[celo 0xa4ec 42220]
     ETH_CHAIN = %w[eth 0x1 1]
-    POLYGON_CHAIN = %w[polygon 0x89 89]
+    POLYGON_CHAIN = %w[polygon 0x89 137]
     GNOSIS_CHAIN_ID = 100
 
     SUPPORTED_CHAINS = SUPPORTED_CHAIN_IDS + SUPPORTED_CHAIN_NAMES
@@ -24,17 +24,21 @@ module Web3
     def retrieve_tokens(wallet_address:, chain: nil)
       validate_chain!(chain)
 
-      return celo_explorer_tokens(wallet_address) if celo?(chain)
+      formatted_chain = formatted_chain(chain)
 
-      moralis_tokens(wallet_address, chain)
+      return celo_explorer_tokens(wallet_address) if celo?(formatted_chain)
+
+      moralis_tokens(wallet_address, formatted_chain)
     end
 
     def retrieve_nfts(wallet_address:, chain: nil)
       validate_chain!(chain)
 
-      return tatum_nfts(wallet_address, "CELO") if celo?(chain)
+      formatted_chain = formatted_chain(chain)
 
-      moralis_nfts(wallet_address, chain)
+      return tatum_nfts(wallet_address, "CELO") if celo?(formatted_chain)
+
+      moralis_nfts(wallet_address, formatted_chain)
     end
 
     def retrieve_poaps(wallet_address:)
