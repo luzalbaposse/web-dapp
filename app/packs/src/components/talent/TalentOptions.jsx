@@ -7,8 +7,10 @@ import TalentKeywordSearch from "./TalentKeywordSearch";
 import TalentFilters from "./TalentFilters";
 import { Grid, List } from "src/components/icons";
 import { useWindowDimensionsHook } from "src/utils/window";
+import { useTheme } from "src/contexts/ThemeContext";
 import { camelCaseObject } from "src/utils/transformObjects";
 import { P1 } from "src/components/design_system/typography";
+import { lightPrimary, darkPrimary } from "src/utils/colors";
 
 import cx from "classnames";
 
@@ -21,9 +23,11 @@ const TalentOptions = ({
   setLocalTalents,
   setSelectedSort,
   setSortDirection,
+  addTalentData,
   isAdmin,
 }) => {
   const { mobile } = useWindowDimensionsHook();
+  const { mode } = useTheme();
   const url = new URL(document.location);
   const [keyword, setKeyword] = useState(url.searchParams.get("keyword") || "");
   const [status, setStatus] = useState(url.searchParams.get("status") || "All");
@@ -35,7 +39,11 @@ const TalentOptions = ({
     params.set(filterType, option);
 
     get(`${searchUrl}?${params.toString()}`).then((response) => {
-      const talents = response.map((talent) => camelCaseObject(talent));
+      let talents = response.map((talent) => ({
+        ...camelCaseObject(talent),
+      }));
+
+      talents = addTalentData(talents);
 
       if (option === "Trending") {
         setSelectedSort("Market Cap");
@@ -93,7 +101,13 @@ const TalentOptions = ({
           onClick={() => setListModeOnly(false)}
         >
           <Grid
-            fill={listModeOnly ? "currentColor" : "#7a55ff"}
+            fill={
+              listModeOnly
+                ? "currentColor"
+                : mode() == "dark"
+                ? darkPrimary
+                : lightPrimary
+            }
             color="inherit"
           />
         </Button>
@@ -104,7 +118,13 @@ const TalentOptions = ({
           onClick={() => setListModeOnly(true)}
         >
           <List
-            fill={!listModeOnly ? "currentColor" : "#7a55ff"}
+            fill={
+              !listModeOnly
+                ? "currentColor"
+                : mode() == "dark"
+                ? darkPrimary
+                : lightPrimary
+            }
             color="inherit"
           />
         </Button>
