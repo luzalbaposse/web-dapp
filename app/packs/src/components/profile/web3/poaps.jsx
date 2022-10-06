@@ -8,6 +8,9 @@ import { getPOAPData } from "src/onchain/utils";
 import { ToastBody } from "src/components/design_system/toasts";
 import { useWindowDimensionsHook } from "src/utils/window";
 
+import cx from "classnames";
+import imagePlaceholder from "images/image-placeholder.jpeg";
+
 import PoapsModal from "./edit/poapsModal";
 
 const Poaps = ({ userId, canUpdate }) => {
@@ -15,6 +18,14 @@ const Poaps = ({ userId, canUpdate }) => {
   const [editShow, setEditShow] = useState(false);
   const [pagination, setPagination] = useState({});
   const { mobile } = useWindowDimensionsHook();
+  // Display placeholder until the image fully loads
+  const [loadedImagePoaps, setLoadedImagePoaps] = useState({});
+
+  const loadedImage = (poap) =>
+    setLoadedImagePoaps((previousLoadedImages) => ({
+      ...previousLoadedImages,
+      [poap.id]: true,
+    }));
 
   useEffect(() => {
     get(`/api/v1/users/${userId}/profile/web3/poaps?visible=${true}`).then(
@@ -96,7 +107,7 @@ const Poaps = ({ userId, canUpdate }) => {
       />
       <div className="container">
         <div className="d-flex w-100 mb-3">
-          <H3 className="w-100 text-center mr-3">Poaps</H3>
+          <H3 className="w-100 text-center">Poaps</H3>
           {canUpdate && (
             <a onClick={() => setEditShow(true)} className="ml-auto">
               <Edit />
@@ -109,7 +120,21 @@ const Poaps = ({ userId, canUpdate }) => {
             <div className="col-12 col-md-4 mb-4" key={poap.id}>
               <div className="web3-card">
                 <div className="mb-3 d-flex flex-column justify-content-between">
-                  <img src={poap.local_image_url} className="nft-img mb-4" />
+                  <img
+                    src={imagePlaceholder}
+                    className={cx(
+                      "nft-img mb-4",
+                      loadedImagePoaps[poap.id] ? "d-none" : ""
+                    )}
+                  />
+                  <img
+                    src={poap.imageUrl || poap.local_image_url}
+                    onLoad={() => loadedImage(poap)}
+                    className={cx(
+                      "nft-img mb-4",
+                      loadedImagePoaps[poap.id] ? "" : "d-none"
+                    )}
+                  />
                   <P2 text={poap.name} className="text-primary-04" />
                   <P3
                     text={

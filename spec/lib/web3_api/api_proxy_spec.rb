@@ -1,12 +1,12 @@
-require "web3/moralis/client"
-require "web3/celo_explorer/client"
-require "web3/gnosis_chain_explorer/client"
-require "web3/tatum/client"
-require "web3/api_proxy"
+require "web3_api/moralis/client"
+require "web3_api/celo_explorer/client"
+require "web3_api/gnosis_chain_explorer/client"
+require "web3_api/tatum/client"
+require "web3_api/api_proxy"
 require "rails_helper"
 
 RSpec.shared_examples "a moralis client get tokens request" do
-  let(:client_class) { Web3::Moralis::Client }
+  let(:client_class) { Web3Api::Moralis::Client }
   let(:client) { instance_double(client_class) }
 
   before do
@@ -76,7 +76,7 @@ RSpec.shared_examples "a moralis client get tokens request" do
 end
 
 RSpec.shared_examples "a celo explorer client get tokens request" do
-  let(:client_class) { Web3::CeloExplorer::Client }
+  let(:client_class) { Web3Api::CeloExplorer::Client }
   let(:client) { instance_double(client_class) }
 
   before do
@@ -145,7 +145,7 @@ RSpec.shared_examples "a celo explorer client get tokens request" do
 end
 
 RSpec.shared_examples "a moralis client get nfts request" do
-  let(:client_class) { Web3::Moralis::Client }
+  let(:client_class) { Web3Api::Moralis::Client }
   let(:client) { instance_double(client_class) }
 
   before do
@@ -237,7 +237,7 @@ RSpec.shared_examples "a moralis client get nfts request" do
 end
 
 RSpec.shared_examples "a tatum client get nfts request" do |expected_chain|
-  let(:client_class) { Web3::Tatum::Client }
+  let(:client_class) { Web3Api::Tatum::Client }
   let(:client) { instance_double(client_class) }
 
   before do
@@ -365,7 +365,7 @@ RSpec.shared_examples "a tatum client get nfts request" do |expected_chain|
 end
 
 RSpec.shared_examples "a celo explorer client get nfts request" do
-  let(:client_class) { Web3::CeloExplorer::Client }
+  let(:client_class) { Web3Api::CeloExplorer::Client }
   let(:client) { instance_double(client_class) }
 
   before do
@@ -425,7 +425,7 @@ RSpec.shared_examples "a celo explorer client get nfts request" do
 end
 
 RSpec.shared_examples "a gnosis chain explorer client get tokens request" do
-  let(:client_class) { Web3::GnosisChainExplorer::Client }
+  let(:client_class) { Web3Api::GnosisChainExplorer::Client }
   let(:client) { instance_double(client_class) }
 
   before do
@@ -485,7 +485,7 @@ RSpec.shared_examples "an unsupported chain request" do
   end
 end
 
-RSpec.describe Web3::ApiProxy do
+RSpec.describe Web3Api::ApiProxy do
   let(:wallet_address) { SecureRandom.hex }
   let(:api_proxy) { described_class.new }
 

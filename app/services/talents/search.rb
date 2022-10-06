@@ -1,4 +1,4 @@
-require "web3/api_proxy"
+require "web3_api/api_proxy"
 
 module Talents
   class Search
@@ -91,7 +91,7 @@ module Talents
 
     def chain_id(network_name)
       contract_env = ENV["CONTRACTS_ENV"]
-      network = contract_env == "production" ? Web3::ApiProxy.const_get("#{network_name.upcase}_CHAIN") : Web3::ApiProxy.const_get("TESTNET_#{network_name.upcase}_CHAIN")
+      network = contract_env == "production" ? Web3Api::ApiProxy.const_get("#{network_name.upcase}_CHAIN") : Web3Api::ApiProxy.const_get("TESTNET_#{network_name.upcase}_CHAIN")
       network[2].to_i
     end
   end

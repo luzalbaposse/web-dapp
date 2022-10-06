@@ -1,4 +1,4 @@
-module Web3
+module Web3Api
   module Tatum
     class Client
       BASE_URI = "https://api-eu1.tatum.io/v3"

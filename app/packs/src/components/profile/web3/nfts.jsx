@@ -7,6 +7,9 @@ import ThemedButton from "src/components/design_system/button";
 import { getNftData } from "src/onchain/utils";
 import { ToastBody } from "src/components/design_system/toasts";
 import { useWindowDimensionsHook } from "src/utils/window";
+import cx from "classnames";
+
+import imagePlaceholder from "images/image-placeholder.jpeg";
 
 import NftsModal from "./edit/nftsModal";
 
@@ -16,6 +19,14 @@ const Nfts = ({ userId, canUpdate }) => {
   const [pagination, setPagination] = useState({});
   const [chain, setChain] = useState(0);
   const { mobile } = useWindowDimensionsHook();
+  // Display placeholder until the image fully loads
+  const [loadedImageNfts, setLoadedImageNfts] = useState({});
+
+  const loadedImage = (nft) =>
+    setLoadedImageNfts((previousLoadedImages) => ({
+      ...previousLoadedImages,
+      [nft.id]: true,
+    }));
 
   useEffect(() => {
     get(`/api/v1/users/${userId}/profile/web3/nfts?visible=${true}`).then(
@@ -34,7 +45,7 @@ const Nfts = ({ userId, canUpdate }) => {
   const mergeNfts = (newNfts) => {
     newNfts.map((nft) => {
       // Query blockchain when the local image is not defined
-      if (nft.local_image_url) {
+      if (nft.name && nft.local_image_url) {
         setNfts((prev) => [...prev, nft]);
       } else {
         getNftData(nft).then((result) => {
@@ -82,7 +93,7 @@ const Nfts = ({ userId, canUpdate }) => {
       />
       <div className="container">
         <div className="d-flex w-100 mb-3">
-          <H3 className="w-100 text-center mr-3">Nfts</H3>
+          <H3 className="w-100 text-center">Nfts</H3>
           {canUpdate && (
             <a onClick={() => setEditShow(true)} className="ml-auto">
               <Edit />
@@ -95,7 +106,21 @@ const Nfts = ({ userId, canUpdate }) => {
             <div className="col-12 col-md-4 mb-4" key={nft.id}>
               <div className="web3-card">
                 <div className="mb-3 d-flex flex-column justify-content-between">
-                  <img src={nft.local_image_url} className="nft-img mb-4" />
+                  <img
+                    src={imagePlaceholder}
+                    className={cx(
+                      "nft-img mb-4",
+                      loadedImageNfts[nft.id] ? "d-none" : ""
+                    )}
+                  />
+                  <img
+                    src={nft.local_image_url}
+                    onLoad={() => loadedImage(nft)}
+                    className={cx(
+                      "nft-img mb-4",
+                      loadedImageNfts[nft.id] ? "" : "d-none"
+                    )}
+                  />
                   <P2 text={nft.name} className="text-primary-04" />
                   <P3
                     text={

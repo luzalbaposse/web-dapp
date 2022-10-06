@@ -1,4 +1,4 @@
-module Web3
+module Web3Api
   module CeloExplorer
     class Client
       BASE_URI = "https://explorer.celo.org/api"

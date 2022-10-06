@@ -1,4 +1,4 @@
-module Web3
+module Web3Api
   module GnosisChainExplorer
     class Client
       BASE_URI = "https://blockscout.com/xdai/mainnet/api"

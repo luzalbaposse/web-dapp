@@ -1,9 +1,9 @@
-require "web3/celo_explorer/client"
-require "web3/gnosis_chain_explorer/client"
-require "web3/moralis/client"
-require "web3/tatum/client"
+require "web3_api/celo_explorer/client"
+require "web3_api/gnosis_chain_explorer/client"
+require "web3_api/moralis/client"
+require "web3_api/tatum/client"
 
-module Web3
+module Web3Api
   class ApiProxy
     class Error < StandardError; end
 

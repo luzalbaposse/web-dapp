@@ -102,7 +102,7 @@ const Tokens = ({ userId, canUpdate }) => {
       />
       <div className="container">
         <div className="d-flex w-100 mb-3">
-          <H3 className="w-100 text-center mr-3">Tokens</H3>
+          <H3 className="w-100 text-center">Tokens</H3>
           {canUpdate && (
             <a onClick={() => setEditShow(true)} className="ml-auto">
               <Edit />

@@ -1,7 +1,7 @@
-require "web3/moralis/client"
+require "web3_api/moralis/client"
 require "rails_helper"
 
-RSpec.describe Web3::Moralis::Client do
+RSpec.describe Web3Api::Moralis::Client do
   let(:client) { described_class.new }
 
   describe "#retrieve_tokens" do

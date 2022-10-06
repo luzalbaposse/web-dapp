@@ -1,4 +1,4 @@
-module Web3
+module Web3Api
   module Moralis
     class Client
       BASE_URI = "https://deep-index.moralis.io/api/v2"
