@@ -1,11 +1,19 @@
 import React, { useEffect, useContext, useState } from "react";
-
+import { ethers } from "ethers";
 import Divider from "src/components/design_system/other/Divider";
 
-import ThemeContainer, { ThemeContext } from "src/contexts/ThemeContext";
+import ThemeContainer from "src/contexts/ThemeContext";
 import { camelCaseObject } from "src/utils/transformObjects";
 import { useWindowDimensionsHook } from "src/utils/window";
 import Button from "src/components/design_system/button";
+
+import {
+  ApolloProvider,
+  useQuery,
+  GET_TALENT_PORTFOLIO_FOR_ID_SIMPLE,
+  client,
+} from "src/utils/thegraph";
+
 import Poaps from "./web3/poaps";
 import Nfts from "./web3/nfts";
 import Tokens from "./web3/tokens";
@@ -16,11 +24,19 @@ import Journey from "./Journey";
 const Show = ({ talent, railsContext, currentUserId }) => {
   const localTalent = camelCaseObject(talent);
   const canUpdate = talent.user.id == currentUserId;
-  const url = new URL(window.location);
   const [selectedSection, setSelectedSection] = useState(window.location.hash);
+  const [listLoaded, setListLoaded] = useState(false);
+  const [tokenData, setTokenData] = useState({
+    price: 0.1,
+    totalSupply: 0,
+  });
+
+  const { loading, data } = useQuery(GET_TALENT_PORTFOLIO_FOR_ID_SIMPLE, {
+    variables: { id: localTalent.token.contractId?.toLowerCase() },
+    skip: listLoaded,
+  });
 
   const { mobile } = useWindowDimensionsHook();
-  const theme = useContext(ThemeContext);
 
   const changeSection = (newSection) => {
     setSelectedSection(newSection);
@@ -46,16 +62,32 @@ const Show = ({ talent, railsContext, currentUserId }) => {
     }
   }, [selectedSection]);
 
+  useEffect(() => {
+    if (loading || !data || !data.talentToken) {
+      if (!loading) {
+        setListLoaded(true);
+      }
+      return;
+    }
+
+    setListLoaded(true);
+    setTokenData({
+      ...tokenData,
+      totalSupply: ethers.utils.formatUnits(data.talentToken.totalSupply || 0),
+    });
+  }, [data, loading]);
+
   return (
     <div className="d-flex flex-column lg-h-100 p-0 mt-7">
       <Overview
-        className="mb-6"
+        className="mb-2"
         talent={localTalent}
+        tokenData={tokenData}
         currentUserId={currentUserId}
         railsContext={railsContext}
       />
       <Divider className="my-6" />
-      <div className="mt-3">
+      <div>
         <div className="d-flex justify-content-center overflow-x-scroll mx-4">
           <Button
             className="mr-2"
@@ -109,7 +141,9 @@ const Show = ({ talent, railsContext, currentUserId }) => {
 export default (props, railsContext) => {
   return () => (
     <ThemeContainer>
-      <Show {...props} railsContext={railsContext} />
+      <ApolloProvider client={client(props.talent.token.chain_id)}>
+        <Show {...props} railsContext={railsContext} />
+      </ApolloProvider>
     </ThemeContainer>
   );
 };

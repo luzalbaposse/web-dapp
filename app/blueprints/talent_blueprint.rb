@@ -26,6 +26,9 @@ class TalentBlueprint < Blueprinter::Base
     field :followers_count do |talent, _options|
       talent.user.followers.count
     end
+    field :supporting_count do |talent, _options|
+      TalentSupporter.where(supporter_wallet_id: talent.user.wallet_id).count
+    end
     association :milestones, blueprint: MilestoneBlueprint, view: :normal
     association :career_goal, blueprint: CareerGoalBlueprint, view: :normal
   end

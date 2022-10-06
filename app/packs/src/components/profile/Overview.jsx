@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import dayjs from "dayjs";
+import currency from "currency.js";
 
 import TalentProfilePicture from "src/components/talent/TalentProfilePicture";
 import { H4, H5, P2 } from "src/components/design_system/typography";
@@ -12,7 +13,13 @@ import { lightTextPrimary04, darkTextPrimary04 } from "src/utils/colors";
 
 import cx from "classnames";
 
-const Overview = ({ className, talent, currentUserId, railsContext }) => {
+const Overview = ({
+  className,
+  talent,
+  tokenData,
+  currentUserId,
+  railsContext,
+}) => {
   console.log({ talent });
   const joinedAt = dayjs(talent.user.createdAt).format("MMMM YYYY");
   const talentIsFromCurrentUser = talent.userId == currentUserId;
@@ -20,9 +27,11 @@ const Overview = ({ className, talent, currentUserId, railsContext }) => {
   const { mobile } = useWindowDimensionsHook();
   const [showStakeModal, setShowStakeModal] = useState(false);
 
+  const formatNumberWithSymbol = (value) => currency(value).format();
+
   return (
     <div className={cx(className)}>
-      <div className={cx(mobile ? "" : "d-flex", "mb-7")}>
+      <div className={cx(mobile ? "" : "d-flex")}>
         <div className={cx(mobile ? "col-12" : "col-6")}>
           <TalentProfilePicture
             className="mb-3"
@@ -36,8 +45,11 @@ const Overview = ({ className, talent, currentUserId, railsContext }) => {
           />
           <P2 className="text-primary-03 mb-4" text={talent.occupation} />
           {mobile && (
-            <div className="d-flex mb-4">
-              <a href="/messages" className="button-link">
+            <div className="d-flex align-items-center mb-4">
+              <a
+                href={`/messages?user=${talent.user.id}`}
+                className="button-link"
+              >
                 <Button
                   className="mr-2"
                   type="white-outline"
@@ -52,14 +64,55 @@ const Overview = ({ className, talent, currentUserId, railsContext }) => {
                   />
                 </Button>
               </a>
+              <Button
+                type="primary-default"
+                size="big"
+                text="Support"
+                onClick={() => setShowStakeModal(true)}
+              />
             </div>
           )}
           <H5 className="text-primary-01 mb-4" text={talent.headline} />
           <UserTags
             tags={talent.tags.map((tag) => tag.description)}
-            className="mr-2 mb-4"
+            className="mr-2 mb-3"
           />
-          <div className="mb-4">Market cap and etc</div>
+          <div className="mb-4 d-flex flex-wrap">
+            <div className="d-flex mr-2 mt-2">
+              <P2
+                className="text-primary-01 mr-1"
+                bold
+                text={formatNumberWithSymbol(
+                  tokenData.totalSupply * tokenData.price
+                )}
+              />
+              <P2 className="text-primary-04" text="Market Value" />
+            </div>
+            <div className="d-flex mr-2 mt-2">
+              <P2
+                className="text-primary-01 mr-1"
+                bold
+                text={talent.supportersCount}
+              />
+              <P2 className="text-primary-04" text="Supporters" />
+            </div>
+            <div className="d-flex mr-2 mt-2">
+              <P2
+                className="text-primary-01 mr-1"
+                bold
+                text={talent.supportingCount}
+              />
+              <P2 className="text-primary-04" text="Supporting" />
+            </div>
+            <div className="d-flex mr-2 mt-2">
+              <P2
+                className="text-primary-01 mr-1"
+                bold
+                text={talent.followersCount}
+              />
+              <P2 className="text-primary-04" text="Followers" />
+            </div>
+          </div>
           <div className="d-flex align-items-center mb-4">
             <div className="mr-4 d-flex align-items-center">
               <Globe className="mr-2" size={16} color={lightTextPrimary04} />
@@ -72,7 +125,7 @@ const Overview = ({ className, talent, currentUserId, railsContext }) => {
           </div>
           {talent.user.invitedBy && (
             <div className="d-flex align-items-center">
-              <P2 className="mr-3" text="Invited by" />
+              <P2 className="text-primary-04 mr-3" text="Invited by" />
               <TalentProfilePicture
                 className="mr-2"
                 src={talent.user.invitedBy.profilePictureUrl}
@@ -102,7 +155,10 @@ const Overview = ({ className, talent, currentUserId, railsContext }) => {
         <div></div>
         {!mobile && (
           <div>
-            <a href="/messages" className="button-link">
+            <a
+              href={`/messages?user=${talent.user.id}`}
+              className="button-link"
+            >
               <Button
                 className="mr-2"
                 type="white-outline"
@@ -123,15 +179,6 @@ const Overview = ({ className, talent, currentUserId, railsContext }) => {
               onClick={() => setShowStakeModal(true)}
             />
           </div>
-        )}
-        {mobile && (
-          <Button
-            className="w-100 mx-4"
-            type="primary-default"
-            size="extra-big"
-            text="Support"
-            onClick={() => setShowStakeModal(true)}
-          />
         )}
       </div>
       <StakeModal
