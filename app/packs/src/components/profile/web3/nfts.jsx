@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { get } from "src/utils/requests";
-import { P3, H3, P2 } from "src/components/design_system/typography";
+import { P1, P3, H3, P2 } from "src/components/design_system/typography";
 import { Edit } from "src/components/icons";
 import ThemedButton from "src/components/design_system/button";
 import { getNftData } from "src/onchain/utils";
@@ -95,14 +95,14 @@ const Nfts = ({ userId, canUpdate }) => {
       )}
       <div className="container">
         <div className="d-flex w-100 mb-3">
-          <H3 className="w-100 text-center">Nfts</H3>
+          <H3 className="w-100 text-center mb-0">NFTs</H3>
           {canUpdate && (
             <a onClick={() => setEditShow(true)} className="ml-auto">
               <Edit />
             </a>
           )}
         </div>
-        <P2 className="text-center mb-6">A curated list of my main nfts</P2>
+        <P1 className="text-center mb-6">A curated list of my main nfts</P1>
         <div className="row d-flex flex-row justify-content-center mb-3">
           {nfts.map((nft) => (
             <div className="col-12 col-md-4 mb-4" key={nft.id}>

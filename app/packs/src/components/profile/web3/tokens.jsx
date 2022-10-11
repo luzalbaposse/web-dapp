@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { get } from "src/utils/requests";
 
-import { P3, H3, P2 } from "src/components/design_system/typography";
+import { P1, P3, H3, P2 } from "src/components/design_system/typography";
 import ThemedButton from "src/components/design_system/button";
 import { Edit } from "src/components/icons";
 import { Polygon, Celo } from "src/components/icons";
@@ -104,14 +104,14 @@ const Tokens = ({ userId, canUpdate }) => {
       )}
       <div className="container">
         <div className="d-flex w-100 mb-3">
-          <H3 className="w-100 text-center">Tokens</H3>
+          <H3 className="w-100 text-center mb-0">Tokens</H3>
           {canUpdate && (
             <a onClick={() => setEditShow(true)} className="ml-auto">
               <Edit />
             </a>
           )}
         </div>
-        <P2 className="text-center mb-6">A curated list of my main Tokens</P2>
+        <P1 className="text-center mb-6">A curated list of my main Tokens</P1>
         <div className="row d-flex flex-row justify-content-center mb-3">
           {tokens.map((token) => (
             <div

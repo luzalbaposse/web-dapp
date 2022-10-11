@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import currency from "currency.js";
 
 import TalentProfilePicture from "src/components/talent/TalentProfilePicture";
-import { H4, H5, P2 } from "src/components/design_system/typography";
+import { H3, H4, P2 } from "src/components/design_system/typography";
 import { useWindowDimensionsHook } from "src/utils/window";
 import UserTags from "src/components/talent/UserTags";
 import Button from "src/components/design_system/button";
@@ -38,8 +38,7 @@ const Overview = ({
             height={120}
           />
           <H4
-            className="mb-1"
-            bold
+            className="mb-1 medium"
             text={talent.user.displayName || talent.user.username}
           />
           <P2 className="text-primary-03 mb-4" text={talent.occupation} />
@@ -71,7 +70,7 @@ const Overview = ({
               />
             </div>
           )}
-          <H5 className="text-primary-01 mb-4" text={talent.headline} />
+          <H3 className="text-primary-01 mb-4" text={talent.headline} />
           <UserTags
             tags={talent.tags.map((tag) => tag.description)}
             className="mr-2 mb-3"

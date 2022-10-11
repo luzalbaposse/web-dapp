@@ -19,7 +19,7 @@ const UserTags = ({ tags, talent_id, className, mode, clickable = true }) => {
               href={clickable ? `/talent?keyword=${tag}` : null}
               className="text-decoration-none"
             >
-              <P2 mode={mode} text={tag} bold role="button" />
+              <P2 mode={mode} text={tag} medium role="button" />
             </a>
           </Tag>
         ))}

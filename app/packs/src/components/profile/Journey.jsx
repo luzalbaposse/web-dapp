@@ -200,7 +200,7 @@ const Journey = ({ className, talent }) => {
                 <div className="d-flex col-11">
                   {!mobile && (
                     <P3
-                      className="text-primary-04 col-2 text-right pr-6"
+                      className="text-primary-04 col-2 text-right pr-6 pt-1"
                       bold
                       text={dayjs(journeyItem.startDate, "YYYY-MM-DD").format(
                         "MMM YYYY"
@@ -232,7 +232,7 @@ const Journey = ({ className, talent }) => {
                       />
                     )}
                     <P1
-                      className="text-primary-01 mb-1"
+                      className="text-primary-01 medium mb-1"
                       text={journeyItem.title}
                     />
                     <P2

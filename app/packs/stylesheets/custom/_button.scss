@@ -726,7 +726,7 @@
 }
 
 .all-journey-button {
-  color: $light-text-primary-01;
+  color: $light-text-primary-03;
   background-color: none !important;
   border: 1px solid $light-surface-hover-02;
   line-height: 165%;
@@ -739,6 +739,7 @@
   padding-right: 16px;
 
   &:hover {
+    border: 1px solid transparent !important;
     background-color: $light-surface-hover !important;
   }
 

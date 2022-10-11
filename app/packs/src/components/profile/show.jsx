@@ -45,6 +45,8 @@ const Show = ({ talent, railsContext, currentUserId }) => {
   const buttonType = (section) => {
     if (section == selectedSection) {
       return "white-default";
+    } else if (!selectedSection && section == "#About") {
+      return "white-default";
     } else {
       return "white-ghost";
     }
