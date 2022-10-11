@@ -20,7 +20,6 @@ const Overview = ({
   currentUserId,
   railsContext,
 }) => {
-  console.log({ talent });
   const joinedAt = dayjs(talent.user.createdAt).format("MMMM YYYY");
   const talentIsFromCurrentUser = talent.userId == currentUserId;
 

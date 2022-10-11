@@ -90,16 +90,18 @@ const Tokens = ({ userId, canUpdate }) => {
 
   return (
     <section className="d-flex flex-column align-items-center mt-6">
-      <TokensModal
-        userId={userId}
-        appendToken={appendToken}
-        show={editShow && canUpdate}
-        setShow={setEditShow}
-        mobile={mobile}
-        tokenLogo={tokenLogo}
-        setChain={setChain}
-        chain={chain}
-      />
+      {editShow && (
+        <TokensModal
+          userId={userId}
+          appendToken={appendToken}
+          show={editShow && canUpdate}
+          setShow={setEditShow}
+          mobile={mobile}
+          tokenLogo={tokenLogo}
+          setChain={setChain}
+          chain={chain}
+        />
+      )}
       <div className="container">
         <div className="d-flex w-100 mb-3">
           <H3 className="w-100 text-center">Tokens</H3>

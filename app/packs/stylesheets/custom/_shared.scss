@@ -238,12 +238,12 @@
 .divider {
   width: 100%;
   height: 1px;
-  background-color: $light-surface-disable;
+  background-color: $light-surface-hover-02;
   overflow: hidden;
 }
 
 .dark-body .divider {
-  background-color: $dark-surface-disable;
+  background-color: $dark-surface-hover-02;
 }
 
 .border-0 {
@@ -726,4 +726,24 @@
   .hide-content-in-mobile {
     display: none !important;
   }
+}
+
+.border-dashed {
+  border-style: dashed;
+}
+
+.left-dashed-border-black {
+  border-left: 1px dashed $light-surface-hover-02;
+}
+
+.dark-body .left-dashed-border-black {
+  border-left: 1px dashed $dark-surface-hover-02;
+}
+
+.left-solid-border-black {
+  border-left: 0.5px solid $light-text-primary-disable;
+}
+
+.dark-body .left-solid-border-black {
+  border-left: 0.5px solid $dark-text-primary-disable;
 }

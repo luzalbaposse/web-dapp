@@ -231,3 +231,14 @@
     height: 240px;
   }
 }
+
+.rocket-position-absolute {
+  position: absolute;
+  top: -8px;
+  left: -16px;
+  background-color: $light-bg-01;
+}
+
+.dark-body .rocket-position-absolute {
+  background-color: $dark-bg-01;
+}

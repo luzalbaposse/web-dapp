@@ -82,15 +82,17 @@ const Nfts = ({ userId, canUpdate }) => {
 
   return (
     <section className="d-flex flex-column align-items-center mt-6 mb-6">
-      <NftsModal
-        userId={userId}
-        appendNft={appendNft}
-        show={editShow && canUpdate}
-        setShow={setEditShow}
-        mobile={mobile}
-        setChain={setChain}
-        chain={chain}
-      />
+      {editShow && (
+        <NftsModal
+          userId={userId}
+          appendNft={appendNft}
+          show={editShow && canUpdate}
+          setShow={setEditShow}
+          mobile={mobile}
+          setChain={setChain}
+          chain={chain}
+        />
+      )}
       <div className="container">
         <div className="d-flex w-100 mb-3">
           <H3 className="w-100 text-center">Nfts</H3>

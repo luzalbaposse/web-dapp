@@ -87,38 +87,36 @@ const Show = ({ talent, railsContext, currentUserId }) => {
         railsContext={railsContext}
       />
       <Divider className="my-6" />
-      <div>
-        <div className="d-flex justify-content-center overflow-x-scroll mx-4">
-          <Button
-            className="mr-2"
-            type={buttonType("#About")}
-            text="About"
-            onClick={() => changeSection("#About")}
-          />
-          <Button
-            className="mr-2"
-            type={buttonType("#Journey")}
-            text="Journey"
-            onClick={() => changeSection("#Journey")}
-          />
-          <Button
-            className="mr-2"
-            type={buttonType(`#${localTalent.token.ticker}`)}
-            text={localTalent.token.ticker}
-            onClick={() => changeSection(`#${localTalent.token.ticker}`)}
-          />
-          <Button
-            className="mr-2"
-            type={buttonType("#Community")}
-            text="Community"
-            onClick={() => changeSection("#Community")}
-          />
-          <Button
-            type={buttonType("#DigitalCollectibles")}
-            text="Digital Collectibles"
-            onClick={() => changeSection("#DigitalCollectibles")}
-          />
-        </div>
+      <div className="d-flex justify-content-lg-center overflow-x-scroll mx-4">
+        <Button
+          className="mr-2"
+          type={buttonType("#About")}
+          text="About"
+          onClick={() => changeSection("#About")}
+        />
+        <Button
+          className="mr-2"
+          type={buttonType("#Journey")}
+          text="Journey"
+          onClick={() => changeSection("#Journey")}
+        />
+        <Button
+          className="mr-2"
+          type={buttonType(`#${localTalent.token.ticker}`)}
+          text={localTalent.token.ticker}
+          onClick={() => changeSection(`#${localTalent.token.ticker}`)}
+        />
+        <Button
+          className="mr-2"
+          type={buttonType("#Community")}
+          text="Community"
+          onClick={() => changeSection("#Community")}
+        />
+        <Button
+          type={buttonType("#DigitalCollectibles")}
+          text="Digital Collectibles"
+          onClick={() => changeSection("#DigitalCollectibles")}
+        />
       </div>
       <div className="my-7 w-100" id="#About">
         <About talent={localTalent} />
