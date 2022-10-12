@@ -133,7 +133,7 @@
   background-color: $light-bg-01;
 }
 
-.add-to-metamask {
+.inverted-button {
   background-color: $white;
 
   &:hover {
@@ -145,7 +145,7 @@
   }
 }
 
-.dark-body .add-to-metamask {
+.dark-body .inverted-button {
   background-color: $dark-bg-01;
 
   &:hover {
@@ -154,6 +154,20 @@
   p {
     color: $white;
   }
+}
+
+.launch-token-section {
+  border-radius: 24px;
+  background-color: $light-primary;
+}
+
+.highlight-word {
+  color: $light-secondary-text;
+}
+
+.apply-to-launch-token-section {
+  border-radius: 24px;
+  background-color: $dark-blue;
 }
 
 .edit-image {

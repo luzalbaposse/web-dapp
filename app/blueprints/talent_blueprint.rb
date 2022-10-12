@@ -17,6 +17,10 @@ class TalentBlueprint < Blueprinter::Base
     field :max_supply do
       Talent.max_supply.to_s
     end
+
+    field :total_supply do |talent, _options|
+      talent.total_supply.to_s
+    end
   end
 
   view :extended do

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import dayjs from "dayjs";
 
 import TalentProfilePicture from "src/components/talent/TalentProfilePicture";
+import { ethers } from "ethers";
 import { H4, H5, P2 } from "src/components/design_system/typography";
 import TalentBanner from "images/overview.gif";
 import { useWindowDimensionsHook } from "src/utils/window";
@@ -20,7 +21,7 @@ const Overview = ({
   className,
   talent,
   setTalent,
-  tokenData,
+  talentTokenPrice,
   currentUserId,
   railsContext,
   changeSection,
@@ -141,14 +142,19 @@ const Overview = ({
           <div className="mb-4 d-flex flex-wrap">
             <Button
               className="d-flex mr-2 mt-2 button-link p-0"
-              onClick={() => changeSection(`#${talent.token.ticker}`)}
+              onClick={() => changeSection("#token")}
             >
               <P2
                 className="text-primary-01 mr-1"
                 bold
-                text={formatNumberWithSymbol(
-                  tokenData.totalSupply * tokenData.price
-                )}
+                text={
+                  talent.totalSupply
+                    ? formatNumberWithSymbol(
+                        ethers.utils.formatUnits(talent.totalSupply) *
+                          talentTokenPrice
+                      )
+                    : "-"
+                }
               />
               <P2 className="text-primary-04" text="Market Value" />
             </Button>
@@ -159,7 +165,7 @@ const Overview = ({
               <P2
                 className="text-primary-01 mr-1"
                 bold
-                text={talent.supportersCount}
+                text={talent.supportersCount || "0"}
               />
               <P2 className="text-primary-04" text="Supporters" />
             </Button>
@@ -170,7 +176,7 @@ const Overview = ({
               <P2
                 className="text-primary-01 mr-1"
                 bold
-                text={talent.supportingCount}
+                text={talent.supportingCount || "0"}
               />
               <P2 className="text-primary-04" text="Supporting" />
             </Button>
@@ -181,7 +187,7 @@ const Overview = ({
               <P2
                 className="text-primary-01 mr-1"
                 bold
-                text={talent.followersCount}
+                text={talent.followersCount || "0"}
               />
               <P2 className="text-primary-04" text="Followers" />
             </Button>

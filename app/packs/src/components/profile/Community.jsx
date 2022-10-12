@@ -346,7 +346,7 @@ const Community = ({ userId, talent, canUpdate }) => {
           <P2
             className={cx("text-primary-01 mr-1", mobile && "ml-5")}
             bold
-            text={talent.supportersCount || 0}
+            text={talent.supportersCount || "0"}
           />
           <P2 className="text-primary-04" text="Supporters" />
         </div>
@@ -354,7 +354,7 @@ const Community = ({ userId, talent, canUpdate }) => {
           <P2
             className="text-primary-01 mr-1"
             bold
-            text={talent.supportingCount || 0}
+            text={talent.supportingCount || "0"}
           />
           <P2 className="text-primary-04" text="Supporting" />
         </div>
@@ -362,7 +362,7 @@ const Community = ({ userId, talent, canUpdate }) => {
           <P2
             className={cx("text-primary-01 mr-1", mobile && "ml-5")}
             bold
-            text={talent.followersCount || 0}
+            text={talent.followersCount || "0"}
           />
           <P2 className="text-primary-04" text="Followers" />
         </div>
@@ -370,7 +370,7 @@ const Community = ({ userId, talent, canUpdate }) => {
           <P2
             className="text-primary-01 mr-1"
             bold
-            text={talent.followingCount || 0}
+            text={talent.followingCount || "0"}
           />
           <P2 className="text-primary-04" text="Following" />
         </div>
