@@ -116,6 +116,21 @@ ActiveRecord::Schema.define(version: 2022_10_11_074346) do
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
+  create_table "connections", force: :cascade do |t|
+    t.string "user_invested_amount"
+    t.string "connected_user_invested_amount"
+    t.integer "connection_type", null: false
+    t.datetime "connected_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id"
+    t.bigint "connected_user_id"
+    t.index ["connected_user_id"], name: "index_connections_on_connected_user_id"
+    t.index ["user_id", "connected_user_id"], name: "index_connections_on_user_id_and_connected_user_id", unique: true
+    t.index ["user_id"], name: "index_connections_on_user_id"
+    t.check_constraint "user_id <> connected_user_id", name: "user_connections_constraint"
+  end
+
   create_table "daily_metrics", force: :cascade do |t|
     t.date "date", null: false
     t.integer "total_users"
@@ -426,6 +441,7 @@ ActiveRecord::Schema.define(version: 2022_10_11_074346) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "last_time_bought_at"
+    t.datetime "first_time_bought_at"
     t.index ["supporter_wallet_id", "talent_contract_id"], name: "talent_supporters_wallet_token_contract_uidx", unique: true
   end
 
@@ -568,6 +584,8 @@ ActiveRecord::Schema.define(version: 2022_10_11_074346) do
   add_foreign_key "chats", "users", column: "sender_id"
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
+  add_foreign_key "connections", "users"
+  add_foreign_key "connections", "users", column: "connected_user_id"
   add_foreign_key "discovery_rows", "partnerships"
   add_foreign_key "erc20_tokens", "users"
   add_foreign_key "erc721_tokens", "users"

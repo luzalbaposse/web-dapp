@@ -20,6 +20,7 @@ import Tokens from "./web3/tokens";
 import Overview from "./Overview";
 import About from "./About";
 import Journey from "./Journey";
+import Community from "./Community";
 
 const Show = ({ talent, railsContext, currentUserId }) => {
   const localTalent = camelCaseObject(talent);
@@ -87,6 +88,7 @@ const Show = ({ talent, railsContext, currentUserId }) => {
         tokenData={tokenData}
         currentUserId={currentUserId}
         railsContext={railsContext}
+        changeSection={changeSection}
       />
       <Divider className="my-6" />
       <div className="d-flex justify-content-lg-center overflow-x-scroll mx-4">
@@ -128,11 +130,14 @@ const Show = ({ talent, railsContext, currentUserId }) => {
         <Journey talent={localTalent} />
       </div>
       <div className="my-7 w-100" id={`#${localTalent.token.ticker}`}></div>
-      <div className="my-7 w-100" id="#Community"></div>
+      <div className="my-7 w-100" id="#Community">
+        <Community userId={localTalent.user.id} talent={localTalent} />
+      </div>
+      <Divider className="my-6" />
       <div className="my-7 w-100" id="#DigitalCollectibles">
-        <Poaps userId={talent.user.id} canUpdate={canUpdate} />
-        <Nfts userId={talent.user.id} canUpdate={canUpdate} />
-        <Tokens userId={talent.user.id} canUpdate={canUpdate} />
+        <Poaps userId={localTalent.user.id} canUpdate={canUpdate} />
+        <Nfts userId={localTalent.user.id} canUpdate={canUpdate} />
+        <Tokens userId={localTalent.user.id} canUpdate={canUpdate} />
       </div>
     </div>
   );

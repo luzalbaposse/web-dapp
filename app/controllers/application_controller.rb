@@ -82,4 +82,13 @@ class ApplicationController < ActionController::Base
   def user_from_impersonated_cookie
     User.find_by(username: cookies.signed[:impersonated])
   end
+
+  def render_pagination(pagination)
+    {
+      totalItems: pagination.count,
+      currentPage: pagination.page,
+      lastPage: pagination.last,
+      recordsPerPage: pagination.vars[:items]
+    }
+  end
 end

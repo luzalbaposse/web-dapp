@@ -126,8 +126,8 @@ const Nfts = ({ userId, canUpdate }) => {
                   <P2 text={nft.name} className="text-primary-04" />
                   <P3
                     text={
-                      nft.description?.length > 200
-                        ? `${nft.description.substring(0, 200)}...`
+                      nft.description?.length > 150
+                        ? `${nft.description.substring(0, 150)}...`
                         : nft.description
                     }
                     className="text-primary-01"

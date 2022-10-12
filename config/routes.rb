@@ -67,6 +67,7 @@ Rails.application.routes.draw do
 
           namespace :profile do
             resources :web3, controller: :web3, only: [:update]
+            resources :community, only: [:index]
 
             scope :web3 do
               get :tokens, to: "web3#tokens"

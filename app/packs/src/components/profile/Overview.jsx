@@ -19,6 +19,7 @@ const Overview = ({
   tokenData,
   currentUserId,
   railsContext,
+  changeSection,
 }) => {
   const joinedAt = dayjs(talent.user.createdAt).format("MMMM YYYY");
   const talentIsFromCurrentUser = talent.userId == currentUserId;
@@ -76,7 +77,10 @@ const Overview = ({
             className="mr-2 mb-3"
           />
           <div className="mb-4 d-flex flex-wrap">
-            <div className="d-flex mr-2 mt-2">
+            <Button
+              className="d-flex mr-2 mt-2 button-link p-0"
+              onClick={() => changeSection(`#${talent.token.ticker}`)}
+            >
               <P2
                 className="text-primary-01 mr-1"
                 bold
@@ -85,31 +89,40 @@ const Overview = ({
                 )}
               />
               <P2 className="text-primary-04" text="Market Value" />
-            </div>
-            <div className="d-flex mr-2 mt-2">
+            </Button>
+            <Button
+              className="d-flex mr-2 mt-2 button-link p-0"
+              onClick={() => changeSection("#Community")}
+            >
               <P2
                 className="text-primary-01 mr-1"
                 bold
                 text={talent.supportersCount}
               />
               <P2 className="text-primary-04" text="Supporters" />
-            </div>
-            <div className="d-flex mr-2 mt-2">
+            </Button>
+            <Button
+              className="d-flex mr-2 mt-2 button-link p-0"
+              onClick={() => changeSection("#Community")}
+            >
               <P2
                 className="text-primary-01 mr-1"
                 bold
                 text={talent.supportingCount}
               />
               <P2 className="text-primary-04" text="Supporting" />
-            </div>
-            <div className="d-flex mr-2 mt-2">
+            </Button>
+            <Button
+              className="d-flex mr-2 mt-2 button-link p-0"
+              onClick={() => changeSection("#Community")}
+            >
               <P2
                 className="text-primary-01 mr-1"
                 bold
                 text={talent.followersCount}
               />
               <P2 className="text-primary-04" text="Followers" />
-            </div>
+            </Button>
           </div>
           <div className="d-flex align-items-center mb-4">
             <div className="mr-4 d-flex align-items-center">

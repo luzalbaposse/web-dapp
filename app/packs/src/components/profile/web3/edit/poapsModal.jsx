@@ -142,7 +142,7 @@ const PoapsModal = ({ userId, show, setShow, mobile, appendPoap }) => {
   };
 
   const setupPoaps = async () => {
-    if (poaps.length > 0) {
+    if (!show || poaps.length > 0) {
       return;
     }
 

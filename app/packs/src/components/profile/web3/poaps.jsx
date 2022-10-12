@@ -133,7 +133,7 @@ const Poaps = ({ userId, canUpdate }) => {
                     src={poap.imageUrl || poap.local_image_url}
                     onLoad={() => loadedImage(poap)}
                     className={cx(
-                      "nft-img mb-4",
+                      "nft-img poap-img mb-4",
                       loadedImagePoaps[poap.id] ? "" : "d-none"
                     )}
                   />
