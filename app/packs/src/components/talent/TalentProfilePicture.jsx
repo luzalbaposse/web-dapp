@@ -16,7 +16,7 @@ const TalentProfilePicture = ({
   blur,
   border,
   link,
-  borderRadius,
+  style,
   contained,
 }) => {
   const { mode } = useTheme();
@@ -54,7 +54,7 @@ const TalentProfilePicture = ({
         width={width || height}
         height={height}
         alt="Profile Picture"
-        style={{ borderRadius: borderRadius }}
+        style={style}
       />
     </WithLink>
   );

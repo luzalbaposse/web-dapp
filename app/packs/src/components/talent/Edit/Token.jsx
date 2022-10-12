@@ -56,6 +56,7 @@ const LaunchTokenModal = ({
             value={ticker || ""}
             className="w-100 mt-4"
             maxLength={8}
+            maxLengthText
             required={true}
             error={error?.length || error?.characters || error?.tickerTaken}
           />
@@ -587,6 +588,7 @@ const Token = (props) => {
         value={ticker || ""}
         className="w-100 mt-3"
         maxLength={8}
+        maxLengthText
       />
       {error["ticker"] && (
         <P2 className="text-danger">

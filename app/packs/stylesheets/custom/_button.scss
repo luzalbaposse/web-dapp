@@ -776,7 +776,7 @@
 
 .position-journey-button {
   &:hover {
-    color: #328AFF;
+    color: #328aff;
   }
 }
 
@@ -794,7 +794,7 @@
 
 .other-journey-button {
   &:hover {
-    color: #FD9A00;
+    color: #fd9a00;
   }
 }
 
@@ -808,6 +808,12 @@
   padding: 0px;
   width: 16px;
   height: 16px;
+}
+
+.big-icon-size-button {
+  padding: 0px;
+  width: 40px;
+  height: 40px;
 }
 
 .normal-size-button {

@@ -24,7 +24,7 @@ import Community from "./Community";
 import Token from "./Token";
 
 const Show = ({ talent, railsContext, currentUserId }) => {
-  const localTalent = camelCaseObject(talent);
+  const [localTalent, setLocalTalent] = useState(camelCaseObject(talent));
   const canUpdate = talent.user.id == currentUserId;
   const [selectedSection, setSelectedSection] = useState(window.location.hash);
   const [listLoaded, setListLoaded] = useState(false);
@@ -87,6 +87,7 @@ const Show = ({ talent, railsContext, currentUserId }) => {
       <Overview
         className="mb-2"
         talent={localTalent}
+        setTalent={setLocalTalent}
         tokenData={tokenData}
         currentUserId={currentUserId}
         railsContext={railsContext}
@@ -125,7 +126,7 @@ const Show = ({ talent, railsContext, currentUserId }) => {
         />
       </div>
       <div className="my-7 w-100" id="#About">
-        <About talent={localTalent} />
+        <About talent={localTalent} setTalent={setLocalTalent} />
       </div>
       {mobile && <Divider />}
       <div className="my-7 w-100" id="#Journey">
