@@ -157,12 +157,28 @@
   color: $white !important;
 }
 
+.inverted-text-primary-01 {
+  color: $white !important;
+}
+
+.dark-body .inverted-text-primary-01 {
+  color: $light-text-primary-01 !important;
+}
+
 .text-primary-03 {
   color: $light-text-primary-03 !important;
 }
 
 .dark-body .text-primary-03 {
   color: $dark-text-primary-03 !important;
+}
+
+.inverted-text-primary-03 {
+  color: $dark-text-primary-03 !important;
+}
+
+.dark-body .inverted-text-primary-03 {
+  color: $light-text-primary-03 !important;
 }
 
 .text-yellow {

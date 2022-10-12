@@ -23,6 +23,9 @@ class TalentBlueprint < Blueprinter::Base
     association :tags, blueprint: TagBlueprint do |talent, options|
       options[:tags] || talent.user.tags
     end
+    field :connections_count do |talent, _options|
+      talent.user.connections.count
+    end
     field :followers_count do |talent, _options|
       talent.user.followers.count
     end

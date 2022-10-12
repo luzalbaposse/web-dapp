@@ -13,7 +13,7 @@ import imagePlaceholder from "images/image-placeholder.jpeg";
 
 import PoapsModal from "./edit/poapsModal";
 
-const Poaps = ({ userId, canUpdate }) => {
+const Poaps = ({ userId, canUpdate, setShowLastDivider }) => {
   const [poaps, setPoaps] = useState([]);
   const [editShow, setEditShow] = useState(false);
   const [pagination, setPagination] = useState({});
@@ -40,6 +40,12 @@ const Poaps = ({ userId, canUpdate }) => {
       }
     );
   }, [userId]);
+
+  useEffect(() => {
+    if (poaps.length > 0) {
+      setShowLastDivider(true);
+    }
+  }, [poaps]);
 
   const mergePoaps = (newPoaps) => {
     newPoaps.map((poap) => {
@@ -96,6 +102,10 @@ const Poaps = ({ userId, canUpdate }) => {
     return pagination.currentPage < pagination.lastPage;
   };
 
+  if (poaps.length == 0 && !canUpdate) {
+    return <></>;
+  }
+
   return (
     <section className="d-flex flex-column align-items-center mt-6 mb-6">
       {editShow && (
@@ -117,6 +127,31 @@ const Poaps = ({ userId, canUpdate }) => {
           )}
         </div>
         <P1 className="text-center mb-6">A curated list of my main Poaps</P1>
+        {poaps.length == 0 && canUpdate && (
+          <>
+            <P1
+              bold
+              text={"You don't have any POAPs to showcase"}
+              className="text-primary-01 text-center mb-2"
+            />
+            <P2
+              bold
+              text={
+                "This section will be disable until you connect your wallet and enable the POAPs you want to showcase to your community."
+              }
+              className="text-primary-0 text-center"
+            />
+            <div className="d-flex flex-column justify-content-center my-5">
+              <ThemedButton
+                onClick={() => setEditShow(true)}
+                type="primary-default"
+                className="mx-auto"
+              >
+                Choose your POAPs
+              </ThemedButton>
+            </div>
+          </>
+        )}
         <div className="row d-flex flex-row justify-content-center mb-3">
           {poaps.map((poap) => (
             <div className="col-12 col-md-4 mb-4" key={poap.id}>

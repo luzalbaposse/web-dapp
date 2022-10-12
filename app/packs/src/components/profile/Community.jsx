@@ -6,7 +6,13 @@ import { parseAndCommify } from "src/onchain/utils";
 import dayjs from "dayjs";
 import debounce from "lodash/debounce";
 
-import { H4, P2, P3, Caption } from "src/components/design_system/typography";
+import {
+  H4,
+  P1,
+  P2,
+  P3,
+  Caption,
+} from "src/components/design_system/typography";
 import Tag from "src/components/design_system/tag";
 import ThemedButton from "src/components/design_system/button";
 import { useWindowDimensionsHook } from "src/utils/window";
@@ -205,7 +211,7 @@ const SearchForm = ({
   );
 };
 
-const Community = ({ userId, talent }) => {
+const Community = ({ userId, talent, canUpdate }) => {
   const { mobile } = useWindowDimensionsHook();
   const [connections, setConnections] = useState([]);
   const [pagination, setPagination] = useState({});
@@ -340,7 +346,7 @@ const Community = ({ userId, talent }) => {
           <P2
             className={cx("text-primary-01 mr-1", mobile && "ml-5")}
             bold
-            text={talent.supportersCount}
+            text={talent.supportersCount || 0}
           />
           <P2 className="text-primary-04" text="Supporters" />
         </div>
@@ -348,7 +354,7 @@ const Community = ({ userId, talent }) => {
           <P2
             className="text-primary-01 mr-1"
             bold
-            text={talent.supportingCount}
+            text={talent.supportingCount || 0}
           />
           <P2 className="text-primary-04" text="Supporting" />
         </div>
@@ -356,7 +362,7 @@ const Community = ({ userId, talent }) => {
           <P2
             className={cx("text-primary-01 mr-1", mobile && "ml-5")}
             bold
-            text={talent.followersCount}
+            text={talent.followersCount || 0}
           />
           <P2 className="text-primary-04" text="Followers" />
         </div>
@@ -364,24 +370,54 @@ const Community = ({ userId, talent }) => {
           <P2
             className="text-primary-01 mr-1"
             bold
-            text={talent.followingCount}
+            text={talent.followingCount || 0}
           />
           <P2 className="text-primary-04" text="Following" />
         </div>
       </div>
-      <SearchForm
-        options={options}
-        changeOptions={changeOptions}
-        connectionType={connectionType}
-        keyword={keyword}
-        mobile={mobile}
-      />
-      <CommunityTable
-        connections={connections}
-        mode={mode()}
-        ticker={talent.token.ticker}
-        mobile={mobile}
-      />
+      {talent.connectionsCount > 0 && (
+        <>
+          <SearchForm
+            options={options}
+            changeOptions={changeOptions}
+            connectionType={connectionType}
+            keyword={keyword}
+            mobile={mobile}
+          />
+          <CommunityTable
+            connections={connections}
+            mode={mode()}
+            ticker={talent.token.ticker}
+            mobile={mobile}
+          />
+        </>
+      )}
+
+      {talent.connectionsCount == 0 && canUpdate && (
+        <>
+          <P1
+            bold
+            text={"You don't have any Community members"}
+            className="text-primary-01 text-center mt-6 mb-2"
+          />
+          <P2
+            bold
+            text={
+              "Community is compound by people that support your career and people you are supporting. If you support someone that is also your supporter, you get a Super Connection!"
+            }
+            className="text-primary-0 text-center"
+          />
+          <div className="d-flex flex-column justify-content-center my-5">
+            <ThemedButton
+              onClick={() => (window.location.href = `/talent`)}
+              type="primary-default"
+              className="mx-auto"
+            >
+              Connect with talent
+            </ThemedButton>
+          </div>
+        </>
+      )}
       {showLoadMoreConnections() && (
         <div className="d-flex flex-column justify-content-center mt-6">
           <ThemedButton

@@ -13,7 +13,7 @@ import imagePlaceholder from "images/image-placeholder.jpeg";
 
 import NftsModal from "./edit/nftsModal";
 
-const Nfts = ({ userId, canUpdate }) => {
+const Nfts = ({ userId, canUpdate, setShowLastDivider }) => {
   const [nfts, setNfts] = useState([]);
   const [editShow, setEditShow] = useState(false);
   const [pagination, setPagination] = useState({});
@@ -41,6 +41,12 @@ const Nfts = ({ userId, canUpdate }) => {
       }
     );
   }, [userId]);
+
+  useEffect(() => {
+    if (nfts.length > 0) {
+      setShowLastDivider(true);
+    }
+  }, [nfts]);
 
   const mergeNfts = (newNfts) => {
     newNfts.map((nft) => {
@@ -80,6 +86,10 @@ const Nfts = ({ userId, canUpdate }) => {
     return pagination.currentPage < pagination.lastPage;
   };
 
+  if (nfts.length == 0 && !canUpdate) {
+    return <></>;
+  }
+
   return (
     <section className="d-flex flex-column align-items-center mt-6 mb-6">
       {editShow && (
@@ -103,6 +113,31 @@ const Nfts = ({ userId, canUpdate }) => {
           )}
         </div>
         <P1 className="text-center mb-6">A curated list of my main nfts</P1>
+        {nfts.length == 0 && canUpdate && (
+          <>
+            <P1
+              bold
+              text={"You don't have any NFTs to showcase"}
+              className="text-primary-01 text-center mb-2"
+            />
+            <P2
+              bold
+              text={
+                "This section will be disable until you connect your wallet and enable the NFTs you want to showcase to your community."
+              }
+              className="text-primary-0 text-center"
+            />
+            <div className="d-flex flex-column justify-content-center my-5">
+              <ThemedButton
+                onClick={() => setEditShow(true)}
+                type="primary-default"
+                className="mx-auto"
+              >
+                Choose your NFTs
+              </ThemedButton>
+            </div>
+          </>
+        )}
         <div className="row d-flex flex-row justify-content-center mb-3">
           {nfts.map((nft) => (
             <div className="col-12 col-md-4 mb-4" key={nft.id}>

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import dayjs from "dayjs";
-import currency from "currency.js";
 
 import TalentProfilePicture from "src/components/talent/TalentProfilePicture";
 import { H3, H4, P2 } from "src/components/design_system/typography";
@@ -10,6 +9,8 @@ import Button from "src/components/design_system/button";
 import StakeModal from "src/components/token/StakeModal";
 import { Globe, Calendar, Envelope } from "src/components/icons";
 import { lightTextPrimary04, darkTextPrimary04 } from "src/utils/colors";
+
+import { formatNumberWithSymbol } from "src/utils/viewHelpers";
 
 import cx from "classnames";
 
@@ -26,8 +27,6 @@ const Overview = ({
 
   const { mobile } = useWindowDimensionsHook();
   const [showStakeModal, setShowStakeModal] = useState(false);
-
-  const formatNumberWithSymbol = (value) => currency(value).format();
 
   return (
     <div className={cx(className)}>

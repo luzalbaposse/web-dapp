@@ -14,7 +14,7 @@ import { useWindowDimensionsHook } from "src/utils/window";
 
 import TokensModal from "./edit/tokensModal";
 
-const Tokens = ({ userId, canUpdate }) => {
+const Tokens = ({ userId, canUpdate, setShowLastDivider }) => {
   const [tokens, setTokens] = useState([]);
   const [editShow, setEditShow] = useState(false);
   const [chain, setChain] = useState(0);
@@ -34,6 +34,12 @@ const Tokens = ({ userId, canUpdate }) => {
       }
     );
   }, [userId]);
+
+  useEffect(() => {
+    if (tokens.length > 0) {
+      setShowLastDivider(true);
+    }
+  }, [tokens]);
 
   const removeToken = (previousTokens, updatedToken) => {
     const tokenIndex = previousTokens.findIndex(
@@ -88,6 +94,10 @@ const Tokens = ({ userId, canUpdate }) => {
     }
   };
 
+  if (tokens.length == 0 && !canUpdate) {
+    return <></>;
+  }
+
   return (
     <section className="d-flex flex-column align-items-center mt-6">
       {editShow && (
@@ -112,6 +122,31 @@ const Tokens = ({ userId, canUpdate }) => {
           )}
         </div>
         <P1 className="text-center mb-6">A curated list of my main Tokens</P1>
+        {tokens.length == 0 && canUpdate && (
+          <>
+            <P1
+              bold
+              text={"You don't have any Tokens to showcase"}
+              className="text-primary-01 text-center mb-2"
+            />
+            <P2
+              bold
+              text={
+                "This section will be disable until you connect your wallet and enable the Tokens you want to showcase to your community."
+              }
+              className="text-primary-0 text-center"
+            />
+            <div className="d-flex flex-column justify-content-center my-5">
+              <ThemedButton
+                onClick={() => setEditShow(true)}
+                type="primary-default"
+                className="mx-auto"
+              >
+                Choose your Tokens
+              </ThemedButton>
+            </div>
+          </>
+        )}
         <div className="row d-flex flex-row justify-content-center mb-3">
           {tokens.map((token) => (
             <div

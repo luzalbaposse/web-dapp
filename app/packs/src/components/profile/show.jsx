@@ -21,12 +21,14 @@ import Overview from "./Overview";
 import About from "./About";
 import Journey from "./Journey";
 import Community from "./Community";
+import Token from "./Token";
 
 const Show = ({ talent, railsContext, currentUserId }) => {
   const localTalent = camelCaseObject(talent);
   const canUpdate = talent.user.id == currentUserId;
   const [selectedSection, setSelectedSection] = useState(window.location.hash);
   const [listLoaded, setListLoaded] = useState(false);
+  const [showLastDivider, setShowLastDivider] = useState(false);
   const [tokenData, setTokenData] = useState({
     price: 0.1,
     totalSupply: 0,
@@ -129,15 +131,37 @@ const Show = ({ talent, railsContext, currentUserId }) => {
       <div className="my-7 w-100" id="#Journey">
         <Journey talent={localTalent} />
       </div>
-      <div className="my-7 w-100" id={`#${localTalent.token.ticker}`}></div>
-      <div className="my-7 w-100" id="#Community">
-        <Community userId={localTalent.user.id} talent={localTalent} />
+      <div className="my-7 w-100" id={`#${localTalent.token.ticker}`}>
+        <Token
+          tokenData={tokenData}
+          talent={localTalent}
+          env={railsContext.contractsEnv}
+        />
       </div>
-      <Divider className="my-6" />
-      <div className="my-7 w-100" id="#DigitalCollectibles">
-        <Poaps userId={localTalent.user.id} canUpdate={canUpdate} />
-        <Nfts userId={localTalent.user.id} canUpdate={canUpdate} />
-        <Tokens userId={localTalent.user.id} canUpdate={canUpdate} />
+      <div className="my-7 w-100" id="#Community">
+        <Community
+          userId={localTalent.user.id}
+          talent={localTalent}
+          canUpdate={canUpdate}
+        />
+      </div>
+      {(showLastDivider || canUpdate) && <Divider className="my-6" />}
+      <div className="mt-7 w-100" id="#DigitalCollectibles">
+        <Poaps
+          userId={localTalent.user.id}
+          canUpdate={canUpdate}
+          setShowLastDivider={setShowLastDivider}
+        />
+        <Nfts
+          userId={localTalent.user.id}
+          canUpdate={canUpdate}
+          setShowLastDivider={setShowLastDivider}
+        />
+        <Tokens
+          userId={localTalent.user.id}
+          canUpdate={canUpdate}
+          setShowLastDivider={setShowLastDivider}
+        />
       </div>
     </div>
   );
