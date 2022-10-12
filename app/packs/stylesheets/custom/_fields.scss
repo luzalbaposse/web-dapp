@@ -23,32 +23,25 @@
 }
 
 .form-control {
-  background: $light-surface-disable;
+  background: none !important;
   color: $light-text-primary-01;
-  border: 1px solid $light-surface-disable;
+  border: 1px solid $light-surface-hover-02;
   height: 34px;
   border-radius: 8px;
 
   &:hover {
-    background: $light-surface-disable;
     border: 1px solid $light-primary-hover;
     box-sizing: border-box;
   }
 
-  &:active {
-    background-color: $light-surface-disable;
-  }
-
   &:focus {
-    background-color: $light-bg-01;
     border: 1px solid $light-primary !important;
     box-shadow: 0px 0px 0px 3px $info !important;
   }
 
   &:disabled {
     color: $light-text-primary-disable;
-    background: $light-surface-disable;
-    border: 1px solid $light-surface-disable;
+    border: 1px solid $light-surface-disable !important;
     color: $light-text-primary-01;
   }
 }
