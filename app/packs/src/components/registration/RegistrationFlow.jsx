@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Welcome from "./Welcome";
-import RegisterUsername from "./RegisterUsername";
 import RegisterPassword from "./RegisterPassword";
 import ProcessFlow from "./ProcessFlow";
 import RegistrationContainer from "./RegistrationContainer";
@@ -12,8 +11,6 @@ const renderCurrentStep = (currentStep) => {
   switch (currentStep) {
     case 1:
       return Welcome;
-    case 2:
-      return RegisterUsername;
     case 3:
       return RegisterPassword;
     case 4:
@@ -27,11 +24,14 @@ const RegistrationFlow = (props) => {
   const { width } = useWindowDimensionsHook();
   const mobile = width < 992;
   const { mode } = useTheme();
+  const url = new URL(document.location);
 
   const [currentStep, setCurrentSet] = useState(props.step ? props.step : 1);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(
+    url.searchParams.get("handle") || ""
+  );
   const [code, setCode] = useState("");
   const [captcha, setCaptcha] = useState("");
 

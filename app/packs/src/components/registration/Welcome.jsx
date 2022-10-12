@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { faSpinner, faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -6,6 +6,7 @@ import { H5, P2 } from "src/components/design_system/typography";
 import TextInput from "src/components/design_system/fields/textinput";
 import Checkbox from "src/components/design_system/checkbox";
 import Link from "src/components/design_system/link";
+import debounce from "lodash/debounce";
 
 import { get } from "src/utils/requests";
 import { TERMS_HREF, PRIVACY_HREF, USER_GUIDE } from "src/utils/constants";
@@ -27,6 +28,8 @@ const Welcome = ({
   inviteCode,
   name,
   profilePictureUrl,
+  changeUsername,
+  username,
 }) => {
   const { width } = useWindowDimensionsHook();
   const mobile = width < 992;
@@ -38,6 +41,11 @@ const Welcome = ({
   const [emailExists, setEmailExists] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [localCode, setCode] = useState(inviteCode || "");
+  const [localUsername, setUsername] = useState(username);
+  const [requestingUsername, setRequestingUsername] = useState(false);
+  const [usernameValidated, setUsernameValidated] = useState(false);
+  const [usernameExists, setUsernameExists] = useState(false);
+  const [usernameError, setUsernameError] = useState(false);
 
   const validEmail = () => {
     if (railsContext.emailRegexWithoutAliases === "true") {
@@ -47,23 +55,54 @@ const Welcome = ({
     return emailRegexWithAliases.test(String(localEmail).toLowerCase());
   };
 
+  const editUsername = (e) => {
+    if (e.target.value != "" && !/^[a-z0-9]+$/.test(e.target.value)) {
+      setUsernameError(true);
+    } else {
+      setUsernameError(false);
+    }
+    setUsername(e.target.value);
+  };
+
   const invalidForm =
-    !validEmail() || !emailValidated || !acceptedTerms || !localCaptcha;
+    !validEmail() ||
+    !emailValidated ||
+    emailExists ||
+    !acceptedTerms ||
+    !localCaptcha ||
+    !usernameValidated ||
+    usernameError;
 
   const submitWelcomeForm = (e) => {
     e.preventDefault();
-    if (localEmail != "" && validEmail() && localCaptcha) {
+    if (
+      localEmail != "" &&
+      validEmail() &&
+      localCaptcha &&
+      localUsername != ""
+    ) {
       changeEmail(localEmail);
       if (localCode.length > 0) {
         changeCode(localCode);
       }
       setCaptcha(localCaptcha);
-      changeStep(2);
+      changeUsername(localUsername);
+      changeStep(3);
     }
   };
 
   useEffect(() => {
     if (localEmail.length === 0) {
+      return;
+    }
+
+    const splitEmail = localEmail.split("@");
+
+    if (splitEmail.length < 2) {
+      return;
+    }
+
+    if (!splitEmail[1].includes(".")) {
       return;
     }
 
@@ -83,7 +122,7 @@ const Welcome = ({
           setEmailValidated(true);
         } else {
           setRequestingEmail(false);
-          setEmailValidated(false);
+          setEmailValidated(null);
           setEmailExists(true);
         }
       })
@@ -93,6 +132,46 @@ const Welcome = ({
         setEmailValidated(true);
       });
   }, [localEmail]);
+
+  const verify = useCallback(
+    debounce((name, setname, setvalid, setexists) => {
+      setRequestingUsername(true);
+      setvalid(false);
+
+      get(`/users?username=${name}`)
+        .then((response) => {
+          if (response.error) {
+            setname(false);
+            setexists(false);
+            setvalid(true);
+          } else {
+            setname(false);
+            setvalid(false);
+            setexists(true);
+          }
+        })
+        .catch(() => {
+          setname(false);
+          setexists(false);
+          setvalid(true);
+        });
+    }, 200),
+    []
+  );
+
+  useEffect(() => {
+    if (localUsername == "") {
+      setUsernameValidated(false);
+      return;
+    }
+
+    verify(
+      localUsername,
+      setRequestingUsername,
+      setUsernameValidated,
+      setUsernameExists
+    );
+  }, [localUsername]);
 
   const recaptchaSubmition = (value) => {
     setLocalCaptcha(value);
@@ -130,6 +209,50 @@ const Welcome = ({
       </div>
       <form onSubmit={submitWelcomeForm} className="d-flex flex-column w-100">
         <div className="form-group position-relative">
+          <label htmlFor="inputUsername" className="mt-2">
+            <P2 className="text-black" text="Handle" bold />
+          </label>
+          <TextInput
+            mode={themePreference}
+            type="text"
+            id="inputUsername"
+            value={localUsername}
+            onChange={editUsername}
+            error={usernameError}
+          />
+          <P2
+            className="form-text text-primary-04 mt-1"
+            text="This will be your Talent Protocol URL. We only accept lowercase letters and numbers."
+          />
+          {requestingUsername && (
+            <FontAwesomeIcon
+              icon={faSpinner}
+              spin
+              className="position-absolute"
+              style={{ top: 48, right: 10 }}
+            />
+          )}
+          {usernameValidated && !usernameError && (
+            <FontAwesomeIcon
+              icon={faCheck}
+              className="position-absolute text-success"
+              style={{ top: 48, right: 10 }}
+            />
+          )}
+          {(usernameExists || usernameError) && (
+            <FontAwesomeIcon
+              icon={faTimes}
+              className="position-absolute text-danger"
+              style={{ top: 48, right: 10 }}
+            />
+          )}
+          {usernameExists && (
+            <small id="usernameErrorHelp" className="form-text text-danger">
+              We already have that username in the system.
+            </small>
+          )}
+        </div>
+        <div className="form-group position-relative">
           <label htmlFor="inputEmail">
             <P2 className="text-black" text="Drop your email address" bold />
           </label>
@@ -165,7 +288,7 @@ const Welcome = ({
           )}
           {emailValidated === false && (
             <small id="emailErrorHelp" className="form-text text-danger">
-              This is not a valid email. You cannot use aliases
+              This is not a valid email.
             </small>
           )}
           {emailExists && (

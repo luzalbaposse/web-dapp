@@ -1,5 +1,5 @@
 export const TERMS_HREF =
-  "https://drive.google.com/file/d/1Pcf_sa6fvUItxVMiUzuOt41aCbRRFVrh/view";
+  "https://talentprotocol.notion.site/Terms-Conditions-ec060cb6c06e49a98f17d235d0835773";
 export const PRIVACY_HREF =
   "https://drive.google.com/file/d/1Cts7FcmstLa_IISHFeO6vizy8Um5rKZE/view";
 
