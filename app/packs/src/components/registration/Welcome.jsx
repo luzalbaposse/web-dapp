@@ -2,16 +2,17 @@ import React, { useEffect, useState, useCallback } from "react";
 import { faSpinner, faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ReCAPTCHA from "react-google-recaptcha";
-import { H5, P2 } from "src/components/design_system/typography";
+import { H5, P2, P3 } from "src/components/design_system/typography";
 import TextInput from "src/components/design_system/fields/textinput";
 import Checkbox from "src/components/design_system/checkbox";
 import Link from "src/components/design_system/link";
 import debounce from "lodash/debounce";
+import { passwordMatchesRequirements } from "src/utils/passwordRequirements";
+import Tag from "src/components/design_system/tag";
 
 import { get } from "src/utils/requests";
 import { TERMS_HREF, PRIVACY_HREF, USER_GUIDE } from "src/utils/constants";
 import { useWindowDimensionsHook } from "src/utils/window";
-import { emailRegex, emailRegexWithAliases } from "src/utils/regexes";
 import TalentProfilePicture from "src/components/talent/TalentProfilePicture";
 
 import cx from "classnames";
@@ -19,26 +20,21 @@ import cx from "classnames";
 const Welcome = ({
   themePreference,
   changeStep,
-  changeEmail,
-  email,
   changeCode,
   setCaptcha,
   captchaKey,
-  railsContext,
   inviteCode,
   name,
   profilePictureUrl,
   changeUsername,
   username,
+  changePassword,
 }) => {
   const { width } = useWindowDimensionsHook();
   const mobile = width < 992;
 
-  const [localEmail, setEmail] = useState(email);
   const [localCaptcha, setLocalCaptcha] = useState(null);
-  const [requestingEmail, setRequestingEmail] = useState(false);
-  const [emailValidated, setEmailValidated] = useState(null);
-  const [emailExists, setEmailExists] = useState(false);
+
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [localCode, setCode] = useState(inviteCode || "");
   const [localUsername, setUsername] = useState(username);
@@ -46,14 +42,14 @@ const Welcome = ({
   const [usernameValidated, setUsernameValidated] = useState(false);
   const [usernameExists, setUsernameExists] = useState(false);
   const [usernameError, setUsernameError] = useState(false);
-
-  const validEmail = () => {
-    if (railsContext.emailRegexWithoutAliases === "true") {
-      return emailRegex.test(String(localEmail).toLowerCase());
-    }
-
-    return emailRegexWithAliases.test(String(localEmail).toLowerCase());
-  };
+  const [localPassword, setLocalPassword] = useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [samePassword, setSamePassword] = useState(true);
+  const {
+    valid: validPassword,
+    errors,
+    tags,
+  } = passwordMatchesRequirements(localPassword);
 
   const editUsername = (e) => {
     if (e.target.value != "" && !/^[a-z0-9]+$/.test(e.target.value)) {
@@ -65,73 +61,27 @@ const Welcome = ({
   };
 
   const invalidForm =
-    !validEmail() ||
-    !emailValidated ||
-    emailExists ||
     !acceptedTerms ||
     !localCaptcha ||
     !usernameValidated ||
-    usernameError;
+    usernameError ||
+    localPassword.length < 8 ||
+    passwordConfirmation.length < 8 ||
+    !validPassword ||
+    !samePassword;
 
   const submitWelcomeForm = (e) => {
     e.preventDefault();
-    if (
-      localEmail != "" &&
-      validEmail() &&
-      localCaptcha &&
-      localUsername != ""
-    ) {
-      changeEmail(localEmail);
+    if (localCaptcha && localUsername != "" && localPassword != "") {
       if (localCode.length > 0) {
         changeCode(localCode);
       }
       setCaptcha(localCaptcha);
+      changePassword(localPassword);
       changeUsername(localUsername);
-      changeStep(3);
+      changeStep(2);
     }
   };
-
-  useEffect(() => {
-    if (localEmail.length === 0) {
-      return;
-    }
-
-    const splitEmail = localEmail.split("@");
-
-    if (splitEmail.length < 2) {
-      return;
-    }
-
-    if (!splitEmail[1].includes(".")) {
-      return;
-    }
-
-    if (!validEmail()) {
-      setEmailValidated(false);
-      return;
-    }
-
-    setRequestingEmail(true);
-    const searchParams = new URLSearchParams({ email: localEmail });
-
-    get(`/users?${searchParams}`)
-      .then((response) => {
-        if (response.error) {
-          setRequestingEmail(false);
-          setEmailExists(false);
-          setEmailValidated(true);
-        } else {
-          setRequestingEmail(false);
-          setEmailValidated(null);
-          setEmailExists(true);
-        }
-      })
-      .catch(() => {
-        setRequestingEmail(false);
-        setEmailExists(false);
-        setEmailValidated(true);
-      });
-  }, [localEmail]);
 
   const verify = useCallback(
     debounce((name, setname, setvalid, setexists) => {
@@ -173,6 +123,18 @@ const Welcome = ({
     );
   }, [localUsername]);
 
+  useEffect(() => {
+    if (localPassword.length > 7 && passwordConfirmation.length > 7) {
+      if (localPassword === passwordConfirmation) {
+        setSamePassword(true);
+      } else {
+        setSamePassword(false);
+      }
+    } else {
+      setSamePassword(true);
+    }
+  }, [localPassword, passwordConfirmation]);
+
   const recaptchaSubmition = (value) => {
     setLocalCaptcha(value);
   };
@@ -210,7 +172,7 @@ const Welcome = ({
       <form onSubmit={submitWelcomeForm} className="d-flex flex-column w-100">
         <div className="form-group position-relative">
           <label htmlFor="inputUsername" className="mt-2">
-            <P2 className="text-black" text="Handle" bold />
+            <P2 className="text-black" text="Choose your handle" bold />
           </label>
           <TextInput
             mode={themePreference}
@@ -222,7 +184,7 @@ const Welcome = ({
           />
           <P2
             className="form-text text-primary-04 mt-1"
-            text="This will be your Talent Protocol URL. We only accept lowercase letters and numbers."
+            text="This will be your Talent Protocol handle. We only accept lowercase letters and numbers."
           />
           {requestingUsername && (
             <FontAwesomeIcon
@@ -251,58 +213,52 @@ const Welcome = ({
               We already have that username in the system.
             </small>
           )}
-        </div>
-        <div className="form-group position-relative">
-          <label htmlFor="inputEmail">
-            <P2 className="text-black" text="Drop your email address" bold />
+          <label htmlFor="inputPassword">
+            <P2 className="text-black mt-4" text="Choose Password" bold />
           </label>
           <TextInput
             mode={themePreference}
-            type="email"
-            id="inputEmail"
-            ariaDescribedBy="emailHelp"
-            value={localEmail}
-            onChange={(e) => setEmail(e.target.value)}
+            type="password"
+            id="inputPassword"
+            ariaDescribedBy="passwordHelp"
+            value={localPassword}
+            onChange={(e) => setLocalPassword(e.target.value)}
           />
-          {requestingEmail && (
-            <FontAwesomeIcon
-              icon={faSpinner}
-              spin
-              className="position-absolute"
-              style={{ top: 42, right: 10 }}
+          <div className="d-flex flex-wrap">
+            {tags.map((tag) => (
+              <Tag
+                className={`mr-2 mt-2${errors[tag] ? "" : " bg-success"}`}
+                key={tag}
+              >
+                <P3
+                  mode={themePreference}
+                  text={tag}
+                  bold
+                  className={errors[tag] ? "" : "permanent-text-white"}
+                />
+              </Tag>
+            ))}
+          </div>
+          <label htmlFor="inputPasswordConfirmation" className="mt-4">
+            <P2 className="text-black" text="Confirm Password" bold />
+          </label>
+          <TextInput
+            mode={themePreference}
+            type="password"
+            id="inputPasswordConfirmation"
+            ariaDescribedBy="passwordConfirmationHelp"
+            value={passwordConfirmation}
+            onChange={(e) => setPasswordConfirmation(e.target.value)}
+          />
+          {!samePassword && (
+            <P3
+              className="mt-2 text-danger"
+              mode={themePreference}
+              text="The password does not match"
             />
           )}
-          {emailValidated && (
-            <FontAwesomeIcon
-              icon={faCheck}
-              className="position-absolute text-success"
-              style={{ top: 42, right: 10 }}
-            />
-          )}
-          {emailValidated === false && (
-            <FontAwesomeIcon
-              icon={faTimes}
-              className="position-absolute text-danger"
-              style={{ top: 42, right: 10 }}
-            />
-          )}
-          {emailValidated === false && (
-            <small id="emailErrorHelp" className="form-text text-danger">
-              This is not a valid email.
-            </small>
-          )}
-          {emailExists && (
-            <FontAwesomeIcon
-              icon={faTimes}
-              className="position-absolute text-danger"
-              style={{ top: 42, right: 10 }}
-            />
-          )}
-          {emailExists && (
-            <small id="emailErrorHelp" className="form-text text-danger">
-              We already have that email in the system.
-            </small>
-          )}
+        </div>
+        <div className="form-group position-relative">
           <div className="d-flex flex-row w-100 mt-4">
             <ReCAPTCHA sitekey={captchaKey} onChange={recaptchaSubmition} />
           </div>

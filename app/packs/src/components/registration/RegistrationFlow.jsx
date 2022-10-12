@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import Welcome from "./Welcome";
-import RegisterPassword from "./RegisterPassword";
 import ProcessFlow from "./ProcessFlow";
+import RegisterFirstAndLastName from "./RegisterFirstAndLastName";
+import RegisterEmail from "./RegisterEmail";
 import RegistrationContainer from "./RegistrationContainer";
 import { useTheme } from "../../contexts/ThemeContext";
 import { useWindowDimensionsHook } from "../../utils/window";
@@ -11,8 +12,10 @@ const renderCurrentStep = (currentStep) => {
   switch (currentStep) {
     case 1:
       return Welcome;
+    case 2:
+      return RegisterFirstAndLastName;
     case 3:
-      return RegisterPassword;
+      return RegisterEmail;
     case 4:
       return ProcessFlow;
     default:
@@ -29,6 +32,8 @@ const RegistrationFlow = (props) => {
   const [currentStep, setCurrentSet] = useState(props.step ? props.step : 1);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState(
     url.searchParams.get("handle") || ""
   );
@@ -61,6 +66,10 @@ const RegistrationFlow = (props) => {
         setCaptcha={setCaptcha}
         captchaKey={props.captchaKey}
         themePreference={mode()}
+        changeFirstName={setFirstName}
+        changeLastName={setLastName}
+        firstName={firstName}
+        lastName={lastName}
         {...props}
       />
     </div>

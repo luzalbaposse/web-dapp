@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_11_074346) do
+ActiveRecord::Schema.define(version: 2022_10_12_112020) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -532,6 +532,8 @@ ActiveRecord::Schema.define(version: 2022_10_11_074346) do
     t.string "linkedin_id"
     t.string "delete_account_token"
     t.datetime "delete_account_token_expires_at"
+    t.string "legal_first_name"
+    t.string "legal_last_name"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invite_id"], name: "index_users_on_invite_id"
     t.index ["linkedin_id"], name: "index_users_on_linkedin_id", unique: true
