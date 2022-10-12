@@ -54,34 +54,28 @@
 }
 
 .dark-body .form-control {
-  background: $dark-surface-disable;
+  background: none !important;
   color: $dark-text-primary-01;
-  border: 1px solid $dark-surface-disable;
+  border: 1px solid $dark-surface-hover-02;
 
   ::placeholder {
     color: $dark-text-primary-04 !important;
   }
 
   &:hover {
-    background: $dark-surface-disable;
     border: 1px solid $dark-primary;
     box-sizing: border-box;
     border-radius: 8px;
   }
 
-  &:active {
-    background: $dark-surface-disable;
-  }
-
   &:focus {
-    background: $dark-surface-disable !important;
     border: 1px solid $dark-primary !important;
     box-shadow: 0px 0px 0px 3px $dark-primary-shade-02 !important;
   }
 
   &:disabled {
     color: $light-text-primary-disable;
-    background: $dark-surface-disable;
+    background: $dark-surface-disable !important;
     border: 1px solid $dark-surface-disable;
     color: $dark-surface-disable;
   }
