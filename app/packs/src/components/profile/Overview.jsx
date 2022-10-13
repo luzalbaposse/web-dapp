@@ -1,9 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 
-import TalentProfilePicture from "src/components/talent/TalentProfilePicture";
 import { ethers } from "ethers";
+import { patch, getAuthToken } from "src/utils/requests";
+
+import Uppy from "@uppy/core";
+import AwsS3Multipart from "@uppy/aws-s3-multipart";
+
+import { snakeCaseObject, camelCaseObject } from "src/utils/transformObjects";
+
+import TalentProfilePicture from "src/components/talent/TalentProfilePicture";
 import { H4, H5, P2 } from "src/components/design_system/typography";
+import CameraButton from "images/camera-button.png";
+import DeleteButton from "images/delete-button.png";
 import TalentBanner from "images/overview.gif";
 import { useWindowDimensionsHook } from "src/utils/window";
 import UserTags from "src/components/talent/UserTags";
@@ -25,14 +34,175 @@ const Overview = ({
   currentUserId,
   railsContext,
   changeSection,
+  canUpdate,
+  previewMode,
+  setPreviewMode,
 }) => {
   const joinedAt = dayjs(talent.user.createdAt).format("MMMM YYYY");
-  const talentIsFromCurrentUser = talent.userId == currentUserId;
 
   const { mobile } = useWindowDimensionsHook();
   const [showStakeModal, setShowStakeModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [previewMode, setPreviewMode] = useState(false);
+  const [overviewProfileFileInput, setOverviewProfileFileInput] =
+    useState(null);
+  const [overviewBannerFileInput, setOverviewBannerFileInput] = useState(null);
+
+  const uppyProfile = new Uppy({
+    meta: { type: "avatar" },
+    restrictions: {
+      maxFileSize: 5120000,
+      allowedFileTypes: [".jpg", ".png", ".jpeg"],
+    },
+    autoProceed: true,
+  });
+
+  const uppyBanner = new Uppy({
+    meta: { type: "avatar" },
+    restrictions: {
+      maxFileSize: 5120000,
+      allowedFileTypes: [".jpg", ".png", ".jpeg", ".gif"],
+    },
+    autoProceed: true,
+  });
+
+  uppyProfile.use(AwsS3Multipart, {
+    limit: 4,
+    companionUrl: "/",
+    companionHeaders: {
+      "X-CSRF-Token": getAuthToken(),
+    },
+  });
+
+  uppyBanner.use(AwsS3Multipart, {
+    limit: 4,
+    companionUrl: "/",
+    companionHeaders: {
+      "X-CSRF-Token": getAuthToken(),
+    },
+  });
+
+  overviewProfileFileInput?.addEventListener("change", (event) => {
+    const files = Array.from(event.target.files);
+    files.forEach((file) => {
+      try {
+        uppyProfile.addFile({
+          source: "file input",
+          name: file.name,
+          type: file.type,
+          data: file,
+        });
+      } catch (err) {
+        if (err.isRestriction) {
+          // handle restrictions
+          console.log("Restriction error:", err);
+        } else {
+          // handle other errors
+          console.error(err);
+        }
+      }
+    });
+  });
+
+  overviewBannerFileInput?.addEventListener("change", (event) => {
+    const files = Array.from(event.target.files);
+    files.forEach((file) => {
+      try {
+        uppyBanner.addFile({
+          source: "file input",
+          name: file.name,
+          type: file.type,
+          data: file,
+        });
+      } catch (err) {
+        if (err.isRestriction) {
+          // handle restrictions
+          console.log("Restriction error:", err);
+        } else {
+          // handle other errors
+          console.error(err);
+        }
+      }
+    });
+  });
+
+  const saveProfile = async (updatedTalent) => {
+    const response = await patch(`/api/v1/talent/${talent.id}`, {
+      user: {
+        ...snakeCaseObject(updatedTalent.user),
+      },
+      talent: {
+        ...snakeCaseObject(updatedTalent),
+      },
+    });
+
+    if (response) {
+      setTalent((prev) => ({
+        ...prev,
+        ...camelCaseObject(response),
+      }));
+    }
+  };
+
+  const deleteBannerImg = () => {
+    saveProfile({
+      ...talent,
+      bannerUrl: null,
+      bannerData: null,
+    });
+  };
+
+  useEffect(() => {
+    uppyProfile.on("restriction-failed", () => {
+      uppyProfile.reset();
+    });
+    uppyProfile.on("upload-success", (file, response) => {
+      saveProfile({
+        ...talent,
+        profilePictureUrl: response.uploadURL,
+        profilePictureData: {
+          id: response.uploadURL.match(/\/cache\/([^\?]+)/)[1], // extract key without prefix
+          storage: "cache",
+          metadata: {
+            size: file.size,
+            filename: file.name,
+            mime_type: file.type,
+          },
+        },
+      });
+    });
+    uppyProfile.on("upload", () => {});
+  }, [uppyProfile]);
+
+  useEffect(() => {
+    uppyBanner.on("restriction-failed", () => {
+      uppyBanner.reset();
+    });
+    uppyBanner.on("upload-success", (file, response) => {
+      saveProfile({
+        ...talent,
+        bannerUrl: response.uploadURL,
+        bannerData: {
+          id: response.uploadURL.match(/\/cache\/([^\?]+)/)[1], // extract key without prefix
+          storage: "cache",
+          metadata: {
+            size: file.size,
+            filename: file.name,
+            mime_type: file.type,
+          },
+        },
+      });
+    });
+    uppyBanner.on("upload", () => {});
+  }, [uppyBanner]);
+
+  useEffect(() => {
+    setOverviewProfileFileInput(
+      document.getElementById("overviewProfileFileInput")
+    );
+    setOverviewBannerFileInput(
+      document.getElementById("overviewBannerFileInput")
+    );
+  }, []);
 
   return (
     <div className={cx(className)}>
@@ -40,38 +210,140 @@ const Overview = ({
         <div className={cx(mobile ? "col-12" : "col-6")}>
           {mobile ? (
             <div className="d-flex flex-column">
-              {talent.bannerUrl ? (
-                <TalentProfilePicture
-                  style={{ borderRadius: "24px" }}
-                  className="align-self-end pull-bottom-content-70"
-                  src={talent.bannerUrl}
-                  straight
-                  height={257}
-                  width={328}
-                />
+              {previewMode || !canUpdate ? (
+                <>
+                  <TalentProfilePicture
+                    className="align-self-end pull-bottom-content-70"
+                    style={{ borderRadius: "24px" }}
+                    src={talent.bannerUrl || TalentBanner}
+                    straight
+                    height={213}
+                    width={272}
+                  />
+                  <TalentProfilePicture
+                    className="mb-3"
+                    src={talent.profilePictureUrl}
+                    height={120}
+                    border
+                  />
+                </>
               ) : (
-                <TalentProfilePicture
-                  className="align-self-end pull-bottom-content-70"
-                  style={{ borderRadius: "24px" }}
-                  src={TalentBanner}
-                  straight
-                  height={213}
-                  width={272}
-                />
+                <>
+                  <div
+                    className="position-relative pull-bottom-content-70 align-self-end"
+                    style={{ width: "272px", height: "213px" }}
+                  >
+                    <TalentProfilePicture
+                      style={{ borderRadius: "24px" }}
+                      src={talent.bannerUrl || TalentBanner}
+                      straight
+                      height={213}
+                      width={272}
+                    />
+                    <div
+                      className="edit-image"
+                      style={{
+                        borderRadius: "24px",
+                        height: "213px",
+                        width: "272px",
+                      }}
+                    ></div>
+                    <label htmlFor="overviewBannerFileInput">
+                      <TalentProfilePicture
+                        className="position-absolute cursor-pointer"
+                        style={{
+                          top: mobile ? "90px" : "155px",
+                          left: mobile ? "95px" : "185px",
+                        }}
+                        src={CameraButton}
+                        height={40}
+                      />
+                    </label>
+                    <input
+                      id="overviewBannerFileInput"
+                      className="d-none"
+                      type="file"
+                      accept=".jpg,.png,.jpeg,.gif"
+                    ></input>
+                    <button
+                      className="button-link position-absolute"
+                      style={{
+                        top: mobile ? "90px" : "155px",
+                        left: mobile ? "145px" : "240px",
+                      }}
+                      onClick={deleteBannerImg}
+                    >
+                      <TalentProfilePicture
+                        className="cursor-pointer"
+                        src={DeleteButton}
+                        height={40}
+                      />
+                    </button>
+                  </div>
+                  <div
+                    className="position-relative"
+                    style={{ width: "120px", height: "120px" }}
+                  >
+                    <TalentProfilePicture
+                      className="position-relative"
+                      src={talent.profilePictureUrl}
+                      height={120}
+                      border
+                    />
+                    <label htmlFor="overviewProfileFileInput">
+                      <TalentProfilePicture
+                        className="position-absolute cursor-pointer"
+                        style={{ top: "40px", left: "40px" }}
+                        src={CameraButton}
+                        height={40}
+                      />
+                    </label>
+                    <input
+                      id="overviewProfileFileInput"
+                      className="d-none"
+                      type="file"
+                      accept=".jpg,.png,.jpeg"
+                    ></input>
+                  </div>
+                </>
               )}
-              <TalentProfilePicture
-                className="mb-3"
-                src={talent.profilePictureUrl}
-                height={120}
-                border
-              />
             </div>
           ) : (
-            <TalentProfilePicture
-              className="mb-3"
-              src={talent.profilePictureUrl}
-              height={120}
-            />
+            <>
+              {previewMode || !canUpdate ? (
+                <TalentProfilePicture
+                  className="mb-3"
+                  src={talent.profilePictureUrl}
+                  height={120}
+                />
+              ) : (
+                <div
+                  className="position-relative mb-3"
+                  style={{ width: "112px", height: "112px" }}
+                >
+                  <TalentProfilePicture
+                    className="position-relative"
+                    src={talent.profilePictureUrl}
+                    height={112}
+                  />
+                  <div className="rounded-circle edit-image"></div>
+                  <label htmlFor="overviewProfileFileInput">
+                    <TalentProfilePicture
+                      className="position-absolute cursor-pointer"
+                      style={{ top: "36px", left: "36px" }}
+                      src={CameraButton}
+                      height={40}
+                    />
+                  </label>
+                  <input
+                    id="overviewProfileFileInput"
+                    className="d-none"
+                    type="file"
+                    accept=".jpg,.png,.jpeg"
+                  ></input>
+                </div>
+              )}
+            </>
           )}
           <H4
             className="mb-1 medium"
@@ -80,53 +352,63 @@ const Overview = ({
           <P2 className="text-primary-03 mb-4" text={talent.occupation} />
           {mobile && (
             <div className="d-flex align-items-center mb-4">
-              {talentIsFromCurrentUser ? (
-                <>
-                  <Button
-                    className="mr-2"
-                    type="primary-default"
-                    text="Edit"
-                    onClick={() => setEditMode(true)}
-                  />
-                  <Button
-                    className="mr-2"
-                    type="primary-default"
-                    text={`Buy ${talent.token.ticker}`}
-                    onClick={() => setShowStakeModal(true)}
-                  />
-                  <Button
-                    className="mr-2"
-                    type="white-outline"
-                    text="Preview"
-                    onClick={() => setPreviewMode(true)}
-                  />
-                </>
+              {previewMode ? (
+                <Button
+                  type="primary-default"
+                  text="Back to edit profile"
+                  onClick={() => setPreviewMode(false)}
+                />
               ) : (
                 <>
-                  <a
-                    href={`/messages?user=${talent.user.id}`}
-                    className="button-link"
-                  >
-                    <Button
-                      className="mr-2"
-                      type="white-outline"
-                      size="big-icon"
-                      onClick={() => null}
-                    >
-                      <Envelope
-                        className="h-100"
-                        color="currentColor"
-                        size={16}
-                        viewBox="0 0 24 24"
+                  {canUpdate ? (
+                    <>
+                      <Button
+                        className="mr-2"
+                        type="primary-default"
+                        text="Edit"
+                        onClick={() => setEditMode(true)}
                       />
-                    </Button>
-                  </a>
-                  <Button
-                    type="primary-default"
-                    size="big"
-                    text="Support"
-                    onClick={() => setShowStakeModal(true)}
-                  />
+                      <Button
+                        className="mr-2"
+                        type="primary-default"
+                        text={`Buy ${talent.token.ticker}`}
+                        onClick={() => setShowStakeModal(true)}
+                      />
+                      <Button
+                        className="mr-2"
+                        type="white-outline"
+                        text="Preview"
+                        onClick={() => setPreviewMode(true)}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <a
+                        href={`/messages?user=${talent.user.id}`}
+                        className="button-link"
+                      >
+                        <Button
+                          className="mr-2"
+                          type="white-outline"
+                          size="big-icon"
+                          onClick={() => null}
+                        >
+                          <Envelope
+                            className="h-100"
+                            color="currentColor"
+                            size={16}
+                            viewBox="0 0 24 24"
+                          />
+                        </Button>
+                      </a>
+                      <Button
+                        type="primary-default"
+                        size="big"
+                        text="Support"
+                        onClick={() => setShowStakeModal(true)}
+                      />
+                    </>
+                  )}
                 </>
               )}
             </div>
@@ -160,7 +442,7 @@ const Overview = ({
             </Button>
             <Button
               className="d-flex mr-2 mt-2 button-link p-0"
-              onClick={() => changeSection("#Community")}
+              onClick={() => changeSection("#community")}
             >
               <P2
                 className="text-primary-01 mr-1"
@@ -171,7 +453,7 @@ const Overview = ({
             </Button>
             <Button
               className="d-flex mr-2 mt-2 button-link p-0"
-              onClick={() => changeSection("#Community")}
+              onClick={() => changeSection("#community")}
             >
               <P2
                 className="text-primary-01 mr-1"
@@ -182,7 +464,7 @@ const Overview = ({
             </Button>
             <Button
               className="d-flex mr-2 mt-2 button-link p-0"
-              onClick={() => changeSection("#Community")}
+              onClick={() => changeSection("#community")}
             >
               <P2
                 className="text-primary-01 mr-1"
@@ -222,18 +504,49 @@ const Overview = ({
               "d-flex flex-column align-items-end justify-content-center"
             )}
           >
-            {talent.bannerUrl ? (
+            {previewMode || !canUpdate ? (
               <TalentProfilePicture
                 className="banner-profile"
-                src={talent.bannerUrl}
+                src={talent.bannerUrl || TalentBanner}
                 straight
               />
             ) : (
-              <TalentProfilePicture
-                className="banner-profile"
-                src={TalentBanner}
-                straight
-              />
+              <div className="position-relative">
+                <TalentProfilePicture
+                  className="position-relative banner-profile cursor-pointer"
+                  src={talent.bannerUrl || TalentBanner}
+                  straight
+                />
+                <div
+                  className="edit-image banner-profile"
+                  style={{ borderRadius: "24px" }}
+                ></div>
+                <label htmlFor="overviewBannerFileInput">
+                  <TalentProfilePicture
+                    className="position-absolute cursor-pointer"
+                    style={{ top: "145px", left: "160px" }}
+                    src={CameraButton}
+                    height={40}
+                  />
+                </label>
+                <input
+                  id="overviewBannerFileInput"
+                  className="d-none"
+                  type="file"
+                  accept=".jpg,.png,.jpeg,.gif"
+                ></input>
+                <button
+                  className="button-link position-absolute"
+                  style={{ top: "145px", left: "210px" }}
+                  onClick={deleteBannerImg}
+                >
+                  <TalentProfilePicture
+                    className="cursor-pointer"
+                    src={DeleteButton}
+                    height={40}
+                  />
+                </button>
+              </div>
             )}
           </div>
         )}
@@ -242,56 +555,66 @@ const Overview = ({
         <div></div>
         {!mobile && (
           <div className="d-flex align-items-center">
-            {talentIsFromCurrentUser ? (
-              <>
-                <Button
-                  className="mr-2"
-                  type="primary-default"
-                  size="big"
-                  text="Edit"
-                  onClick={() => setEditMode(true)}
-                />
-                <Button
-                  className="mr-2"
-                  type="primary-default"
-                  size="big"
-                  text={`Buy ${talent.token.ticker}`}
-                  onClick={() => setShowStakeModal(true)}
-                />
-                <Button
-                  className="mr-2"
-                  type="white-outline"
-                  size="big"
-                  text="Preview"
-                  onClick={() => setPreviewMode(true)}
-                />
-              </>
+            {previewMode ? (
+              <Button
+                type="primary-default"
+                text="Back to edit profile"
+                onClick={() => setPreviewMode(false)}
+              />
             ) : (
               <>
-                <a
-                  href={`/messages?user=${talent.user.id}`}
-                  className="button-link"
-                >
-                  <Button
-                    className="mr-2"
-                    type="white-outline"
-                    size="big-icon"
-                    onClick={() => null}
-                  >
-                    <Envelope
-                      className="h-100"
-                      color="currentColor"
-                      size={16}
-                      viewBox="0 0 24 24"
+                {canUpdate ? (
+                  <>
+                    <Button
+                      className="mr-2"
+                      type="primary-default"
+                      size="big"
+                      text="Edit"
+                      onClick={() => setEditMode(true)}
                     />
-                  </Button>
-                </a>
-                <Button
-                  type="primary-default"
-                  size="big"
-                  text="Support"
-                  onClick={() => setShowStakeModal(true)}
-                />
+                    <Button
+                      className="mr-2"
+                      type="primary-default"
+                      size="big"
+                      text={`Buy ${talent.token.ticker}`}
+                      onClick={() => setShowStakeModal(true)}
+                    />
+                    <Button
+                      className="mr-2"
+                      type="white-outline"
+                      size="big"
+                      text="Preview"
+                      onClick={() => setPreviewMode(true)}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <a
+                      href={`/messages?user=${talent.user.id}`}
+                      className="button-link"
+                    >
+                      <Button
+                        className="mr-2"
+                        type="white-outline"
+                        size="big-icon"
+                        onClick={() => null}
+                      >
+                        <Envelope
+                          className="h-100"
+                          color="currentColor"
+                          size={16}
+                          viewBox="0 0 24 24"
+                        />
+                      </Button>
+                    </a>
+                    <Button
+                      type="primary-default"
+                      size="big"
+                      text="Support"
+                      onClick={() => setShowStakeModal(true)}
+                    />
+                  </>
+                )}
               </>
             )}
           </div>
@@ -307,7 +630,7 @@ const Overview = ({
         tokenChainId={talent.token.chainId}
         talentName={talent.user.displayName || talent.user.username}
         ticker={talent.token.ticker}
-        talentIsFromCurrentUser={talentIsFromCurrentUser}
+        talentIsFromCurrentUser={canUpdate}
         railsContext={railsContext}
       />
       {editMode && (

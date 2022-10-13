@@ -406,7 +406,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
                 id="bannerFileInput"
                 className="d-none"
                 type="file"
-                accept=".jpg,.png,.jpeg"
+                accept=".jpg,.png,.jpeg,.gif"
               ></input>
               <button
                 className="button-link position-absolute"
@@ -468,7 +468,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
               <P3
                 className="text-primary-01"
                 bold
-                text={editedTalent.profile.headline?.length || 0}
+                text={editedTalent.profile.headline?.length || "0"}
               />
               <P3 className="text-primary-04" bold text="/70" />
             </div>
@@ -571,7 +571,12 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
       </Modal.Body>
       <Divider />
       <Modal.Footer className="px-6 py-3" style={{ borderTop: "none" }}>
-        <Button type="white-ghost" text="Cancel" onClick={hide} />
+        <Button
+          className="mr-2"
+          type="white-ghost"
+          text="Cancel"
+          onClick={hide}
+        />
         <Button type="primary-default" text="Save" onClick={saveProfile} />
       </Modal.Footer>
     </Modal>

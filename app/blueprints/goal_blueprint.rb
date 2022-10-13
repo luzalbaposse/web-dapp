@@ -2,6 +2,6 @@ class GoalBlueprint < Blueprinter::Base
   fields :id
 
   view :normal do
-    fields :due_date, :description
+    fields :title, :due_date, :description, :link
   end
 end

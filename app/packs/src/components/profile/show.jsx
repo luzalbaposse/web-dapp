@@ -22,10 +22,11 @@ const Show = ({ talent, railsContext, currentUserId }) => {
   const [localTalent, setLocalTalent] = useState(camelCaseObject(talent));
   const user = localTalent.user;
   const token = localTalent.token;
-  const canUpdate = talent.user.id == currentUserId;
   const [selectedSection, setSelectedSection] = useState(window.location.hash);
   const [showLastDivider, setShowLastDivider] = useState(false);
+  const [previewMode, setPreviewMode] = useState(false);
   const talentTokenPrice = 0.1;
+  const canUpdate = talent.user.id == currentUserId && !previewMode;
 
   const { mobile } = useWindowDimensionsHook();
 
@@ -36,7 +37,7 @@ const Show = ({ talent, railsContext, currentUserId }) => {
   const buttonType = (section) => {
     if (section == selectedSection) {
       return "white-default";
-    } else if (!selectedSection && section == "#About") {
+    } else if (!selectedSection && section == "#about") {
       return "white-default";
     } else {
       return "white-ghost";
@@ -82,45 +83,57 @@ const Show = ({ talent, railsContext, currentUserId }) => {
         railsContext={railsContext}
         changeSection={changeSection}
         talentTokenPrice={talentTokenPrice}
+        canUpdate={canUpdate}
+        previewMode={previewMode}
+        setPreviewMode={setPreviewMode}
       />
       <Divider className="my-6" />
       <div className="d-flex justify-content-lg-center overflow-x-scroll mx-4">
         <Button
           className="mr-2"
-          type={buttonType("#About")}
+          type={buttonType("#about")}
           text="About"
-          onClick={() => changeSection("#About")}
+          onClick={() => changeSection("#about")}
         />
         <Button
           className="mr-2"
-          type={buttonType("#Journey")}
+          type={buttonType("#journey")}
           text="Journey"
-          onClick={() => changeSection("#Journey")}
+          onClick={() => changeSection("#journey")}
         />
         <Button
           className="mr-2"
-          type={buttonType(`#${token.ticker}`)}
-          text={token.ticker}
-          onClick={() => changeSection(`#${token.ticker}`)}
+          type={buttonType("#token")}
+          text={`$${token.ticker}`}
+          onClick={() => changeSection("#token")}
         />
         <Button
           className="mr-2"
-          type={buttonType("#Community")}
+          type={buttonType("#community")}
           text="Community"
-          onClick={() => changeSection("#Community")}
+          onClick={() => changeSection("#community")}
         />
         <Button
-          type={buttonType("#DigitalCollectibles")}
+          type={buttonType("#digital-collectibles")}
           text="Digital Collectibles"
-          onClick={() => changeSection("#DigitalCollectibles")}
+          onClick={() => changeSection("#digital-collectibles")}
         />
       </div>
-      <div className="my-7 w-100" id="#About">
-        <About talent={localTalent} setTalent={setLocalTalent} />
+      <div className="my-7 w-100 col-12" id="#about">
+        <About
+          talent={localTalent}
+          setTalent={setLocalTalent}
+          canUpdate={canUpdate}
+          previewMode={previewMode}
+        />
       </div>
       {mobile && <Divider />}
-      <div className="my-7 w-100" id="#Journey">
-        <Journey talent={localTalent} />
+      <div className="my-7 w-100 col-12" id="#journey">
+        <Journey
+          talent={localTalent}
+          setTalent={setLocalTalent}
+          canUpdate={canUpdate}
+        />
       </div>
       <div className="my-7 w-100" id={"#token"}>
         {token.contractId && (
@@ -134,7 +147,7 @@ const Show = ({ talent, railsContext, currentUserId }) => {
           waitingApproval={user.profileType == "waiting_for_approval"}
         />
       </div>
-      <div className="my-7 w-100" id="#Community">
+      <div className="my-7 w-100 col-12" id="#community">
         <Community
           userId={localTalent.user.id}
           talent={localTalent}
@@ -142,7 +155,7 @@ const Show = ({ talent, railsContext, currentUserId }) => {
         />
       </div>
       {(showLastDivider || canUpdate) && <Divider className="my-6" />}
-      <div className="mt-7 w-100" id="#DigitalCollectibles">
+      <div className="mt-7 w-100" id="#digital-collectibles">
         <Poaps
           userId={localTalent.user.id}
           canUpdate={canUpdate}

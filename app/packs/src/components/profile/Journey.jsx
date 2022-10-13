@@ -6,14 +6,19 @@ import { useWindowDimensionsHook } from "src/utils/window";
 import { compareDates } from "src/utils/compareHelpers";
 import { Rocket, Toolbox, Bulb, Learn } from "src/components/icons";
 import Divider from "src/components/design_system/other/Divider";
+import Button from "src/components/design_system/button";
+import EditJourneyModal from "./edit/EditJourneyModal";
 
 import cx from "classnames";
 
-const Journey = ({ className, talent }) => {
+const Journey = ({ className, talent, setTalent, canUpdate }) => {
   const { mobile } = useWindowDimensionsHook();
   const [journeyItems, setJourneyItems] = useState([]);
   const [filteredJourneyItems, setFilteredJourneyItems] = useState([]);
   const [activeFilter, setActiveFilter] = useState("All");
+  const [editMode, setEditMode] = useState(false);
+  const [editType, setEditType] = useState("");
+  const [journeyItemInEditing, setJourneyItemInEditing] = useState(null);
 
   useEffect(() => {
     const allItems = mergeAndSortJourney(
@@ -133,7 +138,7 @@ const Journey = ({ className, talent }) => {
                 text="Here is where you can see what I'm doing at the moment,
                 what I've done and where I want to be!"
               />
-              <div className="w-100 mt-6 px-4 d-flex flex-row overflow-x-scroll justify-content-lg-center">
+              <div className="w-100 my-6 px-4 d-flex flex-row overflow-x-scroll justify-content-lg-center">
                 <button
                   type="button"
                   className={`mr-2 btn text-nowrap all-journey-button${
@@ -184,6 +189,18 @@ const Journey = ({ className, talent }) => {
                   {categoryCount("Other")}
                 </button>
               </div>
+              {canUpdate && (
+                <Button
+                  className="align-self-end"
+                  type="primary-default"
+                  size="big"
+                  text="Add Experience"
+                  onClick={() => {
+                    setEditType("Add");
+                    setEditMode(true);
+                  }}
+                />
+              )}
             </div>
           </div>
           <div className="d-flex flex-column">
@@ -197,7 +214,7 @@ const Journey = ({ className, talent }) => {
                       : ""
                   }
                 />
-                <div className="d-flex col-11">
+                <div className="d-flex col-11 pr-0">
                   {!mobile && (
                     <P3
                       className="text-primary-04 col-2 text-right pr-6 pt-1"
@@ -215,7 +232,7 @@ const Journey = ({ className, talent }) => {
                             index,
                             filteredJourneyItems.length
                           )} position-relative`
-                        : `col-10 pl-7 ${cssForBorder(
+                        : `col-10 pl-7 pr-0 ${cssForBorder(
                             journeyItem,
                             index,
                             filteredJourneyItems.length
@@ -231,10 +248,23 @@ const Journey = ({ className, talent }) => {
                         )}
                       />
                     )}
-                    <P1
-                      className="text-primary-01 medium mb-1"
-                      text={journeyItem.title}
-                    />
+                    <div className="d-flex justify-content-between">
+                      <P1
+                        className="text-primary-01 medium mb-1"
+                        text={journeyItem.title}
+                      />
+                      {canUpdate && (
+                        <Button
+                          type="primary-outline"
+                          text="Edit"
+                          onClick={() => {
+                            setJourneyItemInEditing(journeyItem);
+                            setEditType("Edit");
+                            setEditMode(true);
+                          }}
+                        />
+                      )}
+                    </div>
                     <P2
                       className="text-primary-01 mb-3"
                       text={journeyItem.institution}
@@ -261,6 +291,17 @@ const Journey = ({ className, talent }) => {
             ))}
           </div>
         </div>
+      )}
+      {editMode && (
+        <EditJourneyModal
+          show={editMode}
+          hide={() => setEditMode(false)}
+          talent={talent}
+          setTalent={setTalent}
+          editType={editType}
+          journeyItem={journeyItemInEditing}
+          setJourneyItem={setJourneyItemInEditing}
+        />
       )}
     </>
   );

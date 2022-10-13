@@ -1,16 +1,12 @@
-import React, { useEffect, useState, useCallback } from "react";
-import debounce from "lodash/debounce";
+import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 
-import { patch, get, getAuthToken } from "src/utils/requests";
+import { patch, getAuthToken } from "src/utils/requests";
 import { snakeCaseObject, camelCaseObject } from "src/utils/transformObjects";
 import { useTheme } from "src/contexts/ThemeContext";
 
 import Uppy from "@uppy/core";
-import { FileInput } from "@uppy/react";
 import AwsS3Multipart from "@uppy/aws-s3-multipart";
-import AsyncCreatableSelect from "react-select/async-creatable";
-import { components } from "react-select";
 
 import CameraButton from "images/camera-button.png";
 import DeleteButton from "images/delete-button.png";
@@ -244,7 +240,7 @@ const EditAboutModal = ({ show, hide, talent, setTalent }) => {
             id="aboutBannerFileInput"
             className="d-none"
             type="file"
-            accept=".jpg,.png,.jpeg"
+            accept=".jpg,.png,.jpeg,.gif"
           ></input>
           <button
             className="button-link position-absolute"
@@ -268,7 +264,7 @@ const EditAboutModal = ({ show, hide, talent, setTalent }) => {
               <P3
                 className="text-primary-01"
                 bold
-                text={editedTalent.careerGoal.pitch?.length || 0}
+                text={editedTalent.careerGoal.pitch?.length || "0"}
               />
               <P3 className="text-primary-04" bold text="/240" />
             </div>
@@ -295,7 +291,12 @@ const EditAboutModal = ({ show, hide, talent, setTalent }) => {
       </Modal.Body>
       <Divider />
       <Modal.Footer className="px-6 py-3" style={{ borderTop: "none" }}>
-        <Button type="white-ghost" text="Cancel" onClick={hide} />
+        <Button
+          className="mr-2"
+          type="white-ghost"
+          text="Cancel"
+          onClick={hide}
+        />
         <Button type="primary-default" text="Save" onClick={saveProfile} />
       </Modal.Footer>
     </Modal>
