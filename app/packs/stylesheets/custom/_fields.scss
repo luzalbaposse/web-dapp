@@ -23,18 +23,19 @@
 }
 
 .form-control {
+  background: none !important;
   color: $light-text-primary-01;
-  border: 1px solid $light-surface-hover-02;
+  border: 1px solid $light-surface-hover-02 !important;
   height: 34px;
   border-radius: 8px;
 
   &:hover {
-    border: 1px solid $light-primary;
+    border: 1px solid $light-primary !important;
     box-sizing: border-box;
   }
 
   &:active {
-    border: 1px solid $light-primary;
+    border: 1px solid $light-primary !important;
   }
 
   &:focus {
@@ -44,22 +45,22 @@
 
   &:disabled {
     color: $light-text-primary-disable;
-    border: 1px solid $light-surface-disable;
+    border: 1px solid $light-surface-disable !important;
     color: $light-text-primary-01;
   }
 }
 
 .dark-body .form-control {
-  background: inherit;
+  background: none !important;
   color: $dark-text-primary-01;
-  border: 1px solid $dark-surface-hover-02;
+  border: 1px solid $dark-surface-hover-02 !important;
 
   ::placeholder {
     color: $dark-text-primary-04 !important;
   }
 
   &:hover {
-    border: 1px solid $dark-primary;
+    border: 1px solid $dark-primary !important;
     box-sizing: border-box;
     border-radius: 8px;
   }
@@ -71,8 +72,8 @@
 
   &:disabled {
     color: $light-text-primary-disable;
-    background: $dark-surface-disable;
-    border: 1px solid $dark-surface-disable;
+    background: $dark-surface-disable !important;
+    border: 1px solid $dark-surface-disable !important;
     color: $dark-surface-disable;
   }
 }

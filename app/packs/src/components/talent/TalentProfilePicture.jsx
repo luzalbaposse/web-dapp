@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { string, number, oneOfType, bool } from "prop-types";
 import ThemeContainer, { useTheme } from "src/contexts/ThemeContext";
-import DefaultProfilePictureLight from "images/default-profile-icon-light.png";
-import DefaultProfilePictureDark from "images/default-profile-icon-dark.png";
+import DefaultProfilePicture from "images/default-profile-icon.png";
 import DefaultBannerLight from "images/default-banner-light.png";
 import DefaultBannerDark from "images/default-banner-dark.png";
 
@@ -25,9 +24,9 @@ const TalentProfilePicture = ({
     if (src) {
       return src;
     } else if (mode() === "light" && !straight) {
-      return DefaultProfilePictureLight;
+      return DefaultProfilePicture;
     } else if (mode() === "dark" && !straight) {
-      return DefaultProfilePictureDark;
+      return DefaultProfilePicture;
     } else if (mode() === "light" && straight) {
       return DefaultBannerLight;
     } else if (mode() === "dark" && straight) {

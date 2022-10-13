@@ -213,7 +213,6 @@ const PoapsModal = ({ userId, show, setShow, mobile, appendPoap }) => {
             <ToastBody heading="Success" body={"POAP updated successfully!"} />,
             { autoClose: 1500 }
           );
-          console.log(updatedPoap);
           setPoaps((previousPoaps) => updatePoaps(previousPoaps, updatedPoap));
 
           appendPoap({ ...updatedPoap, local_image_url: poap.imageUrl });

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_11_074346) do
+ActiveRecord::Schema.define(version: 2022_10_13_092626) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -426,6 +426,7 @@ ActiveRecord::Schema.define(version: 2022_10_11_074346) do
     t.boolean "hide_profile", default: false, null: false
     t.boolean "open_to_job_offers", default: false, null: false
     t.boolean "verified", default: false
+    t.integer "experience_level", default: 0
     t.index ["activity_count"], name: "index_talent_on_activity_count"
     t.index ["ito_date"], name: "index_talent_on_ito_date"
     t.index ["public_key"], name: "index_talent_on_public_key", unique: true
@@ -521,7 +522,6 @@ ActiveRecord::Schema.define(version: 2022_10_11_074346) do
     t.datetime "email_confirmed_at"
     t.string "display_name"
     t.bigint "invite_id"
-    t.boolean "welcome_pop_up", default: false
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
     t.boolean "disabled", default: false
@@ -548,6 +548,9 @@ ActiveRecord::Schema.define(version: 2022_10_11_074346) do
     t.string "linkedin_id"
     t.string "delete_account_token"
     t.datetime "delete_account_token_expires_at"
+    t.string "legal_first_name"
+    t.string "legal_last_name"
+    t.boolean "onboarding_complete", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invite_id"], name: "index_users_on_invite_id"
     t.index ["linkedin_id"], name: "index_users_on_linkedin_id", unique: true

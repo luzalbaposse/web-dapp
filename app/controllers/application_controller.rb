@@ -53,7 +53,13 @@ class ApplicationController < ActionController::Base
   protected
 
   def prevent_user_impersonation
-    redirect_to user_root_path, flash: {error: "Unauthorized."} if is_user_impersonated?
+    if is_user_impersonated?
+      if current_user.onboarding_complete?
+        redirect_to user_root_path, flash: {error: "Unauthorized."}
+      else
+        redirect_to onboarding_root_path, flash: {error: "Unauthorized."}
+      end
+    end
   end
 
   private
