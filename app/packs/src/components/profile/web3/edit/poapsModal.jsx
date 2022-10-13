@@ -48,7 +48,7 @@ const DisplayPoapsModal = ({
           )}
           {poaps.map((poap) => (
             <div className="col-12 col-md-6 mb-4" key={poap.id}>
-              <div className="web3-card">
+              <div className="card web3-card">
                 <div className="mb-3 d-flex align-items-center">
                   <Slider
                     checked={poap.show}
@@ -118,7 +118,7 @@ const DisplayPoapsModal = ({
 
 const PoapsModal = ({ userId, show, setShow, mobile, appendPoap }) => {
   const [poaps, setPoaps] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(0);
   const [pagination, setPagination] = useState({});
 
   const loadPoaps = async (poaps) => {
@@ -135,10 +135,6 @@ const PoapsModal = ({ userId, show, setShow, mobile, appendPoap }) => {
         }
       });
     }
-    // Force reload if there're no poaps
-    setTimeout(() => {
-      setPoaps((previousPoaps) => [...previousPoaps]);
-    }, 2000);
   };
 
   const setupPoaps = async () => {
@@ -166,6 +162,9 @@ const PoapsModal = ({ userId, show, setShow, mobile, appendPoap }) => {
   }, [userId]);
 
   useEffect(() => {
+    if (loading == 0) {
+      return;
+    }
     // We're using pagination.
     // It might happen that the initial set is not possible to load
     // We keep loading until we have something to show to the user
@@ -214,7 +213,6 @@ const PoapsModal = ({ userId, show, setShow, mobile, appendPoap }) => {
             { autoClose: 1500 }
           );
           setPoaps((previousPoaps) => updatePoaps(previousPoaps, updatedPoap));
-
           appendPoap({ ...updatedPoap, local_image_url: poap.imageUrl });
         }
       }

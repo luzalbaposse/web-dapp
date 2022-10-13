@@ -21,10 +21,7 @@
 }
 
 .web3-card {
-  border-radius: 24px;
-  padding: 24px;
-  border: 1px solid $light-surface-hover-02;
-  min-width: 328px;
+  min-width: 290px;
   height: 490px;
 
   &__full_height {
@@ -50,6 +47,30 @@
 
 .token-img {
   width: 48px;
+}
+
+.perk-card {
+  .header {
+    height: 250px;
+    width: 100%;
+    border-radius: 16px;
+    background-color: $light-primary;
+  }
+
+  .footer {
+    height: 150px;
+    width: 100%;
+  }
+
+  .edit-perk-button {
+    display: none;
+  }
+
+  &:hover {
+    .edit-perk-button {
+      display: flex;
+    }
+  }
 }
 
 .banner-profile {

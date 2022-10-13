@@ -8,6 +8,7 @@ import debounce from "lodash/debounce";
 
 import {
   H4,
+  H5,
   P1,
   P2,
   P3,
@@ -395,17 +396,17 @@ const Community = ({ userId, talent, canUpdate }) => {
 
       {talent.connectionsCount == 0 && canUpdate && (
         <>
-          <P1
+          <H5
             bold
             text={"You don't have any Community members"}
-            className="text-primary-01 text-center mt-6 mb-2"
+            className="text-primary-01 text-center mt-7 mb-2"
           />
           <P2
             bold
             text={
               "Community is compound by people that support your career and people you are supporting. If you support someone that is also your supporter, you get a Super Connection!"
             }
-            className="text-primary-0 text-center"
+            className="text-primary-03 text-center"
           />
           <div className="d-flex flex-column justify-content-center my-5">
             <ThemedButton

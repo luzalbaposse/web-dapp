@@ -6,6 +6,8 @@ import { useWindowDimensionsHook } from "src/utils/window";
 import { useTheme } from "src/contexts/ThemeContext";
 import { ArrowRight } from "src/components/icons";
 
+import { missingFields } from "src/components/talent/utils/talent";
+
 import cx from "classnames";
 
 import LaunchTokenModals from "../talent/Edit/LaunchTokenModals";
@@ -17,6 +19,11 @@ const LaunchToken = ({ talent, railsContext, setLocalTalent }) => {
   const user = talent.user;
   const [ticker, setTicker] = useState(token.ticker || "");
   const [show, setShow] = useState(false);
+  const requiredFields = missingFields({
+    talent: talent,
+    profilePictureUrl: talent.profilePictureUrl,
+    careerGoal: talent.careerGoal,
+  });
 
   return (
     <>
@@ -57,6 +64,7 @@ const LaunchToken = ({ talent, railsContext, setLocalTalent }) => {
           >
             <div className="d-flex mt-6">
               <Button
+                disabled={requiredFields.length > 0}
                 className={cx(
                   "d-flex justify-content-center align-items-center inverted-button",
                   mobile ? "w-75" : "ml-auto"
@@ -64,8 +72,17 @@ const LaunchToken = ({ talent, railsContext, setLocalTalent }) => {
                 type="white-default"
                 onClick={() => setShow(true)}
               >
-                <P2 bold text={`Launch my token`} />
-                <ArrowRight className="ml-2" size={16} />
+                <P2
+                  bold
+                  text={
+                    requiredFields.length > 0
+                      ? "Profile Incomplete"
+                      : "Launch my token"
+                  }
+                />
+                {requiredFields.length == 0 && (
+                  <ArrowRight className="ml-2" size={16} />
+                )}
               </Button>
             </div>
           </div>

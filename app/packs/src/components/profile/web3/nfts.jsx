@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { get } from "src/utils/requests";
-import { P1, P3, H3, P2 } from "src/components/design_system/typography";
+import { P1, P3, H3, H5, P2 } from "src/components/design_system/typography";
 import { Edit } from "src/components/icons";
 import ThemedButton from "src/components/design_system/button";
 import { getNftData } from "src/onchain/utils";
@@ -91,7 +91,7 @@ const Nfts = ({ userId, canUpdate, setShowLastDivider }) => {
   }
 
   return (
-    <section className="d-flex flex-column align-items-center mt-6 mb-6">
+    <section className="d-flex flex-column align-items-center my-7">
       {editShow && (
         <NftsModal
           userId={userId}
@@ -112,20 +112,21 @@ const Nfts = ({ userId, canUpdate, setShowLastDivider }) => {
             </a>
           )}
         </div>
-        <P1 className="text-center mb-6">A curated list of my main nfts</P1>
+        <P1 className="text-center pb-3 mb-4">
+          A curated list of my main nfts
+        </P1>
         {nfts.length == 0 && canUpdate && (
           <>
-            <P1
+            <H5
               bold
               text={"You don't have any NFTs to showcase"}
-              className="text-primary-01 text-center mb-2"
+              className="text-primary-01 text-center mb-2 mt-7"
             />
             <P2
-              bold
               text={
                 "This section will be disable until you connect your wallet and enable the NFTs you want to showcase to your community."
               }
-              className="text-primary-0 text-center"
+              className="text-primary-03 text-center"
             />
             <div className="d-flex flex-column justify-content-center my-5">
               <ThemedButton
@@ -141,7 +142,7 @@ const Nfts = ({ userId, canUpdate, setShowLastDivider }) => {
         <div className="row d-flex flex-row justify-content-center mb-3">
           {nfts.map((nft) => (
             <div className="col-12 col-md-4 mb-4" key={nft.id}>
-              <div className="web3-card">
+              <div className="card web3-card">
                 <div className="mb-3 d-flex flex-column justify-content-between">
                   <img
                     src={imagePlaceholder}

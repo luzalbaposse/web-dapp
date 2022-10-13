@@ -1,5 +1,4 @@
-import React, { useEffect, useContext, useState } from "react";
-import { ethers } from "ethers";
+import React, { useEffect, useState } from "react";
 import Divider from "src/components/design_system/other/Divider";
 
 import ThemeContainer from "src/contexts/ThemeContext";
@@ -17,6 +16,7 @@ import Community from "./Community";
 import Token from "./Token";
 import LaunchToken from "./LaunchToken";
 import ApplyToLaunchToken from "./ApplyToLaunchToken";
+import Perks from "./Perks";
 
 const Show = ({ talent, railsContext, currentUserId }) => {
   const [localTalent, setLocalTalent] = useState(camelCaseObject(talent));
@@ -123,6 +123,9 @@ const Show = ({ talent, railsContext, currentUserId }) => {
         <Journey talent={localTalent} />
       </div>
       <div className="my-7 w-100" id={"#token"}>
+        {token.contractId && (
+          <Perks talent={localTalent} canUpdate={canUpdate} />
+        )}
         <CurrentTokenSection
           talent={localTalent}
           talentTokenPrice={talentTokenPrice}

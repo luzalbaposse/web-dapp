@@ -49,9 +49,9 @@ const Token = ({ talent, talentTokenPrice, railsContext }) => {
         </div>
         <div className={cx("col-12 col-lg-4", mobile && "mb-6")}>
           <H3
-            text={`${ethers.utils.commify(totalSupply * talentTokenPrice)} $${
-              token.ticker
-            }`}
+            text={`${ethers.utils.commify(
+              (totalSupply * talentTokenPrice).toFixed(2)
+            )} $${token.ticker}`}
             className="text-center inverted-text-primary-01"
           ></H3>
           <P3 className="text-center inverted-text-primary-03">

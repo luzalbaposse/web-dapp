@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { get } from "src/utils/requests";
 
-import { P1, P3, H3, P2 } from "src/components/design_system/typography";
+import { P1, P3, H3, H5, P2 } from "src/components/design_system/typography";
 import ThemedButton from "src/components/design_system/button";
 import { Edit } from "src/components/icons";
 import { Polygon, Celo } from "src/components/icons";
@@ -121,20 +121,21 @@ const Tokens = ({ userId, canUpdate, setShowLastDivider }) => {
             </a>
           )}
         </div>
-        <P1 className="text-center mb-6">A curated list of my main Tokens</P1>
+        <P1 className="text-center pb-3 mb-4">
+          A curated list of my main Tokens
+        </P1>
         {tokens.length == 0 && canUpdate && (
           <>
-            <P1
+            <H5
               bold
               text={"You don't have any Tokens to showcase"}
-              className="text-primary-01 text-center mb-2"
+              className="text-primary-01 text-center mb-2 mt-7"
             />
             <P2
-              bold
               text={
                 "This section will be disable until you connect your wallet and enable the Tokens you want to showcase to your community."
               }
-              className="text-primary-0 text-center"
+              className="text-primary-03 text-center"
             />
             <div className="d-flex flex-column justify-content-center my-5">
               <ThemedButton
@@ -153,11 +154,15 @@ const Tokens = ({ userId, canUpdate, setShowLastDivider }) => {
               className="col-12 col-md-4 mb-4"
               key={`token_list_${token.id}`}
             >
-              <div className="web3-card web3-card__full_height">
+              <div className="card web3-card web3-card__full_height">
                 <div className="row">
                   <div className="col-3">{tokenLogo(token)}</div>
                   <div className="col-9 d-flex flex-column justify-content-center">
-                    <P2 text={token.symbol} bold className="text-primary-01" />
+                    <P2
+                      text={`$${token.symbol}`}
+                      bold
+                      className="text-primary-01"
+                    />
                     <P3 text={token.name} className="text-primary-04" />
                   </div>
                 </div>
