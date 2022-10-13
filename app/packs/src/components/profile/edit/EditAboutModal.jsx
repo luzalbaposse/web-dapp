@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
+import { toast } from "react-toastify";
 
 import { patch, getAuthToken } from "src/utils/requests";
 import { snakeCaseObject, camelCaseObject } from "src/utils/transformObjects";
@@ -18,6 +19,8 @@ import Divider from "src/components/design_system/other/Divider";
 import Button from "src/components/design_system/button";
 import UserTags from "src/components/talent/UserTags";
 import { H5, P2, P3 } from "src/components/design_system/typography";
+import { ToastBody } from "src/components/design_system/toasts";
+import { CAREER_NEEDS_OPTIONS } from "src/utils/constants";
 
 import { useWindowDimensionsHook } from "src/utils/window";
 
@@ -31,16 +34,16 @@ const EditAboutModal = ({ show, hide, talent, setTalent }) => {
   const [selectedCareerNeeds, setSelectedCareerNeeds] = useState(
     editedTalent.careerGoal.careerNeeds.map((need) => need.title)
   );
+  const [validationErrors, setValidationErrors] = useState({ pitch: false });
 
-  const allCareerNeeds = [
-    "Full-time roles",
-    "Part-time roles",
-    "Freelancing or contract roles",
-    "Internships",
-    "Being matched with a mentor",
-    "Learning about web3",
-    "Meet new people",
-  ];
+  const talentErrors = () => {
+    const errors = {};
+    if (editedTalent.careerGoal.pitch == "") {
+      errors.pitch = true;
+    }
+
+    return errors;
+  };
 
   const imageSrc =
     editedTalent.careerGoal.imageUrl ||
@@ -86,6 +89,11 @@ const EditAboutModal = ({ show, hide, talent, setTalent }) => {
   });
 
   const saveProfile = async () => {
+    const errors = talentErrors();
+    if (Object.keys(errors).length > 0) {
+      return setValidationErrors(errors);
+    }
+
     const talentResponse = await patch(`/api/v1/talent/${talent.id}`, {
       user: {
         ...snakeCaseObject(editedTalent.user),
@@ -125,6 +133,14 @@ const EditAboutModal = ({ show, hide, talent, setTalent }) => {
       }));
     }
 
+    toast.success(
+      <ToastBody
+        heading="Success!"
+        body={"About section created successfully."}
+      />,
+      { autoClose: 1500 }
+    );
+
     hide();
   };
 
@@ -162,6 +178,7 @@ const EditAboutModal = ({ show, hide, talent, setTalent }) => {
   }, [show]);
 
   const changeCareerGoalAttribute = (attribute, value) => {
+    setValidationErrors((prev) => ({ ...prev, [attribute]: false }));
     setEditedTalent((prev) => ({
       ...prev,
       careerGoal: {
@@ -259,7 +276,9 @@ const EditAboutModal = ({ show, hide, talent, setTalent }) => {
         </div>
         <div className="w-100 mb-5">
           <div className="d-flex justify-content-between align-items-center">
-            <P2 className="text-primary-01" bold text="About" />
+            <P2 className="text-primary-01" bold>
+              About <span className="text-danger">*</span>
+            </P2>
             <div className="d-flex">
               <P3
                 className="text-primary-01"
@@ -275,13 +294,15 @@ const EditAboutModal = ({ show, hide, talent, setTalent }) => {
             value={editedTalent.careerGoal.pitch || ""}
             maxLength={70}
             rows={3}
+            required={true}
+            error={validationErrors?.pitch}
           />
           <P2 className="text-primary-04" text="Short caption" />
         </div>
         <div className="w-100 mb-5">
           <P2 className="text-primary-01 mb-2" bold text="I'm open to" />
           <UserTags
-            tags={allCareerNeeds}
+            tags={CAREER_NEEDS_OPTIONS}
             tagsSelected={selectedCareerNeeds}
             className="mr-2 mb-4"
             clickable={false}

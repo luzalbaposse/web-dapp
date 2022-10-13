@@ -415,7 +415,7 @@ const Overview = ({
           )}
           <H5
             className="text-primary-01 mb-4"
-            text={`--E ${talent.headline}`}
+            text={`--E ${talent.headline || ""}`}
           />
           <UserTags
             tags={talent.tags.map((tag) => tag.description)}

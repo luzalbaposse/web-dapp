@@ -104,7 +104,7 @@ const Show = ({ talent, railsContext, currentUserId }) => {
         <Button
           className="mr-2"
           type={buttonType("#token")}
-          text={`$${token.ticker}`}
+          text={token.ticker ? `$${token.ticker}` : "Token"}
           onClick={() => changeSection("#token")}
         />
         <Button

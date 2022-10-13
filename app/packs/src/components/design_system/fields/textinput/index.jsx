@@ -27,7 +27,7 @@ const TextInput = ({
     <div className={cx("d-flex flex-column", className)}>
       <div className="d-flex flex-row justify-content-between align-items-end">
         {title ? (
-          <P2 bold className="text-black mb-2">
+          <P2 bold className="text-primary-01 mb-2">
             {title} {required && <span className="text-danger">*</span>}
           </P2>
         ) : null}

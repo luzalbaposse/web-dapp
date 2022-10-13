@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import debounce from "lodash/debounce";
 import Modal from "react-bootstrap/Modal";
+import { toast } from "react-toastify";
 
 import { patch, get, getAuthToken } from "src/utils/requests";
 import { snakeCaseObject, camelCaseObject } from "src/utils/transformObjects";
@@ -21,6 +22,8 @@ import TextArea from "src/components/design_system/fields/textarea";
 import Button from "src/components/design_system/button";
 import UserTags from "src/components/talent/UserTags";
 import { H5, P2, P3 } from "src/components/design_system/typography";
+import { ToastBody } from "src/components/design_system/toasts";
+import { CAREER_NEEDS_OPTIONS } from "src/utils/constants";
 
 import { useWindowDimensionsHook } from "src/utils/window";
 
@@ -51,16 +54,30 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
       label: tag.description,
     }))
   );
+  const [validationErrors, setValidationErrors] = useState({
+    displayName: false,
+    occupation: false,
+    location: false,
+    headline: false,
+  });
 
-  const allCareerNeeds = [
-    "Full-time roles",
-    "Part-time roles",
-    "Freelancing or contract roles",
-    "Internships",
-    "Being matched with a mentor",
-    "Learning about web3",
-    "Meet new people",
-  ];
+  const talentErrors = () => {
+    const errors = {};
+    if (editedTalent.user.displayName == "") {
+      errors.displayName = true;
+    }
+    if (editedTalent.profile.occupation == "") {
+      errors.occupation = true;
+    }
+    if (editedTalent.profile.location == "") {
+      errors.location = true;
+    }
+    if (editedTalent.profile.headline == "") {
+      errors.headline = true;
+    }
+
+    return errors;
+  };
 
   const uppyProfile = new Uppy({
     meta: { type: "avatar" },
@@ -141,6 +158,11 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
   });
 
   const saveProfile = async () => {
+    const errors = talentErrors();
+    if (Object.keys(errors).length > 0) {
+      return setValidationErrors(errors);
+    }
+
     const response = await patch(`/api/v1/talent/${talent.id}`, {
       user: {
         ...snakeCaseObject(editedTalent.user),
@@ -152,13 +174,23 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
       career_needs: selectedCareerNeeds,
     });
 
-    if (response) {
+    if (response && !response.error) {
       setTalent((prev) => ({
         ...prev,
         ...camelCaseObject(response),
       }));
-      hide();
+
+      toast.success(
+        <ToastBody heading="Success!" body={"Header created successfully."} />,
+        { autoClose: 1500 }
+      );
+    } else {
+      toast.error(
+        <ToastBody heading="Error!" body={response?.error} mode={mode} />
+      );
     }
+
+    hide();
   };
 
   useEffect(() => {
@@ -215,6 +247,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
   }, [show]);
 
   const changeUserAttribute = (attribute, value) => {
+    setValidationErrors((prev) => ({ ...prev, [attribute]: false }));
     setEditedTalent((prev) => ({
       ...prev,
       user: {
@@ -225,6 +258,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
   };
 
   const changeProfileAttribute = (attribute, value) => {
+    setValidationErrors((prev) => ({ ...prev, [attribute]: false }));
     setEditedTalent((prev) => ({
       ...prev,
       profile: {
@@ -283,6 +317,8 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
       bannerData: null,
     }));
   };
+
+  const debouncedSaveProfile = debounce(() => saveProfile(), 400);
 
   return (
     <Modal
@@ -423,14 +459,16 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
           </div>
         )}
         <div className="w-100 d-flex flex-wrap mb-5">
-          <div className={cx("w-100", mobile ? "" : "mr-4")}>
-            <P2 className="mb-2 text-primary-01" bold text="Display Name" />
+          <div className="w-100">
             <TextInput
               className="mb-2"
+              title="Display Name"
               onChange={(e) =>
                 changeUserAttribute("displayName", e.target.value)
               }
               value={editedTalent.user.displayName}
+              required={true}
+              error={validationErrors?.displayName}
             />
             <P2
               className="text-primary-04"
@@ -438,23 +476,27 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
             />
           </div>
           <div className="w-100">
-            <P2 className="mb-2 text-primary-01" bold text="Location" />
             <TextInput
+              title="Location"
               onChange={(e) =>
                 changeProfileAttribute("location", e.target.value)
               }
               value={editedTalent.profile.location}
+              required={true}
+              error={validationErrors?.location}
             />
           </div>
         </div>
         <div className="w-100 mb-5">
-          <P2 className="mb-2 text-primary-01" bold text="Occupation" />
           <TextInput
+            title="Occupation"
             className="mb-2"
             onChange={(e) =>
               changeProfileAttribute("occupation", e.target.value)
             }
             value={editedTalent.profile.occupation}
+            required={true}
+            error={validationErrors?.occupation}
           />
           <P2
             className="text-primary-04"
@@ -463,7 +505,9 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
         </div>
         <div className="w-100 mb-5">
           <div className="mb-2 d-flex justify-content-between align-items-center">
-            <P2 className="text-primary-01" bold text="Headline" />
+            <P2 className="text-primary-01" bold>
+              Headline <span className="text-danger">*</span>
+            </P2>
             <div className="d-flex">
               <P3
                 className="text-primary-01"
@@ -478,6 +522,8 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
             value={editedTalent.profile.headline || ""}
             maxLength={70}
             rows={3}
+            required={true}
+            error={validationErrors?.headline}
           />
         </div>
         {/* <div className="w-100 mb-2">
@@ -515,7 +561,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
             text="Availability Highlight"
           />
           <UserTags
-            tags={allCareerNeeds}
+            tags={CAREER_NEEDS_OPTIONS}
             tagsSelected={selectedCareerNeeds}
             className="mr-2 mb-4"
             clickable={false}
@@ -525,8 +571,8 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
         <div className="w-100 mb-5">
           <H5 className="mb-5 text-primary-01" bold text="Links" />
           <div className="mb-5">
-            <P2 className="mb-2 text-primary-01" bold text="Website" />
             <TextInput
+              title="Website"
               onChange={(e) =>
                 changeProfileAttribute("website", e.target.value)
               }
@@ -534,8 +580,8 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
             />
           </div>
           <div className="mb-5">
-            <P2 className="mb-2 text-primary-01" bold text="LinkedIn" />
             <TextInput
+              title="LinkedIn"
               onChange={(e) =>
                 changeProfileAttribute("linkedin", e.target.value)
               }
@@ -543,8 +589,8 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
             />
           </div>
           <div className="mb-5">
-            <P2 className="mb-2 text-primary-01" bold text="Twitter" />
             <TextInput
+              title="Twitter"
               onChange={(e) =>
                 changeProfileAttribute("twitter", e.target.value)
               }
@@ -552,8 +598,8 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
             />
           </div>
           <div className="mb-5">
-            <P2 className="mb-2 text-primary-01" bold text="Telegram" />
             <TextInput
+              title="Telegram"
               onChange={(e) =>
                 changeProfileAttribute("telegram", e.target.value)
               }
@@ -561,8 +607,8 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
             />
           </div>
           <div>
-            <P2 className="mb-2 text-primary-01" bold text="Github" />
             <TextInput
+              title="Github"
               onChange={(e) => changeProfileAttribute("github", e.target.value)}
               value={editedTalent.profile.github || ""}
             />
@@ -577,7 +623,11 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
           text="Cancel"
           onClick={hide}
         />
-        <Button type="primary-default" text="Save" onClick={saveProfile} />
+        <Button
+          type="primary-default"
+          text="Save"
+          onClick={debouncedSaveProfile}
+        />
       </Modal.Footer>
     </Modal>
   );
