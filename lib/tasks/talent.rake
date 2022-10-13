@@ -4,7 +4,7 @@ namespace :talent do
     count = users.count
     users.find_each.with_index do |user, index|
       puts "User #{index}/#{count}"
-      Supporter::UpgradeToTalent.new.call(user: user, applying: true, sync_mailerlite: false)
+      TmpUpgradeTalent.perform_later(user_id: user.id)
     end
   end
 end
