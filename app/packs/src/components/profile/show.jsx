@@ -18,7 +18,7 @@ import LaunchToken from "./LaunchToken";
 import ApplyToLaunchToken from "./ApplyToLaunchToken";
 import Perks from "./Perks";
 
-const Show = ({ talent, railsContext, currentUserId }) => {
+const Show = ({ talent, railsContext, currentUserId, currentUserAdmin }) => {
   const [localTalent, setLocalTalent] = useState(camelCaseObject(talent));
   const user = localTalent.user;
   const token = localTalent.token;
@@ -56,6 +56,16 @@ const Show = ({ talent, railsContext, currentUserId }) => {
     }
   }, [selectedSection]);
 
+  const onWalletConnect = (account) => {
+    setTalent((prev) => ({
+      ...prev,
+      user: {
+        ...prev.user,
+        walletId: account,
+      },
+    }));
+  };
+
   const getCurrentTokenSection = () => {
     if (
       (user.profileType == "approved" || user.profileType == "talent") &&
@@ -80,6 +90,7 @@ const Show = ({ talent, railsContext, currentUserId }) => {
         talent={localTalent}
         setTalent={setLocalTalent}
         currentUserId={currentUserId}
+        currentUserAdmin={currentUserAdmin}
         railsContext={railsContext}
         changeSection={changeSection}
         talentTokenPrice={talentTokenPrice}
@@ -157,19 +168,28 @@ const Show = ({ talent, railsContext, currentUserId }) => {
       {(showLastDivider || canUpdate) && <Divider className="my-6" />}
       <div className="mt-7 w-100" id="#digital-collectibles">
         <Poaps
-          userId={localTalent.user.id}
+          user={localTalent.user}
           canUpdate={canUpdate}
           setShowLastDivider={setShowLastDivider}
+          setTalent={setLocalTalent}
+          railsContext={railsContext}
+          onWalletConnect={onWalletConnect}
         />
         <Nfts
-          userId={localTalent.user.id}
+          user={localTalent.user}
           canUpdate={canUpdate}
           setShowLastDivider={setShowLastDivider}
+          setTalent={setLocalTalent}
+          railsContext={railsContext}
+          onWalletConnect={onWalletConnect}
         />
         <Tokens
-          userId={localTalent.user.id}
+          user={localTalent.user}
           canUpdate={canUpdate}
           setShowLastDivider={setShowLastDivider}
+          setTalent={setLocalTalent}
+          railsContext={railsContext}
+          onWalletConnect={onWalletConnect}
         />
       </div>
     </div>

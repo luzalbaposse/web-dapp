@@ -10,6 +10,7 @@ export const lightTextPrimary04 = "#697f8f";
 export const darkPositive = "#1DB954";
 export const darkBg01 = "#131415";
 export const black = "#000000";
+export const white = "#ffffff";
 export const lightSurfaceHover = "#EBEDF0";
 export const darkSurfaceHover = "#2D2F32";
 export const warning = "#FFD166";

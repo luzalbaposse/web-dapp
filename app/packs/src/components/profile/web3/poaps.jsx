@@ -11,15 +11,24 @@ import { useWindowDimensionsHook } from "src/utils/window";
 import cx from "classnames";
 import imagePlaceholder from "images/image-placeholder.jpeg";
 
+import Web3ModalConnect from "src/components/login/Web3ModalConnect";
 import PoapsModal from "./edit/poapsModal";
 
-const Poaps = ({ userId, canUpdate, setShowLastDivider }) => {
+const Poaps = ({
+  user,
+  canUpdate,
+  setShowLastDivider,
+  onWalletConnect,
+  railsContext,
+}) => {
   const [poaps, setPoaps] = useState([]);
   const [editShow, setEditShow] = useState(false);
   const [pagination, setPagination] = useState({});
   const { mobile } = useWindowDimensionsHook();
   // Display placeholder until the image fully loads
   const [loadedImagePoaps, setLoadedImagePoaps] = useState({});
+  const userId = user.id;
+  const walletConnected = user.walletId;
 
   const loadedImage = (poap) =>
     setLoadedImagePoaps((previousLoadedImages) => ({
@@ -28,6 +37,9 @@ const Poaps = ({ userId, canUpdate, setShowLastDivider }) => {
     }));
 
   useEffect(() => {
+    if (!walletConnected) {
+      return;
+    }
     get(`/api/v1/users/${userId}/profile/web3/poaps?visible=${true}`).then(
       (response) => {
         if (response.error) {
@@ -108,7 +120,7 @@ const Poaps = ({ userId, canUpdate, setShowLastDivider }) => {
 
   return (
     <section className="d-flex flex-column align-items-center mb-7">
-      {editShow && (
+      {editShow && walletConnected && (
         <PoapsModal
           userId={userId}
           appendPoap={appendPoap}
@@ -120,7 +132,7 @@ const Poaps = ({ userId, canUpdate, setShowLastDivider }) => {
       <div className="container">
         <div className="d-flex w-100 mb-3">
           <H3 className="w-100 text-center mb-0">POAPs</H3>
-          {canUpdate && (
+          {canUpdate && walletConnected && (
             <a onClick={() => setEditShow(true)} className="ml-auto">
               <Edit />
             </a>
@@ -129,7 +141,7 @@ const Poaps = ({ userId, canUpdate, setShowLastDivider }) => {
         <P1 className="text-center pb-3 mb-4">
           A curated list of my main Poaps
         </P1>
-        {poaps.length == 0 && canUpdate && (
+        {(poaps.length == 0 || !walletConnected) && canUpdate && (
           <>
             <H5
               bold
@@ -143,49 +155,59 @@ const Poaps = ({ userId, canUpdate, setShowLastDivider }) => {
               className="text-primary-03 text-center"
             />
             <div className="d-flex flex-column justify-content-center my-5">
-              <ThemedButton
-                onClick={() => setEditShow(true)}
-                type="primary-default"
-                className="mx-auto"
-              >
-                Choose your POAPs
-              </ThemedButton>
+              {walletConnected ? (
+                <ThemedButton
+                  onClick={() => setEditShow(true)}
+                  type="primary-default"
+                  className="mx-auto"
+                >
+                  Choose your Poaps
+                </ThemedButton>
+              ) : (
+                <Web3ModalConnect
+                  user_id={userId}
+                  onConnect={onWalletConnect}
+                  railsContext={railsContext}
+                  buttonClassName="primary-default-button mx-auto"
+                />
+              )}
             </div>
           </>
         )}
         <div className="row d-flex flex-row justify-content-center mb-3">
-          {poaps.map((poap) => (
-            <div className="col-12 col-md-4 mb-4" key={poap.id}>
-              <div className="card web3-card">
-                <div className="mb-3 d-flex flex-column justify-content-between">
-                  <img
-                    src={imagePlaceholder}
-                    className={cx(
-                      "nft-img mb-4",
-                      loadedImagePoaps[poap.id] ? "d-none" : ""
-                    )}
-                  />
-                  <img
-                    src={poap.imageUrl || poap.local_image_url}
-                    onLoad={() => loadedImage(poap)}
-                    className={cx(
-                      "nft-img mb-4",
-                      loadedImagePoaps[poap.id] ? "" : "d-none"
-                    )}
-                  />
-                  <P2 text={poap.name} className="text-primary-04" />
-                  <P3
-                    text={
-                      poap.description?.length > 200
-                        ? `${poap.description.substring(0, 200)}...`
-                        : poap.description
-                    }
-                    className="text-primary-01"
-                  />
+          {walletConnected &&
+            poaps.map((poap) => (
+              <div className="col-12 col-md-4 mb-4" key={poap.id}>
+                <div className="card web3-card">
+                  <div className="mb-3 d-flex flex-column justify-content-between">
+                    <img
+                      src={imagePlaceholder}
+                      className={cx(
+                        "nft-img mb-4",
+                        loadedImagePoaps[poap.id] ? "d-none" : ""
+                      )}
+                    />
+                    <img
+                      src={poap.imageUrl || poap.local_image_url}
+                      onLoad={() => loadedImage(poap)}
+                      className={cx(
+                        "nft-img mb-4",
+                        loadedImagePoaps[poap.id] ? "" : "d-none"
+                      )}
+                    />
+                    <P2 text={poap.name} className="text-primary-04" />
+                    <P3
+                      text={
+                        poap.description?.length > 200
+                          ? `${poap.description.substring(0, 200)}...`
+                          : poap.description
+                      }
+                      className="text-primary-01"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
         {showLoadMorePoaps() && (
           <div className="d-flex flex-column justify-content-center mt-2">

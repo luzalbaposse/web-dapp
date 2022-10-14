@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 
 import { ethers } from "ethers";
 import { patch, getAuthToken } from "src/utils/requests";
+import { toast } from "react-toastify";
 
 import Uppy from "@uppy/core";
 import AwsS3Multipart from "@uppy/aws-s3-multipart";
@@ -15,6 +16,7 @@ import CameraButton from "images/camera-button.png";
 import DeleteButton from "images/delete-button.png";
 import TalentBanner from "images/overview.gif";
 import { useWindowDimensionsHook } from "src/utils/window";
+import { ToastBody } from "src/components/design_system/toasts";
 import UserTags from "src/components/talent/UserTags";
 import Button from "src/components/design_system/button";
 import StakeModal from "src/components/token/StakeModal";
@@ -32,6 +34,7 @@ const Overview = ({
   setTalent,
   talentTokenPrice,
   currentUserId,
+  currentUserAdmin,
   railsContext,
   changeSection,
   canUpdate,
@@ -204,6 +207,65 @@ const Overview = ({
     );
   }, []);
 
+  const approveUser = async () => {
+    const params = {
+      user: {
+        id: talent.user.id,
+        profile_type: "approved",
+      },
+    };
+
+    const response = await patch(`/api/v1/talent/${talent.id}`, params).catch(
+      () => {
+        return false;
+      }
+    );
+
+    if (response && !response.error) {
+      setTalent((prev) => ({
+        ...prev,
+        user: { ...prev.user, profileType: "approved" },
+      }));
+
+      toast.success(
+        <ToastBody heading="Success!" body={"User approved successfully."} />,
+        { autoClose: 1500 }
+      );
+
+      return true;
+    }
+  };
+
+  const verifyTalent = async () => {
+    const params = {
+      talent: {
+        verified: true,
+      },
+      user: {
+        id: talent.user.id,
+      },
+    };
+
+    const response = await patch(`/api/v1/talent/${talent.id}`, params).catch(
+      () => {
+        return false;
+      }
+    );
+
+    if (response && !response.error) {
+      setTalent((prev) => ({
+        ...prev,
+        verified: true,
+      }));
+
+      toast.success(
+        <ToastBody heading="Success!" body={"User verified successfully."} />,
+        { autoClose: 1500 }
+      );
+      return true;
+    }
+  };
+
   return (
     <div className={cx(className)}>
       <div className={cx(mobile ? "" : "d-flex mb-7")}>
@@ -351,67 +413,94 @@ const Overview = ({
           />
           <P2 className="text-primary-03 mb-4" text={talent.occupation} />
           {mobile && (
-            <div className="d-flex align-items-center mb-4">
-              {previewMode ? (
-                <Button
-                  type="primary-default"
-                  text="Back to edit profile"
-                  onClick={() => setPreviewMode(false)}
-                />
-              ) : (
-                <>
-                  {canUpdate ? (
-                    <>
-                      <Button
-                        className="mr-2"
-                        type="primary-default"
-                        text="Edit"
-                        onClick={() => setEditMode(true)}
-                      />
-                      <Button
-                        className="mr-2"
-                        type="primary-default"
-                        text={`Buy ${talent.token.ticker}`}
-                        onClick={() => setShowStakeModal(true)}
-                      />
-                      <Button
-                        className="mr-2"
-                        type="white-outline"
-                        text="Preview"
-                        onClick={() => setPreviewMode(true)}
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <a
-                        href={`/messages?user=${talent.user.id}`}
-                        className="button-link"
-                      >
+            <>
+              <div className="d-flex align-items-center mb-4">
+                {previewMode ? (
+                  <Button
+                    type="primary-default"
+                    text="Back to edit profile"
+                    onClick={() => setPreviewMode(false)}
+                  />
+                ) : (
+                  <>
+                    {canUpdate ? (
+                      <>
+                        <Button
+                          className="mr-2"
+                          type="primary-default"
+                          text="Edit"
+                          onClick={() => setEditMode(true)}
+                        />
+                        {talent.token.contractId && (
+                          <Button
+                            className="mr-2"
+                            type="primary-default"
+                            text={`Buy ${talent.token.ticker}`}
+                            onClick={() => setShowStakeModal(true)}
+                          />
+                        )}
                         <Button
                           className="mr-2"
                           type="white-outline"
-                          size="big-icon"
-                          onClick={() => null}
+                          text="Preview"
+                          onClick={() => setPreviewMode(true)}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <a
+                          href={`/messages?user=${talent.user.id}`}
+                          className="button-link"
                         >
-                          <Envelope
-                            className="h-100"
-                            color="currentColor"
-                            size={16}
-                            viewBox="0 0 24 24"
+                          <Button
+                            className="mr-2"
+                            type="white-outline"
+                            size="big-icon"
+                            onClick={() => null}
+                          >
+                            <Envelope
+                              className="h-100"
+                              color="currentColor"
+                              size={16}
+                              viewBox="0 0 24 24"
+                            />
+                          </Button>
+                        </a>
+                        {talent.token.contractId && (
+                          <Button
+                            type="primary-default"
+                            size="big"
+                            text="Support"
+                            onClick={() => setShowStakeModal(true)}
                           />
-                        </Button>
-                      </a>
-                      <Button
-                        type="primary-default"
-                        size="big"
-                        text="Support"
-                        onClick={() => setShowStakeModal(true)}
-                      />
-                    </>
+                        )}
+                      </>
+                    )}
+                  </>
+                )}
+              </div>
+              {currentUserAdmin && (
+                <div className="d-flex mb-4">
+                  {talent.user.profileType == "waiting_for_approval" && (
+                    <Button
+                      className="mr-2"
+                      type="white-outline"
+                      size="big"
+                      text={"Approve"}
+                      onClick={() => approveUser(true)}
+                    />
                   )}
-                </>
+                  {!talent.verified && (
+                    <Button
+                      type="primary-default"
+                      size="big"
+                      text="Verify"
+                      onClick={() => verifyTalent()}
+                    />
+                  )}
+                </div>
               )}
-            </div>
+            </>
           )}
           <H5
             className="text-primary-01 mb-4"
@@ -555,6 +644,28 @@ const Overview = ({
         <div></div>
         {!mobile && (
           <div className="d-flex align-items-center">
+            {currentUserAdmin && (
+              <>
+                {!talent.verified && (
+                  <Button
+                    className="mr-2"
+                    size="big"
+                    type="primary-default"
+                    text="Verify"
+                    onClick={() => verifyTalent()}
+                  />
+                )}
+                {talent.user.profileType == "waiting_for_approval" && (
+                  <Button
+                    className="mr-7"
+                    size="big"
+                    type="white-outline"
+                    text="Approve"
+                    onClick={() => approveUser(true)}
+                  />
+                )}
+              </>
+            )}
             {previewMode ? (
               <Button
                 type="primary-default"
@@ -572,13 +683,15 @@ const Overview = ({
                       text="Edit"
                       onClick={() => setEditMode(true)}
                     />
-                    <Button
-                      className="mr-2"
-                      type="primary-default"
-                      size="big"
-                      text={`Buy ${talent.token.ticker}`}
-                      onClick={() => setShowStakeModal(true)}
-                    />
+                    {talent.token.contractId && (
+                      <Button
+                        className="mr-2"
+                        type="primary-default"
+                        size="big"
+                        text={`Buy ${talent.token.ticker}`}
+                        onClick={() => setShowStakeModal(true)}
+                      />
+                    )}
                     <Button
                       className="mr-2"
                       type="white-outline"
@@ -607,12 +720,14 @@ const Overview = ({
                         />
                       </Button>
                     </a>
-                    <Button
-                      type="primary-default"
-                      size="big"
-                      text="Support"
-                      onClick={() => setShowStakeModal(true)}
-                    />
+                    {talent.token.contractId && (
+                      <Button
+                        type="primary-default"
+                        size="big"
+                        text="Support"
+                        onClick={() => setShowStakeModal(true)}
+                      />
+                    )}
                   </>
                 )}
               </>

@@ -25,7 +25,7 @@ const UserSaved = ({ mode }) => (
     <H5 className="mb-1" text="Welcome to Talent Protocol!" bold />
     <P2
       className="mb-6 text-center"
-      text="We’re a community where talent can launch a token and where supporters can back them. Build your profile, connect your wallet and grow your potential."
+      text="We're a community where talent can launch a token and where supporters can back them. Build your profile, connect your wallet and grow your potential."
     />
     <Check color={mode() == "dark" ? darkPrimary : lightPrimary} size={64} />
     <button

@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 
 import { patch } from "src/utils/requests";
-import { H3, P3, P2 } from "src/components/design_system/typography";
+import { H3, P2 } from "src/components/design_system/typography";
 import Button from "src/components/design_system/button";
 import { useWindowDimensionsHook } from "src/utils/window";
 import { useTheme } from "src/contexts/ThemeContext";
 import { ArrowRight } from "src/components/icons";
+
+import { white, lightTextPrimary01 } from "src/utils/colors.js";
 
 import cx from "classnames";
 
@@ -74,7 +76,13 @@ const ApplyToLaunchToken = ({ talent, waitingApproval, setLocalTalent }) => {
                   bold
                   text={waitingApproval ? "Waiting Approval" : "Apply"}
                 />
-                {!waitingApproval && <ArrowRight className="ml-2" size={16} />}
+                {!waitingApproval && (
+                  <ArrowRight
+                    color={mode() == "dark" ? white : lightTextPrimary01}
+                    className="ml-2"
+                    size={16}
+                  />
+                )}
               </Button>
             </div>
           </div>
