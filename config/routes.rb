@@ -15,7 +15,18 @@ Rails.application.routes.draw do
       resources :supporters, only: [:index]
       resources :talent, only: [:show]
       get "/public_talent" => "talent#public_index"
-      resources :users, only: [:show]
+      resources :users, only: [:show] do
+        namespace :profile do
+          resources :community, only: [:index]
+          resources :perks, only: [:index]
+
+          scope :web3 do
+            get :tokens, to: "web3#tokens"
+            get :nfts, to: "web3#nfts"
+            get :poaps, to: "web3#poaps"
+          end
+        end
+      end
     end
   end
   # end Public API
@@ -73,15 +84,10 @@ Rails.application.routes.draw do
 
           namespace :profile do
             resources :web3, controller: :web3, only: [:update]
-            resources :community, only: [:index]
-            resources :perks, only: [:index]
 
             scope :web3 do
-              get :tokens, to: "web3#tokens"
               post :refresh_tokens, to: "web3#refresh_tokens"
-              get :nfts, to: "web3#nfts"
               post :refresh_nfts, to: "web3#refresh_nfts"
-              get :poaps, to: "web3#poaps"
               post :refresh_poaps, to: "web3#refresh_poaps"
             end
           end

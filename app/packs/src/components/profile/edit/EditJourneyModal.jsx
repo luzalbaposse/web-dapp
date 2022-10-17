@@ -134,19 +134,10 @@ const MilestoneExperience = ({
         <div className="w-100 mb-5">
           <div className="mb-2 d-flex justify-content-between align-items-center">
             <P2 className="text-primary-01" bold text="Description" />
-            <div className="d-flex">
-              <P3
-                className="text-primary-01"
-                bold
-                text={currentJourneyItem.description.length || "0"}
-              />
-              <P3 className="text-primary-04" bold text="/240" />
-            </div>
           </div>
           <TextArea
             onChange={(e) => changeAttribute("description", e.target.value)}
             value={currentJourneyItem.description}
-            maxLength={240}
             rows={3}
             required={true}
             error={validationErrors?.description}
@@ -275,19 +266,10 @@ const GoalExperience = ({
         <div className="w-100 mb-5">
           <div className="mb-2 d-flex justify-content-between align-items-center">
             <P2 className="text-primary-01" bold text="Description" />
-            <div className="d-flex">
-              <P3
-                className="text-primary-01"
-                bold
-                text={currentJourneyItem.description.length || "0"}
-              />
-              <P3 className="text-primary-04" bold text="/240" />
-            </div>
           </div>
           <TextArea
             onChange={(e) => changeAttribute("description", e.target.value)}
             value={currentJourneyItem.description}
-            maxLength={240}
             rows={3}
             required={true}
             error={validationErrors?.description}

@@ -94,7 +94,7 @@ const ProcessFlow = ({
   }, []);
 
   return (
-    <div className="d-flex flex-column align-items-center">
+    <div className="d-flex flex-column align-items-center registration-items">
       {error != "" && <UserFailed error={error} />}
       {!userSaved && requesting && <ProcessingUser />}
       {userSaved && <UserSaved mode={mode} />}

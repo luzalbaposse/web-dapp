@@ -40,7 +40,7 @@ const OpenTo = ({ changeStep, careerNeeds, changeCareerNeeds, allSteps }) => {
   const canHelpWithOptions = CAREER_NEEDS_OPTIONS.slice(10, 13);
 
   return (
-    <>
+    <div className="registration-items">
       <div className="d-flex flex-row justify-content-between mb-4">
         <P2 medium>
           Step {allSteps === 4 ? 2 : 3}
@@ -114,7 +114,7 @@ const OpenTo = ({ changeStep, careerNeeds, changeCareerNeeds, allSteps }) => {
           </button>
         </div>
       </form>
-    </>
+    </div>
   );
 };
 

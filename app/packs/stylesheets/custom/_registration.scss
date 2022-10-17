@@ -41,11 +41,14 @@
 
 @media (min-width: 992px) {
   .registration-box {
-    width: 70%;
     padding-left: 636px !important;
     padding-right: 96px !important;
     padding-top: 64px !important;
     padding-bottom: 64px !important;
+  }
+
+  .registration-items {
+    max-width: 576px;
   }
 }
 
