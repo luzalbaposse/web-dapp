@@ -1,5 +1,9 @@
 import { ethers } from "ethers";
 import { parseAndCommify } from "src/onchain/utils";
+import currency from "currency.js";
+
+import verifiedDark from "images/verified-dark.png";
+import verifiedLight from "images/verified-light.png";
 
 export const shortenAddress = (address) => {
   return `${address.substring(0, 5)}...${address.substring(
@@ -103,3 +107,8 @@ export const getUTCDate = (date) => {
 
   return deployDateUTC;
 };
+
+export const formatNumberWithSymbol = (value) => currency(value).format();
+
+export const verifiedIcon = (mode) =>
+  mode == "light" ? verifiedLight : verifiedDark;

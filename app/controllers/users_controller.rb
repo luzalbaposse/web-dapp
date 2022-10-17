@@ -57,7 +57,9 @@ class UsersController < ApplicationController
         username: user_params[:username],
         password: user_params[:password],
         invite_code: user_params[:code],
-        theme_preference: user_params[:theme_preference]
+        theme_preference: user_params[:theme_preference],
+        legal_first_name: user_params[:legal_first_name],
+        legal_last_name: user_params[:legal_last_name]
       )
 
       if @result[:success]
@@ -77,7 +79,6 @@ class UsersController < ApplicationController
     end
 
     @talent = @user.talent
-    @investor = @user.investor
   end
 
   def send_confirmation_email
@@ -108,7 +109,7 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.permit(:email, :username, :password, :code, :captcha, :mode, :theme_preference)
+    params.permit(:email, :username, :password, :code, :captcha, :mode, :theme_preference, :legal_first_name, :legal_last_name)
   end
 
   def verify_captcha

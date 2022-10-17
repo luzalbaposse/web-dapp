@@ -28,23 +28,12 @@ const UserMenu = ({ user, toggleTheme, mode, onClickTransak, signOut }) => {
   return (
     <Dropdown>
       <Dropdown.Toggle
-        className="talent-button white-subtle-button normal-size-button no-caret d-flex align-items-center text-primary-03"
+        className="talent-button white-subtle-button normal-size-button p-2 no-caret d-flex align-items-center text-primary-03"
         id="user-dropdown"
         bsPrefix=""
         as="div"
-        style={{ height: 34 }}
       >
-        <TalentProfilePicture
-          src={user.profilePictureUrl}
-          height={20}
-          className="mr-2"
-        />
-        <ArrowFill
-          className="toggle-arrow"
-          size={8}
-          pathClassName="text-primary-04"
-          color="currentColor"
-        />
+        <TalentProfilePicture src={user.profilePictureUrl} height={20} />
       </Dropdown.Toggle>
 
       <Dropdown.Menu className="user-menu-dropdown">
@@ -57,17 +46,9 @@ const UserMenu = ({ user, toggleTheme, mode, onClickTransak, signOut }) => {
           <P2 bold text="My profile" className="text-black ml-3" />
         </Dropdown.Item>
         <Dropdown.Item
-          key="tab-dropdown-edit-profile"
-          className="text-black d-flex flex-row align-items-center user-menu-dropdown-item"
-          href={`/u/${user.username}/edit_profile`}
-        >
-          <Edit pathClassName="icon-dropdown-item" />
-          <P2 bold text="Edit Profile" className="text-black ml-3" />
-        </Dropdown.Item>
-        <Dropdown.Item
           key="tab-dropdown-settings"
           className="text-black d-flex flex-row align-items-center user-menu-dropdown-item"
-          href={`/u/${user.username}/edit_profile?tab=Settings`}
+          href={`/u/${user.username}/account_settings`}
         >
           <Settings pathClassName="icon-dropdown-item" />
           <P2 bold text="Settings" className="text-black ml-3" />
