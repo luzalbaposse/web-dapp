@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
 
 import { useWindowDimensionsHook } from "src/utils/window";
+import { get } from "src/utils/requests";
 
 import { getMarketCap, getProgress } from "src/utils/viewHelpers";
 import { post, destroy } from "src/utils/requests";
 import ThemeContainer, { ThemeContext } from "src/contexts/ThemeContext";
 
+import Button from "src/components/design_system/button";
 import { H3, P1, P2 } from "src/components/design_system/typography";
 import TalentTableListMode from "./TalentTableListMode";
 import TalentTableCardMode from "./TalentTableCardMode";
@@ -21,7 +23,7 @@ import {
 
 import cx from "classnames";
 
-const TalentPage = ({ talents, isAdmin, env }) => {
+const TalentPage = ({ talents, pagination, isAdmin, env }) => {
   const theme = useContext(ThemeContext);
   const { mobile } = useWindowDimensionsHook();
   const [localTalents, setLocalTalents] = useState(talents);
@@ -30,6 +32,7 @@ const TalentPage = ({ talents, isAdmin, env }) => {
   const [listModeOnly, setListModeOnly] = useState(false);
   const [selectedSort, setSelectedSort] = useState("");
   const [sortDirection, setSortDirection] = useState("asc");
+  const [localPagination, setLocalPagination] = useState(pagination);
 
   const changeTab = (tab) => {
     setWatchlistOnly(tab === "Watchlist" ? true : false);
@@ -97,6 +100,19 @@ const TalentPage = ({ talents, isAdmin, env }) => {
     return desiredTalent;
   }, [localTalents, watchlistOnly, selectedSort, sortDirection]);
 
+  const loadMoreTalents = () => {
+    const nextPage = localPagination.currentPage + 1;
+
+    get(`talent?page=${nextPage}`).then((response) => {
+      const newTalents = [...localTalents, ...response.talents];
+      setLocalTalents(newTalents);
+      setLocalPagination(response.pagination);
+    });
+  };
+
+  const showLoadMoreTalents =
+    localPagination.currentPage < localPagination.lastPage;
+
   useEffect(() => {
     setLocalTalents(addTalentData(talents));
   }, [talents]);
@@ -113,6 +129,8 @@ const TalentPage = ({ talents, isAdmin, env }) => {
     }));
     return newTalents;
   };
+
+  console.log({ pagination });
 
   return (
     <div className={cx("pb-6", mobile && "p-4")}>
@@ -160,6 +178,15 @@ const TalentPage = ({ talents, isAdmin, env }) => {
           updateFollow={updateFollow}
           env={env}
         />
+      )}
+      {showLoadMoreTalents && (
+        <Button
+          onClick={() => loadMoreTalents()}
+          type="white-subtle"
+          className="d-flex mt-4 mx-auto"
+        >
+          Load more
+        </Button>
       )}
     </div>
   );
