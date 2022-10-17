@@ -52,7 +52,7 @@ const Identity = ({
   };
 
   return (
-    <>
+    <div className="registration-items">
       <div className="d-flex flex-row justify-content-between mb-4">
         <P2 medium>
           Step {allSteps === 4 ? 4 : 5}
@@ -142,7 +142,7 @@ const Identity = ({
           </button>
         </div>
       </form>
-    </>
+    </div>
   );
 };
 

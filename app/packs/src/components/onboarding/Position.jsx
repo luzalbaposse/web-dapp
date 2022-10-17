@@ -42,7 +42,7 @@ const Position = ({ changeStep, position, changePosition, allSteps }) => {
     localPosition.start_date == "";
 
   return (
-    <>
+    <div className="registration-items">
       <div className="d-flex flex-row justify-content-between mb-4">
         <P2 medium>
           Step {allSteps === 4 ? 3 : 4}
@@ -99,7 +99,6 @@ const Position = ({ changeStep, position, changePosition, allSteps }) => {
             value={localPosition.description}
             id="inputDescription"
             shortCaption="Describe what you did"
-            maxLength="175"
             rows={3}
           />
         </div>
@@ -152,7 +151,7 @@ const Position = ({ changeStep, position, changePosition, allSteps }) => {
           </button>
         </div>
       </form>
-    </>
+    </div>
   );
 };
 

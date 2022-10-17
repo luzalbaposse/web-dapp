@@ -28,7 +28,7 @@ const Welcome = ({
   const invalidForm = localFirstName == "" || localLastName == "";
 
   return (
-    <>
+    <div className="registration-items">
       <div className="d-flex flex-row justify-content-between mb-4">
         <P2 medium>
           Step 1<span className="text-primary-04">/{allSteps}</span>
@@ -73,7 +73,7 @@ const Welcome = ({
           </button>
         </div>
       </form>
-    </>
+    </div>
   );
 };
 

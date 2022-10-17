@@ -35,7 +35,7 @@ const Occupation = ({
   };
 
   return (
-    <>
+    <div className="registration-items">
       <div className="d-flex flex-row justify-content-between mb-4">
         <P2 medium>
           Step {allSteps === 4 ? 1 : 2}
@@ -123,7 +123,7 @@ const Occupation = ({
           </button>
         </div>
       </form>
-    </>
+    </div>
   );
 };
 
