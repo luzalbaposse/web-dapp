@@ -59,7 +59,7 @@ Rails.application.routes.draw do
     resources :profiles, only: [:show], param: :username
 
     # Edit profile
-    get "/u/:username/edit_profile", to: "users#edit_profile", as: "edit_profile"
+    get "/u/:username/edit_profile", to: redirect("/u/%{username}/account_settings")
 
     # Quests
     resources :quests, only: [:show]
@@ -149,7 +149,8 @@ Rails.application.routes.draw do
   resources :wait_list, only: [:create, :index]
 
   get "/u/:username/delete_account" => "users#destroy", :as => "delete_account", :constraints => {username: /[^\/]+/}
-  get "/u/:username" => "users#show", :as => "user", :constraints => {username: /[^\/]+/}
+  get "/u/:username" => "profiles#show", :as => "user", :constraints => {username: /[^\/]+/}
+  get "/u/:username/account_settings" => "users#edit_profile", :as => "account_settings", :constraints => {username: /[^\/]+/}
   # redirect /talent to /u so we have the old route still working
   get "/talent/:username", to: redirect("/u/%{username}"), as: "talent_profile"
 

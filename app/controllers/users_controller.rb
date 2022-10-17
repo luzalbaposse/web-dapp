@@ -79,7 +79,6 @@ class UsersController < ApplicationController
     end
 
     @talent = @user.talent
-    @investor = @user.investor
   end
 
   def send_confirmation_email
