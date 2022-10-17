@@ -4,8 +4,9 @@ import dayjs from "dayjs";
 import { P2, H5 } from "../design_system/typography";
 import TextInput from "../design_system/fields/textinput";
 import TextArea from "../design_system/fields/textarea";
+import Link from "src/components/design_system/link";
 
-const Position = ({ changeStep, position, changePosition }) => {
+const Position = ({ changeStep, position, changePosition, allSteps }) => {
   const [localPosition, setLocalPosition] = useState({
     ...position,
     start_date:
@@ -24,6 +25,11 @@ const Position = ({ changeStep, position, changePosition }) => {
     changeStep(5);
   };
 
+  const goBack = (e) => {
+    e.preventDefault();
+    changeStep(3);
+  };
+
   const skipStep = (e) => {
     e.preventDefault();
     changeStep(5);
@@ -37,6 +43,15 @@ const Position = ({ changeStep, position, changePosition }) => {
 
   return (
     <>
+      <div className="d-flex flex-row justify-content-between mb-4">
+        <P2 medium>
+          Step {allSteps === 4 ? 3 : 4}
+          <span className="text-primary-04">/{allSteps}</span>
+        </P2>
+        <Link onClick={skipStep}>
+          <P2 className="" bold text={"Skip"} />
+        </Link>
+      </div>
       <H5 text="What’s your most recent position?" bold />
       <P2 className="mb-5 mt-2">
         Tell us what have you been doing lately. Later on you'll be able to add
@@ -119,19 +134,19 @@ const Position = ({ changeStep, position, changePosition }) => {
               }))
             }
           />
-          <p className="short-caption">YYYY-MM</p>
+          <p className="short-caption">Month YYYY</p>
         </div>
         <div className="d-flex flex-row justify-content-between mt-6">
           <button
-            onClick={skipStep}
-            className="btn btn-secondary talent-button primary-outline-button extra-big-size-button mt-6"
+            onClick={goBack}
+            className="btn btn-secondary talent-button primary-outline-button big-size-button mb-4"
           >
-            I'm a student
+            Back
           </button>
           <button
             type="submit"
             disabled={invalidForm}
-            className="btn btn-primary talent-button primary-default-button extra-big-size-button mt-6"
+            className="btn btn-primary talent-button primary-default-button big-size-button mb-4"
           >
             Continue
           </button>

@@ -31,7 +31,7 @@ const UserSaved = ({ mode }) => (
     <button
       type="button"
       onClick={() => window.location.reload()}
-      className="btn btn-primary talent-button primary-default-button extra-big-size-button w-100 mt-6"
+      className="btn btn-primary talent-button primary-default-button big-size-button w-100 mt-6"
     >
       Explore
     </button>
