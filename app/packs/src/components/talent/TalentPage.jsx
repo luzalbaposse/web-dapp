@@ -26,8 +26,9 @@ import cx from "classnames";
 const TalentPage = ({ talents, pagination, isAdmin, env }) => {
   const theme = useContext(ThemeContext);
   const { mobile } = useWindowDimensionsHook();
-  const [localTalents, setLocalTalents] = useState(talents);
+  const url = new URL(document.location);
 
+  const [localTalents, setLocalTalents] = useState(talents);
   const [watchlistOnly, setWatchlistOnly] = useState(false);
   const [listModeOnly, setListModeOnly] = useState(false);
   const [selectedSort, setSelectedSort] = useState("");
@@ -107,6 +108,15 @@ const TalentPage = ({ talents, pagination, isAdmin, env }) => {
       const newTalents = [...localTalents, ...response.talents];
       setLocalTalents(newTalents);
       setLocalPagination(response.pagination);
+
+      const params = new URLSearchParams(document.location.search);
+      params.set("page", nextPage);
+
+      window.history.replaceState(
+        {},
+        document.title,
+        `${url.pathname}?${params.toString()}`
+      );
     });
   };
 
@@ -130,8 +140,6 @@ const TalentPage = ({ talents, pagination, isAdmin, env }) => {
     return newTalents;
   };
 
-  console.log({ pagination });
-
   return (
     <div className={cx("pb-6", mobile && "p-4")}>
       <div className="mb-5 talent-list-header d-flex flex-column justify-content-center">
@@ -147,6 +155,7 @@ const TalentPage = ({ talents, pagination, isAdmin, env }) => {
         searchUrl="/api/v1/talent"
         setListModeOnly={setListModeOnly}
         setLocalTalents={setLocalTalents}
+        setLocalPagination={setLocalPagination}
         setSelectedSort={setSelectedSort}
         setSortDirection={setSortDirection}
         addTalentData={addTalentData}
