@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_13_092626) do
+ActiveRecord::Schema.define(version: 2022_10_18_141222) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
 
   create_table "blazer_audits", force: :cascade do |t|
@@ -444,6 +445,8 @@ ActiveRecord::Schema.define(version: 2022_10_13_092626) do
     t.boolean "open_to_job_offers", default: false, null: false
     t.boolean "verified", default: false
     t.integer "experience_level", default: 0
+    t.string "market_cap"
+    t.decimal "market_cap_variance", precision: 10, scale: 2
     t.index ["activity_count"], name: "index_talent_on_activity_count"
     t.index ["ito_date"], name: "index_talent_on_ito_date"
     t.index ["public_key"], name: "index_talent_on_public_key", unique: true
@@ -541,8 +544,8 @@ ActiveRecord::Schema.define(version: 2022_10_13_092626) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.string "theme_preference", default: "light"
     t.boolean "disabled", default: false
+    t.string "theme_preference", default: "light"
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"

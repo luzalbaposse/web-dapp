@@ -4,6 +4,7 @@ import { useWindowDimensionsHook } from "src/utils/window";
 import { get } from "src/utils/requests";
 
 import { getMarketCap, getProgress } from "src/utils/viewHelpers";
+import { camelCaseObject } from "src/utils/transformObjects";
 import { post, destroy } from "src/utils/requests";
 import ThemeContainer, { ThemeContext } from "src/contexts/ThemeContext";
 
@@ -104,13 +105,16 @@ const TalentPage = ({ talents, pagination, isAdmin, env }) => {
   const loadMoreTalents = () => {
     const nextPage = localPagination.currentPage + 1;
 
-    get(`talent?page=${nextPage}`).then((response) => {
-      const newTalents = [...localTalents, ...response.talents];
+    const params = new URLSearchParams(document.location.search);
+    params.set("page", nextPage);
+
+    get(`talent?${params.toString()}`).then((response) => {
+      let responseTalents = response.talents.map((talent) => ({
+        ...camelCaseObject(talent),
+      }));
+      const newTalents = [...localTalents, ...responseTalents];
       setLocalTalents(newTalents);
       setLocalPagination(response.pagination);
-
-      const params = new URLSearchParams(document.location.search);
-      params.set("page", nextPage);
 
       window.history.replaceState(
         {},
