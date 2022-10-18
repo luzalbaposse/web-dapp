@@ -71,8 +71,6 @@ module Talents
         talents.where(talent_token: {chain_id: chain_id("polygon")})
       else
         talents
-          .select("setseed(0.#{Date.today.jd}), talent.*")
-          .order("random()")
       end
     end
 
