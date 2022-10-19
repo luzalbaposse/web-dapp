@@ -111,9 +111,13 @@ const DisplayNftsModal = ({
         >
           Back
         </ThemedButton>
-        <a onClick={() => closeModal()} className="mr-3">
+        <ThemedButton
+          onClick={() => closeModal()}
+          type="white-ghost"
+          className="mr-3"
+        >
           Cancel
-        </a>
+        </ThemedButton>
       </Modal.Footer>
     </>
   );
