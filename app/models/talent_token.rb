@@ -6,6 +6,7 @@ class TalentToken < ApplicationRecord
   TAL_VALUE = 2
   TAL_DECIMALS = 10**18
   TAL_VALUE_IN_USD = 0.02
+  TALENT_TOKEN_VALUE_IN_USD = 0.1
 
   CHAIN_INFO = {
     137 => "POLYGON (Matic)",

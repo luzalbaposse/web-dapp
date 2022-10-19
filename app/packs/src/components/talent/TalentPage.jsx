@@ -3,7 +3,6 @@ import React, { useEffect, useState, useContext, useMemo } from "react";
 import { useWindowDimensionsHook } from "src/utils/window";
 import { get } from "src/utils/requests";
 
-import { getMarketCap, getProgress } from "src/utils/viewHelpers";
 import { camelCaseObject } from "src/utils/transformObjects";
 import { post, destroy } from "src/utils/requests";
 import ThemeContainer, { ThemeContext } from "src/contexts/ThemeContext";
@@ -127,23 +126,6 @@ const TalentPage = ({ talents, pagination, isAdmin, env }) => {
   const showLoadMoreTalents =
     localPagination.currentPage < localPagination.lastPage;
 
-  useEffect(() => {
-    setLocalTalents(addTalentData(talents));
-  }, [talents]);
-
-  const addTalentData = (talents) => {
-    const newTalents = talents.map((talent) => ({
-      ...talent,
-      marketCap: getMarketCap(talent.totalSupply),
-      progress: getProgress(
-        talent.totalSupply || "0",
-        talent.maxSupply,
-        talent.id
-      ),
-    }));
-    return newTalents;
-  };
-
   return (
     <div className={cx("pb-6", mobile && "p-4")}>
       <div className="mb-5 talent-list-header d-flex flex-column justify-content-center">
@@ -162,7 +144,6 @@ const TalentPage = ({ talents, pagination, isAdmin, env }) => {
         setLocalPagination={setLocalPagination}
         setSelectedSort={setSelectedSort}
         setSortDirection={setSortDirection}
-        addTalentData={addTalentData}
         isAdmin={isAdmin}
       />
       {localTalents.length === 0 && (

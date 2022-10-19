@@ -6,13 +6,15 @@ import cx from "classnames";
 import React, { useState, useContext, useMemo } from "react";
 
 import { ArrowLeft, Help } from "src/components/icons";
+
 import {
-  compareMarketCap,
-  compareMarketCapVariance,
   compareName,
   compareOccupation,
   compareSupporters,
+  compareMarketCap,
+  compareMarketCapVariance,
 } from "src/components/talent/utils/talent";
+
 import { destroy, post } from "src/utils/requests";
 import { H3, P1, P2 } from "src/components/design_system/typography";
 import { lightTextPrimary03 } from "src/utils/colors";
@@ -36,11 +38,12 @@ const DiscoveryShow = ({ discoveryRow, talents, env }) => {
   const partnershipSocialLinks =
     partnership && (partnership.website_url || partnership.twitter_url);
 
-  const showPartnershipButton = partnership?.button_name && partnership?.button_url
+  const showPartnershipButton =
+    partnership?.button_name && partnership?.button_url;
 
   const totalSupplyToString = (totalSupply) => {
     const bignumber = ethers.BigNumber.from(totalSupply).div(10);
-    const formattedNumber = ethers.utils.formatUnits(bignumber)
+    const formattedNumber = ethers.utils.formatUnits(bignumber);
     return parseAndCommify(formattedNumber);
   };
 
@@ -123,23 +126,50 @@ const DiscoveryShow = ({ discoveryRow, talents, env }) => {
           </Button>
         </a>
         {partnership?.banner_url && (
-          <div className="partnership-banner" style={{ backgroundImage: `url(${partnership.banner_url})`, }}>
-          </div>
+          <div
+            className="partnership-banner"
+            style={{ backgroundImage: `url(${partnership.banner_url})` }}
+          ></div>
         )}
-        <div className={cx("d-flex flex-column flex-lg-row justify-content-between mb-4 row")}>
+        <div
+          className={cx(
+            "d-flex flex-column flex-lg-row justify-content-between mb-4 row"
+          )}
+        >
           <div className="col-lg-8 d-flex flex-column">
             <div className="d-flex">
               {partnership?.logo_url && (
                 <img
                   alt="Partnership Picture"
-                  className={cx("image-fit rounded-circle", partnership.banner_url && "partnership-logo")}
+                  className={cx(
+                    "image-fit rounded-circle",
+                    partnership.banner_url && "partnership-logo"
+                  )}
                   height={mobile ? 120 : 173}
                   src={partnership.logo_url}
                   width={mobile ? 120 : 173}
                 />
               )}
               <div className={cx(partnership?.logo_url && "ml-5 mt-3")}>
-                <H3 className="mb-0 text-black" bold text={discoveryRow.title} />
+                <div className="d-flex align-items-center">
+                  <H3
+                    className="mb-0 text-black mr-2"
+                    bold
+                    text={discoveryRow.title}
+                  />
+
+                  {discoveryRow.tags && (
+                    <Tooltip
+                      body={discoveryRow.tags}
+                      popOverAccessibilityId={"discovery_row_tags"}
+                      placement="top"
+                    >
+                      <div className="cursor-pointer d-flex align-items-center">
+                        <Help color={lightTextPrimary03} />
+                      </div>
+                    </Tooltip>
+                  )}
+                </div>
                 {partnershipSocialLinks && (
                   <div className="d-flex flex-row flex-wrap text-primary-03 mt-3">
                     {partnership.website_url && (
@@ -166,28 +196,21 @@ const DiscoveryShow = ({ discoveryRow, talents, env }) => {
             </div>
             <div className="my-4">
               <span className="caption">{`@${discoveryRow.slug.toUpperCase()}`}</span>
-              {partnership?.location && <span className="caption ml-4">{partnership.location.toUpperCase()}</span>}
+              {partnership?.location && (
+                <span className="caption ml-4">
+                  {partnership.location.toUpperCase()}
+                </span>
+              )}
             </div>
             {showPartnershipButton && (
               <div className="d-block d-lg-none mb-3">
                 <a href={partnership.button_url} target="_blank">
-                  <div className="partnership-button primary-default-button">{partnership.button_name}</div>
+                  <div className="partnership-button primary-default-button">
+                    {partnership.button_name}
+                  </div>
                 </a>
               </div>
             )}
-            <div className="d-flex align-items-center">
-              {discoveryRow.tags && (
-                <Tooltip
-                  body={discoveryRow.tags}
-                  popOverAccessibilityId={"discovery_row_tags"}
-                  placement="top"
-                >
-                  <div className="cursor-pointer d-flex align-items-center">
-                    <Help color={lightTextPrimary03} />
-                  </div>
-                </Tooltip>
-              )}
-            </div>
             {discoveryRow.description && (
               <P1 className="text-primary-03" text={discoveryRow.description} />
             )}
@@ -196,7 +219,9 @@ const DiscoveryShow = ({ discoveryRow, talents, env }) => {
             {showPartnershipButton && (
               <div className="d-none d-lg-flex justify-content-lg-end mb-3">
                 <a href={partnership.button_url} target="_blank">
-                  <div className="partnership-button primary-default-button">{partnership.button_name}</div>
+                  <div className="partnership-button primary-default-button">
+                    {partnership.button_name}
+                  </div>
                 </a>
               </div>
             )}
@@ -210,7 +235,9 @@ const DiscoveryShow = ({ discoveryRow, talents, env }) => {
                 <P1
                   bold
                   className="text-black d-inline"
-                  text={`$${totalSupplyToString(discoveryRow.talentsTotalSupply)}`}
+                  text={`$${totalSupplyToString(
+                    discoveryRow.talentsTotalSupply
+                  )}`}
                 />
               </div>
               <div className="discovery-stat">

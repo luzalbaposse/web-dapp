@@ -59,7 +59,7 @@ const Token = ({ talent, talentTokenPrice, railsContext }) => {
         </div>
         <div className={cx("col-12 col-lg-4", mobile && "mb-6")}>
           <H3
-            text={formatNumberWithSymbol(maxSupply)}
+            text={`${ethers.utils.commify(maxSupply)} $${token.ticker}`}
             className="text-center inverted-text-primary-01"
           ></H3>
           <P3 className="text-center inverted-text-primary-03">Max Supply</P3>
