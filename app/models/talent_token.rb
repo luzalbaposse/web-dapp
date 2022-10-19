@@ -8,6 +8,9 @@ class TalentToken < ApplicationRecord
   TAL_VALUE_IN_USD = 0.02
   TALENT_TOKEN_VALUE_IN_USD = 0.1
 
+  scope :deployed, -> { where.not(deployed_at: nil) }
+  scope :on_chain, ->(chain_id) { where(chain_id: chain_id) }
+
   CHAIN_INFO = {
     137 => "POLYGON (Matic)",
     42220 => "CELO",
