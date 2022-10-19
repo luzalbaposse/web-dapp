@@ -357,6 +357,10 @@ ActiveRecord::Schema.define(version: 2022_10_18_141222) do
     t.bigint "invite_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.text "banner_data"
+    t.string "button_name"
+    t.string "button_url"
+    t.string "location"
     t.index ["invite_id"], name: "index_partnerships_on_invite_id"
   end
 
@@ -544,8 +548,8 @@ ActiveRecord::Schema.define(version: 2022_10_18_141222) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.boolean "disabled", default: false
     t.string "theme_preference", default: "light"
+    t.boolean "disabled", default: false
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"

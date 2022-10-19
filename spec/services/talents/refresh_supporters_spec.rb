@@ -22,7 +22,6 @@ RSpec.describe Talents::RefreshSupporters do
     OpenStruct.new(
       supporter_counter: supporter_counter,
       total_supply: "183000000000000000000",
-      market_cap: "185000000000000000000",
       supporters: supporters_data,
       token_day_data: token_day_data
     )
@@ -98,11 +97,11 @@ RSpec.describe Talents::RefreshSupporters do
 
     talent.reload
 
-    variance = (("183000000000000000000".to_f - "180000000000000000000".to_f) / "180000000000000000000".to_f).round(2)
+    variance = (("183000000000000000000".to_f - "180000000000000000000".to_f) * 100 / "180000000000000000000".to_f).round(2)
 
     aggregate_failures do
       expect(talent.total_supply).to eq "183000000000000000000"
-      expect(talent.market_cap).to eq "185000000000000000000"
+      expect(talent.market_cap).to eq ("183000000000000000000".to_f * TalentToken::TALENT_TOKEN_VALUE_IN_USD).to_i.to_s
       expect(talent.market_cap_variance).to eq variance
       expect(talent.supporters_count).to eq 2
     end
@@ -118,7 +117,7 @@ RSpec.describe Talents::RefreshSupporters do
 
       aggregate_failures do
         expect(talent.total_supply).to eq "183000000000000000000"
-        expect(talent.market_cap).to eq "185000000000000000000"
+        expect(talent.market_cap).to eq ("183000000000000000000".to_f * TalentToken::TALENT_TOKEN_VALUE_IN_USD).to_i.to_s
         expect(talent.market_cap_variance).to eq 0
         expect(talent.supporters_count).to eq 2
       end

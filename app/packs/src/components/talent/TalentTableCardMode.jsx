@@ -2,6 +2,8 @@ import React from "react";
 import NewTalentCard from "src/components/design_system/cards/NewTalentCard";
 import { useWindowDimensionsHook } from "src/utils/window";
 
+import { displayableAmount } from "src/utils/viewHelpers";
+
 import cx from "classnames";
 
 const TalentTableCardMode = ({
@@ -31,7 +33,7 @@ const TalentTableCardMode = ({
             isFollowing={talent.isFollowing}
             updateFollow={() => updateFollow(talent)}
             talentLink={`/u/${talent.user.username}`}
-            marketCap={talent.marketCap}
+            marketCap={displayableAmount(talent.marketCap)}
             supporterCount={talent.supportersCount?.toString()}
             publicPageViewer={publicPageViewer}
             isVerified={talent.isVerified}
