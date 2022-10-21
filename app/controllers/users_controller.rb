@@ -63,7 +63,6 @@ class UsersController < ApplicationController
       )
 
       if @result[:success]
-        RemoveEmailFromWaitlistJob.perform_later(email: user_params[:email])
         UserMailer.with(user_id: @result[:user].id).send_sign_up_email.deliver_later(wait: 5.seconds)
 
         render json: @result[:user], status: :created

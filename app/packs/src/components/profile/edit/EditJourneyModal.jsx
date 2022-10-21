@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import debounce from "lodash/debounce";
 import { toast } from "react-toastify";
 import Modal from "react-bootstrap/Modal";
+import Form from "react-bootstrap/Form";
 
 import { post, patch, destroy } from "src/utils/requests";
 import { snakeCaseObject, camelCaseObject } from "src/utils/transformObjects";
@@ -82,6 +83,22 @@ const SelectExperienceType = ({ mobile, goToNextStep }) => {
   );
 };
 
+const returnYear = (date) => {
+  if (date) {
+    return dayjs(date).format("YYYY");
+  } else {
+    return "";
+  }
+};
+
+const returnMonth = (date) => {
+  if (date) {
+    return dayjs(date).format("MMMM");
+  } else {
+    return "";
+  }
+};
+
 const MilestoneExperience = ({
   mobile,
   changeAttribute,
@@ -95,6 +112,65 @@ const MilestoneExperience = ({
   editType,
   validationErrors,
 }) => {
+  const [startMonth, setStartMonth] = useState(
+    returnMonth(currentJourneyItem.startDate)
+  );
+  const [startYear, setStartYear] = useState(
+    returnYear(currentJourneyItem.startDate)
+  );
+  const [endMonth, setEndMonth] = useState(
+    returnMonth(currentJourneyItem.endDate)
+  );
+  const [endYear, setEndYear] = useState(
+    returnYear(currentJourneyItem.endDate)
+  );
+
+  const monthOptions = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const yearOptions = (() => {
+    const max = new Date().getFullYear();
+    const min = 1970;
+
+    const years = [];
+    for (let i = max; i >= min; i--) {
+      years.push(i);
+    }
+    return years;
+  })();
+
+  const CategoryOptions = ["Position", "Education", "Other"];
+
+  useEffect(() => {
+    if (startMonth != "" && startYear != "") {
+      changeAttribute(
+        "startDate",
+        dayjs(`${startMonth}-${startYear}`, "MMMM-YYYY").format("DD-MM-YYYY")
+      );
+    }
+  }, [startMonth, startYear]);
+
+  useEffect(() => {
+    if (endMonth != "" && endYear != "") {
+      changeAttribute(
+        "endDate",
+        dayjs(`${endMonth}-${endYear}`, "MMMM-YYYY").format("DD-MM-YYYY")
+      );
+    }
+  }, [endMonth, endYear]);
+
   return (
     <>
       <Modal.Header closeButton className="px-5">
@@ -111,6 +187,30 @@ const MilestoneExperience = ({
           overflowY: "overlay",
         }}
       >
+        {editType != "Add" && (
+          <div className="w-100 mb-5">
+            <label htmlFor="inputCategory">
+              <P2 className="mb-2 text-primary-01" bold>
+                Category
+              </P2>
+            </label>
+            <div className="d-flex flex-row justify-content-between">
+              <Form.Control
+                as="select"
+                onChange={(e) => changeAttribute("category", e.target.value)}
+                value={currentJourneyItem.category}
+                placeholder="Category"
+                className="height-auto mr-2"
+              >
+                {CategoryOptions.map((category) => (
+                  <option value={category} key={category}>
+                    {category}
+                  </option>
+                ))}
+              </Form.Control>
+            </div>
+          </div>
+        )}
         <div className="w-100 mb-5">
           <TextInput
             title="Title"
@@ -153,33 +253,81 @@ const MilestoneExperience = ({
           </Checkbox>
         </div>
         <div className="w-100 mb-5">
-          <P2 className="mb-2 text-primary-01" bold>
-            Start date <span className="text-danger">*</span>
-          </P2>
-          <input
-            className={cx(
-              "form-control",
-              mode(),
-              validationErrors?.startDate && "border-danger"
-            )}
-            placeholder={"Select date"}
-            type="month"
-            value={currentJourneyItem.startDate}
-            onChange={(e) => changeAttribute("startDate", e.target.value)}
-            required={true}
-          />
+          <label htmlFor="inputStartMonth">
+            <P2 className="mb-2 text-primary-01" bold>
+              Start date <span className="text-danger">*</span>
+            </P2>
+          </label>
+          <div className="d-flex flex-row justify-content-between">
+            <Form.Control
+              as="select"
+              onChange={(e) => setStartMonth(e.target.value)}
+              value={startMonth}
+              placeholder="Month"
+              className="height-auto mr-2"
+            >
+              <option value=""></option>
+              {monthOptions.map((month) => (
+                <option value={month} key={`start-${month}`}>
+                  {month}
+                </option>
+              ))}
+            </Form.Control>
+            <Form.Control
+              as="select"
+              onChange={(e) => setStartYear(e.target.value)}
+              value={startYear}
+              placeholder="Year"
+              className="height-auto ml-2"
+            >
+              <option value=""></option>
+              {yearOptions.map((year) => (
+                <option value={year} key={`start-${year}`}>
+                  {year}
+                </option>
+              ))}
+            </Form.Control>
+          </div>
         </div>
-        <div className="w-100 mb-5">
-          <P2 className="mb-2 text-primary-01" bold text="End date" />
-          <input
-            className={cx("form-control", mode())}
-            placeholder={"Select date"}
-            type="month"
-            value={currentJourneyItem.endDate}
-            onChange={(e) => changeAttribute("endDate", e.target.value)}
-            disabled={currentJourneyItem.inProgress}
-          />
-        </div>
+        {!currentJourneyItem.inProgress && (
+          <div className="w-100 mb-5">
+            <label htmlFor="inputEndMonth">
+              <P2 className="mb-2 text-primary-01" bold>
+                End Date
+              </P2>
+            </label>
+            <div className="d-flex flex-row justify-content-between">
+              <Form.Control
+                as="select"
+                onChange={(e) => setEndMonth(e.target.value)}
+                value={endMonth}
+                placeholder="Month"
+                className="height-auto mr-2"
+              >
+                <option value=""></option>
+                {monthOptions.map((month) => (
+                  <option value={month} key={`end-${month}`}>
+                    {month}
+                  </option>
+                ))}
+              </Form.Control>
+              <Form.Control
+                as="select"
+                onChange={(e) => setEndYear(e.target.value)}
+                value={endYear}
+                placeholder="Year"
+                className="height-auto ml-2"
+              >
+                <option value=""></option>
+                {yearOptions.map((year) => (
+                  <option value={year} key={`end-${year}`}>
+                    {year}
+                  </option>
+                ))}
+              </Form.Control>
+            </div>
+          </div>
+        )}
         <div className="w-100 mb-5">
           <P2 className="mb-2 text-primary-01" bold text="Link" />
           <TextInput
@@ -237,6 +385,48 @@ const GoalExperience = ({
   editType,
   validationErrors,
 }) => {
+  const [dueMonth, setDueMonth] = useState(
+    returnMonth(currentJourneyItem.dueDate)
+  );
+  const [dueYear, setDueYear] = useState(
+    returnYear(currentJourneyItem.dueDate)
+  );
+
+  const monthOptions = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const yearOptions = (() => {
+    const max = new Date().getFullYear() + 20;
+    const min = new Date().getFullYear() - 30;
+
+    const years = [];
+    for (let i = max; i >= min; i--) {
+      years.push(i);
+    }
+    return years;
+  })();
+
+  useEffect(() => {
+    if (dueMonth != "" && dueYear != "") {
+      changeAttribute(
+        "dueDate",
+        dayjs(`${dueMonth}-${dueYear}`, "MMMM-YYYY").format("DD-MM-YYYY")
+      );
+    }
+  }, [dueMonth, dueYear]);
+
   return (
     <>
       <Modal.Header closeButton className="px-5">
@@ -274,21 +464,41 @@ const GoalExperience = ({
           />
         </div>
         <div className="w-100 mb-5">
-          <P2 className="mb-2 text-primary-01" bold>
-            Due date <span className="text-danger">*</span>
-          </P2>
-          <input
-            className={cx(
-              "form-control",
-              mode(),
-              validationErrors?.dueDate && "border-danger"
-            )}
-            placeholder={"Select date"}
-            type="month"
-            value={currentJourneyItem.dueDate}
-            onChange={(e) => changeAttribute("dueDate", e.target.value)}
-            required={true}
-          />
+          <label htmlFor="inputDueMonth">
+            <P2 className="mb-2 text-primary-01" bold>
+              Due Date <span className="text-danger">*</span>
+            </P2>
+          </label>
+          <div className="d-flex flex-row justify-content-between">
+            <Form.Control
+              as="select"
+              onChange={(e) => setDueMonth(e.target.value)}
+              value={dueMonth}
+              placeholder="Month"
+              className="height-auto mr-2"
+            >
+              <option value=""></option>
+              {monthOptions.map((month) => (
+                <option value={month} key={`due-${month}`}>
+                  {month}
+                </option>
+              ))}
+            </Form.Control>
+            <Form.Control
+              as="select"
+              onChange={(e) => setDueYear(e.target.value)}
+              value={dueYear}
+              placeholder="Year"
+              className="height-auto ml-2"
+            >
+              <option value=""></option>
+              {yearOptions.map((year) => (
+                <option value={year} key={`due-${year}`}>
+                  {year}
+                </option>
+              ))}
+            </Form.Control>
+          </div>
         </div>
         <div className="w-100 mb-5">
           <P2 className="mb-2 text-primary-01" bold text="Link" />
@@ -361,9 +571,10 @@ const EditJourneyModal = ({
     description: journeyItem?.description || "",
     link: journeyItem?.link || "",
     institution: journeyItem?.institution || "",
-    inProgress: false,
+    inProgress: journeyItem?.inProgress || false,
     category: journeyItem?.category || "",
   });
+
   const [validationErrors, setValidationErrors] = useState({
     title: false,
     startDate: false,

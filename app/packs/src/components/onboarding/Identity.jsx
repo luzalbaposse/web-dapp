@@ -71,7 +71,7 @@ const Identity = ({
       </P2>
       <form onSubmit={submitIdentityForm} className="d-flex flex-column w-100">
         <div className="form-group position-relative">
-          <label htmlFor="inputFirstName" className="mt-2">
+          <label htmlFor="inputGender" className="mt-2">
             <P2 className="text-black" text="Gender" bold />
           </label>
           <Form.Control
@@ -90,7 +90,7 @@ const Identity = ({
           <p className="short-caption">What gender do you identify as?</p>
         </div>
         <div className="form-group position-relative">
-          <label htmlFor="inputFirstName" className="mt-2">
+          <label htmlFor="inputEthnicity" className="mt-2">
             <P2 className="text-black" text="Ethnicity" bold />
           </label>
           <Form.Control
@@ -109,7 +109,7 @@ const Identity = ({
           <p className="short-caption">What ethnicity do you identify as?</p>
         </div>
         <div className="form-group position-relative">
-          <label htmlFor="inputFirstName" className="mt-2">
+          <label htmlFor="inputNationality" className="mt-2">
             <P2 className="text-black" text="Nationality" bold />
           </label>
           <Form.Control

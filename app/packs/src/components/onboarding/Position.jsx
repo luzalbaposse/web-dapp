@@ -1,26 +1,46 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import Form from "react-bootstrap/Form";
 
 import { P2, H5 } from "../design_system/typography";
 import TextInput from "../design_system/fields/textinput";
 import TextArea from "../design_system/fields/textarea";
 import Link from "src/components/design_system/link";
 
+const returnYear = (date) => {
+  if (date) {
+    return dayjs(date).format("YYYY");
+  } else {
+    return "";
+  }
+};
+
+const returnMonth = (date) => {
+  if (date) {
+    return dayjs(date).format("MMMM");
+  } else {
+    return "";
+  }
+};
+
 const Position = ({ changeStep, position, changePosition, allSteps }) => {
   const [localPosition, setLocalPosition] = useState({
     ...position,
     start_date:
       position.start_date != ""
-        ? dayjs(position.start_date).format("YYYY-MM")
+        ? dayjs(position.start_date).format("DD-MM-YYYY")
         : "",
   });
+  const [localMonth, setLocalMonth] = useState(
+    returnMonth(position.start_date)
+  );
+  const [localYear, setLocalYear] = useState(returnYear(position.start_date));
 
   const submitPositionForm = (e) => {
     e.preventDefault();
     if (invalidForm) {
       return;
     }
-
     changePosition(localPosition);
     changeStep(5);
   };
@@ -39,7 +59,46 @@ const Position = ({ changeStep, position, changePosition, allSteps }) => {
     localPosition.title == "" ||
     localPosition.institution == "" ||
     localPosition.description == "" ||
-    localPosition.start_date == "";
+    localPosition.start_date == "" ||
+    localMonth == "" ||
+    localYear == "";
+
+  const monthOptions = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const yearOptions = (() => {
+    const max = new Date().getFullYear();
+    const min = 1970;
+
+    const years = [];
+    for (let i = max; i >= min; i--) {
+      years.push(i);
+    }
+    return years;
+  })();
+
+  useEffect(() => {
+    if (localYear != "" && localMonth != "") {
+      setLocalPosition((prev) => ({
+        ...prev,
+        start_date: dayjs(`${localMonth}-${localYear}`, "MMMM-YYYY").format(
+          "DD-MM-YYYY"
+        ),
+      }));
+    }
+  }, [localYear, localMonth]);
 
   return (
     <div className="registration-items">
@@ -52,7 +111,7 @@ const Position = ({ changeStep, position, changePosition, allSteps }) => {
           <P2 className="" bold text={"Skip"} />
         </Link>
       </div>
-      <H5 text="What’s your most recent position?" bold />
+      <H5 text="What’s your main position?" bold />
       <P2 className="mb-5 mt-2">
         Tell us what have you been doing lately. Later on you'll be able to add
         your education, career goals and past achievements.
@@ -116,24 +175,39 @@ const Position = ({ changeStep, position, changePosition, allSteps }) => {
           />
         </div>
         <div className="form-group position-relative">
-          <label>
-            <P2 className="text-black" bold>
-              Start Date
-            </P2>
+          <label htmlFor="inputMonth" className="mt-2">
+            <P2 className="text-black" text="Select date" bold />
           </label>
-          <input
-            className={"form-control"}
-            placeholder={"Select date"}
-            type="month"
-            value={localPosition.start_date}
-            onChange={(e) =>
-              setLocalPosition((prev) => ({
-                ...prev,
-                start_date: e.target.value,
-              }))
-            }
-          />
-          <p className="short-caption">Month YYYY</p>
+          <div className="d-flex flex-row justify-content-between">
+            <Form.Control
+              as="select"
+              onChange={(e) => setLocalMonth(e.target.value)}
+              value={localMonth}
+              placeholder="Month"
+              className="height-auto mr-2"
+            >
+              <option value=""></option>
+              {monthOptions.map((month) => (
+                <option value={month} key={month}>
+                  {month}
+                </option>
+              ))}
+            </Form.Control>
+            <Form.Control
+              as="select"
+              onChange={(e) => setLocalYear(e.target.value)}
+              value={localYear}
+              placeholder="Year"
+              className="height-auto ml-2"
+            >
+              <option value=""></option>
+              {yearOptions.map((year) => (
+                <option value={year} key={year}>
+                  {year}
+                </option>
+              ))}
+            </Form.Control>
+          </div>
         </div>
         <div className="d-flex flex-row justify-content-between mt-6">
           <button

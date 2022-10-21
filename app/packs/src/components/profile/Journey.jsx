@@ -223,7 +223,8 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
                       {dayjs(journeyItem.startDate, "YYYY-MM-DD").format(
                         "MMM YYYY"
                       )}
-                      {journeyItem.endDate
+                      {journeyItem.inProgress && " - Today"}
+                      {journeyItem.endDate && !journeyItem.inProgress
                         ? ` - ${dayjs(journeyItem.endDate, "YYYY-MM-DD").format(
                             "MMM YYYY"
                           )}`
