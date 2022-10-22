@@ -4,6 +4,8 @@ import { get } from "src/utils/requests";
 import { ethers } from "ethers";
 import { parseAndCommify } from "src/onchain/utils";
 import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+dayjs.extend(customParseFormat);
 import debounce from "lodash/debounce";
 
 import {

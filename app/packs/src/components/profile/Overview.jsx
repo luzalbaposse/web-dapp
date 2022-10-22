@@ -28,6 +28,8 @@ import { formatNumberWithSymbol, verifiedIcon } from "src/utils/viewHelpers";
 import EditOverviewModal from "src/components/profile/edit/EditOverviewModal";
 
 import cx from "classnames";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+dayjs.extend(customParseFormat);
 
 const Overview = ({
   className,
