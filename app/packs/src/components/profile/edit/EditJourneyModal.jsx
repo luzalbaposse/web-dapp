@@ -21,6 +21,8 @@ import { H5, P2, P3 } from "src/components/design_system/typography";
 import { useWindowDimensionsHook } from "src/utils/window";
 
 import cx from "classnames";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+dayjs.extend(customParseFormat);
 
 const SelectExperienceType = ({ mobile, goToNextStep }) => {
   return (

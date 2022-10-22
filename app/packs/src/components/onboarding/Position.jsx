@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import Form from "react-bootstrap/Form";
 
 import { P2, H5 } from "../design_system/typography";
 import TextInput from "../design_system/fields/textinput";
 import TextArea from "../design_system/fields/textarea";
 import Link from "src/components/design_system/link";
+
+dayjs.extend(customParseFormat);
 
 const returnYear = (date) => {
   if (date) {
@@ -93,7 +96,7 @@ const Position = ({ changeStep, position, changePosition, allSteps }) => {
     if (localYear != "" && localMonth != "") {
       setLocalPosition((prev) => ({
         ...prev,
-        start_date: dayjs(`${localMonth}-${localYear}`, "MMMM-YYYY").format(
+        start_date: dayjs(`${localMonth}/${localYear}`, "MMMM/YYYY").format(
           "DD-MM-YYYY"
         ),
       }));

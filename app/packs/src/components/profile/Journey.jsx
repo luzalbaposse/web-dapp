@@ -10,6 +10,8 @@ import Button from "src/components/design_system/button";
 import EditJourneyModal from "./edit/EditJourneyModal";
 
 import cx from "classnames";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+dayjs.extend(customParseFormat);
 
 const Journey = ({ className, talent, setTalent, canUpdate }) => {
   const { mobile } = useWindowDimensionsHook();
