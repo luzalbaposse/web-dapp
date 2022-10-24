@@ -64,14 +64,14 @@ const Nfts = ({
   const mergeNfts = (newNfts) => {
     newNfts.map((nft) => {
       // Query blockchain when the local image is not defined
-      if (nft.name && nft.local_image_url) {
+      if (nft.name && nft.image_url) {
         setNfts((prev) => [...prev, nft]);
       } else {
         getNftData(nft).then((result) => {
           if (result?.name && result?.image && result?.imageType == "image") {
             const newNft = {
               ...nft,
-              local_image_url: result.image,
+              image_url: result.image,
             };
             setNfts((prev) => [...prev, newNft]);
           }
@@ -190,7 +190,7 @@ const Nfts = ({
                       )}
                     />
                     <img
-                      src={nft.local_image_url}
+                      src={nft.image_url}
                       onLoad={() => loadedImage(nft)}
                       className={cx(
                         "nft-img mb-4",

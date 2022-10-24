@@ -68,7 +68,7 @@ const DisplayPoapsModal = ({
                   )}
                 />
                 <img
-                  src={poap.imageUrl || poap.local_image_url}
+                  src={poap.imageUrl || poap.external_image_url}
                   onLoad={() => loadedImage(poap)}
                   className={cx(
                     "nft-img poap-img mb-4",
@@ -195,7 +195,7 @@ const PoapsModal = ({ userId, show, setShow, mobile, appendPoap }) => {
       address: poap.address,
       token_id: poap.token_id,
       chain_id: poap.chain_id,
-      image_url: poap.imageUrl,
+      external_image_url: poap.imageUrl,
       description: poap.description,
       name: poap.name,
     };
@@ -210,7 +210,7 @@ const PoapsModal = ({ userId, show, setShow, mobile, appendPoap }) => {
             { autoClose: 1500 }
           );
           setPoaps((previousPoaps) => updatePoaps(previousPoaps, updatedPoap));
-          appendPoap({ ...updatedPoap, local_image_url: poap.imageUrl });
+          appendPoap({ ...updatedPoap, external_image_url: poap.imageUrl });
         }
       }
     );
@@ -219,7 +219,7 @@ const PoapsModal = ({ userId, show, setShow, mobile, appendPoap }) => {
   const mergePoaps = (newPoaps) => {
     newPoaps.map((poap) => {
       // Query blockchain when the local image is not defined
-      if (poap.local_image_url) {
+      if (poap.external_image_url) {
         setPoaps((prev) => [...prev, poap]);
       } else {
         getPOAPData(poap.address, poap.token_id).then((result) => {

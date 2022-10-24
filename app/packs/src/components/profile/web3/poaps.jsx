@@ -62,14 +62,14 @@ const Poaps = ({
   const mergePoaps = (newPoaps) => {
     newPoaps.map((poap) => {
       // Query blockchain when the local image is not defined
-      if (poap.local_image_url) {
+      if (poap.image_url) {
         setPoaps((prev) => [...prev, poap]);
       } else {
         getPOAPData(poap.address, poap.token_id).then((result) => {
           if (result?.name && result?.image_url) {
             const newPoap = {
               ...poap,
-              local_image_url: result.image_url,
+              image_url: result.image_url,
             };
             setPoaps((prev) => [...prev, newPoap]);
           }
@@ -188,7 +188,7 @@ const Poaps = ({
                       )}
                     />
                     <img
-                      src={poap.imageUrl || poap.local_image_url}
+                      src={poap.imageUrl || poap.image_url}
                       onLoad={() => loadedImage(poap)}
                       className={cx(
                         "nft-img mb-4",

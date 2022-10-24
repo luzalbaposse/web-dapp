@@ -199,8 +199,8 @@ ActiveRecord::Schema.define(version: 2022_10_21_122846) do
     t.datetime "last_sync_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.text "token_image_data"
     t.text "description"
+    t.string "external_image_url"
     t.index ["user_id"], name: "index_erc721_tokens_on_user_id"
   end
 

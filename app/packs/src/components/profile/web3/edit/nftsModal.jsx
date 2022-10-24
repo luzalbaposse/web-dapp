@@ -71,7 +71,7 @@ const DisplayNftsModal = ({
                   )}
                 />
                 <img
-                  src={nft.imageUrl || nft.local_image_url}
+                  src={nft.imageUrl || nft.external_image_url}
                   onLoad={() => loadedImage(nft)}
                   className={cx(
                     "nft-img mb-4",
@@ -138,10 +138,10 @@ const NftsModal = ({
 
   const loadNfts = async (nfts) => {
     for (const nft of nfts) {
-      if (nft.name && nft.local_image_url) {
+      if (nft.name && nft.external_image_url) {
         const newNft = {
           ...nft,
-          imageUrl: nft.local_image_url,
+          imageUrl: nft.external_image_url,
         };
         setNfts((previousNfts) => [...previousNfts, newNft]);
       } else {
@@ -223,7 +223,7 @@ const NftsModal = ({
       address: nft.address,
       token_id: nft.token_id,
       chain_id: nft.chain_id,
-      image_url: nft.imageUrl,
+      external_image_url: nft.imageUrl,
       description: nft.description,
       name: nft.name,
     };
@@ -238,7 +238,7 @@ const NftsModal = ({
             { autoClose: 1500 }
           );
           setNfts((previousNfts) => updateNfts(previousNfts, response));
-          appendNft({ ...response, local_image_url: nft.imageUrl });
+          appendNft({ ...response, external_image_url: nft.imageUrl });
         }
       }
     );
@@ -247,8 +247,11 @@ const NftsModal = ({
   const mergeNfts = (newNfts) => {
     newNfts.map((nft) => {
       // Query blockchain when the local image is not defined
-      if (nft.local_image_url) {
-        setNfts((prev) => [...prev, { ...nft, imageUrl: nft.local_image_url }]);
+      if (nft.external_image_url) {
+        setNfts((prev) => [
+          ...prev,
+          { ...nft, imageUrl: nft.external_image_url },
+        ]);
       } else {
         getNftData(nft).then((result) => {
           if (result?.name && result?.image) {
