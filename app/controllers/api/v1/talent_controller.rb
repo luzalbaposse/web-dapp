@@ -2,10 +2,10 @@ class API::V1::TalentController < ApplicationController
   PER_PAGE = 40
 
   def index
-    service = Talents::Search.new(filter_params: filter_params.to_h, admin: current_user.admin?)
+    service = Talents::Search.new(filter_params: filter_params.to_h, admin: current_user.admin?, discovery_row: discovery_row)
     pagy, talents = pagy(service.call, items: per_page)
 
-    talents = TalentBlueprint.render_as_json(talents.includes(:talent_token), view: :normal, current_user_watchlist: current_user_watchlist)
+    talents = TalentBlueprint.render_as_json(talents.includes(:talent_token, :user), view: :normal, current_user_watchlist: current_user_watchlist)
 
     render json: {
       talents: talents,
@@ -71,7 +71,11 @@ class API::V1::TalentController < ApplicationController
   end
 
   def filter_params
-    params.permit(:keyword, :status)
+    params.permit(:keyword, :status, :discovery_row_id)
+  end
+
+  def discovery_row
+    DiscoveryRow.find_by(id: filter_params[:discovery_row_id])
   end
 
   def user_params

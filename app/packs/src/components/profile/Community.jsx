@@ -254,7 +254,6 @@ const Community = ({ userId, talent, canUpdate }) => {
       (response) => {
         if (response.error) {
           toast.error(<ToastBody heading="Error!" body={response.error} />);
-          console.log(response.error);
         } else {
           setPagination(response.pagination);
           setConnections(response.connections);

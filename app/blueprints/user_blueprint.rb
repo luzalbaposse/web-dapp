@@ -9,9 +9,6 @@ class UserBlueprint < Blueprinter::Base
     field :is_talent do |user, _options|
       user.talent.present?
     end
-    field :investor_id do |user, _options|
-      user.investor&.id
-    end
   end
 
   view :extended do

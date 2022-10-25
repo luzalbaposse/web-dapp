@@ -303,16 +303,13 @@ export const TopBar = ({
         </div>
         <div className="d-flex" style={{ height: 34 }}>
           {isUserImpersonated && (
-            <>
-              <P2 className="mr-2 p-1">Impersonating {impersonatedUsername}</P2>
-              <Button
-                onClick={stopImpersonation}
-                type="white-subtle"
-                className="mr-2"
-              >
-                Stop Impersonation
-              </Button>
-            </>
+            <Button
+              onClick={stopImpersonation}
+              type="white-subtle"
+              className="mr-2"
+            >
+              Stop Impersonation {impersonatedUsername}
+            </Button>
           )}
           {!showConnectButton() && connectedButton("mr-2")}
           {showConnectButton() && walletConnectButton()}

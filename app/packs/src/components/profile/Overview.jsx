@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 
 import { ethers } from "ethers";
-import { patch, getAuthToken } from "src/utils/requests";
+import { patch, getAuthToken, post } from "src/utils/requests";
 import { toast } from "react-toastify";
 
 import Uppy from "@uppy/core";
@@ -43,6 +43,7 @@ const Overview = ({
   canUpdate,
   previewMode,
   setPreviewMode,
+  isCurrentUserImpersonated,
 }) => {
   const joinedAt = dayjs(talent.user.createdAt).format("MMMM YYYY");
 
@@ -267,6 +268,26 @@ const Overview = ({
         { autoClose: 1500 }
       );
       return true;
+    }
+  };
+
+  const impersonateUser = async () => {
+    const params = {
+      username: talent.user.username,
+    };
+
+    const response = await post(`/api/v1/impersonations`, params).catch(() => {
+      return false;
+    });
+
+    if (response && !response.error) {
+      toast.success(
+        <ToastBody
+          heading="Success!"
+          body="Impersonation started successfully!"
+        />
+      );
+      window.location.reload();
     }
   };
 
@@ -504,10 +525,19 @@ const Overview = ({
                   )}
                   {!talent.verified && (
                     <Button
+                      className="mr-2"
                       type="primary-default"
                       size="big"
                       text="Verify"
                       onClick={() => verifyTalent()}
+                    />
+                  )}
+                  {!isCurrentUserImpersonated && (
+                    <Button
+                      type="primary-default"
+                      size="big"
+                      text="Impersonate"
+                      onClick={() => impersonateUser()}
                     />
                   )}
                 </div>
@@ -674,6 +704,15 @@ const Overview = ({
                     type="white-outline"
                     text="Approve"
                     onClick={() => approveUser(true)}
+                  />
+                )}
+                {!isCurrentUserImpersonated && (
+                  <Button
+                    className="mr-2"
+                    type="primary-default"
+                    size="big"
+                    text="Impersonate"
+                    onClick={() => impersonateUser()}
                   />
                 )}
               </>

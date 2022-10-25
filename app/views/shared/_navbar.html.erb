@@ -2,7 +2,7 @@
   mode: current_user&.theme_preference || "light",
   user: {
     id: current_acting_user.id,
-    profilePictureUrl: current_acting_user.talent&.profile_picture_url || current_acting_user.investor&.profile_picture_url,
+    profilePictureUrl: current_acting_user.profile_picture_url,
     talentId: current_acting_user.talent&.id,
     investorId: current_acting_user.investor&.id,
     isTalent: current_acting_user.talent.present?,

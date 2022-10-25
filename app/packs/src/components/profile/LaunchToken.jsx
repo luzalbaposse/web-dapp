@@ -12,7 +12,7 @@ import cx from "classnames";
 
 import LaunchTokenModals from "../talent/Edit/LaunchTokenModals";
 
-const LaunchToken = ({ talent, railsContext, setLocalTalent }) => {
+const LaunchToken = ({ talent, railsContext, setLocalTalent, canUpdate }) => {
   const { mobile } = useWindowDimensionsHook();
   const { mode } = useTheme();
   const token = talent.token;
@@ -25,9 +25,13 @@ const LaunchToken = ({ talent, railsContext, setLocalTalent }) => {
     careerGoal: talent.careerGoal,
   });
 
+  if (!canUpdate) {
+    return <></>;
+  }
+
   return (
     <>
-      {show && (
+      {show && canUpdate && (
         <LaunchTokenModals
           show={show}
           setShow={setShow}

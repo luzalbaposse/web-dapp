@@ -39,7 +39,6 @@ const Perks = ({ talent, canUpdate }) => {
     get(`/api/v1/users/${userId}/profile/perks`).then((response) => {
       if (response.error) {
         toast.error(<ToastBody heading="Error!" body={response.error} />);
-        console.log(response.error);
       } else {
         setPerks(response.perks);
       }
