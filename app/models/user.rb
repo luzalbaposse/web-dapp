@@ -163,7 +163,7 @@ class User < ApplicationRecord
   end
 
   def profile_picture_url
-    talent&.profile_picture_url || investor&.profile_picture_url
+    talent&.profile_picture_url
   end
 
   def public_displayable?

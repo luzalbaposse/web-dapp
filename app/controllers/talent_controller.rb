@@ -5,7 +5,7 @@ class TalentController < ApplicationController
     service = Talents::Search.new(filter_params: filter_params.to_h, admin: current_user.admin?)
     @pagy, talents = pagy(service.call, items: per_page)
 
-    @talents = TalentBlueprint.render_as_json(talents.includes(:talent_token, user: :investor), view: :normal, current_user_watchlist: current_user_watchlist)
+    @talents = TalentBlueprint.render_as_json(talents.includes(:talent_token, :user), view: :normal, current_user_watchlist: current_user_watchlist)
 
     respond_to do |format|
       format.html

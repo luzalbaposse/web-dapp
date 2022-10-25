@@ -146,7 +146,6 @@ const PoapsModal = ({ userId, show, setShow, mobile, appendPoap }) => {
     }).then((response) => {
       if (response.error) {
         toast.error(<ToastBody heading="Error!" body={response.error} />);
-        console.log(response.error);
       } else {
         setPagination(response.pagination);
         loadPoaps(response.tokens);
@@ -203,7 +202,6 @@ const PoapsModal = ({ userId, show, setShow, mobile, appendPoap }) => {
       (updatedPoap) => {
         if (updatedPoap.error) {
           toast.error(<ToastBody heading="Error!" body={updatedPoap.error} />);
-          console.log(updatedPoap.error);
         } else {
           toast.success(
             <ToastBody heading="Success" body={"POAP updated successfully!"} />,

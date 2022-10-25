@@ -177,7 +177,6 @@ const NftsModal = ({
     }).then((response) => {
       if (response.error) {
         toast.error(<ToastBody heading="Error!" body={response.error} />);
-        console.log(response.error);
       } else {
         setPagination(response.pagination);
         loadNfts(response.tokens);
@@ -231,7 +230,6 @@ const NftsModal = ({
       (response) => {
         if (response.error) {
           toast.error(<ToastBody heading="Error!" body={response.error} />);
-          console.log(response.error);
         } else {
           toast.success(
             <ToastBody heading="Success" body={"NFT updated successfully!"} />,
