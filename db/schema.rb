@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_21_122846) do
+ActiveRecord::Schema.define(version: 2022_10_26_090347) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -416,6 +416,11 @@ ActiveRecord::Schema.define(version: 2022_10_21_122846) do
     t.bigint "amount"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "creator_id"
+    t.boolean "imported", default: false
+    t.string "identifier"
+    t.index ["creator_id"], name: "index_rewards_on_creator_id"
+    t.index ["identifier"], name: "index_rewards_on_identifier", unique: true
     t.index ["user_id"], name: "index_rewards_on_user_id"
   end
 
@@ -637,6 +642,7 @@ ActiveRecord::Schema.define(version: 2022_10_21_122846) do
   add_foreign_key "profile_page_visitors", "users"
   add_foreign_key "quests", "users"
   add_foreign_key "rewards", "users"
+  add_foreign_key "rewards", "users", column: "creator_id"
   add_foreign_key "tags", "discovery_rows"
   add_foreign_key "talent_tokens", "talent"
   add_foreign_key "tasks", "quests"
