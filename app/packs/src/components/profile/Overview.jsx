@@ -26,6 +26,7 @@ import { lightTextPrimary04 } from "src/utils/colors";
 
 import { formatNumberWithSymbol, verifiedIcon } from "src/utils/viewHelpers";
 import EditOverviewModal from "src/components/profile/edit/EditOverviewModal";
+import RejectTalentModal from "./RejectTalentModal";
 
 import cx from "classnames";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -50,6 +51,7 @@ const Overview = ({
   const { mobile } = useWindowDimensionsHook();
   const { mode } = useTheme();
   const [showStakeModal, setShowStakeModal] = useState(false);
+  const [showRejectModal, setShowRejectModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [overviewProfileFileInput, setOverviewProfileFileInput] =
     useState(null);
@@ -513,19 +515,28 @@ const Overview = ({
                 )}
               </div>
               {currentUserAdmin && (
-                <div className="d-flex mb-4">
+                <div className="d-flex flex-column mb-4">
                   {talent.user.profileType == "waiting_for_approval" && (
-                    <Button
-                      className="mr-2"
-                      type="white-outline"
-                      size="big"
-                      text={"Approve"}
-                      onClick={() => approveUser(true)}
-                    />
+                    <>
+                      <Button
+                        className="mb-2"
+                        type="primary-default"
+                        size="big"
+                        text={"Approve"}
+                        onClick={() => approveUser(true)}
+                      />
+                      <Button
+                        onClick={() => setShowRejectModal(true)}
+                        type="white-subtle"
+                        className="mb-5"
+                      >
+                        Reject
+                      </Button>
+                    </>
                   )}
                   {!talent.verified && (
                     <Button
-                      className="mr-2"
+                      className="mb-5"
                       type="primary-default"
                       size="big"
                       text="Verify"
@@ -534,7 +545,7 @@ const Overview = ({
                   )}
                   {!isCurrentUserImpersonated && (
                     <Button
-                      type="primary-default"
+                      type="white-outline"
                       size="big"
                       text="Impersonate"
                       onClick={() => impersonateUser()}
@@ -688,28 +699,38 @@ const Overview = ({
           <div className="d-flex align-items-center">
             {currentUserAdmin && (
               <>
+                {talent.user.profileType == "waiting_for_approval" && (
+                  <>
+                    <Button
+                      className="mr-2"
+                      size="big"
+                      type="primary-default"
+                      text="Approve"
+                      onClick={() => approveUser(true)}
+                    />
+                    <Button
+                      onClick={() => setShowRejectModal(true)}
+                      size="big"
+                      type="white-subtle"
+                      className="mr-7"
+                    >
+                      Reject
+                    </Button>
+                  </>
+                )}
                 {!talent.verified && (
                   <Button
-                    className="mr-2"
+                    className="mr-7"
                     size="big"
                     type="primary-default"
                     text="Verify"
                     onClick={() => verifyTalent()}
                   />
                 )}
-                {talent.user.profileType == "waiting_for_approval" && (
-                  <Button
-                    className="mr-7"
-                    size="big"
-                    type="white-outline"
-                    text="Approve"
-                    onClick={() => approveUser(true)}
-                  />
-                )}
                 {!isCurrentUserImpersonated && (
                   <Button
                     className="mr-2"
-                    type="primary-default"
+                    type="white-outline"
                     size="big"
                     text="Impersonate"
                     onClick={() => impersonateUser()}
@@ -719,7 +740,7 @@ const Overview = ({
             )}
             {previewMode ? (
               <Button
-                type="primary-default"
+                type="white-outline"
                 text="Back to edit profile"
                 onClick={() => setPreviewMode(false)}
               />
@@ -799,6 +820,16 @@ const Overview = ({
         talentIsFromCurrentUser={canUpdate}
         railsContext={railsContext}
       />
+      {showRejectModal && (
+        <RejectTalentModal
+          show={showRejectModal}
+          setShow={setShowRejectModal}
+          mobile={mobile}
+          mode={mode()}
+          talent={talent}
+          setTalent={setTalent}
+        />
+      )}
       {editMode && (
         <EditOverviewModal
           show={editMode}

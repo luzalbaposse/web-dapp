@@ -11,7 +11,6 @@ import "channels";
 import "@fontsource/plus-jakarta-sans";
 
 import ReactOnRails from "react-on-rails";
-import TalentShow from "src/components/talent/TalentShow";
 import MessageUserList from "src/components/chat/MessageUserList";
 import Chat from "src/components/chat/Chat";
 import TalentKeywordSearch from "src/components/talent/TalentKeywordSearch";
@@ -71,7 +70,6 @@ ReactOnRails.register({
   SupporterProfile,
   TalentKeywordSearch,
   TalentPage,
-  TalentShow,
   TopBar,
   TopBar,
   UpcomingTalents,
