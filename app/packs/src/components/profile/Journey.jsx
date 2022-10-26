@@ -3,11 +3,13 @@ import dayjs from "dayjs";
 
 import { H4, H5, P1, P2, P3 } from "src/components/design_system/typography";
 import { useWindowDimensionsHook } from "src/utils/window";
-import { compareDates } from "src/utils/compareHelpers";
+import { compareDates, diffDates } from "src/utils/compareHelpers";
 import { Rocket, Toolbox, Bulb, Learn } from "src/components/icons";
 import Divider from "src/components/design_system/other/Divider";
+import TalentProfilePicture from "src/components/talent/TalentProfilePicture";
 import Button from "src/components/design_system/button";
 import EditJourneyModal from "./edit/EditJourneyModal";
+import JourneyImagesModal from "./edit/journey/JourneyImagesModal";
 
 import cx from "classnames";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -19,8 +21,10 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
   const [filteredJourneyItems, setFilteredJourneyItems] = useState([]);
   const [activeFilter, setActiveFilter] = useState("All");
   const [editMode, setEditMode] = useState(false);
+  const [journeyImagesModal, setJourneyImagesModal] = useState(false);
   const [editType, setEditType] = useState("");
   const [journeyItemInEditing, setJourneyItemInEditing] = useState(null);
+  const [journeyItemSelected, setJourneyItemSelected] = useState(null);
 
   useEffect(() => {
     const allItems = mergeAndSortJourney(
@@ -128,6 +132,11 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
     return items.filter((item) => item.category == activeFilter);
   };
 
+  const openJourneyImagesModal = (journeyItem) => {
+    setJourneyItemSelected(journeyItem);
+    setJourneyImagesModal(true);
+  };
+
   return (
     <>
       {(talent.careerGoal.goals.length > 0 || talent.milestones.length > 0) && (
@@ -218,20 +227,30 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
                 />
                 <div className="d-flex col-11 pr-0">
                   {!mobile && (
-                    <P3
-                      className="text-primary-04 col-3 text-right pr-6 pt-1"
-                      bold
-                    >
-                      {dayjs(journeyItem.startDate, "YYYY-MM-DD").format(
-                        "MMM YYYY"
+                    <div className="d-flex flex-column col-3 pr-6 pt-1 text-right">
+                      <P3 className="text-primary-04" bold>
+                        {dayjs(journeyItem.startDate, "YYYY-MM-DD").format(
+                          "MMM YYYY"
+                        )}
+                        {journeyItem.inProgress && " - Today"}
+                        {journeyItem.endDate && !journeyItem.inProgress
+                          ? ` - ${dayjs(
+                              journeyItem.endDate,
+                              "YYYY-MM-DD"
+                            ).format("MMM YYYY")}`
+                          : ""}
+                      </P3>
+                      {journeyItem.endDate && (
+                        <P3
+                          className="text-primary-04"
+                          bold
+                          text={diffDates(
+                            dayjs(journeyItem.endDate, "YYYY-MM-DD"),
+                            dayjs(journeyItem.startDate, "YYYY-MM-DD")
+                          )}
+                        />
                       )}
-                      {journeyItem.inProgress && " - Today"}
-                      {journeyItem.endDate && !journeyItem.inProgress
-                        ? ` - ${dayjs(journeyItem.endDate, "YYYY-MM-DD").format(
-                            "MMM YYYY"
-                          )}`
-                        : ""}
-                    </P3>
+                    </div>
                   )}
                   <div
                     className={cx(
@@ -249,17 +268,29 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
                     )}
                   >
                     {mobile && (
-                      <P3 className="text-primary-04 mb-4" bold>
-                        {dayjs(journeyItem.startDate, "YYYY-MM-DD").format(
-                          "MMM YYYY"
+                      <div className="d-flex flex-column mb-4">
+                        <P3 className="text-primary-04" bold>
+                          {dayjs(journeyItem.startDate, "YYYY-MM-DD").format(
+                            "MMM YYYY"
+                          )}
+                          {journeyItem.endDate
+                            ? ` - ${dayjs(
+                                journeyItem.endDate,
+                                "YYYY-MM-DD"
+                              ).format("MMM YYYY")}`
+                            : ""}
+                        </P3>
+                        {journeyItem.endDate && (
+                          <P3
+                            className="text-primary-04"
+                            bold
+                            text={diffDates(
+                              dayjs(journeyItem.endDate, "YYYY-MM-DD"),
+                              dayjs(journeyItem.startDate, "YYYY-MM-DD")
+                            )}
+                          />
                         )}
-                        {journeyItem.endDate
-                          ? ` - ${dayjs(
-                              journeyItem.endDate,
-                              "YYYY-MM-DD"
-                            ).format("MMM YYYY")}`
-                          : ""}
-                      </P3>
+                      </div>
                     )}
                     <div className="d-flex justify-content-between">
                       <P1
@@ -286,6 +317,61 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
                       className="text-primary-03"
                       text={journeyItem.description}
                     />
+                    <div className="d-flex flex-wrap">
+                      {journeyItem.images?.length > 3 ? (
+                        <>
+                          {journeyItem.images.slice(0, 2).map((image) => (
+                            <TalentProfilePicture
+                              className="position-relative mr-2 mt-2"
+                              style={{ borderRadius: "24px" }}
+                              src={image.imageUrl}
+                              straight
+                              height={176}
+                              width={225}
+                            />
+                          ))}
+                          {journeyItem.images.slice(2, 3).map((image) => (
+                            <button
+                              className="d-flex button-link p-0 position-relative mt-2"
+                              onClick={() =>
+                                openJourneyImagesModal(journeyItem)
+                              }
+                            >
+                              <TalentProfilePicture
+                                className="position-relative"
+                                style={{ borderRadius: "24px" }}
+                                src={image.imageUrl}
+                                straight
+                                height={176}
+                                width={225}
+                              />
+                              <div
+                                className="edit-image"
+                                style={{ borderRadius: "24px" }}
+                              ></div>
+                              <H4
+                                className="position-absolute permanent-text-white"
+                                style={{ top: "45%", left: "45%" }}
+                                text={`+${journeyItem.images.slice(3).length}`}
+                              />
+                            </button>
+                          ))}
+                        </>
+                      ) : (
+                        <>
+                          {journeyItem.images.map((image) => (
+                            <TalentProfilePicture
+                              className="mr-2 mt-2"
+                              style={{ borderRadius: "24px" }}
+                              src={image.imageUrl}
+                              straight
+                              height={176}
+                              width={225}
+                            />
+                          ))}
+                        </>
+                      )}
+                    </div>
                     <div className="rocket-position-absolute">
                       <div
                         className={
@@ -314,6 +400,13 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
           editType={editType}
           journeyItem={journeyItemInEditing}
           setJourneyItem={setJourneyItemInEditing}
+        />
+      )}
+      {journeyImagesModal && (
+        <JourneyImagesModal
+          show={journeyImagesModal}
+          hide={() => setJourneyImagesModal(false)}
+          journeyItem={journeyItemSelected}
         />
       )}
     </>

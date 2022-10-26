@@ -10,8 +10,8 @@ const RejectTalentModal = ({
   setShow,
   mode,
   mobile,
-  sharedState,
-  setSharedState,
+  talent,
+  setTalent,
 }) => {
   const [note, setNote] = useState("");
   const [rejectingUser, setRejectingUser] = useState(false);
@@ -21,23 +21,22 @@ const RejectTalentModal = ({
 
     const params = {
       user: {
-        id: sharedState.user.id,
+        id: talent.user.id,
         profile_type: "rejected",
         note: note,
       },
     };
 
-    const response = await patch(
-      `/api/v1/talent/${sharedState.talent.id}`,
-      params
-    ).catch(() => {
-      return false;
-    });
+    const response = await patch(`/api/v1/talent/${talent.id}`, params).catch(
+      () => {
+        return false;
+      }
+    );
 
     if (response && !response.error) {
-      setSharedState((prev) => ({
+      setTalent((prev) => ({
         ...prev,
-        user: { ...prev.user, profile_type: "rejected" },
+        user: { ...prev.user, profileType: "rejected" },
       }));
 
       setRejectingUser(false);
