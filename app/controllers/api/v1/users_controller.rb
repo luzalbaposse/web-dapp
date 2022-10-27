@@ -76,11 +76,6 @@ class API::V1::UsersController < ApplicationController
         end
 
         current_user.update!(user_params)
-
-        if investor_params.present?
-          service = API::UpdateInvestor.new(investor: @user.investor)
-          service.call(investor_params: investor_params, tag_params: tag_params)
-        end
       end
 
       render json: @user, status: :ok
@@ -116,20 +111,6 @@ class API::V1::UsersController < ApplicationController
 
   def password_params
     params.require(:user).permit(:new_password, :current_password)
-  end
-
-  def investor_params
-    if params[:investor].present?
-      params.require(:investor).permit(
-        profile: [
-          :occupation, :location, :headline, :website, :video, :linkedin, :twitter, :telegram, :discord, :github
-        ],
-        profile_picture_data: {},
-        banner_data: {}
-      )
-    else
-      {}
-    end
   end
 
   def tag_params

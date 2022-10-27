@@ -10,10 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_26_090347) do
+ActiveRecord::Schema.define(version: 2022_10_27_085300) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
 
   create_table "blazer_audits", force: :cascade do |t|
@@ -261,19 +260,6 @@ ActiveRecord::Schema.define(version: 2022_10_26_090347) do
     t.index ["impersonated_id"], name: "index_impersonations_on_impersonated_id"
     t.index ["impersonator_id"], name: "index_impersonations_on_impersonator_id"
     t.index ["ip_bidx"], name: "index_impersonations_on_ip_bidx"
-  end
-
-  create_table "investors", force: :cascade do |t|
-    t.string "description"
-    t.string "public_key"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.bigint "user_id"
-    t.text "profile_picture_data"
-    t.text "banner_data"
-    t.jsonb "profile", default: {}
-    t.index ["public_key"], name: "index_investors_on_public_key", unique: true
-    t.index ["user_id"], name: "index_investors_on_user_id"
   end
 
   create_table "invites", force: :cascade do |t|
@@ -554,8 +540,8 @@ ActiveRecord::Schema.define(version: 2022_10_26_090347) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.boolean "disabled", default: false
     t.string "theme_preference", default: "light"
+    t.boolean "disabled", default: false
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"

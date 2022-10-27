@@ -3,6 +3,11 @@ class UserBlueprint < Blueprinter::Base
 
   view :normal do
     fields :username, :display_name, :profile_type, :created_at
+
+    field :talent_id do |user, _options|
+      user.talent.id
+    end
+
     field :name do |user, _options|
       user.name
     end

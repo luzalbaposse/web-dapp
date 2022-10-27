@@ -28,12 +28,10 @@ import BottomNav from "src/components/design_system/bottom_nav";
 import TopBar from "src/components/top_bar";
 import EditTalent from "src/components/talent/Edit/Profile";
 import NewPortfolio from "src/components/portfolio/NewPortfolio";
-import EditSupporter from "src/components/supporters/edit/Profile";
 import Discovery from "src/components/discovery";
 import DiscoveryShow from "src/components/discovery/show";
 import TalentPage from "src/components/talent/TalentPage";
 import LoggedOutTopBar from "src/components/top_bar/LoggedOutTopBar";
-import SupporterProfile from "src/components/supporters/show/Profile";
 import Rewards from "src/components/rewards";
 import QuestShow from "src/components/rewards/quests/show";
 import Footer from "src/components/design_system/footer";
@@ -52,7 +50,6 @@ ReactOnRails.register({
   Chat,
   Discovery,
   DiscoveryShow,
-  EditSupporter,
   EditTalent,
   FirstQuestPopup,
   FlashMessages,
@@ -67,7 +64,6 @@ ReactOnRails.register({
   RegistrationFlow,
   ResetPassword,
   Rewards,
-  SupporterProfile,
   TalentKeywordSearch,
   TalentPage,
   TopBar,

@@ -33,8 +33,9 @@ class ApplicationController < ActionController::Base
           )
         }
       end
-
     end
+  rescue ActionController::UnknownFormat
+    render status: 404, text: "Not Found"
   end
 
   def current_impersonated_user

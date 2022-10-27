@@ -36,7 +36,8 @@ const TalentTokenApplicationBanner = ({ user }) => {
       <ApplyToLaunchTokenModal
         show={showApplyToLaunchTokenModal}
         hide={() => setShowApplyToLaunchTokenModal(false)}
-        investorId={user.investorId}
+        userId={user.id}
+        talentId={user.talent_id}
         username={user.username}
       />
     </>

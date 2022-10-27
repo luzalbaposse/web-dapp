@@ -19,7 +19,7 @@ import MobileTopBar from "src/components/top_bar/MobileTopBar";
 import { Polygon, Celo } from "src/components/icons";
 import EarnMenu from "src/components/menus/EarnMenu";
 
-import { P2, H5 } from "src/components/design_system/typography";
+import { H5 } from "src/components/design_system/typography";
 
 const UnreadMessagesIndicator = () => {
   return (

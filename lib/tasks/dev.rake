@@ -10,8 +10,6 @@ if Rails.env.development?
         email_confirmed_at: Time.zone.now
       )
 
-      admin_investor = Investor.new
-      admin_investor.update!(user: admin)
       Feed.create!(user: admin)
       Tasks::PopulateForUser.new.call(user: admin)
 

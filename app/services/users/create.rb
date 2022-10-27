@@ -13,7 +13,6 @@ module Users
         params[:invite] = invite if invite
         user = create_user(params)
 
-        create_investor(user)
         create_feed(user)
         create_talent(user)
         create_talent_token(user)
@@ -106,13 +105,6 @@ module Users
 
       discovery_row.tags << tag unless discovery_row.tags.include?(tag)
       user.tags << tag unless user.tags.include?(tag)
-    end
-
-    def create_investor(user)
-      investor = Investor.new
-      investor.user = user
-      investor.save!
-      investor
     end
 
     def create_feed(user)
