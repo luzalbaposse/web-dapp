@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import dayjs from "dayjs";
 
 import { ethers } from "ethers";
@@ -293,6 +293,10 @@ const Overview = ({
     }
   };
 
+  const headlineArray = useMemo(() => {
+    return talent.profile.headline?.split(" ");
+  }, [talent.profile.headline]);
+
   return (
     <div className={cx(className)}>
       <div className={cx(mobile ? "" : "d-flex mb-7")}>
@@ -555,10 +559,33 @@ const Overview = ({
               )}
             </>
           )}
-          <H5
-            className="text-primary-01 mb-4"
-            text={`--E ${talent.headline || ""}`}
-          />
+          {talent.profile.headline && (
+            <div className="d-flex flex-wrap mb-4">
+              {talent.profile.highlightedHeadlineWordsIndex ? (
+                <>
+                  <H5 className="text-primary-01 mr-1" text="--E" />
+                  {headlineArray.map((word, index) => {
+                    if (
+                      talent.profile.highlightedHeadlineWordsIndex.includes(
+                        index
+                      )
+                    ) {
+                      return <H5 className="text-primary mr-1" text={word} />;
+                    } else {
+                      return (
+                        <H5 className="text-primary-01 mr-1" text={word} />
+                      );
+                    }
+                  })}
+                </>
+              ) : (
+                <H5
+                  className="text-primary-01"
+                  text={`--E ${talent.profile.headline}`}
+                />
+              )}
+            </div>
+          )}
           <UserTags
             tags={talent.tags.map((tag) => tag.description)}
             className="mr-2 mb-3"

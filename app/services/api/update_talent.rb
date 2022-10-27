@@ -63,6 +63,7 @@ class API::UpdateTalent
         talent.nationality = params[:profile][:nationality]
         talent.ethnicity = params[:profile][:ethnicity]
         talent.based_in = params[:profile][:based_in]
+        talent.highlighted_headline_words_index = params[:profile][:highlighted_headline_words_index]
 
         if params[:profile][:occupation]
           UpdateTasksJob.perform_later(type: "Tasks::FillInAbout", user_id: talent.user.id)
