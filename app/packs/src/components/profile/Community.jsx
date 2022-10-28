@@ -11,7 +11,6 @@ import debounce from "lodash/debounce";
 import {
   H4,
   H5,
-  P1,
   P2,
   P3,
   Caption,

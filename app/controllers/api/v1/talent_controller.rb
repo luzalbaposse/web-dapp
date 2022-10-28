@@ -121,7 +121,8 @@ class API::V1::TalentController < ApplicationController
         :gender,
         :ethnicity,
         :nationality,
-        :based_in
+        :based_in,
+        highlighted_headline_words_index: []
       ],
       profile_picture_data: {},
       banner_data: {}

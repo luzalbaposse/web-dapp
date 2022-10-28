@@ -9,7 +9,6 @@ class User < ApplicationRecord
   validate :username_is_valid
 
   has_one :talent
-  has_one :investor
   has_many :invites
   belongs_to :invited, class_name: "Invite", foreign_key: "invite_id", optional: true
   belongs_to :race, optional: true
@@ -122,10 +121,6 @@ class User < ApplicationRecord
 
   def has_unread_messages?
     messagee.unread.any?
-  end
-
-  def investor?
-    investor.present?
   end
 
   def last_message_with(chat_user)

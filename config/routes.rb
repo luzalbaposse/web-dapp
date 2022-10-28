@@ -111,12 +111,8 @@ Rails.application.routes.draw do
         end
         resources :stakes, only: [:create]
         post "reward_claiming", to: "stakes#reward_claiming"
-        resources :investor, only: [:update]
         resources :perks, only: [:show]
         resources :races, only: [:show]
-        resources :supporters do
-          patch :upgrade_profile_to_talent
-        end
         resources :impersonations, only: [:create, :destroy]
         resources :tags, only: [:index]
       end
