@@ -27,6 +27,7 @@ import { lightTextPrimary04 } from "src/utils/colors";
 import { formatNumberWithSymbol, verifiedIcon } from "src/utils/viewHelpers";
 import EditOverviewModal from "src/components/profile/edit/EditOverviewModal";
 import RejectTalentModal from "./RejectTalentModal";
+import SocialRow from "./SocialRow";
 
 import cx from "classnames";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -721,7 +722,9 @@ const Overview = ({
         )}
       </div>
       <div className="d-flex align-items-center justify-content-between">
-        <div></div>
+        <div>
+          <SocialRow profile={talent.profile} />
+        </div>
         {!mobile && (
           <div className="d-flex align-items-center">
             {currentUserAdmin && (
