@@ -34,7 +34,8 @@ RSpec.describe "Talent", type: :request do
     end
 
     context "when the current user does not match the talent id passed" do
-      let(:another_user) { create :user }
+      let(:another_user) { create :user, role: role }
+      let(:role) { "basic" }
 
       it "returns an authorization error" do
         put api_v1_talent_path(id: talent.id, params: params, as: another_user)
@@ -50,6 +51,26 @@ RSpec.describe "Talent", type: :request do
             error: "You don't have access to perform that action"
           }
         )
+      end
+
+      context "when the current user is an admin" do
+        let(:role) { "admin" }
+
+        it "returns a successful response" do
+          put api_v1_talent_path(id: talent.id, params: params, as: another_user)
+
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+      context "when the current user is a moderator" do
+        let(:role) { "moderator" }
+
+        it "returns a successful response" do
+          put api_v1_talent_path(id: talent.id, params: params, as: another_user)
+
+          expect(response).to have_http_status(:ok)
+        end
       end
     end
 

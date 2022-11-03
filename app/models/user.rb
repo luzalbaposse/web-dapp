@@ -39,7 +39,7 @@ class User < ApplicationRecord
   has_many :erc20_tokens
   has_many :erc721_tokens
 
-  VALID_ROLES = ["admin", "basic"].freeze
+  VALID_ROLES = ["admin", "basic", "moderator"].freeze
 
   enum profile_type: {
     supporter: "supporter",
@@ -99,6 +99,10 @@ class User < ApplicationRecord
 
   def admin?
     role == "admin"
+  end
+
+  def moderator?
+    role == "moderator"
   end
 
   def as_json(options = {})
@@ -213,6 +217,15 @@ class User < ApplicationRecord
     return false unless delete_account_token && delete_account_token_expires_at
 
     delete_account_token == token && delete_account_token_expires_at > Time.current
+  end
+
+  def approved_by
+    return unless profile_type == "approved"
+
+    profile_type_change = UserProfileTypeChange.find_by(new_profile_type: "approved", user: self)
+    return unless profile_type_change
+
+    profile_type_change.who_dunnit
   end
 
   private

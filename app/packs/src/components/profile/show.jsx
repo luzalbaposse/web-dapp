@@ -23,6 +23,7 @@ const Show = ({
   railsContext,
   currentUserId,
   currentUserAdmin,
+  currentUserModerator,
   isCurrentUserImpersonated,
 }) => {
   const [localTalent, setLocalTalent] = useState(camelCaseObject(talent));
@@ -97,6 +98,7 @@ const Show = ({
         setTalent={setLocalTalent}
         currentUserId={currentUserId}
         currentUserAdmin={currentUserAdmin}
+        currentUserModerator={currentUserModerator}
         railsContext={railsContext}
         changeSection={changeSection}
         talentTokenPrice={talentTokenPrice}

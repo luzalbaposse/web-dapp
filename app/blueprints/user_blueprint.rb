@@ -20,6 +20,15 @@ class UserBlueprint < Blueprinter::Base
     include_view :normal
     fields :email, :wallet_id, :profile_type, :admin?
 
+    field :approved_by do |user, _options|
+      if user.approved_by
+        {
+          name: user.approved_by.name,
+          profile_picture_url: user.approved_by.profile_picture_url
+        }
+      end
+    end
+
     field :invited_by do |user, _options|
       if user.invited
         {
