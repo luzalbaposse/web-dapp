@@ -143,10 +143,7 @@ const LaunchMyTokenBanner = ({ username }) => (
           text="Launch a Talent Token and win $200 in tokens."
           bold
         />
-        <a
-          className="button-link"
-          href={`/u/${username}/edit_profile?tab=Token`}
-        >
+        <a className="button-link" href={`/u/${username}#token`}>
           <Button
             type="primary-default"
             size="extra-big"
