@@ -5,20 +5,19 @@ export const completeProfile = (args) => {
   return missingFields(args).length == 0;
 };
 
-export const missingFields = ({ talent, profilePictureUrl, career_goal }) => {
+export const missingFields = ({ talent, profilePictureUrl, careerGoal }) => {
   const fields = [];
-
   if (!talent.profile?.occupation || talent.profile.occupation == "") {
     fields.push("Occupation");
   }
   if (!talent.profile?.headline || talent.profile.headline == "") {
-    fields.push("Bio");
+    fields.push("Headline");
   }
   if (!profilePictureUrl || profilePictureUrl == "") {
     fields.push("Profile picture");
   }
-  if (!career_goal?.pitch || career_goal.pitch == "") {
-    fields.push("Pitch");
+  if (!careerGoal?.pitch || careerGoal.pitch == "") {
+    fields.push("About");
   }
 
   return fields;

@@ -139,101 +139,139 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
 
   return (
     <>
-      {(talent.careerGoal.goals.length > 0 || talent.milestones.length > 0) && (
-        <div className={cx(className)}>
-          <div className="d-flex w-100 mb-7">
-            <div className="d-flex flex-column align-items-center w-100">
-              <H4 className="text-center" text="Journey" />
-              <P1
-                className="text-center lg-w-50 lg-mx-0 mx-4"
-                text="Here is where you can see what I'm doing at the moment,
+      <div className={cx(className)}>
+        <div className="d-flex flex-column align-items-center w-100 mb-7">
+          <H4 className="text-center" text="Journey" />
+          <P1
+            className="text-center lg-w-50 lg-mx-0 mx-4"
+            text="Here is where you can see what I'm doing at the moment,
                 what I've done and where I want to be!"
-              />
-              <div className="w-100 my-6 px-4 d-flex flex-row overflow-x-scroll justify-content-lg-center">
-                <button
-                  type="button"
-                  className={`mr-2 btn text-nowrap all-journey-button${
-                    activeFilter == "All" ? " active" : ""
-                  }`}
-                  onClick={() => setActiveFilter("All")}
-                >
-                  All ({journeyItems.length})
-                </button>
-                <button
-                  type="button"
-                  className={`mr-2 btn text-nowrap all-journey-button goal-journey-button${
-                    activeFilter == "Goal" ? " active" : ""
-                  }`}
-                  onClick={() => setActiveFilter("Goal")}
-                >
-                  {iconForItem({ category: "Goal" }, true)} Goal{" "}
-                  {categoryCount("Goal")}
-                </button>
-                <button
-                  type="button"
-                  className={`mr-2 btn text-nowrap all-journey-button position-journey-button${
-                    activeFilter == "Position" ? " active" : ""
-                  }`}
-                  onClick={() => setActiveFilter("Position")}
-                >
-                  {iconForItem({ category: "Position" }, true)} Position{" "}
-                  {categoryCount("Position")}
-                </button>
-                <button
-                  type="button"
-                  className={`mr-2 btn text-nowrap all-journey-button education-journey-button${
-                    activeFilter == "Education" ? " active" : ""
-                  }`}
-                  onClick={() => setActiveFilter("Education")}
-                >
-                  {iconForItem({ category: "Education" }, true)} Education{" "}
-                  {categoryCount("Education")}
-                </button>
-                <button
-                  type="button"
-                  className={`btn all-journey-button text-nowrap other-journey-button${
-                    activeFilter == "Other" ? " active" : ""
-                  }`}
-                  onClick={() => setActiveFilter("Other")}
-                >
-                  {iconForItem({ category: "Other" }, true)} Other{" "}
-                  {categoryCount("Other")}
-                </button>
-              </div>
-              {canUpdate && (
-                <Button
-                  className="align-self-end"
-                  type="primary-default"
-                  size="big"
-                  text="Add Experience"
-                  onClick={() => {
-                    setEditType("Add");
-                    setEditMode(true);
-                  }}
-                />
-              )}
+          />
+          {journeyItems.length > 0 && (
+            <div className="w-100 my-6 px-4 d-flex flex-row overflow-x-scroll justify-content-lg-center">
+              <button
+                type="button"
+                className={`mr-2 btn text-nowrap all-journey-button${
+                  activeFilter == "All" ? " active" : ""
+                }`}
+                onClick={() => setActiveFilter("All")}
+              >
+                All ({journeyItems.length})
+              </button>
+              <button
+                type="button"
+                className={`mr-2 btn text-nowrap all-journey-button goal-journey-button${
+                  activeFilter == "Goal" ? " active" : ""
+                }`}
+                onClick={() => setActiveFilter("Goal")}
+              >
+                {iconForItem({ category: "Goal" }, true)} Goal{" "}
+                {categoryCount("Goal")}
+              </button>
+              <button
+                type="button"
+                className={`mr-2 btn text-nowrap all-journey-button position-journey-button${
+                  activeFilter == "Position" ? " active" : ""
+                }`}
+                onClick={() => setActiveFilter("Position")}
+              >
+                {iconForItem({ category: "Position" }, true)} Position{" "}
+                {categoryCount("Position")}
+              </button>
+              <button
+                type="button"
+                className={`mr-2 btn text-nowrap all-journey-button education-journey-button${
+                  activeFilter == "Education" ? " active" : ""
+                }`}
+                onClick={() => setActiveFilter("Education")}
+              >
+                {iconForItem({ category: "Education" }, true)} Education{" "}
+                {categoryCount("Education")}
+              </button>
+              <button
+                type="button"
+                className={`btn all-journey-button text-nowrap other-journey-button${
+                  activeFilter == "Other" ? " active" : ""
+                }`}
+                onClick={() => setActiveFilter("Other")}
+              >
+                {iconForItem({ category: "Other" }, true)} Other{" "}
+                {categoryCount("Other")}
+              </button>
             </div>
-          </div>
-          <div className="d-flex flex-column">
-            {filteredJourneyItems.map((journeyItem, index) => (
-              <div className="d-flex flex-row" key={`journey-item-${index}`}>
-                <H5
-                  className="col-1 text-primary-01"
-                  text={
-                    displayYear(index) && !mobile
-                      ? dayjs(journeyItem.startDate).year()
-                      : ""
-                  }
-                />
-                <div className="d-flex col-11 pr-0">
-                  {!mobile && (
-                    <div className="d-flex flex-column col-3 pr-6 pt-1 text-right">
+          )}
+          {canUpdate && (
+            <Button
+              className="align-self-end"
+              type="primary-default"
+              size="big"
+              text="Add Experience"
+              onClick={() => {
+                setEditType("Add");
+                setEditMode(true);
+              }}
+            />
+          )}
+        </div>
+        <div className="d-flex flex-column">
+          {filteredJourneyItems.map((journeyItem, index) => (
+            <div className="d-flex flex-row" key={`journey-item-${index}`}>
+              <H5
+                className="col-1 text-primary-01"
+                text={
+                  displayYear(index) && !mobile
+                    ? dayjs(journeyItem.startDate).year()
+                    : ""
+                }
+              />
+              <div className="d-flex col-11 pr-0">
+                {!mobile && (
+                  <div className="d-flex flex-column col-3 pr-6 pt-1 text-right">
+                    <P3 className="text-primary-04" bold>
+                      {dayjs(journeyItem.startDate, "YYYY-MM-DD").format(
+                        "MMM YYYY"
+                      )}
+                      {journeyItem.inProgress && " - Today"}
+                      {journeyItem.endDate && !journeyItem.inProgress
+                        ? ` - ${dayjs(journeyItem.endDate, "YYYY-MM-DD").format(
+                            "MMM YYYY"
+                          )}`
+                        : ""}
+                    </P3>
+                    {journeyItem.endDate && (
+                      <P3
+                        className="text-primary-04"
+                        bold
+                        text={diffDates(
+                          dayjs(journeyItem.endDate, "YYYY-MM-DD"),
+                          dayjs(journeyItem.startDate, "YYYY-MM-DD")
+                        )}
+                      />
+                    )}
+                  </div>
+                )}
+                <div
+                  className={cx(
+                    mobile
+                      ? `col-9 pl-6 ${cssForBorder(
+                          journeyItem,
+                          index,
+                          filteredJourneyItems.length
+                        )} position-relative`
+                      : `col-9 pl-7 pr-0 ${cssForBorder(
+                          journeyItem,
+                          index,
+                          filteredJourneyItems.length
+                        )} position-relative`
+                  )}
+                >
+                  {mobile && (
+                    <div className="d-flex flex-column mb-4">
                       <P3 className="text-primary-04" bold>
                         {dayjs(journeyItem.startDate, "YYYY-MM-DD").format(
                           "MMM YYYY"
                         )}
-                        {journeyItem.inProgress && " - Today"}
-                        {journeyItem.endDate && !journeyItem.inProgress
+                        {journeyItem.endDate
                           ? ` - ${dayjs(
                               journeyItem.endDate,
                               "YYYY-MM-DD"
@@ -252,145 +290,102 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
                       )}
                     </div>
                   )}
-                  <div
-                    className={cx(
-                      mobile
-                        ? `col-9 pl-6 ${cssForBorder(
-                            journeyItem,
-                            index,
-                            filteredJourneyItems.length
-                          )} position-relative`
-                        : `col-9 pl-7 pr-0 ${cssForBorder(
-                            journeyItem,
-                            index,
-                            filteredJourneyItems.length
-                          )} position-relative`
-                    )}
-                  >
-                    {mobile && (
-                      <div className="d-flex flex-column mb-4">
-                        <P3 className="text-primary-04" bold>
-                          {dayjs(journeyItem.startDate, "YYYY-MM-DD").format(
-                            "MMM YYYY"
-                          )}
-                          {journeyItem.endDate
-                            ? ` - ${dayjs(
-                                journeyItem.endDate,
-                                "YYYY-MM-DD"
-                              ).format("MMM YYYY")}`
-                            : ""}
-                        </P3>
-                        {journeyItem.endDate && (
-                          <P3
-                            className="text-primary-04"
-                            bold
-                            text={diffDates(
-                              dayjs(journeyItem.endDate, "YYYY-MM-DD"),
-                              dayjs(journeyItem.startDate, "YYYY-MM-DD")
-                            )}
-                          />
-                        )}
-                      </div>
-                    )}
-                    <div className="d-flex justify-content-between">
-                      <P1
-                        className="text-primary-01 medium mb-1"
-                        text={journeyItem.title}
+                  <div className="d-flex justify-content-between">
+                    <P1
+                      className="text-primary-01 medium mb-1"
+                      text={journeyItem.title}
+                    />
+                    {canUpdate && (
+                      <Button
+                        type="primary-outline"
+                        text="Edit"
+                        onClick={() => {
+                          setJourneyItemInEditing(journeyItem);
+                          setEditType("Edit");
+                          setEditMode(true);
+                        }}
                       />
-                      {canUpdate && (
-                        <Button
-                          type="primary-outline"
-                          text="Edit"
-                          onClick={() => {
-                            setJourneyItemInEditing(journeyItem);
-                            setEditType("Edit");
-                            setEditMode(true);
-                          }}
-                        />
-                      )}
-                    </div>
-                    <P2
-                      className="text-primary-01 mb-3"
-                      text={journeyItem.institution}
-                    />
-                    <P2
-                      className="text-primary-03"
-                      text={journeyItem.description}
-                    />
-                    <div className="d-flex flex-wrap">
-                      {journeyItem.images?.length > 3 ? (
-                        <>
-                          {journeyItem.images.slice(0, 2).map((image) => (
-                            <TalentProfilePicture
-                              className="position-relative mr-2 mt-2"
-                              style={{ borderRadius: "24px" }}
-                              src={image.imageUrl}
-                              straight
-                              height={176}
-                              width={225}
-                            />
-                          ))}
-                          {journeyItem.images.slice(2, 3).map((image) => (
-                            <button
-                              className="d-flex button-link p-0 position-relative mt-2"
-                              onClick={() =>
-                                openJourneyImagesModal(journeyItem)
-                              }
-                            >
-                              <TalentProfilePicture
-                                className="position-relative"
-                                style={{ borderRadius: "24px" }}
-                                src={image.imageUrl}
-                                straight
-                                height={176}
-                                width={225}
-                              />
-                              <div
-                                className="edit-image"
-                                style={{ borderRadius: "24px" }}
-                              ></div>
-                              <H4
-                                className="position-absolute permanent-text-white"
-                                style={{ top: "45%", left: "45%" }}
-                                text={`+${journeyItem.images.slice(3).length}`}
-                              />
-                            </button>
-                          ))}
-                        </>
-                      ) : (
-                        <>
-                          {journeyItem.images.map((image) => (
-                            <TalentProfilePicture
-                              className="mr-2 mt-2"
-                              style={{ borderRadius: "24px" }}
-                              src={image.imageUrl}
-                              straight
-                              height={176}
-                              width={225}
-                            />
-                          ))}
-                        </>
-                      )}
-                    </div>
-                    <div className="rocket-position-absolute">
-                      <div
-                        className={
-                          useDashedLine(journeyItem)
-                            ? "journey-dashed-border"
-                            : "journey-border"
-                        }
-                      >
-                        {iconForItem(journeyItem)}
-                      </div>
-                    </div>
-                    <Divider className="my-5" />
+                    )}
                   </div>
+                  <P2
+                    className="text-primary-01 mb-3"
+                    text={journeyItem.institution}
+                  />
+                  <P2
+                    className="text-primary-03"
+                    text={journeyItem.description}
+                  />
+                  <div className="d-flex flex-wrap">
+                    {journeyItem.images?.length > 3 ? (
+                      <>
+                        {journeyItem.images.slice(0, 2).map((image) => (
+                          <TalentProfilePicture
+                            className="position-relative mr-2 mt-2"
+                            style={{ borderRadius: "24px" }}
+                            src={image.imageUrl}
+                            straight
+                            height={176}
+                            width={225}
+                          />
+                        ))}
+                        {journeyItem.images.slice(2, 3).map((image) => (
+                          <button
+                            className="d-flex button-link p-0 position-relative mt-2"
+                            onClick={() => openJourneyImagesModal(journeyItem)}
+                          >
+                            <TalentProfilePicture
+                              className="position-relative"
+                              style={{ borderRadius: "24px" }}
+                              src={image.imageUrl}
+                              straight
+                              height={176}
+                              width={225}
+                            />
+                            <div
+                              className="edit-image"
+                              style={{ borderRadius: "24px" }}
+                            ></div>
+                            <H4
+                              className="position-absolute permanent-text-white"
+                              style={{ top: "45%", left: "45%" }}
+                              text={`+${journeyItem.images.slice(3).length}`}
+                            />
+                          </button>
+                        ))}
+                      </>
+                    ) : (
+                      <>
+                        {journeyItem.images.map((image) => (
+                          <TalentProfilePicture
+                            className="mr-2 mt-2"
+                            style={{ borderRadius: "24px" }}
+                            src={image.imageUrl}
+                            straight
+                            height={176}
+                            width={225}
+                          />
+                        ))}
+                      </>
+                    )}
+                  </div>
+                  <div className="rocket-position-absolute">
+                    <div
+                      className={
+                        useDashedLine(journeyItem)
+                          ? "journey-dashed-border"
+                          : "journey-border"
+                      }
+                    >
+                      {iconForItem(journeyItem)}
+                    </div>
+                  </div>
+                  <Divider className="my-5" />
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-      )}
+      </div>
       {editMode && (
         <EditJourneyModal
           show={editMode}

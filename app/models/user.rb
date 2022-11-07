@@ -105,6 +105,10 @@ class User < ApplicationRecord
     role == "moderator"
   end
 
+  def admin_or_moderator?
+    role.in?(%w[admin moderator])
+  end
+
   def as_json(options = {})
     options[:except] ||= [:remember_token, :encrypted_password, :confirmation_token, :last_sign_in_at, :nounce, :email_confirmation_token]
     super(options)
