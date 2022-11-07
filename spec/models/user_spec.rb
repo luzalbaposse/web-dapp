@@ -394,6 +394,34 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe "#admin_or_moderator?" do
+    let(:user) { create :user, role: role }
+
+    context "when the user's role is 'admin'" do
+      let(:role) { "admin" }
+
+      it "returns false" do
+        expect(user.admin_or_moderator?).to be_truthy
+      end
+    end
+
+    context "when the user's role is 'basic'" do
+      let(:role) { "basic" }
+
+      it "returns false" do
+        expect(user.admin_or_moderator?).to be_falsey
+      end
+    end
+
+    context "when the user's role is 'moderator'" do
+      let(:role) { "moderator" }
+
+      it "returns true" do
+        expect(user.admin_or_moderator?).to be_truthy
+      end
+    end
+  end
+
   describe "#approved_by" do
     let(:user) { create :user, profile_type: profile_type }
     let(:who_dunnit) { create :user, role: "admin" }
