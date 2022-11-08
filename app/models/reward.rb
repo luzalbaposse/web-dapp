@@ -14,5 +14,5 @@ class Reward < ApplicationRecord
   }
 
   validates :amount, presence: true
-  validates :identifier, uniqueness: true
+  validates :identifier, uniqueness: true, if: -> { identifier.present? }
 end
