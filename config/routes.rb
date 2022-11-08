@@ -95,7 +95,7 @@ Rails.application.routes.draw do
 
         resources :follows, only: [:index, :create]
         delete "follows", to: "follows#destroy"
-        resources :notifications, only: [] do
+        resources :notifications, only: [:index] do
           put :mark_as_read
         end
         post "clear_notifications", to: "notifications#mark_all_as_read"

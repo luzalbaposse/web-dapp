@@ -20,7 +20,7 @@ const DiscoveryRow = ({ discoveryRow, env }) => {
   const [talents, setTalents] = useState([]);
   const [pagination, setPagination] = useState({});
   const calculatePerPage = () => {
-    if (width < 400) {
+    if (width < 590) {
       return 1;
     }
     if (width < 900) {

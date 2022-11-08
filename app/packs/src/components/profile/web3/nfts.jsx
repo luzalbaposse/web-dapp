@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { get } from "src/utils/requests";
 import { P1, P3, H3, H5, P2 } from "src/components/design_system/typography";
-import { Edit } from "src/components/icons";
 import ThemedButton from "src/components/design_system/button";
 import { getNftData } from "src/onchain/utils";
 import { ToastBody } from "src/components/design_system/toasts";

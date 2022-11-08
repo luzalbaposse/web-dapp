@@ -13,8 +13,8 @@ if Rails.env.development?
       Feed.create!(user: admin)
       Tasks::PopulateForUser.new.call(user: admin)
 
-      investor_invite = Invites::Create.new(user_id: admin.id).call
-      talent_invite = Invites::Create.new(user_id: admin.id, talent_invite: true).call
+      investor_invite = Invites::Create.new(user: admin).call
+      talent_invite = Invites::Create.new(user: admin, talent_invite: true).call
 
       investor_result = Users::Create.new.call(
         email: "investor@talentprotocol.com",
