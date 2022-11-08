@@ -72,7 +72,6 @@ export const TopBar = ({
   user,
   signOutPath,
   railsContext,
-  notifications,
   hasUnreadMessages,
   isUserImpersonated,
   impersonatedUsername,
@@ -249,7 +248,6 @@ export const TopBar = ({
     return (
       <MobileTopBar
         mode={theme.mode()}
-        notifications={notifications}
         user={user}
         toggleTheme={toggleTheme}
         showConnectButton={showConnectButton}
@@ -323,7 +321,7 @@ export const TopBar = ({
             onClickTransak={onClickTransak}
             signOut={signOut}
           />
-          <Notifications notifications={notifications} mode={theme.mode()} />
+          <Notifications mode={theme.mode()} />
         </div>
       </nav>
     </div>
