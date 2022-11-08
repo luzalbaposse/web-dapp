@@ -144,6 +144,7 @@ Rails.application.routes.draw do
   end
 
   get "/auth/linkedin/callback", to: "oauth_callbacks#linkedin"
+  post "/auth/unstoppable_domains/login", to: "oauth_callbacks#unstoppable_domains"
 
   delete "/sign_out" => "sessions#destroy", :as => "sign_out"
   # end Auth

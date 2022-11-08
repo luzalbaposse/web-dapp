@@ -106,10 +106,7 @@ class Linkedin::OauthHandler
   end
 
   def username
-    parameterized_name = display_name.parameterize(separator: "")
-    return parameterized_name unless User.find_by(username: parameterized_name).present?
-
-    "#{parameterized_name}#{(SecureRandom.random_number(9e5) + 1e5).to_i}"
+    Users::GenerateUsername.new(display_name: display_name).call
   end
 
   def lite_profile

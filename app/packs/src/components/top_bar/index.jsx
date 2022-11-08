@@ -123,10 +123,18 @@ export const TopBar = ({
     });
   };
 
-  const signOut = () => {
+  const signOut = async () => {
+    await disconnectWallet();
+
     destroy(signOutPath).then(() => {
       window.location.replace("/");
     });
+  };
+
+  const disconnectWallet = async (account) => {
+    const onChain = new OnChain(railsContext.contractsEnv);
+
+    onChain.disconnect();
   };
 
   const setupChain = useCallback(
