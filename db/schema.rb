@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_27_085300) do
-
+ActiveRecord::Schema.define(version: 2022_11_06_130542) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -267,9 +266,11 @@ ActiveRecord::Schema.define(version: 2022_10_27_085300) do
     t.integer "uses", default: 0
     t.integer "max_uses", default: 2
     t.boolean "talent_invite", default: false
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "partnership_id"
+    t.index ["partnership_id"], name: "index_invites_on_partnership_id"
     t.index ["user_id"], name: "index_invites_on_user_id"
   end
 
@@ -617,6 +618,7 @@ ActiveRecord::Schema.define(version: 2022_10_27_085300) do
   add_foreign_key "goals", "career_goals"
   add_foreign_key "impersonations", "users", column: "impersonated_id"
   add_foreign_key "impersonations", "users", column: "impersonator_id"
+  add_foreign_key "invites", "partnerships"
   add_foreign_key "invites", "users"
   add_foreign_key "marketing_articles", "users"
   add_foreign_key "messages", "chats"

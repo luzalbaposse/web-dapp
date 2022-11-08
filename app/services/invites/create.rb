@@ -3,33 +3,26 @@ module Invites
     MAX_RETRIES = 5
 
     def initialize(params)
-      @user_id = params.fetch(:user_id)
-      @single_use = params.fetch(:single_use, false)
+      @max_uses = params.fetch(:max_uses, nil)
+      @partnership = params.fetch(:partnership, nil)
       @talent_invite = params.fetch(:talent_invite, false)
+      @user = params.fetch(:user, nil)
     end
 
     def call
-      user = User.find_by(id: @user_id)
-      invite = user.invites.find_by(talent_invite: @talent_invite)
+      invite = existing_invite
       return invite if invite
 
       invite = Invite.new
-
+      invite.partnership = partnership
+      invite.max_uses = max_uses
+      invite.talent_invite = talent_invite
       invite.user = user
-      invite.talent_invite = @talent_invite
-
-      invite.max_uses = number_of_invites(user)
 
       count = 0
 
       begin
-        invite.code =
-          if Invite.where(code: user.username).exists?
-            "#{prefix(invite)}-#{Invite.generate_code}"
-          else
-            user.username
-          end
-
+        invite.code = code(invite)
         invite.save!
       rescue ActiveRecord::RecordNotUnique
         count += 1
@@ -41,10 +34,19 @@ module Invites
 
     private
 
-    def number_of_invites(user)
-      if @single_use
-        1
-      end
+    attr_reader :max_uses, :partnership, :talent_invite, :user
+
+    def existing_invite
+      record = partnership || user
+      return unless record
+
+      record.invites.find_by(talent_invite: talent_invite)
+    end
+
+    def code(invite)
+      return user.username if user && Invite.where(code: user.username).empty?
+
+      "#{prefix(invite)}-#{Invite.generate_code}"
     end
 
     def prefix(invite)

@@ -32,8 +32,8 @@ class UserBlueprint < Blueprinter::Base
     field :invited_by do |user, _options|
       if user.invited
         {
-          name: user.invited.user.name,
-          profile_picture_url: user.invited.user.profile_picture_url
+          name: user.invited.name,
+          profile_picture_url: user.invited.profile_picture_url
         }
       end
     end
