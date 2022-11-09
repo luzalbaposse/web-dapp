@@ -133,6 +133,8 @@ RSpec.describe UnstoppableDomains::LoginUser do
 
           expect(creator).to have_received(:call)
             .with(
+              legal_first_name: "Unstoppable",
+              legal_last_name: "Dinis",
               display_name: "Unstoppable Dinis",
               email: email,
               password: "314835",

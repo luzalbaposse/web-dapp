@@ -41,6 +41,8 @@ module UnstoppableDomains
       return user if user
 
       result = Users::Create.new.call(
+        legal_first_name: legal_first_name,
+        legal_last_name: legal_last_name,
         display_name: params[:name],
         wallet_id: params[:wallet_address],
         email: params[:email],
@@ -90,6 +92,18 @@ module UnstoppableDomains
       return unless params[:ipfs_website]
 
       "https://ipfs.io/ipfs/#{params[:ipfs_website]}"
+    end
+
+    def legal_first_name
+      return unless params[:name] && params[:name].split(" ")[0]
+
+      params[:name].split(" ")[0]
+    end
+
+    def legal_last_name
+      return unless params[:name] && params[:name].split(" ")[-1]
+
+      params[:name].split(" ")[-1]
     end
   end
 end

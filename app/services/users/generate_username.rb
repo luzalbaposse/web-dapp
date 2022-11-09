@@ -1,7 +1,7 @@
 module Users
   class GenerateUsername
     def initialize(display_name:)
-      @display_name = display_name
+      @display_name = display_name.to_s
     end
 
     def call

@@ -62,7 +62,7 @@ RSpec.describe User, type: :model do
 
       expect {
         create(:user, email: "john.doe@talentprotocol.com")
-      }.to raise_error(ActiveRecord::RecordNotUnique)
+      }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "does not allow multiple users with same username" do
@@ -70,7 +70,7 @@ RSpec.describe User, type: :model do
 
       expect {
         create(:user, username: "frank")
-      }.to raise_error(ActiveRecord::RecordNotUnique)
+      }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "does not allow multiple users with same wallet_id" do
@@ -78,7 +78,7 @@ RSpec.describe User, type: :model do
 
       expect {
         create(:user, wallet_id: "1")
-      }.to raise_error(ActiveRecord::RecordNotUnique)
+      }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "does not allow non supported roles" do

@@ -7,6 +7,7 @@ class User < ApplicationRecord
   validate :email_and_credentials
   validate :validate_notification_preferences
   validate :username_is_valid
+  validates :username, :email, :wallet_id, uniqueness: true
 
   has_one :talent
   has_many :invites
@@ -255,9 +256,7 @@ class User < ApplicationRecord
   end
 
   def username_is_valid
-    unless username.match?(/^[a-z0-9]*$/)
-      errors.add(:base, "The username has invalid characters.")
-    end
+    errors.add(:base, "The username has invalid characters.") unless username.match?(/^[a-z0-9]*$/)
   end
 
   def email_and_credentials
