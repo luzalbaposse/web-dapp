@@ -70,6 +70,7 @@ module Users
         display_name: params[:display_name],
         email_confirmation_token: Clearance::Token.new,
         email: params[:email].downcase,
+        wallet_id: params[:wallet_id]&.downcase,
         invited: params[:invite],
         linkedin_id: params[:linkedin_id],
         password: params[:password],

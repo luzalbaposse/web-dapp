@@ -68,7 +68,7 @@ RSpec.describe Invites::Create do
       it "assigns a generated code for the invite" do
         invite = create_invite
 
-        expect(invite.code).to eq("SUP-CODE")
+        expect(invite.code).to eq("#{user.username}-CODE")
       end
 
       context "when it is a talent invite" do
@@ -77,7 +77,7 @@ RSpec.describe Invites::Create do
         it "assigns a generated code for the invite" do
           invite = create_invite
 
-          expect(invite.code).to eq("TAL-CODE")
+          expect(invite.code).to eq("#{user.username}-CODE")
         end
       end
     end
@@ -93,7 +93,7 @@ RSpec.describe Invites::Create do
       invite = Invite.last
 
       aggregate_failures do
-        expect(invite.code).to eq("SUP-CODE")
+        expect(invite.code).to eq(partnership.name.parameterize)
         expect(invite.max_uses).to be_nil
         expect(invite.partnership).to eq(partnership)
         expect(invite.talent_invite).to be_falsey

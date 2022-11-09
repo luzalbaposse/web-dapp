@@ -44,13 +44,28 @@ module Invites
     end
 
     def code(invite)
-      return user.username if user && Invite.where(code: user.username).empty?
+      return user_code if user
+      return partnership_code if partnership
 
-      "#{prefix(invite)}-#{Invite.generate_code}"
+      "invite-#{Invite.generate_code}"
     end
 
-    def prefix(invite)
-      invite.talent_invite ? "TAL" : "SUP"
+    def partnership_code
+      code = partnership.name.parameterize
+
+      if Invite.where(code: code).any?
+        return "#{code}-#{Invite.generate_code}"
+      end
+
+      code
+    end
+
+    def user_code
+      if Invite.where(code: user.username).any?
+        return "#{user.username}-#{Invite.generate_code}"
+      end
+
+      user.username
     end
   end
 end

@@ -15,6 +15,11 @@ Rails.application.routes.draw do
       resources :supporters, only: [:index]
       resources :talent, only: [:show]
       get "/public_talent" => "talent#public_index"
+
+      resource :username, only: [] do
+        get :valid, on: :collection
+      end
+
       resources :users, only: [:show] do
         namespace :profile do
           resources :community, only: [:index]
@@ -78,7 +83,6 @@ Rails.application.routes.draw do
     namespace :api, defaults: {format: :json} do
       namespace :v1 do
         resources :tokens, only: [:show]
-
         resources :users, only: [:index, :update] do
           resources :delete_account_tokens, module: "users", only: [:create]
 
@@ -144,6 +148,7 @@ Rails.application.routes.draw do
   end
 
   get "/auth/linkedin/callback", to: "oauth_callbacks#linkedin"
+  post "/auth/unstoppable_domains/login", to: "oauth_callbacks#unstoppable_domains"
 
   delete "/sign_out" => "sessions#destroy", :as => "sign_out"
   # end Auth
