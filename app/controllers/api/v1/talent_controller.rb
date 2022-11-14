@@ -5,7 +5,8 @@ class API::V1::TalentController < ApplicationController
     service = Talents::Search.new(
       admin_or_moderator: current_user.admin_or_moderator?,
       discovery_row: discovery_row,
-      filter_params: filter_params.to_h
+      filter_params: filter_params.to_h,
+      searching_user: current_user
     )
 
     pagy, talents = pagy(service.call, items: per_page)
@@ -76,7 +77,7 @@ class API::V1::TalentController < ApplicationController
   end
 
   def filter_params
-    params.permit(:keyword, :status, :discovery_row_id)
+    params.permit(:keyword, :status, :discovery_row_id, :watchlist_only)
   end
 
   def discovery_row
