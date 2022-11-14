@@ -16,15 +16,16 @@ import cx from "classnames";
 
 const TalentOptions = ({
   changeTab,
+  watchlistOnly,
   searchUrl,
   listModeOnly,
   headerDescription,
   setListModeOnly,
-  setLocalTalents,
-  setLocalPagination,
+  setTalents,
+  setPagination,
   setSelectedSort,
   setSortDirection,
-  isAdminOrModerator
+  isAdminOrModerator,
 }) => {
   const { mobile } = useWindowDimensionsHook();
   const { mode } = useTheme();
@@ -40,7 +41,7 @@ const TalentOptions = ({
     params.set("page", 1);
 
     get(`${searchUrl}?${params.toString()}`).then((response) => {
-      setLocalPagination(response.pagination);
+      setPagination(response.pagination);
 
       let talents = response.talents.map((talent) => ({
         ...camelCaseObject(talent),
@@ -52,7 +53,7 @@ const TalentOptions = ({
       } else {
         setSelectedSort("");
       }
-      setLocalTalents(talents);
+      setTalents(talents);
       window.history.replaceState(
         {},
         document.title,
@@ -76,6 +77,7 @@ const TalentOptions = ({
         <P1 bold className="text-black" text={headerDescription} />
       ) : (
         <TabButton
+          textActiveTab={watchlistOnly ? "Watchlist" : "All Talent"}
           textTabPrimary="All Talent"
           textTabSecondary="Watchlist"
           onClick={(tab) => changeTab(tab)}
