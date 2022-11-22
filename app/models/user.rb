@@ -38,6 +38,7 @@ class User < ApplicationRecord
   has_many :rewards
 
   # web3
+  has_one :user_domain
   has_many :erc20_tokens
   has_many :erc721_tokens
 
@@ -126,6 +127,8 @@ class User < ApplicationRecord
   end
 
   def display_wallet_id
+    return user_domain.domain if user_domain.present?
+
     wallet_id ? "#{wallet_id[0..10]}..." : ""
   end
 

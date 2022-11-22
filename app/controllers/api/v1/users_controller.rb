@@ -43,6 +43,7 @@ class API::V1::UsersController < ApplicationController
 
         SendCommunityNFTToUser.perform_later(user_id: @user.id)
         AddUsersToMailerliteJob.perform_later(@user.id)
+        Web3::RefreshDomains.new(user: @user).call
 
         service = Web3::TransferCelo.new
         service.call(user: @user)
