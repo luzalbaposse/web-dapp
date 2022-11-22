@@ -18,6 +18,7 @@ const TalentOptions = ({
   changeTab,
   watchlistOnly,
   searchUrl,
+  discoveryRowId,
   listModeOnly,
   headerDescription,
   setListModeOnly,
@@ -40,6 +41,10 @@ const TalentOptions = ({
     params.set(filterType, option);
     params.set("page", 1);
 
+    if (discoveryRowId) {
+      params.set("discovery_row_id", discoveryRowId);
+    }
+
     get(`${searchUrl}?${params.toString()}`).then((response) => {
       setPagination(response.pagination);
 
@@ -54,6 +59,8 @@ const TalentOptions = ({
         setSelectedSort("");
       }
       setTalents(talents);
+
+      params.delete("discovery_row_id");
       window.history.replaceState(
         {},
         document.title,
