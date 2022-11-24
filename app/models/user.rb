@@ -10,12 +10,15 @@ class User < ApplicationRecord
   validates :username, :email, uniqueness: true
   validates :wallet_id, uniqueness: true, if: -> { wallet_id.present? }
 
-  has_one :talent
-  has_many :invites
   belongs_to :invited, class_name: "Invite", foreign_key: "invite_id", optional: true
   belongs_to :race, optional: true
+
+  has_many :invites
   has_many :user_tags
   has_many :tags, through: :user_tags
+
+  has_one :talent
+  has_one :user_email_log
 
   # Chat
   has_many :messagee, foreign_key: :receiver_id, class_name: "Message"
