@@ -35,7 +35,7 @@ module Talents
       if admin_or_moderator && ADMIN_FILTER_STATUS.include?(filter_params[:status])
         Talent.all
       else
-        Talent.base
+        Talent.base.profile_complete.where.not(user: {profile_type: "waiting_for_approval"})
       end
     end
 

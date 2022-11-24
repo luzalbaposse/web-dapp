@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe User, type: :model do
   describe "associations" do
     it { is_expected.to have_one(:talent) }
+    it { is_expected.to have_one(:user_email_log) }
 
     # Chat
     it { is_expected.to have_many(:messagee) }
