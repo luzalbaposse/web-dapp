@@ -59,6 +59,14 @@ RSpec.describe Talents::Search do
   let(:talent_looking_to_mentor_others) { create :talent, :with_token, :with_career_goal, public: true }
   let!(:looking_to_mentor_others_career_need) { create :career_need, career_goal: talent_looking_to_mentor_others.career_goal, title: CareerNeed::MENTORING_OTHERS }
 
+  let!(:user_looking_to_hire_others) { create :user, :with_profile_complete, profile_type: "talent", talent: talent_looking_to_hire_others }
+  let(:talent_looking_to_hire_others) { create :talent, :with_token, :with_career_goal, public: true }
+  let!(:looking_to_hire_others_career_need) { create :career_need, career_goal: talent_looking_to_hire_others.career_goal, title: CareerNeed::HIRING_NEEDS.first }
+
+  let!(:user_looking_for_a_role) { create :user, :with_profile_complete, profile_type: "talent", talent: talent_looking_for_a_role }
+  let(:talent_looking_for_a_role) { create :talent, :with_token, :with_career_goal, public: true }
+  let!(:looking_for_a_role_career_need) { create :career_need, career_goal: talent_looking_for_a_role.career_goal, title: CareerNeed::ROLE_NEEDS.first }
+
   context "when filter params are empty" do
     let(:filter_params) { {} }
 
@@ -75,7 +83,9 @@ RSpec.describe Talents::Search do
           celo_talent,
           polygon_talent,
           talent_looking_for_mentor,
-          talent_looking_to_mentor_others
+          talent_looking_to_mentor_others,
+          talent_looking_to_hire_others,
+          talent_looking_for_a_role
         ]
       )
     end
@@ -276,6 +286,30 @@ RSpec.describe Talents::Search do
 
       it "returns all latest talents looking to mentor" do
         expect(search_talents).to match_array([talent_looking_to_mentor_others])
+      end
+    end
+
+    context "when the status filter is Looking to hire others" do
+      let(:filter_params) do
+        {
+          status: "Looking to hire others"
+        }
+      end
+
+      it "returns all latest talents Looking to hire others" do
+        expect(search_talents).to match_array([talent_looking_to_hire_others])
+      end
+    end
+
+    context "when the status filter is Looking for a role" do
+      let(:filter_params) do
+        {
+          status: "Looking for a role"
+        }
+      end
+
+      it "returns all latest talents looking for a role" do
+        expect(search_talents).to match_array([talent_looking_for_a_role])
       end
     end
   end
