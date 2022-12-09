@@ -28,6 +28,8 @@ import { lightTextPrimary04 } from "src/utils/colors";
 import { formatNumberWithSymbol, verifiedIcon } from "src/utils/viewHelpers";
 import EditOverviewModal from "src/components/profile/edit/EditOverviewModal";
 import RejectTalentModal from "./RejectTalentModal";
+import ApprovalConfirmationModal from "./ApprovalConfirmationModal";
+import VerificationConfirmationModal from "./VerificationConfirmationModal";
 import SocialRow from "./SocialRow";
 
 import cx from "classnames";
@@ -55,6 +57,12 @@ const Overview = ({
   const { mode } = useTheme();
   const [showStakeModal, setShowStakeModal] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
+  const [showApprovalConfirmationModal, setShowApprovalConfirmationModal] =
+    useState(false);
+  const [
+    showVerificationConfirmationModal,
+    setShowVerificationConfirmationModal,
+  ] = useState(false);
   const [isUploadingProfile, setIsUploadingProfile] = useState(false);
   const [isUploadingBanner, setIsUploadingBanner] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -225,65 +233,6 @@ const Overview = ({
     );
   }, []);
 
-  const approveUser = async () => {
-    const params = {
-      user: {
-        id: talent.user.id,
-        profile_type: "approved",
-      },
-    };
-
-    const response = await patch(`/api/v1/talent/${talent.id}`, params).catch(
-      () => {
-        return false;
-      }
-    );
-
-    if (response && !response.error) {
-      setTalent((prev) => ({
-        ...prev,
-        user: { ...prev.user, profileType: "approved" },
-      }));
-
-      toast.success(
-        <ToastBody heading="Success!" body={"User approved successfully."} />,
-        { autoClose: 1500 }
-      );
-
-      return true;
-    }
-  };
-
-  const verifyTalent = async () => {
-    const params = {
-      talent: {
-        verified: true,
-      },
-      user: {
-        id: talent.user.id,
-      },
-    };
-
-    const response = await patch(`/api/v1/talent/${talent.id}`, params).catch(
-      () => {
-        return false;
-      }
-    );
-
-    if (response && !response.error) {
-      setTalent((prev) => ({
-        ...prev,
-        verified: true,
-      }));
-
-      toast.success(
-        <ToastBody heading="Success!" body={"User verified successfully."} />,
-        { autoClose: 1500 }
-      );
-      return true;
-    }
-  };
-
   const impersonateUser = async () => {
     const params = {
       username: talent.user.username,
@@ -363,12 +312,9 @@ const Overview = ({
                     className="position-relative pull-bottom-content-70 align-self-end"
                     style={{ width: "272px", height: "213px" }}
                   >
-                    { isUploadingProfile ? (
+                    {isUploadingProfile ? (
                       <div class="h-100 d-flex justify-content-center align-items-center">
-                        <Spinner
-                          className="mx-4"
-                          width={50}
-                        />
+                        <Spinner className="mx-4" width={50} />
                       </div>
                     ) : (
                       <>
@@ -389,12 +335,9 @@ const Overview = ({
                         ></div>
                       </>
                     )}
-                    { isUploadingBanner ? (
+                    {isUploadingBanner ? (
                       <div class="h-100 d-flex justify-content-center align-items-center">
-                        <Spinner
-                          className="mx-4"
-                          width={50}
-                        />
+                        <Spinner className="mx-4" width={50} />
                       </div>
                     ) : (
                       <>
@@ -595,7 +538,7 @@ const Overview = ({
                         type="primary-default"
                         size="big"
                         text={"Approve"}
-                        onClick={() => approveUser(true)}
+                        onClick={() => setShowApprovalConfirmationModal(true)}
                       />
                       <Button
                         onClick={() => setShowRejectModal(true)}
@@ -612,7 +555,7 @@ const Overview = ({
                       type="primary-default"
                       size="big"
                       text="Verify"
-                      onClick={() => verifyTalent()}
+                      onClick={() => setShowVerificationConfirmationModal(true)}
                     />
                   )}
                   {!isCurrentUserImpersonated && (
@@ -814,7 +757,7 @@ const Overview = ({
                       size="big"
                       type="primary-default"
                       text="Approve"
-                      onClick={() => approveUser(true)}
+                      onClick={() => setShowApprovalConfirmationModal(true)}
                     />
                     <Button
                       onClick={() => setShowRejectModal(true)}
@@ -832,7 +775,7 @@ const Overview = ({
                     size="big"
                     type="primary-default"
                     text="Verify"
-                    onClick={() => verifyTalent()}
+                    onClick={() => setShowVerificationConfirmationModal(true)}
                   />
                 )}
                 {!isCurrentUserImpersonated && (
@@ -937,16 +880,28 @@ const Overview = ({
         talentIsFromCurrentUser={canUpdate}
         railsContext={railsContext}
       />
-      {showRejectModal && (
-        <RejectTalentModal
-          show={showRejectModal}
-          setShow={setShowRejectModal}
-          mobile={mobile}
-          mode={mode()}
-          talent={talent}
-          setTalent={setTalent}
-        />
-      )}
+      <ApprovalConfirmationModal
+        show={showApprovalConfirmationModal}
+        setShow={setShowApprovalConfirmationModal}
+        hide={() => setShowApprovalConfirmationModal(false)}
+        talent={talent}
+        setTalent={setTalent}
+      />
+      <VerificationConfirmationModal
+        show={showVerificationConfirmationModal}
+        setShow={setShowVerificationConfirmationModal}
+        hide={() => setShowVerificationConfirmationModal(false)}
+        talent={talent}
+        setTalent={setTalent}
+      />
+      <RejectTalentModal
+        show={showRejectModal}
+        setShow={setShowRejectModal}
+        mobile={mobile}
+        mode={mode()}
+        talent={talent}
+        setTalent={setTalent}
+      />
       {editMode && (
         <EditOverviewModal
           show={editMode}

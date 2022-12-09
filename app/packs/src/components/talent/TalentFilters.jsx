@@ -24,6 +24,8 @@ const TalentFilters = ({
         "By Polygon Network",
         "Looking for a mentor",
         "Looking to mentor others",
+        "Looking to hire others",
+        "Looking for a role",
       ];
     }
 
@@ -37,6 +39,8 @@ const TalentFilters = ({
       "By Polygon Network",
       "Looking for a mentor",
       "Looking to mentor others",
+      "Looking to hire others",
+      "Looking for a role",
     ];
   }, []);
 
