@@ -129,7 +129,7 @@ const Overview = ({
   });
 
   overviewBannerFileInput?.addEventListener("change", (event) => {
-    setIsUploadingProfile(true);
+    setIsUploadingBanner(true);
     const files = Array.from(event.target.files);
     files.forEach((file) => {
       try {
@@ -333,6 +333,37 @@ const Overview = ({
                             width: "272px",
                           }}
                         ></div>
+                        <label htmlFor="overviewBannerFileInput">
+                          <TalentProfilePicture
+                            className="position-absolute cursor-pointer"
+                            style={{
+                              top: mobile ? "90px" : "155px",
+                              left: mobile ? "95px" : "185px",
+                            }}
+                            src={CameraButton}
+                            height={40}
+                          />
+                        </label>
+                        <input
+                          id="overviewBannerFileInput"
+                          className="d-none"
+                          type="file"
+                          accept=".jpg,.png,.jpeg,.gif"
+                        ></input>
+                        <button
+                          className="button-link position-absolute"
+                          style={{
+                            top: mobile ? "90px" : "155px",
+                            left: mobile ? "145px" : "240px",
+                          }}
+                          onClick={deleteBannerImg}
+                        >
+                          <TalentProfilePicture
+                            className="cursor-pointer"
+                            src={DeleteButton}
+                            height={40}
+                          />
+                        </button>
                       </>
                     )}
                     {isUploadingBanner ? (
@@ -379,26 +410,34 @@ const Overview = ({
                     className="position-relative"
                     style={{ width: "120px", height: "120px" }}
                   >
-                    <TalentProfilePicture
-                      className="position-relative"
-                      src={talent.profilePictureUrl}
-                      height={120}
-                      border
-                    />
-                    <label htmlFor="overviewProfileFileInput">
-                      <TalentProfilePicture
-                        className="position-absolute cursor-pointer"
-                        style={{ top: "40px", left: "40px" }}
-                        src={CameraButton}
-                        height={40}
-                      />
-                    </label>
-                    <input
-                      id="overviewProfileFileInput"
-                      className="d-none"
-                      type="file"
-                      accept=".jpg,.png,.jpeg"
-                    ></input>
+                    {isUploadingProfile ? (
+                      <div class="h-100 d-flex justify-content-center align-items-center">
+                        <Spinner className="mx-4" width={50} />
+                      </div>
+                    ) : (
+                      <>
+                        <TalentProfilePicture
+                          className="position-relative"
+                          src={talent.profilePictureUrl}
+                          height={120}
+                          border
+                        />
+                        <label htmlFor="overviewProfileFileInput">
+                          <TalentProfilePicture
+                            className="position-absolute cursor-pointer"
+                            style={{ top: "40px", left: "40px" }}
+                            src={CameraButton}
+                            height={40}
+                          />
+                        </label>
+                        <input
+                          id="overviewProfileFileInput"
+                          className="d-none"
+                          type="file"
+                          accept=".jpg,.png,.jpeg"
+                        ></input>
+                      </>
+                    )}
                   </div>
                 </>
               )}
@@ -416,26 +455,34 @@ const Overview = ({
                   className="position-relative mb-3"
                   style={{ width: "112px", height: "112px" }}
                 >
-                  <TalentProfilePicture
-                    className="position-relative"
-                    src={talent.profilePictureUrl}
-                    height={112}
-                  />
-                  <div className="rounded-circle edit-image"></div>
-                  <label htmlFor="overviewProfileFileInput">
-                    <TalentProfilePicture
-                      className="position-absolute cursor-pointer"
-                      style={{ top: "36px", left: "36px" }}
-                      src={CameraButton}
-                      height={40}
-                    />
-                  </label>
-                  <input
-                    id="overviewProfileFileInput"
-                    className="d-none"
-                    type="file"
-                    accept=".jpg,.png,.jpeg"
-                  ></input>
+                  {isUploadingProfile ? (
+                    <div class="h-100 d-flex justify-content-center align-items-center">
+                      <Spinner className="mx-4" width={50} />
+                    </div>
+                  ) : (
+                    <>
+                      <TalentProfilePicture
+                        className="position-relative"
+                        src={talent.profilePictureUrl}
+                        height={112}
+                      />
+                      <div className="rounded-circle edit-image"></div>
+                      <label htmlFor="overviewProfileFileInput">
+                        <TalentProfilePicture
+                          className="position-absolute cursor-pointer"
+                          style={{ top: "36px", left: "36px" }}
+                          src={CameraButton}
+                          height={40}
+                        />
+                      </label>
+                      <input
+                        id="overviewProfileFileInput"
+                        className="d-none"
+                        type="file"
+                        accept=".jpg,.png,.jpeg"
+                      ></input>
+                    </>
+                  )}
                 </div>
               )}
             </>
@@ -692,7 +739,7 @@ const Overview = ({
           <div
             className={cx(
               mobile ? "col-12" : "col-5 p-0",
-              "d-flex flex-column align-items-end justify-content-center"
+              "d-flex flex-column align-items-center justify-content-center"
             )}
           >
             {previewMode || !canUpdate ? (
@@ -703,40 +750,48 @@ const Overview = ({
               />
             ) : (
               <div className="position-relative">
-                <TalentProfilePicture
-                  className="position-relative banner-profile cursor-pointer"
-                  src={talent.bannerUrl || TalentBanner}
-                  straight
-                />
-                <div
-                  className="edit-image banner-profile"
-                  style={{ borderRadius: "24px" }}
-                ></div>
-                <label htmlFor="overviewBannerFileInput">
-                  <TalentProfilePicture
-                    className="position-absolute cursor-pointer"
-                    style={{ top: "145px", left: "160px" }}
-                    src={CameraButton}
-                    height={40}
-                  />
-                </label>
-                <input
-                  id="overviewBannerFileInput"
-                  className="d-none"
-                  type="file"
-                  accept=".jpg,.png,.jpeg,.gif"
-                ></input>
-                <button
-                  className="button-link position-absolute"
-                  style={{ top: "145px", left: "210px" }}
-                  onClick={deleteBannerImg}
-                >
-                  <TalentProfilePicture
-                    className="cursor-pointer"
-                    src={DeleteButton}
-                    height={40}
-                  />
-                </button>
+                {isUploadingBanner ? (
+                  <div class="h-100 d-flex justify-content-center align-items-center">
+                    <Spinner className="mx-4" width={50} />
+                  </div>
+                ) : (
+                  <>
+                    <TalentProfilePicture
+                      className="position-relative banner-profile cursor-pointer"
+                      src={talent.bannerUrl || TalentBanner}
+                      straight
+                    />
+                    <div
+                      className="edit-image banner-profile"
+                      style={{ borderRadius: "24px" }}
+                    ></div>
+                    <label htmlFor="overviewBannerFileInput">
+                      <TalentProfilePicture
+                        className="position-absolute cursor-pointer"
+                        style={{ top: "145px", left: "160px" }}
+                        src={CameraButton}
+                        height={40}
+                      />
+                    </label>
+                    <input
+                      id="overviewBannerFileInput"
+                      className="d-none"
+                      type="file"
+                      accept=".jpg,.png,.jpeg,.gif"
+                    ></input>
+                    <button
+                      className="button-link position-absolute"
+                      style={{ top: "145px", left: "210px" }}
+                      onClick={deleteBannerImg}
+                    >
+                      <TalentProfilePicture
+                        className="cursor-pointer"
+                        src={DeleteButton}
+                        height={40}
+                      />
+                    </button>
+                  </>
+                )}
               </div>
             )}
           </div>
