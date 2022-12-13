@@ -96,11 +96,11 @@ module Talents
         talents
           .joins(career_goal: :career_needs)
           .where(career_needs: {title: CareerNeed::MENTORING_OTHERS})
-      elsif filter_params[:status] == "Looking to hire others"
+      elsif filter_params[:status] == "Looking to hire"
         talents
           .joins(career_goal: :career_needs)
           .where(career_needs: {title: CareerNeed::HIRING_NEEDS})
-      elsif filter_params[:status] == "Looking for a role"
+      elsif filter_params[:status] == "Looking for new opportunities"
         talents
           .joins(career_goal: :career_needs)
           .where(career_needs: {title: CareerNeed::ROLE_NEEDS})
