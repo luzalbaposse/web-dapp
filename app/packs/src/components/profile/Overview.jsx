@@ -140,7 +140,7 @@ const Overview = ({
           data: file,
         });
       } catch (err) {
-        setIsUploadingProfile(false);
+        setIsUploadingBanner(false);
         if (err.isRestriction) {
           // handle restrictions
           console.log("Restriction error:", err);
