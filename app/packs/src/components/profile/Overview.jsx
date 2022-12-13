@@ -184,6 +184,7 @@ const Overview = ({
     });
     uppyProfile.on("upload-success", (file, response) => {
       setIsUploadingProfile(false);
+      setIsUploadingBanner(false);
       saveProfile({
         ...talent,
         profilePictureUrl: response.uploadURL,
@@ -207,6 +208,7 @@ const Overview = ({
     });
     uppyBanner.on("upload-success", (file, response) => {
       setIsUploadingProfile(false);
+      setIsUploadingBanner(false);
       saveProfile({
         ...talent,
         bannerUrl: response.uploadURL,
