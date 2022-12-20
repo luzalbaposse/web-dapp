@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_21_140053) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_20_082739) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -561,8 +561,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_21_140053) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.string "theme_preference", default: "light"
     t.boolean "disabled", default: false
+    t.string "theme_preference", default: "light"
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"
@@ -588,6 +588,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_21_140053) do
     t.string "legal_first_name"
     t.string "legal_last_name"
     t.boolean "onboarding_complete", default: false
+    t.boolean "whitelisted_talent_mate", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invite_id"], name: "index_users_on_invite_id"
     t.index ["linkedin_id"], name: "index_users_on_linkedin_id", unique: true
