@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 
 import { H4, H5, P1, P2, P3 } from "src/components/design_system/typography";
+import Tag from "src/components/design_system/tag";
 import { useWindowDimensionsHook } from "src/utils/window";
 import { compareDates, diffDates } from "src/utils/compareHelpers";
 import { Rocket, Toolbox, Bulb, Learn } from "src/components/icons";
@@ -25,6 +26,14 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
   const [editType, setEditType] = useState("");
   const [journeyItemInEditing, setJourneyItemInEditing] = useState(null);
   const [journeyItemSelected, setJourneyItemSelected] = useState(null);
+
+  const progressMap = {
+    planned: "Planned",
+    executing: "Executing",
+    accomplished: "Accomplished",
+    not_accomplished: "Not Accomplished",
+    abandoned: "Abandoned",
+  };
 
   useEffect(() => {
     const allItems = mergeAndSortJourney(
@@ -292,7 +301,7 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
                   )}
                   <div className="d-flex justify-content-between">
                     <P1
-                      className="text-primary-01 medium mb-1"
+                      className="text-primary-01 medium mb-3"
                       text={journeyItem.title}
                     />
                     {canUpdate && (
@@ -307,16 +316,34 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
                       />
                     )}
                   </div>
-                  <a target="_blank" href={journeyItem.link}>
-                    <P2
-                      className="text-primary-01 mb-3"
-                      text={journeyItem.institution}
-                    />
-                  </a>
+                  {journeyItem.link && (
+                    <a target="_blank" href={journeyItem.link}>
+                      <P2
+                        className="text-primary-01 mb-3"
+                        text={journeyItem.institution}
+                      />
+                    </a>
+                  )}
                   <P2
                     className="text-primary-03"
                     text={journeyItem.description}
                   />
+                  {journeyItem.progress && (
+                    <Tag
+                      className={cx(
+                        journeyItem.progress == "accomplished"
+                          ? "positive"
+                          : "secondary",
+                        "mt-3"
+                      )}
+                    >
+                      <P3
+                        className="current-color"
+                        medium
+                        text={progressMap[journeyItem.progress]}
+                      />
+                    </Tag>
+                  )}
                   <div className="d-flex flex-wrap">
                     {journeyItem.images?.length > 3 ? (
                       <>

@@ -246,6 +246,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_20_082739) do
     t.bigint "career_goal_id"
     t.string "title"
     t.string "link"
+    t.string "progress"
     t.index ["career_goal_id"], name: "index_goals_on_career_goal_id"
   end
 

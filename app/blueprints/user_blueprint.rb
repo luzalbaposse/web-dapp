@@ -11,8 +11,13 @@ class UserBlueprint < Blueprinter::Base
     field :name do |user, _options|
       user.name
     end
+
     field :is_talent do |user, _options|
       user.talent.present?
+    end
+
+    field :visible_digital_collectibles do |user, _options|
+      user.visible_digital_collectibles?
     end
   end
 

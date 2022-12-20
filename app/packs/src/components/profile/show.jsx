@@ -135,7 +135,8 @@ const Show = ({
           text="Community"
           onClick={() => changeSection("#community")}
         />
-        {(user.walletId || canUpdate) && (
+        {((user.walletId && user.visible_digital_collectibles) ||
+          canUpdate) && (
           <Button
             type={buttonType("#digital-collectibles")}
             text={"Digital Collectibles"}

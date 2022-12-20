@@ -135,6 +135,10 @@ class User < ApplicationRecord
     wallet_id ? "#{wallet_id[0..10]}..." : ""
   end
 
+  def visible_digital_collectibles?
+    erc20_tokens.visible.any? || erc721_tokens.visible.any?
+  end
+
   def has_unread_messages?
     messagee.unread.any?
   end
