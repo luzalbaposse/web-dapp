@@ -18,7 +18,7 @@ class User < ApplicationRecord
   has_many :tags, through: :user_tags
 
   has_one :talent
-  has_one :user_email_log
+  has_one :user_email_log, dependent: :destroy
 
   # Chat
   has_many :messagee, foreign_key: :receiver_id, class_name: "Message"
@@ -35,15 +35,15 @@ class User < ApplicationRecord
   has_many :posts
   has_many :notifications, as: :recipient
   has_many :quests
-  has_many :connections
+  has_many :connections, dependent: :destroy
 
   # Rewards
   has_many :rewards
 
   # web3
-  has_one :user_domain
-  has_many :erc20_tokens
-  has_many :erc721_tokens
+  has_one :user_domain, dependent: :destroy
+  has_many :erc20_tokens, dependent: :destroy
+  has_many :erc721_tokens, dependent: :destroy
 
   VALID_ROLES = ["admin", "basic", "moderator"].freeze
 
