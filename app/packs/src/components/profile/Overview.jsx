@@ -237,8 +237,6 @@ const Overview = ({
       environment: railsContext.withPersonaEnvironment,
       onReady: () => client.open(),
       onComplete: ({ inquiryId, status, fields }) => {
-        patch("/api/v1/with_persona_requests");
-
         const params = {
           talent: {
             with_persona_id: inquiryId,
@@ -257,9 +255,9 @@ const Overview = ({
             toast.success(
               <ToastBody
                 heading="Success!"
-                body={"You're being verified. It can take up to 24h"}
+                body={"You're being verified. It can take up to 24 hours"}
               />,
-              { autoClose: 1500 }
+              { autoClose: 2500 }
             );
             return true;
           })

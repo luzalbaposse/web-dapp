@@ -4,4 +4,11 @@ class WithPersonaRequest < ApplicationRecord
 
   validates :month, presence: true
   validates :year, presence: true
+
+  def self.current_month_persona_request
+    WithPersonaRequest.find_or_create_by!(
+      month: Date.today.month,
+      year: Date.today.year
+    )
+  end
 end
