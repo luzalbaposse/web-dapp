@@ -29,7 +29,6 @@ import { formatNumberWithSymbol, verifiedIcon } from "src/utils/viewHelpers";
 import EditOverviewModal from "src/components/profile/edit/EditOverviewModal";
 import RejectTalentModal from "./RejectTalentModal";
 import ApprovalConfirmationModal from "./ApprovalConfirmationModal";
-import VerificationConfirmationModal from "./VerificationConfirmationModal";
 import SocialRow from "./SocialRow";
 
 import cx from "classnames";
@@ -50,6 +49,7 @@ const Overview = ({
   previewMode,
   setPreviewMode,
   isCurrentUserImpersonated,
+  withPersonaRequest,
 }) => {
   const joinedAt = dayjs(talent.user.createdAt).format("MMMM YYYY");
 
@@ -59,10 +59,6 @@ const Overview = ({
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [showApprovalConfirmationModal, setShowApprovalConfirmationModal] =
     useState(false);
-  const [
-    showVerificationConfirmationModal,
-    setShowVerificationConfirmationModal,
-  ] = useState(false);
   const [isUploadingProfile, setIsUploadingProfile] = useState(false);
   const [isUploadingBanner, setIsUploadingBanner] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -234,6 +230,45 @@ const Overview = ({
       document.getElementById("overviewBannerFileInput")
     );
   }, []);
+
+  const verifyTalent = async () => {
+    const client = new Persona.Client({
+      templateId: railsContext.withPersonaTemplateId,
+      environment: railsContext.withPersonaEnvironment,
+      onReady: () => client.open(),
+      onComplete: ({ inquiryId, status, fields }) => {
+        patch("/api/v1/with_persona_requests");
+
+        const params = {
+          talent: {
+            with_persona_id: inquiryId,
+          },
+          user: {
+            id: talent.user.id,
+          },
+        };
+        patch(`/api/v1/talent/${talent.id}`, params)
+          .then((response) => {
+            setTalent((prev) => ({
+              ...prev,
+              withPersonaId: response.with_persona_id,
+            }));
+
+            toast.success(
+              <ToastBody
+                heading="Success!"
+                body={"You're being verified. It can take up to 24h"}
+              />,
+              { autoClose: 1500 }
+            );
+            return true;
+          })
+          .catch(() => {
+            return false;
+          });
+      },
+    });
+  };
 
   const impersonateUser = async () => {
     const params = {
@@ -515,6 +550,16 @@ const Overview = ({
                   <>
                     {canUpdate ? (
                       <>
+                        {!talent.verified &&
+                          !talent.withPersonaId &&
+                          withPersonaRequest.requests_counter < 450 && (
+                            <Button
+                              className="mr-2"
+                              type="primary-default"
+                              text="Verify"
+                              onClick={() => verifyTalent()}
+                            />
+                          )}
                         <Button
                           className="mr-2"
                           type="primary-default"
@@ -597,15 +642,6 @@ const Overview = ({
                         Reject
                       </Button>
                     </>
-                  )}
-                  {!talent.verified && (
-                    <Button
-                      className="mb-5"
-                      type="primary-default"
-                      size="big"
-                      text="Verify"
-                      onClick={() => setShowVerificationConfirmationModal(true)}
-                    />
                   )}
                   {!isCurrentUserImpersonated && (
                     <Button
@@ -826,15 +862,6 @@ const Overview = ({
                     </Button>
                   </>
                 )}
-                {!talent.verified && (
-                  <Button
-                    className="mr-7"
-                    size="big"
-                    type="primary-default"
-                    text="Verify"
-                    onClick={() => setShowVerificationConfirmationModal(true)}
-                  />
-                )}
                 {!isCurrentUserImpersonated && (
                   <Button
                     className="mr-2"
@@ -856,6 +883,17 @@ const Overview = ({
               <>
                 {canUpdate ? (
                   <>
+                    {!talent.verified &&
+                      !talent.withPersonaId &&
+                      withPersonaRequest.requests_counter < 450 && (
+                        <Button
+                          className="mr-2"
+                          type="primary-default"
+                          size="big"
+                          text="Verify"
+                          onClick={() => verifyTalent()}
+                        />
+                      )}
                     <Button
                       className="mr-2"
                       type="primary-default"
@@ -941,13 +979,6 @@ const Overview = ({
         show={showApprovalConfirmationModal}
         setShow={setShowApprovalConfirmationModal}
         hide={() => setShowApprovalConfirmationModal(false)}
-        talent={talent}
-        setTalent={setTalent}
-      />
-      <VerificationConfirmationModal
-        show={showVerificationConfirmationModal}
-        setShow={setShowVerificationConfirmationModal}
-        hide={() => setShowVerificationConfirmationModal(false)}
         talent={talent}
         setTalent={setTalent}
       />

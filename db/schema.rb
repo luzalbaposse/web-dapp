@@ -445,6 +445,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_20_082739) do
     t.integer "experience_level", default: 0
     t.string "market_cap", default: "0"
     t.decimal "market_cap_variance", precision: 10, scale: 2, default: "0.0"
+    t.string "with_persona_id"
     t.index ["activity_count"], name: "index_talent_on_activity_count"
     t.index ["ito_date"], name: "index_talent_on_ito_date"
     t.index ["public_key"], name: "index_talent_on_public_key", unique: true
@@ -618,6 +619,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_20_082739) do
     t.boolean "talent", default: false
     t.index ["approved"], name: "index_wait_list_on_approved"
     t.index ["email"], name: "index_wait_list_on_email", unique: true
+  end
+
+  create_table "with_persona_requests", force: :cascade do |t|
+    t.integer "requests_counter", default: 0, null: false
+    t.integer "month", null: false
+    t.integer "year", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "career_goals", "talent"

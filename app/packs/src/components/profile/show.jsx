@@ -25,6 +25,7 @@ const Show = ({
   currentUserAdmin,
   currentUserModerator,
   isCurrentUserImpersonated,
+  withPersonaRequest,
 }) => {
   const [localTalent, setLocalTalent] = useState(camelCaseObject(talent));
   const user = localTalent.user;
@@ -106,6 +107,7 @@ const Show = ({
         previewMode={previewMode}
         setPreviewMode={setPreviewMode}
         isCurrentUserImpersonated={isCurrentUserImpersonated}
+        withPersonaRequest={withPersonaRequest}
       />
       <Divider className="my-6" />
       <div className="d-flex justify-content-lg-center overflow-x-scroll mx-4">
