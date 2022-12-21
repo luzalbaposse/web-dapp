@@ -30,6 +30,7 @@ import EditOverviewModal from "src/components/profile/edit/EditOverviewModal";
 import RejectTalentModal from "./RejectTalentModal";
 import ApprovalConfirmationModal from "./ApprovalConfirmationModal";
 import SocialRow from "./SocialRow";
+import VerificationConfirmationModal from "./VerificationConfirmationModal";
 
 import cx from "classnames";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -59,6 +60,10 @@ const Overview = ({
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [showApprovalConfirmationModal, setShowApprovalConfirmationModal] =
     useState(false);
+  const [
+    showVerificationConfirmationModal,
+    setShowVerificationConfirmationModal,
+  ] = useState(false);
   const [isUploadingProfile, setIsUploadingProfile] = useState(false);
   const [isUploadingBanner, setIsUploadingBanner] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -623,6 +628,15 @@ const Overview = ({
               </div>
               {(currentUserAdmin || currentUserModerator) && (
                 <div className="d-flex flex-column mb-4">
+                  {!talent.verified && (
+                    <Button
+                      className="mb-5"
+                      type="primary-default"
+                      size="big"
+                      text="Verify"
+                      onClick={() => setShowVerificationConfirmationModal(true)}
+                    />
+                  )}
                   {talent.user.profileType == "waiting_for_approval" && (
                     <>
                       <Button
@@ -841,6 +855,15 @@ const Overview = ({
           <div className="d-flex align-items-center">
             {(currentUserAdmin || currentUserModerator) && (
               <>
+                {!talent.verified && (
+                  <Button
+                    className="mr-2"
+                    size="big"
+                    type="primary-default"
+                    text="Verify"
+                    onClick={() => setShowVerificationConfirmationModal(true)}
+                  />
+                )}
                 {talent.user.profileType == "waiting_for_approval" && (
                   <>
                     <Button
@@ -972,6 +995,13 @@ const Overview = ({
         ticker={talent.token.ticker}
         talentIsFromCurrentUser={canUpdate}
         railsContext={railsContext}
+      />
+      <VerificationConfirmationModal
+        show={showVerificationConfirmationModal}
+        setShow={setShowVerificationConfirmationModal}
+        hide={() => setShowVerificationConfirmationModal(false)}
+        talent={talent}
+        setTalent={setTalent}
       />
       <ApprovalConfirmationModal
         show={showApprovalConfirmationModal}
