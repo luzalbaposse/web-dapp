@@ -18,7 +18,7 @@ export const questDescription = (type) => {
     case "Quests::TalentProfile":
       return "Complete the mandatory fields of your profile and share it with your network.";
     case "Quests::VerifiedProfile":
-      return "Schedule a call with a member of Talent Protocol’s core team. Get verified and earn your badge. Currently unavailable.";
+      return "Click on the Verify button in your profile and get verified";
     case "Quests::TalentToken":
       return "Complete the mandatory fields of your profile and apply to be verified.";
     default:
@@ -103,6 +103,13 @@ export const taskDescription = (type) => {
       return (
         <P2 className="text-primary-03" text="Add perks to your profile." />
       );
+    case "Tasks::Verified":
+      return (
+        <P2
+          className="text-primary-03"
+          text="Click on the Verify button in your profile and get verified."
+        />
+      );
     default:
       return "";
   }
@@ -110,27 +117,11 @@ export const taskDescription = (type) => {
 
 export const taskReward = (type, disabled) => {
   switch (type) {
-    case "Tasks::FillInAbout":
-      return (
-        <P2
-          className={cx(disabled ? "text-primary-04" : "text-black")}
-          text="0.001 CELO"
-        />
-      );
-    case "Tasks::ConnectWallet":
-      return (
-        <ParagraphLink
-          text="User NFT"
-          href={COMMUNITY_S01_NFT_AIRDROP}
-          target="_blank"
-          disabled={disabled}
-        />
-      );
     case "Tasks::BuyTalentToken":
       return (
         <ParagraphLink
-          text="Member NFT"
-          href={COMMUNITY_S01_NFT_AIRDROP}
+          text="Talent Mate 'Token Holder' skin unlock"
+          href={"https://mates.talentprotocol.com/"}
           target="_blank"
           disabled={disabled}
         />
@@ -142,13 +133,6 @@ export const taskReward = (type, disabled) => {
           text="2,000 Talent Tokens (worth $200)"
         />
       );
-    case "Tasks::Verified":
-      return (
-        <P2
-          className={cx(disabled ? "text-primary-04" : "text-black")}
-          text="100 TAL"
-        />
-      );
     default:
       return "";
   }
@@ -158,16 +142,24 @@ export const questRewards = (type, disabled) => {
   switch (type) {
     case "Quests::User":
       return [
-        <P2
-          className={cx(disabled ? "text-primary-04" : "text-black")}
-          text="Referral Race"
+        <ParagraphLink
+          text="Talent Hunt"
+          href={"/earn?tab=talent"}
+          disabled={disabled}
         />,
       ];
     case "Quests::TalentProfile":
       return [
+        <P2
+          className={cx(disabled ? "text-primary-04" : "text-black")}
+          text="50 TAL"
+        />,
+      ];
+    case "Quests::TalentToken":
+      return [
         <ParagraphLink
-          text="Member NFT"
-          href={COMMUNITY_S01_NFT_AIRDROP}
+          text="Talent Mate 'Talent' skin unlock"
+          href={"https://mates.talentprotocol.com/"}
           target="_blank"
           disabled={disabled}
         />,
@@ -177,6 +169,12 @@ export const questRewards = (type, disabled) => {
         <P2
           className={cx(disabled ? "text-primary-04" : "text-black")}
           text="Verified badge"
+        />,
+        <ParagraphLink
+          text="Talent Mate basic skin unlock"
+          href={"https://mates.talentprotocol.com/"}
+          target="_blank"
+          disabled={disabled}
         />,
       ];
     default:

@@ -34,7 +34,8 @@ module Tasks
         user.invites.where(talent_invite: false).update_all(max_uses: nil)
       elsif type == "Quests::VerifiedProfile"
         WhitelistUserJob.perform_later(user_id: user.id, level: "verified")
-        Reward.create!(user: user, amount: 100, category: "quest", reason: "Got verified")
+      elsif type == "Quests::TalentProfile"
+        Reward.create!(user: user, amount: 50, category: "quest", reason: "completed profile")
       end
     end
 
