@@ -151,7 +151,7 @@ const MilestoneExperience = ({
   ];
 
   const yearOptions = (() => {
-    const max = new Date().getFullYear();
+    const max = new Date().getFullYear() + 20;
     const min = 1970;
 
     const years = [];
@@ -178,6 +178,8 @@ const MilestoneExperience = ({
         "endDate",
         dayjs(`${endMonth}-${endYear}`, "MMMM-YYYY").format("DD-MM-YYYY")
       );
+    } else {
+      changeAttribute("endDate", "");
     }
   }, [endMonth, endYear]);
 
@@ -449,6 +451,14 @@ const GoalExperience = ({
     returnYear(currentJourneyItem.dueDate)
   );
 
+  const progressOptions = [
+    { value: "planned", title: "Planned" },
+    { value: "executing", title: "Executing" },
+    { value: "accomplished", title: "Accomplished" },
+    { value: "not_accomplished", title: "Not Accomplished" },
+    { value: "abandoned", title: "Abandoned" },
+  ];
+
   const monthOptions = [
     "January",
     "February",
@@ -509,6 +519,27 @@ const GoalExperience = ({
             required={true}
             error={validationErrors?.title}
           />
+        </div>
+        <div className="w-100 mb-5">
+          <label htmlFor="inputProgress">
+            <P2 className="mb-2 text-primary-01" bold>
+              Career Goal Status
+            </P2>
+          </label>
+          <Form.Control
+            as="select"
+            onChange={(e) => changeAttribute("progress", e.target.value)}
+            value={currentJourneyItem.progress}
+            placeholder="Please Select"
+            className="height-auto mr-2"
+          >
+            <option value=""></option>
+            {progressOptions.map((item) => (
+              <option value={item.value} key={`progress-${item.value}`}>
+                {item.title}
+              </option>
+            ))}
+          </Form.Control>
         </div>
         <div className="w-100 mb-5">
           <TextArea
@@ -676,6 +707,7 @@ const EditJourneyModal = ({
     link: journeyItem?.link || "",
     institution: journeyItem?.institution || "",
     inProgress: journeyItem?.inProgress || false,
+    progress: journeyItem?.progress || "",
     category: journeyItem?.category || "",
     images: journeyItem?.images || [],
   });
@@ -684,6 +716,7 @@ const EditJourneyModal = ({
     title: false,
     startDate: false,
     dueDate: false,
+    progress: false,
     description: false,
     institution: false,
   });
@@ -1028,6 +1061,7 @@ const EditJourneyModal = ({
       link: "",
       institution: "",
       inProgress: false,
+      progress: "",
       category: "",
     });
     setJourneyItem(null);

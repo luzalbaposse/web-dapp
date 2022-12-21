@@ -119,6 +119,7 @@ Rails.application.routes.draw do
         resources :races, only: [:show]
         resources :impersonations, only: [:create, :destroy]
         resources :tags, only: [:index]
+        resource :with_persona_requests, only: [:update]
       end
     end
   end

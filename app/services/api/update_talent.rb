@@ -40,7 +40,15 @@ class API::UpdateTalent
       end
     end
 
-    talent_user.update!(params.except(:profile_type, :note))
+    if params.key?(:legal_first_name) && !talent.with_persona_id
+      talent_user.update!(legal_first_name: params[:legal_first_name])
+    end
+
+    if params.key?(:legal_last_name) && !talent.with_persona_id
+      talent_user.update!(legal_last_name: params[:legal_last_name])
+    end
+
+    talent_user.update!(params.except(:profile_type, :note, :legal_first_name, :legal_last_name))
   end
 
   def update_talent(params)
@@ -127,6 +135,10 @@ class API::UpdateTalent
     if params.key?(:verified)
       talent.verified = params[:verified]
       Tasks::Update.new.call(type: "Tasks::Verified", user: talent_user) if talent.verified?
+    end
+
+    if params.key?(:with_persona_id)
+      talent.with_persona_id = params[:with_persona_id]
     end
 
     if params.key?(:banner_data)

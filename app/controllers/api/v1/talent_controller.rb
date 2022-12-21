@@ -90,7 +90,9 @@ class API::V1::TalentController < ApplicationController
       :username,
       :profile_type,
       :note,
-      :ens_domain
+      :ens_domain,
+      :legal_first_name,
+      :legal_last_name
     )
   end
 
@@ -110,6 +112,7 @@ class API::V1::TalentController < ApplicationController
       :disable_messages,
       :open_to_job_offers,
       :verified,
+      :with_persona_id,
       profile: [
         :pronouns,
         :occupation,
