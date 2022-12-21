@@ -15,12 +15,7 @@ class ProfilesController < ApplicationController
       tags: user.tags.where(hidden: false)
     )
 
-    with_persona_request = WithPersonaRequest.find_by(
-      month: Date.today.month,
-      year: Date.today.year
-    )
-
-    @with_persona_request = WithPersonaRequestBlueprint.render_as_json(with_persona_request)
+    @with_persona_request = WithPersonaRequestBlueprint.render_as_json(WithPersonaRequest.current_month_persona_request)
   end
 
   private

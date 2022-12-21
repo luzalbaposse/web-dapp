@@ -36,6 +36,10 @@ Rails.application.routes.draw do
   end
   # end Public API
 
+  namespace :external, defaults: {format: :json} do
+    resources :persona_webhooks, only: [:create]
+  end
+
   constraints Clearance::Constraints::SignedIn.new { |user| !user.onboarding_complete? } do
     root to: "onboarding#index", as: :onboarding_root
     post "/finish" => "onboarding#finish"

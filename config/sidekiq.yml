@@ -51,5 +51,5 @@
     cron: "1 0 1 * *" # Runs every month at 00:01
     class: SetupNextRaceJob
   sync_with_persona_job:
-    cron: "0 */12 * * *" # Runs every 12 hours
+    cron: "*/10 * * * *" # Runs every 10 minutes
     class: SyncWithPersonaJob
