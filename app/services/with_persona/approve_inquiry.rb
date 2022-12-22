@@ -14,7 +14,12 @@ module WithPersona
         Tasks::Update.new.call(type: "Tasks::Verified", user: user)
       else
         talent.update(with_persona_id: nil)
-        # failed notification
+        CreateNotification.new.call(
+          recipient: user,
+          source_id: user.id,
+          type: UserNamesVerificationFailedNotification,
+          extra_params: {reason: "name"}
+        )
       end
     end
 

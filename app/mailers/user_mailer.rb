@@ -71,6 +71,13 @@ class UserMailer < ApplicationMailer
     bootstrap_mail(to: @user.email, subject: "You're verified! ✅")
   end
 
+  def send_verification_failed_email
+    @user = User.find(indifferent_access_params[:source_id])
+    @reason = indifferent_access_params[:reason]
+
+    bootstrap_mail(to: @user.email, subject: "Verification failed 💔")
+  end
+
   def send_digest_email
     @user = indifferent_access_params[:user]
     @without_container = true

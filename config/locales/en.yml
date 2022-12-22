@@ -62,3 +62,9 @@ en:
     talent_application_rejected_notification:
       title: "Talent application rejected"
       body: "Your talent application has been rejected by %{name}"
+    user_names_verification_failed_notification:
+      title: "Verification names don't match 🤔"
+      body: "Added names don't match. Please check again!"
+    user_persona_verification_failed_notification:
+      title: "Verification failed 😭"
+      body: "Make sure documents are legible to submit them"

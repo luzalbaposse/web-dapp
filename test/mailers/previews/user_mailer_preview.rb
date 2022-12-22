@@ -45,6 +45,10 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.with(user: User.first).send_verified_profile_email
   end
 
+  def send_verification_failed_email
+    UserMailer.with(source_id: User.first.id, reason: "name").send_verification_failed_email
+  end
+
   def send_digest_email
     UserMailer.with(user: User.last).send_digest_email
   end

@@ -51,6 +51,12 @@ RSpec.describe WithPersona::ApproveInquiry do
   context "when the inquiry names don't match the user names" do
     let(:legal_first_name) { "Ruben" }
     let(:legal_last_name) { "Antunes" }
+    let(:create_notification_class) { CreateNotification }
+    let(:create_notification_instance) { instance_double(create_notification_class, call: true) }
+
+    before do
+      allow(create_notification_class).to receive(:new).and_return(create_notification_instance)
+    end
 
     it "does not verify the talent" do
       approve_inquiry
@@ -68,6 +74,18 @@ RSpec.describe WithPersona::ApproveInquiry do
       approve_inquiry
 
       expect(task_update_class).not_to have_received(:new)
+    end
+
+    it "initializes and calls the notification service" do
+      approve_inquiry
+
+      expect(create_notification_class).to have_received(:new)
+      expect(create_notification_instance).to have_received(:call).with(
+        recipient: user,
+        source_id: user.id,
+        type: UserNamesVerificationFailedNotification,
+        extra_params: {reason: "name"}
+      )
     end
   end
 end
