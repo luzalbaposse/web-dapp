@@ -12,7 +12,8 @@ module RenderingExtension
       disableSmartContracts: ENV["DISABLE_SMART_CONTRACTS"],
       etherscanApiKey: ENV["ETHERSCAN_API_KEY"],
       withPersonaTemplateId: ENV["WITH_PERSONA_TEMPLATE_ID"],
-      withPersonaEnvironment: ENV["WITH_PERSONA_ENVIRONMENT"]
+      withPersonaEnvironment: ENV["WITH_PERSONA_ENVIRONMENT"],
+      withPersonaVerificationsLimit: ENV["WITH_PERSONA_VERIFICATIONS_LIMIT"]
     }
   end
 end
