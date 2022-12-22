@@ -124,6 +124,10 @@ class User < ApplicationRecord
     quests.where(type: "Quests::User", status: "done").any?
   end
 
+  def profile_completed?
+    quests.where(type: "Quests::TalentProfile", status: "done").any?
+  end
+
   def confirm_email
     self.email_confirmed_at = Time.current
     save

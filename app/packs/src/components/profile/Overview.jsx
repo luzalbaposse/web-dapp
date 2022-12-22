@@ -21,9 +21,9 @@ import { ToastBody } from "src/components/design_system/toasts";
 import UserTags from "src/components/talent/UserTags";
 import Button from "src/components/design_system/button";
 import StakeModal from "src/components/token/StakeModal";
-import { Spinner } from "src/components/icons";
-import { Globe, Calendar, Envelope } from "src/components/icons";
-import { lightTextPrimary04 } from "src/utils/colors";
+import Tooltip from "src/components/design_system/tooltip";
+import { Globe, Calendar, Envelope, Spinner, Help } from "src/components/icons";
+import { lightTextPrimary03, lightTextPrimary04 } from "src/utils/colors";
 
 import { formatNumberWithSymbol, verifiedIcon } from "src/utils/viewHelpers";
 import EditOverviewModal from "src/components/profile/edit/EditOverviewModal";
@@ -553,16 +553,35 @@ const Overview = ({
                   <>
                     {canUpdate ? (
                       <>
-                        {!talent.verified &&
-                          !talent.withPersonaId &&
-                          withPersonaRequest.requests_counter < 450 && (
-                            <Button
-                              className="mr-2"
-                              type="primary-default"
-                              text="Verify"
-                              onClick={() => verifyTalent()}
-                            />
-                          )}
+                        {!talent.verified && (
+                          <Button
+                            className="mr-2"
+                            type="primary-default"
+                            onClick={() => verifyTalent()}
+                            disabled={
+                              !talent.user.profileCompleted ||
+                              talent.withPersonaId
+                            }
+                          >
+                            <div className="d-flex align-items-center">
+                              Verify
+                              <Tooltip
+                                body={
+                                  talent.withPersonaId
+                                    ? "Your verification is being processed"
+                                    : "In order to verify your account your profile must be complete and we must match the legal name you provided with the ID provided"
+                                }
+                                popOverAccessibilityId={"verify_tooltip"}
+                                placement="top"
+                              >
+                                <Help
+                                  className="cursor-pointer ml-1"
+                                  color={lightTextPrimary03}
+                                />
+                              </Tooltip>
+                            </div>
+                          </Button>
+                        )}
                         <Button
                           className="mr-2"
                           type="primary-default"
@@ -904,17 +923,35 @@ const Overview = ({
               <>
                 {canUpdate ? (
                   <>
-                    {!talent.verified &&
-                      !talent.withPersonaId &&
-                      withPersonaRequest.requests_counter < 450 && (
-                        <Button
-                          className="mr-2"
-                          type="primary-default"
-                          size="big"
-                          text="Verify"
-                          onClick={() => verifyTalent()}
-                        />
-                      )}
+                    {!talent.verified && (
+                      <Button
+                        className="mr-2"
+                        type="primary-default"
+                        size="big"
+                        onClick={() => verifyTalent()}
+                        disabled={
+                          !talent.user.profileCompleted || talent.withPersonaId
+                        }
+                      >
+                        <div className="d-flex align-items-center">
+                          Verify
+                          <Tooltip
+                            body={
+                              talent.withPersonaId
+                                ? "Your verification is being processed"
+                                : "In order to verify your account your profile must be complete and we must match the legal name you provided with the ID provided"
+                            }
+                            popOverAccessibilityId={"verify_tooltip"}
+                            placement="top"
+                          >
+                            <Help
+                              className="cursor-pointer ml-2"
+                              color={lightTextPrimary03}
+                            />
+                          </Tooltip>
+                        </div>
+                      </Button>
+                    )}
                     <Button
                       className="mr-2"
                       type="primary-default"

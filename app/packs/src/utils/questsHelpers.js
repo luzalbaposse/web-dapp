@@ -1,11 +1,10 @@
 import React from "react";
 import { P2 } from "src/components/design_system/typography";
 import ParagraphLink from "src/components/design_system/link/ParagraphLink";
-import {
-  COMMUNITY_S01_NFT_AIRDROP,
-  TOP_UP_YOUR_ACCOUNT,
-  BUY_TALENT_TOKENS,
-} from "src/utils/constants";
+import Tooltip from "src/components/design_system/tooltip";
+import { Help } from "src/components/icons";
+import { lightTextPrimary03 } from "src/utils/colors";
+import { TOP_UP_YOUR_ACCOUNT, BUY_TALENT_TOKENS } from "src/utils/constants";
 
 import cx from "classnames";
 
@@ -105,10 +104,23 @@ export const taskDescription = (type) => {
       );
     case "Tasks::Verified":
       return (
-        <P2
-          className="text-primary-03"
-          text="Click on the Verify button in your profile and get verified."
-        />
+        <div className="d-flex align-items-center">
+          <P2 className="text-primary-03">
+            Click on the Verify button in your profile and get verified.
+            <Tooltip
+              body={
+                "In order to verify your account your profile must be complete and we must match the legal name you provided with the ID provided"
+              }
+              popOverAccessibilityId={"verify_tooltip"}
+              placement="top"
+            >
+              <Help
+                className="cursor-pointer ml-1"
+                color={lightTextPrimary03}
+              />
+            </Tooltip>
+          </P2>
+        </div>
       );
     default:
       return "";
@@ -153,6 +165,14 @@ export const questRewards = (type, disabled) => {
         <P2
           className={cx(disabled ? "text-primary-04" : "text-black")}
           text="50 TAL"
+        />,
+        <P2
+          className={cx(disabled ? "text-primary-04" : "text-black")}
+          text="Unlock verification process"
+        />,
+        <P2
+          className={cx(disabled ? "text-primary-04" : "text-black")}
+          text="Unlock token launch process"
         />,
       ];
     case "Quests::TalentToken":
