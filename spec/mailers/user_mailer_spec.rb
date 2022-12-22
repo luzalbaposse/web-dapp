@@ -88,6 +88,33 @@ RSpec.describe UserMailer, type: :mailer do
     end
   end
 
+  describe "send verified profile email" do
+    let(:mail) { described_class.with(source_id: user.id).send_verified_profile_email }
+
+    it "renders the header" do
+      expect(mail.subject).to eql("You're verified! ✅")
+      expect(mail.to).to eql([user.email])
+    end
+  end
+
+  describe "send name verification failed profile email" do
+    let(:mail) { described_class.with(source_id: user.id, reason: "name").send_verification_failed_email }
+
+    it "renders the header" do
+      expect(mail.subject).to eql("Verification failed 💔")
+      expect(mail.to).to eql([user.email])
+    end
+  end
+
+  describe "send persona verification failed profile email" do
+    let(:mail) { described_class.with(source_id: user.id, reason: "with_persona").send_verification_failed_email }
+
+    it "renders the header" do
+      expect(mail.subject).to eql("Verification failed 💔")
+      expect(mail.to).to eql([user.email])
+    end
+  end
+
   describe "send message received email" do
     let(:sender) { create :user }
     let(:notification) { create :notification, type: "MessageReceivedNotification", recipient: user }

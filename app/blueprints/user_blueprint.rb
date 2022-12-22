@@ -42,6 +42,10 @@ class UserBlueprint < Blueprinter::Base
         }
       end
     end
+
+    field :profile_completed do |user, _options|
+      user.profile_completed?
+    end
   end
 
   view :with_pictures do
