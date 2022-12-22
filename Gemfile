@@ -68,6 +68,10 @@ gem "sidekiq-status"
 gem "faraday"
 gem "down"
 
+# Prevent boot time warnings
+gem "net-http"
+gem "uri", "0.10.0"
+
 # GraphQL
 gem "graphql-client"
 
