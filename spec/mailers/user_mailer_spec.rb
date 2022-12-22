@@ -88,6 +88,15 @@ RSpec.describe UserMailer, type: :mailer do
     end
   end
 
+  describe "send verified profile email" do
+    let(:mail) { described_class.with(source_id: user.id).send_verified_profile_email }
+
+    it "renders the header" do
+      expect(mail.subject).to eql("You're verified! ✅")
+      expect(mail.to).to eql([user.email])
+    end
+  end
+
   describe "send message received email" do
     let(:sender) { create :user }
     let(:notification) { create :notification, type: "MessageReceivedNotification", recipient: user }

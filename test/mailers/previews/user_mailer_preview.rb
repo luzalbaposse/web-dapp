@@ -41,6 +41,10 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.with(user: User.first).send_completed_profile_email
   end
 
+  def send_verified_profile_email
+    UserMailer.with(user: User.first).send_verified_profile_email
+  end
+
   def send_digest_email
     UserMailer.with(user: User.last).send_digest_email
   end
