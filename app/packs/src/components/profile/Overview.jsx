@@ -553,35 +553,37 @@ const Overview = ({
                   <>
                     {canUpdate ? (
                       <>
-                        {!talent.verified && (
-                          <Button
-                            className="mr-2"
-                            type="primary-default"
-                            onClick={() => verifyTalent()}
-                            disabled={
-                              !talent.user.profileCompleted ||
-                              talent.withPersonaId
-                            }
-                          >
-                            <div className="d-flex align-items-center">
-                              Verify
-                              <Tooltip
-                                body={
-                                  talent.withPersonaId
-                                    ? "Your verification is being processed"
-                                    : "In order to verify your account your profile must be complete and we must match the legal name you provided with the ID provided"
-                                }
-                                popOverAccessibilityId={"verify_tooltip"}
-                                placement="top"
-                              >
-                                <Help
-                                  className="cursor-pointer ml-1"
-                                  color={lightTextPrimary03}
-                                />
-                              </Tooltip>
-                            </div>
-                          </Button>
-                        )}
+                        {!talent.verified &&
+                          withPersonaRequest.requests_counter <
+                            railsContext.withPersonaVerificationsLimit && (
+                            <Button
+                              className="mr-2"
+                              type="primary-default"
+                              onClick={() => verifyTalent()}
+                              disabled={
+                                !talent.user.profileCompleted ||
+                                talent.withPersonaId
+                              }
+                            >
+                              <div className="d-flex align-items-center">
+                                Verify
+                                <Tooltip
+                                  body={
+                                    talent.withPersonaId
+                                      ? "Your verification is being processed"
+                                      : "In order to verify your account your profile must be complete and we must match the legal name you provided with the ID provided"
+                                  }
+                                  popOverAccessibilityId={"verify_tooltip"}
+                                  placement="top"
+                                >
+                                  <Help
+                                    className="cursor-pointer ml-1"
+                                    color={lightTextPrimary03}
+                                  />
+                                </Tooltip>
+                              </div>
+                            </Button>
+                          )}
                         <Button
                           className="mr-2"
                           type="primary-default"
@@ -923,35 +925,38 @@ const Overview = ({
               <>
                 {canUpdate ? (
                   <>
-                    {!talent.verified && (
-                      <Button
-                        className="mr-2"
-                        type="primary-default"
-                        size="big"
-                        onClick={() => verifyTalent()}
-                        disabled={
-                          !talent.user.profileCompleted || talent.withPersonaId
-                        }
-                      >
-                        <div className="d-flex align-items-center">
-                          Verify
-                          <Tooltip
-                            body={
-                              talent.withPersonaId
-                                ? "Your verification is being processed"
-                                : "In order to verify your account your profile must be complete and we must match the legal name you provided with the ID provided"
-                            }
-                            popOverAccessibilityId={"verify_tooltip"}
-                            placement="top"
-                          >
-                            <Help
-                              className="cursor-pointer ml-2"
-                              color={lightTextPrimary03}
-                            />
-                          </Tooltip>
-                        </div>
-                      </Button>
-                    )}
+                    {!talent.verified &&
+                      withPersonaRequest.requests_counter <
+                        railsContext.withPersonaVerificationsLimit && (
+                        <Button
+                          className="mr-2"
+                          type="primary-default"
+                          size="big"
+                          onClick={() => verifyTalent()}
+                          disabled={
+                            !talent.user.profileCompleted ||
+                            talent.withPersonaId
+                          }
+                        >
+                          <div className="d-flex align-items-center">
+                            Verify
+                            <Tooltip
+                              body={
+                                talent.withPersonaId
+                                  ? "Your verification is being processed"
+                                  : "In order to verify your account your profile must be complete and we must match the legal name you provided with the ID provided"
+                              }
+                              popOverAccessibilityId={"verify_tooltip"}
+                              placement="top"
+                            >
+                              <Help
+                                className="cursor-pointer ml-2"
+                                color={lightTextPrimary03}
+                              />
+                            </Tooltip>
+                          </div>
+                        </Button>
+                      )}
                     <Button
                       className="mr-2"
                       type="primary-default"
