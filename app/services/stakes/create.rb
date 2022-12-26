@@ -22,7 +22,8 @@ module Stakes
         )
       end
 
-      TalentSupportersRefreshJob.perform_later(talent_token.contract_id)
+      # Wait for blockchain transaction to settle
+      TalentSupportersRefreshJob.set(wait: 5.minutes).perform_later(talent_token.contract_id)
     end
 
     private

@@ -19,6 +19,8 @@ class API::V1::Talent::TokensController < ApplicationController
         UpdateTasksJob.perform_later(type: "Tasks::LaunchToken", user_id: current_user.id)
         SendTokenNotificationToDiscordJob.perform_later(talent_token.id)
         UserMailer.with(user: current_user).send_token_launched_email.deliver_later(wait: 5.seconds)
+        # Wait for blockchain transaction to settle
+        TalentSupportersRefreshJob.set(wait: 5.minutes).perform_later(talent_token.contract_id)
       end
       CreateNotificationTalentChangedJob.perform_later(talent.user.followers.pluck(:follower_id), talent.user_id)
 
@@ -53,7 +55,7 @@ class API::V1::Talent::TokensController < ApplicationController
   end
 
   def token_params
-    params.require(:token).permit(
+    params.require(:talent_token).permit(
       :ticker,
       :contract_id,
       :deployed,
