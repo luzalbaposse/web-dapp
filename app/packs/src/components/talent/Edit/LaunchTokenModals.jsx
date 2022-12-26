@@ -297,7 +297,7 @@ const LaunchTokenModals = (props) => {
         const response = await patch(
           `/api/v1/talent/${talent.id}/tokens/${token.id}`,
           {
-            token: {
+            talent_token: {
               contract_id: contractAddress.toLowerCase(),
               deployed: true,
             },
@@ -361,7 +361,7 @@ const LaunchTokenModals = (props) => {
     const response = await patch(
       `/api/v1/talent/${talent.id}/tokens/${token.id}`,
       {
-        token: {
+        talent_token: {
           ticker,
           chain_id: currentChain,
         },
