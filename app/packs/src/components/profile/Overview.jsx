@@ -30,7 +30,8 @@ import EditOverviewModal from "src/components/profile/edit/EditOverviewModal";
 import RejectTalentModal from "./RejectTalentModal";
 import ApprovalConfirmationModal from "./ApprovalConfirmationModal";
 import SocialRow from "./SocialRow";
-import VerificationConfirmationModal from "./VerificationConfirmationModal";
+import AdminVerificationConfirmationModal from "./AdminVerificationConfirmationModal";
+import PersonaVerificationConfirmationModal from "./PersonaVerificationConfirmationModal";
 
 import cx from "classnames";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -61,8 +62,12 @@ const Overview = ({
   const [showApprovalConfirmationModal, setShowApprovalConfirmationModal] =
     useState(false);
   const [
-    showVerificationConfirmationModal,
-    setShowVerificationConfirmationModal,
+    showAdminVerificationConfirmationModal,
+    setShowAdminVerificationConfirmationModal,
+  ] = useState(false);
+  const [
+    showPersonaVerificationConfirmationModal,
+    setShowPersonaVerificationConfirmationModal,
   ] = useState(false);
   const [isUploadingProfile, setIsUploadingProfile] = useState(false);
   const [isUploadingBanner, setIsUploadingBanner] = useState(false);
@@ -236,43 +241,6 @@ const Overview = ({
     );
   }, []);
 
-  const verifyTalent = async () => {
-    const client = new Persona.Client({
-      templateId: railsContext.withPersonaTemplateId,
-      environment: railsContext.withPersonaEnvironment,
-      onReady: () => client.open(),
-      onComplete: ({ inquiryId, status, fields }) => {
-        const params = {
-          talent: {
-            with_persona_id: inquiryId,
-          },
-          user: {
-            id: talent.user.id,
-          },
-        };
-        patch(`/api/v1/talent/${talent.id}`, params)
-          .then((response) => {
-            setTalent((prev) => ({
-              ...prev,
-              withPersonaId: response.with_persona_id,
-            }));
-
-            toast.success(
-              <ToastBody
-                heading="Success!"
-                body={"You're being verified. It can take up to 24 hours"}
-              />,
-              { autoClose: 2500 }
-            );
-            return true;
-          })
-          .catch(() => {
-            return false;
-          });
-      },
-    });
-  };
-
   const impersonateUser = async () => {
     const params = {
       username: talent.user.username,
@@ -322,6 +290,19 @@ const Overview = ({
   const headlineArray = useMemo(() => {
     return talent.profile.headline?.split(" ");
   }, [talent.profile.headline]);
+
+  const verifyTooltipBody = () => {
+    if (talent.withPersonaId) {
+      return "Your verification is being processed";
+    } else if (
+      withPersonaRequest.requests_counter >
+      railsContext.withPersonaVerificationsLimit
+    ) {
+      return "The number of verifications we can do is limited. Please check back later to verify your account";
+    } else {
+      return "In order to verify your account your profile must be complete and we must match the legal name you provided with the ID provided";
+    }
+  };
 
   return (
     <div className={cx(className)}>
@@ -553,37 +534,35 @@ const Overview = ({
                   <>
                     {canUpdate ? (
                       <>
-                        {!talent.verified &&
-                          withPersonaRequest.requests_counter <
-                            railsContext.withPersonaVerificationsLimit && (
-                            <Button
-                              className="mr-2"
-                              type="primary-default"
-                              onClick={() => verifyTalent()}
-                              disabled={
-                                !talent.user.profileCompleted ||
-                                talent.withPersonaId
-                              }
-                            >
-                              <div className="d-flex align-items-center">
-                                Verify
-                                <Tooltip
-                                  body={
-                                    talent.withPersonaId
-                                      ? "Your verification is being processed"
-                                      : "In order to verify your account your profile must be complete and we must match the legal name you provided with the ID provided"
-                                  }
-                                  popOverAccessibilityId={"verify_tooltip"}
-                                  placement="top"
-                                >
-                                  <Help
-                                    className="cursor-pointer ml-1"
-                                    color={lightTextPrimary03}
-                                  />
-                                </Tooltip>
-                              </div>
-                            </Button>
-                          )}
+                        {!talent.verified && (
+                          <Button
+                            className="mr-2"
+                            type="primary-default"
+                            onClick={() =>
+                              setShowPersonaVerificationConfirmationModal(true)
+                            }
+                            disabled={
+                              !talent.user.profileCompleted ||
+                              talent.withPersonaId ||
+                              withPersonaRequest.requests_counter >
+                                railsContext.withPersonaVerificationsLimit
+                            }
+                          >
+                            <div className="d-flex align-items-center">
+                              Verify
+                              <Tooltip
+                                body={verifyTooltipBody()}
+                                popOverAccessibilityId={"verify_tooltip"}
+                                placement="top"
+                              >
+                                <Help
+                                  className="cursor-pointer ml-1"
+                                  color={lightTextPrimary03}
+                                />
+                              </Tooltip>
+                            </div>
+                          </Button>
+                        )}
                         <Button
                           className="mr-2"
                           type="primary-default"
@@ -655,7 +634,9 @@ const Overview = ({
                       type="primary-default"
                       size="big"
                       text="Verify"
-                      onClick={() => setShowVerificationConfirmationModal(true)}
+                      onClick={() =>
+                        setShowAdminVerificationConfirmationModal(true)
+                      }
                     />
                   )}
                   {talent.user.profileType == "waiting_for_approval" && (
@@ -882,7 +863,9 @@ const Overview = ({
                     size="big"
                     type="primary-default"
                     text="Verify"
-                    onClick={() => setShowVerificationConfirmationModal(true)}
+                    onClick={() =>
+                      setShowAdminVerificationConfirmationModal(true)
+                    }
                   />
                 )}
                 {talent.user.profileType == "waiting_for_approval" && (
@@ -925,38 +908,36 @@ const Overview = ({
               <>
                 {canUpdate ? (
                   <>
-                    {!talent.verified &&
-                      withPersonaRequest.requests_counter <
-                        railsContext.withPersonaVerificationsLimit && (
-                        <Button
-                          className="mr-2"
-                          type="primary-default"
-                          size="big"
-                          onClick={() => verifyTalent()}
-                          disabled={
-                            !talent.user.profileCompleted ||
-                            talent.withPersonaId
-                          }
-                        >
-                          <div className="d-flex align-items-center">
-                            Verify
-                            <Tooltip
-                              body={
-                                talent.withPersonaId
-                                  ? "Your verification is being processed"
-                                  : "In order to verify your account your profile must be complete and we must match the legal name you provided with the ID provided"
-                              }
-                              popOverAccessibilityId={"verify_tooltip"}
-                              placement="top"
-                            >
-                              <Help
-                                className="cursor-pointer ml-2"
-                                color={lightTextPrimary03}
-                              />
-                            </Tooltip>
-                          </div>
-                        </Button>
-                      )}
+                    {!talent.verified && (
+                      <Button
+                        className="mr-2"
+                        type="primary-default"
+                        size="big"
+                        onClick={() =>
+                          setShowPersonaVerificationConfirmationModal(true)
+                        }
+                        disabled={
+                          !talent.user.profileCompleted ||
+                          talent.withPersonaId ||
+                          withPersonaRequest.requests_counter >
+                            railsContext.withPersonaVerificationsLimit
+                        }
+                      >
+                        <div className="d-flex align-items-center">
+                          Verify
+                          <Tooltip
+                            body={verifyTooltipBody()}
+                            popOverAccessibilityId={"verify_tooltip"}
+                            placement="top"
+                          >
+                            <Help
+                              className="cursor-pointer ml-2"
+                              color={lightTextPrimary03}
+                            />
+                          </Tooltip>
+                        </div>
+                      </Button>
+                    )}
                     <Button
                       className="mr-2"
                       type="primary-default"
@@ -1038,12 +1019,20 @@ const Overview = ({
         talentIsFromCurrentUser={canUpdate}
         railsContext={railsContext}
       />
-      <VerificationConfirmationModal
-        show={showVerificationConfirmationModal}
-        setShow={setShowVerificationConfirmationModal}
-        hide={() => setShowVerificationConfirmationModal(false)}
+      <AdminVerificationConfirmationModal
+        show={showAdminVerificationConfirmationModal}
+        setShow={setShowAdminVerificationConfirmationModal}
+        hide={() => setShowAdminVerificationConfirmationModal(false)}
         talent={talent}
         setTalent={setTalent}
+      />
+      <PersonaVerificationConfirmationModal
+        show={showPersonaVerificationConfirmationModal}
+        setShow={setShowPersonaVerificationConfirmationModal}
+        hide={() => setShowPersonaVerificationConfirmationModal(false)}
+        talent={talent}
+        setTalent={setTalent}
+        railsContext={railsContext}
       />
       <ApprovalConfirmationModal
         show={showApprovalConfirmationModal}

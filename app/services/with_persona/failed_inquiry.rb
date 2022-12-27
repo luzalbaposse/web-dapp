@@ -7,12 +7,14 @@ module WithPersona
     end
 
     def call
+      with_persona_id = talent.with_persona_id
       talent.update(with_persona_id: nil)
+
       CreateNotification.new.call(
         recipient: user,
         source_id: user.id,
         type: UserPersonaVerificationFailedNotification,
-        extra_params: {reason: "with_persona"}
+        extra_params: {reason: "with_persona", with_persona_id: with_persona_id}
       )
     end
 

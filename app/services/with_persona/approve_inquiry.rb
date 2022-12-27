@@ -13,12 +13,14 @@ module WithPersona
         talent.update(verified: true)
         Tasks::Update.new.call(type: "Tasks::Verified", user: user)
       else
+        with_persona_id = talent.with_persona_id
         talent.update(with_persona_id: nil)
+
         CreateNotification.new.call(
           recipient: user,
           source_id: user.id,
           type: UserNamesVerificationFailedNotification,
-          extra_params: {reason: "name"}
+          extra_params: {reason: "name", with_persona_id: with_persona_id}
         )
       end
     end

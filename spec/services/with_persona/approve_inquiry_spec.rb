@@ -84,7 +84,7 @@ RSpec.describe WithPersona::ApproveInquiry do
         recipient: user,
         source_id: user.id,
         type: UserNamesVerificationFailedNotification,
-        extra_params: {reason: "name"}
+        extra_params: {reason: "name", with_persona_id: "123"}
       )
     end
   end

@@ -10,7 +10,12 @@ import Divider from "src/components/design_system/other/Divider";
 import Button from "src/components/design_system/button";
 import { useWindowDimensionsHook } from "src/utils/window";
 
-const VerificationConfirmationModal = ({ show, hide, talent, setTalent }) => {
+const AdminVerificationConfirmationModal = ({
+  show,
+  hide,
+  talent,
+  setTalent,
+}) => {
   const { mobile } = useWindowDimensionsHook();
 
   const verifyTalent = async () => {
@@ -80,4 +85,4 @@ const VerificationConfirmationModal = ({ show, hide, talent, setTalent }) => {
   );
 };
 
-export default VerificationConfirmationModal;
+export default AdminVerificationConfirmationModal;

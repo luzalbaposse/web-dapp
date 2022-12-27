@@ -282,7 +282,7 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
                       <Button
                         type="primary-outline"
                         text="Edit"
-                        style={{ "max-height": "45px" }}
+                        style={{ maxHeight: "45px" }}
                         onClick={() => {
                           setJourneyItemInEditing(journeyItem);
                           setEditType("Edit");
