@@ -28,7 +28,7 @@ RSpec.describe WithPersona::FailedInquiry do
       recipient: user,
       source_id: user.id,
       type: UserPersonaVerificationFailedNotification,
-      extra_params: {reason: "with_persona"}
+      extra_params: {reason: "with_persona", with_persona_id: "123"}
     )
   end
 end
