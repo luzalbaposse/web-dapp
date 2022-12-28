@@ -12,13 +12,16 @@ module UnstoppableDomains
 
     def call
       verify_wallet!
-      user = upsert_user!
 
-      upsert_profile_picture(user)
-      upsert_talent_data(user)
-      refresh_domains(user)
+      ActiveRecord::Base.transaction do
+        user = upsert_user!
 
-      user
+        upsert_profile_picture(user)
+        upsert_talent_data(user)
+        refresh_domains(user)
+
+        user
+      end
     end
 
     private
