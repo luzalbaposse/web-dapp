@@ -94,7 +94,7 @@ gem "paper_trail"
 gem "blazer"
 
 # Elasticsearch
-gem "chewy"
+gem "chewy", ">= 7.2.7"
 gem "faraday_middleware-aws-sigv4"
 
 group :development, :test do
