@@ -1,23 +1,21 @@
 class API::V1::TalentController < ApplicationController
   PER_PAGE = 40
+  PAGE_NEUTRALIZER = 1
 
   def index
-    service = Talents::Search.new(
-      admin_or_moderator: current_user.admin_or_moderator?,
-      discovery_row: discovery_row,
+    paging, talents = Talents::ChewySearch.new(
       filter_params: filter_params.to_h,
+      admin_or_moderator: current_user.admin_or_moderator?,
+      size: per_page,
+      from: ((params[:page] || PAGE_NEUTRALIZER).to_i - PAGE_NEUTRALIZER) * per_page,
       searching_user: current_user
-    )
-
-    pagy, talents = pagy(service.call, items: per_page)
-
-    talents = TalentBlueprint.render_as_json(talents.includes(:talent_token, :user), view: :normal, current_user_watchlist: current_user_watchlist)
+    ).call
 
     render json: {
       talents: talents,
       pagination: {
-        currentPage: pagy.page,
-        lastPage: pagy.last
+        currentPage: paging[:current_page],
+        lastPage: paging[:last_page]
       }
     }, status: :ok
   end

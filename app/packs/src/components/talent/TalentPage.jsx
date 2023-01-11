@@ -149,7 +149,7 @@ const TalentPage = ({ isAdminOrModerator, env }) => {
       }));
       const newTalents = [...talents, ...responseTalents];
       setTalents(newTalents);
-      setPagination(response.pagination);
+      setPagination(camelCaseObject(response.pagination));
 
       window.history.replaceState(
         {},
