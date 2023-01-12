@@ -192,7 +192,7 @@ const WrongNetwork = ({
   );
 };
 
-const WaitingForConfirmation = ({ mode }) => (
+const WaitingForConfirmation = () => (
   <>
     <Modal.Header closeButton>
       <Modal.Title className="px-3">Launch your Talent Token</Modal.Title>
@@ -240,7 +240,7 @@ const SuccessConfirmation = ({ mode, hide }) => {
 const LaunchTokenModals = (props) => {
   const {
     mode,
-    token,
+    talentToken,
     user,
     talent,
     railsContext,
@@ -295,7 +295,7 @@ const LaunchTokenModals = (props) => {
         const contractAddress = result.args.token;
 
         const response = await patch(
-          `/api/v1/talent/${talent.id}/tokens/${token.id}`,
+          `/api/v1/talent/${talent.id}/tokens/${talentToken.id}`,
           {
             talent_token: {
               contract_id: contractAddress.toLowerCase(),
@@ -311,8 +311,8 @@ const LaunchTokenModals = (props) => {
           changeSharedState((prev) => ({
             ...prev,
             totalSupply: response.total_supply,
-            token: {
-              ...prev.token,
+            talent_token: {
+              ...prev.talentToken,
               contract_id: contractAddress.toLowerCase(),
               contractId: contractAddress.toLowerCase(),
               chainId: response.token.chain_id,
@@ -359,7 +359,7 @@ const LaunchTokenModals = (props) => {
 
   const saveTicker = async () => {
     const response = await patch(
-      `/api/v1/talent/${talent.id}/tokens/${token.id}`,
+      `/api/v1/talent/${talent.id}/tokens/${talentToken.id}`,
       {
         talent_token: {
           ticker,
@@ -376,8 +376,8 @@ const LaunchTokenModals = (props) => {
       if (!response.error) {
         changeSharedState((prev) => ({
           ...prev,
-          token: {
-            ...prev.token,
+          talent_token: {
+            ...prev.talentToken,
             ticker,
           },
         }));

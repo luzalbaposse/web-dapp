@@ -40,7 +40,7 @@ const LaunchToken = ({ talent, railsContext, setLocalTalent, canUpdate }) => {
           changeSharedState={setLocalTalent}
           mode={mode()}
           talent={talent}
-          token={token}
+          talentToken={talentToken}
           user={user}
           railsContext={railsContext}
           setContractId={() => {}}
