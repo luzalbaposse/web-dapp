@@ -24,6 +24,7 @@ RSpec.describe "Talent", type: :request do
             admin_or_moderator: false,
             filter_params: {"status" => "Pending approval"},
             searching_user: current_user,
+            discovery_row: nil,
             size: 40,
             from: 0
           )

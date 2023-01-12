@@ -8,7 +8,8 @@ class API::V1::TalentController < ApplicationController
       admin_or_moderator: current_user.admin_or_moderator?,
       size: per_page,
       from: ((params[:page] || PAGE_NEUTRALIZER).to_i - PAGE_NEUTRALIZER) * per_page,
-      searching_user: current_user
+      searching_user: current_user,
+      discovery_row: discovery_row
     ).call
 
     render json: {
@@ -137,6 +138,6 @@ class API::V1::TalentController < ApplicationController
   end
 
   def per_page
-    params[:per_page] || PER_PAGE
+    (params[:per_page] || PER_PAGE).to_i
   end
 end

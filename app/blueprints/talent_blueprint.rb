@@ -3,7 +3,7 @@ class TalentBlueprint < Blueprinter::Base
 
   view :normal do
     fields :occupation, :headline, :user_id, :verified, :supporters_count, :total_supply, :market_cap, :market_cap_variance
-    association :talent_token, blueprint: TalentTokenBlueprint, view: :normal, name: :token
+    association :talent_token, blueprint: TalentTokenBlueprint, view: :normal
     association :user, blueprint: UserBlueprint, view: :normal
 
     field :is_following do |talent, options|

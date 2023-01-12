@@ -383,17 +383,17 @@ const TalentTableListMode = ({
               />
             </Table.Td>
             <Table.Td
-              className={cx(
-                "pr-3",
-                talent.talentToken.contractId
-                  ? ""
-                  : "d-flex justify-content-center"
-              )}
+              className="pr-3"
               onClick={() =>
                 (window.location.href = `/u/${talent.user.username}`)
               }
             >
               <P2
+                className={cx(
+                  talent.talentToken.contractId
+                    ? ""
+                    : "d-flex justify-content-center"
+                )}
                 text={
                   talent.talentToken.contractId
                     ? `${currency(
@@ -402,24 +402,21 @@ const TalentTableListMode = ({
                     : "-"
                 }
               />
-              <div className="progress" style={{ height: 6 }}>
-                <div
-                  className="progress-bar bg-secondary"
-                  role="progressbar"
-                  aria-valuenow={talent.supplyProgress || 0}
-                  style={{ width: `${talent.supplyProgress || 0}%` }}
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                ></div>
-              </div>
+              {talent.talentToken.contractId && (
+                <div className="progress" style={{ height: 6 }}>
+                  <div
+                    className="progress-bar bg-secondary"
+                    role="progressbar"
+                    aria-valuenow={talent.supplyProgress || 0}
+                    style={{ width: `${talent.supplyProgress || 0}%` }}
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
+                </div>
+              )}
             </Table.Td>
             <Table.Td
-              className={cx(
-                "pr-5",
-                talent.talentToken.contractId
-                  ? ""
-                  : "d-flex justify-content-center"
-              )}
+              className="pr-5"
               onClick={() =>
                 (window.location.href = `/u/${talent.user.username}`)
               }

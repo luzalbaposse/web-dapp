@@ -192,7 +192,7 @@ const VerifiyUserBanner = ({ username }) => (
         />
         <P1
           className="pb-4 text-marketing-light-yellow"
-          text="By verifying your identity, you can increase the credibility and unlock access to claim your Talent Mate."
+          text="By verifying your identity, you can increase your profile strength and unlock your Talent Mate!"
         />
         <a className="button-link" href={`/u/${username}`}>
           <Button
