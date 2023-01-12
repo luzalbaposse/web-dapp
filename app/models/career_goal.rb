@@ -11,7 +11,7 @@ class CareerGoal < ApplicationRecord
     "#{target_date}: #{description}"
   end
 
-  update_index("talents") { talent }
+  update_index("talents", :talent)
 
   after_save :touch_talent
 

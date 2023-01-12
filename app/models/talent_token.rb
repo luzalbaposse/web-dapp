@@ -6,7 +6,7 @@ class TalentToken < ApplicationRecord
   validates :ticker, uniqueness: {message: "already taken."}, if: :ticker_exists?
 
   # Elasticsearch index update
-  update_index("talents") { talent }
+  update_index("talents", :talent)
 
   after_save :touch_talent
 

@@ -16,6 +16,8 @@ RSpec.describe TalentsIndex do
 
   describe "User update" do
     let(:user1) { create(:user) }
+    let(:tag) { create(:tag, description: "Test") }
+    let!(:user_tag) { create(:user_tag, user: user1, tag: tag) }
 
     before { talent1.user = user1 }
 
@@ -28,10 +30,7 @@ RSpec.describe TalentsIndex do
     end
 
     it "should add the talent user tags" do
-      expect do
-        talent1.user.tags << Tag.new(description: "Test")
-        talent1.save!
-      end.to update_index(TalentsIndex).and_reindex(talent1, with: {user: {tags: ["Test"]}})
+      expect { talent1.save! }.to update_index(TalentsIndex).and_reindex(talent1, with: {user: {tags: ["Test"]}})
     end
   end
 

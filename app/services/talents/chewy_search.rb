@@ -41,6 +41,7 @@ module Talents
       }, talents.entries.map do |talent|
         attributes = talent.attributes.deep_stringify_keys
         attributes["is_following"] = following_user_ids.include?(attributes["user_id"])
+        attributes["profile_picture_url"] = Talent.find_by!(id: talent.id).profile_picture_url
         attributes
       end]
     end
@@ -80,7 +81,8 @@ module Talents
             "carrer_goal.*",
             "career_goal.goals.*"
           ],
-          allow_leading_wildcard: true
+          allow_leading_wildcard: true,
+          default_operator: "AND"
         }
       })
     end

@@ -46,7 +46,7 @@ class User < ApplicationRecord
   has_many :erc721_tokens, dependent: :destroy
 
   # Elasticsearch index update
-  update_index("talents") { talent }
+  update_index("talents", :talent)
 
   after_save :touch_talent
 
