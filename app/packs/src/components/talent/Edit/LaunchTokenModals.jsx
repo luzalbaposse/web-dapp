@@ -311,7 +311,7 @@ const LaunchTokenModals = (props) => {
           changeSharedState((prev) => ({
             ...prev,
             totalSupply: response.total_supply,
-            talent_token: {
+            talentToken: {
               ...prev.talentToken,
               contract_id: contractAddress.toLowerCase(),
               contractId: contractAddress.toLowerCase(),
@@ -376,7 +376,7 @@ const LaunchTokenModals = (props) => {
       if (!response.error) {
         changeSharedState((prev) => ({
           ...prev,
-          talent_token: {
+          talentToken: {
             ...prev.talentToken,
             ticker,
           },
