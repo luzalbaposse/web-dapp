@@ -291,7 +291,7 @@ export const TopBar = ({
           />
           <Tab
             href="/portfolio"
-            text="Community"
+            text="Portfolio"
             type="white"
             active={activeTab === "/portfolio"}
             className="mr-4"

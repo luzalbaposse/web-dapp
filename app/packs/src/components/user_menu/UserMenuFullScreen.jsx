@@ -102,7 +102,7 @@ const UserMenuFullScreen = ({
         mode={mode}
         className="d-flex flex-row justify-content-between mt-3"
       >
-        <P1 className="text-black" bold text="Community" />
+        <P1 className="text-black" bold text="Portfolio" />
         <ArrowRight color="currentColor" />
       </Button>
       <Button
