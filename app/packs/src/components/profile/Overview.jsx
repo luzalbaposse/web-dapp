@@ -510,8 +510,11 @@ const Overview = ({
           )}
           <div className="d-flex align-items-center mb-1">
             <H4 className="medium mr-2 mb-0" text={talent.user.name} />
-            {talent.token.contractId && (
-              <P2 className="medium mr-2" text={`$${talent.token.ticker}`} />
+            {talent.talentToken.contractId && (
+              <P2
+                className="medium mr-2"
+                text={`$${talent.talentToken.ticker}`}
+              />
             )}
             {talent.verified && (
               <img
@@ -569,11 +572,11 @@ const Overview = ({
                           text="Edit"
                           onClick={() => setEditMode(true)}
                         />
-                        {talent.token.contractId && (
+                        {talent.talentToken.contractId && (
                           <Button
                             className="mr-2"
                             type="primary-default"
-                            text={`Buy ${talent.token.ticker}`}
+                            text={`Buy ${talent.talentToken.ticker}`}
                             onClick={() => setShowStakeModal(true)}
                           />
                         )}
@@ -613,7 +616,7 @@ const Overview = ({
                             onClick={() => updateFollow()}
                           />
                         )}
-                        {talent.token.contractId && (
+                        {talent.talentToken.contractId && (
                           <Button
                             type="primary-default"
                             size="big"
@@ -945,12 +948,12 @@ const Overview = ({
                       text="Edit"
                       onClick={() => setEditMode(true)}
                     />
-                    {talent.token.contractId && (
+                    {talent.talentToken.contractId && (
                       <Button
                         className="mr-2"
                         type="primary-default"
                         size="big"
-                        text={`Buy ${talent.token.ticker}`}
+                        text={`Buy ${talent.talentToken.ticker}`}
                         onClick={() => setShowStakeModal(true)}
                       />
                     )}
@@ -991,7 +994,7 @@ const Overview = ({
                         onClick={() => updateFollow()}
                       />
                     )}
-                    {talent.token.contractId && (
+                    {talent.talentToken.contractId && (
                       <Button
                         type="primary-default"
                         size="big"
@@ -1009,13 +1012,13 @@ const Overview = ({
       <StakeModal
         show={showStakeModal}
         setShow={setShowStakeModal}
-        tokenAddress={talent.token.contractId}
-        tokenId={talent.token.id}
+        tokenAddress={talent.talentToken.contractId}
+        tokenId={talent.talentToken.id}
         userId={currentUserId}
         talentUserId={talent.userId}
-        tokenChainId={talent.token.chainId}
+        tokenChainId={talent.talentToken.chainId}
         talentName={talent.user.displayName || talent.user.username}
-        ticker={talent.token.ticker}
+        ticker={talent.talentToken.ticker}
         talentIsFromCurrentUser={canUpdate}
         railsContext={railsContext}
       />

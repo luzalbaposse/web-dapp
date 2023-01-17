@@ -49,11 +49,6 @@ const Discovery = ({
           env={railsContext.contractsEnv}
         />
       ))}
-      {marketingArticles.length > 0 && (
-        <div className="mt-3 mb-4">
-          <DiscoveryMarketingArticles marketingArticles={marketingArticles} />
-        </div>
-      )}
     </div>
   );
 };

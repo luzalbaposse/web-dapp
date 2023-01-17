@@ -46,7 +46,9 @@ class User < ApplicationRecord
   has_many :erc721_tokens, dependent: :destroy
 
   # Elasticsearch index update
-  update_index("talents") { self }
+  update_index("talents", :talent)
+
+  after_save :touch_talent
 
   VALID_ROLES = ["admin", "basic", "moderator"].freeze
 
@@ -295,5 +297,9 @@ class User < ApplicationRecord
     if !valid
       errors.add(:notification_preferences, "Invalid notification preferences.")
     end
+  end
+
+  def touch_talent
+    talent.touch if talent.present?
   end
 end

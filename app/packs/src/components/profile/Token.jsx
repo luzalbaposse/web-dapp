@@ -16,7 +16,7 @@ import cx from "classnames";
 const Token = ({ talent, talentTokenPrice, railsContext }) => {
   const { mobile } = useWindowDimensionsHook();
   const { mode } = useTheme();
-  const token = talent.token;
+  const talentToken = talent.talentToken;
 
   const totalSupply = ethers.utils.formatUnits(talent.totalSupply);
   const maxSupply = ethers.utils.formatUnits(talent.maxSupply);
@@ -26,11 +26,14 @@ const Token = ({ talent, talentTokenPrice, railsContext }) => {
 
     const chainId = await onChainAPI.getChainID();
 
-    if (chainId != token.chainId) {
-      await onChainAPI.switchChain(token.chainId);
+    if (chainId != talentToken.chainId) {
+      await onChainAPI.switchChain(talentToken.chainId);
     }
 
-    await onChainAPI.addTokenToWallet(token.contractId, token.ticker);
+    await onChainAPI.addTokenToWallet(
+      talentToken.contractId,
+      talentToken.ticker
+    );
   };
 
   return (
@@ -50,7 +53,7 @@ const Token = ({ talent, talentTokenPrice, railsContext }) => {
         </div>
         <div className={cx("col-12 col-lg-4", mobile && "mb-6")}>
           <H3
-            text={`${parseAndCommify(totalSupply)} $${token.ticker}`}
+            text={`${parseAndCommify(totalSupply)} $${talentToken.ticker}`}
             className="text-center inverted-text-primary-01"
           ></H3>
           <P3 className="text-center inverted-text-primary-03">
@@ -59,7 +62,7 @@ const Token = ({ talent, talentTokenPrice, railsContext }) => {
         </div>
         <div className={cx("col-12 col-lg-4", mobile && "mb-6")}>
           <H3
-            text={`${ethers.utils.commify(maxSupply)} $${token.ticker}`}
+            text={`${ethers.utils.commify(maxSupply)} $${talentToken.ticker}`}
             className="text-center inverted-text-primary-01"
           ></H3>
           <P3 className="text-center inverted-text-primary-03">Max Supply</P3>
@@ -84,12 +87,12 @@ const Token = ({ talent, talentTokenPrice, railsContext }) => {
         </div>
         <div className={cx("col-12 col-lg-4", mobile && "mb-6")}>
           <H3
-            text={shortenAddress(token.contractId)}
+            text={shortenAddress(talentToken.contractId)}
             className="text-center inverted-text-primary-01"
           ></H3>
           <P3
             text={`${chainIdToName(
-              token.chainId,
+              talentToken.chainId,
               railsContext.contractsEnv
             )} Network`}
             className="text-center inverted-text-primary-03"
@@ -103,7 +106,7 @@ const Token = ({ talent, talentTokenPrice, railsContext }) => {
           type="white-default"
           onClick={() => addTokenToMetamask()}
         >
-          <P2 bold text={`Add $${token.ticker} to Metamask`} />
+          <P2 bold text={`Add $${talentToken.ticker} to Metamask`} />
         </Button>
       </div>
     </section>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Modal from "react-bootstrap/Modal";
-
+import { toast } from "react-toastify";
+import { ToastBody } from "src/components/design_system/toasts";
 import { patch } from "src/utils/requests";
 import { OnChain } from "src/onchain";
 import {
@@ -8,7 +9,6 @@ import {
   chainNameToId,
   getAllChainOptions,
 } from "src/onchain/utils";
-
 import H5 from "src/components/design_system/typography/h5";
 import P2 from "src/components/design_system/typography/p2";
 import TextInput from "src/components/design_system/fields/textinput";
@@ -192,7 +192,7 @@ const WrongNetwork = ({
   );
 };
 
-const WaitingForConfirmation = ({ mode }) => (
+const WaitingForConfirmation = () => (
   <>
     <Modal.Header closeButton>
       <Modal.Title className="px-3">Launch your Talent Token</Modal.Title>
@@ -240,7 +240,7 @@ const SuccessConfirmation = ({ mode, hide }) => {
 const LaunchTokenModals = (props) => {
   const {
     mode,
-    token,
+    talentToken,
     user,
     talent,
     railsContext,
@@ -295,7 +295,7 @@ const LaunchTokenModals = (props) => {
         const contractAddress = result.args.token;
 
         const response = await patch(
-          `/api/v1/talent/${talent.id}/tokens/${token.id}`,
+          `/api/v1/talent/${talent.id}/tokens/${talentToken.id}`,
           {
             talent_token: {
               contract_id: contractAddress.toLowerCase(),
@@ -311,8 +311,8 @@ const LaunchTokenModals = (props) => {
           changeSharedState((prev) => ({
             ...prev,
             totalSupply: response.total_supply,
-            token: {
-              ...prev.token,
+            talentToken: {
+              ...prev.talentToken,
               contract_id: contractAddress.toLowerCase(),
               contractId: contractAddress.toLowerCase(),
               chainId: response.token.chain_id,
@@ -359,7 +359,7 @@ const LaunchTokenModals = (props) => {
 
   const saveTicker = async () => {
     const response = await patch(
-      `/api/v1/talent/${talent.id}/tokens/${token.id}`,
+      `/api/v1/talent/${talent.id}/tokens/${talentToken.id}`,
       {
         talent_token: {
           ticker,
@@ -376,13 +376,18 @@ const LaunchTokenModals = (props) => {
       if (!response.error) {
         changeSharedState((prev) => ({
           ...prev,
-          token: {
-            ...prev.token,
+          talentToken: {
+            ...prev.talentToken,
             ticker,
           },
         }));
         return true;
       }
+
+    toast.error(
+      <ToastBody heading="Error!" body={response?.error} mode={mode}/>,
+      { autoClose: 5000 }
+    );
     }
 
     return false;

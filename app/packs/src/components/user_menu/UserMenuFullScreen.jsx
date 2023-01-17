@@ -102,7 +102,7 @@ const UserMenuFullScreen = ({
         mode={mode}
         className="d-flex flex-row justify-content-between mt-3"
       >
-        <P1 className="text-black" bold text="Community" />
+        <P1 className="text-black" bold text="Portfolio" />
         <ArrowRight color="currentColor" />
       </Button>
       <Button
@@ -137,13 +137,13 @@ const UserMenuFullScreen = ({
       </Button>
       <Button
         onClick={() =>
-          window.open(user.isTalent ? TALENT_GUIDE : SUPPORTER_GUIDE, "_blank")
+          (window.location.href = `/u/${user.username}/account_settings`)
         }
         type="white-ghost"
         mode={mode}
         className="d-flex flex-row justify-content-between mb-3 mt-1"
       >
-        <P1 className="text-black" bold text="User guide" />
+        <P1 className="text-black" bold text="Settings" />
         <ArrowRight color="currentColor" />
       </Button>
       <Button

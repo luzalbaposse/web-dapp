@@ -29,7 +29,7 @@ const Show = ({
 }) => {
   const [localTalent, setLocalTalent] = useState(camelCaseObject(talent));
   const user = localTalent.user;
-  const token = localTalent.token;
+  const talentToken = localTalent.talentToken;
   const [selectedSection, setSelectedSection] = useState(window.location.hash);
   const [showLastDivider, setShowLastDivider] = useState(false);
   const [previewMode, setPreviewMode] = useState(false);
@@ -77,7 +77,7 @@ const Show = ({
   const getCurrentTokenSection = () => {
     if (
       (user.profileType == "approved" || user.profileType == "talent") &&
-      !token.contractId
+      !talentToken.contractId
     ) {
       return LaunchToken;
     }
@@ -123,11 +123,11 @@ const Show = ({
           text="Journey"
           onClick={() => changeSection("#journey")}
         />
-        {(token.contractId || canUpdate) && (
+        {(talentToken.contractId || canUpdate) && (
           <Button
             className="mr-2"
             type={buttonType("#token")}
-            text={token.ticker ? `$${token.ticker}` : "Token"}
+            text={talentToken.ticker ? `$${talentToken.ticker}` : "Token"}
             onClick={() => changeSection("#token")}
           />
         )}
@@ -163,7 +163,7 @@ const Show = ({
         />
       </div>
       <div className="my-7 w-100" id={"#token"}>
-        {token.contractId && (
+        {talentToken.contractId && (
           <Perks talent={localTalent} canUpdate={canUpdate} />
         )}
         <CurrentTokenSection
