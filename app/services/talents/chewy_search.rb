@@ -77,6 +77,7 @@ module Talents
             "talent_token.ticker",
             "occupation",
             "headline",
+            "location",
             "milestones.*",
             "carrer_goal.*",
             "career_goal.goals.*"
