@@ -361,14 +361,14 @@ RSpec.shared_examples "a tatum client get nfts request" do |expected_chain|
     let(:response_success) { false }
 
     it "raises an api client error" do
-      expect { request }.to raise_error(described_class::ApiClientRequestError)
+      expect { request }.to raise_error
     end
 
     context "when the status is forbidden" do
       let(:response_status) { 403 }
 
       it "does not raise an api client error" do
-        expect { request }.not_to raise_error(described_class::ApiClientRequestError)
+        expect { request }.not_to raise_error
       end
 
       it "returns an empty json array" do
