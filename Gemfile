@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "2.7.6"
+ruby "3.1.3"
 
 gem "rails", "7.0.3.1"
 gem "pg", "~> 1.1"
@@ -10,7 +10,7 @@ gem "puma", "~> 5.6"
 # Frontend Dependencies
 gem "sass-rails", ">= 6"
 gem "webpacker", github: "rails/webpacker", branch: "master"
-gem "jbuilder", "~> 2.7"
+gem "jbuilder"
 gem "react_on_rails", "= 12.2.0"
 gem "mini_racer", platforms: :ruby
 
@@ -48,7 +48,7 @@ gem "aws-sdk-lambda"
 gem "uppy-s3_multipart", "~> 1.0"
 gem "image_processing", "~> 1.12", require: false
 
-gem "bootsnap", ">= 1.4.4", require: false
+gem "bootsnap", require: false
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
@@ -71,6 +71,7 @@ gem "down"
 # Prevent boot time warnings
 gem "net-http"
 gem "uri", "0.10.0"
+gem "matrix", "~> 0.4.2"
 
 # GraphQL
 gem "graphql-client"
