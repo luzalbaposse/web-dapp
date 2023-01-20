@@ -10,13 +10,22 @@ RSpec.describe DailyMetricsJob, type: :job do
   let!(:user_3) { create :user }
   let!(:message) { create :message, sender: user_3, receiver: user_1, created_at: 10.days.ago }
 
-  let!(:user_4) { create :user }
+  let!(:user_4) { create :user, onboarding_complete: false }
   let!(:follow) { create :follow, follower: user_4, user: user_1, created_at: 26.days.ago }
 
   let!(:user_5) { create :user }
   let!(:talent_supporter) { create :talent_supporter, supporter_wallet_id: user_5.wallet_id, talent_contract_id: talent_token.contract_id, last_time_bought_at: 15.days.ago }
 
   let!(:user_6) { create :user }
+
+  let(:web3_proxy_class) { Web3Api::ApiProxy }
+  let(:web3_proxy) { instance_double(web3_proxy_class) }
+
+  before do
+    allow(web3_proxy_class).to receive(:new).and_return(web3_proxy)
+    allow(web3_proxy).to receive(:retrieve_transactions_count).and_return(10)
+    allow(web3_proxy).to receive(:retrieve_polygon_nfts_count).and_return(400)
+  end
 
   subject(:daily_metrics_refresh) { described_class.perform_now }
 
@@ -33,6 +42,10 @@ RSpec.describe DailyMetricsJob, type: :job do
       expect(created_daily_metric.total_users).to eq 6
       expect(created_daily_metric.date).to eq Date.yesterday
       expect(created_daily_metric.total_engaged_users).to eq 5
+      expect(created_daily_metric.total_onboarded_users).to eq 5
+      expect(created_daily_metric.total_celo_token_transactions).to eq 20
+      expect(created_daily_metric.total_polygon_token_transactions).to eq 20
+      expect(created_daily_metric.total_mates_nfts).to eq 400
     end
   end
 end
