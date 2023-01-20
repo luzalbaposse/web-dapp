@@ -1,5 +1,20 @@
+require "web3_api/api_proxy"
+
 class DailyMetricsJob < ApplicationJob
   queue_as :low
+
+  POLYGON_CONTRACTS = [
+    "0xbbfeda7c4d8d9df752542b03cdd715f790b32d0b",
+    "0xE23104E89fF4c93A677136C4cBdFD2037B35BE67"
+  ]
+  POLYGON_MATES_CONTRACT = "0x41033160a2351358ddc1b97edd0bc6f00cdeca92"
+
+  CELO_CONTRACTS = [
+    "0xa902DA7a40a671B84bA3Dd0BdBA6FD9d2D888246",
+    "0x5a6eF881E3707AAf7201dDb7c198fc94B4b12636"
+  ]
+
+  TRANSACTIONS_KPI_START_DATE = Date.new(2023, 0o1, 0o1).to_time.to_i
 
   def perform
     DailyMetric.create!(
@@ -18,7 +33,11 @@ class DailyMetricsJob < ApplicationJob
       total_celo_supporters: total_celo_supporters,
       total_polygon_tokens: total_polygon_tokens,
       total_polygon_supporters: total_polygon_supporters,
-      total_engaged_users: total_engaged_users
+      total_engaged_users: total_engaged_users,
+      total_onboarded_users: total_onboarded_users,
+      total_polygon_token_transactions: total_polygon_token_transactions,
+      total_celo_token_transactions: total_celo_token_transactions,
+      total_mates_nfts: total_mates_nfts
     )
   end
 
@@ -176,7 +195,46 @@ class DailyMetricsJob < ApplicationJob
     TalentSupporter.where(talent_contract_id: polygon_contracts).distinct.count(:supporter_wallet_id)
   end
 
+  def total_onboarded_users
+    User.where(onboarding_complete: true).count
+  end
+
+  def total_polygon_token_transactions
+    count = 0
+    POLYGON_CONTRACTS.each do |contract_address|
+      count += web3_proxy.retrieve_transactions_count(
+        address: contract_address,
+        chain: "polygon",
+        start_timestamp: TRANSACTIONS_KPI_START_DATE
+      )
+    end
+
+    count
+  end
+
+  def total_celo_token_transactions
+    count = 0
+    CELO_CONTRACTS.each do |contract_address|
+      count += web3_proxy.retrieve_transactions_count(
+        address: contract_address,
+        chain: "celo",
+        start_timestamp: TRANSACTIONS_KPI_START_DATE
+      )
+    end
+    count
+  end
+
+  def total_mates_nfts
+    web3_proxy.retrieve_polygon_nfts_count(
+      address: POLYGON_MATES_CONTRACT
+    )
+  end
+
   def one_month_ago
     @one_month_ago ||= 31.days.ago.beginning_of_day
+  end
+
+  def web3_proxy
+    @web3_proxy ||= Web3Api::ApiProxy.new
   end
 end
