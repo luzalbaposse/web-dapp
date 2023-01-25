@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_19_213514) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_25_103205) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -141,7 +141,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_19_213514) do
     t.integer "total_engaged_users"
     t.integer "total_advocates"
     t.integer "total_scouts"
-    t.integer "talent_applications"
     t.integer "total_beginner_quests_completed"
     t.integer "total_complete_profile_quests_completed"
     t.integer "total_ambassador_quests_completed"
@@ -156,6 +155,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_19_213514) do
     t.integer "total_celo_token_transactions"
     t.integer "total_mates_nfts"
     t.integer "total_onboarded_users"
+    t.integer "total_talent_token_applications"
+    t.integer "total_approved_talent_token_applications"
+    t.integer "time_on_page"
+    t.integer "visitors"
+    t.integer "total_polygon_tvl"
+    t.integer "total_celo_tvl"
+    t.integer "total_twitter_followers"
+    t.integer "total_discord_members"
   end
 
   create_table "discovery_rows", force: :cascade do |t|
