@@ -64,7 +64,7 @@ module GoogleDrive
     end
 
     def config
-      Base64.decode64(ENV["GOOGLE_SERVICE_ACCOUNT_JSON"])
+      ENV["GOOGLE_SERVICE_ACCOUNT_JSON"]
     end
   end
 end
