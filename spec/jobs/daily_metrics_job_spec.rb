@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe DailyMetricsJob, type: :job do
-  let!(:user_1) { create :user, last_access_at: 5.days.ago }
+  let!(:user_1) { create :user, last_access_at: 5.days.ago, created_at: 5.days.ago }
   let!(:talent) { create :talent, user: user_1, updated_at: Date.today }
   let!(:talent_token) { create :talent_token, talent: talent, deployed: true }
   let!(:user_2) { create :user, last_access_at: Date.yesterday, talent: talent_2 }
@@ -85,6 +85,7 @@ RSpec.describe DailyMetricsJob, type: :job do
       expect(created_daily_metric.total_users).to eq 6
       expect(created_daily_metric.date).to eq date
       expect(created_daily_metric.total_engaged_users).to eq 5
+      expect(created_daily_metric.total_active_users).to eq 1
       expect(created_daily_metric.total_onboarded_users).to eq 5
       expect(created_daily_metric.total_celo_token_transactions).to eq 20
       expect(created_daily_metric.total_polygon_token_transactions).to eq 20
