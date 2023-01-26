@@ -21,6 +21,9 @@ RSpec.describe DailyMetricsJob, type: :job do
   let(:web3_proxy_class) { Web3Api::ApiProxy }
   let(:web3_proxy) { instance_double(web3_proxy_class) }
 
+  let(:upload_metrics_class) { GoogleDrive::UploadMetrics }
+  let(:upload_metrics) { instance_double(upload_metrics_class, call: true) }
+
   let(:date) { Date.yesterday }
 
   let(:simple_analytics_request) { "https://simpleanalytics.com/beta.talentprotocol.com.json?end=#{date.end_of_day}&fields=seconds_on_page,visitors,pages&info=false&start=#{date.beginning_of_day}&version=5" }
@@ -56,6 +59,7 @@ RSpec.describe DailyMetricsJob, type: :job do
 
   before do
     allow(web3_proxy_class).to receive(:new).and_return(web3_proxy)
+    allow(upload_metrics_class).to receive(:new).and_return(upload_metrics)
     allow(web3_proxy).to receive(:retrieve_transactions_count).and_return(10)
     allow(web3_proxy).to receive(:retrieve_polygon_nfts_count).and_return(400)
     stub_request(:get, simple_analytics_request).to_return(body: simple_analytics_body.to_json)
@@ -117,5 +121,14 @@ RSpec.describe DailyMetricsJob, type: :job do
       eth_contract,
       "totalTokensStaked"
     ).twice
+  end
+
+  it "initializes and calls the upload metrics service" do
+    daily_metrics_refresh
+
+    expect(upload_metrics_class).to have_received(:new).with(
+      DailyMetric.last
+    )
+    expect(upload_metrics).to have_received(:call)
   end
 end
