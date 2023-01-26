@@ -18,7 +18,7 @@ RSpec.describe GoogleDrive::UploadMetrics do
     allow(google_drive_class).to receive(:from_service_account_key).and_return(google_drive)
     allow(google_drive).to receive(:spreadsheet_by_key).and_return(spreadsheet)
     allow(spreadsheet).to receive(:worksheet_by_title).and_return(worksheet)
-    ENV["GOOGLE_SERVICE_ACCOUNT_JSON"] = Base64.encode64(google_drive_account_json.to_json)
+    ENV["GOOGLE_SERVICE_ACCOUNT_JSON"] = google_drive_account_json.to_json
   end
 
   it "initializes a google drive session" do
