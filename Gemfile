@@ -94,6 +94,7 @@ gem "paper_trail"
 
 # Data analytics
 gem "blazer"
+gem "google_drive"
 
 # Elasticsearch
 gem "chewy", ">= 7.2.7"

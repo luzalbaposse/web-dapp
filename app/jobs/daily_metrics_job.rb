@@ -1,4 +1,5 @@
 require "web3_api/api_proxy"
+require "google_drive/upload_metrics"
 
 class DailyMetricsJob < ApplicationJob
   queue_as :low
@@ -20,7 +21,7 @@ class DailyMetricsJob < ApplicationJob
   TRANSACTIONS_KPI_START_DATE = Date.new(2023, 0o1, 0o1).to_time.to_i
 
   def perform
-    DailyMetric.create!(
+    daily_metric = DailyMetric.create!(
       date: date,
       total_users: total_users,
       total_connected_wallets: total_connected_wallets,
@@ -49,6 +50,8 @@ class DailyMetricsJob < ApplicationJob
       total_twitter_followers: total_twitter_followers,
       total_discord_members: total_discord_members
     )
+    # Uploads the daily metric to the google sheet
+    GoogleDrive::UploadMetrics.new(daily_metric).call
   end
 
   private
