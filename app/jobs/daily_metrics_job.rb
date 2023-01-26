@@ -69,7 +69,7 @@ class DailyMetricsJob < ApplicationJob
   end
 
   def total_active_users
-    User.where("users.last_access_at > ?", one_month_ago).count
+    User.where("users.last_access_at > ? and users.last_access_at::date != users.created_at::date", one_month_ago).count
   end
 
   def total_dead_accounts
