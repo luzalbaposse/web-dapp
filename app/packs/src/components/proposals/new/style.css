@@ -1,0 +1,247 @@
+.community-submit-community-submit-wrapper {
+  background-color: #fafafb;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.community-submit-community-submit {
+  background-color: #fafafb;
+  border: 1px none;
+  height: 1011px;
+  overflow: hidden;
+  position: relative;
+  width: 375px;
+}
+
+.community-submit-overlap {
+  height: 947px;
+  left: 0;
+  position: absolute;
+  top: 64px;
+  width: 375px;
+}
+
+.community-submit-frame {
+  height: 884px;
+  left: 0;
+  position: absolute;
+  top: 63px;
+  width: 375px;
+}
+
+.community-submit-frame-4 {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  left: 24px;
+  position: relative;
+  top: 25px;
+  width: fit-content;
+}
+
+.community-submit-frame-361 {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 328px;
+}
+
+.community-submit-input-fields-light {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 328px;
+}
+
+.community-submit-text-wrapper {
+  color: #1c2126;
+  font-family: "Acid Grotesk TP-Bold", Helvetica;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.28px;
+  line-height: 23.1px;
+  margin-top: -1px;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.community-submit-group {
+  height: 328px;
+  min-width: 328px;
+  object-fit: cover;
+}
+
+.community-submit-frame-1241 {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: fit-content;
+}
+
+.community-submit-frame-1240 {
+  align-items: flex-start;
+  display: flex;
+  gap: 16px;
+  width: fit-content;
+}
+
+.community-submit-button-dark {
+  align-items: flex-start;
+  align-self: stretch;
+  border: 1px solid;
+  border-color: #f2f3f5;
+  border-radius: 8px;
+  display: flex;
+  gap: 10px;
+  overflow: hidden;
+  padding: 10px;
+}
+
+.community-submit-frame-1 {
+  align-items: flex-start;
+  display: flex;
+  gap: 1px;
+  width: fit-content;
+}
+
+.community-submit-maximum-supply {
+  color: #aebbc5;
+  font-family: "Plus Jakarta Sans", Helvetica;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.28px;
+  line-height: 20px;
+  margin-top: -1px;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.community-submit-top-nav-dark {
+  background-color: #fafafb;
+  height: 64px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 375px;
+}
+
+.community-submit-rectangle {
+  background-color: #ebedf0;
+  height: 1px;
+  left: 0;
+  position: absolute;
+  top: 63px;
+  width: 375px;
+}
+
+.community-submit-frame-1242 {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  gap: 16px;
+  left: 24px;
+  position: absolute;
+  top: 20px;
+  width: fit-content;
+}
+
+.community-submit-frame-1029 {
+  align-items: center;
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  width: fit-content;
+}
+
+.community-submit-frame-1028 {
+  background-image: url(https://anima-uploads.s3.amazonaws.com/projects/63d17b550d6f95510a75a056/releases/63d17dffd4c21235ffab3b04/img/arrow-2@2x.png);
+  background-size: 100% 100%;
+  height: 16px;
+  min-width: 16px;
+}
+
+.community-submit-div {
+  background-color: #fafafb;
+  height: 64px;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 375px;
+}
+
+.community-submit-talent-protocol {
+  color: #7857ed;
+  font-family: "Acid Grotesk TP-Medium", Helvetica;
+  font-size: 16px;
+  font-weight: 500;
+  left: 25px;
+  letter-spacing: -0.16px;
+  line-height: normal;
+  position: absolute;
+  top: 24px;
+}
+
+.community-submit-frame-1239 {
+  align-items: center;
+  display: flex;
+  gap: 24px;
+  left: 240px;
+  position: absolute;
+  top: 20px;
+  width: fit-content;
+}
+
+.community-submit-img {
+  height: 20px;
+  min-width: 20px;
+}
+
+.community-submit-ellipse {
+  height: 36px;
+  margin-bottom: -6px;
+  margin-right: -6px;
+  margin-top: -6px;
+  min-width: 36px;
+}
+
+.community-submit-overlap-group-wrapper {
+  border-color: #ebedf0;
+  border-top-style: solid;
+  border-top-width: 1px;
+  height: 66px;
+  left: -1px;
+  position: fixed;
+  top: 946px;
+  width: 377px;
+}
+
+.community-submit-overlap-group {
+  background-color: #fafafb;
+  height: 64px;
+  width: 375px;
+}
+
+.community-submit-frame-1258 {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  gap: 111px;
+  justify-content: flex-end;
+  left: 16px;
+  position: relative;
+  top: 16px;
+  width: 343px;
+}
+
+.community-submit-frame-2 {
+  align-items: flex-start;
+  display: flex;
+  gap: 8px;
+  width: fit-content;
+}

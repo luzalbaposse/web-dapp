@@ -1,0 +1,278 @@
+.community-vote-community-vote-wrapper {
+  background-color: #fafafb;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.community-vote-community-vote {
+  background-color: #fafafb;
+  border: 1px none;
+  height: 1200px;
+  overflow: hidden;
+  position: relative;
+  width: 375px;
+}
+
+.community-vote-frame {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  left: 16px;
+  position: absolute;
+  top: 152px;
+  width: fit-content;
+}
+
+.community-vote-group {
+  height: 343px;
+  min-width: 343px;
+  object-fit: cover;
+}
+
+.community-vote-frame-1264 {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: fit-content;
+}
+
+.community-vote-frame-1265 {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: fit-content;
+}
+
+.community-vote-frame-1040 {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+  width: fit-content;
+}
+
+.community-vote-frame-1259 {
+  align-items: flex-start;
+  display: flex;
+  gap: 4px;
+  width: fit-content;
+}
+
+.community-vote-element-jan {
+  color: #697f8f;
+  font-family: "Acid Grotesk TP-Normal", Helvetica;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.28px;
+  line-height: 23.1px;
+  margin-top: -1px;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.community-vote-this-is-a-trustable-merch-provider {
+  color: #1c2126;
+  font-family: "Acid Grotesk TP-Medium", Helvetica;
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 28px;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.community-vote-frame-1263 {
+  align-items: center;
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  width: fit-content;
+}
+
+.community-vote-her-career-took-off-in-when-she-started-streaming-strategy-games-on-twitch-in-the-years-of-live-streaming-she-s-amassed-hundreds-of-thousands-of-followers-and-worked-with-fortune-companies-and-AAA-game-developers {
+  color: #37434b;
+  font-family: "Plus Jakarta Sans", Helvetica;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.28px;
+  line-height: 23.1px;
+  width: 343px;
+}
+
+.community-vote-group-358 {
+  height: 52px;
+  min-width: 63px;
+  position: relative;
+}
+
+.community-vote-text-wrapper {
+  color: #697f8f;
+  font-family: "Acid Grotesk TP-Normal", Helvetica;
+  font-size: 12px;
+  font-weight: 400;
+  left: 0;
+  letter-spacing: 0.24px;
+  line-height: 19.8px;
+  position: absolute;
+  top: 0;
+  white-space: nowrap;
+}
+
+.community-vote-element {
+  color: #1c2126;
+  font-family: "Acid Grotesk TP-Medium", Helvetica;
+  font-size: 20px;
+  font-weight: 500;
+  left: 0;
+  letter-spacing: 0;
+  line-height: 28px;
+  position: absolute;
+  top: 24px;
+  white-space: nowrap;
+}
+
+.community-vote-group-359 {
+  height: 52px;
+  min-width: 59px;
+  position: relative;
+}
+
+.community-vote-top-nav-dark {
+  background-color: #fafafb;
+  height: 64px;
+  left: 0;
+  position: absolute;
+  top: 64px;
+  width: 375px;
+}
+
+.community-vote-rectangle {
+  background-color: #ebedf0;
+  height: 1px;
+  left: 0;
+  position: absolute;
+  top: 63px;
+  width: 375px;
+}
+
+.community-vote-frame-1242 {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  gap: 16px;
+  left: 24px;
+  position: absolute;
+  top: 20px;
+  width: fit-content;
+}
+
+.community-vote-frame-1029 {
+  align-items: center;
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  width: fit-content;
+}
+
+.community-vote-frame-1028 {
+  background-image: url(https://anima-uploads.s3.amazonaws.com/projects/63d17ab1ab83f3e1623df3e0/releases/63d17ace901b2070f6fb1dd2/img/arrow-2@2x.png);
+  background-size: 100% 100%;
+  height: 16px;
+  min-width: 16px;
+}
+
+.community-vote-p {
+  color: #1c2126;
+  font-family: "Acid Grotesk TP-Bold", Helvetica;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.28px;
+  line-height: 23.1px;
+  margin-top: -1px;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.community-vote-non-modal-dialog-footer-light-mobile {
+  border-color: #ebedf0;
+  border-top-style: solid;
+  border-top-width: 1px;
+  height: 66px;
+  left: -1px;
+  position: fixed;
+  top: 949px;
+  width: 377px;
+}
+
+.community-vote-overlap-group {
+  background-color: #fafafb;
+  height: 64px;
+  width: 375px;
+}
+
+.community-vote-frame-1258 {
+  align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
+  left: 16px;
+  position: relative;
+  top: 16px;
+  width: 343px;
+}
+
+.community-vote-frame-1241 {
+  align-items: flex-start;
+  display: flex;
+  gap: 8px;
+  width: fit-content;
+}
+
+.community-vote-div {
+  background-color: #fafafb;
+  height: 64px;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 375px;
+}
+
+.community-vote-talent-protocol {
+  color: #7857ed;
+  font-family: "Acid Grotesk TP-Medium", Helvetica;
+  font-size: 16px;
+  font-weight: 500;
+  left: 25px;
+  letter-spacing: -0.16px;
+  line-height: normal;
+  position: absolute;
+  top: 24px;
+}
+
+.community-vote-frame-1239 {
+  align-items: center;
+  display: flex;
+  gap: 24px;
+  left: 240px;
+  position: absolute;
+  top: 20px;
+  width: fit-content;
+}
+
+.community-vote-img {
+  height: 20px;
+  min-width: 20px;
+}
+
+.community-vote-ellipse {
+  height: 36px;
+  margin-bottom: -6px;
+  margin-right: -6px;
+  margin-top: -6px;
+  min-width: 36px;
+}

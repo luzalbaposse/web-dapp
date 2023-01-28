@@ -39,6 +39,10 @@ import FirstQuestPopup from "src/components/one_time_popups/FirstQuestPopup";
 import FlashMessages from "src/components/FlashMessages";
 import ProfileShow from "src/components/profile/show";
 import OnboardingFlow from "src/components/onboarding/OnboardingFlow";
+import Proposals from "src/components/proposals";
+import ProposalsNew from "src/components/proposals/new/index.jsx";
+import SeeProposals from "src/components/proposals/see/index.jsx";
+
 
 import "stylesheets/application.scss";
 
@@ -71,6 +75,9 @@ ReactOnRails.register({
   UpcomingTalents,
   Web3ModalConnect,
   OnboardingFlow,
+  Proposals,
+  ProposalsNew,
+  SeeProposals
 });
 
 Rails.start();

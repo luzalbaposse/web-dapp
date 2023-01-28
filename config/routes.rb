@@ -60,6 +60,11 @@ Rails.application.routes.draw do
     # Portfolio
     resource :portfolio, only: [:show]
 
+    # VOTE
+    get "/proposals" => "proposals#index"
+    get "/proposals/new" => "proposalsnew#index"
+    get "/proposals/:id" => "seeproposals#index"
+
     # Chat
     resources :messages, only: [:index, :show, :create] do
       post :send_to_all_supporters, on: :collection

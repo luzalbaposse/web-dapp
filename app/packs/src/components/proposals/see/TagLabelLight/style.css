@@ -1,0 +1,25 @@
+.tag-label-light-size-small-layout-label-only {
+  display: flex;
+  gap: 8px;
+  width: fit-content;
+}
+
+.tag-label-light-tag-label {
+  letter-spacing: 0;
+  line-height: 24px;
+  margin-top: -1px;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.tag-label-light-add {
+  background-image: url(https://anima-uploads.s3.amazonaws.com/projects/63d17ab1ab83f3e1623df3e0/releases/63d17ace901b2070f6fb1dd2/img/union-6@2x.png);
+  background-size: 100% 100%;
+  height: 12px;
+  min-width: 12px;
+}
+
+.tag-label-light-img {
+  height: 12px;
+  min-width: 12px;
+}

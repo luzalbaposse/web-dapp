@@ -1,0 +1,184 @@
+.input-fields-light-text {
+  width: fit-content;
+}
+
+.input-fields-light-text-wrapper {
+  color: #1c2126;
+  font-family: "Acid Grotesk TP-Normal", Helvetica;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.28px;
+  line-height: 20px;
+  margin-top: -1px;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.input-fields-light-rectangle {
+  background-color: #1c2126;
+  height: 20px;
+  min-width: 1px;
+}
+
+.input-fields-light-rectangle-224 {
+  background-color: #1c2126;
+  height: 21px;
+  margin-right: -2px;
+  min-width: 1px;
+}
+
+.input-fields-light-add {
+  height: 12px;
+  left: 2px;
+  position: absolute;
+  top: 2px;
+  width: 12px;
+}
+
+.input-fields-light-div {
+  background-color: #1c2126;
+  height: 20px;
+  margin-right: -2px;
+  min-width: 1px;
+}
+
+.input-fields-light-rectangle-2 {
+  background-color: #1c2126;
+  height: 19px;
+  min-width: 1px;
+}
+
+.input-fields-light-rectangle-225 {
+  background-color: #3a3c3e;
+  height: 16px;
+  min-width: 1px;
+}
+
+.input-fields-light-max {
+  color: #7857ed;
+  font-family: "Acid Grotesk TP-Normal", Helvetica;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.28px;
+  line-height: 20px;
+  margin-top: -1px;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.input-fields-light-group {
+  height: 16px;
+  left: 4px;
+  position: relative;
+  width: 8px;
+}
+
+.input-fields-light-polygon {
+  height: 6px;
+  left: 1px;
+  position: absolute;
+  top: 0;
+  width: 6px;
+}
+
+.input-fields-light-polygon-2 {
+  height: 6px;
+  left: 1px;
+  position: absolute;
+  top: 10px;
+  width: 6px;
+}
+
+.input-fields-light-text-wrapper-2 {
+  color: #1c2126;
+  font-family: "Acid Grotesk TP-Bold", Helvetica;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.28px;
+  line-height: 23.1px;
+  margin-top: -1px;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.input-fields-light-top-right-caption {
+  color: #697f8f;
+  flex: 1;
+  font-family: "Acid Grotesk TP-Bold", Helvetica;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.24px;
+  line-height: 19.8px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.input-fields-light-tags-input-light {
+  align-items: center;
+  border: 1px solid;
+  border-color: #dadde1;
+  border-radius: 4px;
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  padding: 2px 8px;
+  width: fit-content;
+}
+
+.input-fields-light-group-1 {
+  border-radius: 8px;
+  height: 16px;
+  min-width: 16px;
+  position: relative;
+}
+
+.input-fields-light-img {
+  height: 16px;
+  min-width: 16px;
+}
+
+.input-fields-light-text-1-105 {
+  color: #697f8f;
+  font-family: "Acid Grotesk TP-Normal", Helvetica;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.28px;
+  line-height: 20px;
+  margin-top: -1px;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.input-fields-light-frame {
+  align-items: flex-start;
+  display: flex;
+  gap: 1px;
+  left: 10px;
+  position: absolute;
+  top: 10px;
+  width: 30px;
+}
+
+.input-fields-light-please-enter-the-amount {
+  color: #697f8f;
+  font-family: "Acid Grotesk TP-Normal", Helvetica;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.28px;
+  line-height: 20px;
+  margin-right: -141px;
+  margin-top: -1px;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.input-fields-light-frame-1 {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  left: 274px;
+  position: absolute;
+  top: 10px;
+  width: fit-content;
+}

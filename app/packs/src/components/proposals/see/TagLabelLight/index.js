@@ -1,0 +1,1 @@
+export { TagLabelLight } from "./TagLabelLight";

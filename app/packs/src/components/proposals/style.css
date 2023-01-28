@@ -1,0 +1,253 @@
+.community-community-wrapper {
+  background-color: #fafafb;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.community-community {
+  background-color: #fafafb;
+  border: 1px none;
+  height: 2741px;
+  position: relative;
+  width: 375px;
+}
+
+.community-frame {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  left: 20px;
+  position: absolute;
+  top: 421px;
+  width: fit-content;
+}
+
+.community-frame-1234 {
+  align-items: flex-start;
+  border: 1px solid;
+  border-color: #dadde1;
+  border-radius: 24px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  justify-content: center;
+  padding: 24px;
+  width: fit-content;
+}
+
+.community-group {
+  height: 287px;
+  min-width: 287px;
+  object-fit: cover;
+}
+
+.community-frame-1021 {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 280px;
+}
+
+.community-frame-370 {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 280px;
+}
+
+.community-frame-1259 {
+  align-items: flex-start;
+  display: flex;
+  gap: 4px;
+  width: fit-content;
+}
+
+.community-element-jan {
+  color: #697f8f;
+  font-family: "Acid Grotesk TP-Normal", Helvetica;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.28px;
+  line-height: 23.1px;
+  margin-top: -1px;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.community-this-is-a-trustable-merch-provider {
+  color: #1c2126;
+  font-family: "Acid Grotesk TP-Medium", Helvetica;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 26.4px;
+  white-space: nowrap;
+  width: 280px;
+}
+
+.community-this-non-transferable-NFT-SBT-serves-as-a-recognition-of-your {
+  color: #536471;
+  font-family: "Acid Grotesk TP-Normal", Helvetica;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 26.4px;
+  width: 280px;
+}
+
+.community-frame-1262 {
+  align-items: center;
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  width: fit-content;
+}
+
+.community-div {
+  align-items: flex-start;
+  border: 1px solid;
+  border-color: #dadde1;
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  justify-content: center;
+  padding: 24px;
+  width: fit-content;
+}
+
+.community-frame-1261 {
+  align-items: flex-start;
+  display: flex;
+  gap: 8px;
+  left: 16px;
+  position: absolute;
+  top: 357px;
+  width: fit-content;
+}
+
+.community-page-header-light-mobile {
+  align-items: flex-start;
+  background-color: #f2f3f5;
+  display: flex;
+  gap: 8px;
+  left: 0;
+  padding: 24px 19px 48px;
+  position: absolute;
+  top: 64px;
+  width: 375px;
+}
+
+.community-frame-1242 {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  width: fit-content;
+}
+
+.community-frame-1243 {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: fit-content;
+}
+
+.community-frame-1240 {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: fit-content;
+}
+
+.community-page-title {
+  color: #1c2126;
+  font-family: "Acid Grotesk TP-Medium", Helvetica;
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 28px;
+  margin-top: -1px;
+  white-space: nowrap;
+  width: 336px;
+}
+
+.community-below-are-listed-the-stats-for-NFT-collections-and-individual-assets-that-have-sold-for-the-highest-prices-we-the-data-list-in-descending-order {
+  color: #536471;
+  font-family: "Acid Grotesk TP-Normal", Helvetica;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.28px;
+  line-height: 23.1px;
+  width: 336px;
+}
+
+.community-frame-1244 {
+  align-items: flex-start;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: fit-content;
+}
+
+.community-top-nav-dark {
+  background-color: #fafafb;
+  height: 64px;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 375px;
+}
+
+.community-talent-protocol {
+  color: #7857ed;
+  font-family: "Acid Grotesk TP-Medium", Helvetica;
+  font-size: 16px;
+  font-weight: 500;
+  left: 25px;
+  letter-spacing: -0.16px;
+  line-height: normal;
+  position: absolute;
+  top: 24px;
+}
+
+.community-rectangle {
+  background-color: #ebedf0;
+  height: 1px;
+  left: 0;
+  position: absolute;
+  top: 63px;
+  width: 375px;
+}
+
+.community-frame-1239 {
+  align-items: center;
+  display: flex;
+  gap: 24px;
+  left: 240px;
+  position: absolute;
+  top: 20px;
+  width: fit-content;
+}
+
+.community-img {
+  height: 20px;
+  min-width: 20px;
+}
+
+.community-ellipse {
+  height: 36px;
+  margin-bottom: -6px;
+  margin-right: -6px;
+  margin-top: -6px;
+  min-width: 36px;
+}

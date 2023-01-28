@@ -1,0 +1,13 @@
+.switch-light-layout-on-stat-enable {
+  height: 24px;
+  width: 44px;
+}
+
+.switch-light-ellipse {
+  border-radius: 10px;
+  box-shadow: 0px 1px 1px #0000000f, 0px 1px 2px #00000026;
+  height: 20px;
+  position: relative;
+  top: 2px;
+  width: 20px;
+}

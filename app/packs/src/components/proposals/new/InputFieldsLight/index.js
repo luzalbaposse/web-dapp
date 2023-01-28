@@ -1,0 +1,1 @@
+export { InputFieldsLight } from "./InputFieldsLight";
