@@ -68,7 +68,7 @@ const MobileSupporterAction = ({
           >
             <ArrowLeft color="currentColor" />
           </Button>
-          <TalentProfilePicture src={profilePicture} height="24" />
+          <TalentProfilePicture src={profilePicture} height="24" userId={userId}/>
           <P2 className="ml-2 p-0" bold>
             {name}
           </P2>
@@ -621,6 +621,7 @@ const Supporters = ({
                     <TalentProfilePicture
                       src={supporterInfo[supporter.id]?.profilePictureUrl}
                       height="24"
+                      userId={supporter.id}
                     />
                     <P2 text={supporterName(supporter)} bold className="ml-2" />
                   </div>
@@ -693,6 +694,7 @@ const Supporters = ({
                   <TalentProfilePicture
                     src={supporterInfo[supporter.id]?.profilePictureUrl}
                     height="24"
+                    userId={supporter.id}
                   />
                   {supporterInfo[supporter.id]?.username && (
                     <P2

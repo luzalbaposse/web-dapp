@@ -323,6 +323,7 @@ const Overview = ({
                   <TalentProfilePicture
                     className="mb-3"
                     src={talent.profilePictureUrl}
+                    userId={talent.id}
                     height={120}
                     border
                   />
@@ -440,6 +441,7 @@ const Overview = ({
                         <TalentProfilePicture
                           className="position-relative"
                           src={talent.profilePictureUrl}
+                          userId={talentId}
                           height={120}
                           border
                         />
@@ -469,6 +471,7 @@ const Overview = ({
                 <TalentProfilePicture
                   className="mb-3"
                   src={talent.profilePictureUrl}
+                  userId={talent.userId}
                   height={120}
                 />
               ) : (
@@ -485,6 +488,7 @@ const Overview = ({
                       <TalentProfilePicture
                         className="position-relative"
                         src={talent.profilePictureUrl}
+                        userId={talent.userId}
                         height={112}
                       />
                       <div className="rounded-circle edit-image"></div>
@@ -772,6 +776,7 @@ const Overview = ({
               <TalentProfilePicture
                 className="mr-2"
                 src={talent.user.invitedBy.profilePictureUrl}
+                userId={talent.user.invitedBy.id}
                 height={32}
               />
               <P2 bold text={talent.user.invitedBy.name} />
@@ -783,6 +788,7 @@ const Overview = ({
               <TalentProfilePicture
                 className="mr-2"
                 src={talent.user.approvedBy.profilePictureUrl}
+                userId={talent.user.approvedBy.id}
                 height={32}
               />
               <P2 bold text={talent.user.approvedBy.name} />

@@ -19,7 +19,7 @@ const UserMenu = ({ user, toggleTheme, mode, onClickTransak, signOut }) => {
         bsPrefix=""
         as="div"
       >
-        <TalentProfilePicture src={user.profilePictureUrl} height={20} />
+        <TalentProfilePicture src={user.profilePictureUrl} height={20} userId={user.id} />
       </Dropdown.Toggle>
 
       <Dropdown.Menu className="user-menu-dropdown">

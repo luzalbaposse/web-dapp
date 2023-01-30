@@ -195,6 +195,7 @@ const DiscoveryRow = ({ discoveryRow, env }) => {
                   supporterCount={talent.supporters_count?.toString()}
                   chainId={talent.talent_token.chain_id}
                   env={env}
+                  userId={talent.user.id}
                 />
               </div>
             ))}

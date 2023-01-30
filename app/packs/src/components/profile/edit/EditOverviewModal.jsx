@@ -405,6 +405,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
                   className="mb-2 cursor-pointer"
                   style={{ borderRadius: "24px" }}
                   src={editedTalent.profilePictureUrl}
+                  userId={editedTalent.id}
                   height={112}
                   width={112}
                 />
@@ -431,6 +432,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
               <TalentProfilePicture
                 className="position-relative"
                 src={editedTalent.profilePictureUrl}
+                userId={editedTalent.id}
                 height={112}
               />
               <div className="rounded-circle edit-image"></div>

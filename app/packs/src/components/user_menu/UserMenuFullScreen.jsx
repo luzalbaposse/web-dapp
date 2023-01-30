@@ -51,6 +51,7 @@ const UserMenuFullScreen = ({
       <div className="d-flex flex-row w-100 align-items-center my-2">
         <TalentProfilePicture
           src={user.profilePictureUrl}
+          userId={user.id}
           height={48}
           className="mr-2"
         />
