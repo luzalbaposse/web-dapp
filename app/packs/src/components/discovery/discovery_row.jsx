@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import cx from "classnames";
 import { useWindowDimensionsHook } from "src/utils/window";
 import { P1, P3 } from "src/components/design_system/typography";
 import Link from "src/components/design_system/link";
@@ -7,13 +9,8 @@ import NewTalentCard from "src/components/design_system/cards/NewTalentCard";
 import Button from "src/components/design_system/button";
 import Tag from "src/components/design_system/tag";
 import { displayableAmount } from "src/utils/viewHelpers";
-
-import { toast } from "react-toastify";
 import { ToastBody } from "src/components/design_system/toasts";
-
-import { get, post } from "src/utils/requests";
-
-import cx from "classnames";
+import { get, post, destroy } from "src/utils/requests";
 
 const DiscoveryRow = ({ discoveryRow, env }) => {
   const { mobile, width } = useWindowDimensionsHook();

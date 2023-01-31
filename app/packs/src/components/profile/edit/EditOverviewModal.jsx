@@ -41,7 +41,7 @@ const Option = (props) => {
   );
 };
 
-const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
+const EditOverviewModal = ({ show, hide, talent, setTalent, mode }) => {
   const { mobile } = useWindowDimensionsHook();
   const [editedTalent, setEditedTalent] = useState(talent);
   const [profileFileInput, setProfileFileInput] = useState(null);
@@ -205,6 +205,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
         ...prev,
         profilePictureUrl: response.uploadURL,
         profilePictureData: {
+          // eslint-disable-next-line  no-useless-escape
           id: response.uploadURL.match(/\/cache\/([^\?]+)/)[1], // extract key without prefix
           storage: "cache",
           metadata: {
@@ -227,6 +228,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
         ...prev,
         bannerUrl: response.uploadURL,
         bannerData: {
+          // eslint-disable-next-line  no-useless-escape
           id: response.uploadURL.match(/\/cache\/([^\?]+)/)[1], // extract key without prefix
           storage: "cache",
           metadata: {

@@ -6,13 +6,12 @@ import HighlightsCard from "src/components/design_system/highlights_card";
 import DiscoveryBanners from "src/components/design_system/banners/DiscoveryBanners";
 
 import DiscoveryRow from "./discovery_row";
-import DiscoveryMarketingArticles from "./discovery_marketing_articles";
 
 import cx from "classnames";
 
 const Discovery = ({
   discoveryRows,
-  marketingArticles,
+  /*marketingArticles,*/
   user,
   railsContext,
 }) => {

@@ -24,6 +24,7 @@ const TalentProfilePicture = ({
     if (src) {
       return src;
     } else if (!straight) {
+      // eslint-disable-next-line no-undef
       return require(`images/default-profile-icon-${Math.floor((userId || 0 ) % 5)}.png`);
     } else if (mode() === "light" && straight) {
       return DefaultBannerLight;
@@ -81,6 +82,8 @@ TalentProfilePicture.propTypes = {
   border: bool,
   link: string,
 };
+
+// eslint-disable-next-line no-unused-vars
 export default (props, _railsContext) => (
   <ThemeContainer>
     <TalentProfilePicture {...props} />

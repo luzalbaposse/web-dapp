@@ -3,12 +3,10 @@ import Modal from "react-bootstrap/Modal";
 
 import TalentProfilePicture from "src/components/talent/TalentProfilePicture";
 import Button from "src/components/design_system/button";
-import { ArrowLeft, Sun, Moon, ArrowRight, Copy } from "src/components/icons";
+import { ArrowLeft, Sun, Moon, ArrowRight } from "src/components/icons";
 import { P1, P2 } from "src/components/design_system/typography";
 
 import {
-  SUPPORTER_GUIDE,
-  TALENT_GUIDE,
   TERMS_HREF,
   PRIVACY_HREF,
 } from "src/utils/constants";
@@ -23,9 +21,11 @@ const UserMenuFullScreen = ({
   showConnectButton,
   walletConnectButton,
   onClickTransak,
+  /*
   copyCodeToClipboard,
   inviteNumbers,
   userHasInvitesLeft,
+  */
   signOut,
 }) => (
   <Modal

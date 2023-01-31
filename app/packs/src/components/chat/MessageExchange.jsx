@@ -174,6 +174,7 @@ const MessageExchange = (props) => {
             profilePictureUrl={props.profilePictureUrl}
             username={props.username}
             user={props.user}
+            // eslint-disable-next-line no-undef
             userId={mine(message) ? user.id : message.sender_id}
           />
         ))}

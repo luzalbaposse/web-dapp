@@ -348,7 +348,15 @@ const LaunchTokenModals = (props) => {
     if (result) {
       setFactory(newOnChain);
     } else {
-      setDeploy("Unable to deploy token");
+      try {
+        // eslint-disable-next-line no-undef
+        setDeploy("Unable to deploy token");
+      } catch {
+    toast.error(
+        <ToastBody heading="Error!" body={"Unable to deploy token"} mode={mode}/>,  
+        { autoClose: 5000 }
+    );
+      }
       return;
     }
   }, []);

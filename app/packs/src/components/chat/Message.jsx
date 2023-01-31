@@ -45,7 +45,7 @@ const MessageLinkified = (props) => {
 
   const { message, mine } = props;
 
-  const handleClick = (e, url) => {
+  const handleClick = (e /*, url*/) => {
     if (mine) {
       return;
     }
