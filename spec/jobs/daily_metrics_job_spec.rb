@@ -10,7 +10,7 @@ RSpec.describe DailyMetricsJob, type: :job do
   let!(:user_3) { create :user }
   let!(:message) { create :message, sender: user_3, receiver: user_1, created_at: 10.days.ago }
 
-  let!(:user_4) { create :user, onboarding_complete: false }
+  let!(:user_4) { create :user, onboarded_at: nil }
   let!(:follow) { create :follow, follower: user_4, user: user_1, created_at: 26.days.ago }
 
   let!(:user_5) { create :user }

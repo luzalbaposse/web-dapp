@@ -281,6 +281,26 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe "#onboarding_complete?" do
+    let(:user) { create :user, onboarded_at: onboarded_at }
+
+    context "when the onboarded_at is nil" do
+      let(:onboarded_at) { nil }
+
+      it "returns false" do
+        expect(user.onboarding_complete?).to eq false
+      end
+    end
+
+    context "when the onboarded_at is not nil" do
+      let(:onboarded_at) { Time.current }
+
+      it "returns true" do
+        expect(user.onboarding_complete?).to eq true
+      end
+    end
+  end
+
   describe "#visible_digital_collectibles?" do
     let(:user) { create :user }
 

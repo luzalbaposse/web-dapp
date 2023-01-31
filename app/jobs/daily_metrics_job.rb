@@ -196,7 +196,7 @@ class DailyMetricsJob < ApplicationJob
   end
 
   def total_onboarded_users
-    User.where(onboarding_complete: true).count
+    User.where.not(onboarded_at: nil).count
   end
 
   def total_polygon_token_transactions
