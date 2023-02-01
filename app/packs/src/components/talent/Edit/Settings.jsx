@@ -18,164 +18,153 @@ import TextInput from "src/components/design_system/fields/textinput";
 const NotificationInputs = [
   {
     description: "Someone bought your talent token",
-    name: "TokenAcquiredNotification",
+    name: "TokenAcquiredNotification"
   },
   {
     description: "Someone sent you a chat message",
-    name: "MessageReceivedNotification",
-  },
+    name: "MessageReceivedNotification"
+  }
 ];
 
-const Settings = (props) => {
-  const { notificationPreferences, user, mobile, mode, changeSharedState } =
-    props;
+const Settings = props => {
+  const { notificationPreferences, user, mobile, mode, changeSharedState } = props;
   const [settings, setSettings] = useState({
     username: user.username || "",
     email: user.email || "",
     messagingDisabled: user.messaging_disabled || false,
     currentPassword: "",
     newPassword: "",
-    deletePassword: "",
+    deletePassword: ""
   });
   const [validationErrors, setValidationErrors] = useState({
     username: false,
     currentPassword: false,
     newPassword: false,
-    deletePassword: false,
+    deletePassword: false
   });
   const [saving, setSaving] = useState({
     loading: false,
     profile: false,
-    public: false,
+    public: false
   });
   const [emailValidated, setEmailValidated] = useState(false);
-  const {
-    valid: validPassword,
-    errors,
-    tags,
-  } = passwordMatchesRequirements(settings.newPassword);
+  const { valid: validPassword, errors, tags } = passwordMatchesRequirements(settings.newPassword);
   const [notifications, setNotifications] = useState({
     saving: false,
-    success: false,
+    success: false
   });
 
   const changeAttribute = (attribute, value) => {
     if (attribute === "currentPassword" && validationErrors.currentPassword) {
-      setValidationErrors((prev) => ({ ...prev, currentPassword: false }));
+      setValidationErrors(prev => ({ ...prev, currentPassword: false }));
     } else if (attribute === "email") {
-      setValidationErrors((prev) => ({ ...prev, email: false }));
+      setValidationErrors(prev => ({ ...prev, email: false }));
       setEmailValidated(false);
       if (emailRegex.test(value)) validateEmail(value);
     } else if (attribute === "username") {
       if (usernameRegex.test(value)) {
-        setValidationErrors((prev) => ({ ...prev, username: false }));
+        setValidationErrors(prev => ({ ...prev, username: false }));
       } else {
-        setValidationErrors((prev) => ({
+        setValidationErrors(prev => ({
           ...prev,
-          username: "Username only allows lower case letters and numbers",
+          username: "Username only allows lower case letters and numbers"
         }));
       }
     } else if (attribute === "deletePassword") {
-      setValidationErrors((prev) => ({ ...prev, deleting: false }));
+      setValidationErrors(prev => ({ ...prev, deleting: false }));
     }
-    setSettings((prevInfo) => ({ ...prevInfo, [attribute]: value }));
+    setSettings(prevInfo => ({ ...prevInfo, [attribute]: value }));
   };
 
   const updateUser = async () => {
-    setSaving((prev) => ({ ...prev, loading: true }));
+    setSaving(prev => ({ ...prev, loading: true }));
 
     const response = await patch(`/api/v1/users/${user.id}`, {
       user: {
         ...settings,
-        messaging_disabled: settings.messagingDisabled,
-      },
-    }).catch(() => setValidationErrors((prev) => ({ ...prev, saving: true })));
+        messaging_disabled: settings.messagingDisabled
+      }
+    }).catch(() => setValidationErrors(prev => ({ ...prev, saving: true })));
 
     if (response) {
       if (!response.errors && !response.error) {
-        changeSharedState((prev) => ({
+        changeSharedState(prev => ({
           ...prev,
           user: {
             ...prev.user,
-            ...response.user,
-          },
+            ...response.user
+          }
         }));
-        setSaving((prev) => ({ ...prev, loading: false, profile: true }));
+        setSaving(prev => ({ ...prev, loading: false, profile: true }));
       } else {
-        setValidationErrors((prev) => ({ ...prev, ...response.errors }));
+        setValidationErrors(prev => ({ ...prev, ...response.errors }));
       }
     }
 
-    setSaving((prev) => ({ ...prev, loading: false }));
+    setSaving(prev => ({ ...prev, loading: false }));
   };
 
   const updatePassword = async () => {
-    setSaving((prev) => ({ ...prev, loading: true }));
+    setSaving(prev => ({ ...prev, loading: true }));
 
     const response = await patch(`/api/v1/users/${user.id}`, {
       user: {
         current_password: settings.currentPassword,
-        new_password: settings.newPassword,
-      },
-    }).catch(() => setValidationErrors((prev) => ({ ...prev, saving: true })));
+        new_password: settings.newPassword
+      }
+    }).catch(() => setValidationErrors(prev => ({ ...prev, saving: true })));
 
     if (response) {
       if (!response.errors && !response.error) {
-        setSettings((prev) => ({
+        setSettings(prev => ({
           ...prev,
           currentPassword: "",
-          newPassword: "",
+          newPassword: ""
         }));
-        setSaving((prev) => ({ ...prev, loading: false, profile: true }));
+        setSaving(prev => ({ ...prev, loading: false, profile: true }));
       } else {
-        setValidationErrors((prev) => ({ ...prev, ...response.errors }));
+        setValidationErrors(prev => ({ ...prev, ...response.errors }));
       }
     }
 
-    setSaving((prev) => ({ ...prev, loading: false }));
+    setSaving(prev => ({ ...prev, loading: false }));
   };
 
   const sendDeleteAccountEmail = async () => {
-    const response = await post(
-      `/api/v1/users/${user.id}/delete_account_tokens`
-    );
+    const response = await post(`/api/v1/users/${user.id}/delete_account_tokens`);
 
     if (response && response.success) {
       toast.success(<ToastBody heading="Success!" body="Email sent!" />);
     }
   };
 
-  const setNotificationSettings = (name) => (event) => {
+  const setNotificationSettings = name => event => {
     const value = parseInt(event.currentTarget.value, 10);
     const preferences = { ...notificationPreferences, [name]: value };
-    changeSharedState((prev) => ({
+    changeSharedState(prev => ({
       ...prev,
-      notificationPreferences: preferences,
+      notificationPreferences: preferences
     }));
   };
 
   const updateNotificationSettings = async () => {
     let success = true;
-    setNotifications((prev) => ({ ...prev, saving: true, success: false }));
+    setNotifications(prev => ({ ...prev, saving: true, success: false }));
 
     const response = await patch(`/api/v1/users/${user.id}`, {
       user: {
-        notification_preferences: notificationPreferences,
-      },
+        notification_preferences: notificationPreferences
+      }
     }).catch(() => (success = false));
 
     success = success && response && !response.errors;
-    setNotifications((prev) => ({ ...prev, saving: false, success }));
+    setNotifications(prev => ({ ...prev, saving: false, success }));
   };
 
-  const messagingModeChanged = () =>
-    settings.messagingDisabled != user.messaging_disabled;
+  const messagingModeChanged = () => settings.messagingDisabled != user.messaging_disabled;
 
   const cannotSaveSettings = () =>
-    !emailValidated ||
-    !!validationErrors.email ||
-    settings.username.length == 0 ||
-    !!validationErrors.username;
+    !emailValidated || !!validationErrors.email || settings.username.length == 0 || !!validationErrors.username;
 
   const cannotChangePassword = () =>
     !!validationErrors.currentPassword ||
@@ -184,13 +173,13 @@ const Settings = (props) => {
     settings.newPassword.length < 8 ||
     (!!settings.newPassword && !validPassword);
 
-  const validateEmail = (value) => {
+  const validateEmail = value => {
     if (emailRegex.test(value)) {
-      setValidationErrors((prev) => ({ ...prev, email: false }));
+      setValidationErrors(prev => ({ ...prev, email: false }));
     } else {
-      setValidationErrors((prev) => ({
+      setValidationErrors(prev => ({
         ...prev,
-        email: "Email is not valid",
+        email: "Email is not valid"
       }));
     }
     setEmailValidated(true);
@@ -198,47 +187,34 @@ const Settings = (props) => {
 
   return (
     <>
-      <H5
-        className="w-100 text-left"
-        mode={mode}
-        text="Account Settings"
-        bold
-      />
-      <P2
-        className="w-100 text-left"
-        mode={mode}
-        text="Update your username and manage your account"
-      />
+      <H5 className="w-100 text-left" mode={mode} text="Account Settings" bold />
+      <P2 className="w-100 text-left" mode={mode} text="Update your username and manage your account" />
       <div className="d-flex flex-row w-100 flex-wrap justify-content-between mt-4">
         <TextInput
           title={"Username"}
           mode={mode}
           shortCaption={`Your Talent Protocol URL: /u/${settings.username}`}
-          onChange={(e) => changeAttribute("username", e.target.value)}
+          onChange={e => changeAttribute("username", e.target.value)}
           value={settings.username}
           className="w-100"
           required
           error={validationErrors.username}
         />
-        {validationErrors.username && (
-          <P3 className="text-danger" text={validationErrors.username} />
-        )}
+        {validationErrors.username && <P3 className="text-danger" text={validationErrors.username} />}
       </div>
       <div className="d-flex flex-row w-100 flex-wrap mt-4">
         <TextInput
           title="Email"
           type="email"
           mode={mode}
-          onChange={(e) => changeAttribute("email", e.target.value)}
+          onChange={e => changeAttribute("email", e.target.value)}
           value={settings.email}
           className="w-100"
           required
           error={validationErrors.email}
-          onBlur={(e) => validateEmail(e.target.value)}
+          onBlur={e => validateEmail(e.target.value)}
         />
-        {validationErrors?.email && (
-          <P3 className="text-danger" text={validationErrors.email} />
-        )}
+        {validationErrors?.email && <P3 className="text-danger" text={validationErrors.email} />}
       </div>
       <div className="d-flex flex-column w-100 flex-wrap mt-4">
         <P2 bold className="text-black mb-2">
@@ -248,27 +224,18 @@ const Settings = (props) => {
         <Checkbox
           className="form-check-input mt-4"
           checked={settings.messagingDisabled}
-          onChange={() =>
-            changeAttribute("messagingDisabled", !settings.messagingDisabled)
-          }
+          onChange={() => changeAttribute("messagingDisabled", !settings.messagingDisabled)}
         >
           <div className="d-flex flex-wrap">
             <P2 className="mr-1" text="I don't want to receive messages" />
           </div>
         </Checkbox>
-        <div
-          className={`d-flex flex-row ${
-            mobile ? "justify-content-between" : "mt-4"
-          } w-100 pb-4`}
-        >
+        <div className={`d-flex flex-row ${mobile ? "justify-content-between" : "mt-4"} w-100 pb-4`}>
           <LoadingButton
             onClick={() => updateUser()}
             type="primary-default"
             mode={mode}
-            disabled={
-              (saving.loading || cannotSaveSettings()) &&
-              !messagingModeChanged()
-            }
+            disabled={(saving.loading || cannotSaveSettings()) && !messagingModeChanged()}
             loading={saving.loading}
             success={saving.profile}
           >
@@ -283,15 +250,13 @@ const Settings = (props) => {
           type="password"
           placeholder={"*********"}
           mode={mode}
-          onChange={(e) => changeAttribute("currentPassword", e.target.value)}
+          onChange={e => changeAttribute("currentPassword", e.target.value)}
           value={settings.currentPassword}
           className="w-100"
           required
           error={validationErrors.currentPassword}
         />
-        {validationErrors?.currentPassword && (
-          <P3 className="text-danger" text={validationErrors.currentPassword} />
-        )}
+        {validationErrors?.currentPassword && <P3 className="text-danger" text={validationErrors.currentPassword} />}
       </div>
       <div className="d-flex flex-row w-100 justify-content-between mt-4">
         <TextInput
@@ -299,23 +264,16 @@ const Settings = (props) => {
           type="password"
           placeholder={"*********"}
           mode={mode}
-          onChange={(e) => changeAttribute("newPassword", e.target.value)}
+          onChange={e => changeAttribute("newPassword", e.target.value)}
           value={settings.newPassword}
           className="w-100"
           error={validationErrors.newPassword}
         />
       </div>
       <div className="d-flex flex-wrap">
-        {tags.map((tag) => (
-          <Tag
-            className={`mr-2 mt-2${errors[tag] ? "" : " bg-success"}`}
-            key={tag}
-          >
-            <P3
-              text={tag}
-              bold
-              className={errors[tag] ? "" : "permanent-text-white"}
-            />
+        {tags.map(tag => (
+          <Tag className={`mr-2 mt-2${errors[tag] ? "" : " bg-success"}`} key={tag}>
+            <P3 text={tag} bold className={errors[tag] ? "" : "permanent-text-white"} />
           </Tag>
         ))}
       </div>
@@ -331,23 +289,15 @@ const Settings = (props) => {
 
       <Divider className="mb-4" />
       <div className="d-flex flex-column w-100 my-3">
-        <H5
-          className="w-100 text-left"
-          mode={mode}
-          text="Email Notification Settings"
-          bold
-        />
+        <H5 className="w-100 text-left" mode={mode} text="Email Notification Settings" bold />
         <P2
           className="w-100 text-left"
           mode={mode}
           text="For each type of notification you can select to receive an immediate email notification, a daily email digest or to not receive any email."
         />
 
-        {NotificationInputs.map((input) => (
-          <div
-            className="d-flex flex-row w-100 flex-wrap mt-4"
-            key={input.name}
-          >
+        {NotificationInputs.map(input => (
+          <div className="d-flex flex-row w-100 flex-wrap mt-4" key={input.name}>
             <div className="d-flex flex-column w-100">
               <div className="d-flex flex-row justify-content-between align-items-end">
                 <P2 bold className="text-black mb-2">
@@ -367,11 +317,7 @@ const Settings = (props) => {
             </div>
           </div>
         ))}
-        <div
-          className={`d-flex flex-row ${
-            mobile ? "justify-content-between mt-4" : "mt-4"
-          } w-100 pb-4`}
-        >
+        <div className={`d-flex flex-row ${mobile ? "justify-content-between mt-4" : "mt-4"} w-100 pb-4`}>
           <LoadingButton
             onClick={updateNotificationSettings}
             type="primary-default"
@@ -393,14 +339,8 @@ const Settings = (props) => {
           mode={mode}
           text="To permanently delete your account and account data, you'll need to confirm your decision in an email we send you."
         />
-        <button
-          className="button-link w-100 mt-4 mb-2"
-          onClick={sendDeleteAccountEmail}
-        >
-          <Link
-            text="Send delete account confirmation email"
-            className="text-primary"
-          />
+        <button className="button-link w-100 mt-4 mb-2" onClick={sendDeleteAccountEmail}>
+          <Link text="Send delete account confirmation email" className="text-primary" />
         </button>
       </div>
     </>

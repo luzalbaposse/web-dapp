@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
+import { toast } from "react-toastify";
 
 import { useWindowDimensionsHook } from "src/utils/window";
 import { get } from "src/utils/requests";
@@ -20,7 +21,7 @@ import {
   compareOccupation,
   compareSupporters,
   compareMarketCap,
-  compareMarketCapVariance,
+  compareMarketCapVariance
 } from "src/components/talent/utils/talent";
 
 import cx from "classnames";
@@ -31,15 +32,13 @@ const TalentPage = ({ isAdminOrModerator, env }) => {
   const url = new URL(document.location);
 
   const [talents, setTalents] = useState([]);
-  const [watchlistOnly, setWatchlistOnly] = useState(
-    url.searchParams.get("watchlist_only") == "true" || false
-  );
+  const [watchlistOnly, setWatchlistOnly] = useState(url.searchParams.get("watchlist_only") == "true" || false);
   const [listModeOnly, setListModeOnly] = useState(false);
   const [selectedSort, setSelectedSort] = useState("");
   const [sortDirection, setSortDirection] = useState("asc");
   const [pagination, setPagination] = useState({
     currentPage: 1,
-    lastPage: null,
+    lastPage: null
   });
   const [loading, setLoading] = useState(false);
 
@@ -50,12 +49,12 @@ const TalentPage = ({ isAdminOrModerator, env }) => {
     loadTalents(params);
   }, [watchlistOnly]);
 
-  const changeTab = (tab) => {
+  const changeTab = tab => {
     setWatchlistOnly(tab === "Watchlist" ? true : false);
   };
 
-  const updateFollow = async (talent) => {
-    const newtalents = talents.map((currTalent) => {
+  const updateFollow = async talent => {
+    const newtalents = talents.map(currTalent => {
       if (currTalent.id === talent.id) {
         return { ...currTalent, isFollowing: !talent.isFollowing };
       } else {
@@ -64,16 +63,14 @@ const TalentPage = ({ isAdminOrModerator, env }) => {
     });
 
     if (talent.isFollowing) {
-      const response = await destroy(
-        `/api/v1/follows?user_id=${talent.userId}`
-      );
+      const response = await destroy(`/api/v1/follows?user_id=${talent.userId}`);
 
       if (response.success) {
         setTalents([...newtalents]);
       }
     } else {
       const response = await post(`/api/v1/follows`, {
-        user_id: talent.userId,
+        user_id: talent.userId
       });
 
       if (response.success) {
@@ -114,23 +111,19 @@ const TalentPage = ({ isAdminOrModerator, env }) => {
     setTalents(sortedTalent);
   }, [selectedSort, sortDirection]);
 
-  const loadTalents = (params) => {
+  const loadTalents = params => {
     setLoading(true);
-    get(`/api/v1/talent?${params.toString()}`).then((response) => {
+    get(`/api/v1/talent?${params.toString()}`).then(response => {
       if (response.error) {
         toast.error(<ToastBody heading="Error!" body={response.error} />);
       } else {
         setPagination(response.pagination);
-        let responseTalents = response.talents.map((talent) => ({
-          ...camelCaseObject(talent),
+        let responseTalents = response.talents.map(talent => ({
+          ...camelCaseObject(talent)
         }));
         setTalents(responseTalents);
 
-        window.history.replaceState(
-          {},
-          document.title,
-          `${url.pathname}?${params.toString()}`
-        );
+        window.history.replaceState({}, document.title, `${url.pathname}?${params.toString()}`);
         setLoading(false);
       }
     });
@@ -143,19 +136,15 @@ const TalentPage = ({ isAdminOrModerator, env }) => {
     const params = new URLSearchParams(document.location.search);
     params.set("page", nextPage);
 
-    get(`/api/v1/talent?${params.toString()}`).then((response) => {
-      let responseTalents = response.talents.map((talent) => ({
-        ...camelCaseObject(talent),
+    get(`/api/v1/talent?${params.toString()}`).then(response => {
+      let responseTalents = response.talents.map(talent => ({
+        ...camelCaseObject(talent)
       }));
       const newTalents = [...talents, ...responseTalents];
       setTalents(newTalents);
       setPagination(camelCaseObject(response.pagination));
 
-      window.history.replaceState(
-        {},
-        document.title,
-        `${url.pathname}?${params.toString()}`
-      );
+      window.history.replaceState({}, document.title, `${url.pathname}?${params.toString()}`);
       setLoading(false);
     });
   };
@@ -166,10 +155,7 @@ const TalentPage = ({ isAdminOrModerator, env }) => {
     <div className={cx("pb-6", mobile && "p-4")}>
       <div className="mb-5 talent-list-header d-flex flex-column justify-content-center">
         <H3 className="text-black mb-3" bold text="Explore All Talent" />
-        <P1
-          className="text-primary-03"
-          text="Support undiscovered talent and be rewarded as they grow."
-        />
+        <P1 className="text-primary-03" text="Support undiscovered talent and be rewarded as they grow." />
       </div>
       <TalentOptions
         changeTab={changeTab}
@@ -185,11 +171,7 @@ const TalentPage = ({ isAdminOrModerator, env }) => {
       />
       {talents.length === 0 && !loading && (
         <div className="d-flex justify-content-center mt-6">
-          <P2
-            className="text-black"
-            bold
-            text="We couldn't find any talent based on your search."
-          />
+          <P2 className="text-black" bold text="We couldn't find any talent based on your search." />
         </div>
       )}
       {listModeOnly ? (
@@ -204,11 +186,7 @@ const TalentPage = ({ isAdminOrModerator, env }) => {
           showFirstBoughtField={false}
         />
       ) : (
-        <TalentTableCardMode
-          talents={talents}
-          updateFollow={updateFollow}
-          env={env}
-        />
+        <TalentTableCardMode talents={talents} updateFollow={updateFollow} env={env} />
       )}
       {loading && (
         <div className="w-100 d-flex flex-row my-2 justify-content-center">
@@ -216,11 +194,7 @@ const TalentPage = ({ isAdminOrModerator, env }) => {
         </div>
       )}
       {showLoadMoreTalents && (
-        <Button
-          onClick={() => loadMoreTalents()}
-          type="white-subtle"
-          className="d-flex mt-4 mx-auto"
-        >
+        <Button onClick={() => loadMoreTalents()} type="white-subtle" className="d-flex mt-4 mx-auto">
           Load more
         </Button>
       )}

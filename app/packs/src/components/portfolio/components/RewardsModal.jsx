@@ -1,13 +1,12 @@
 import React from "react";
 import { ethers } from "ethers";
-import currency from "currency.js";
 import Modal from "react-bootstrap/Modal";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { parseAndCommify } from "src/onchain/utils";
 import ClaimRewardsDropdown from "src/components/design_system/dropdowns/claim_rewards_dropdown";
 import Divider from "src/components/design_system/other/Divider";
-import { H3, P1, P2, P3 } from "src/components/design_system/typography";
+import { P1, P2 } from "src/components/design_system/typography";
 import Button from "src/components/design_system/button";
 import { useWindowDimensionsHook } from "../../../utils/window";
 import { ArrowLeft } from "src/components/icons";
@@ -21,7 +20,7 @@ const RewardsModal = ({
   rewardValues,
   supportedTalents,
   mode,
-  railsContext,
+  railsContext
 }) => {
   if (!activeContract) {
     return null;
@@ -30,13 +29,10 @@ const RewardsModal = ({
   const { width } = useWindowDimensionsHook();
   const mobile = width < 992;
   const availableRewards = rewardValues[activeContract] || "0";
-  const activeTalent =
-    supportedTalents.find(
-      (talent) => talent.contract_id == activeContract.toLowerCase()
-    ) || {};
-  const loadAvailableSupply = ethers.utils.formatUnits(
-    parseInt(activeTalent.totalSupply) || 0
-  );
+  const activeTalent = supportedTalents.find(talent => talent.contract_id == activeContract.toLowerCase()) || {};
+
+  // eslint-disable-next-line no-unused-vars
+  const loadAvailableSupply = ethers.utils.formatUnits(parseInt(activeTalent.totalSupply) || 0);
 
   return (
     <Modal
@@ -44,28 +40,19 @@ const RewardsModal = ({
       show={show}
       centered={mobile ? false : true}
       onHide={() => setShow(false)}
-      dialogClassName={
-        mobile ? "mw-100 mh-100 m-0" : "remove-background rewards-modal"
-      }
+      dialogClassName={mobile ? "mw-100 mh-100 m-0" : "remove-background rewards-modal"}
       fullscreen={"md-down"}
     >
       <>
         <Modal.Header closeButton className="pt-4 px-4 pb-0">
           {mobile && (
-            <button
-              onClick={() => setShow(false)}
-              className="text-black remove-background remove-border mr-3"
-            >
+            <button onClick={() => setShow(false)} className="text-black remove-background remove-border mr-3">
               <ArrowLeft color="currentColor" />
             </button>
           )}
           <P1
             className="text-black"
-            text={`Claim rewards ${
-              railsContext.disableSmartContracts == "true"
-                ? "(currently unavailable)"
-                : ""
-            }`}
+            text={`Claim rewards ${railsContext.disableSmartContracts == "true" ? "(currently unavailable)" : ""}`}
             bold
           />
         </Modal.Header>
@@ -80,11 +67,7 @@ const RewardsModal = ({
             mode={mode}
           />
           <P2 className="text-black mb-2" text="Claim method" bold />
-          <ClaimRewardsDropdown
-            mode={mode}
-            talentSymbol={activeTalent.symbol}
-            className="mb-2"
-          />
+          <ClaimRewardsDropdown mode={mode} talentSymbol={activeTalent.symbol} className="mb-2" />
           <P2
             className="text-primary-04"
             text="This will use all your accumulated rewards. If no more talent tokens can
@@ -93,28 +76,16 @@ const RewardsModal = ({
           <Divider mode={mode} className="mt-6 mb-3" />
           <div className="d-flex justify-content-between mb-2">
             <P2 className="text-gray-300" text="Unclaimed Rewards" />
-            <P2
-              className="text-right text-black"
-              text={`${parseAndCommify(availableRewards)} $TAL`}
-            />
+            <P2 className="text-right text-black" text={`${parseAndCommify(availableRewards)} $TAL`} />
           </div>
           <div className="d-flex justify-content-between">
-            <P2
-              className="text-gray-300"
-              text={`$${activeTalent.symbol} Unclaimed Price`}
-            />
+            <P2 className="text-gray-300" text={`$${activeTalent.symbol} Unclaimed Price`} />
             <P2 className="text-right text-black" text="$0.1" />
           </div>
           <Divider mode={mode} className="mt-3 mb-3" />
           <div className="d-flex justify-content-between">
             <P1 className="text-black" text="You will receive" bold />
-            <P1
-              className="text-black"
-              text={`${parseAndCommify(availableRewards / 5)} $${
-                activeTalent.symbol
-              }`}
-              bold
-            />
+            <P1 className="text-black" text={`${parseAndCommify(availableRewards / 5)} $${activeTalent.symbol}`} bold />
           </div>
           <Divider mode={mode} className="mt-3 mb-3" />
           <Button
@@ -122,12 +93,9 @@ const RewardsModal = ({
             type="primary-default"
             size="big"
             onClick={claim}
-            disabled={
-              loadingRewards || railsContext.disableSmartContracts == "true"
-            }
+            disabled={loadingRewards || railsContext.disableSmartContracts == "true"}
           >
-            Buy ${activeTalent.symbol}{" "}
-            {loadingRewards ? <FontAwesomeIcon icon={faSpinner} spin /> : ""}
+            Buy ${activeTalent.symbol} {loadingRewards ? <FontAwesomeIcon icon={faSpinner} spin /> : ""}
           </Button>
         </Modal.Body>
       </>

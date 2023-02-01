@@ -21,14 +21,8 @@ const UnreadMessagesIndicator = () => {
   );
 };
 
-export const BottomNav = ({
-  talentPath,
-  portfolioPath,
-  messagesPath,
-  rewardsPath,
-  hasUnreadMessages,
-}) => {
-  const { height, width } = useWindowDimensionsHook();
+export const BottomNav = ({ talentPath, portfolioPath, messagesPath, rewardsPath, hasUnreadMessages }) => {
+  const { width } = useWindowDimensionsHook();
 
   if (width >= 992) {
     return null;
@@ -38,19 +32,10 @@ export const BottomNav = ({
     <nav className="navbar-bottom-mobile">
       <div className="navbar-bottom-menu">
         <div className="navbar-bottom-menu-option">
-          <BottomNavItem
-            url={talentPath}
-            secondaryUrl={"/"}
-            routeName="Talent"
-            Icon={Talent}
-          />
+          <BottomNavItem url={talentPath} secondaryUrl={"/"} routeName="Talent" Icon={Talent} />
         </div>
         <div className="navbar-bottom-menu-option">
-          <BottomNavItem
-            url={portfolioPath}
-            routeName="Portfolio"
-            Icon={Wallet}
-          />
+          <BottomNavItem url={portfolioPath} routeName="Portfolio" Icon={Wallet} />
         </div>
         <div className="navbar-bottom-menu-option">
           <BottomNavItem url={messagesPath} routeName="Messages" Icon={Chat} />

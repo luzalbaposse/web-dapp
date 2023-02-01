@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_25_103205) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_31_095534) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -600,8 +600,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_25_103205) do
     t.datetime "delete_account_token_expires_at", precision: nil
     t.string "legal_first_name"
     t.string "legal_last_name"
-    t.boolean "onboarding_complete", default: false
     t.boolean "whitelisted_talent_mate", default: false
+    t.datetime "onboarded_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invite_id"], name: "index_users_on_invite_id"
     t.index ["linkedin_id"], name: "index_users_on_linkedin_id", unique: true

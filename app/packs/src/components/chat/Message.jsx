@@ -20,10 +20,7 @@ export const PhisingAwarenessModal = ({ show, hide, url }) => (
         {url}
       </a>
       <div className="d-flex flex-row justify-content-between align-items-center mt-4">
-        <button
-          className="talent-button white-subtle-button normal-size-button w-100 mr-2"
-          onClick={hide}
-        >
+        <button className="talent-button white-subtle-button normal-size-button w-100 mr-2" onClick={hide}>
           Cancel
         </button>
         <a
@@ -39,13 +36,13 @@ export const PhisingAwarenessModal = ({ show, hide, url }) => (
   </Modal>
 );
 
-const MessageLinkified = (props) => {
+const MessageLinkified = props => {
   const [showPishingModal, setShowPishingModal] = useState(false);
   const [url, setUrl] = useState("");
 
   const { message, mine } = props;
 
-  const handleClick = (e, url) => {
+  const handleClick = (e /*, url*/) => {
     if (mine) {
       return;
     }
@@ -64,29 +61,15 @@ const MessageLinkified = (props) => {
       regex={urlRegex}
     >
       <LinkItEmail>
-        {!mine && (
-          <PhisingAwarenessModal
-            url={url}
-            show={showPishingModal}
-            hide={() => setShowPishingModal(false)}
-          />
-        )}
+        {!mine && <PhisingAwarenessModal url={url} show={showPishingModal} hide={() => setShowPishingModal(false)} />}
         {message}
       </LinkItEmail>
     </LinkIt>
   );
 };
 
-const Message = (props) => {
-  const {
-    message,
-    mine,
-    profilePictureUrl,
-    username,
-    profileLink,
-    previousMessageSameUser,
-    user,
-  } = props;
+const Message = props => {
+  const { message, mine, profilePictureUrl, username, profileLink, previousMessageSameUser, user, userId } = props;
 
   const sentDate = dayjs(message.created_at).format("MMM D, YYYY, h:mm A");
 
@@ -95,23 +78,16 @@ const Message = (props) => {
       {!previousMessageSameUser && (
         <TalentProfilePicture
           src={mine ? user.profilePictureUrl : profilePictureUrl}
+          userId={userId}
           link={profileLink}
           height={48}
           className="mb-auto mt-3"
         />
       )}
-      <div
-        className={`d-flex flex-column w-100 ${
-          previousMessageSameUser ? "messages-from-same-user" : "ml-3"
-        }`}
-      >
+      <div className={`d-flex flex-column w-100 ${previousMessageSameUser ? "messages-from-same-user" : "ml-3"}`}>
         {!previousMessageSameUser && (
           <div className="d-flex flex-row w-100 align-items-center mt-3">
-            <P2
-              bold
-              text={mine ? user.username : username}
-              className="mb-0 text-primary"
-            />
+            <P2 bold text={mine ? user.username : username} className="mb-0 text-primary" />
             <P3 text={sentDate} className="mb-0 ml-2" />
           </div>
         )}

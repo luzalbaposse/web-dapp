@@ -30,7 +30,7 @@ import { useWindowDimensionsHook } from "src/utils/window";
 
 import cx from "classnames";
 
-const Option = (props) => {
+const Option = props => {
   return (
     <components.Option {...props}>
       <div className="d-flex justify-content-between">
@@ -41,18 +41,18 @@ const Option = (props) => {
   );
 };
 
-const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
+const EditOverviewModal = ({ show, hide, talent, setTalent, mode }) => {
   const { mobile } = useWindowDimensionsHook();
   const [editedTalent, setEditedTalent] = useState(talent);
   const [profileFileInput, setProfileFileInput] = useState(null);
   const [bannerFileInput, setBannerFileInput] = useState(null);
   const [selectedCareerNeeds, setSelectedCareerNeeds] = useState(
-    editedTalent.careerGoal.careerNeeds.map((need) => need.title)
+    editedTalent.careerGoal.careerNeeds.map(need => need.title)
   );
   const [selectedTags, setSelectedTags] = useState(
-    editedTalent.tags.map((tag) => ({
+    editedTalent.tags.map(tag => ({
       value: tag.description,
-      label: tag.description,
+      label: tag.description
     }))
   );
   const [validationErrors, setValidationErrors] = useState({
@@ -61,7 +61,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
     displayName: false,
     occupation: false,
     location: false,
-    headline: false,
+    headline: false
   });
 
   const talentErrors = () => {
@@ -86,45 +86,45 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
     meta: { type: "avatar" },
     restrictions: {
       maxFileSize: 5120000,
-      allowedFileTypes: [".jpg", ".png", ".jpeg"],
+      allowedFileTypes: [".jpg", ".png", ".jpeg"]
     },
-    autoProceed: true,
+    autoProceed: true
   });
 
   const uppyBanner = new Uppy({
     meta: { type: "avatar" },
     restrictions: {
       maxFileSize: 5120000,
-      allowedFileTypes: [".jpg", ".png", ".jpeg", ".gif"],
+      allowedFileTypes: [".jpg", ".png", ".jpeg", ".gif"]
     },
-    autoProceed: true,
+    autoProceed: true
   });
 
   uppyProfile.use(AwsS3Multipart, {
     limit: 4,
     companionUrl: "/",
     companionHeaders: {
-      "X-CSRF-Token": getAuthToken(),
-    },
+      "X-CSRF-Token": getAuthToken()
+    }
   });
 
   uppyBanner.use(AwsS3Multipart, {
     limit: 4,
     companionUrl: "/",
     companionHeaders: {
-      "X-CSRF-Token": getAuthToken(),
-    },
+      "X-CSRF-Token": getAuthToken()
+    }
   });
 
-  profileFileInput?.addEventListener("change", (event) => {
+  profileFileInput?.addEventListener("change", event => {
     const files = Array.from(event.target.files);
-    files.forEach((file) => {
+    files.forEach(file => {
       try {
         uppyProfile.addFile({
           source: "file input",
           name: file.name,
           type: file.type,
-          data: file,
+          data: file
         });
       } catch (err) {
         if (err.isRestriction) {
@@ -138,15 +138,15 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
     });
   });
 
-  bannerFileInput?.addEventListener("change", (event) => {
+  bannerFileInput?.addEventListener("change", event => {
     const files = Array.from(event.target.files);
-    files.forEach((file) => {
+    files.forEach(file => {
       try {
         uppyBanner.addFile({
           source: "file input",
           name: file.name,
           type: file.type,
-          data: file,
+          data: file
         });
       } catch (err) {
         if (err.isRestriction) {
@@ -168,29 +168,24 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
 
     const response = await patch(`/api/v1/talent/${talent.id}`, {
       user: {
-        ...snakeCaseObject(editedTalent.user),
+        ...snakeCaseObject(editedTalent.user)
       },
       talent: {
-        ...snakeCaseObject(editedTalent),
+        ...snakeCaseObject(editedTalent)
       },
-      tags: selectedTags.map((tag) => tag.value),
-      career_needs: selectedCareerNeeds,
+      tags: selectedTags.map(tag => tag.value),
+      career_needs: selectedCareerNeeds
     });
 
     if (response && !response.error) {
-      setTalent((prev) => ({
+      setTalent(prev => ({
         ...prev,
-        ...camelCaseObject(response),
+        ...camelCaseObject(response)
       }));
 
-      toast.success(
-        <ToastBody heading="Success!" body={"Header created successfully."} />,
-        { autoClose: 1500 }
-      );
+      toast.success(<ToastBody heading="Success!" body={"Header created successfully."} />, { autoClose: 1500 });
     } else {
-      toast.error(
-        <ToastBody heading="Error!" body={response?.error} mode={mode} />
-      );
+      toast.error(<ToastBody heading="Error!" body={response?.error} mode={mode} />);
     }
 
     hide();
@@ -201,18 +196,19 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
       uppyProfile.reset();
     });
     uppyProfile.on("upload-success", (file, response) => {
-      setEditedTalent((prev) => ({
+      setEditedTalent(prev => ({
         ...prev,
         profilePictureUrl: response.uploadURL,
         profilePictureData: {
+          // eslint-disable-next-line  no-useless-escape
           id: response.uploadURL.match(/\/cache\/([^\?]+)/)[1], // extract key without prefix
           storage: "cache",
           metadata: {
             size: file.size,
             filename: file.name,
-            mime_type: file.type,
-          },
-        },
+            mime_type: file.type
+          }
+        }
       }));
     });
     uppyProfile.on("upload", () => {});
@@ -223,18 +219,19 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
       uppyBanner.reset();
     });
     uppyBanner.on("upload-success", (file, response) => {
-      setEditedTalent((prev) => ({
+      setEditedTalent(prev => ({
         ...prev,
         bannerUrl: response.uploadURL,
         bannerData: {
+          // eslint-disable-next-line  no-useless-escape
           id: response.uploadURL.match(/\/cache\/([^\?]+)/)[1], // extract key without prefix
           storage: "cache",
           metadata: {
             size: file.size,
             filename: file.name,
-            mime_type: file.type,
-          },
-        },
+            mime_type: file.type
+          }
+        }
       }));
     });
     uppyBanner.on("upload", () => {});
@@ -250,34 +247,34 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
   }, [show]);
 
   const changeUserAttribute = (attribute, value) => {
-    setValidationErrors((prev) => ({ ...prev, [attribute]: false }));
-    setEditedTalent((prev) => ({
+    setValidationErrors(prev => ({ ...prev, [attribute]: false }));
+    setEditedTalent(prev => ({
       ...prev,
       user: {
         ...prev.user,
-        [attribute]: value,
-      },
+        [attribute]: value
+      }
     }));
   };
 
   const changeProfileAttribute = (attribute, value) => {
-    setValidationErrors((prev) => ({ ...prev, [attribute]: false }));
-    setEditedTalent((prev) => ({
+    setValidationErrors(prev => ({ ...prev, [attribute]: false }));
+    setEditedTalent(prev => ({
       ...prev,
       profile: {
         ...prev.profile,
-        [attribute]: value,
-      },
+        [attribute]: value
+      }
     }));
   };
 
   const getTags = (query, callback) => {
-    get(`/api/v1/tags?description=${query}`).then((response) => {
+    get(`/api/v1/tags?description=${query}`).then(response => {
       return callback(
-        response.map((tag) => ({
+        response.map(tag => ({
           value: tag.description,
           label: tag.description,
-          count: tag.user_tags_count,
+          count: tag.user_tags_count
         }))
       );
     });
@@ -285,27 +282,27 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
 
   const debouncedGetTags = debounce(getTags, 300);
 
-  const onChangeTags = (tags) => {
+  const onChangeTags = tags => {
     setSelectedTags(
-      tags.map((tag) => ({
+      tags.map(tag => ({
         value: tag.value,
-        label: tag.label.toLowerCase(),
+        label: tag.label.toLowerCase()
       }))
     );
-    setEditedTalent((prev) => ({
+    setEditedTalent(prev => ({
       ...prev,
-      tags: tags.map((tag) => tag.label.toLowerCase()),
+      tags: tags.map(tag => tag.label.toLowerCase())
     }));
   };
 
-  const changeSelectedCareerNeeds = (tag) => {
+  const changeSelectedCareerNeeds = tag => {
     if (selectedCareerNeeds.includes(tag)) {
       const array = selectedCareerNeeds;
       const index = array.indexOf(tag);
       array.splice(index, 1);
       setSelectedCareerNeeds([...array]);
     } else {
-      setSelectedCareerNeeds((prev) => [...prev, tag]);
+      setSelectedCareerNeeds(prev => [...prev, tag]);
     }
   };
 
@@ -313,39 +310,35 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
     return editedTalent.profile.headline?.split(" ") || "";
   }, [editedTalent.profile.headline]);
 
-  const changeHeadlineHighlightedWords = (tagIndex) => {
-    let highlightedHeadlineWordsIndex =
-      editedTalent.profile.highlightedHeadlineWordsIndex || [];
+  const changeHeadlineHighlightedWords = tagIndex => {
+    let highlightedHeadlineWordsIndex = editedTalent.profile.highlightedHeadlineWordsIndex || [];
 
     if (highlightedHeadlineWordsIndex.includes(tagIndex)) {
       const index = highlightedHeadlineWordsIndex.indexOf(tagIndex);
       highlightedHeadlineWordsIndex.splice(index, 1);
-      setEditedTalent((prev) => ({
+      setEditedTalent(prev => ({
         ...prev,
         profile: {
           ...prev.profile,
-          highlightedHeadlineWordsIndex: [...highlightedHeadlineWordsIndex],
-        },
+          highlightedHeadlineWordsIndex: [...highlightedHeadlineWordsIndex]
+        }
       }));
     } else {
-      setEditedTalent((prev) => ({
+      setEditedTalent(prev => ({
         ...prev,
         profile: {
           ...prev.profile,
-          highlightedHeadlineWordsIndex: [
-            ...highlightedHeadlineWordsIndex,
-            tagIndex,
-          ],
-        },
+          highlightedHeadlineWordsIndex: [...highlightedHeadlineWordsIndex, tagIndex]
+        }
       }));
     }
   };
 
   const deleteBannerImg = () => {
-    setEditedTalent((prev) => ({
+    setEditedTalent(prev => ({
       ...prev,
       bannerUrl: null,
-      bannerData: null,
+      bannerData: null
     }));
   };
 
@@ -383,10 +376,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
               height={257}
               width={328}
             />
-            <P3
-              className="text-primary-04 mb-2"
-              text="JPG,PNG,GIF,URL(Video). Recommend 900x700. Max 5MB"
-            />
+            <P3 className="text-primary-04 mb-2" text="JPG,PNG,GIF,URL(Video). Recommend 900x700. Max 5MB" />
             <div className="d-flex justify-content-center mb-4">
               <FileInput
                 uppy={uppyBanner}
@@ -394,8 +384,8 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
                 inputName="banners[]"
                 locale={{
                   strings: {
-                    chooseFiles: "Choose masterhead image",
-                  },
+                    chooseFiles: "Choose masterhead image"
+                  }
                 }}
               />
             </div>
@@ -405,21 +395,19 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
                   className="mb-2 cursor-pointer"
                   style={{ borderRadius: "24px" }}
                   src={editedTalent.profilePictureUrl}
+                  userId={editedTalent.id}
                   height={112}
                   width={112}
                 />
-                <P3
-                  className="text-primary-04 mb-2"
-                  text="JPG or PNG. Max 5MB"
-                />
+                <P3 className="text-primary-04 mb-2" text="JPG or PNG. Max 5MB" />
                 <FileInput
                   uppy={uppyProfile}
                   pretty
                   inputName="profiles[]"
                   locale={{
                     strings: {
-                      chooseFiles: "Choose Profile Picture",
-                    },
+                      chooseFiles: "Choose Profile Picture"
+                    }
                   }}
                 />
               </div>
@@ -431,6 +419,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
               <TalentProfilePicture
                 className="position-relative"
                 src={editedTalent.profilePictureUrl}
+                userId={editedTalent.id}
                 height={112}
               />
               <div className="rounded-circle edit-image"></div>
@@ -442,12 +431,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
                   height={40}
                 />
               </label>
-              <input
-                id="profileFileInput"
-                className="d-none"
-                type="file"
-                accept=".jpg,.png,.jpeg"
-              ></input>
+              <input id="profileFileInput" className="d-none" type="file" accept=".jpg,.png,.jpeg"></input>
             </div>
             <div className="position-relative">
               <TalentProfilePicture
@@ -457,10 +441,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
                 height={332}
                 width={424}
               />
-              <div
-                className="edit-image"
-                style={{ borderRadius: "24px" }}
-              ></div>
+              <div className="edit-image" style={{ borderRadius: "24px" }}></div>
               <label htmlFor="bannerFileInput">
                 <TalentProfilePicture
                   className="position-absolute cursor-pointer"
@@ -469,22 +450,13 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
                   height={40}
                 />
               </label>
-              <input
-                id="bannerFileInput"
-                className="d-none"
-                type="file"
-                accept=".jpg,.png,.jpeg,.gif"
-              ></input>
+              <input id="bannerFileInput" className="d-none" type="file" accept=".jpg,.png,.jpeg,.gif"></input>
               <button
                 className="button-link position-absolute"
                 style={{ top: "145px", left: "210px" }}
                 onClick={deleteBannerImg}
               >
-                <TalentProfilePicture
-                  className="cursor-pointer"
-                  src={DeleteButton}
-                  height={40}
-                />
+                <TalentProfilePicture className="cursor-pointer" src={DeleteButton} height={40} />
               </button>
             </div>
           </div>
@@ -494,9 +466,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
             <TextInput
               className="mb-2"
               title="First Name"
-              onChange={(e) =>
-                changeUserAttribute("legalFirstName", e.target.value)
-              }
+              onChange={e => changeUserAttribute("legalFirstName", e.target.value)}
               value={editedTalent.user.legalFirstName}
               error={validationErrors?.legalFirstName}
               disabled={editedTalent.withPersonaId}
@@ -510,40 +480,28 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
             <TextInput
               className="mb-2"
               title="Last Name"
-              onChange={(e) =>
-                changeUserAttribute("legalLastName", e.target.value)
-              }
+              onChange={e => changeUserAttribute("legalLastName", e.target.value)}
               value={editedTalent.user.legalLastName}
               error={validationErrors?.legalLastName}
               disabled={editedTalent.withPersonaId}
             />
-            <P2
-              className="text-primary-04"
-              text="Your legal last name that will be used when verifying your account"
-            />
+            <P2 className="text-primary-04" text="Your legal last name that will be used when verifying your account" />
           </div>
           <div className="w-100 mb-5">
             <TextInput
               className="mb-2"
               title="Display Name"
-              onChange={(e) =>
-                changeUserAttribute("displayName", e.target.value)
-              }
+              onChange={e => changeUserAttribute("displayName", e.target.value)}
               value={editedTalent.user.displayName}
               required={true}
               error={validationErrors?.displayName}
             />
-            <P2
-              className="text-primary-04"
-              text="The name that we will generally use"
-            />
+            <P2 className="text-primary-04" text="The name that we will generally use" />
           </div>
           <div className="w-100 mb-5">
             <TextInput
               title="Location"
-              onChange={(e) =>
-                changeProfileAttribute("location", e.target.value)
-              }
+              onChange={e => changeProfileAttribute("location", e.target.value)}
               value={editedTalent.profile.location}
               required={true}
               error={validationErrors?.location}
@@ -554,9 +512,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
           <TextInput
             title="Occupation"
             className="mb-2"
-            onChange={(e) =>
-              changeProfileAttribute("occupation", e.target.value)
-            }
+            onChange={e => changeProfileAttribute("occupation", e.target.value)}
             value={editedTalent.profile.occupation}
             required={true}
             error={validationErrors?.occupation}
@@ -572,16 +528,12 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
               Headline <span className="text-danger">*</span>
             </P2>
             <div className="d-flex">
-              <P3
-                className="text-primary-01"
-                bold
-                text={editedTalent.profile.headline?.length || "0"}
-              />
+              <P3 className="text-primary-01" bold text={editedTalent.profile.headline?.length || "0"} />
               <P3 className="text-primary-04" bold text="/70" />
             </div>
           </div>
           <TextArea
-            onChange={(e) => changeProfileAttribute("headline", e.target.value)}
+            onChange={e => changeProfileAttribute("headline", e.target.value)}
             value={editedTalent.profile.headline || ""}
             maxLength={70}
             rows={3}
@@ -590,19 +542,13 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
           />
         </div>
         <div className="w-100 mb-2">
-          <P2
-            className="text-primary-01 mb-2"
-            bold
-            text="Highlight headline keywords"
-          />
+          <P2 className="text-primary-01 mb-2" bold text="Highlight headline keywords" />
           <TagsWithIndex
             tags={headlineHighlightedWords}
-            tagsIndexSelected={
-              editedTalent.profile.highlightedHeadlineWordsIndex || []
-            }
+            tagsIndexSelected={editedTalent.profile.highlightedHeadlineWordsIndex || []}
             className="mr-2 mb-4"
             clickable={false}
-            onClick={(tagIndex) => changeHeadlineHighlightedWords(tagIndex)}
+            onClick={tagIndex => changeHeadlineHighlightedWords(tagIndex)}
           />
         </div>
         <div className="w-100 mb-5">
@@ -611,7 +557,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
             classNamePrefix="select"
             isMulti
             cacheOptions
-            onChange={(tags) => onChangeTags(tags)}
+            onChange={tags => onChangeTags(tags)}
             defaultOptions
             value={selectedTags}
             loadOptions={debouncedGetTags}
@@ -619,17 +565,13 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
           />
         </div>
         <div className="mb-5">
-          <P2
-            className="mb-2 text-primary-01"
-            bold
-            text="Availability Highlight"
-          />
+          <P2 className="mb-2 text-primary-01" bold text="Availability Highlight" />
           <UserTags
             tags={CAREER_NEEDS_OPTIONS}
             tagsSelected={selectedCareerNeeds}
             className="mr-2 mb-4"
             clickable={false}
-            onClick={(tag) => changeSelectedCareerNeeds(tag)}
+            onClick={tag => changeSelectedCareerNeeds(tag)}
           />
         </div>
         <div className="w-100 mb-5">
@@ -637,43 +579,35 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
           <div className="mb-5">
             <TextInput
               title="Website"
-              onChange={(e) =>
-                changeProfileAttribute("website", e.target.value)
-              }
+              onChange={e => changeProfileAttribute("website", e.target.value)}
               value={editedTalent.profile.website || ""}
             />
           </div>
           <div className="mb-5">
             <TextInput
               title="LinkedIn"
-              onChange={(e) =>
-                changeProfileAttribute("linkedin", e.target.value)
-              }
+              onChange={e => changeProfileAttribute("linkedin", e.target.value)}
               value={editedTalent.profile.linkedin || ""}
             />
           </div>
           <div className="mb-5">
             <TextInput
               title="Twitter"
-              onChange={(e) =>
-                changeProfileAttribute("twitter", e.target.value)
-              }
+              onChange={e => changeProfileAttribute("twitter", e.target.value)}
               value={editedTalent.profile.twitter || ""}
             />
           </div>
           <div className="mb-5">
             <TextInput
               title="Telegram"
-              onChange={(e) =>
-                changeProfileAttribute("telegram", e.target.value)
-              }
+              onChange={e => changeProfileAttribute("telegram", e.target.value)}
               value={editedTalent.profile.telegram || ""}
             />
           </div>
           <div>
             <TextInput
               title="Github"
-              onChange={(e) => changeProfileAttribute("github", e.target.value)}
+              onChange={e => changeProfileAttribute("github", e.target.value)}
               value={editedTalent.profile.github || ""}
             />
           </div>
@@ -681,17 +615,8 @@ const EditOverviewModal = ({ show, hide, talent, setTalent }) => {
       </Modal.Body>
       <Divider />
       <Modal.Footer className="px-6 py-3" style={{ borderTop: "none" }}>
-        <Button
-          className="mr-2"
-          type="white-ghost"
-          text="Cancel"
-          onClick={hide}
-        />
-        <Button
-          type="primary-default"
-          text="Save"
-          onClick={debouncedSaveProfile}
-        />
+        <Button className="mr-2" type="white-ghost" text="Cancel" onClick={hide} />
+        <Button type="primary-default" text="Save" onClick={debouncedSaveProfile} />
       </Modal.Footer>
     </Modal>
   );

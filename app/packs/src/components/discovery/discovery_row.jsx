@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import cx from "classnames";
 import { useWindowDimensionsHook } from "src/utils/window";
 import { P1, P3 } from "src/components/design_system/typography";
 import Link from "src/components/design_system/link";
@@ -7,13 +9,8 @@ import NewTalentCard from "src/components/design_system/cards/NewTalentCard";
 import Button from "src/components/design_system/button";
 import Tag from "src/components/design_system/tag";
 import { displayableAmount } from "src/utils/viewHelpers";
-
-import { toast } from "react-toastify";
 import { ToastBody } from "src/components/design_system/toasts";
-
-import { get, post } from "src/utils/requests";
-
-import cx from "classnames";
+import { get, post, destroy } from "src/utils/requests";
 
 const DiscoveryRow = ({ discoveryRow, env }) => {
   const { mobile, width } = useWindowDimensionsHook();
@@ -43,10 +40,8 @@ const DiscoveryRow = ({ discoveryRow, env }) => {
     setPerPage(calculatePerPage());
   }, [width]);
 
-  const loadTalents = (page) => {
-    get(
-      `/api/v1/talent?discovery_row_id=${discoveryRow.id}&page=${page}&per_page=${perPage}`
-    ).then((response) => {
+  const loadTalents = page => {
+    get(`/api/v1/talent?discovery_row_id=${discoveryRow.id}&page=${page}&per_page=${perPage}`).then(response => {
       if (response.error) {
         toast.error(<ToastBody heading="Error!" body={response.error} />);
       } else {
@@ -56,18 +51,18 @@ const DiscoveryRow = ({ discoveryRow, env }) => {
     });
   };
 
-  const updateFollow = async (talent) => {
+  const updateFollow = async talent => {
     let response;
     if (talent.is_following) {
       response = await destroy(`/api/v1/follows?user_id=${talent.user_id}`);
     } else {
       response = await post(`/api/v1/follows`, {
-        user_id: talent.user_id,
+        user_id: talent.user_id
       });
     }
 
     if (response.success) {
-      const newLocalTalents = talents.map((currentTalent) => {
+      const newLocalTalents = talents.map(currentTalent => {
         if (currentTalent.id === talent.id) {
           return { ...currentTalent, is_following: !talent.is_following };
         } else {
@@ -77,9 +72,7 @@ const DiscoveryRow = ({ discoveryRow, env }) => {
 
       setTalents(newLocalTalents);
     } else {
-      toast.error(
-        <ToastBody heading="Unable to update follow" body={response?.error} />
-      );
+      toast.error(<ToastBody heading="Unable to update follow" body={response?.error} />);
     }
   };
 
@@ -98,11 +91,7 @@ const DiscoveryRow = ({ discoveryRow, env }) => {
   const discoveryBadge = () => {
     if (!!discoveryRow.badge_link) {
       return (
-        <a
-          href={discoveryRow.badge_link}
-          className="cursor-pointer ml-2"
-          target="_blank"
-        >
+        <a href={discoveryRow.badge_link} className="cursor-pointer ml-2" target="_blank">
           <Tag className="cursor-pointer secondary">
             <P3 className="current-color" bold text={discoveryRow.badge} />
           </Tag>
@@ -123,11 +112,7 @@ const DiscoveryRow = ({ discoveryRow, env }) => {
         <>
           <div className="d-flex justify-content-between">
             <div className="d-flex flex-row">
-              <P1
-                bold
-                text={discoveryRow.title}
-                className={cx("text-black", mobile && "pl-4")}
-              />
+              <P1 bold text={discoveryRow.title} className={cx("text-black", mobile && "pl-4")} />
               {!!discoveryRow.badge && discoveryBadge()}
               <Link
                 className="mb-2 ml-3 d-flex align-items-center discover-all-link"
@@ -135,11 +120,7 @@ const DiscoveryRow = ({ discoveryRow, env }) => {
                 href={`discovery/${discoveryRow.slug}`}
                 text="Discover all"
               >
-                <Caret
-                  size={12}
-                  color="currentColor"
-                  className="rotate-270 ml-2"
-                />
+                <Caret size={12} color="currentColor" className="rotate-270 ml-2" />
               </Link>
             </div>
             {displayPaginationButtons() && (
@@ -153,17 +134,8 @@ const DiscoveryRow = ({ discoveryRow, env }) => {
                 >
                   <Caret size={16} color="currentColor" className="rotate-90" />
                 </Button>
-                <Button
-                  onClick={() => slideRight()}
-                  disabled={disableRight()}
-                  type="white-ghost"
-                  size="icon"
-                >
-                  <Caret
-                    size={16}
-                    color="currentColor"
-                    className="rotate-270"
-                  />
+                <Button onClick={() => slideRight()} disabled={disableRight()} type="white-ghost" size="icon">
+                  <Caret size={16} color="currentColor" className="rotate-270" />
                 </Button>
               </div>
             )}
@@ -174,11 +146,8 @@ const DiscoveryRow = ({ discoveryRow, env }) => {
               mobile && "pl-4"
             )}
           >
-            {talents.map((talent) => (
-              <div
-                key={talent.id}
-                className={cx("pt-3 pr-4", perPage == 1 && "mx-auto")}
-              >
+            {talents.map(talent => (
+              <div key={talent.id} className={cx("pt-3 pr-4", perPage == 1 && "mx-auto")}>
                 <NewTalentCard
                   name={talent.user.name}
                   ticker={talent.talent_token.ticker}
@@ -195,6 +164,7 @@ const DiscoveryRow = ({ discoveryRow, env }) => {
                   supporterCount={talent.supporters_count?.toString()}
                   chainId={talent.talent_token.chain_id}
                   env={env}
+                  userId={talent.user.id}
                 />
               </div>
             ))}

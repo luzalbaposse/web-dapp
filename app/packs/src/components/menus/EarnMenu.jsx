@@ -5,13 +5,14 @@ import { urlStore } from "src/contexts/state";
 import Dropdown from "react-bootstrap/Dropdown";
 import { P2 } from "src/components/design_system/typography";
 import Tab from "src/components/design_system/tab";
-import { ArrowFill, Rocket, Invite, Quest } from "src/components/icons";
+import { ArrowFill, Invite, Quest } from "src/components/icons";
 
 import cx from "classnames";
 
 const EarnMenu = () => {
-  const url = urlStore((state) => state.url);
-  const changeURL = urlStore((state) => state.changeURL);
+  // eslint-disable-next-line no-unused-vars
+  const url = urlStore(state => state.url);
+  const changeURL = urlStore(state => state.changeURL);
 
   const active = window.location.pathname === "/earn";
 
@@ -28,22 +29,9 @@ const EarnMenu = () => {
         as="div"
         style={{ height: 34 }}
       >
-        <Tab
-          type="white"
-          active={active}
-          className="d-flex align-items-center mr-4"
-        >
-          <P2
-            className={cx("mr-2", active ? "text-black" : "current-color")}
-            bold
-            text="Earn"
-          />
-          <ArrowFill
-            className="toggle-arrow"
-            size={8}
-            pathClassName="text-primary-04"
-            color="currentColor"
-          />
+        <Tab type="white" active={active} className="d-flex align-items-center mr-4">
+          <P2 className={cx("mr-2", active ? "text-black" : "current-color")} bold text="Earn" />
+          <ArrowFill className="toggle-arrow" size={8} pathClassName="text-primary-04" color="currentColor" />
         </Tab>
       </Dropdown.Toggle>
 
