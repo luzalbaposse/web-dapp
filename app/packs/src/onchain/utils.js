@@ -15,15 +15,16 @@ export const ipfsToURL = ipfsAddress => {
   return "https://ipfs.io/" + ipfsAddress.replace("://", "/");
 };
 
-export const getENSFromAddress = async (walletAddress, apiKey) => {
-  let name = null;
+export const getWalletFromENS = async (domain, env, apiKey) => {
+  let address = null;
   try {
-    const provider = new ethers.providers.EtherscanProvider("mainnet", apiKey);
-    name = await provider.lookupAddress(walletAddress);
+    const network = env == "production" ? "mainnet" : "goerli";
+    const provider = new ethers.providers.EtherscanProvider(network, apiKey);
+    address = await provider.resolveName(domain);
   } catch (err) {
     console.log(err);
   }
-  return name;
+  return address;
 };
 
 export const chainIdToName = (chainId, env) => {
