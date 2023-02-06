@@ -32,15 +32,15 @@ module Users
         @result[:user] = user
         @result[:success] = true
         @result
-      rescue ActiveRecord::RecordNotUnique => error
+      rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid => error
         @result[:success] = false
-        if error.message.include?("username")
+        if error.message.downcase.include?("username")
           @result[:field] = "username"
           @result[:error] = "Username is already taken."
-        elsif error.message.include?("email")
+        elsif error.message.downcase.include?("email")
           @result[:field] = "email"
           @result[:error] = "Email is already taken."
-        elsif error.message.include?("wallet_id")
+        elsif error.message.downcase.include?("wallet_id")
           @result[:field] = "wallet_id"
           @result[:error] = "We already have that wallet in the system."
         end
