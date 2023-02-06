@@ -444,6 +444,7 @@ const Overview = ({
                         <Button className="mr-2" type="primary-default" text="Edit" onClick={() => setEditMode(true)} />
                         {talent.talentToken.contractId && (
                           <Button
+                            style={{ whiteSpace: "pre" }}
                             className="mr-2"
                             type="primary-default"
                             text={`Buy ${talent.talentToken.ticker}`}
@@ -605,6 +606,7 @@ const Overview = ({
                         />
                         {talent.talentToken.contractId && (
                           <Button
+                            style={{ whiteSpace: "pre" }}
                             className="mr-2"
                             type="primary-default"
                             size="big"

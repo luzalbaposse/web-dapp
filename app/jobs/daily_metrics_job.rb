@@ -202,11 +202,12 @@ class DailyMetricsJob < ApplicationJob
   def total_polygon_token_transactions
     count = 0
     POLYGON_CONTRACTS.each do |contract_address|
-      count += web3_proxy.retrieve_transactions_count(
+      contract_count = web3_proxy.retrieve_transactions_count(
         address: contract_address,
         chain: "polygon",
         start_timestamp: TRANSACTIONS_KPI_START_DATE
       )
+      count += contract_count.to_i
     end
 
     count
@@ -215,11 +216,12 @@ class DailyMetricsJob < ApplicationJob
   def total_celo_token_transactions
     count = 0
     CELO_CONTRACTS.each do |contract_address|
-      count += web3_proxy.retrieve_transactions_count(
+      contract_count = web3_proxy.retrieve_transactions_count(
         address: contract_address,
         chain: "celo",
         start_timestamp: TRANSACTIONS_KPI_START_DATE
       )
+      count += contract_count.to_i
     end
     count
   end
