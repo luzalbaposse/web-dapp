@@ -29,10 +29,7 @@ const TextInput = ({
     <div className={cx("d-flex flex-column", className)}>
       <div className="d-flex flex-row justify-content-between align-items-end">
         {title ? (
-          <P2
-            bold
-            className="text-primary-01 mb-2 d-flex flex-row justify-content-center align-items-center"
-          >
+          <P2 bold className="text-primary-01 mb-2 d-flex flex-row justify-content-center align-items-center">
             {title} {required && <span className="text-danger">*</span>}
             {tag && (
               <Tag className="tag-available ml-2" size="small">

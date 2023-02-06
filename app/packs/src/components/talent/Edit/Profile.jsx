@@ -6,13 +6,13 @@ import { railsContextStore } from "src/contexts/state";
 
 import Settings from "./Settings";
 
-const Profile = (props) => {
+const Profile = props => {
   const theme = useContext(ThemeContext);
   const { mobile } = useWindowDimensionsHook();
   const [sharedState, setSharedState] = useState({ ...props });
 
   const railsContext = props.railsContext;
-  const setRailsContext = railsContextStore((state) => state.setRailsContext);
+  const setRailsContext = railsContextStore(state => state.setRailsContext);
 
   useEffect(() => {
     setRailsContext(props.railsContext);
