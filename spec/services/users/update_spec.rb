@@ -8,7 +8,7 @@ RSpec.describe Users::Update do
       user: user,
       user_params: user_params,
       password_params: password_params,
-      tal_domain: tal_domain,
+      tal_domain_params: tal_domain_params,
       wallet_id: wallet_id,
       first_quest_popup: first_quest_popup
     ).call
@@ -17,7 +17,7 @@ RSpec.describe Users::Update do
   let(:user) { create :user }
   let(:user_params) { {} }
   let(:password_params) { {} }
-  let(:tal_domain) { nil }
+  let(:tal_domain_params) { {} }
   let(:wallet_id) { nil }
   let(:first_quest_popup) { nil }
 
@@ -90,7 +90,12 @@ RSpec.describe Users::Update do
   end
 
   context "when the tal_domain is passed" do
-    let(:tal_domain) { "dinis.tal.community" }
+    let(:tal_domain_params) do
+      {
+        tal_domain: "dinis.tal.community",
+        tal_domain_theme: "dark"
+      }
+    end
 
     let(:ens_domain_owner_class) { Web3::EnsDomainOwner }
     let(:ens_domain_owner) { instance_double(ens_domain_owner_class, call: domain_owner) }
@@ -104,7 +109,7 @@ RSpec.describe Users::Update do
       update_user
 
       expect(ens_domain_owner_class).to have_received(:new).with(
-        domain: tal_domain
+        domain: "dinis.tal.community"
       )
       expect(ens_domain_owner).to have_received(:call)
     end
@@ -114,6 +119,18 @@ RSpec.describe Users::Update do
 
       it "creates a new user domain" do
         expect { update_user }.to change(UserDomain, :count).from(0).to(1)
+      end
+
+      it "creates a new user domain with the correct arguments" do
+        update_user
+
+        created_tal_domain = UserDomain.last
+
+        aggregate_failures do
+          expect(created_tal_domain.domain).to eq("dinis.tal.community")
+          expect(created_tal_domain.theme).to eq("dark")
+          expect(created_tal_domain.tal_domain).to eq(true)
+        end
       end
     end
 

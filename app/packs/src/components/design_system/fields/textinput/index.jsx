@@ -32,8 +32,8 @@ const TextInput = ({
           <P2 bold className="text-primary-01 mb-2 d-flex flex-row justify-content-center align-items-center">
             {title} {required && <span className="text-danger">*</span>}
             {tag && (
-              <Tag className="tag-available ml-2" size="small">
-                <P3 className="text-primary-01" bold text={tag} />
+              <Tag className="tag-available-label ml-2 square-tag" size="small">
+                <P3 className="bg-01" bold text={tag} />
               </Tag>
             )}
           </P2>

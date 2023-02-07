@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_31_095534) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_06_221404) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -520,6 +520,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_31_095534) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "tal_domain", default: false
+    t.string "theme", default: "light"
     t.index ["user_id", "domain", "chain_id", "wallet"], name: "unique_user_domain_fields_index", unique: true
     t.index ["user_id"], name: "index_user_domains_on_user_id"
   end

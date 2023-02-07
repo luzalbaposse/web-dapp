@@ -38,7 +38,8 @@ const Overview = ({
   previewMode,
   setPreviewMode,
   isCurrentUserImpersonated,
-  withPersonaRequest
+  withPersonaRequest,
+  profileSubdomain
 }) => {
   const { mobile } = useWindowDimensionsHook();
   const { mode } = useTheme();
@@ -252,7 +253,7 @@ const Overview = ({
   };
 
   const showFollowButton = () => {
-    return currentUserId && talent.user.id != currentUserId;
+    return currentUserId && talent.user.id != currentUserId && !profileSubdomain;
   };
 
   // eslint-disable-next-line no-unused-vars
@@ -405,6 +406,7 @@ const Overview = ({
         talent={talent}
         changeSection={changeSection}
         currentUserAdmin={currentUserAdmin}
+        profileSubdomain={profileSubdomain}
         mobile={mobile}
         talentTokenPrice={talentTokenPrice}
       >
@@ -460,11 +462,13 @@ const Overview = ({
                       </>
                     ) : (
                       <>
-                        <a href={`/messages?user=${talent.user.id}`} className="button-link">
-                          <Button className="mr-2" type="white-outline" size="big" onClick={() => null}>
-                            <Envelope className="h-100" color="currentColor" size={16} viewBox="0 0 24 24" />
-                          </Button>
-                        </a>
+                        {currentUserId && !profileSubdomain && (
+                          <a href={`/messages?user=${talent.user.id}`} className="button-link">
+                            <Button className="mr-2" type="white-outline" size="big" onClick={() => null}>
+                              <Envelope className="h-100" color="currentColor" size={16} viewBox="0 0 24 24" />
+                            </Button>
+                          </a>
+                        )}
                         {showFollowButton() && (
                           <Button
                             className="mr-2"
@@ -474,13 +478,27 @@ const Overview = ({
                             onClick={() => updateFollow()}
                           />
                         )}
-                        {talent.talentToken.contractId && (
+                        {talent.talentToken.contractId && !profileSubdomain && (
                           <Button
                             type="primary-default"
                             size="big"
                             text="Support"
                             onClick={() => setShowStakeModal(true)}
                           />
+                        )}
+                        {profileSubdomain && talent.talentToken.contractId && (
+                          <a
+                            href={`https://beta.talentprotocol.com/join/${talent.user.username}`}
+                            className="button-link"
+                            target="_blank"
+                          >
+                            <Button
+                              type="primary-default"
+                              size="big"
+                              text={`Buy $${talent.talentToken.ticker} on Talent Protocol`}
+                              onClick={() => null}
+                            />
+                          </a>
                         )}
                       </>
                     )}
@@ -624,11 +642,13 @@ const Overview = ({
                       </>
                     ) : (
                       <>
-                        <a href={`/messages?user=${talent.user.id}`} className="button-link">
-                          <Button className="mr-2" type="white-outline" size="big" onClick={() => null}>
-                            <Envelope className="h-100" color="currentColor" size={16} viewBox="0 0 24 24" />
-                          </Button>
-                        </a>
+                        {currentUserId && !profileSubdomain && (
+                          <a href={`/messages?user=${talent.user.id}`} className="button-link">
+                            <Button className="mr-2" type="white-outline" size="big" onClick={() => null}>
+                              <Envelope className="h-100" color="currentColor" size={16} viewBox="0 0 24 24" />
+                            </Button>
+                          </a>
+                        )}
                         {showFollowButton() && (
                           <Button
                             className="mr-2"
@@ -638,13 +658,27 @@ const Overview = ({
                             onClick={() => updateFollow()}
                           />
                         )}
-                        {talent.talentToken.contractId && (
+                        {talent.talentToken.contractId && !profileSubdomain && (
                           <Button
                             type="primary-default"
                             size="big"
                             text="Support"
                             onClick={() => setShowStakeModal(true)}
                           />
+                        )}
+                        {profileSubdomain && talent.talentToken.contractId && (
+                          <a
+                            href={`https://beta.talentprotocol.com/join/${talent.user.username}`}
+                            className="button-link"
+                            target="_blank"
+                          >
+                            <Button
+                              type="primary-default"
+                              size="big"
+                              text={`Buy $${talent.talentToken.ticker} on Talent Protocol`}
+                              onClick={() => null}
+                            />
+                          </a>
                         )}
                       </>
                     )}

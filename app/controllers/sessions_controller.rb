@@ -63,15 +63,7 @@ class SessionsController < Clearance::SessionsController
     request.domain == ENV["TAL_BASE_DOMAIN"]
   end
 
-  def tal_domain
-    @tal_domain ||= UserDomain.where(tal_domain: true).find_by("domain = ?", request.subdomain)
-  end
-
   def user
     @user ||= User.find_by("username=:subdomain or wallet_id=:subdomain or ens_domain=:subdomain", subdomain: request.subdomain)
-  end
-
-  def profile_subdomain
-    @profile_subdomain ||= request.subdomain
   end
 end

@@ -17,3 +17,4 @@ export const warning = "#FFD166";
 export const danger = "#FF2222";
 export const grayPrimary = "#9fa3a9";
 export const lightBg01 = "#FAFAFB";
+export const darkBlue = "#1e2330";

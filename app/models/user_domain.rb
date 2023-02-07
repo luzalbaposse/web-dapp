@@ -9,4 +9,9 @@ class UserDomain < ApplicationRecord
     unstoppable_domains: "unstoppable_domains",
     ens: "ens"
   }
+
+  enum theme: {
+    light: "light",
+    dark: "dark"
+  }
 end

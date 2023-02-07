@@ -25,7 +25,8 @@ const Show = ({
   currentUserAdmin,
   currentUserModerator,
   isCurrentUserImpersonated,
-  withPersonaRequest
+  withPersonaRequest,
+  profileSubdomain
 }) => {
   const [localTalent, setLocalTalent] = useState(camelCaseObject(talent));
   const user = localTalent.user;
@@ -85,7 +86,7 @@ const Show = ({
   const CurrentTokenSection = getCurrentTokenSection();
 
   return (
-    <div className="d-flex flex-column lg-h-100 p-0 mt-1">
+    <div className="d-flex flex-column lg-h-100 p-0">
       <Overview
         className="mb-2"
         talent={localTalent}
@@ -101,6 +102,7 @@ const Show = ({
         setPreviewMode={setPreviewMode}
         isCurrentUserImpersonated={isCurrentUserImpersonated}
         withPersonaRequest={withPersonaRequest}
+        profileSubdomain={profileSubdomain}
       />
       <Divider className="my-6" />
       <div className="d-flex justify-content-lg-center overflow-x-scroll mx-4">

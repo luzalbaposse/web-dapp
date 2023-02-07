@@ -30,7 +30,15 @@ import {
 
 dayjs.extend(customParseFormat);
 
-export const ProfileCard = ({ talent, changeSection, currentUserAdmin, talentTokenPrice, mobile, children }) => {
+export const ProfileCard = ({
+  talent,
+  changeSection,
+  currentUserAdmin,
+  profileSubdomain,
+  talentTokenPrice,
+  mobile,
+  children
+}) => {
   const { mode } = useTheme();
   const joinedAt = useMemo(() => {
     return dayjs(talent.user.createdAt).format("MMMM YYYY");
@@ -62,10 +70,13 @@ export const ProfileCard = ({ talent, changeSection, currentUserAdmin, talentTok
           {talent.talentToken.contractId && <P2 className="medium mr-2" text={`$${talent.talentToken.ticker}`} />}
           <P2 className="text-primary-03" text={talent.occupation} />
         </DataRow>
-        {mobile && <ActionArea>{children}</ActionArea>}
         <HeadlineContainer>{Headline}</HeadlineContainer>
         <TagsContainer>
-          <StyledUserTag tags={talent.tags.map(tag => tag.description)} className="mr-2" />
+          <StyledUserTag
+            tags={talent.tags.map(tag => tag.description)}
+            clickable={!profileSubdomain}
+            className="mr-2"
+          />
         </TagsContainer>
         <TalentDetails>
           <Button className="d-flex mr-2 mt-2 button-link p-0" onClick={() => changeSection("#token")}>
@@ -119,7 +130,7 @@ export const ProfileCard = ({ talent, changeSection, currentUserAdmin, talentTok
         </TalentUserDetails>
         <SocialRow profile={talent.profile} />
       </InfoColumn>
-      {!mobile && <ActionArea>{children}</ActionArea>}
+      <ActionArea>{children}</ActionArea>
     </Container>
   );
 };

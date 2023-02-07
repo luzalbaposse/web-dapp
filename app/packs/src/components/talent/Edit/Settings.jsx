@@ -11,6 +11,7 @@ import { ToastBody } from "src/components/design_system/toasts";
 import Button from "src/components/design_system/button";
 import Checkbox from "src/components/design_system/checkbox";
 import Divider from "src/components/design_system/other/Divider";
+import Slider from "src/components/design_system/slider";
 import Link from "src/components/design_system/link";
 import LoadingButton from "src/components/button/LoadingButton";
 import Tag from "src/components/design_system/tag";
@@ -31,6 +32,7 @@ const Settings = props => {
   const { notificationPreferences, user, mobile, mode, changeSharedState, etherscanApiKey, env, talBaseDomain } = props;
   const [settings, setSettings] = useState({
     tal_domain: user.tal_domain || "",
+    tal_domain_theme: user.tal_domain_theme || "light",
     wallet_id: user.wallet_id || "",
     username: user.username || "",
     email: user.email || "",
@@ -256,6 +258,20 @@ const Settings = props => {
         />
         {validationErrors?.email && <P3 className="text-danger" text={validationErrors.email} />}
       </div>
+      <div className="d-flex flex-column w-100 flex-wrap mt-4">
+        <P2 bold className="text-black mb-2">
+          Disable Messages
+        </P2>
+
+        <div className="d-flex flex-row align-middle align-items-center">
+          <Slider
+            checked={!settings.messagingDisabled}
+            onChange={() => changeAttribute("messagingDisabled", !settings.messagingDisabled)}
+            className="mb-0"
+          />
+          <P3 className="text-primary-01" text="I want to receive messages" />
+        </div>
+      </div>
       <div className="d-flex flex-row w-100 flex-wrap mt-4">
         <TextInput
           title="Custom Domain"
@@ -279,19 +295,24 @@ const Settings = props => {
         )}
       </div>
       <div className="d-flex flex-column w-100 flex-wrap mt-4">
-        <P2 bold className="text-black mb-2">
-          Disable Messages
-        </P2>
+        <div className="d-flex flex-row align-middle align-items-center mb-2">
+          <P2 className="text-primary-01">Custom domain theme</P2>
+          <Tag className="tag-available-label ml-2 square-tag" size="small">
+            <P3 className="bg-01" bold text="New" />
+          </Tag>
+        </div>
 
-        <Checkbox
-          className="form-check-input mt-4"
-          checked={settings.messagingDisabled}
-          onChange={() => changeAttribute("messagingDisabled", !settings.messagingDisabled)}
-        >
-          <div className="d-flex flex-wrap">
-            <P2 className="mr-1" text="I don't want to receive messages" />
-          </div>
-        </Checkbox>
+        <div className="d-flex flex-row align-middle align-items-center">
+          <Slider
+            checked={settings.tal_domain_theme == "dark"}
+            disabled={validationErrors?.talDomain || !settings.tal_domain}
+            onChange={() => changeAttribute("tal_domain_theme", settings.tal_domain_theme == "dark" ? "light" : "dark")}
+            className="mb-0"
+          />
+          <P3 className="text-primary-01" text="Dark Theme" />
+        </div>
+      </div>
+      <div className="d-flex flex-column w-100 flex-wrap mt-3">
         <div className={`d-flex flex-row ${mobile ? "justify-content-between" : "mt-4"} w-100 pb-4`}>
           <LoadingButton
             onClick={() => updateUser()}

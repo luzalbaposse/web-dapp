@@ -41,7 +41,7 @@ class API::V1::UsersController < ApplicationController
       user: user,
       user_params: user_params.to_h,
       password_params: password_params.to_h,
-      tal_domain: tal_domain,
+      tal_domain_params: tal_domain_params.to_h,
       wallet_id: params[:wallet_id],
       first_quest_popup: params[:first_quest_popup]
     ).call
@@ -70,8 +70,8 @@ class API::V1::UsersController < ApplicationController
     )
   end
 
-  def tal_domain
-    params.require(:user).permit(:tal_domain)[:tal_domain]
+  def tal_domain_params
+    params.require(:user).permit(:tal_domain, :tal_domain_theme)
   end
 
   def password_params

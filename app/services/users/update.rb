@@ -1,10 +1,10 @@
 module Users
   class Update
-    def initialize(user:, user_params:, password_params:, tal_domain:, wallet_id:, first_quest_popup:)
+    def initialize(user:, user_params:, password_params:, tal_domain_params:, wallet_id:, first_quest_popup:)
       @user = user
       @user_params = user_params
       @password_params = password_params
-      @tal_domain = tal_domain
+      @tal_domain_params = tal_domain_params
       @wallet_id = wallet_id
       @first_quest_popup = first_quest_popup
     end
@@ -14,8 +14,8 @@ module Users
 
       user.update!(first_quest_popup: true) if first_quest_popup
 
-      if new_tal_domain?
-        if ens_domain_owner.nil? || ens_domain_owner&.downcase != user.wallet_id
+      if tal_domain_params.any?
+        if new_tal_domain? && (ens_domain_owner.nil? || ens_domain_owner&.downcase != user.wallet_id)
           return {success: false, errors: {talDomain: "Your wallet does not own the domain specified"}}
         end
         update_tal_domain
@@ -66,7 +66,7 @@ module Users
 
     private
 
-    attr_reader :user, :user_params, :password_params, :tal_domain, :wallet_id, :first_quest_popup
+    attr_reader :user, :user_params, :password_params, :tal_domain_params, :wallet_id, :first_quest_popup
 
     def update_wallet!
       user.update!(wallet_id: wallet_id&.downcase)
@@ -80,6 +80,10 @@ module Users
       tal_domain.present? && tal_domain != user.tal_domain&.domain
     end
 
+    def tal_domain
+      @tal_domain ||= tal_domain_params[:tal_domain]
+    end
+
     def update_tal_domain
       user_domain = UserDomain.find_or_initialize_by(
         user: user,
@@ -87,7 +91,7 @@ module Users
         provider: "ens",
         chain_id: domain_chain_id
       )
-      user_domain.update!(domain: tal_domain, wallet: user.wallet_id)
+      user_domain.update!(domain: tal_domain, wallet: user.wallet_id, theme: tal_domain_params[:tal_domain_theme])
     end
 
     def ens_domain_owner
