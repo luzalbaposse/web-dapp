@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import Form from "react-bootstrap/Form";
 import React, { useState } from "react";
 
+import { getWalletFromENS } from "src/onchain/utils";
 import { emailRegex, usernameRegex } from "src/utils/regexes";
 import { H5, P2, P3 } from "src/components/design_system/typography";
 import { passwordMatchesRequirements } from "src/utils/passwordRequirements";
@@ -10,6 +11,7 @@ import { ToastBody } from "src/components/design_system/toasts";
 import Button from "src/components/design_system/button";
 import Checkbox from "src/components/design_system/checkbox";
 import Divider from "src/components/design_system/other/Divider";
+import Slider from "src/components/design_system/slider";
 import Link from "src/components/design_system/link";
 import LoadingButton from "src/components/button/LoadingButton";
 import Tag from "src/components/design_system/tag";
@@ -27,8 +29,11 @@ const NotificationInputs = [
 ];
 
 const Settings = props => {
-  const { notificationPreferences, user, mobile, mode, changeSharedState } = props;
+  const { notificationPreferences, user, mobile, mode, changeSharedState, etherscanApiKey, env, talBaseDomain } = props;
   const [settings, setSettings] = useState({
+    tal_domain: user.tal_domain || "",
+    tal_domain_theme: user.tal_domain_theme || "light",
+    wallet_id: user.wallet_id || "",
     username: user.username || "",
     email: user.email || "",
     messagingDisabled: user.messaging_disabled || false,
@@ -40,14 +45,16 @@ const Settings = props => {
     username: false,
     currentPassword: false,
     newPassword: false,
-    deletePassword: false
+    deletePassword: false,
+    talDomain: false
   });
   const [saving, setSaving] = useState({
     loading: false,
     profile: false,
     public: false
   });
-  const [emailValidated, setEmailValidated] = useState(false);
+  const [emailValidated, setEmailValidated] = useState(!!user.email);
+  const [domainValidated, setDomainValidated] = useState(!!user.tal_domain);
   const { valid: validPassword, errors, tags } = passwordMatchesRequirements(settings.newPassword);
   const [notifications, setNotifications] = useState({
     saving: false,
@@ -61,6 +68,10 @@ const Settings = props => {
       setValidationErrors(prev => ({ ...prev, email: false }));
       setEmailValidated(false);
       if (emailRegex.test(value)) validateEmail(value);
+    } else if (attribute === "tal_domain") {
+      setValidationErrors(prev => ({ ...prev, tal_domain: false }));
+      setDomainValidated(false);
+      validateDomain(value);
     } else if (attribute === "username") {
       if (usernameRegex.test(value)) {
         setValidationErrors(prev => ({ ...prev, username: false }));
@@ -164,7 +175,12 @@ const Settings = props => {
   const messagingModeChanged = () => settings.messagingDisabled != user.messaging_disabled;
 
   const cannotSaveSettings = () =>
-    !emailValidated || !!validationErrors.email || settings.username.length == 0 || !!validationErrors.username;
+    !emailValidated ||
+    !!validationErrors.email ||
+    !domainValidated ||
+    !!validationErrors.talDomain ||
+    settings.username.length == 0 ||
+    !!validationErrors.username;
 
   const cannotChangePassword = () =>
     !!validationErrors.currentPassword ||
@@ -183,6 +199,32 @@ const Settings = props => {
       }));
     }
     setEmailValidated(true);
+  };
+
+  const validateDomain = async talDomain => {
+    if (!talDomain.includes(talBaseDomain)) {
+      setValidationErrors(prev => ({
+        ...prev,
+        talDomain: `You can only claim ENS domains ending in ${talBaseDomain}`
+      }));
+      setDomainValidated(true);
+      return;
+    }
+
+    const address = await getWalletFromENS(talDomain, env, etherscanApiKey);
+    if (address?.toLowerCase() == settings.wallet_id.toLowerCase()) {
+      setValidationErrors(prev => ({ ...prev, talDomain: false }));
+    } else {
+      setValidationErrors(prev => ({
+        ...prev,
+        talDomain: `The wallet connected does not own ${talDomain} domain.`
+      }));
+    }
+    setDomainValidated(true);
+  };
+
+  const saveProfileDisabled = () => {
+    return (saving.loading || cannotSaveSettings()) && !messagingModeChanged();
   };
 
   return (
@@ -221,21 +263,62 @@ const Settings = props => {
           Disable Messages
         </P2>
 
-        <Checkbox
-          className="form-check-input mt-4"
-          checked={settings.messagingDisabled}
-          onChange={() => changeAttribute("messagingDisabled", !settings.messagingDisabled)}
-        >
-          <div className="d-flex flex-wrap">
-            <P2 className="mr-1" text="I don't want to receive messages" />
-          </div>
-        </Checkbox>
+        <div className="d-flex flex-row align-middle align-items-center">
+          <Slider
+            checked={!settings.messagingDisabled}
+            onChange={() => changeAttribute("messagingDisabled", !settings.messagingDisabled)}
+            className="mb-0"
+          />
+          <P3 className="text-primary-01" text="I want to receive messages" />
+        </div>
+      </div>
+      <div className="d-flex flex-row w-100 flex-wrap mt-4">
+        <TextInput
+          title="Custom Domain"
+          mode={mode}
+          onChange={e => changeAttribute("tal_domain", e.target.value)}
+          value={settings.tal_domain}
+          className="w-100"
+          error={validationErrors.talDomain}
+          onBlur={e => validateDomain(e.target.value)}
+          tag={"New"}
+        />
+        {validationErrors?.talDomain ? (
+          <P3 className="text-danger mt-1" text={validationErrors.talDomain} />
+        ) : (
+          <P3 className="mt-1">
+            You can use a custom domain as your Talent Protocol Profile.{" "}
+            <a href="https://talentprotocol.com/handle" target="_blank">
+              Learn More
+            </a>
+          </P3>
+        )}
+      </div>
+      <div className="d-flex flex-column w-100 flex-wrap mt-4">
+        <div className="d-flex flex-row align-middle align-items-center mb-2">
+          <P2 className="text-primary-01">Custom domain theme</P2>
+          <Tag className="tag-available-label ml-2 square-tag" size="small">
+            <P3 className="bg-01" bold text="New" />
+          </Tag>
+        </div>
+
+        <div className="d-flex flex-row align-middle align-items-center">
+          <Slider
+            checked={settings.tal_domain_theme == "dark"}
+            disabled={validationErrors?.talDomain || !settings.tal_domain}
+            onChange={() => changeAttribute("tal_domain_theme", settings.tal_domain_theme == "dark" ? "light" : "dark")}
+            className="mb-0"
+          />
+          <P3 className="text-primary-01" text="Dark Theme" />
+        </div>
+      </div>
+      <div className="d-flex flex-column w-100 flex-wrap mt-3">
         <div className={`d-flex flex-row ${mobile ? "justify-content-between" : "mt-4"} w-100 pb-4`}>
           <LoadingButton
             onClick={() => updateUser()}
             type="primary-default"
             mode={mode}
-            disabled={(saving.loading || cannotSaveSettings()) && !messagingModeChanged()}
+            disabled={saveProfileDisabled()}
             loading={saving.loading}
             success={saving.profile}
           >

@@ -11,6 +11,7 @@ const Profile = props => {
   const { mobile } = useWindowDimensionsHook();
   const [sharedState, setSharedState] = useState({ ...props });
 
+  const railsContext = props.railsContext;
   const setRailsContext = railsContextStore(state => state.setRailsContext);
 
   useEffect(() => {
@@ -20,7 +21,15 @@ const Profile = props => {
   return (
     <div className="d-flex flex-column align-items-center mt-5">
       <div className="d-flex flex-column edit-profile-content w-100">
-        <Settings {...sharedState} mode={theme.mode()} mobile={mobile} changeSharedState={setSharedState} />
+        <Settings
+          {...sharedState}
+          mode={theme.mode()}
+          mobile={mobile}
+          changeSharedState={setSharedState}
+          etherscanApiKey={railsContext.etherscanApiKey}
+          env={railsContext.contractsEnv}
+          talBaseDomain={railsContext.talBaseDomain}
+        />
       </div>
     </div>
   );

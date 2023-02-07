@@ -56,7 +56,10 @@ const CommunityTable = ({ connections, mode, ticker, mobile }) => {
       </Table.Head>
       <Table.Body>
         {connections.map(connection => (
-          <Table.Tr key={connection.id} onClick={() => (window.location.href = `/profiles/${connection.username}`)}>
+          <Table.Tr
+            key={connection.id}
+            onClick={() => (window.location.href = `https://beta.talentprotocol.com/u/${connection.username}`)}
+          >
             <Table.Td>
               <div className="d-flex align-items-center">
                 <TalentProfilePicture src={connection.profile_picture_url} userId={connection.id} height={24} />

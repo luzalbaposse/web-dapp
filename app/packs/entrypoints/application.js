@@ -37,6 +37,7 @@ import Support from "src/components-v2/support";
 import UserSupportPage from "src/components-v2/user-support-page";
 import QuestShow from "src/components/rewards/quests/show";
 import Footer from "src/components/design_system/footer";
+import SubdomainFooter from "src/components/design_system/subdomain_footer";
 import FirstQuestPopup from "src/components/one_time_popups/FirstQuestPopup";
 import FlashMessages from "src/components/FlashMessages";
 import ProfileShow from "src/components/profile/show";
@@ -57,6 +58,7 @@ ReactOnRails.register({
   FirstQuestPopup,
   FlashMessages,
   Footer,
+  SubdomainFooter,
   LoggedOutTopBar,
   Login,
   MessageUserList,

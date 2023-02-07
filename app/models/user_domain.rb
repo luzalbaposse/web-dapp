@@ -6,6 +6,12 @@ class UserDomain < ApplicationRecord
   validates :user_id, uniqueness: {scope: [:wallet, :domain, :chain_id]}
 
   enum provider: {
-    unstoppable_domains: "unstoppable_domains"
+    unstoppable_domains: "unstoppable_domains",
+    ens: "ens"
+  }
+
+  enum theme: {
+    light: "light",
+    dark: "dark"
   }
 end

@@ -52,5 +52,5 @@ export const StyledButton = styled.label`
 export const ProfilePicture = styled(TalentProfilePicture)`
   width: 100%;
   height: 100%;
-  border-radius: 8px;
+  border-radius: 0 0 8px 8px;
 `;

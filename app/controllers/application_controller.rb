@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
 
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
 
-  helper_method :is_user_impersonated?, :current_acting_user, :current_impersonated_user
+  helper_method :is_user_impersonated?, :current_acting_user, :current_impersonated_user, :active_theme, :tal_domain
 
   def render_404
     respond_to do |format|
@@ -49,6 +49,20 @@ class ApplicationController < ActionController::Base
 
   def current_acting_user
     is_user_impersonated? ? current_impersonated_user : current_user
+  end
+
+  def active_theme
+    return current_user.active_theme if current_user.present?
+
+    if tal_domain
+      return (tal_domain.theme == "dark") ? "dark-body" : "light-body"
+    end
+
+    "light-body"
+  end
+
+  def tal_domain
+    @tal_domain ||= UserDomain.where(tal_domain: true).find_by("domain = ?", "#{request.subdomain}.#{ENV["TAL_BASE_DOMAIN"]}")
   end
 
   protected

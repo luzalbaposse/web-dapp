@@ -9,9 +9,9 @@
   <% end %>
 <% end %>
 
-<main class="main-content">
+<main class="main-content <%= tal_domain.present? ? "no-padding" : "" %>">
   <div class="container-grid">
-    <% if current_user.nil? %>
+    <% if current_user.nil? && tal_domain.nil? %>
       <%= react_component("LoggedOutTopBar", props:
         {
         }, prerender: false)
@@ -23,6 +23,7 @@
         "ProfileShow",
         props: {
           talent: @talent,
+          profileSubdomain: tal_domain.present?,
           currentUserId: current_acting_user&.id,
           currentUserAdmin: current_user&.admin?,
           currentUserModerator: current_user&.moderator?,
@@ -34,3 +35,6 @@
     <% end %>
   </div>
 </main>
+<% if tal_domain.present? %>
+  <%= react_component("SubdomainFooter", props: { displayName: @talent["user"]["name"], username: @talent["user"]["username"] }, prerender: false) %>
+<% end  %>

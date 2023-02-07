@@ -59,7 +59,6 @@ export const TalentUserDetails = styled.div`
   display: flex;
   align-items: center;
 
-
   @media (max-width: 991px) {
     flex-direction: column;
     align-items: flex-start;
