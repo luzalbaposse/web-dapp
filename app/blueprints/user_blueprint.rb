@@ -1,6 +1,14 @@
 class UserBlueprint < Blueprinter::Base
   fields :id
 
+  view :basic_with_pictures do
+    field :profilePictureUrl do |user, _options|
+      user.profile_picture_url
+    end
+
+    fields :username
+  end
+
   view :normal do
     fields :username, :display_name, :profile_type, :created_at, :legal_first_name, :legal_last_name
 

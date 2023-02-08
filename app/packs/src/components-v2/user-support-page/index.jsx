@@ -2,11 +2,11 @@ import React from "react";
 import { Avatar } from "src/components-v2/shared-styles/avatar";
 import { Container, DataItem, DataRow, DataTitle, Username, ClickableDataRow } from "./styles";
 
-export const UserSupportPage = ({ user, userData, supportings, supporteds, totalRewards }) => {
+export const UserSupportPage = ({ user, supportings, supporteds, totalRewards }) => {
   return (
     <Container>
-      <Avatar src={userData.profilePictureUrl} userOrTalentId={user.id} size={120} />
-      <Username>{userData.name}</Username>
+      <Avatar src={user.profilePictureUrl} userOrTalentId={user.id} size={120} />
+      <Username>{user.name}</Username>
       <DataRow>
         <DataTitle>Created at: </DataTitle>
         <DataItem>{new Date(user.created_at).toLocaleString()}</DataItem>

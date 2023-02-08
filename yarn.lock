@@ -2043,9 +2043,9 @@
     defer-to-connect "^1.0.1"
 
 "@talentprotocol/design-system@^0.0.0-switch-v1":
-  version "0.0.0-switch-v4"
-  resolved "https://registry.yarnpkg.com/@talentprotocol/design-system/-/design-system-0.0.0-switch-v4.tgz#625fed6e4c3801b2b0f6e332b3082b5e82e58477"
-  integrity sha512-Nmae44rWj64po5iZHcVFO4bZGxI7u4J0uDEol8PlT+S9jzyTaxigNlqkDP1KfDM75FuIMuoZ/yUQXHUCZNZe0Q==
+  version "0.0.0-switch-v6"
+  resolved "https://registry.yarnpkg.com/@talentprotocol/design-system/-/design-system-0.0.0-switch-v6.tgz#bb0a61114e4ede90f01c2ca1e47561c485060400"
+  integrity sha512-6XNiREBM9qrLsGSVQBEm0YIVANSCTZfN85jTXr+hkzCMgQ9wxcT/5zL3g4FDTcFhKK30TcygLD4Cpg60FxA7ew==
 
 "@transak/transak-sdk@^1.0.30":
   version "1.0.31"
