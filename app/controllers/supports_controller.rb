@@ -17,7 +17,7 @@ class SupportsController < ApplicationController
   def search
     users = User
       .includes(:talent)
-      .where("username LIKE ?", "%#{params[:username]}%")
+      .where("username ILIKE :keyword OR email ILIKE :keyword OR display_name ILIKE :keyword", keyword: "%#{params[:username]}%")
     render json: UserBlueprint.render_as_json(users, view: :basic_with_pictures), status: :ok
   end
 end
