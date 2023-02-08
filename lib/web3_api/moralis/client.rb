@@ -38,7 +38,8 @@ module Web3Api
 
         params = {
           chain: chain,
-          from_date: start_timestamp
+          from_date: start_timestamp,
+          disable_total: false
         }
         Faraday.get(url, params, headers)
       end

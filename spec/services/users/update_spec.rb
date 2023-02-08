@@ -103,6 +103,7 @@ RSpec.describe Users::Update do
 
     before do
       allow(ens_domain_owner_class).to receive(:new).and_return(ens_domain_owner)
+      ENV["TAL_BASE_DOMAIN"] = "tal.community"
     end
 
     it "initializes and calls the refresh domains service" do
@@ -131,6 +132,24 @@ RSpec.describe Users::Update do
           expect(created_tal_domain.theme).to eq("dark")
           expect(created_tal_domain.tal_domain).to eq(true)
         end
+      end
+    end
+
+    context "when only the subdomain is passed" do
+      let(:tal_domain_params) do
+        {
+          tal_domain: "dinis",
+          tal_domain_theme: "dark"
+        }
+      end
+
+      it "initializes and calls the refresh domains service with the full domain" do
+        update_user
+
+        expect(ens_domain_owner_class).to have_received(:new).with(
+          domain: "dinis.tal.community"
+        )
+        expect(ens_domain_owner).to have_received(:call)
       end
     end
 

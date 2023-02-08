@@ -81,7 +81,12 @@ module Users
     end
 
     def tal_domain
-      @tal_domain ||= tal_domain_params[:tal_domain]
+      @tal_domain ||= begin
+        domain = tal_domain_params[:tal_domain]
+        return domain if tal_domain_params[:tal_domain].include?(ENV["TAL_BASE_DOMAIN"])
+
+        "#{domain}.#{ENV["TAL_BASE_DOMAIN"]}"
+      end
     end
 
     def update_tal_domain

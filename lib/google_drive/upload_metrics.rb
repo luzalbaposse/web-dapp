@@ -40,7 +40,9 @@ module GoogleDrive
         daily_metric.total_celo_token_transactions,
         daily_metric.total_polygon_token_transactions,
         daily_metric.total_mates_nfts,
-        daily_metric.total_celo_token_transactions.to_i + daily_metric.total_polygon_token_transactions.to_i + daily_metric.total_mates_nfts.to_i,
+        daily_metric.total_claimed_domains,
+        daily_metric.total_tal_subdomain_transactions,
+        total_blockchain_transactions,
         daily_metric.total_polygon_tvl,
         daily_metric.total_celo_tvl,
         daily_metric.total_celo_tvl.to_i + daily_metric.total_polygon_tvl.to_i,
@@ -49,6 +51,13 @@ module GoogleDrive
         daily_metric.total_twitter_followers,
         daily_metric.total_discord_members
       ]]
+    end
+
+    def total_blockchain_transactions
+      daily_metric.total_celo_token_transactions.to_i +
+        daily_metric.total_polygon_token_transactions.to_i +
+        daily_metric.total_mates_nfts.to_i +
+        daily_metric.total_tal_subdomain_transactions.to_i
     end
 
     def daily_data_sheet
