@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_06_221404) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_08_134351) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -163,6 +163,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_06_221404) do
     t.integer "total_celo_tvl"
     t.integer "total_twitter_followers"
     t.integer "total_discord_members"
+    t.integer "total_claimed_domains"
+    t.integer "total_tal_subdomain_transactions"
   end
 
   create_table "discovery_rows", force: :cascade do |t|

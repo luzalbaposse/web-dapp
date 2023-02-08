@@ -18,6 +18,8 @@ class DailyMetricsJob < ApplicationJob
     CELO_STAKING_ADDRESS
   ]
 
+  ETH_TAL_SUBDOMAIN_ADDRESS = "0xe86C5ea96eA47D3A9D835672C1428329bD0bb7Af"
+
   TRANSACTIONS_KPI_START_DATE = Date.new(2023, 0o1, 0o1).to_time.to_i
 
   def perform
@@ -41,6 +43,8 @@ class DailyMetricsJob < ApplicationJob
       total_polygon_token_transactions: total_polygon_token_transactions,
       total_celo_token_transactions: total_celo_token_transactions,
       total_mates_nfts: total_mates_nfts,
+      total_claimed_domains: total_claimed_domains,
+      total_tal_subdomain_transactions: total_tal_subdomain_transactions,
       total_talent_token_applications: total_talent_token_applications,
       total_approved_talent_token_applications: total_approved_talent_token_applications,
       time_on_page: time_on_page,
@@ -230,6 +234,18 @@ class DailyMetricsJob < ApplicationJob
     web3_proxy.retrieve_polygon_nfts_count(
       address: POLYGON_MATES_CONTRACT
     )
+  end
+
+  def total_claimed_domains
+    UserDomain.where(tal_domain: true).count
+  end
+
+  def total_tal_subdomain_transactions
+    web3_proxy.retrieve_transactions_count(
+      address: ETH_TAL_SUBDOMAIN_ADDRESS,
+      chain: "eth",
+      start_timestamp: TRANSACTIONS_KPI_START_DATE
+    ).to_i
   end
 
   def total_talent_token_applications

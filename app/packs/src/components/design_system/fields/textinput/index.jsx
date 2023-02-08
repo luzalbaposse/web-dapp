@@ -17,7 +17,6 @@ const TextInput = ({
   inputClassName,
   maxLength,
   required,
-  tag,
   error,
   id,
   ariaDescribedBy,
@@ -31,11 +30,6 @@ const TextInput = ({
         {title ? (
           <P2 bold className="text-primary-01 mb-2 d-flex flex-row justify-content-center align-items-center">
             {title} {required && <span className="text-danger">*</span>}
-            {tag && (
-              <Tag className="tag-available-label ml-2 square-tag" size="small">
-                <P3 className="bg-01" bold text={tag} />
-              </Tag>
-            )}
           </P2>
         ) : null}
         {maxLengthText ? <P2 className="mb-2" text={`${value.length}/${maxLength}`} /> : null}

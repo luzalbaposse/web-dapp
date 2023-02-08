@@ -18,6 +18,8 @@ RSpec.describe DailyMetricsJob, type: :job do
 
   let!(:user_6) { create :user }
 
+  let!(:tal_domain) { create :user_domain, domain: "dinis.tal.coomunity", tal_domain: true, user: user_6 }
+
   let(:web3_proxy_class) { Web3Api::ApiProxy }
   let(:web3_proxy) { instance_double(web3_proxy_class) }
 
@@ -90,6 +92,8 @@ RSpec.describe DailyMetricsJob, type: :job do
       expect(created_daily_metric.total_celo_token_transactions).to eq 20
       expect(created_daily_metric.total_polygon_token_transactions).to eq 20
       expect(created_daily_metric.total_mates_nfts).to eq 400
+      expect(created_daily_metric.total_tal_subdomain_transactions).to eq 10
+      expect(created_daily_metric.total_claimed_domains).to eq 1
       expect(created_daily_metric.total_polygon_tvl).to eq 1200
       expect(created_daily_metric.total_celo_tvl).to eq 1200
       expect(created_daily_metric.time_on_page).to eq 20

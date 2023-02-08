@@ -70,6 +70,7 @@ export const ProfileCard = ({
           {talent.talentToken.contractId && <P2 className="medium mr-2" text={`$${talent.talentToken.ticker}`} />}
           <P2 className="text-primary-03" text={talent.occupation} />
         </DataRow>
+        {!profileSubdomain && mobile && <ActionArea>{children}</ActionArea>}
         <HeadlineContainer>{Headline}</HeadlineContainer>
         <TagsContainer>
           <StyledUserTag
@@ -78,47 +79,53 @@ export const ProfileCard = ({
             className="mr-2"
           />
         </TagsContainer>
-        <TalentDetails>
-          <Button className="d-flex mr-2 mt-2 button-link p-0" onClick={() => changeSection("#token")}>
-            <P2
-              className="text-primary-01 mr-1"
-              bold
-              text={
-                talent.totalSupply
-                  ? formatNumberWithSymbol(ethers.utils.formatUnits(talent.totalSupply) * talentTokenPrice)
-                  : "-"
-              }
-            />
-            <P2 className="text-primary-04" text="Market Value" />
-          </Button>
-          <Button className="d-flex mr-2 mt-2 button-link p-0" onClick={() => changeSection("#community")}>
-            <P2 className="text-primary-01 mr-1" bold text={talent.supportersCount || "0"} />
-            <P2 className="text-primary-04" text="Supporters" />
-          </Button>
-          <Button className="d-flex mr-2 mt-2 button-link p-0" onClick={() => changeSection("#community")}>
-            <P2 className="text-primary-01 mr-1" bold text={talent.supportingCount || "0"} />
-            <P2 className="text-primary-04" text="Supporting" />
-          </Button>
-          <Button className="d-flex mr-2 mt-2 button-link p-0" onClick={() => changeSection("#community")}>
-            <P2 className="text-primary-01 mr-1" bold text={talent.followersCount || "0"} />
-            <P2 className="text-primary-04" text="Followers" />
-          </Button>
-        </TalentDetails>
+        {!profileSubdomain && (
+          <TalentDetails>
+            <Button className="d-flex mr-2 mt-2 button-link p-0" onClick={() => changeSection("#token")}>
+              <P2
+                className="text-primary-01 mr-1"
+                bold
+                text={
+                  talent.totalSupply
+                    ? formatNumberWithSymbol(ethers.utils.formatUnits(talent.totalSupply) * talentTokenPrice)
+                    : "-"
+                }
+              />
+              <P2 className="text-primary-04" text="Market Value" />
+            </Button>
+            <Button className="d-flex mr-2 mt-2 button-link p-0" onClick={() => changeSection("#community")}>
+              <P2 className="text-primary-01 mr-1" bold text={talent.supportersCount || "0"} />
+              <P2 className="text-primary-04" text="Supporters" />
+            </Button>
+            <Button className="d-flex mr-2 mt-2 button-link p-0" onClick={() => changeSection("#community")}>
+              <P2 className="text-primary-01 mr-1" bold text={talent.supportingCount || "0"} />
+              <P2 className="text-primary-04" text="Supporting" />
+            </Button>
+            <Button className="d-flex mr-2 mt-2 button-link p-0" onClick={() => changeSection("#community")}>
+              <P2 className="text-primary-01 mr-1" bold text={talent.followersCount || "0"} />
+              <P2 className="text-primary-04" text="Followers" />
+            </Button>
+          </TalentDetails>
+        )}
         <TalentUserDetails>
           <TalentUserDetailsItem>
             <Globe className="mr-2" size={16} color={lightTextPrimary04} />
             <P2 className="text-primary-03" text={talent.profile.location} />
           </TalentUserDetailsItem>
-          <TalentUserDetailsItem>
-            <Calendar className="mr-2" size={16} color={lightTextPrimary04} />
-            <P2 className="text-primary-03" text={`Joined ${joinedAt}`} />
-          </TalentUserDetailsItem>
-          {talent.user.invitedBy && (
-            <InvitedByContainer>
-              <P2 className="text-primary-04 mr-3" text="Invited by" />
-              <TalentProfilePicture className="mr-2" src={talent.user.profilePictureUrl} height={32} />
-              <P2 bold text={talent.user.invitedBy.name} />
-            </InvitedByContainer>
+          {!profileSubdomain && (
+            <>
+              <TalentUserDetailsItem>
+                <Calendar className="mr-2" size={16} color={lightTextPrimary04} />
+                <P2 className="text-primary-03" text={`Joined ${joinedAt}`} />
+              </TalentUserDetailsItem>
+              {talent.user.invitedBy && (
+                <InvitedByContainer>
+                  <P2 className="text-primary-04 mr-3" text="Invited by" />
+                  <TalentProfilePicture className="mr-2" src={talent.user.profilePictureUrl} height={32} />
+                  <P2 bold text={talent.user.invitedBy.name} />
+                </InvitedByContainer>
+              )}
+            </>
           )}
           {currentUserAdmin && talent.user.approvedBy && (
             <ApprovedByContainer>
@@ -130,7 +137,8 @@ export const ProfileCard = ({
         </TalentUserDetails>
         <SocialRow profile={talent.profile} />
       </InfoColumn>
-      <ActionArea>{children}</ActionArea>
+      {profileSubdomain && mobile && <ActionArea>{children}</ActionArea>}
+      {!mobile && <ActionArea>{children}</ActionArea>}
     </Container>
   );
 };

@@ -99,7 +99,7 @@ RSpec.describe Web3Api::Moralis::Client do
     let(:chain) { "eth" }
     let(:start_timestamp) { Time.now.to_i }
 
-    let(:request_path) { "#{described_class::BASE_URI}/#{address}?chain=#{chain}&from_date=#{start_timestamp}" }
+    let(:request_path) { "#{described_class::BASE_URI}/#{address}?chain=#{chain}&from_date=#{start_timestamp}&disable_total=false" }
 
     before do
       stub_request(:get, request_path)

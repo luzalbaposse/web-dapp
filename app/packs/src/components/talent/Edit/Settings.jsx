@@ -2,6 +2,8 @@ import { toast } from "react-toastify";
 import Form from "react-bootstrap/Form";
 import React, { useState } from "react";
 
+import { Switch } from "@talentprotocol/design-system/switch";
+
 import { getWalletFromENS } from "src/onchain/utils";
 import { emailRegex, usernameRegex } from "src/utils/regexes";
 import { H5, P2, P3 } from "src/components/design_system/typography";
@@ -9,9 +11,7 @@ import { passwordMatchesRequirements } from "src/utils/passwordRequirements";
 import { patch, post } from "src/utils/requests";
 import { ToastBody } from "src/components/design_system/toasts";
 import Button from "src/components/design_system/button";
-import Checkbox from "src/components/design_system/checkbox";
 import Divider from "src/components/design_system/other/Divider";
-import Slider from "src/components/design_system/slider";
 import Link from "src/components/design_system/link";
 import LoadingButton from "src/components/button/LoadingButton";
 import Tag from "src/components/design_system/tag";
@@ -84,6 +84,7 @@ const Settings = props => {
     } else if (attribute === "deletePassword") {
       setValidationErrors(prev => ({ ...prev, deleting: false }));
     }
+
     setSettings(prevInfo => ({ ...prevInfo, [attribute]: value }));
   };
 
@@ -202,22 +203,19 @@ const Settings = props => {
   };
 
   const validateDomain = async talDomain => {
-    if (!talDomain.includes(talBaseDomain)) {
-      setValidationErrors(prev => ({
-        ...prev,
-        talDomain: `You can only claim ENS domains ending in ${talBaseDomain}`
-      }));
-      setDomainValidated(true);
-      return;
+    let subdomainWithDomain = talDomain;
+
+    if (!subdomainWithDomain.includes(talBaseDomain)) {
+      subdomainWithDomain = `${talDomain}.${talBaseDomain}`;
     }
 
-    const address = await getWalletFromENS(talDomain, env, etherscanApiKey);
+    const address = await getWalletFromENS(subdomainWithDomain, env, etherscanApiKey);
     if (address?.toLowerCase() == settings.wallet_id.toLowerCase()) {
       setValidationErrors(prev => ({ ...prev, talDomain: false }));
     } else {
       setValidationErrors(prev => ({
         ...prev,
-        talDomain: `The wallet connected does not own ${talDomain} domain.`
+        talDomain: `The wallet connected does not own ${subdomainWithDomain} domain.`
       }));
     }
     setDomainValidated(true);
@@ -226,6 +224,11 @@ const Settings = props => {
   const saveProfileDisabled = () => {
     return (saving.loading || cannotSaveSettings()) && !messagingModeChanged();
   };
+
+  const talSubdomain = () =>
+    settings.tal_domain.includes(talBaseDomain)
+      ? settings.tal_domain.replace(`.${talBaseDomain}`, "")
+      : settings.tal_domain;
 
   return (
     <>
@@ -264,30 +267,35 @@ const Settings = props => {
         </P2>
 
         <div className="d-flex flex-row align-middle align-items-center">
-          <Slider
-            checked={!settings.messagingDisabled}
+          <Switch
+            isDarkTheme={mode == "dark"}
+            state="enabled"
+            isChecked={!settings.messagingDisabled}
             onChange={() => changeAttribute("messagingDisabled", !settings.messagingDisabled)}
-            className="mb-0"
           />
-          <P3 className="text-primary-01" text="I want to receive messages" />
+          <P2 className="text-primary-01 ml-2 mb-2" text="I want to receive messages" />
         </div>
       </div>
       <div className="d-flex flex-row w-100 flex-wrap mt-4">
+        <div className="d-flex flex-row align-middle align-items-center mb-2">
+          <P2 className="text-primary-01" bold text="Custom domain" />
+          <Tag className="tag-available-label ml-2 square-tag" size="small">
+            <P3 className="bg-01" bold text="New" />
+          </Tag>
+        </div>
         <TextInput
-          title="Custom Domain"
           mode={mode}
           onChange={e => changeAttribute("tal_domain", e.target.value)}
-          value={settings.tal_domain}
+          value={talSubdomain()}
           className="w-100"
           error={validationErrors.talDomain}
           onBlur={e => validateDomain(e.target.value)}
-          tag={"New"}
         />
         {validationErrors?.talDomain ? (
           <P3 className="text-danger mt-1" text={validationErrors.talDomain} />
         ) : (
           <P3 className="mt-1">
-            You can use a custom domain as your Talent Protocol Profile.{" "}
+            Set your handle to configure your Talent Protocol custom domain.{" "}
             <a href="https://talentprotocol.com/handle" target="_blank">
               Learn More
             </a>
@@ -296,20 +304,20 @@ const Settings = props => {
       </div>
       <div className="d-flex flex-column w-100 flex-wrap mt-4">
         <div className="d-flex flex-row align-middle align-items-center mb-2">
-          <P2 className="text-primary-01">Custom domain theme</P2>
+          <P2 className="text-primary-01" bold text="Custom domain theme" />
           <Tag className="tag-available-label ml-2 square-tag" size="small">
             <P3 className="bg-01" bold text="New" />
           </Tag>
         </div>
 
         <div className="d-flex flex-row align-middle align-items-center">
-          <Slider
-            checked={settings.tal_domain_theme == "dark"}
-            disabled={validationErrors?.talDomain || !settings.tal_domain}
+          <Switch
+            isDarkTheme={mode == "dark"}
+            isChecked={settings.tal_domain_theme == "dark"}
+            state={validationErrors?.talDomain || !settings.tal_domain ? "disabled" : "enabled"}
             onChange={() => changeAttribute("tal_domain_theme", settings.tal_domain_theme == "dark" ? "light" : "dark")}
-            className="mb-0"
           />
-          <P3 className="text-primary-01" text="Dark Theme" />
+          <P2 className="text-primary-01 ml-2 mb-2" text="Dark Theme" />
         </div>
       </div>
       <div className="d-flex flex-column w-100 flex-wrap mt-3">
