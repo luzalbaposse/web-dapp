@@ -20,12 +20,7 @@ RSpec.describe SupportsController, type: :request do
 
     it "assigns @user" do
       get support_user_path(id: user.id, as: current_user)
-      expect(assigns(:user)).to eq(user)
-    end
-
-    it "assigns @user_with_pictures" do
-      get support_user_path(id: user.id, as: current_user)
-      expect(assigns(:user_with_pictures)).not_to be_nil
+      expect(assigns(:user)["id"]).to eq(user.id)
     end
 
     it "assigns @portfolio" do
@@ -55,13 +50,13 @@ RSpec.describe SupportsController, type: :request do
       expect(response).to have_http_status(:success)
     end
 
-    it "assigns @user" do
-      get search_support_path(username: user.username, as: current_user)
-      expect(assigns(:user)).not_to be_nil
-    end
-
     it "returns user with matching username" do
       get search_support_path(username: user.username, as: current_user)
+      expect(JSON.parse(response.body).first["username"]).to eq(user.username)
+    end
+
+    it "returns user with matching email" do
+      get search_support_path(username: user.email, as: current_user)
       expect(JSON.parse(response.body).first["username"]).to eq(user.username)
     end
   end
