@@ -1,6 +1,9 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
+  config.hosts << ".talentprotocol.com"
+  config.hosts << ".tal.community"
+  config.hosts << ".tal.builders"
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.

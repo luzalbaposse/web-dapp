@@ -14,6 +14,13 @@ module Mvp
     # Set sidekiq as the default adapter
     config.active_job.queue_adapter = :sidekiq
 
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins ".talentprotocol.com", ".tal.community", ".tal.builders"
+        resource "*", headers: :any, methods: :any, credentials: true
+      end
+    end
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
