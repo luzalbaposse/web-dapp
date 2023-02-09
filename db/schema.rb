@@ -10,9 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_08_134351) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_09_112916) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
 
   create_table "blazer_audits", force: :cascade do |t|
@@ -165,6 +164,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_08_134351) do
     t.integer "total_discord_members"
     t.integer "total_claimed_domains"
     t.integer "total_tal_subdomain_transactions"
+    t.jsonb "daily_page_visitors", default: {}
+    t.jsonb "total_onboarding_metrics", default: {}
   end
 
   create_table "discovery_rows", force: :cascade do |t|
@@ -579,8 +580,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_08_134351) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.boolean "disabled", default: false
     t.string "theme_preference", default: "light"
+    t.boolean "disabled", default: false
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"

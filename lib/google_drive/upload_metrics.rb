@@ -32,7 +32,7 @@ module GoogleDrive
         daily_metric.total_complete_profile_quests_completed,
         daily_metric.total_supporter_quests_completed,
         daily_metric.time_on_page,
-        daily_metric.visitors,
+        daily_metric.root_visitors,
         daily_metric.total_celo_tokens,
         daily_metric.total_polygon_tokens,
         daily_metric.total_celo_supporters,
@@ -49,7 +49,15 @@ module GoogleDrive
         daily_metric.total_advocates,
         daily_metric.total_scouts,
         daily_metric.total_twitter_followers,
-        daily_metric.total_discord_members
+        daily_metric.total_discord_members,
+        daily_metric.voya_visitors.to_i,
+        daily_metric.wtfcrypto_visitors.to_i,
+        daily_metric.talenthouse_visitors.to_i,
+        daily_metric.talentmates_visitors.to_i,
+        daily_metric.total_old_users_season_3.to_i,
+        daily_metric.total_new_users_season_3.to_i,
+        daily_metric.total_organic_users_season_3.to_i,
+        daily_metric.total_referral_users_season_3.to_i
       ]]
     end
 

@@ -21,9 +21,31 @@ class DailyMetricsJob < ApplicationJob
   ETH_TAL_SUBDOMAIN_ADDRESS = "0xe86C5ea96eA47D3A9D835672C1428329bD0bb7Af"
 
   TRANSACTIONS_KPI_START_DATE = Date.new(2023, 0o1, 0o1).to_time.to_i
+  ONBOARDING_START_DATE = Date.new(2022, 10, 13)
+  SEASON_3_START_DATE = Date.new(2023, 0o1, 0o1)
+  SEASON_3_END_DATE = Date.new(2023, 0o6, 30)
+
+  PAGE_VISITORS = {
+    "/" => "root_visitors",
+    "/join/voya" => "voya_visitors",
+    "/join/wtfcrypto" => "wtfcrypto_visitors",
+    "/join/talenthouse" => "talenthouse_visitors",
+    "/join/talentmates" => "talentmates_visitors"
+  }
 
   def perform
-    daily_metric = DailyMetric.create!(
+    daily_metric = initialize_daily_metric
+    daily_metric = collect_daily_page_visitors(daily_metric)
+    daily_metric = collect_onboarding_metrics(daily_metric)
+    daily_metric.save!
+    # Uploads the daily metric to the google sheet
+    GoogleDrive::UploadMetrics.new(daily_metric).call
+  end
+
+  private
+
+  def initialize_daily_metric
+    DailyMetric.new(
       date: date,
       total_users: total_users,
       total_connected_wallets: total_connected_wallets,
@@ -48,17 +70,12 @@ class DailyMetricsJob < ApplicationJob
       total_talent_token_applications: total_talent_token_applications,
       total_approved_talent_token_applications: total_approved_talent_token_applications,
       time_on_page: time_on_page,
-      visitors: visitors,
       total_polygon_tvl: total_polygon_tvl,
       total_celo_tvl: total_celo_tvl,
       total_twitter_followers: total_twitter_followers,
       total_discord_members: total_discord_members
     )
-    # Uploads the daily metric to the google sheet
-    GoogleDrive::UploadMetrics.new(daily_metric).call
   end
-
-  private
 
   def date
     Date.yesterday
@@ -275,11 +292,8 @@ class DailyMetricsJob < ApplicationJob
   end
 
   def time_on_page
-    analytics_json["seconds_on_page"]
-  end
-
-  def visitors
-    analytics_json["visitors"]
+    root_page = analytics_json["pages"].detect { |page| page["value"] == "/" }
+    root_page ? root_page["seconds_on_page"] : 0
   end
 
   def analytics_json
@@ -290,8 +304,9 @@ class DailyMetricsJob < ApplicationJob
           start: date.beginning_of_day,
           end: date.end_of_day,
           info: false,
-          fields: "seconds_on_page,visitors,pages",
-          version: 5
+          fields: "pages,seconds_on_page",
+          version: 5,
+          pages: PAGE_VISITORS.keys.join(",")
         }
       )
       JSON.parse(resp.body)
@@ -339,6 +354,24 @@ class DailyMetricsJob < ApplicationJob
     resp = Faraday.get("https://discord.com/api/v9/invites/talentprotocol?with_counts=true&with_expiration=true", {})
     body = JSON.parse(resp.body)
     body["approximate_member_count"]
+  end
+
+  def collect_daily_page_visitors(daily_metric)
+    analytics_json["pages"].each do |page|
+      metric = PAGE_VISITORS[page["value"]]
+
+      daily_metric.daily_page_visitors[metric.to_sym] = page["visitors"]
+    end
+    daily_metric
+  end
+
+  def collect_onboarding_metrics(daily_metric)
+    daily_metric.total_old_users_season_3 = User.where("created_at < ? AND onboarded_at between ? AND ?", ONBOARDING_START_DATE, SEASON_3_START_DATE, SEASON_3_END_DATE).count
+    season_3_created_and_onboarded = User.where("created_at >= ? AND onboarded_at between ? AND ?", SEASON_3_START_DATE, SEASON_3_START_DATE, SEASON_3_END_DATE)
+    daily_metric.total_new_users_season_3 = season_3_created_and_onboarded.count
+    daily_metric.total_organic_users_season_3 = season_3_created_and_onboarded.where(invite_id: nil).count
+    daily_metric.total_referral_users_season_3 = season_3_created_and_onboarded.where.not(invite_id: nil).count
+    daily_metric
   end
 
   def one_month_ago

@@ -28,7 +28,8 @@ module Web3Api
 
         params = {
           chain: chain,
-          format: "decimal"
+          format: "decimal",
+          disable_total: false
         }
         Faraday.get(url, params, headers)
       end

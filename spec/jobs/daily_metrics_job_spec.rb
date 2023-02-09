@@ -16,7 +16,7 @@ RSpec.describe DailyMetricsJob, type: :job do
   let!(:user_5) { create :user }
   let!(:talent_supporter) { create :talent_supporter, supporter_wallet_id: user_5.wallet_id, talent_contract_id: talent_token.contract_id, last_time_bought_at: 15.days.ago }
 
-  let!(:user_6) { create :user }
+  let!(:user_6) { create :user, created_at: Date.new(2023, 0o1, 0o5), onboarded_at: Date.new(2023, 0o1, 6), invite_id: nil }
 
   let!(:tal_domain) { create :user_domain, domain: "dinis.tal.coomunity", tal_domain: true, user: user_6 }
 
@@ -28,11 +28,40 @@ RSpec.describe DailyMetricsJob, type: :job do
 
   let(:date) { Date.yesterday }
 
-  let(:simple_analytics_request) { "https://simpleanalytics.com/beta.talentprotocol.com.json?end=#{date.end_of_day}&fields=seconds_on_page,visitors,pages&info=false&start=#{date.beginning_of_day}&version=5" }
+  let(:simple_analytics_request) { "https://simpleanalytics.com/beta.talentprotocol.com.json?#{simple_analytics_request_params.to_query}" }
+  let(:simple_analytics_request_params) do
+    {
+      end: date.end_of_day,
+      fields: "pages,seconds_on_page",
+      info: false,
+      start: date.beginning_of_day,
+      version: 5,
+      pages: "/,/join/voya,/join/wtfcrypto,/join/talenthouse,/join/talentmates"
+    }
+  end
+
   let(:simple_analytics_body) do
     {
-      seconds_on_page: 20,
-      visitors: 200
+      pages: [
+        {
+          value: "/",
+          pageviews: 3145,
+          visitors: 1623,
+          seconds_on_page: 18
+        },
+        {
+          value: "/join/wtfcrypto",
+          pageviews: 38,
+          visitors: 33,
+          seconds_on_page: 56
+        },
+        {
+          value: "/join/voya",
+          pageviews: 6,
+          visitors: 4,
+          seconds_on_page: 84
+        }
+      ]
     }
   end
 
@@ -96,8 +125,10 @@ RSpec.describe DailyMetricsJob, type: :job do
       expect(created_daily_metric.total_claimed_domains).to eq 1
       expect(created_daily_metric.total_polygon_tvl).to eq 1200
       expect(created_daily_metric.total_celo_tvl).to eq 1200
-      expect(created_daily_metric.time_on_page).to eq 20
-      expect(created_daily_metric.visitors).to eq 200
+      expect(created_daily_metric.time_on_page).to eq 18
+      expect(created_daily_metric.root_visitors).to eq 1623
+      expect(created_daily_metric.wtfcrypto_visitors).to eq 33
+      expect(created_daily_metric.voya_visitors).to eq 4
       expect(created_daily_metric.total_twitter_followers).to eq 10000
       expect(created_daily_metric.total_discord_members).to eq 6000
     end
