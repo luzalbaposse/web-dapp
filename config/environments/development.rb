@@ -1,10 +1,6 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
-  config.hosts << ".talentprotocol.com"
-  config.hosts << ".tal.community"
-  config.hosts << ".tal.builders"
-
   config.after_initialize do
     Bullet.enable = true
     Bullet.alert = false

@@ -7,9 +7,6 @@ gem "rails", "7.0.3.1"
 gem "pg", "~> 1.1"
 gem "puma", "~> 5.6"
 
-# Cors Policy
-gem "rack-cors"
-
 # Frontend Dependencies
 gem "sass-rails", ">= 6"
 gem "webpacker", github: "rails/webpacker", branch: "master"
