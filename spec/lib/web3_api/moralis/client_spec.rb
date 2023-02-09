@@ -68,7 +68,7 @@ RSpec.describe Web3Api::Moralis::Client do
     let(:contract_address) { SecureRandom.hex }
     let(:chain) { "eth" }
 
-    let(:request_path) { "#{described_class::BASE_URI}/#{described_class::NFTS_URI_PATH}/#{contract_address}?chain=#{chain}&format=decimal" }
+    let(:request_path) { "#{described_class::BASE_URI}/#{described_class::NFTS_URI_PATH}/#{contract_address}?chain=#{chain}&format=decimal&disable_total=false" }
 
     before do
       stub_request(:get, request_path)
