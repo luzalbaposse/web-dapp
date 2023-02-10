@@ -56,5 +56,7 @@ export const colors = {
   warning: "#FFD166",
   danger: "#FF2222",
   grayPrimary: "#9fa3a9",
-  lightBg01: "#FAFAFB"
+  lightBg01: "#FAFAFB",
+  darkSurfaceHover02: "#3b3c3f",
+  lightSurfaceHover02: "#dadde1"
 };
