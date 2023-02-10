@@ -1,6 +1,4 @@
 import React from "react";
-
-import Tag from "src/components/design_system/tag";
 import { P2, P3 } from "src/components/design_system/typography";
 
 import cx from "classnames";

@@ -18,7 +18,7 @@ RSpec.describe DailyMetricsJob, type: :job do
 
   let!(:user_6) { create :user, created_at: Date.new(2023, 0o1, 0o5), onboarded_at: Date.new(2023, 0o1, 6), invite_id: nil }
 
-  let!(:tal_domain) { create :user_domain, domain: "dinis.tal.coomunity", tal_domain: true, user: user_6 }
+  let!(:tal_domain) { create :user_domain, domain: "dinis.tal.community", tal_domain: true, user: user_6 }
 
   let(:web3_proxy_class) { Web3Api::ApiProxy }
   let(:web3_proxy) { instance_double(web3_proxy_class) }

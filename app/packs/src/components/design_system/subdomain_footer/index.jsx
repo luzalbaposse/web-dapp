@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import ThemeContainer, { ThemeContext } from "src/contexts/ThemeContext";
+import React from "react";
+import ThemeContainer from "src/contexts/ThemeContext";
 import { P2 } from "src/components/design_system/typography";
 import Divider from "src/components/design_system/other/Divider";
 

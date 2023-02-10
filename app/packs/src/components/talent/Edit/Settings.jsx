@@ -16,6 +16,7 @@ import Link from "src/components/design_system/link";
 import LoadingButton from "src/components/button/LoadingButton";
 import Tag from "src/components/design_system/tag";
 import TextInput from "src/components/design_system/fields/textinput";
+import { CustomHandleInput } from "src/components-v2/custom-handle-input";
 
 const NotificationInputs = [
   {
@@ -71,7 +72,6 @@ const Settings = props => {
     } else if (attribute === "tal_domain") {
       setValidationErrors(prev => ({ ...prev, tal_domain: false }));
       setDomainValidated(false);
-      validateDomain(value);
     } else if (attribute === "username") {
       if (usernameRegex.test(value)) {
         setValidationErrors(prev => ({ ...prev, username: false }));
@@ -283,13 +283,11 @@ const Settings = props => {
             <P3 className="bg-01" bold text="New" />
           </Tag>
         </div>
-        <TextInput
+        <CustomHandleInput
           mode={mode}
-          onChange={e => changeAttribute("tal_domain", e.target.value)}
+          onChange={e => changeAttribute("tal_domain", e.target.innerText)}
           value={talSubdomain()}
-          className="w-100"
-          error={validationErrors.talDomain}
-          onBlur={e => validateDomain(e.target.value)}
+          onBlur={e => validateDomain(e.target.innerText)}
         />
         {validationErrors?.talDomain ? (
           <P3 className="text-danger mt-1" text={validationErrors.talDomain} />

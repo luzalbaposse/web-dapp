@@ -347,6 +347,8 @@ class DailyMetricsJob < ApplicationJob
     resp = Faraday.get("https://api.twitter.com/2/users/1383059435111780352?user.fields=public_metrics", {}, {Authorization: "Bearer #{ENV["TWITTER_API_TOKEN"]}"})
     body = JSON.parse(resp.body)
 
+    return 0 if body["errors"]&.any?
+
     body["data"]["public_metrics"]["followers_count"]
   end
 
