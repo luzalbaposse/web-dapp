@@ -30,6 +30,8 @@ Rails.application.routes.draw do
       end
 
       resources :users, only: [:show] do
+        get :domain_owner, on: :collection
+
         namespace :profile do
           resources :community, only: [:index]
           resources :perks, only: [:index]

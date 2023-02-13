@@ -53,6 +53,26 @@ class API::V1::UsersController < ApplicationController
     render json: result[:user], status: :ok
   end
 
+  def domain_owner
+    return render json: {error: "You don't have access to perform that action"}, status: :unauthorized unless current_user
+
+    domain_owner = Web3::EnsDomainOwner.new(domain: tal_domain).call
+
+    if current_user&.wallet_id&.downcase == domain_owner&.downcase
+      render json: {wallet: domain_owner&.downcase}, status: :ok
+    else
+      error_message = "The wallet you have connected (#{current_user.wallet_id}) is not the owner of #{tal_domain}."
+      render json: {error: error_message}, status: :bad_request
+    end
+  rescue => error
+    puts error
+    Rollbar.error(
+      error,
+      "Error getting the domain owner"
+    )
+    render json: {error: "Something went wrong."}, status: :bad_request
+  end
+
   private
 
   def user
@@ -83,5 +103,14 @@ class API::V1::UsersController < ApplicationController
       current_user: current_user,
       search_params: search_params.to_h
     ).call
+  end
+
+  def tal_domain
+    @tal_domain ||= begin
+      domain = params[:tal_domain]
+      return domain if domain.include?(ENV["TAL_BASE_DOMAIN"])
+
+      "#{domain}.#{ENV["TAL_BASE_DOMAIN"]}"
+    end
   end
 end

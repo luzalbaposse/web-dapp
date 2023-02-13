@@ -15,18 +15,6 @@ export const ipfsToURL = ipfsAddress => {
   return "https://ipfs.io/" + ipfsAddress.replace("://", "/");
 };
 
-export const getWalletFromENS = async (domain, env, apiKey) => {
-  let address = null;
-  try {
-    const network = env == "production" ? "mainnet" : "goerli";
-    const provider = new ethers.providers.EtherscanProvider(network, apiKey);
-    address = await provider.resolveName(domain);
-  } catch (err) {
-    console.log(err);
-  }
-  return address;
-};
-
 export const chainIdToName = (chainId, env) => {
   if (Addresses[env][chainId]) {
     return Addresses[env][chainId].chainName;
