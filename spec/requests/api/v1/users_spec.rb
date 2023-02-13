@@ -173,4 +173,111 @@ RSpec.describe "Users", type: :request do
       end
     end
   end
+
+  describe "#domain_owner" do
+    subject(:get_domain_owner) { get domain_owner_api_v1_users_path(params: params, as: current_user) }
+
+    let(:params) do
+      {
+        tal_domain: "ruben.tal.community"
+      }
+    end
+
+    let(:ens_domain_owner_class) { Web3::EnsDomainOwner }
+    let(:ens_domain_owner) { instance_double(ens_domain_owner_class, call: domain_owner) }
+    let(:domain_owner) { SecureRandom.hex }
+
+    before do
+      allow(ens_domain_owner_class).to receive(:new).and_return(ens_domain_owner)
+      ENV["TAL_BASE_DOMAIN"] = "tal.community"
+    end
+
+    context "when the owner of the domain is the current user wallet" do
+      before do
+        current_user.update!(wallet_id: domain_owner)
+      end
+
+      it "returns a successful response" do
+        get_domain_owner
+
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "returns the wallet that owns the domain" do
+        get_domain_owner
+
+        expect(json).to eq(
+          {
+            wallet: domain_owner
+          }
+        )
+      end
+    end
+
+    context "when the current user is nil" do
+      let(:current_user) { nil }
+
+      it "returns an unauthorized response" do
+        get_domain_owner
+
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it "returns an error message" do
+        get_domain_owner
+
+        expect(json).to eq(
+          error: "You don't have access to perform that action"
+        )
+      end
+    end
+
+    context "when the owner of the domain is not the user wallet" do
+      it "returns a bad request" do
+        get_domain_owner
+
+        expect(response).to have_http_status(:bad_request)
+      end
+
+      it "returns an error message" do
+        get_domain_owner
+
+        expect(json).to eq(
+          error: "The wallet you have connected (#{current_user.wallet_id}) is not the owner of ruben.tal.community."
+        )
+      end
+    end
+
+    context "when the ens domain owner service raises an error" do
+      let(:error) { StandardError.new }
+
+      before do
+        allow(ens_domain_owner).to receive(:call).and_raise(error)
+        allow(Rollbar).to receive(:error)
+      end
+
+      it "returns a bad request" do
+        get_domain_owner
+
+        expect(response).to have_http_status(:bad_request)
+      end
+
+      it "returns an error message" do
+        get_domain_owner
+
+        expect(json).to eq(
+          error: "Something went wrong."
+        )
+      end
+
+      it "raises the error to Rollbar" do
+        get_domain_owner
+
+        expect(Rollbar).to have_received(:error).with(
+          error,
+          "Error getting the domain owner"
+        )
+      end
+    end
+  end
 end

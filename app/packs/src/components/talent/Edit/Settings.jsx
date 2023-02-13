@@ -4,11 +4,10 @@ import React, { useState } from "react";
 
 import { Switch } from "@talentprotocol/design-system/switch";
 
-import { getWalletFromENS } from "src/onchain/utils";
 import { emailRegex, usernameRegex } from "src/utils/regexes";
 import { H5, P2, P3 } from "src/components/design_system/typography";
 import { passwordMatchesRequirements } from "src/utils/passwordRequirements";
-import { patch, post } from "src/utils/requests";
+import { patch, post, get } from "src/utils/requests";
 import { ToastBody } from "src/components/design_system/toasts";
 import Button from "src/components/design_system/button";
 import Divider from "src/components/design_system/other/Divider";
@@ -209,15 +208,16 @@ const Settings = props => {
       subdomainWithDomain = `${talDomain}.${talBaseDomain}`;
     }
 
-    const address = await getWalletFromENS(subdomainWithDomain, env, etherscanApiKey);
-    if (address?.toLowerCase() == settings.wallet_id.toLowerCase()) {
-      setValidationErrors(prev => ({ ...prev, talDomain: false }));
+    const response = await get(`/api/v1/users/domain_owner?tal_domain=${subdomainWithDomain}`).catch(error =>
+      console.error(error)
+    );
+
+    if (response.error) {
+      setValidationErrors(prev => ({ ...prev, talDomain: response.error }));
     } else {
-      setValidationErrors(prev => ({
-        ...prev,
-        talDomain: `The wallet connected does not own ${subdomainWithDomain} domain.`
-      }));
+      setValidationErrors(prev => ({ ...prev, talDomain: false }));
     }
+
     setDomainValidated(true);
   };
 
