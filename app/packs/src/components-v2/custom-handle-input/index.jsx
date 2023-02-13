@@ -13,7 +13,7 @@ export const CustomHandleInput = ({ mode, onChange, value, onBlur }) => {
   }, []);
   return (
     <Container id="custon-handle-input" isLight={mode === "light"}>
-      <InputArea contentEditable placeholder="your handle" onChange={onChange} onBlur={onBlur} />
+      <InputArea contentEditable placeholder="your handle" onChange={onChange} onBlur={onBlur} value={value} />
       <Suffix>.tal.community</Suffix>
     </Container>
   );
