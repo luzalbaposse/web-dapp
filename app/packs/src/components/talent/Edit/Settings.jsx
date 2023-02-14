@@ -202,6 +202,10 @@ const Settings = props => {
   };
 
   const validateDomain = async talDomain => {
+    if (!talDomain) {
+      return;
+    }
+
     let subdomainWithDomain = talDomain;
 
     if (!subdomainWithDomain.includes(talBaseDomain)) {
