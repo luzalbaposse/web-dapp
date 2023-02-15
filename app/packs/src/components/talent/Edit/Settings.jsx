@@ -17,6 +17,8 @@ import Tag from "src/components/design_system/tag";
 import TextInput from "src/components/design_system/fields/textinput";
 import { CustomHandleInput } from "src/components-v2/custom-handle-input";
 
+import MintTalNftModal from "./MintTalNftModal";
+
 const NotificationInputs = [
   {
     description: "Someone bought your talent token",
