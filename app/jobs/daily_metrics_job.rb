@@ -26,7 +26,6 @@ class DailyMetricsJob < ApplicationJob
   SEASON_3_END_DATE = Date.new(2023, 0o6, 30)
 
   PAGE_VISITORS = {
-    "/" => "root_visitors",
     "/join/voya" => "voya_visitors",
     "/join/wtfcrypto" => "wtfcrypto_visitors",
     "/join/talenthouse" => "talenthouse_visitors",
@@ -292,8 +291,7 @@ class DailyMetricsJob < ApplicationJob
   end
 
   def time_on_page
-    root_page = analytics_json["pages"].detect { |page| page["value"] == "/" }
-    root_page ? root_page["seconds_on_page"] : 0
+    analytics_json["seconds_on_page"].to_i
   end
 
   def analytics_json
@@ -304,9 +302,8 @@ class DailyMetricsJob < ApplicationJob
           start: date.beginning_of_day,
           end: date.end_of_day,
           info: false,
-          fields: "pages,seconds_on_page",
-          version: 5,
-          pages: PAGE_VISITORS.keys.join(",")
+          fields: "pages,seconds_on_page,visitors",
+          version: 5
         }
       )
       JSON.parse(resp.body)
@@ -362,8 +359,12 @@ class DailyMetricsJob < ApplicationJob
     analytics_json["pages"].each do |page|
       metric = PAGE_VISITORS[page["value"]]
 
+      next unless metric
+
       daily_metric.daily_page_visitors[metric.to_sym] = page["visitors"]
     end
+
+    daily_metric.visitors = analytics_json["visitors"]
     daily_metric
   end
 

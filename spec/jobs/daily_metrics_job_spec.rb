@@ -32,16 +32,17 @@ RSpec.describe DailyMetricsJob, type: :job do
   let(:simple_analytics_request_params) do
     {
       end: date.end_of_day,
-      fields: "pages,seconds_on_page",
+      fields: "pages,seconds_on_page,visitors",
       info: false,
       start: date.beginning_of_day,
-      version: 5,
-      pages: "/,/join/voya,/join/wtfcrypto,/join/talenthouse,/join/talentmates"
+      version: 5
     }
   end
 
   let(:simple_analytics_body) do
     {
+      seconds_on_page: 18,
+      visitors: 300,
       pages: [
         {
           value: "/",
@@ -126,7 +127,7 @@ RSpec.describe DailyMetricsJob, type: :job do
       expect(created_daily_metric.total_polygon_tvl).to eq 1200
       expect(created_daily_metric.total_celo_tvl).to eq 1200
       expect(created_daily_metric.time_on_page).to eq 18
-      expect(created_daily_metric.root_visitors).to eq 1623
+      expect(created_daily_metric.visitors).to eq 300
       expect(created_daily_metric.wtfcrypto_visitors).to eq 33
       expect(created_daily_metric.voya_visitors).to eq 4
       expect(created_daily_metric.total_twitter_followers).to eq 10000

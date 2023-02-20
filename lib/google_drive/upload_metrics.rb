@@ -32,7 +32,7 @@ module GoogleDrive
         daily_metric.total_complete_profile_quests_completed,
         daily_metric.total_supporter_quests_completed,
         daily_metric.time_on_page,
-        daily_metric.root_visitors,
+        daily_metric.visitors,
         daily_metric.total_celo_tokens,
         daily_metric.total_polygon_tokens,
         daily_metric.total_celo_supporters,
