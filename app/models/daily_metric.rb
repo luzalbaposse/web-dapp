@@ -1,6 +1,5 @@
 class DailyMetric < ApplicationRecord
   store :daily_page_visitors, accessors: %i[
-    root_visitors
     voya_visitors
     wtfcrypto_visitors
     talenthouse_visitors
