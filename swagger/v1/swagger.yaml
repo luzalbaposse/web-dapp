@@ -1,0 +1,62 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/talents/{id}":
+    get:
+      summary: Retrieves a talent
+      tags:
+      - Talents
+      parameters:
+      - name: id
+        in: path
+        description: Wallet address or username
+        required: true
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        description: Your Talent Protocol API key
+        schema:
+          type: string
+      responses:
+        '200':
+          description: talent found
+          content:
+            application/json:
+              example:
+                email: user_110@talentprotocol.com
+                name: API user
+                profile_picture_url:
+                username: user110
+                wallet_address: 7ef1e2217ab70b8c864bd056e8d99eb3
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  name:
+                    type: string
+                  profile_picture_url:
+                    type: string
+                    nullable: true
+                  email:
+                    type: string
+                  wallet_address:
+                    type: string
+                    nullable: true
+                required:
+                - username
+                - email
+                - name
+        '404':
+          description: talent not found
+        '401':
+          description: unauthorized request
+servers:
+- url: https://{defaultHost}/api/v1
+  variables:
+    defaultHost:
+      default: api.talentprotocol.com

@@ -14,6 +14,8 @@ module Mvp
     # Set sidekiq as the default adapter
     config.active_job.queue_adapter = :sidekiq
 
+    config.autoload_paths += Dir[Rails.root.join(Rails.root.join("config", "routes", "**/"))]
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

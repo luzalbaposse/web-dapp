@@ -2,6 +2,7 @@ require "sidekiq/web"
 require "sidekiq-scheduler/web"
 
 Rails.application.routes.draw do
+  extend PublicAPIRoutes
   # Admin area
   constraints Clearance::Constraints::SignedIn.new { |user| user.admin? } do
     mount Sidekiq::Web => "/sidekiq"
@@ -17,35 +18,6 @@ Rails.application.routes.draw do
     end
   end
   # end Moderator
-
-  # Public API
-  namespace :api, defaults: {format: :json} do
-    namespace :v1 do
-      resources :supporters, only: [:index]
-      resources :talent, only: [:show]
-      get "/public_talent" => "talent#public_index"
-
-      resource :username, only: [] do
-        get :valid, on: :collection
-      end
-
-      resources :users, only: [:show] do
-        get :domain_owner, on: :collection
-
-        namespace :profile do
-          resources :community, only: [:index]
-          resources :perks, only: [:index]
-
-          scope :web3 do
-            get :tokens, to: "web3#tokens"
-            get :nfts, to: "web3#nfts"
-            get :poaps, to: "web3#poaps"
-          end
-        end
-      end
-    end
-  end
-  # end Public API
 
   namespace :external, defaults: {format: :json} do
     resources :persona_webhooks, only: [:create]
