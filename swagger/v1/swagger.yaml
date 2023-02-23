@@ -31,16 +31,72 @@ paths:
                   name: user111
                   profile_picture_url:
                   username: user111
-                  wallet_address: 23c912c997948a15871381d986c7ca73
+                  wallet_address: 865c3a3d22b2f3c1f4dd2ccdea5d38f1
                 - email: user_112@talentprotocol.com
                   name: user112
                   profile_picture_url:
                   username: user112
-                  wallet_address: 619b63d263ceb19ead2e51b5c76e60ab
+                  wallet_address: c4e5b239dab9b4086a9b300466341572
               schema:
                 type: object
                 properties:
                   followers:
+                    type: array
+                    items:
+                      type:
+                        username:
+                          type: string
+                        name:
+                          type: string
+                        profile_picture_url:
+                          type: string
+                          nullable: true
+                        email:
+                          type: string
+                        wallet_address:
+                          type: string
+                          nullable: true
+        '404':
+          description: talent not found
+        '401':
+          description: unauthorized request
+  "/supporters":
+    get:
+      summary: Retrieves the supporters of a talent
+      tags:
+      - Supporters
+      parameters:
+      - name: id
+        in: query
+        description: Wallet address or username
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        description: Your Talent Protocol API key
+        schema:
+          type: string
+      responses:
+        '200':
+          description: talent found
+          content:
+            application/json:
+              example:
+                supporters:
+                - email: user_128@talentprotocol.com
+                  name: user128
+                  profile_picture_url:
+                  username: user128
+                  wallet_address: 6b5db3ff2746f1d7b5e1856ba830f89a
+                - email: user_129@talentprotocol.com
+                  name: user129
+                  profile_picture_url:
+                  username: user129
+                  wallet_address: 17d745afcf262df4f050bfac327c9bac
+              schema:
+                type: object
+                properties:
+                  supporters:
                     type: array
                     items:
                       type:
@@ -84,15 +140,15 @@ paths:
             application/json:
               example:
                 talent:
-                  email: user_127@talentprotocol.com
+                  email: user_136@talentprotocol.com
                   followers_count: 1
                   following_count: 2
                   name: API user
                   profile_picture_url:
                   supporters_count: 1
                   supporting_count: 1
-                  username: user127
-                  wallet_address: c8bb9116dbb4a51e79c6913d3572c6c4
+                  username: user136
+                  wallet_address: 0340c0bd4f754e8bbf9467c0665215f9
               schema:
                 type: object
                 properties:
