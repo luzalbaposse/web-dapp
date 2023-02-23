@@ -337,7 +337,8 @@ GEM
     numerizer (0.1.1)
     openssl (3.1.0)
     os (1.1.4)
-    pagy (4.8.0)
+    pagy (5.10.1)
+      activesupport
     paper_trail (12.3.0)
       activerecord (>= 5.2)
       request_store (~> 1.1)
@@ -617,7 +618,7 @@ DEPENDENCIES
   net-http
   newrelic_rpm
   noticed (~> 1.5)
-  pagy (~> 4.8)
+  pagy
   paper_trail
   pg (~> 1.1)
   pry-byebug

@@ -1,14 +1,6 @@
 require "swagger_helper"
 require "rails_helper"
 
-TALENT_PROPERTIES = {
-  username: {type: :string},
-  name: {type: :string},
-  profile_picture_url: {type: :string, nullable: true},
-  email: {type: :string},
-  wallet_address: {type: :string, nullable: true}
-}
-
 RSpec.describe "Talents API" do
   path "/talents/{id}" do
     get "Retrieves a talent" do
@@ -22,24 +14,45 @@ RSpec.describe "Talents API" do
       let(:access_key) { SecureRandom.hex }
       let(:"X-API-KEY") { access_key }
 
-      let!(:talent) { create(:user, wallet_id: wallet_id, display_name: "API user") }
+      let!(:talent) { create(:user, :with_talent_token, wallet_id: wallet_id, display_name: "API user") }
       let(:wallet_id) { SecureRandom.hex }
       let(:id) { wallet_id }
 
+      before do
+        user_1 = create :user
+        user_2 = create :user, :with_talent_token
+
+        create :follow, user: user_1, follower: talent
+        create :follow, user: user_2, follower: talent
+        create :follow, user: talent, follower: user_1
+
+        create :talent_supporter, supporter_wallet_id: talent.wallet_id, talent_contract_id: user_2.talent.talent_token.contract_id, amount: "2000000"
+        create :talent_supporter, supporter_wallet_id: user_1.wallet_id, talent_contract_id: talent.talent.talent_token.contract_id, amount: "1000000"
+      end
+
       response "200", "talent found", save_example: true do
         schema type: :object,
-          properties: TALENT_PROPERTIES,
-          required: ["username", "email", "name"]
+          properties: {
+            talent: {
+              type: :object,
+              properties: PublicAPI::ObjectProperties::TALENT_PROPERTIES
+            }
+          }
 
         run_test! do |response|
           data = JSON.parse(response.body)
 
+          returned_talent = data["talent"]
           aggregate_failures do
-            expect(data["username"]).to eq(talent.username)
-            expect(data["name"]).to eq(talent.name)
-            expect(data["email"]).to eq(talent.email)
-            expect(data["wallet_address"]).to eq(talent.wallet_id)
-            expect(data["profile_picture_url"]).to eq(talent.profile_picture_url)
+            expect(returned_talent["username"]).to eq(talent.username)
+            expect(returned_talent["name"]).to eq(talent.name)
+            expect(returned_talent["email"]).to eq(talent.email)
+            expect(returned_talent["wallet_address"]).to eq(talent.wallet_id)
+            expect(returned_talent["profile_picture_url"]).to eq(talent.profile_picture_url)
+            expect(returned_talent["followers_count"]).to eq(1)
+            expect(returned_talent["following_count"]).to eq(2)
+            expect(returned_talent["supporters_count"]).to eq(1)
+            expect(returned_talent["supporting_count"]).to eq(1)
           end
         end
       end

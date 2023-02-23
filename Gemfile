@@ -32,7 +32,7 @@ gem "lockbox" # for application level encryption
 gem "blind_index" # for searchable encryption
 
 # Pagination
-gem "pagy", "~> 4.8"
+gem "pagy"
 
 # Use Redis adapter to run Action Cable in production
 gem "redis", "~> 4.3"

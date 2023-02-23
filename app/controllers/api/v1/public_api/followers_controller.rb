@@ -1,9 +1,8 @@
-class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
-  def show
+class API::V1::PublicAPI::FollowersController < API::V1::PublicAPI::APIController
+  def index
     response_body = {
-      talent: API::TalentBlueprint.render_as_json(user, view: :detailed)
+      followers: API::TalentBlueprint.render_as_json(user.followers, view: :normal)
     }
-
     log_request(response_body, :ok)
 
     render json: response_body, status: :ok

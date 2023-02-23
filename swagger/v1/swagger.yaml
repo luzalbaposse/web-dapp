@@ -4,6 +4,62 @@ info:
   title: API V1
   version: v1
 paths:
+  "/followers":
+    get:
+      summary: Retrieves the followers of a talent
+      tags:
+      - Followers
+      parameters:
+      - name: id
+        in: query
+        description: Wallet address or username
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        description: Your Talent Protocol API key
+        schema:
+          type: string
+      responses:
+        '200':
+          description: talent found
+          content:
+            application/json:
+              example:
+                followers:
+                - email: user_111@talentprotocol.com
+                  name: user111
+                  profile_picture_url:
+                  username: user111
+                  wallet_address: 23c912c997948a15871381d986c7ca73
+                - email: user_112@talentprotocol.com
+                  name: user112
+                  profile_picture_url:
+                  username: user112
+                  wallet_address: 619b63d263ceb19ead2e51b5c76e60ab
+              schema:
+                type: object
+                properties:
+                  followers:
+                    type: array
+                    items:
+                      type:
+                        username:
+                          type: string
+                        name:
+                          type: string
+                        profile_picture_url:
+                          type: string
+                          nullable: true
+                        email:
+                          type: string
+                        wallet_address:
+                          type: string
+                          nullable: true
+        '404':
+          description: talent not found
+        '401':
+          description: unauthorized request
   "/talents/{id}":
     get:
       summary: Retrieves a talent
@@ -27,30 +83,34 @@ paths:
           content:
             application/json:
               example:
-                email: user_110@talentprotocol.com
-                name: API user
-                profile_picture_url:
-                username: user110
-                wallet_address: 7ef1e2217ab70b8c864bd056e8d99eb3
+                talent:
+                  email: user_127@talentprotocol.com
+                  followers_count: 1
+                  following_count: 2
+                  name: API user
+                  profile_picture_url:
+                  supporters_count: 1
+                  supporting_count: 1
+                  username: user127
+                  wallet_address: c8bb9116dbb4a51e79c6913d3572c6c4
               schema:
                 type: object
                 properties:
-                  username:
-                    type: string
-                  name:
-                    type: string
-                  profile_picture_url:
-                    type: string
-                    nullable: true
-                  email:
-                    type: string
-                  wallet_address:
-                    type: string
-                    nullable: true
-                required:
-                - username
-                - email
-                - name
+                  talent:
+                    type: object
+                    properties:
+                      username:
+                        type: string
+                      name:
+                        type: string
+                      profile_picture_url:
+                        type: string
+                        nullable: true
+                      email:
+                        type: string
+                      wallet_address:
+                        type: string
+                        nullable: true
         '404':
           description: talent not found
         '401':

@@ -6,6 +6,8 @@ module PublicAPIRoutes
           # API authenticated endpoints
           scope module: :public_api, as: "public" do
             resources :talents, only: [:show]
+            resources :followers, only: [:index]
+            resources :supporters, only: [:index]
           end
 
           # API non authenticated endpoints
