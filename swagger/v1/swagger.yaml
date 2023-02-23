@@ -31,19 +31,20 @@ paths:
                   name: user111
                   profile_picture_url:
                   username: user111
-                  wallet_address: 865c3a3d22b2f3c1f4dd2ccdea5d38f1
+                  wallet_address: fb0f51243b146f2cddcf632f796df7e6
                 - email: user_112@talentprotocol.com
                   name: user112
                   profile_picture_url:
                   username: user112
-                  wallet_address: c4e5b239dab9b4086a9b300466341572
+                  wallet_address: 5fcf08f0bc2381c2115d74b32c2dc4f9
               schema:
                 type: object
                 properties:
                   followers:
                     type: array
                     items:
-                      type:
+                      type: object
+                      properties:
                         username:
                           type: string
                         name:
@@ -87,19 +88,20 @@ paths:
                   name: user128
                   profile_picture_url:
                   username: user128
-                  wallet_address: 6b5db3ff2746f1d7b5e1856ba830f89a
+                  wallet_address: aab7308ebf525fc891778148c677afc0
                 - email: user_129@talentprotocol.com
                   name: user129
                   profile_picture_url:
                   username: user129
-                  wallet_address: 17d745afcf262df4f050bfac327c9bac
+                  wallet_address: e4c4fc0326ab7924b88589c658d2b1b1
               schema:
                 type: object
                 properties:
                   supporters:
                     type: array
                     items:
-                      type:
+                      type: object
+                      properties:
                         username:
                           type: string
                         name:
@@ -148,7 +150,7 @@ paths:
                   supporters_count: 1
                   supporting_count: 1
                   username: user136
-                  wallet_address: 0340c0bd4f754e8bbf9467c0665215f9
+                  wallet_address: 896a78f241b29966ee285f08a8320ee2
               schema:
                 type: object
                 properties:

@@ -32,7 +32,8 @@ RSpec.describe "Followers API" do
             followers: {
               type: :array,
               items: {
-                type: PublicAPI::ObjectProperties::TALENT_PROPERTIES
+                type: :object,
+                properties: PublicAPI::ObjectProperties::TALENT_PROPERTIES
               }
             }
           }

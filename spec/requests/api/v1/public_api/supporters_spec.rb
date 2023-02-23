@@ -32,7 +32,8 @@ RSpec.describe "Supporters API" do
             supporters: {
               type: :array,
               items: {
-                type: PublicAPI::ObjectProperties::TALENT_PROPERTIES
+                type: :object,
+                properties: PublicAPI::ObjectProperties::TALENT_PROPERTIES
               }
             }
           }
