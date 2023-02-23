@@ -1,7 +1,10 @@
 class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
   def show
-    profile = API::TalentBlueprint.render_as_json(user, view: :normal)
-    render json: profile, status: :ok
+    response_body = API::TalentBlueprint.render_as_json(user, view: :normal)
+
+    log_request(response_body, :ok)
+
+    render json: response_body, status: :ok
   end
 
   private

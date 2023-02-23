@@ -10,8 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_20_164338) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_22_141126) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
 
   create_table "api_keys", force: :cascade do |t|
@@ -20,8 +21,24 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_20_164338) do
     t.string "description"
     t.datetime "activated_at", precision: nil
     t.datetime "revoked_at", precision: nil
+    t.string "revoked_reason"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "api_log_requests", force: :cascade do |t|
+    t.text "ip_ciphertext", null: false
+    t.string "ip_bidx"
+    t.string "method"
+    t.string "path"
+    t.jsonb "request_body"
+    t.jsonb "response_body"
+    t.integer "response_code"
+    t.bigint "api_key_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["api_key_id"], name: "index_api_log_requests_on_api_key_id"
+    t.index ["ip_bidx"], name: "index_api_log_requests_on_ip_bidx"
   end
 
   create_table "blazer_audits", force: :cascade do |t|
@@ -590,8 +607,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_20_164338) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.string "theme_preference", default: "light"
     t.boolean "disabled", default: false
+    t.string "theme_preference", default: "light"
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"
@@ -656,6 +673,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_20_164338) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "api_log_requests", "api_keys"
   add_foreign_key "career_goals", "talent"
   add_foreign_key "career_needs", "career_goals"
   add_foreign_key "chats", "users", column: "receiver_id"

@@ -2,7 +2,7 @@
 class API::V1::PublicAPI::APIController < ActionController::Base
   before_action :validate_request
 
-  rescue_from ActiveRecord::RecordNotFound, with: :not_found
+  rescue_from StandardError, with: :something_went_wrong
 
   private
 
@@ -24,9 +24,49 @@ class API::V1::PublicAPI::APIController < ActionController::Base
     render json: {error: error_message}, status: :unauthorized
   end
 
-  def not_found
+  def something_went_wrong(error)
+    return not_found if error.is_a?(ActiveRecord::RecordNotFound)
+
+    response_body = {error: "Something went wrong. Reach out to us."}
+    response_status = :internal_server_error
+
+    log_request(response_body, response_status)
+    Rollbar.error(
+      error,
+      {
+        header_api_key: api_key_from_headers,
+        request_path: request.path,
+        request_method: request.method,
+        request_ip: request.remote_ip,
+        request_body: request.body.read
+      }
+    )
+
     respond_to do |format|
-      format.json { render json: {error: "Resource not found."}, status: :not_found }
+      format.json { render json: response_body, status: response_status }
     end
+  end
+
+  def not_found
+    response_body = {error: "Resource not found."}
+    response_status = :not_found
+
+    log_request(response_body, response_status)
+
+    respond_to do |format|
+      format.json { render json: response_body, status: response_status }
+    end
+  end
+
+  def log_request(response_body, response_code)
+    API::LogRequestJob.perform_later(
+      api_key_id: api_key.id,
+      request_path: request.path,
+      request_method: request.method,
+      request_ip: request.remote_ip,
+      request_body: request.body.read,
+      response_body: response_body.to_json,
+      response_code: response_code.is_a?(Symbol) ? Rack::Utils::SYMBOL_TO_STATUS_CODE[response_code] : response_code
+    )
   end
 end
