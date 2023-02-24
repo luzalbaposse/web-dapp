@@ -1,5 +1,10 @@
+require "pagy_cursor/pagy/extras/cursor"
+require "pagy_cursor/pagy/extras/uuid_cursor"
+
 # Inherit from this controller for authenticated api requests
 class API::V1::PublicAPI::APIController < ActionController::Base
+  include Pagy::Backend
+
   before_action :validate_request
 
   rescue_from StandardError, with: :something_went_wrong
@@ -18,6 +23,14 @@ class API::V1::PublicAPI::APIController < ActionController::Base
 
   def api_key
     @api_key ||= API::Key.find_by(access_key: api_key_from_headers)
+  end
+
+  def cursor
+    params[:cursor]
+  end
+
+  def per_page
+    ENV.fetch("API_PAGINATION_PER_PAGE", 25).to_i
   end
 
   def unauthorized_request(error_message)
@@ -68,5 +81,13 @@ class API::V1::PublicAPI::APIController < ActionController::Base
       response_body: response_body.to_json,
       response_code: response_code.is_a?(Symbol) ? Rack::Utils::SYMBOL_TO_STATUS_CODE[response_code] : response_code
     )
+  end
+
+  # Override pagy methods to use the :uuid database field for pagination
+  def pagy_uuid_cursor_get_vars(collection, vars)
+    vars[:arel_table] = collection.arel_table
+    vars[:primary_key] = :uuid
+    vars[:backend] = "uuid"
+    vars
   end
 end

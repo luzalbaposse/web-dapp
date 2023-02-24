@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_22_141126) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_24_164020) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_stat_statements"
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "api_keys", force: :cascade do |t|
@@ -607,8 +607,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_22_141126) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.boolean "disabled", default: false
     t.string "theme_preference", default: "light"
+    t.boolean "disabled", default: false
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"
@@ -635,6 +635,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_22_141126) do
     t.string "legal_last_name"
     t.boolean "whitelisted_talent_mate", default: false
     t.datetime "onboarded_at"
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invite_id"], name: "index_users_on_invite_id"
     t.index ["linkedin_id"], name: "index_users_on_linkedin_id", unique: true

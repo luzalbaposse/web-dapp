@@ -1,5 +1,17 @@
 module PublicAPI
   module ObjectProperties
+    PAGINATION_PROPERTIES = {
+      total: {
+        type: :integer,
+        description: "The total amount of records"
+      },
+      cursor: {
+        type: :string,
+        description: "The cursor to fetch the next page of records",
+        nullable: true
+      }
+    }
+
     TALENT_PROPERTIES = {
       username: {type: :string},
       name: {type: :string},

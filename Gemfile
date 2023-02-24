@@ -33,6 +33,7 @@ gem "blind_index" # for searchable encryption
 
 # Pagination
 gem "pagy"
+gem "pagy_cursor"
 
 # Use Redis adapter to run Action Cable in production
 gem "redis", "~> 4.3"

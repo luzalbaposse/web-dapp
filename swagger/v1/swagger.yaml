@@ -15,6 +15,11 @@ paths:
         description: Wallet address or username
         schema:
           type: string
+      - name: cursor
+        in: query
+        description: The cursor to fetch the next page
+        schema:
+          type: string
       - name: X-API-KEY
         in: header
         description: Your Talent Protocol API key
@@ -31,12 +36,15 @@ paths:
                   name: user111
                   profile_picture_url:
                   username: user111
-                  wallet_address: fb0f51243b146f2cddcf632f796df7e6
+                  wallet_address: 8a5558845381ed1de90a6ea5bb75b13d
                 - email: user_112@talentprotocol.com
                   name: user112
                   profile_picture_url:
                   username: user112
-                  wallet_address: 5fcf08f0bc2381c2115d74b32c2dc4f9
+                  wallet_address: bc0232b81ddf557406a5b68e5f49ecf7
+                pagination:
+                  total: 2
+                  cursor:
               schema:
                 type: object
                 properties:
@@ -57,6 +65,16 @@ paths:
                         wallet_address:
                           type: string
                           nullable: true
+                  pagination:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        description: The total amount of records
+                      cursor:
+                        type: string
+                        description: The cursor to fetch the next page of records
+                        nullable: true
         '404':
           description: talent not found
         '401':
@@ -72,6 +90,11 @@ paths:
         description: Wallet address or username
         schema:
           type: string
+      - name: cursor
+        in: query
+        description: The cursor to fetch the next page
+        schema:
+          type: string
       - name: X-API-KEY
         in: header
         description: Your Talent Protocol API key
@@ -84,16 +107,19 @@ paths:
             application/json:
               example:
                 supporters:
-                - email: user_128@talentprotocol.com
-                  name: user128
+                - email: user_139@talentprotocol.com
+                  name: user139
                   profile_picture_url:
-                  username: user128
-                  wallet_address: aab7308ebf525fc891778148c677afc0
-                - email: user_129@talentprotocol.com
-                  name: user129
+                  username: user139
+                  wallet_address: a99b913cb7def48b0ca2bddd2d1223f8
+                - email: user_138@talentprotocol.com
+                  name: user138
                   profile_picture_url:
-                  username: user129
-                  wallet_address: e4c4fc0326ab7924b88589c658d2b1b1
+                  username: user138
+                  wallet_address: fbc15abd1bc5c62a5296605d397afa52
+                pagination:
+                  total: 2
+                  cursor:
               schema:
                 type: object
                 properties:
@@ -114,6 +140,16 @@ paths:
                         wallet_address:
                           type: string
                           nullable: true
+                  pagination:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        description: The total amount of records
+                      cursor:
+                        type: string
+                        description: The cursor to fetch the next page of records
+                        nullable: true
         '404':
           description: talent not found
         '401':
@@ -142,15 +178,15 @@ paths:
             application/json:
               example:
                 talent:
-                  email: user_136@talentprotocol.com
+                  email: user_146@talentprotocol.com
                   followers_count: 1
                   following_count: 2
                   name: API user
                   profile_picture_url:
                   supporters_count: 1
                   supporting_count: 1
-                  username: user136
-                  wallet_address: 896a78f241b29966ee285f08a8320ee2
+                  username: user146
+                  wallet_address: 3ac8d6254fac180be75d1354a07b66fe
               schema:
                 type: object
                 properties:

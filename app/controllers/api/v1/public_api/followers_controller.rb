@@ -1,7 +1,13 @@
 class API::V1::PublicAPI::FollowersController < API::V1::PublicAPI::APIController
   def index
+    pagy, followers = pagy_uuid_cursor(user.followers, before: cursor, items: per_page)
+
     response_body = {
-      followers: API::TalentBlueprint.render_as_json(user.followers, view: :normal)
+      followers: API::TalentBlueprint.render_as_json(followers, view: :normal),
+      pagination: {
+        total: user.followers.count,
+        cursor: pagy.has_more? ? followers.last.uuid : nil
+      }
     }
     log_request(response_body, :ok)
 

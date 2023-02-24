@@ -10,6 +10,7 @@ FactoryBot.define do
     email_confirmed_at { Time.current }
     wallet_id { SecureRandom.hex }
     onboarded_at { Time.current }
+    uuid { SecureRandom.uuid }
 
     trait :with_talent do
       association :talent
