@@ -10,9 +10,36 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_09_112916) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_24_164020) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "api_keys", force: :cascade do |t|
+    t.text "access_key", null: false
+    t.string "name", null: false
+    t.string "description"
+    t.datetime "activated_at", precision: nil
+    t.datetime "revoked_at", precision: nil
+    t.string "revoked_reason"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "api_log_requests", force: :cascade do |t|
+    t.text "ip_ciphertext", null: false
+    t.string "ip_bidx"
+    t.string "method"
+    t.string "path"
+    t.jsonb "request_body"
+    t.jsonb "response_body"
+    t.integer "response_code"
+    t.bigint "api_key_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["api_key_id"], name: "index_api_log_requests_on_api_key_id"
+    t.index ["ip_bidx"], name: "index_api_log_requests_on_ip_bidx"
+  end
 
   create_table "blazer_audits", force: :cascade do |t|
     t.bigint "user_id"
@@ -608,6 +635,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_09_112916) do
     t.string "legal_last_name"
     t.boolean "whitelisted_talent_mate", default: false
     t.datetime "onboarded_at"
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invite_id"], name: "index_users_on_invite_id"
     t.index ["linkedin_id"], name: "index_users_on_linkedin_id", unique: true
@@ -646,6 +674,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_09_112916) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "api_log_requests", "api_keys"
   add_foreign_key "career_goals", "talent"
   add_foreign_key "career_needs", "career_goals"
   add_foreign_key "chats", "users", column: "receiver_id"

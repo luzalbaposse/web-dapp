@@ -1,0 +1,216 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/followers":
+    get:
+      summary: Retrieves the followers of a talent
+      tags:
+      - Followers
+      parameters:
+      - name: id
+        in: query
+        description: Wallet address or username
+        schema:
+          type: string
+      - name: cursor
+        in: query
+        description: The cursor to fetch the next page
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        description: Your Talent Protocol API key
+        schema:
+          type: string
+      responses:
+        '200':
+          description: talent found
+          content:
+            application/json:
+              example:
+                followers:
+                - email: user_111@talentprotocol.com
+                  name: user111
+                  profile_picture_url:
+                  username: user111
+                  wallet_address: 8a5558845381ed1de90a6ea5bb75b13d
+                - email: user_112@talentprotocol.com
+                  name: user112
+                  profile_picture_url:
+                  username: user112
+                  wallet_address: bc0232b81ddf557406a5b68e5f49ecf7
+                pagination:
+                  total: 2
+                  cursor:
+              schema:
+                type: object
+                properties:
+                  followers:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        username:
+                          type: string
+                        name:
+                          type: string
+                        profile_picture_url:
+                          type: string
+                          nullable: true
+                        email:
+                          type: string
+                        wallet_address:
+                          type: string
+                          nullable: true
+                  pagination:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        description: The total amount of records
+                      cursor:
+                        type: string
+                        description: The cursor to fetch the next page of records
+                        nullable: true
+        '404':
+          description: talent not found
+        '401':
+          description: unauthorized request
+  "/supporters":
+    get:
+      summary: Retrieves the supporters of a talent
+      tags:
+      - Supporters
+      parameters:
+      - name: id
+        in: query
+        description: Wallet address or username
+        schema:
+          type: string
+      - name: cursor
+        in: query
+        description: The cursor to fetch the next page
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        description: Your Talent Protocol API key
+        schema:
+          type: string
+      responses:
+        '200':
+          description: talent found
+          content:
+            application/json:
+              example:
+                supporters:
+                - email: user_139@talentprotocol.com
+                  name: user139
+                  profile_picture_url:
+                  username: user139
+                  wallet_address: a99b913cb7def48b0ca2bddd2d1223f8
+                - email: user_138@talentprotocol.com
+                  name: user138
+                  profile_picture_url:
+                  username: user138
+                  wallet_address: fbc15abd1bc5c62a5296605d397afa52
+                pagination:
+                  total: 2
+                  cursor:
+              schema:
+                type: object
+                properties:
+                  supporters:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        username:
+                          type: string
+                        name:
+                          type: string
+                        profile_picture_url:
+                          type: string
+                          nullable: true
+                        email:
+                          type: string
+                        wallet_address:
+                          type: string
+                          nullable: true
+                  pagination:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        description: The total amount of records
+                      cursor:
+                        type: string
+                        description: The cursor to fetch the next page of records
+                        nullable: true
+        '404':
+          description: talent not found
+        '401':
+          description: unauthorized request
+  "/talents/{id}":
+    get:
+      summary: Retrieves a talent
+      tags:
+      - Talents
+      parameters:
+      - name: id
+        in: path
+        description: Wallet address or username
+        required: true
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        description: Your Talent Protocol API key
+        schema:
+          type: string
+      responses:
+        '200':
+          description: talent found
+          content:
+            application/json:
+              example:
+                talent:
+                  email: user_146@talentprotocol.com
+                  followers_count: 1
+                  following_count: 2
+                  name: API user
+                  profile_picture_url:
+                  supporters_count: 1
+                  supporting_count: 1
+                  username: user146
+                  wallet_address: 3ac8d6254fac180be75d1354a07b66fe
+              schema:
+                type: object
+                properties:
+                  talent:
+                    type: object
+                    properties:
+                      username:
+                        type: string
+                      name:
+                        type: string
+                      profile_picture_url:
+                        type: string
+                        nullable: true
+                      email:
+                        type: string
+                      wallet_address:
+                        type: string
+                        nullable: true
+        '404':
+          description: talent not found
+        '401':
+          description: unauthorized request
+servers:
+- url: https://{defaultHost}/api/v1
+  variables:
+    defaultHost:
+      default: api.talentprotocol.com

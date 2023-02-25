@@ -32,7 +32,8 @@ gem "lockbox" # for application level encryption
 gem "blind_index" # for searchable encryption
 
 # Pagination
-gem "pagy", "~> 4.8"
+gem "pagy"
+gem "pagy_cursor"
 
 # Use Redis adapter to run Action Cable in production
 gem "redis", "~> 4.3"
@@ -110,6 +111,7 @@ group :development, :test do
   gem "pry-rails"
   gem "standard"
   gem "bullet"
+  gem "rswag-specs"
 end
 
 group :development do
@@ -122,13 +124,11 @@ group :development do
 end
 
 group :test do
-  gem "capybara", ">= 3.26"
-  gem "rails-controller-testing"
-  gem "rspec-rails", "~> 5.0.1"
-  gem "selenium-webdriver"
+  gem "rspec-rails"
   gem "shoulda-matchers", "~> 4.5.1"
   gem "webdrivers"
   gem "simplecov"
   gem "codecov"
   gem "webmock"
+  gem "rails-controller-testing"
 end
