@@ -29,7 +29,7 @@ const NotificationInputs = [
 ];
 
 const Settings = props => {
-  const { notificationPreferences, user, mobile, mode, changeSharedState, etherscanApiKey, env, talBaseDomain } = props;
+  const { notificationPreferences, user, mobile, mode, changeSharedState, talBaseDomain } = props;
   const [settings, setSettings] = useState({
     tal_domain: user.tal_domain || "",
     tal_domain_theme: user.tal_domain_theme || "light",

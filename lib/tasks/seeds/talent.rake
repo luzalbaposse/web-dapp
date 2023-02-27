@@ -42,10 +42,6 @@ if Rails.env.development?
           description: Faker::Company.catch_phrase,
           talent: talent
         )
-
-        Feed.create(user: talent_user)
-        post = Post.create(user: talent_user, text: Faker::Lorem.paragraph)
-        talent_user.feed.posts << post
       end
     end
   end

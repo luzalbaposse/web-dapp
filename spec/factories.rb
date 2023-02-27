@@ -13,9 +13,6 @@ FactoryBot.define do
     email { Faker::Internet.email }
   end
 
-  factory :feed do
-  end
-
   factory :notification do
     type { MessageReceivedNotification.name }
   end
