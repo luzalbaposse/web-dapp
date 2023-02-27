@@ -10,8 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_24_164020) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_27_174708) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
@@ -132,16 +133,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_24_164020) do
     t.index ["sender_id"], name: "index_chats_on_sender_id"
   end
 
-  create_table "comments", force: :cascade do |t|
-    t.text "text"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "user_id"
-    t.bigint "post_id"
-    t.index ["post_id"], name: "index_comments_on_post_id"
-    t.index ["user_id"], name: "index_comments_on_user_id"
-  end
-
   create_table "connections", force: :cascade do |t|
     t.string "user_invested_amount"
     t.string "connected_user_invested_amount"
@@ -243,23 +234,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_24_164020) do
     t.text "description"
     t.string "external_image_url"
     t.index ["user_id"], name: "index_erc721_tokens_on_user_id"
-  end
-
-  create_table "feed_posts", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "feed_id"
-    t.bigint "post_id"
-    t.index ["feed_id", "post_id"], name: "index_feed_posts_on_feed_id_and_post_id", unique: true
-    t.index ["feed_id"], name: "index_feed_posts_on_feed_id"
-    t.index ["post_id"], name: "index_feed_posts_on_post_id"
-  end
-
-  create_table "feeds", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "user_id"
-    t.index ["user_id"], name: "index_feeds_on_user_id"
   end
 
   create_table "follows", force: :cascade do |t|
@@ -402,14 +376,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_24_164020) do
     t.datetime "updated_at", null: false
     t.bigint "talent_id"
     t.index ["talent_id"], name: "index_perks_on_talent_id"
-  end
-
-  create_table "posts", force: :cascade do |t|
-    t.text "text"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "user_id"
-    t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
   create_table "profile_page_visitors", force: :cascade do |t|
@@ -607,8 +573,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_24_164020) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.string "theme_preference", default: "light"
     t.boolean "disabled", default: false
+    t.string "theme_preference", default: "light"
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"
@@ -679,16 +645,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_24_164020) do
   add_foreign_key "career_needs", "career_goals"
   add_foreign_key "chats", "users", column: "receiver_id"
   add_foreign_key "chats", "users", column: "sender_id"
-  add_foreign_key "comments", "posts"
-  add_foreign_key "comments", "users"
   add_foreign_key "connections", "users"
   add_foreign_key "connections", "users", column: "connected_user_id"
   add_foreign_key "discovery_rows", "partnerships"
   add_foreign_key "erc20_tokens", "users"
   add_foreign_key "erc721_tokens", "users"
-  add_foreign_key "feed_posts", "feeds"
-  add_foreign_key "feed_posts", "posts"
-  add_foreign_key "feeds", "users"
   add_foreign_key "follows", "users"
   add_foreign_key "follows", "users", column: "follower_id"
   add_foreign_key "goal_images", "goals"
@@ -703,7 +664,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_24_164020) do
   add_foreign_key "milestones", "talent"
   add_foreign_key "partnerships", "invites"
   add_foreign_key "perks", "talent"
-  add_foreign_key "posts", "users"
   add_foreign_key "profile_page_visitors", "users"
   add_foreign_key "quests", "users"
   add_foreign_key "rewards", "users"

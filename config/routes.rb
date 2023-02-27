@@ -54,11 +54,6 @@ Rails.application.routes.draw do
     # Rewards
     get "earn", to: "rewards#index"
 
-    # Feed
-    resources :posts, only: [:show, :create, :destroy] do
-      resources :comments, only: [:index, :create, :destroy], module: "posts"
-    end
-
     resources :profiles, only: [:show], param: :username
 
     # Edit profile

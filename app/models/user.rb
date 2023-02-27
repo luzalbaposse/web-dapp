@@ -27,12 +27,9 @@ class User < ApplicationRecord
   has_many :receivers, through: :messaged
 
   # Feed
-  has_one :feed
   has_many :follows
   has_many :followers, through: :follows # only use to load users, never to count
   has_many :following, foreign_key: :follower_id, class_name: "Follow"
-  has_many :comments
-  has_many :posts
   has_many :notifications, as: :recipient
   has_many :quests
   has_many :connections, dependent: :destroy

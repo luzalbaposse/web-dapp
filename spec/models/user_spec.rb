@@ -12,12 +12,9 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_many(:receivers).through(:messaged) }
 
     # Feed
-    it { is_expected.to have_one(:feed) }
     it { is_expected.to have_many(:follows) }
     it { is_expected.to have_many(:followers).through(:follows) }
     it { is_expected.to have_many(:following) }
-    it { is_expected.to have_many(:comments) }
-    it { is_expected.to have_many(:posts) }
     it { is_expected.to have_many(:connections) }
   end
 

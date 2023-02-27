@@ -12,14 +12,8 @@ namespace :machine do
     )
     user.create_investor!
     user.create_talent!
-    user.create_feed!
 
     user.talent.create_talent_token!(ticker: "TAL")
-    post = Post.create!(text: "Hello world!", user: user)
-    user.feed.posts << post
-
-    post = Post.create!(text: "Everyone, welcome to Talent Protocol's Private Beta. We're excited to have you here, you can start by looking up Talent, you can already interact with the profiles from the core team.\n\nIf you have any issues, find any bugs or just have some form of feedback, please do let us know!", user: user)
-    user.feed.posts << post
 
     puts "Setting up invites.."
 

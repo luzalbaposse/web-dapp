@@ -14,10 +14,6 @@ module Users
           user.invites.update_all(user_id: 1, max_uses: 0)
         end
 
-        if user.feed
-          user.feed.feed_posts.destroy_all
-          user.feed.destroy!
-        end
         user.follows.destroy_all
         user.following.destroy_all
 

@@ -13,7 +13,6 @@ module Users
         params[:invite] = invite if invite
         user = create_user(params)
 
-        create_feed(user)
         create_talent(user)
         create_talent_token(user)
         create_invite_used_notification(invite, user) if invite
@@ -107,18 +106,6 @@ module Users
 
       discovery_row.tags << tag unless discovery_row.tags.include?(tag)
       user.tags << tag unless user.tags.include?(tag)
-    end
-
-    def create_feed(user)
-      feed = Feed.create!(user: user)
-
-      admin = User.find_by(email: "admin@talentprotocol.com")
-      if admin.present?
-        admin.posts.find_each do |post|
-          feed.posts << post
-        end
-      end
-      feed
     end
 
     def create_invite(user)
