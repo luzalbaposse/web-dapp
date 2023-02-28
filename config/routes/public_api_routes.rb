@@ -8,6 +8,7 @@ module PublicAPIRoutes
             resources :talents, only: [:show]
             resources :followers, only: [:index]
             resources :supporters, only: [:index]
+            resources :connections, only: [:index]
           end
 
           # API non authenticated endpoints

@@ -65,7 +65,6 @@ class API::V1::UsersController < ApplicationController
       render json: {error: error_message}, status: :bad_request
     end
   rescue => error
-    puts error
     Rollbar.error(
       error,
       "Error getting the domain owner"

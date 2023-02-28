@@ -1,6 +1,4 @@
-class CommunityConnectionBlueprint < Blueprinter::Base
-  fields :id
-
+class API::ConnectionBlueprint < Blueprinter::Base
   view :normal do
     fields :user_invested_amount, :connected_user_invested_amount, :connection_type, :connected_at
 

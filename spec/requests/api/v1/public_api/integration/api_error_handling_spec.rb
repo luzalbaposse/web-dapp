@@ -14,6 +14,23 @@ RSpec.describe "API error handling" do
     }
   end
 
+  context "when the request is internal" do
+    let(:headers) do
+      {
+        "X-API-KEY": nil
+      }
+    end
+
+    before do
+      ENV["INTERNAL_DOMAINS"] = "beta.talentprotocol.com"
+      host! "beta.talentprotocol.com"
+    end
+
+    it "does not enqueue a job to log the request" do
+      expect { api_request }.not_to have_enqueued_job(API::LogRequestJob)
+    end
+  end
+
   context "when a valid api key is passed" do
     it "enqueues a job to log the request" do
       expect { api_request }.to have_enqueued_job(API::LogRequestJob)
