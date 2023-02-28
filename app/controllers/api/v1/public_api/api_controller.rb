@@ -77,7 +77,7 @@ class API::V1::PublicAPI::APIController < ActionController::Base
       request_path: request.path,
       request_method: request.method,
       request_ip: request.remote_ip,
-      request_body: request.body.read,
+      request_body: params.to_json,
       response_body: response_body.to_json,
       response_code: response_code.is_a?(Symbol) ? Rack::Utils::SYMBOL_TO_STATUS_CODE[response_code] : response_code
     )
