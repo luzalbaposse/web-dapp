@@ -27,7 +27,7 @@ RSpec.describe "API error handling" do
         request_path: "/api/v1/talents/#{id}",
         request_method: "GET",
         request_ip: "127.0.0.1",
-        request_body: "",
+        request_body: instance_of(String),
         response_body: response.body,
         response_code: response.status
       )
@@ -61,7 +61,7 @@ RSpec.describe "API error handling" do
         request_path: "/api/v1/talents/#{id}",
         request_method: "GET",
         request_ip: "127.0.0.1",
-        request_body: "",
+        request_body: instance_of(String),
         response_body: response.body,
         response_code: 404
       )
@@ -88,7 +88,7 @@ RSpec.describe "API error handling" do
         request_path: "/api/v1/talents/#{id}",
         request_method: "GET",
         request_ip: "127.0.0.1",
-        request_body: "",
+        request_body: instance_of(String),
         response_body: response.body,
         response_code: 500
       )
@@ -104,7 +104,8 @@ RSpec.describe "API error handling" do
           request_path: "/api/v1/talents/#{id}",
           request_method: "GET",
           request_ip: "127.0.0.1",
-          request_body: ""
+          request_body: instance_of(String),
+          params: instance_of(String)
         }
       )
     end

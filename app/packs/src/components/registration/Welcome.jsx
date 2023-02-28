@@ -76,7 +76,7 @@ const Welcome = ({
         return;
       }
 
-      get(`api/v1/username/valid?username=${localUsername}`).then(response => {
+      get(`/api/v1/username/valid?username=${localUsername}`).then(response => {
         if (response.error == "") {
           setUsernameValidated(true);
         } else {

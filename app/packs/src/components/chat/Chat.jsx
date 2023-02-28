@@ -33,6 +33,7 @@ const Chat = ({ chats, user, pagination }) => {
   const updateChats = (previousChats, newChat) => {
     const receiverIndex = previousChats.findIndex(chat => chat.receiver_id === newChat.receiver_id);
 
+    console.log(previousChats, newChat)
     const newChats = [
       {
         ...previousChats[receiverIndex],
@@ -41,7 +42,6 @@ const Chat = ({ chats, user, pagination }) => {
       ...previousChats.slice(0, receiverIndex),
       ...previousChats.slice(receiverIndex + 1)
     ];
-
     return newChats;
   };
 
@@ -67,9 +67,6 @@ const Chat = ({ chats, user, pagination }) => {
       setMessengerUsername(response.username);
       setLastOnline(response.lastOnline);
       setGettingMessages(false);
-      if (response.readChat) {
-        setLocalChats(previousChats => updateChats(previousChats, response.readChat));
-      }
     });
   }, [activeUserId]);
 

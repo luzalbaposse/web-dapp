@@ -83,7 +83,6 @@ export const InvitedByContainer = styled.div`
 `;
 
 export const ApprovedByContainer = styled.div`
-  ${margins.mb24}
   display: flex;
   align-items: center;
 `;
@@ -92,6 +91,7 @@ export const ActionArea = styled.div`
   display: flex;
   align-self: flex-start;
   margin-top: -44px;
+  position: relative;
 
   @media (max-width: 991px) {
     ${margins.mt24}
