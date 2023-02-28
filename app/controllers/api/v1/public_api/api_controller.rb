@@ -51,7 +51,8 @@ class API::V1::PublicAPI::APIController < ActionController::Base
         request_path: request.path,
         request_method: request.method,
         request_ip: request.remote_ip,
-        request_body: request.body.read
+        request_body: request.body.read,
+        params: params.to_json
       }
     )
 
