@@ -541,7 +541,9 @@ const Overview = ({
             </div>
           </>
         ) : (
-          <div className="d-flex align-items-center justify-content-between">
+          <div 
+            className="d-flex align-items-center justify-content-between" 
+            style={{ position: "absolute", transform: "translate(-100%, 0)" }}>
             {!mobile && (
               <div className="d-flex align-items-center">
                 {(currentUserAdmin || currentUserModerator) && (
