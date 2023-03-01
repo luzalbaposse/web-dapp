@@ -9,12 +9,15 @@ class API::V1::PublicAPI::ConnectionsController < API::V1::PublicAPI::APIControl
         .where("users.username ILIKE :keyword OR users.display_name ILIKE :keyword", keyword: "%#{search_params[:keyword]}%")
     end
 
-    connections = connections.includes(connected_user: {talent: :talent_token}).distinct
-
-    pagy, page_connections = pagy_uuid_cursor(connections, before: cursor, items: per_page, order: {connection_type: :asc})
+    pagy, page_connections = pagy_uuid_cursor(
+      connections,
+      before: cursor,
+      items: per_page,
+      order: {connection_type: :desc, uuid: :desc}
+    )
 
     response_body = {
-      connections: API::ConnectionBlueprint.render_as_json(page_connections, view: :normal),
+      connections: API::ConnectionBlueprint.render_as_json(page_connections.includes(connected_user: {talent: :talent_token}), view: :normal),
       pagination: {
         total: connections.count,
         cursor: pagy.has_more? ? page_connections.last.uuid : nil

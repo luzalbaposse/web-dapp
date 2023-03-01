@@ -1,6 +1,11 @@
 class API::V1::PublicAPI::SupportersController < API::V1::PublicAPI::APIController
   def index
-    pagy, supporters = pagy_uuid_cursor(user.supporters, before: cursor, items: per_page)
+    pagy, supporters = pagy_uuid_cursor(
+      user.supporters,
+      before: cursor,
+      items: per_page,
+      order: {created_at: :desc, uuid: :desc}
+    )
 
     response_body = {
       supporters: API::TalentBlueprint.render_as_json(supporters, view: :normal),
