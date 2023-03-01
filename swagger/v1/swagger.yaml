@@ -48,7 +48,7 @@ paths:
             application/json:
               example:
                 connections:
-                - connected_at: '2023-03-01T10:08:19.000Z'
+                - connected_at: '2023-03-01T16:37:13.000Z'
                   connected_user_invested_amount: '0'
                   connection_type: super_connection
                   name: user111
@@ -56,7 +56,8 @@ paths:
                   ticker:
                   user_invested_amount: '0'
                   username: user111
-                - connected_at: '2023-03-01T10:08:19.000Z'
+                  uuid: a30f9a85-34db-403a-99ea-690ea45fedcf
+                - connected_at: '2023-03-01T16:37:13.000Z'
                   connected_user_invested_amount: '0'
                   connection_type: supporter
                   name: user112
@@ -64,7 +65,8 @@ paths:
                   ticker:
                   user_invested_amount: '0'
                   username: user112
-                - connected_at: '2023-03-01T10:08:19.000Z'
+                  uuid: 6065b3e3-e295-4106-9cbb-b136e216c4e2
+                - connected_at: '2023-03-01T16:37:13.000Z'
                   connected_user_invested_amount: '0'
                   connection_type: supporting
                   name: user113
@@ -72,7 +74,8 @@ paths:
                   ticker:
                   user_invested_amount: '0'
                   username: user113
-                - connected_at: '2023-03-01T10:08:19.000Z'
+                  uuid: 7e185ab2-f773-43a1-a086-ca0bb862c29a
+                - connected_at: '2023-03-01T16:37:13.000Z'
                   connected_user_invested_amount: '0'
                   connection_type: follower
                   name: user114
@@ -80,9 +83,12 @@ paths:
                   ticker:
                   user_invested_amount: '0'
                   username: user114
+                  uuid: c3ebd6ca-f86d-42dc-a6bb-783e22a206a8
                 pagination:
                   total: 4
-                  cursor: 74e0814c-a7e5-47cb-be19-67198cbe4924
+                  cursor:
+                  per_page: 25
+                  returned: 4
               schema:
                 type: object
                 properties:
@@ -172,13 +178,13 @@ paths:
                   name: user126
                   profile_picture_url:
                   username: user126
-                  wallet_address: 8bfd534ea694d5a9e5f3b55b5a2126b6
+                  wallet_address: 2d93380ffe4ad7c8785f8c4dfb79fa98
                 - email: user_127@talentprotocol.com
                   headline:
                   name: user127
                   profile_picture_url:
                   username: user127
-                  wallet_address: a3054eee0cd56eb0ca600ab3992ca91f
+                  wallet_address: 72ee14cff43d62406e8256f492310a64
                 pagination:
                   total: 2
                   cursor:
@@ -252,13 +258,13 @@ paths:
                   name: user154
                   profile_picture_url:
                   username: user154
-                  wallet_address: ae8db712a6d8ad7c5c1d2640d88823e6
+                  wallet_address: 0a6771fc5c87151efb8d4239d475eb5d
                 - email: user_155@talentprotocol.com
                   headline:
                   name: user155
                   profile_picture_url:
                   username: user155
-                  wallet_address: 5bd6393d94316f5c1f3f7340cafbe1c3
+                  wallet_address: e1395552be4b56ac1006f036c35bdb83
                 pagination:
                   total: 2
                   cursor:
@@ -332,7 +338,7 @@ paths:
                   supporters_count: 1
                   supporting_count: 1
                   username: user162
-                  wallet_address: fa2ae7eaa2de08ae8c692704d4b4eb3b
+                  wallet_address: 8da25f38d18dc20adc2fa2d29321e4fb
               schema:
                 type: object
                 properties:
