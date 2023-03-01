@@ -23,9 +23,9 @@ class API::V1::PublicAPI::APIController < ActionController::Base
   end
 
   def internal_request?
-    return false if request.host.blank?
+    return false if request.domain.blank?
 
-    return true if INTERNAL_DOMAINS.include?(request.host)
+    return true if INTERNAL_DOMAINS.include?(request.domain)
 
     false
   end
