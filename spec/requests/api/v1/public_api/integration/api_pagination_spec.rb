@@ -30,6 +30,10 @@ RSpec.describe "API pagination" do
     ENV["API_PAGINATION_PER_PAGE"] = "2"
   end
 
+  after do
+    ENV["API_PAGINATION_PER_PAGE"] = nil
+  end
+
   it "returns the correct pagination" do
     api_request
 

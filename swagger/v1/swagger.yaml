@@ -4,6 +4,147 @@ info:
   title: API V1
   version: v1
 paths:
+  "/connections":
+    get:
+      summary: Retrieves the connections of a talent
+      tags:
+      - Connections
+      parameters:
+      - name: id
+        in: query
+        description: Wallet address or username
+        schema:
+          type: string
+      - name: keyword
+        in: query
+        description: Keyword search to filter by the connected user name
+        schema:
+          type: string
+      - name: connection_type
+        in: query
+        schema:
+          type: string
+          enum:
+          - super_connection
+          - supporter
+          - supporting
+          - follower
+          - following
+        description: Filter by a specific connection type
+      - name: cursor
+        in: query
+        description: The cursor to fetch the next page
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        description: Your Talent Protocol API key
+        schema:
+          type: string
+      responses:
+        '200':
+          description: talent found
+          content:
+            application/json:
+              example:
+                connections:
+                - connected_at: '2023-03-01T16:37:13.000Z'
+                  connected_user_invested_amount: '0'
+                  connection_type: super_connection
+                  name: user111
+                  profile_picture_url:
+                  ticker:
+                  user_invested_amount: '0'
+                  username: user111
+                  uuid: a30f9a85-34db-403a-99ea-690ea45fedcf
+                - connected_at: '2023-03-01T16:37:13.000Z'
+                  connected_user_invested_amount: '0'
+                  connection_type: supporter
+                  name: user112
+                  profile_picture_url:
+                  ticker:
+                  user_invested_amount: '0'
+                  username: user112
+                  uuid: 6065b3e3-e295-4106-9cbb-b136e216c4e2
+                - connected_at: '2023-03-01T16:37:13.000Z'
+                  connected_user_invested_amount: '0'
+                  connection_type: supporting
+                  name: user113
+                  profile_picture_url:
+                  ticker:
+                  user_invested_amount: '0'
+                  username: user113
+                  uuid: 7e185ab2-f773-43a1-a086-ca0bb862c29a
+                - connected_at: '2023-03-01T16:37:13.000Z'
+                  connected_user_invested_amount: '0'
+                  connection_type: follower
+                  name: user114
+                  profile_picture_url:
+                  ticker:
+                  user_invested_amount: '0'
+                  username: user114
+                  uuid: c3ebd6ca-f86d-42dc-a6bb-783e22a206a8
+                pagination:
+                  total: 4
+                  cursor:
+                  per_page: 25
+                  returned: 4
+              schema:
+                type: object
+                properties:
+                  connections:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        username:
+                          type: string
+                          description: The username of the connected user
+                        name:
+                          type: string
+                          description: The name of the connected user
+                        user_invested_amount:
+                          type: string
+                          description: The amount invested by the user
+                        connected_user_invested_amount:
+                          type: string
+                          description: The amount invested by the connected user
+                        connection_type:
+                          type: string
+                          enum:
+                          - super_connection
+                          - supporter
+                          - supporting
+                          - follower
+                          - following
+                          description: The type of the connection
+                        connected_at:
+                          type: string
+                          format: datetime
+                          description: The timestamp of the initial date the users
+                            connected
+                        profile_picture_url:
+                          type: string
+                          nullable: true
+                          description: The profile picture of the connected user
+                        ticker:
+                          type: string
+                          nullable: true
+                          description: The token ticker of the connected user
+                  pagination:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        description: The total amount of records
+                      cursor:
+                        type: string
+                        description: The cursor to fetch the next page of records
+                        nullable: true
+        '404':
+          description: talent not found
+        '401':
+          description: unauthorized request
   "/followers":
     get:
       summary: Retrieves the followers of a talent
@@ -32,16 +173,18 @@ paths:
             application/json:
               example:
                 followers:
-                - email: user_111@talentprotocol.com
-                  name: user111
+                - email: user_126@talentprotocol.com
+                  headline:
+                  name: user126
                   profile_picture_url:
-                  username: user111
-                  wallet_address: 8a5558845381ed1de90a6ea5bb75b13d
-                - email: user_112@talentprotocol.com
-                  name: user112
+                  username: user126
+                  wallet_address: 2d93380ffe4ad7c8785f8c4dfb79fa98
+                - email: user_127@talentprotocol.com
+                  headline:
+                  name: user127
                   profile_picture_url:
-                  username: user112
-                  wallet_address: bc0232b81ddf557406a5b68e5f49ecf7
+                  username: user127
+                  wallet_address: 72ee14cff43d62406e8256f492310a64
                 pagination:
                   total: 2
                   cursor:
@@ -57,6 +200,9 @@ paths:
                           type: string
                         name:
                           type: string
+                        headline:
+                          type: string
+                          nullable: true
                         profile_picture_url:
                           type: string
                           nullable: true
@@ -107,16 +253,18 @@ paths:
             application/json:
               example:
                 supporters:
-                - email: user_139@talentprotocol.com
-                  name: user139
+                - email: user_154@talentprotocol.com
+                  headline:
+                  name: user154
                   profile_picture_url:
-                  username: user139
-                  wallet_address: a99b913cb7def48b0ca2bddd2d1223f8
-                - email: user_138@talentprotocol.com
-                  name: user138
+                  username: user154
+                  wallet_address: 0a6771fc5c87151efb8d4239d475eb5d
+                - email: user_155@talentprotocol.com
+                  headline:
+                  name: user155
                   profile_picture_url:
-                  username: user138
-                  wallet_address: fbc15abd1bc5c62a5296605d397afa52
+                  username: user155
+                  wallet_address: e1395552be4b56ac1006f036c35bdb83
                 pagination:
                   total: 2
                   cursor:
@@ -132,6 +280,9 @@ paths:
                           type: string
                         name:
                           type: string
+                        headline:
+                          type: string
+                          nullable: true
                         profile_picture_url:
                           type: string
                           nullable: true
@@ -178,15 +329,16 @@ paths:
             application/json:
               example:
                 talent:
-                  email: user_146@talentprotocol.com
+                  email: user_162@talentprotocol.com
                   followers_count: 1
                   following_count: 2
+                  headline:
                   name: API user
                   profile_picture_url:
                   supporters_count: 1
                   supporting_count: 1
-                  username: user146
-                  wallet_address: 3ac8d6254fac180be75d1354a07b66fe
+                  username: user162
+                  wallet_address: 8da25f38d18dc20adc2fa2d29321e4fb
               schema:
                 type: object
                 properties:
@@ -197,6 +349,9 @@ paths:
                         type: string
                       name:
                         type: string
+                      headline:
+                        type: string
+                        nullable: true
                       profile_picture_url:
                         type: string
                         nullable: true

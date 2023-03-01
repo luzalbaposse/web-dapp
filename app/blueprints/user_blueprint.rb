@@ -1,5 +1,5 @@
 class UserBlueprint < Blueprinter::Base
-  fields :id
+  fields :id, :uuid
 
   view :basic_with_pictures do
     field :profilePictureUrl do |user, _options|
