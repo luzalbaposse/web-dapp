@@ -7,7 +7,6 @@ class PagesController < ApplicationController
 
     if params[:invite_code].present?
       @invite = Invite.find_by("code ILIKE ?", params[:invite_code])
-      @user = @invite&.user
     end
   end
 
