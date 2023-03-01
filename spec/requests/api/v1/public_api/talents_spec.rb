@@ -14,7 +14,7 @@ RSpec.describe "Talents API" do
       let(:access_key) { SecureRandom.hex }
       let(:"X-API-KEY") { access_key }
 
-      let!(:talent) { create(:user, :with_talent_token, wallet_id: wallet_id, display_name: "API user") }
+      let!(:talent_user) { create(:user, :with_talent_token, wallet_id: wallet_id, display_name: "API user") }
       let(:wallet_id) { SecureRandom.hex }
       let(:id) { wallet_id }
 
@@ -22,12 +22,12 @@ RSpec.describe "Talents API" do
         user_1 = create :user
         user_2 = create :user, :with_talent_token
 
-        create :follow, user: user_1, follower: talent
-        create :follow, user: user_2, follower: talent
-        create :follow, user: talent, follower: user_1
+        create :follow, user: user_1, follower: talent_user
+        create :follow, user: user_2, follower: talent_user
+        create :follow, user: talent_user, follower: user_1
 
-        create :talent_supporter, supporter_wallet_id: talent.wallet_id, talent_contract_id: user_2.talent.talent_token.contract_id, amount: "2000000"
-        create :talent_supporter, supporter_wallet_id: user_1.wallet_id, talent_contract_id: talent.talent.talent_token.contract_id, amount: "1000000"
+        create :talent_supporter, supporter_wallet_id: talent_user.wallet_id, talent_contract_id: user_2.talent.talent_token.contract_id, amount: "2000000"
+        create :talent_supporter, supporter_wallet_id: user_1.wallet_id, talent_contract_id: talent_user.talent.talent_token.contract_id, amount: "1000000"
       end
 
       response "200", "talent found", save_example: true do
@@ -44,11 +44,12 @@ RSpec.describe "Talents API" do
 
           returned_talent = data["talent"]
           aggregate_failures do
-            expect(returned_talent["username"]).to eq(talent.username)
-            expect(returned_talent["name"]).to eq(talent.name)
-            expect(returned_talent["email"]).to eq(talent.email)
-            expect(returned_talent["wallet_address"]).to eq(talent.wallet_id)
-            expect(returned_talent["profile_picture_url"]).to eq(talent.profile_picture_url)
+            expect(returned_talent["username"]).to eq(talent_user.username)
+            expect(returned_talent["name"]).to eq(talent_user.name)
+            expect(returned_talent["email"]).to eq(talent_user.email)
+            expect(returned_talent["headline"]).to eq(talent_user.talent.headline)
+            expect(returned_talent["wallet_address"]).to eq(talent_user.wallet_id)
+            expect(returned_talent["profile_picture_url"]).to eq(talent_user.profile_picture_url)
             expect(returned_talent["followers_count"]).to eq(1)
             expect(returned_talent["following_count"]).to eq(2)
             expect(returned_talent["supporters_count"]).to eq(1)

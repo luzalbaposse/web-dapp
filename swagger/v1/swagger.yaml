@@ -48,7 +48,7 @@ paths:
             application/json:
               example:
                 connections:
-                - connected_at: '2023-02-28T19:32:47.000Z'
+                - connected_at: '2023-03-01T10:08:19.000Z'
                   connected_user_invested_amount: '0'
                   connection_type: super_connection
                   name: user111
@@ -56,7 +56,7 @@ paths:
                   ticker:
                   user_invested_amount: '0'
                   username: user111
-                - connected_at: '2023-02-28T19:32:47.000Z'
+                - connected_at: '2023-03-01T10:08:19.000Z'
                   connected_user_invested_amount: '0'
                   connection_type: supporter
                   name: user112
@@ -64,7 +64,7 @@ paths:
                   ticker:
                   user_invested_amount: '0'
                   username: user112
-                - connected_at: '2023-02-28T19:32:47.000Z'
+                - connected_at: '2023-03-01T10:08:19.000Z'
                   connected_user_invested_amount: '0'
                   connection_type: supporting
                   name: user113
@@ -72,7 +72,7 @@ paths:
                   ticker:
                   user_invested_amount: '0'
                   username: user113
-                - connected_at: '2023-02-28T19:32:47.000Z'
+                - connected_at: '2023-03-01T10:08:19.000Z'
                   connected_user_invested_amount: '0'
                   connection_type: follower
                   name: user114
@@ -82,7 +82,7 @@ paths:
                   username: user114
                 pagination:
                   total: 4
-                  cursor: 1663ada3-93cf-45bd-8d39-b8acf1d2aca0
+                  cursor: 74e0814c-a7e5-47cb-be19-67198cbe4924
               schema:
                 type: object
                 properties:
@@ -167,16 +167,18 @@ paths:
             application/json:
               example:
                 followers:
-                - email: user_127@talentprotocol.com
-                  name: user127
-                  profile_picture_url:
-                  username: user127
-                  wallet_address: 001f4f72102af7528c82293a68dc154e
                 - email: user_126@talentprotocol.com
+                  headline:
                   name: user126
                   profile_picture_url:
                   username: user126
-                  wallet_address: 6e54d4ce47fb0cdace24a073e38e056f
+                  wallet_address: 8bfd534ea694d5a9e5f3b55b5a2126b6
+                - email: user_127@talentprotocol.com
+                  headline:
+                  name: user127
+                  profile_picture_url:
+                  username: user127
+                  wallet_address: a3054eee0cd56eb0ca600ab3992ca91f
                 pagination:
                   total: 2
                   cursor:
@@ -192,6 +194,9 @@ paths:
                           type: string
                         name:
                           type: string
+                        headline:
+                          type: string
+                          nullable: true
                         profile_picture_url:
                           type: string
                           nullable: true
@@ -242,16 +247,18 @@ paths:
             application/json:
               example:
                 supporters:
-                - email: user_155@talentprotocol.com
-                  name: user155
-                  profile_picture_url:
-                  username: user155
-                  wallet_address: a3cd2918cfd03749e53935b753060609
                 - email: user_154@talentprotocol.com
+                  headline:
                   name: user154
                   profile_picture_url:
                   username: user154
-                  wallet_address: 0fbd7197617f036ed0a1bddff5f5abd8
+                  wallet_address: ae8db712a6d8ad7c5c1d2640d88823e6
+                - email: user_155@talentprotocol.com
+                  headline:
+                  name: user155
+                  profile_picture_url:
+                  username: user155
+                  wallet_address: 5bd6393d94316f5c1f3f7340cafbe1c3
                 pagination:
                   total: 2
                   cursor:
@@ -267,6 +274,9 @@ paths:
                           type: string
                         name:
                           type: string
+                        headline:
+                          type: string
+                          nullable: true
                         profile_picture_url:
                           type: string
                           nullable: true
@@ -316,12 +326,13 @@ paths:
                   email: user_162@talentprotocol.com
                   followers_count: 1
                   following_count: 2
+                  headline:
                   name: API user
                   profile_picture_url:
                   supporters_count: 1
                   supporting_count: 1
                   username: user162
-                  wallet_address: e982c4f9898f0099c2604df5b6d54bcc
+                  wallet_address: fa2ae7eaa2de08ae8c692704d4b4eb3b
               schema:
                 type: object
                 properties:
@@ -332,6 +343,9 @@ paths:
                         type: string
                       name:
                         type: string
+                      headline:
+                        type: string
+                        nullable: true
                       profile_picture_url:
                         type: string
                         nullable: true

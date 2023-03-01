@@ -15,6 +15,7 @@ module PublicAPI
     TALENT_PROPERTIES = {
       username: {type: :string},
       name: {type: :string},
+      headline: {type: :string, nullable: true},
       profile_picture_url: {type: :string, nullable: true},
       email: {type: :string},
       wallet_address: {type: :string, nullable: true}
