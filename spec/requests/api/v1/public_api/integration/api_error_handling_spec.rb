@@ -22,7 +22,7 @@ RSpec.describe "API error handling" do
     end
 
     before do
-      ENV["INTERNAL_DOMAINS"] = "beta.talentprotocol.com"
+      ENV["INTERNAL_DOMAINS"] = "talentprotocol.com"
       host! "beta.talentprotocol.com"
     end
 
