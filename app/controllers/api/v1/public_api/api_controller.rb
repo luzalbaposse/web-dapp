@@ -3,18 +3,31 @@ require "pagy_cursor/pagy/extras/uuid_cursor"
 
 # Inherit from this controller for authenticated api requests
 class API::V1::PublicAPI::APIController < ActionController::Base
+  include Clearance::Controller
   include Pagy::Backend
 
-  before_action :validate_request
+  INTERNAL_DOMAINS = ENV["INTERNAL_DOMAINS"].split(",")
+
+  before_action :validate_api_key
 
   rescue_from StandardError, with: :something_went_wrong
 
   private
 
-  def validate_request
+  def validate_api_key
+    return if internal_request? && api_key_from_headers.blank?
+
     return unauthorized_request("API KEY header was not provided.") unless api_key_from_headers
     return unauthorized_request("API KEY provided is invalid.") unless api_key
     return unauthorized_request("API KEY provided was not activated or it was revoked.") unless api_key.active?
+  end
+
+  def internal_request?
+    return false if request.host.blank?
+
+    return true if INTERNAL_DOMAINS.include?(request.host)
+
+    false
   end
 
   def api_key_from_headers
@@ -30,6 +43,9 @@ class API::V1::PublicAPI::APIController < ActionController::Base
   end
 
   def per_page
+    # Allow the client to override the items per page on internal requests
+    return (params[:per_page] || 10) if internal_request?
+
     ENV.fetch("API_PAGINATION_PER_PAGE", 25).to_i
   end
 
@@ -73,6 +89,8 @@ class API::V1::PublicAPI::APIController < ActionController::Base
   end
 
   def log_request(response_body, response_code)
+    return if internal_request?
+
     API::LogRequestJob.perform_later(
       api_key_id: api_key.id,
       request_path: request.path,

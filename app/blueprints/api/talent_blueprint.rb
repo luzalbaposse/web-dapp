@@ -5,6 +5,10 @@ class API::TalentBlueprint < Blueprinter::Base
     field :wallet_address do |user, _options|
       user.wallet_id
     end
+
+    field :headline do |user, _options|
+      user.talent&.headline
+    end
   end
 
   view :detailed do

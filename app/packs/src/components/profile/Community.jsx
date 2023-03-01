@@ -190,12 +190,13 @@ const Community = ({ userId, talent, canUpdate }) => {
       value: null
     }
   );
-  const [keyword, setKeyword] = useState(url.searchParams.get("community_q") || "");
+  const [keyword, setKeyword] = useState(url.searchParams.get("keyword") || "");
 
   useEffect(() => {
     const params = new URLSearchParams(document.location.search);
+    params.set("id", userId);
 
-    get(`/api/v1/users/${userId}/profile/community?${params.toString()}`).then(response => {
+    get(`/api/v1/connections?${params.toString()}`).then(response => {
       if (response.error) {
         toast.error(<ToastBody heading="Error!" body={response.error} />);
       } else {
@@ -206,16 +207,15 @@ const Community = ({ userId, talent, canUpdate }) => {
   }, [userId]);
 
   const showLoadMoreConnections = () => {
-    return pagination.currentPage < pagination.lastPage;
+    return pagination.cursor;
   };
 
   const loadMoreConnections = () => {
-    const nextPage = pagination.currentPage + 1;
-
     const params = new URLSearchParams(document.location.search);
-    params.set("page", nextPage);
+    params.set("cursor", pagination.cursor);
+    params.set("id", userId);
 
-    get(`/api/v1/users/${userId}/profile/community?${params.toString()}`).then(response => {
+    get(`/api/v1/connections?${params.toString()}`).then(response => {
       setConnections(prev => [...prev, ...response.connections]);
       setPagination(response.pagination);
       window.history.replaceState({}, document.title, `${url.pathname}?${params.toString()}`);
@@ -223,7 +223,7 @@ const Community = ({ userId, talent, canUpdate }) => {
   };
 
   const search = params => {
-    get(`/api/v1/users/${userId}/profile/community?${params.toString()}`).then(response => {
+    get(`/api/v1/connections?${params.toString()}`).then(response => {
       setConnections(response.connections);
       setPagination(response.pagination);
       window.history.replaceState({}, document.title, `${url.pathname}?${params.toString()}`);
@@ -234,6 +234,7 @@ const Community = ({ userId, talent, canUpdate }) => {
 
   const setParamsAndSearch = (field, option) => {
     const params = new URLSearchParams(document.location.search);
+    params.set("id", userId);
 
     if (field === "connectionType") {
       if (option.name == "All") {
@@ -241,7 +242,7 @@ const Community = ({ userId, talent, canUpdate }) => {
       } else {
         params.set("connection_type", option.value);
       }
-      params.set("community_q", keyword);
+      params.set("keyword", keyword);
     }
 
     if (field === "keyword") {
@@ -249,10 +250,9 @@ const Community = ({ userId, talent, canUpdate }) => {
         params.set("connection_type", connectionType.value);
       }
 
-      params.set("community_q", option);
+      params.set("keyword", option);
     }
 
-    params.set("page", 1);
     search(params);
   };
 

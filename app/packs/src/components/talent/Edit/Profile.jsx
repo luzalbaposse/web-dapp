@@ -26,8 +26,6 @@ const Profile = props => {
           mode={theme.mode()}
           mobile={mobile}
           changeSharedState={setSharedState}
-          etherscanApiKey={railsContext.etherscanApiKey}
-          env={railsContext.contractsEnv}
           talBaseDomain={railsContext.talBaseDomain}
         />
       </div>
