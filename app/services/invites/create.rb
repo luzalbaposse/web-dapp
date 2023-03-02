@@ -5,7 +5,6 @@ module Invites
     def initialize(params)
       @max_uses = params.fetch(:max_uses, nil)
       @partnership = params.fetch(:partnership, nil)
-      @talent_invite = params.fetch(:talent_invite, false)
       @user = params.fetch(:user, nil)
     end
 
@@ -16,7 +15,6 @@ module Invites
       invite = Invite.new
       invite.partnership = partnership
       invite.max_uses = max_uses
-      invite.talent_invite = talent_invite
       invite.user = user
 
       count = 0
@@ -34,13 +32,13 @@ module Invites
 
     private
 
-    attr_reader :max_uses, :partnership, :talent_invite, :user
+    attr_reader :max_uses, :partnership, :user
 
     def existing_invite
       record = partnership || user
       return unless record
 
-      record.invites.find_by(talent_invite: talent_invite)
+      record.invites.first
     end
 
     def code(invite)

@@ -41,7 +41,7 @@ RSpec.describe Partnerships::Create do
 
     aggregate_failures do
       expect(invites_create_class).to have_received(:new)
-        .with(max_uses: max_uses, partnership: partnership, talent_invite: true)
+        .with(max_uses: max_uses, partnership: partnership)
 
       expect(invites_create).to have_received(:call)
     end

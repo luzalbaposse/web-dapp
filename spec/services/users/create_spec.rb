@@ -10,13 +10,15 @@ RSpec.describe Users::Create do
       email: email,
       password: password,
       username: username,
-      invite_code: invite_code
+      invite_code: invite_code,
+      wallet_id: wallet_id
     }
   }
 
   let(:email) { "test@talentprotocol.com" }
   let(:password) { "password" }
   let(:username) { "test" }
+  let(:wallet_id) { SecureRandom.hex }
   let(:invite_code) { invite.code }
 
   let(:user) { create :user, username: "jack" }
@@ -90,6 +92,48 @@ RSpec.describe Users::Create do
       end
     end
 
+    context "when a user with the same username already exists" do
+      before do
+        create :user, username: username
+      end
+
+      it "returns an error" do
+        result = create_user
+
+        expect(result[:success]).to eq(false)
+        expect(result[:field]).to eq("username")
+        expect(result[:error]).to eq("Username is already taken.")
+      end
+    end
+
+    context "when a user with the same email already exists" do
+      before do
+        create :user, email: email
+      end
+
+      it "returns an error" do
+        result = create_user
+
+        expect(result[:success]).to eq(false)
+        expect(result[:field]).to eq("email")
+        expect(result[:error]).to eq("Email is already taken.")
+      end
+    end
+
+    context "when a user with the same wallet already exists" do
+      before do
+        create :user, wallet_id: wallet_id
+      end
+
+      it "returns an error" do
+        result = create_user
+
+        expect(result[:success]).to eq(false)
+        expect(result[:field]).to eq("wallet_id")
+        expect(result[:error]).to eq("We already have that wallet in the system.")
+      end
+    end
+
     it "initializes and calls the notification creator with the correct arguments" do
       result = create_user
 
@@ -115,91 +159,6 @@ RSpec.describe Users::Create do
       user = User.find_by(email: email)
 
       expect(user.profile_type).to eq("talent")
-    end
-
-    context "when the talent invite passed is associated with a partnership" do
-      let!(:invite) { create :invite, partnership: partnership, code: "core-team", talent_invite: true, user: nil }
-      let!(:partnership) { create :partnership, name: "Talent Protocol Core Team", description: "Team building Talent Protocol." }
-
-      it "creates a new discovery row" do
-        create_user
-
-        created_discovery_row = DiscoveryRow.last
-
-        aggregate_failures do
-          expect(created_discovery_row.partnership).to eq partnership
-          expect(created_discovery_row.title).to eq partnership.name
-          expect(created_discovery_row.description).to eq partnership.description
-        end
-      end
-
-      it "creates the discovery row with the correct arguments" do
-        expect { create_user }.to change(DiscoveryRow, :count).from(0).to(1)
-      end
-
-      it "creates a new hidden tag" do
-        expect { create_user }.to change(Tag.where(hidden: true), :count).from(0).to(1)
-      end
-
-      it "creates the tag the correct arguments" do
-        create_user
-
-        created_tag = Tag.last
-
-        aggregate_failures do
-          expect(created_tag.description).to eq invite_code
-          expect(created_tag.hidden).to eq true
-        end
-      end
-
-      it "associates the new tag with the user and the discovery row" do
-        create_user
-
-        created_user = User.last
-        created_discovery_row = DiscoveryRow.last
-        created_tag = Tag.last
-
-        aggregate_failures do
-          expect(created_user.tags).to include created_tag
-          expect(created_discovery_row.tags).to include created_tag
-        end
-      end
-
-      context "when the discovery row already exists" do
-        let!(:discovery_row) { create :discovery_row, partnership: partnership }
-
-        it "does not create a new discovery row" do
-          expect { create_user }.not_to change(DiscoveryRow, :count)
-        end
-
-        it "associates the new tag with existing discovery row" do
-          create_user
-
-          created_tag = Tag.last
-
-          expect(discovery_row.tags).to include created_tag
-        end
-      end
-
-      context "when the hidden tag already exists" do
-        let!(:tag) { create :tag, description: invite_code, hidden: true }
-
-        it "does not create a new tag" do
-          expect { create_user }.not_to change(Tag.where(hidden: true), :count)
-        end
-
-        it "associates the existing tag with the user and the discovery row" do
-          create_user
-
-          created_user = User.last
-          created_discovery_row = DiscoveryRow.last
-
-          aggregate_failures do
-            expect(created_user.tags).to include tag
-            expect(created_discovery_row.tags).to include tag
-          end
-        end
-      end
     end
   end
 end

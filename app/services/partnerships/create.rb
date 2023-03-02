@@ -49,7 +49,7 @@ module Partnerships
     end
 
     def create_invite!(partnership)
-      Invites::Create.new(max_uses: max_uses, partnership: partnership, talent_invite: true).call
+      Invites::Create.new(max_uses: max_uses, partnership: partnership).call
     end
   end
 end

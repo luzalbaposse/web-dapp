@@ -19,7 +19,6 @@ module Users
 
         if invite&.talent_invite?
           update_profile_type(user, invite)
-          upsert_discovery_row(invite, user) if invite.partnership.present?
         end
 
         create_invite(user)
@@ -31,15 +30,17 @@ module Users
         @result[:user] = user
         @result[:success] = true
         @result
-      rescue ActiveRecord::RecordNotUnique => error
+      rescue ActiveRecord::RecordInvalid => error
         @result[:success] = false
-        if error.message.include?("username")
+        error_message = error.message.downcase
+
+        if error_message.include?("username")
           @result[:field] = "username"
           @result[:error] = "Username is already taken."
-        elsif error.message.include?("email")
+        elsif error_message.include?("email")
           @result[:field] = "email"
           @result[:error] = "Email is already taken."
-        elsif error.message.include?("wallet_id")
+        elsif error_message.include?("wallet")
           @result[:field] = "wallet_id"
           @result[:error] = "We already have that wallet in the system."
         end
@@ -88,24 +89,6 @@ module Users
 
     def create_talent_token(user)
       user.talent.create_talent_token!
-    end
-
-    def upsert_discovery_row(invite, user)
-      partnership = invite.partnership
-
-      discovery_row = partnership.discovery_row
-
-      discovery_row ||= DiscoveryRow.create!(
-        partnership: partnership,
-        title: partnership.name,
-        description: partnership.description
-      )
-
-      tag = Tag.find_by(description: invite.code, hidden: true)
-      tag ||= Tag.create!(description: invite.code, hidden: true)
-
-      discovery_row.tags << tag unless discovery_row.tags.include?(tag)
-      user.tags << tag unless user.tags.include?(tag)
     end
 
     def create_invite(user)
