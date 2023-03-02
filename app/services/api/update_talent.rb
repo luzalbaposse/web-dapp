@@ -60,6 +60,8 @@ class API::UpdateTalent
     end
 
     if params.key?(:profile_picture_data)
+      # We need to force this to prevent errors
+      params[:profile_picture_data][:storage] = "cache"
       talent.profile_picture = params[:profile_picture_data].as_json
       talent.profile_picture_derivatives! if talent.profile_picture && talent.profile_picture_changed?
     end
@@ -142,6 +144,8 @@ class API::UpdateTalent
     end
 
     if params.key?(:banner_data)
+      # We need to force this to prevent errors
+      params[:banner_data][:storage] = "cache"
       talent.banner = params[:banner_data].as_json
       talent.banner_derivatives! if talent.banner && talent.banner_changed?
     end

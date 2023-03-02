@@ -24,6 +24,45 @@ RSpec.describe API::UpdateTalent do
     end
   end
 
+  context "when the profile picture data is passed" do
+    let(:user_params) { {} }
+    let(:tag_params) { {} }
+    let(:career_needs_params) { {} }
+    let(:talent_params) do
+      {
+        profile_picture_data: {
+          id: "b7d3e25bd98cf67b7eb485f62679bc39.jpeg",
+          storage: "store",
+          metadata: {
+            size: 22078,
+            filename: "5319238.jpeg",
+            mime_type: "image/jpeg"
+          }
+        }
+      }
+    end
+
+    before do
+      allow(talent).to receive(:profile_picture=)
+    end
+
+    it "updates the profile picture data" do
+      update_talent.call(talent_params, user_params, tag_params, career_needs_params)
+
+      expect(talent).to have_received(:profile_picture=).with(
+        {
+          id: "b7d3e25bd98cf67b7eb485f62679bc39.jpeg",
+          storage: "cache",
+          metadata: {
+            size: 22078,
+            filename: "5319238.jpeg",
+            mime_type: "image/jpeg"
+          }
+        }.as_json
+      )
+    end
+  end
+
   context "when there are career need params" do
     let(:talent_params) { {} }
     let(:user_params) { {} }
