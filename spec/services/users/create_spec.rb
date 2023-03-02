@@ -161,4 +161,20 @@ RSpec.describe Users::Create do
       expect(user.profile_type).to eq("talent")
     end
   end
+
+  context "when the username is taken" do
+    before do
+      create :user, username: username
+    end
+
+    it "returns an unsuccessful response" do
+      expect(create_user).to eq(
+        {
+          success: false,
+          field: "username",
+          error: "Username is already taken."
+        }
+      )
+    end
+  end
 end

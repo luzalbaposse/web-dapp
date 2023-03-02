@@ -30,7 +30,7 @@ module Users
         @result[:user] = user
         @result[:success] = true
         @result
-      rescue ActiveRecord::RecordInvalid => error
+      rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid => error
         @result[:success] = false
         error_message = error.message.downcase
 
