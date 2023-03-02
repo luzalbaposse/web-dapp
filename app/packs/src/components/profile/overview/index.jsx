@@ -496,6 +496,7 @@ const Overview = ({
                               type="primary-default"
                               size="big"
                               text={`Buy $${talent.talentToken.ticker} on Talent Protocol`}
+                              style={{ "min-width": "340px" }}
                               onClick={() => null}
                             />
                           </a>
@@ -541,9 +542,10 @@ const Overview = ({
             </div>
           </>
         ) : (
-          <div 
-            className="d-flex align-items-center justify-content-between" 
-            style={{ position: "absolute", transform: "translate(-100%, 0)" }}>
+          <div
+            className="d-flex align-items-center justify-content-between"
+            style={{ position: "absolute", transform: "translate(-100%, 0)" }}
+          >
             {!mobile && (
               <div className="d-flex align-items-center">
                 {(currentUserAdmin || currentUserModerator) && (
@@ -677,6 +679,7 @@ const Overview = ({
                             <Button
                               type="primary-default"
                               size="big"
+                              style={{ "min-width": "340px" }}
                               text={`Buy $${talent.talentToken.ticker} on Talent Protocol`}
                               onClick={() => null}
                             />
