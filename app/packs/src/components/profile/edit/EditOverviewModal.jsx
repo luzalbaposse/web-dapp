@@ -202,6 +202,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent, mode }) => {
         profilePictureData: {
           // eslint-disable-next-line  no-useless-escape
           id: response.uploadURL.match(/\/cache\/([^\?]+)/)[1], // extract key without prefix
+          new_upload: true,
           storage: "cache",
           metadata: {
             size: file.size,
@@ -226,6 +227,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent, mode }) => {
           // eslint-disable-next-line  no-useless-escape
           id: response.uploadURL.match(/\/cache\/([^\?]+)/)[1], // extract key without prefix
           storage: "cache",
+          new_upload: true,
           metadata: {
             size: file.size,
             filename: file.name,

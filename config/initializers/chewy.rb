@@ -20,6 +20,6 @@ end
 Chewy.settings = {host: "localhost:9200"} if Rails.env.development?
 Chewy.settings = {host: "localhost:9200"} if Rails.env.test?
 
-Chewy.root_strategy = :atomic
-Chewy.request_strategy = :atomic
-Chewy.console_strategy = :atomic
+Chewy.root_strategy = :sidekiq
+Chewy.request_strategy = :sidekiq
+Chewy.console_strategy = :sidekiq
