@@ -24,7 +24,7 @@ RSpec.describe API::UpdateTalent do
     end
   end
 
-  context "when the profile picture data is passed" do
+  context "when a new profile picture data is passed" do
     let(:user_params) { {} }
     let(:tag_params) { {} }
     let(:career_needs_params) { {} }
@@ -32,7 +32,8 @@ RSpec.describe API::UpdateTalent do
       {
         profile_picture_data: {
           id: "b7d3e25bd98cf67b7eb485f62679bc39.jpeg",
-          storage: "store",
+          storage: "cache",
+          new_upload: new_upload,
           metadata: {
             size: 22078,
             filename: "5319238.jpeg",
@@ -46,20 +47,34 @@ RSpec.describe API::UpdateTalent do
       allow(talent).to receive(:profile_picture=)
     end
 
-    it "updates the profile picture data" do
-      update_talent.call(talent_params, user_params, tag_params, career_needs_params)
+    context "when it is a new upload" do
+      let(:new_upload) { true }
 
-      expect(talent).to have_received(:profile_picture=).with(
-        {
-          id: "b7d3e25bd98cf67b7eb485f62679bc39.jpeg",
-          storage: "cache",
-          metadata: {
-            size: 22078,
-            filename: "5319238.jpeg",
-            mime_type: "image/jpeg"
-          }
-        }.as_json
-      )
+      it "updates the profile picture data" do
+        update_talent.call(talent_params, user_params, tag_params, career_needs_params)
+
+        expect(talent).to have_received(:profile_picture=).with(
+          {
+            id: "b7d3e25bd98cf67b7eb485f62679bc39.jpeg",
+            storage: "cache",
+            metadata: {
+              size: 22078,
+              filename: "5319238.jpeg",
+              mime_type: "image/jpeg"
+            }
+          }.as_json
+        )
+      end
+    end
+
+    context "when it is not a new upload" do
+      let(:new_upload) { false }
+
+      it "does not update the profile picture data" do
+        update_talent.call(talent_params, user_params, tag_params, career_needs_params)
+
+        expect(talent).not_to have_received(:profile_picture=)
+      end
     end
   end
 

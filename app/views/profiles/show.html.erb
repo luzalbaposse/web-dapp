@@ -23,7 +23,7 @@
         "ProfileShow",
         props: {
           talent: @talent,
-          profileSubdomain: tal_domain.present?,
+          profileSubdomain: !tal_domain.present?,
           currentUserId: current_acting_user&.id,
           currentUserAdmin: current_user&.admin?,
           currentUserModerator: current_user&.moderator?,
