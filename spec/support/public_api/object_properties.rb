@@ -31,6 +31,7 @@ module PublicAPI
     CONNECTION_PROPERTIES = {
       username: {type: :string, description: "The username of the connected user"},
       name: {type: :string, description: "The name of the connected user"},
+      wallet_address: {type: :string, description: "The wallet address of the connected user"},
       user_invested_amount: {type: :string, description: "The amount invested by the user"},
       connected_user_invested_amount: {type: :string, description: "The amount invested by the connected user"},
       connection_type: {type: :string, enum: Connection.connection_types.keys, description: "The type of the connection"},

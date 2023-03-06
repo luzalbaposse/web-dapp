@@ -28,6 +28,7 @@ paths:
           - super_connection
           - supporter
           - supporting
+          - mutual_follow
           - follower
           - following
         description: Filter by a specific connection type
@@ -48,7 +49,7 @@ paths:
             application/json:
               example:
                 connections:
-                - connected_at: '2023-03-01T16:37:13.000Z'
+                - connected_at: '2023-03-06T11:47:21.000Z'
                   connected_user_invested_amount: '0'
                   connection_type: super_connection
                   name: user111
@@ -56,8 +57,8 @@ paths:
                   ticker:
                   user_invested_amount: '0'
                   username: user111
-                  uuid: a30f9a85-34db-403a-99ea-690ea45fedcf
-                - connected_at: '2023-03-01T16:37:13.000Z'
+                  wallet_address: 11b62d3505fc53e48dc6e4a74f0fb9d2
+                - connected_at: '2023-03-06T11:47:21.000Z'
                   connected_user_invested_amount: '0'
                   connection_type: supporter
                   name: user112
@@ -65,8 +66,8 @@ paths:
                   ticker:
                   user_invested_amount: '0'
                   username: user112
-                  uuid: 6065b3e3-e295-4106-9cbb-b136e216c4e2
-                - connected_at: '2023-03-01T16:37:13.000Z'
+                  wallet_address: ea7b4c533e9cf5775879474d220a4d45
+                - connected_at: '2023-03-06T11:47:21.000Z'
                   connected_user_invested_amount: '0'
                   connection_type: supporting
                   name: user113
@@ -74,8 +75,8 @@ paths:
                   ticker:
                   user_invested_amount: '0'
                   username: user113
-                  uuid: 7e185ab2-f773-43a1-a086-ca0bb862c29a
-                - connected_at: '2023-03-01T16:37:13.000Z'
+                  wallet_address: 7059d36ae6e4c73fd0323e030e9c990e
+                - connected_at: '2023-03-06T11:47:21.000Z'
                   connected_user_invested_amount: '0'
                   connection_type: follower
                   name: user114
@@ -83,12 +84,10 @@ paths:
                   ticker:
                   user_invested_amount: '0'
                   username: user114
-                  uuid: c3ebd6ca-f86d-42dc-a6bb-783e22a206a8
+                  wallet_address: 56a95073fce844a131df45eccaedf9cf
                 pagination:
                   total: 4
                   cursor:
-                  per_page: 25
-                  returned: 4
               schema:
                 type: object
                 properties:
@@ -103,6 +102,9 @@ paths:
                         name:
                           type: string
                           description: The name of the connected user
+                        wallet_address:
+                          type: string
+                          description: The wallet address of the connected user
                         user_invested_amount:
                           type: string
                           description: The amount invested by the user
@@ -115,6 +117,7 @@ paths:
                           - super_connection
                           - supporter
                           - supporting
+                          - mutual_follow
                           - follower
                           - following
                           description: The type of the connection
@@ -173,18 +176,18 @@ paths:
             application/json:
               example:
                 followers:
-                - email: user_126@talentprotocol.com
-                  headline:
-                  name: user126
-                  profile_picture_url:
-                  username: user126
-                  wallet_address: 2d93380ffe4ad7c8785f8c4dfb79fa98
                 - email: user_127@talentprotocol.com
                   headline:
                   name: user127
                   profile_picture_url:
                   username: user127
-                  wallet_address: 72ee14cff43d62406e8256f492310a64
+                  wallet_address: 0503b08ee2a409f553fdb5fa334660e5
+                - email: user_126@talentprotocol.com
+                  headline:
+                  name: user126
+                  profile_picture_url:
+                  username: user126
+                  wallet_address: 7cf01dafebfd62a4f1ad88ef4702da1b
                 pagination:
                   total: 2
                   cursor:
@@ -253,18 +256,18 @@ paths:
             application/json:
               example:
                 supporters:
-                - email: user_154@talentprotocol.com
-                  headline:
-                  name: user154
-                  profile_picture_url:
-                  username: user154
-                  wallet_address: 0a6771fc5c87151efb8d4239d475eb5d
                 - email: user_155@talentprotocol.com
                   headline:
                   name: user155
                   profile_picture_url:
                   username: user155
-                  wallet_address: e1395552be4b56ac1006f036c35bdb83
+                  wallet_address: b2e293adec08d35a5697bc58bffd0317
+                - email: user_154@talentprotocol.com
+                  headline:
+                  name: user154
+                  profile_picture_url:
+                  username: user154
+                  wallet_address: 60722f21762f8021213e92f0f3839b13
                 pagination:
                   total: 2
                   cursor:
@@ -338,7 +341,7 @@ paths:
                   supporters_count: 1
                   supporting_count: 1
                   username: user162
-                  wallet_address: 8da25f38d18dc20adc2fa2d29321e4fb
+                  wallet_address: 25988e81dd2e7f90afda748fcd01f2a0
               schema:
                 type: object
                 properties:

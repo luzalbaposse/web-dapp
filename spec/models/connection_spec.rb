@@ -94,5 +94,18 @@ RSpec.describe Connection, type: :model do
         expect(updated_connection.connection_type).to eq "super_connection"
       end
     end
+
+    context "when the users follow each other" do
+      before do
+        create :follow, user: user, follower: connected_user
+        create :follow, user: connected_user, follower: user
+      end
+
+      it "updates the connection type to super connection" do
+        updated_connection = connection.refresh_connection!
+
+        expect(updated_connection.connection_type).to eq "mutual_follow"
+      end
+    end
   end
 end
