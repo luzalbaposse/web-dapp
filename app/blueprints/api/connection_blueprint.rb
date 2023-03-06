@@ -10,6 +10,10 @@ class API::ConnectionBlueprint < Blueprinter::Base
       connection.connected_user.name
     end
 
+    field :wallet_address do |connection, _options|
+      connection.connected_user.wallet_id
+    end
+
     field :profile_picture_url do |connection, _options|
       connection.connected_user.profile_picture_url
     end

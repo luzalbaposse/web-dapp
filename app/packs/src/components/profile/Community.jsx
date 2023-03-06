@@ -33,6 +33,7 @@ const CommunityTable = ({ connections, mode, ticker, mobile }) => {
       super_connection: "Super Connection",
       supporter: "Supporter",
       supporting: "Supporting",
+      mutual_follow: "Mutual Follow",
       follower: "Follower",
       following: "Following"
     }[connection_type];
@@ -173,6 +174,7 @@ const Community = ({ userId, talent, canUpdate }) => {
     { name: "Super Connection", value: "super_connection" },
     { name: "Supporter", value: "supporter" },
     { name: "Supporting", value: "supporting" },
+    { name: "Mutual Follow", value: "mutual_follow" },
     { name: "Follower", value: "follower" },
     { name: "Following", value: "following" }
   ];

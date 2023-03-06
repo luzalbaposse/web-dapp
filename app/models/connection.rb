@@ -9,12 +9,14 @@ class Connection < ApplicationRecord
   # user is a super connection of connected_user
   # user is a supporter of connected_user
   # user is supporting the connected_user
+  # user is following and is a being followed by the connected_user
   # user is a follower of connected_user
   # user is following the connected_user
   enum connection_type: {
-    super_connection: 5,
-    supporter: 4,
-    supporting: 3,
+    super_connection: 6,
+    supporter: 5,
+    supporting: 4,
+    mutual_follow: 3,
     follower: 2,
     following: 1
   }
@@ -42,9 +44,10 @@ class Connection < ApplicationRecord
   private
 
   def calculate_connection_type(user_invested_amount, connected_user_invested_amount)
-    return 5 if user_invested_amount.to_i.positive? && connected_user_invested_amount.to_i.positive?
-    return 4 if connected_user_invested_amount.to_i.positive?
-    return 3 if user_invested_amount.to_i.positive?
+    return 6 if user_invested_amount.to_i.positive? && connected_user_invested_amount.to_i.positive?
+    return 5 if connected_user_invested_amount.to_i.positive?
+    return 4 if user_invested_amount.to_i.positive?
+    return 3 if user.following.find_by(user_id: connected_user_id).present? && connected_user.following.find_by(user_id: user_id).present?
     return 2 if user.following.find_by(user_id: connected_user_id).present?
     return 1 if connected_user.following.find_by(user_id: user_id).present?
   end
