@@ -159,6 +159,7 @@ const Show = ({
       </div>
       <div className="my-7 w-100 col-12" id="#social-graph">	
         <SocialGraph talent={localTalent}/>
+      </div>
       {(showLastDivider || canUpdate) && <Divider className="my-6" />}
       <div className="mt-7 w-100" id="#digital-collectibles">
         <Poaps
