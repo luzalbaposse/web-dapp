@@ -1,0 +1,303 @@
+#social-graph {
+  /**
+    * BASE STYLES:
+    * ************
+    */
+  background: $dark-bg-01;
+  color: $dark-text-primary-01;
+  font-size: 0.9em;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+
+  h2 {
+    font-size: 1.3em;
+    margin: 0;
+  }
+  h2 > * {
+    vertical-align: middle;
+  }
+  a {
+    color: black !important;
+  }
+  a:hover {
+    opacity: 0.7;
+  }
+
+  /**
+    * LAYOUT:
+    * *******
+    */
+
+  #social-graph-wrapper,
+  .sigma-container {
+    position: absolute;
+    inset: 0;
+  }
+  .controls {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+  }
+
+  .panels {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 350px;
+    max-height: calc(100vh - 2 * 8px);
+    overflow-y: auto;
+    padding: 8px;
+    scrollbar-width: thin;
+  }
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #999;
+    border: transparent;
+  }
+
+  /**
+    * USEFUL CLASSES:
+    * ***************
+    */
+  div.ico > button {
+    display: block;
+    position: relative;
+    font-size: 1.8em;
+    width: 2em;
+    height: 2em;
+    color: $dark-text-primary-01;
+    background: $dark-bg-01-transparent;
+    border: none;
+    outline: none;
+    margin-top: 0.2em;
+    cursor: pointer;
+  }
+  div.ico > button:hover {
+    background: $dark-text-primary-04;
+  }
+  div.ico > button > * {
+    position: absolute;
+    inset: 0;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  button.btn {
+    background: $dark-bg-01;
+    color: #fff;
+    border: 1px solid black;
+    outline: none;
+    border-radius: 3px;
+    padding: 0.3em 0.5em;
+    font-size: 1em;
+    font-family: Lato, sans-serif;
+    cursor: pointer;
+  }
+  button.btn:hover {
+    opacity: 0.7;
+  }
+  button.btn > * {
+    vertical-align: baseline;
+  }
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  ul > li {
+    margin-top: 0.2em;
+  }
+  .text-muted {
+    color: $dark-text-primary-04;
+  }
+  .text-small {
+    font-size: 0.7em;
+    vertical-align: baseline;
+  }
+  .mouse-pointer {
+    cursor: pointer;
+  }
+
+  /**
+    * CAPTIONS PANELS:
+    * ****************
+    */
+  .panel {
+    background: $dark-bg-01-transparent;
+    padding: 1em;
+    border-radius: 3px;
+    box-shadow: 0 1px 5px $dark-text-primary-04;
+  }
+  .panel:not(:last-child) {
+    margin-bottom: 0.5em;
+  }
+  .panel h2 button {
+    float: right;
+    background: $dark-bg-01-transparent;
+    color: #ccc;
+    border: 1px solid black;
+    border-radius: 3px;
+    font-size: 1.2em;
+    height: 1em;
+    width: 1em;
+    text-align: center;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .panel h2 button:hover {
+    opacity: 0.7;
+  }
+
+  .caption-row input[type="checkbox"] {
+    display: none;
+  }
+  .caption-row input[type="checkbox"]:not(:checked) + label {
+    color: $dark-text-primary-04;
+  }
+  .caption-row input[type="checkbox"]:not(:checked) + label .circle {
+    background-color: white !important;
+  }
+  .caption-row label {
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+  }
+  .caption-row label:hover {
+    opacity: 0.7;
+  }
+  .caption-row label .circle {
+    flex-shrink: 0;
+    display: inline-block;
+    width: 1.2em;
+    height: 1.2em;
+    border-radius: 1.2em;
+    vertical-align: middle;
+    box-sizing: border-box;
+    background-color: $dark-text-primary-04;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin-right: 0.2em;
+    transition: all ease-out 300ms;
+    border: 3px solid $dark-text-primary-04;
+  }
+  .caption-row label .node-label {
+    flex-grow: 1;
+  }
+  .caption-row label .bar {
+    position: relative;
+    background: transparent;
+    height: 3px;
+    margin-bottom: 0.2em;
+  }
+  .caption-row label .bar .inside-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: $dark-text-primary-04;
+    transition: all ease-out 300ms;
+  }
+
+  /**
+    * SEARCH FIELD:
+    * *************
+    */
+  .search-wrapper {
+    position: relative;
+  }
+  .search-wrapper > input[type="search"] {
+    background: $dark-bg-01-transparent;
+    color: $dark-text-primary-01;
+    width: calc(100%);
+    height: 3em;
+    box-shadow: 0 1px 5px $dark-text-primary-04;
+    border: none;
+    outline: none;
+    border-radius: 3px;
+    margin-bottom: 0.5em;
+    padding: 1em 1em 1em 3em;
+    font-family: Lato, sans-serif;
+    font-size: 1em;
+  }
+  .search-wrapper > .icon {
+    position: absolute;
+    width: 1em;
+    height: 1em;
+    top: 1em;
+    left: 1em;
+  }
+
+  /**
+    * RESPONSIVENESS:
+    * ***************
+    */
+  @media (max-width: 767.98px) {
+    #social-graph-wrapper:not(.show-contents) .contents,
+    #social-graph-wrapper.show-contents .controls {
+      display: none;
+    }
+
+    #social-graph-wrapper.show-contents .contents {
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      background: $dark-bg-01;
+    }
+
+    #social-graph-wrapper.show-contents .panels {
+      height: auto;
+      max-height: unset;
+      max-width: unset;
+      position: static;
+      overflow-y: visible;
+      width: auto;
+    }
+    #social-graph-wrapper.show-contents .contents .hide-contents {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+    }
+  }
+  @media (min-width: 768px) {
+    button.show-contents,
+    button.hide-contents {
+      display: none !important;
+    }
+  }
+
+  @keyframes rotation {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  div.react-sigma-v2 {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    background: $dark-bg-01;
+  }
+  div.react-sigma-v2 div.sigma-container {
+    height: 100%;
+    width: 100%;
+  }
+}
