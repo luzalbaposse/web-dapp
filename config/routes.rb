@@ -123,11 +123,10 @@ Rails.application.routes.draw do
   end
 
   constraints Routes::FormatConstraints.new(:html) do
-    get "/join(/:invite_code)" => "pages#home", :as => :sign_up
-    get "/" => "sessions#new", :as => "sign_in"
+    get "/join(/:invite_code)" => "onboard#sign_up", :as => :sign_up
+    get "/" => "onboard#sign_in"
     delete "/" => "sessions#new", :as => "sign_in_redirect"
     get "/confirm_email(/:token)" => "email_confirmations#update", :as => "confirm_email"
-    get "/sign_up", to: redirect("/join")
   end
 
   get "/auth/linkedin/callback", to: "oauth_callbacks#linkedin"

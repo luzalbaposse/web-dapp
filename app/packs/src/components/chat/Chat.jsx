@@ -33,7 +33,7 @@ const Chat = ({ chats, user, pagination }) => {
   const updateChats = (previousChats, newChat) => {
     const receiverIndex = previousChats.findIndex(chat => chat.receiver_id === newChat.receiver_id);
 
-    console.log(previousChats, newChat)
+    console.log(previousChats, newChat);
     const newChats = [
       {
         ...previousChats[receiverIndex],
