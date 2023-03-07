@@ -141,7 +141,7 @@ const SocialGraph = ({ talent }) => {
 
   if (!dataset) return null;
   return (
-    <div id="social-graph-wrapper" className={showContents ? "show-contents" : ""}>
+    <div id="social-graph-wrapper" className={`social-graph-wrapper` + (showContents ? "show-contents" : "")}>
       <SigmaContainer
         graphOptions={{ type: "directed" }}
         settings={{

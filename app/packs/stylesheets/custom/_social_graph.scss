@@ -1,4 +1,4 @@
-#social-graph {
+.social-graph {
   /**
     * BASE STYLES:
     * ************
@@ -29,7 +29,7 @@
     * *******
     */
 
-  #social-graph-wrapper,
+  .social-graph-wrapper,
   .sigma-container {
     position: absolute;
     inset: 0;
@@ -247,12 +247,12 @@
     * ***************
     */
   @media (max-width: 767.98px) {
-    #social-graph-wrapper:not(.show-contents) .contents,
-    #social-graph-wrapper.show-contents .controls {
+    .social-graph-wrapper:not(.show-contents) .contents,
+    .social-graph-wrapper.show-contents .controls {
       display: none;
     }
 
-    #social-graph-wrapper.show-contents .contents {
+    .social-graph-wrapper.show-contents .contents {
       position: absolute;
       inset: 0;
       overflow-y: auto;
@@ -260,7 +260,7 @@
       background: $dark-bg-01;
     }
 
-    #social-graph-wrapper.show-contents .panels {
+    .social-graph-wrapper.show-contents .panels {
       height: auto;
       max-height: unset;
       max-width: unset;
@@ -268,7 +268,7 @@
       overflow-y: visible;
       width: auto;
     }
-    #social-graph-wrapper.show-contents .contents .hide-contents {
+    .social-graph-wrapper.show-contents .contents .hide-contents {
       position: absolute;
       top: 8px;
       right: 8px;
