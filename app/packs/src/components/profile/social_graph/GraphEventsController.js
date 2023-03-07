@@ -1,5 +1,5 @@
+import React, { useEffect } from "react";
 import { useRegisterEvents, useSigma } from "@react-sigma/core";
-import { useEffect } from "react";
 
 function getMouseLayer() {
   return document.querySelector(".sigma-mouse");
@@ -30,7 +30,7 @@ const GraphEventsController = ({ setHoveredNode, children }) => {
         setHoveredNode(null);
         const mouseLayer = getMouseLayer();
         if (mouseLayer) mouseLayer.classList.remove("mouse-pointer");
-      },
+      }
     });
   }, []);
 

@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  SigmaContainer,
-  ZoomControl,
-  FullScreenControl,
-} from "@react-sigma/core";
+import { SigmaContainer, ZoomControl, FullScreenControl } from "@react-sigma/core";
 import { omit, mapValues, keyBy, constant } from "lodash";
 import { ethers } from "ethers";
 
@@ -15,25 +11,20 @@ import ClustersPanel from "./ClustersPanel";
 import SearchField from "./SearchField";
 import drawLabel from "./canvas-utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faExpand,
-  faCompress,
-  faTimes,
-  faColumns,
-} from "@fortawesome/free-solid-svg-icons";
+import { faExpand, faCompress, faTimes, faColumns } from "@fortawesome/free-solid-svg-icons";
 
 const SocialGraph = ({ talent }) => {
   const [showContents, setShowContents] = useState(false);
   const [dataReady, setDataReady] = useState(false);
   const [dataset, setDataset] = useState(null);
   const [filtersState, setFiltersState] = useState({
-    clusters: {},
+    clusters: {}
   });
   const [hoveredNode, setHoveredNode] = useState(null);
 
   const talentToken = talent.talentToken;
 
-  const getConnectionTypeCluster = (type) => {
+  const getConnectionTypeCluster = type => {
     switch (type) {
       case "super_connection":
         return "1";
@@ -49,24 +40,17 @@ const SocialGraph = ({ talent }) => {
     }
   };
 
-  const calculateScore = (connection) => {
+  const calculateScore = connection => {
     let score = 1;
     switch (connection.connection_type) {
       case "super_connection":
-        score =
-          1.1 +
-          (1000 * connection.connected_user_invested_amount) /
-            talent.totalSupply;
+        score = 1.1 + (1000 * connection.connected_user_invested_amount) / talent.totalSupply;
         break;
       case "supporting":
-        score =
-          1 + (1000 * connection.user_invested_amount) / talent.totalSupply;
+        score = 1 + (1000 * connection.user_invested_amount) / talent.totalSupply;
         break;
       case "supporter":
-        score =
-          1 +
-          (1000 * connection.connected_user_invested_amount) /
-            talent.totalSupply;
+        score = 1 + (1000 * connection.connected_user_invested_amount) / talent.totalSupply;
         break;
       case "follower":
       case "following":
@@ -77,25 +61,18 @@ const SocialGraph = ({ talent }) => {
     return score;
   };
 
-  const buildCoinLabelString = (connection) => {
+  const buildCoinLabelString = connection => {
     let s = "";
     if (connection.ticker != "" && connection.user_invested_amount > 0) {
-      s += `${(connection.user_invested_amount / 10e18).toFixed(2)} $${
-        connection.ticker
-      }`;
+      s += `${(connection.user_invested_amount / 10e18).toFixed(2)} $${connection.ticker}`;
     }
-    if (
-      talentToken.ticker != "" &&
-      connection.connected_user_invested_amount > 0
-    ) {
+    if (talentToken.ticker != "" && connection.connected_user_invested_amount > 0) {
       if (s.length > 0) s += " - ";
-      s += `${(connection.connected_user_invested_amount / 10e18).toFixed(
-        2
-      )} $${talentToken.ticker}`;
+      s += `${(connection.connected_user_invested_amount / 10e18).toFixed(2)} $${talentToken.ticker}`;
     }
     return s;
   };
-  const transformResponseToGraphData = (response) => {
+  const transformResponseToGraphData = response => {
     let nodes = [];
     let edges = [];
     const clusters = [
@@ -104,7 +81,7 @@ const SocialGraph = ({ talent }) => {
       { key: "2", color: "#57a835", clusterLabel: "Supporting" },
       { key: "3", color: "#7145cd", clusterLabel: "Supporter" },
       { key: "4", color: "#666666", clusterLabel: "Follower" },
-      { key: "5", color: "#d043c4", clusterLabel: "Following" },
+      { key: "5", color: "#d043c4", clusterLabel: "Following" }
     ];
 
     // add self node
@@ -112,15 +89,13 @@ const SocialGraph = ({ talent }) => {
       key: talent.username,
       label: talent.name,
       coinLabel: talentToken.ticker
-        ? `${ethers.utils.formatUnits(talent.totalSupply)} $${
-            talentToken.ticker
-          } - ${talent.supporters} supporters`
+        ? `${ethers.utils.formatUnits(talent.totalSupply)} $${talentToken.ticker} - ${talent.supporters} supporters`
         : "",
       URL: `https://beta.talentprotocol.com/u/${talent.username}`,
       cluster: "0",
       x: 0,
       y: 0,
-      score: 1,
+      score: 1
     });
 
     // add connection nodes & edges
@@ -133,7 +108,7 @@ const SocialGraph = ({ talent }) => {
         cluster: getConnectionTypeCluster(connection.connection_type),
         x: 0,
         y: 0,
-        score: calculateScore(connection), //TODO: calculate size dynamically
+        score: calculateScore(connection) //TODO: calculate size dynamically
       });
       edges.push([talent.username, connection.username]);
     });
@@ -141,24 +116,24 @@ const SocialGraph = ({ talent }) => {
     return {
       nodes: nodes,
       edges: edges,
-      clusters: clusters,
+      clusters: clusters
     };
   };
 
   // Load connections data on mount:
   useEffect(() => {
-    fetch(`api.talentprotocol.com/api/v1/connections?id=${talent.username}`)
-      .then((res) => {
+    fetch(`/api/v1/connections?id=${talent.user.uuid}`)
+      .then(res => {
         return res.json();
       })
-      .then((json) => {
+      .then(json => {
         // transform response to proper format for graphology
         return transformResponseToGraphData(json);
       })
-      .then((dataset) => {
+      .then(dataset => {
         setDataset(dataset);
         setFiltersState({
-          clusters: mapValues(keyBy(dataset.clusters, "key"), constant(true)),
+          clusters: mapValues(keyBy(dataset.clusters, "key"), constant(true))
         });
         requestAnimationFrame(() => setDataReady(true));
       });
@@ -166,10 +141,7 @@ const SocialGraph = ({ talent }) => {
 
   if (!dataset) return null;
   return (
-    <div
-      id="social-graph-wrapper"
-      className={showContents ? "show-contents" : ""}
-    >
+    <div id="social-graph-wrapper" className={showContents ? "show-contents" : ""}>
       <SigmaContainer
         graphOptions={{ type: "directed" }}
         settings={{
@@ -181,7 +153,7 @@ const SocialGraph = ({ talent }) => {
           labelGridCellSize: 60,
           labelRenderedSizeThreshold: 15,
           labelFont: "Lato, sans-serif",
-          zIndex: true,
+          zIndex: true
         }}
         className="react-sigma"
       >
@@ -226,18 +198,18 @@ const SocialGraph = ({ talent }) => {
                 <ClustersPanel
                   clusters={dataset.clusters}
                   filters={filtersState}
-                  setClusters={(clusters) =>
-                    setFiltersState((filters) => ({
+                  setClusters={clusters =>
+                    setFiltersState(filters => ({
                       ...filters,
-                      clusters,
+                      clusters
                     }))
                   }
-                  toggleCluster={(cluster) => {
-                    setFiltersState((filters) => ({
+                  toggleCluster={cluster => {
+                    setFiltersState(filters => ({
                       ...filters,
                       clusters: filters.clusters[cluster]
                         ? omit(filters.clusters, cluster)
-                        : { ...filters.clusters, [cluster]: true },
+                        : { ...filters.clusters, [cluster]: true }
                     }));
                   }}
                 />
