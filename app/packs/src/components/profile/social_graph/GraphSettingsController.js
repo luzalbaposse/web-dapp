@@ -1,5 +1,5 @@
+import React, { useEffect } from "react";
 import { useSigma } from "@react-sigma/core";
-import { useEffect } from "react";
 
 import { drawHover } from "./canvas-utils";
 import drawLabel from "./canvas-utils";
@@ -21,12 +21,11 @@ const GraphSettingsController = ({ children, hoveredNode }) => {
    * instance:
    */
   useEffect(() => {
-    sigma.setSetting("hoverRenderer", (context, data, settings) =>{
-      return drawHover(context, { ...sigma.getNodeDisplayData(data.key), ...data }, settings);  
-    }
-    );
+    sigma.setSetting("hoverRenderer", (context, data, settings) => {
+      return drawHover(context, { ...sigma.getNodeDisplayData(data.key), ...data }, settings);
+    });
     // sigma.setSetting("labelRenderer", (context, data, settings) =>{
-    //     return drawLabel(context, { ...sigma.getNodeDisplayData(data.key), ...data }, settings);    
+    //     return drawLabel(context, { ...sigma.getNodeDisplayData(data.key), ...data }, settings);
     // });
   }, [sigma, graph]);
 
@@ -46,7 +45,7 @@ const GraphSettingsController = ({ children, hoveredNode }) => {
             graph.hasEdge(debouncedHoveredNode, node)
               ? { ...data, zIndex: 1 }
               : { ...data, zIndex: 0, label: "", color: NODE_FADE_COLOR, image: null, highlighted: false }
-        : null,
+        : null
     );
     sigma.setSetting(
       "edgeReducer",
@@ -55,7 +54,7 @@ const GraphSettingsController = ({ children, hoveredNode }) => {
             graph.hasExtremity(edge, debouncedHoveredNode)
               ? { ...data, color: hoveredColor, size: 4 }
               : { ...data, color: EDGE_FADE_COLOR, hidden: true }
-        : null,
+        : null
     );
   }, [debouncedHoveredNode]);
 
