@@ -85,13 +85,16 @@ const SocialGraph = ({ talent }) => {
     ];
 
     // add self node
+    console.log(talent);
     nodes.push({
-      key: talent.username,
-      label: talent.name,
+      key: talent.user.username,
+      label: talent.user.name,
       coinLabel: talentToken.ticker
-        ? `${ethers.utils.formatUnits(talent.totalSupply)} $${talentToken.ticker} - ${talent.supporters} supporters`
+        ? `${ethers.utils.formatUnits(talent.totalSupply)} $${talentToken.ticker} - ${
+            talent.supportersCount
+          } supporters`
         : "",
-      URL: `https://beta.talentprotocol.com/u/${talent.username}`,
+      URL: `https://beta.talentprotocol.com/u/${talent.user.username}`,
       cluster: "0",
       x: 0,
       y: 0,
@@ -110,7 +113,7 @@ const SocialGraph = ({ talent }) => {
         y: 0,
         score: calculateScore(connection) //TODO: calculate size dynamically
       });
-      edges.push([talent.username, connection.username]);
+      edges.push([talent.user.username, connection.username]);
     });
 
     return {
@@ -131,6 +134,7 @@ const SocialGraph = ({ talent }) => {
         return transformResponseToGraphData(json);
       })
       .then(dataset => {
+        console.log(dataset);
         setDataset(dataset);
         setFiltersState({
           clusters: mapValues(keyBy(dataset.clusters, "key"), constant(true))

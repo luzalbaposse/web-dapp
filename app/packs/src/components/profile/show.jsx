@@ -157,8 +157,10 @@ const Show = ({
       <div className="my-7 w-100 col-12" id="#community">
         <Community userId={localTalent.user.uuid} talent={localTalent} canUpdate={canUpdate} />
       </div>
-      <div className="my-7 w-100 col-12 social-graph" id="#social-graph">	
-        <SocialGraph talent={localTalent}/>
+      <div className="my-7 w-100 col-12" id="#social-graph">
+        <div className="social-graph">
+          <SocialGraph talent={localTalent} />
+        </div>
       </div>
       {(showLastDivider || canUpdate) && <Divider className="my-6" />}
       <div className="mt-7 w-100" id="#digital-collectibles">
