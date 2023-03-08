@@ -102,6 +102,26 @@ class API::V1::PublicAPI::APIController < ActionController::Base
     )
   end
 
+  def internal_only
+    return if internal_request?
+
+    response_body = {error: "Endpoint unavailable."}
+    response_status = :bad_request
+
+    respond_to do |format|
+      format.json { render json: response_body, status: response_status }
+    end
+  end
+
+  def current_impersonated_user
+    @current_impersonated_user ||= user_from_impersonated_cookie
+    @current_impersonated_user
+  end
+
+  def user_from_impersonated_cookie
+    User.find_by(username: cookies.signed[:impersonated])
+  end
+
   # Override pagy methods to use the :uuid database field for pagination
   def pagy_uuid_cursor_get_vars(collection, vars)
     vars[:arel_table] = collection.arel_table

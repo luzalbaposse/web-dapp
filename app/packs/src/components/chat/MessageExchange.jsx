@@ -18,7 +18,7 @@ const CommunicateFirst = () => {
   return <div className="my-auto align-self-center">Find someone to chat with!</div>;
 };
 
-const ChatHeader = ({ profilePictureUrl, link, lastOnline, username, userId }) => {
+const ChatHeader = ({ profilePictureUrl, link, lastOnline, username }) => {
   const date = dayjs();
   const lastOnlineDay = dayjs(lastOnline);
   const period = date.unix() - lastOnlineDay.unix();
@@ -32,7 +32,7 @@ const ChatHeader = ({ profilePictureUrl, link, lastOnline, username, userId }) =
 
   return (
     <div className="d-flex flex-row w-100 pt-3 themed-border-bottom" style={{ paddingBottom: 18 }}>
-      <TalentProfilePicture src={profilePictureUrl} link={link} height={48} className="ml-3 mr-2" userId={userId} />
+      <TalentProfilePicture src={profilePictureUrl} link={link} height={48} className="ml-3 mr-2" />
       <div className="d-flex flex-column">
         <P2 bold className="text-black">
           {username}
@@ -84,19 +84,15 @@ const MessageExchange = props => {
     }
   };
 
-  const mine = message => message && message.sender_id === props.user.id;
+  const mine = message => message && message.sender_id === props.user?.id;
 
   const link = message => {
-    const { user, username, messengerWithTalent } = props;
+    const { user, username } = props;
 
     if (mine(message)) {
-      if (user.receiver_with_talent) {
-        return `u/${user.username}`;
-      }
+      return `u/${user?.username}`;
     } else {
-      if (messengerWithTalent) {
-        return `u/${username}`;
-      }
+      return `u/${username}`;
     }
   };
 
@@ -126,7 +122,7 @@ const MessageExchange = props => {
           <div className={`divider ${mode}`}></div>
         </>
       )}
-      {props.activeUserId !== 0 && (
+      {props.activeUserUsername !== 0 && (
         <ChatHeader
           username={props.username}
           profilePictureUrl={props.profilePictureUrl}
@@ -136,8 +132,8 @@ const MessageExchange = props => {
         />
       )}
       <div id="messages" className="px-3 overflow-y-scroll d-flex flex-column pb-3 display-messages">
-        {props.messages.length === 0 && props.activeUserId === 0 && <CommunicateFirst />}
-        {props.messages.length === 0 && props.activeUserId !== 0 && <EmptyMessages />}
+        {props.messages.length === 0 && props.activeUserUsername === 0 && <CommunicateFirst />}
+        {props.messages.length === 0 && props.activeUserUsername !== 0 && <EmptyMessages />}
         {props.messages.map((message, index) => (
           <Message
             key={`message_${message.id}`}
@@ -149,17 +145,17 @@ const MessageExchange = props => {
             username={props.username}
             user={props.user}
             // eslint-disable-next-line no-undef
-            userId={mine(message) ? props.user.id : message.sender_id}
+            userId={mine(message) ? props.user?.id : message.sender_id}
           />
         ))}
       </div>
-      {props.activeUserId !== 0 && (
+      {props.activeUserUsername !== "" && (
         <div className="d-flex flex-row w-100 p-2">
           <TextArea
             mode={mode}
             disabled={
               props.username == undefined ||
-              (props.messages.length == 0 && props.user.id == 0) ||
+              (props.messages.length == 0 && props.user?.id == 0) ||
               props.messagingDisabled
             }
             onChange={e => props.onChange(e.target.value)}
@@ -179,7 +175,7 @@ const MessageExchange = props => {
             disabled={
               props.value == "" ||
               props.sendingMessage == true ||
-              (props.messages.length == 0 && props.user.id == 0) ||
+              (props.messages.length == 0 && props.user?.id == 0) ||
               props.messagingDisabled
             }
           >

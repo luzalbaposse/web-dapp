@@ -464,7 +464,7 @@ const Overview = ({
                     ) : (
                       <>
                         {currentUserId && !profileSubdomain && (
-                          <a href={`/messages?user=${talent.user.id}`} className="button-link">
+                          <a href={`/messages?user=${talent.user.username}`} className="button-link">
                             <Button className="mr-2" type="white-outline" size="big" onClick={() => null}>
                               <Envelope className="h-100" color="currentColor" size={16} viewBox="0 0 24 24" />
                             </Button>
@@ -648,7 +648,7 @@ const Overview = ({
                     ) : (
                       <>
                         {currentUserId && !profileSubdomain && (
-                          <a href={`/messages?user=${talent.user.id}`} className="button-link">
+                          <a href={`/messages?user=${talent.user.username}`} className="button-link">
                             <Button className="mr-2" type="white-outline" size="big" onClick={() => null}>
                               <Envelope className="h-100" color="currentColor" size={16} viewBox="0 0 24 24" />
                             </Button>

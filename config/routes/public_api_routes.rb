@@ -9,6 +9,9 @@ module PublicAPIRoutes
             resources :followers, only: [:index]
             resources :supporters, only: [:index]
             resources :connections, only: [:index]
+            resources :sessions, only: [] do
+              get :logged_in_user, on: :collection
+            end
           end
 
           # API non authenticated endpoints
