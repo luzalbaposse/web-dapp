@@ -5,7 +5,7 @@ module PublicAPIRoutes
         namespace :v1 do
           # API authenticated endpoints
           scope module: :public_api, as: "public" do
-            resources :talents, only: [:show]
+            resources :talents, only: [:show, :index]
             resources :followers, only: [:index]
             resources :supporters, only: [:index]
             resources :connections, only: [:index]

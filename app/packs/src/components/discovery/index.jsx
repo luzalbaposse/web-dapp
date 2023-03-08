@@ -9,12 +9,7 @@ import DiscoveryRow from "./discovery_row";
 
 import cx from "classnames";
 
-const Discovery = ({
-  discoveryRows,
-  /*marketingArticles,*/
-  user,
-  railsContext
-}) => {
+const Discovery = ({ discoveryRows, user, railsContext }) => {
   const { mobile } = useWindowDimensionsHook();
 
   return (
