@@ -157,11 +157,13 @@ const Show = ({ talent, railsContext, withPersonaRequest, profileSubdomain }) =>
       <div className="my-7 w-100 col-12" id="#community">
         <Community userId={localTalent.user.uuid} talent={localTalent} canUpdate={canUpdate} />
       </div>
-      <div className="my-7 w-100 col-12" id="#social-graph">
-        <div className="social-graph">
-          <SocialGraph talent={localTalent} />
+      {currentUser?.admin && (
+        <div className="my-7 w-100 col-12" id="#social-graph">
+          <div className="social-graph">
+            <SocialGraph talent={localTalent} />
+          </div>
         </div>
-      </div>
+      )}
       {(showLastDivider || canUpdate) && <Divider className="my-6" />}
       <div className="mt-7 w-100" id="#digital-collectibles">
         <Poaps
