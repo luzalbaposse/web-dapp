@@ -80,7 +80,7 @@ export const SignUpFlow = props => {
         setCreatedUser={setCreatedUser}
         inviteProps={{
           name: props.name,
-          picture: props.profilePictureUrl,
+          profilePictureUrl: props.profilePictureUrl,
           inviteCode: props.inviteCode
         }}
         goToFirstStep={() => stepsState.jumpToStep(props.isDesktop ? 2 : 3)}

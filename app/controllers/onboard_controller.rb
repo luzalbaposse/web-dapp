@@ -32,8 +32,6 @@ class OnboardController < ApplicationController
     end
     if params[:invite_code].present?
       @invite = Invite.find_by("code ILIKE ?", params[:invite_code])
-      @user = @invite&.name
-      @profile_picture_url = @invite&.profile_picture_url
     end
   end
 
