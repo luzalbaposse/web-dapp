@@ -26,7 +26,7 @@ import ResetPassword from "src/components/login/ResetPassword";
 import ChangePassword from "src/components/login/ChangePassword";
 import BottomNav from "src/components/design_system/bottom_nav";
 import TopBar from "src/components/top_bar";
-import EditTalent from "src/components/talent/Edit/Profile";
+import UserSettings from "src/components/talent/Edit/Settings";
 import NewPortfolio from "src/components/portfolio/NewPortfolio";
 import Discovery from "src/components/discovery";
 import DiscoveryShow from "src/components/discovery/show";
@@ -56,7 +56,7 @@ ReactOnRails.register({
   Chat,
   Discovery,
   DiscoveryShow,
-  EditTalent,
+  UserSettings,
   FirstQuestPopup,
   FlashMessages,
   Footer,

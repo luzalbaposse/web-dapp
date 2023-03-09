@@ -17,7 +17,7 @@ class API::V1::PublicAPI::APIController < ActionController::Base
   def validate_api_key
     return if internal_request? && api_key_from_headers.blank?
 
-    return unauthorized_request("API KEY header was not provided.") unless api_key_from_headers
+    return unauthorized_request("API KEY header was not provided.") unless api_key_from_headers.present?
     return unauthorized_request("API KEY provided is invalid.") unless api_key
     return unauthorized_request("API KEY provided was not activated or it was revoked.") unless api_key.active?
   end
