@@ -42,4 +42,8 @@ class OnboardController < ApplicationController
   def profile_subdomain?
     request.domain == ENV["TAL_BASE_DOMAIN"]
   end
+
+  def user
+    @user ||= User.find_by("username=:invite_code or wallet_id=:invite_code or ens_domain=:invite_code", invite_code: params[:invite_code])
+  end
 end
