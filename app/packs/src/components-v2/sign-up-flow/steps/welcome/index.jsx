@@ -43,7 +43,7 @@ export const WelcomeStep = ({ linkedinRedirectUri, linkedinClientId, inviteProps
         </Typography>
       </>
     );
-  }, [state]);
+  }, [state, inviteProps]);
   return state === "loading" ? (
     <LoadingStateContainer>loading</LoadingStateContainer>
   ) : (

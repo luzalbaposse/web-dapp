@@ -5,8 +5,8 @@
       step: 1,
       captchaKey: ENV["RECAPTCHA_SITE_KEY"],
       inviteCode: @invite&.code,
-      profilePictureUrl: @profile_picture_url,
-      name: @user
+      profilePictureUrl: @invite&.profile_picture_url,
+      name: @invite&.name
     },
     prerender: false
 ) %>
