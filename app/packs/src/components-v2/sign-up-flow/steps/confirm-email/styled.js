@@ -1,4 +1,5 @@
-import styled from "styled-components";
+import { desktopStyles } from "@talentprotocol/design-system/breakpoints";
+import styled, { css } from "styled-components";
 
 export const TitleRow = styled.div`
   display: flex;
@@ -6,7 +7,7 @@ export const TitleRow = styled.div`
   gap: 8px;
 `;
 
-export const ErrorContainer = styled.div`
+export const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -15,6 +16,10 @@ export const ErrorContainer = styled.div`
   padding: 0 16px;
   text-align: center;
   gap: 8px;
+
+  ${desktopStyles(css`
+    width: 100%;
+  `)}
 
   svg {
     margin-bottom: 16px;

@@ -1,24 +1,27 @@
 import { Dropdown, Input, Typography } from "@talentprotocol/design-system";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { genderOptions, nationalityOptions } from "../../../../components/talent/Edit/dropdownValues";
 import { TitleRow, Row, RowWithMargin, Form } from "./styled";
 
 export const DefineStep = ({ user, setUser, setIsNextDisable }) => {
-  const [gender, setGender] = useState("");
-  const nationalityRef = useRef(null);
+  const [gender, setGender] = useState(user.gender || "");
+  const [nationality, setNationality] = useState(user.nationality || "");
   const locationRef = useRef(null);
-  const validateStep = useCallback(() => {
-    if (!!gender && nationalityRef.current.value && locationRef.current.value) {
+  const validateStep = useCallback((genderParameter, nationalityParameter) => {
+    if ((!!genderParameter || !!gender) && (!!nationalityParameter || !!nationality) && locationRef.current.value) {
       setUser({
         ...user,
-        gender,
-        nationality: nationalityRef.current.value,
-        locationRef: locationRef.current.value
+        gender: gender || genderParameter,
+        nationality: nationality || nationalityParameter,
+        location: locationRef.current.value
       });
-      setIsNextDisable(false);
     } else {
       setIsNextDisable(true);
     }
-  }, [gender, nationalityRef, locationRef, user, setUser]);
+  }, [gender, nationality, locationRef, user, setUser]);
+  useEffect(() => {
+    setIsNextDisable(false);
+  }, [user, setIsNextDisable]);
   return (
     <>
       <TitleRow>
@@ -35,8 +38,11 @@ export const DefineStep = ({ user, setUser, setIsNextDisable }) => {
             Gender
           </Typography>
           <Dropdown
-            options={["Male", "Female", "Other"]}
-            selectValue={setGender}
+            options={genderOptions}
+            selectValue={value => {
+              setGender(value);
+              validateStep(value);
+            }}
             value={gender || user.gender || ""}
             placeholder="Select a gender"
           />
@@ -45,11 +51,14 @@ export const DefineStep = ({ user, setUser, setIsNextDisable }) => {
           <Typography specs={{ variant: "p2", type: "bold" }} color="primary01">
             Nationality
           </Typography>
-          <Input
-            placeholder="Italian, Japonese, Colombian..."
-            onBlur={validateStep}
-            inputRef={nationalityRef}
-            defaultValue={user.nationality}
+          <Dropdown
+            options={nationalityOptions}
+            selectValue={value => {
+              setNationality(value);
+              validateStep(undefined, value);
+            }}
+            value={nationality || user.nationality || ""}
+            placeholder="Select a nationality"
           />
         </RowWithMargin>
         <RowWithMargin>
@@ -58,6 +67,7 @@ export const DefineStep = ({ user, setUser, setIsNextDisable }) => {
           </Typography>
           <Input
             placeholder="Porto, Portugal"
+            onChange={validateStep}
             onBlur={validateStep}
             inputRef={locationRef}
             defaultValue={user.location}
@@ -67,3 +77,16 @@ export const DefineStep = ({ user, setUser, setIsNextDisable }) => {
     </>
   );
 };
+
+
+/*
+
+          <Input
+            placeholder="Italian, Japonese, Colombian..."
+            onChange={validateStep}
+            onBlur={validateStep}
+            inputRef={nationalityRef}
+            defaultValue={user.nationality}
+          />
+
+*/

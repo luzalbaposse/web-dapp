@@ -1,5 +1,5 @@
 import { Input, Typography } from "@talentprotocol/design-system";
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { TitleRow, Row, RowWithMargin, Form } from "./styled";
 
 export const LegalNameStep = ({ setIsNextDisable, setUser, user }) => {
@@ -11,6 +11,9 @@ export const LegalNameStep = ({ setIsNextDisable, setUser, user }) => {
       setIsNextDisable(false);
     }
   }, [firstNameRef, lastNameRef, setIsNextDisable]);
+  useEffect(() => {
+    validateStep();
+  }, [user]);
   return (
     <>
       <TitleRow>
@@ -27,13 +30,25 @@ export const LegalNameStep = ({ setIsNextDisable, setUser, user }) => {
           <Typography specs={{ variant: "p2", type: "bold" }} color="primary01">
             First Name
           </Typography>
-          <Input placeholder="John" defaultValue={user.firstName} inputRef={firstNameRef} onBlur={validateStep} />
+          <Input
+            placeholder="John"
+            defaultValue={user.firstName}
+            inputRef={firstNameRef}
+            onChange={validateStep}
+            onBlur={validateStep}
+          />
         </Row>
         <RowWithMargin>
           <Typography specs={{ variant: "p2", type: "bold" }} color="primary01">
             Last Name
           </Typography>
-          <Input placeholder="Doe" defaultValue={user.lastName} inputRef={lastNameRef} onBlur={validateStep} />
+          <Input
+            placeholder="Doe"
+            defaultValue={user.lastName}
+            inputRef={lastNameRef}
+            onChange={validateStep}
+            onBlur={validateStep}
+          />
         </RowWithMargin>
       </Form>
     </>

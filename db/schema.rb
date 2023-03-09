@@ -10,9 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_08_100521) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_08_183046) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "api_keys", force: :cascade do |t|
@@ -546,14 +545,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_100521) do
   end
 
   create_table "user_tags", force: :cascade do |t|
-    t.bigint "talent_id"
     t.bigint "tag_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.index ["tag_id"], name: "index_user_tags_on_tag_id"
-    t.index ["talent_id", "tag_id"], name: "index_user_tags_on_talent_id_and_tag_id", unique: true
-    t.index ["talent_id"], name: "index_user_tags_on_talent_id"
     t.index ["user_id"], name: "index_user_tags_on_user_id"
   end
 
@@ -576,8 +572,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_100521) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.string "theme_preference", default: "light"
     t.boolean "disabled", default: false
+    t.string "theme_preference", default: "light"
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"
@@ -682,6 +678,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_100521) do
   add_foreign_key "user_profile_type_changes", "users"
   add_foreign_key "user_profile_type_changes", "users", column: "who_dunnit_id"
   add_foreign_key "user_tags", "tags"
-  add_foreign_key "user_tags", "talent"
   add_foreign_key "user_tags", "users"
 end

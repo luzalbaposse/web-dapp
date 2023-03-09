@@ -38,6 +38,7 @@ export const DesktopSimpleContainer = styled.div`
 
 export const DesktopSimpleInnerContainer = styled.div`
   max-height: 640px;
+  max-width: 456px;
   display: flex;
   flex-direction: column;
   justify-content: center;

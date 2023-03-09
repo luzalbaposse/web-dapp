@@ -1,33 +1,36 @@
 import { Button, Icon, Spinner, Typography } from "@talentprotocol/design-system";
 import React, { useCallback, useEffect, useState } from "react";
 import { users } from "../../../../api";
-import { ErrorContainer, TitleRow } from "./styled";
+import { Container, TitleRow } from "./styled";
 
-export const ConfirmEmailStep = ({ user, goToFirstStep }) => {
+export const ConfirmEmailStep = ({ user, goToFirstStep, setHasCreateAccountError, setCreatedUser }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const createAccountCallback = useCallback(() => {
     users
       .createAccount(user)
-      .then(() => {
+      .then(({ data }) => {
         setIsLoading(false);
         setHasError(false);
+        setHasCreateAccountError(false);
+        setCreatedUser(data);
       })
       .catch(() => {
         setIsLoading(false);
         setHasError(true);
+        setHasCreateAccountError(true);
       });
-  }, [user]);
+  }, [user, setHasCreateAccountError]);
   useEffect(() => {
     createAccountCallback();
   }, [createAccountCallback]);
   return isLoading ? (
-    <ErrorContainer>
+    <Container>
       <Spinner size={64} />
-    </ErrorContainer>
+    </Container>
   ) : (
     (hasError && (
-      <ErrorContainer>
+      <Container>
         <Icon name="question" color="primary04" size={64} />
         <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
           Something went wrong
@@ -36,9 +39,9 @@ export const ConfirmEmailStep = ({ user, goToFirstStep }) => {
           Please check your registration data for errors or reach out to the team
         </Typography>
         <Button hierarchy="primary" size="medium" text="Review data" onClick={goToFirstStep} />
-      </ErrorContainer>
+      </Container>
     )) || (
-      <>
+      <Container>
         <TitleRow>
           <Typography specs={{ variant: "h3", type: "bold" }} color="primary01">
             Lastly, Please check you inbox and confirm your email:
@@ -47,7 +50,7 @@ export const ConfirmEmailStep = ({ user, goToFirstStep }) => {
             {user.email}
           </Typography>
         </TitleRow>
-      </>
+      </Container>
     )
   );
 };

@@ -30,6 +30,13 @@ export const SignUpPage = props => {
   }, [mobile, props]);
   return (
     <TalentThemeProvider>
+      <style>
+        {`
+          #helpkit-launcherButton--talentprotocol {
+            display: none;
+          }
+        `}
+      </style>
       <Container>{pageContent}</Container>
     </TalentThemeProvider>
   );

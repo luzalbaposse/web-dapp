@@ -26,14 +26,15 @@ export const DesktopColoredContainer = styled.div`
 export const DesktopSimpleContainer = styled.div`
   flex-basis: 50%;
   border-radius: 24px;
-  flex-direction: column;
   padding: 48px;
 `;
 
 export const DesktopSimpleInnerContainer = styled.div`
   height: 100%;
+  max-width: 456px;
   display: flex;
   align-items: center;
+  margin: auto;
 
   section {
     width: 100%;

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Input, Typography } from "@talentprotocol/design-system";
 import { Row, Form, TitleRow } from "./styled";
 import { username } from "../../../../api/username";
@@ -27,6 +27,11 @@ export const HandleStep = ({ user, setUser, setIsNextDisable }) => {
         setIsNextDisable(true);
       });
   }, [handleRef, setHandleError, setUser, user]);
+  useEffect(() => {
+    if (user.handle) {
+      validateStep()
+    }
+  }, [user]);
   return (
     <>
       <TitleRow>
@@ -47,6 +52,7 @@ export const HandleStep = ({ user, setUser, setIsNextDisable }) => {
             defaultValue={user.handle}
             inputRef={handleRef}
             hasError={!!handleError}
+            onChange={validateStep}
             onBlur={validateStep}
             shortDescription={handleError}
           />

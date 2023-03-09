@@ -48,6 +48,8 @@ export const SignUpFlow = props => {
   const captchaModalState = useModal();
   const { linkedinClientId, linkedinRedirectUri } = props;
   const [isNextDisabled, setIsNextDisable] = useState(true);
+  const [hasCreateAccountError, setHasCreateAccountError] = useState(false);
+  const [createdUser, setCreatedUser] = useState({});
   const userBuilderState = useUserBuilder();
   useEffect(() => {
     if (userBuilderState.user.code === props.code) return;
@@ -74,12 +76,14 @@ export const SignUpFlow = props => {
         setUser={userBuilderState.setUser}
         linkedinClientId={linkedinClientId}
         linkedinRedirectUri={linkedinRedirectUri}
+        setHasCreateAccountError={setHasCreateAccountError}
+        setCreatedUser={setCreatedUser}
         inviteProps={{
           name: props.name,
           picture: props.profilePictureUrl,
           inviteCode: props.inviteCode
         }}
-        goToFirstStep={() => stepsState.jumpToStep(props.isDesktop ? 1 : 2)}
+        goToFirstStep={() => stepsState.jumpToStep(props.isDesktop ? 2 : 3)}
       />
     ),
     [
@@ -112,13 +116,13 @@ export const SignUpFlow = props => {
       case 2:
         return !props.isDesktop ? <WelcomeFooter /> : MemoizedDefaultFooter;
       case 9:
-        return !props.isDesktop ? MemoizedDefaultFooter : <EmailFooter />;
+        return !props.isDesktop ? MemoizedDefaultFooter : <EmailFooter hasCreateAccountError={hasCreateAccountError} createdUser={createdUser} />;
       case 10:
-        return <EmailFooter />;
+        return <EmailFooter hasCreateAccountError={hasCreateAccountError} createdUser={createdUser} />;
       default:
         return MemoizedDefaultFooter;
     }
-  }, [stepsState.currentStep, isNextDisabled, props.isDesktop]);
+  }, [stepsState.currentStep, isNextDisabled, props.isDesktop, hasCreateAccountError]);
   return (
     <>
       <Modal title="Captcha" isOpen={captchaModalState.isOpen} closeModal={captchaModalState.closeModal}>
@@ -131,7 +135,9 @@ export const SignUpFlow = props => {
         />
       </Modal>
       <Container>
-        {!props.isDesktop && (stepsState.currentStep === 1 || stepsState.currentStep === 10) ? (
+        {(!props.isDesktop && stepsState.currentStep === 1) ||
+        stepsState.currentStep === 10 ||
+        (props.isDesktop && stepsState.currentStep === 9) ? (
           <></>
         ) : (
           <StepCounterContainer>
@@ -142,11 +148,15 @@ export const SignUpFlow = props => {
               /
             </Typography>
             <Typography specs={{ variant: "p2", type: "medium" }} color="primary04">
-              {Object.keys(STEP_TO_COMPONENT_MAP(props.isDesktop)).length}
+              9
             </Typography>
           </StepCounterContainer>
         )}
-        {stepsState.currentStep === 1 ? MemoizedStep : <StepContainer>{MemoizedStep}</StepContainer>}
+        {stepsState.currentStep === 1 || stepsState.currentStep === 10 ? (
+          MemoizedStep
+        ) : (
+          <StepContainer>{MemoizedStep}</StepContainer>
+        )}
       </Container>
       <ActionContainer>{MemoizedActionArea}</ActionContainer>
     </>

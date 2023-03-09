@@ -1,3 +1,4 @@
+import { mobileStyles } from "@talentprotocol/design-system/breakpoints";
 import { desktopStyles } from "@talentprotocol/design-system/breakpoints";
 import styled, { css } from "styled-components";
 
@@ -9,7 +10,9 @@ export const Container = styled.section`
 `;
 
 export const StepContainer = styled.div`
-  padding: 0 16px;
+  ${mobileStyles(css`
+    padding: 0 16px;
+  `)}
 `;
 
 export const StepCounterContainer = styled.div`

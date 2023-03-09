@@ -1,10 +1,10 @@
 import { Pills, Typography } from "@talentprotocol/design-system";
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { TitleRow, PillsContainer } from "./styled";
 
 export const LookingForStep = ({ user, setUser, setIsNextDisable }) => {
   const [tags, setTags] = useState(
-    (user.tags.length && user.tags) || [
+    [
       {
         content: "Full-time roles",
         isSelected: false
@@ -65,7 +65,13 @@ export const LookingForStep = ({ user, setUser, setIsNextDisable }) => {
         content: "Assisting others with their job search",
         isSelected: false
       }
-    ]
+    ].map(value => {
+      const parsedValue = { ...value };
+      if (user.careerNeeds.includes(value.content)) {
+        parsedValue.isSelected = true;
+      }
+      return parsedValue;
+    })
   );
   const updateTags = useCallback(
     index => {
@@ -74,7 +80,7 @@ export const LookingForStep = ({ user, setUser, setIsNextDisable }) => {
       setTags(parsedTags);
       setUser({
         ...user,
-        tags: parsedTags.reduce((acc, el) => {
+        careerNeeds: parsedTags.reduce((acc, el) => {
           if (el.isSelected) {
             acc.push(el.content);
           }
@@ -89,6 +95,13 @@ export const LookingForStep = ({ user, setUser, setIsNextDisable }) => {
     },
     [tags, setTags, user, setUser]
   );
+  useEffect(() => {
+    if (user.careerNeeds.length) {
+      requestAnimationFrame(() => {
+        setIsNextDisable(false);
+      })
+    }
+  }, [user]);
   return (
     <>
       <TitleRow>
@@ -96,7 +109,7 @@ export const LookingForStep = ({ user, setUser, setIsNextDisable }) => {
           What are you looking for?
         </Typography>
         <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
-          Choose up to 5 tags. You can add more later.
+          Choose at least 1 tag. You can add more later.
         </Typography>
       </TitleRow>
       <PillsContainer>

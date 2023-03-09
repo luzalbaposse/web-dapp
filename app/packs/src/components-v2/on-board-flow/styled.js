@@ -1,4 +1,5 @@
 import { buildColor } from "@talentprotocol/design-system";
+import { mobileStyles } from "@talentprotocol/design-system/breakpoints";
 import { desktopStyles } from "@talentprotocol/design-system/breakpoints";
 import styled, { css } from "styled-components";
 
@@ -12,6 +13,10 @@ export const ImageContainer = styled.div`
   width: 100%;
   background-color: ${buildColor("primary")};
   padding: 24px 16px;
+
+  ${mobileStyles(css`
+    padding: 24px 0;
+  `)}
 `;
 
 export const StyledImage = styled.img`

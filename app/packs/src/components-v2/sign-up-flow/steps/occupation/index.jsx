@@ -1,10 +1,10 @@
 import { Pills, Typography } from "@talentprotocol/design-system";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { TitleRow, PillsContainer } from "./styled";
 
 export const OccupationStep = ({ user, setUser, setIsNextDisable }) => {
-  const [careerNeeds, setCareerNeeds] = useState(
-    (user.careerNeeds.length && user.careerNeeds) || [
+  const [tags, setTags] = useState(
+    [
       {
         content: "Web3",
         isSelected: false
@@ -34,7 +34,7 @@ export const OccupationStep = ({ user, setUser, setIsNextDisable }) => {
         isSelected: false
       },
       {
-        content: "Entreprenership",
+        content: "Entrepreneurship",
         isSelected: false
       },
       {
@@ -81,30 +81,43 @@ export const OccupationStep = ({ user, setUser, setIsNextDisable }) => {
         content: "Content creator",
         isSelected: false
       }
-    ]
+    ].map(value => {
+      const parsedValue = { ...value };
+      if (user.tags.includes(value.content)) {
+        parsedValue.isSelected = true;
+      }
+      return parsedValue;
+    })
   );
   const updatePills = useCallback(
     index => {
-      const parsedCareerNeeds = [...careerNeeds];
-      parsedCareerNeeds[index].isSelected = !parsedCareerNeeds[index].isSelected;
-      setCareerNeeds(parsedCareerNeeds);
+      const parsedTags = [...tags];
+      parsedTags[index].isSelected = !parsedTags[index].isSelected;
+      setTags(parsedTags);
       setUser({
         ...user,
-        careerNeeds: parsedCareerNeeds.reduce((acc, el) => {
+        tags: parsedTags.reduce((acc, el) => {
           if (el.isSelected) {
             acc.push(el.content);
           }
           return acc;
         }, [])
       });
-      if (parsedCareerNeeds.some(pill => pill.isSelected)) {
+      if (parsedTags.some(pill => pill.isSelected)) {
         setIsNextDisable(false);
       } else {
         setIsNextDisable(true);
       }
     },
-    [careerNeeds, setCareerNeeds, user, setUser]
+    [tags, setTags, user, setUser]
   );
+  useEffect(() => {
+    if (user.tags.length) {
+      requestAnimationFrame(() => {
+        setIsNextDisable(false);
+      })
+    }
+  }, [user]);
   return (
     <>
       <TitleRow>
@@ -112,11 +125,11 @@ export const OccupationStep = ({ user, setUser, setIsNextDisable }) => {
           What best describes your occupation?
         </Typography>
         <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
-          Choose up to 5 tags. You can add more later.
+          Choose at least 1 tag. You can add more later.
         </Typography>
       </TitleRow>
       <PillsContainer>
-        <Pills onClick={updatePills} pillList={careerNeeds} />
+        <Pills onClick={updatePills} pillList={tags} />
       </PillsContainer>
     </>
   );

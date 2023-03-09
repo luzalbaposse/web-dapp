@@ -92,9 +92,7 @@ module Users
 
       params[:tags].each do |description|
         tag = Tag.find_or_create_by(description: description.downcase)
-        user_tag = UserTag.find_or_initialize_by(user: user, tag: tag)
-
-        user_tag.save! unless user_tag.persisted?
+        UserTag.find_or_create_by!(user: user, tag: tag)
       end
       CareerNeeds::Upsert.new(career_goal: talent.career_goal, titles: params[:career_needs]).call
     end

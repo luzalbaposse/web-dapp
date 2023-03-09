@@ -33,6 +33,10 @@ const createAccount = user => {
   );
 };
 
+const sendConfirmationEmail = userId =>
+  axios.post(`users/${userId}/send_confirmation_email.json`);
+
 export const users = {
-  createAccount
+  createAccount,
+  sendConfirmationEmail
 };

@@ -48,7 +48,10 @@ export const IntroductionStep = ({ user, setUser, setIsNextDisable }) => {
             defaultValue={user.headline}
             hasError={(!isFirstRender && !headline) || headline.length > MAX_CHARACTERS}
             shortDescription={headline.length > MAX_CHARACTERS ? "Max characters reached" : ""}
-            onChange={onChangeCallback}
+            onChange={e => {
+              onChangeCallback(e);
+              validateStep();
+            }}
             onBlur={validateStep}
           />
         </Row>
