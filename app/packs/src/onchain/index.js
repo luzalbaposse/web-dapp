@@ -9,6 +9,7 @@ dayjs.extend(customParseFormat);
 import TalentToken from "../abis/recent/TalentToken.json";
 import Staking from "../abis/recent/Staking.json";
 import TalentFactory from "../abis/recent/TalentFactory.json";
+import TalentFactoryV3 from "../abis/recent/TalentFactoryV3.json";
 import StableToken from "../abis/recent/StableToken.json";
 import CommunityUser from "../abis/recent/CommunityUser.json";
 
@@ -22,6 +23,7 @@ class OnChain {
   constructor(env) {
     this.account = null;
     this.talentFactory = null;
+    this.talentFactoryV3 = null;
     this.staking = null;
     this.stabletoken = null;
     this.stableDecimals = null;
@@ -134,7 +136,7 @@ class OnChain {
       console.log(error);
       // metamask mobile throws an error but that error has no code
       // https://github.com/MetaMask/metamask-mobile/issues/3312
-      if (!!error.code || error.code === 4902) {
+      if (!error.code || error.code === 4902) {
         const web3ModalInstance = await this.web3ModalConnect();
 
         await web3ModalInstance.request({
@@ -210,6 +212,33 @@ class OnChain {
         const factoryAddress = Addresses[this.env][chainId]["factory"];
 
         this.talentFactory = new ethers.Contract(factoryAddress, TalentFactory.abi, provider);
+
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
+
+  async loadFactoryV3() {
+    try {
+      const web3ModalInstance = await this.web3ModalConnect();
+      let provider;
+
+      const chainId = await this.getChainID();
+      if (web3ModalInstance !== undefined) {
+        provider = new ethers.providers.Web3Provider(web3ModalInstance);
+      } else {
+        provider = new ethers.providers.JsonRpcProvider(Addresses[this.env][chainId]["rpcURL"]);
+      }
+
+      if (await this.recognizedChain()) {
+        const factoryAddress = Addresses[this.env][chainId]["factory"];
+
+        this.talentFactoryV3 = new ethers.Contract(factoryAddress, TalentFactoryV3.abi, provider);
 
         return true;
       } else {
@@ -448,6 +477,32 @@ class OnChain {
       return ethers.utils.formatUnits(result);
     } else {
       return result;
+    }
+  }
+
+  async isAddressWhitelisted(address, chainId) {
+    const provider = new ethers.providers.JsonRpcProvider(Addresses[this.env][chainId]["rpcURL"]);
+
+    const factoryAddress = Addresses[this.env][chainId]["factory"];
+    const talentFactoryV3 = new ethers.Contract(factoryAddress, TalentFactoryV3.abi, provider);
+
+    return await talentFactoryV3.whitelist(address);
+  }
+
+  async whitelistAddress(address) {
+    try {
+      if (!this.talentFactoryV3) {
+        return;
+      }
+
+      const tx = await this.talentFactoryV3.connect(this.signer).whitelistAddress(address);
+
+      await tx.wait();
+
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
     }
   }
 
