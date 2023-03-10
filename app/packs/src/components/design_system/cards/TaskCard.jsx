@@ -52,7 +52,7 @@ const TaskCard = ({ title, type, link, status, userId, userUsername, userProfile
     if (title === "Connect wallet" && status !== "done") {
       return (
         <Web3ModalConnect
-          user_id={userId}
+          userId={userId}
           onConnect={() => window.location.reload()}
           railsContext={railsContext}
           buttonClassName={`w-100 extra-big-size-button ${buttonType}-button`}
