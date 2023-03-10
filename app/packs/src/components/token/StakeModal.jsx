@@ -24,7 +24,7 @@ const StakeModal = ({
   tokenAddress,
   tokenId,
   userId,
-  talentUserId,
+  userUsername,
   talentName,
   mode,
   tokenChainId,
@@ -46,7 +46,7 @@ const StakeModal = ({
   const [validChain, setValidChain] = useState(true);
   // eslint-disable-next-line no-unused-vars
   const [valueError, setValueError] = useState(false);
-  const [showNewMessageModal, setShowNewMessageModal] = useState(false);
+  const [showNewMessageModal, setShowNewMessageModal] = useState(true);
   const [chainName, setChainName] = useState("celo");
 
   const setupOnChain = useCallback(async () => {
@@ -249,7 +249,7 @@ const StakeModal = ({
         setShow={setShowNewMessageModal}
         ticker={ticker}
         talentName={talentName}
-        talentId={talentUserId}
+        userUsername={userUsername}
         amountBought={amount * 10}
         mode={mode}
       />
