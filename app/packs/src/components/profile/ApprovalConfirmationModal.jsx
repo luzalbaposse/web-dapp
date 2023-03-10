@@ -74,7 +74,7 @@ const ApprovalConfirmationModal = ({ show, hide, talent, setTalent, railsContext
   const setupChain = useCallback(async () => {
     const newOnChain = new OnChain(railsContext.contractsEnv);
     await newOnChain.retrieveAccount();
-    await newOnChain.loadFactoryV3();
+    await newOnChain.loadFactory();
     for await (const option of getAllChainOptions(railsContext.contractsEnv)) {
       const isWhitelisted = await newOnChain.isAddressWhitelisted(talent.user.walletId, option.id);
       setIsWhitelisted(prev => ({ ...prev, [option.id]: isWhitelisted }));
@@ -92,7 +92,23 @@ const ApprovalConfirmationModal = ({ show, hide, talent, setTalent, railsContext
   }, []);
 
   if (firstLoading) {
-    return <></>;
+    return (
+      <Modal
+        scrollable={true}
+        show={show}
+        onHide={hide}
+        centered
+        dialogClassName={mobile ? "mw-100 mh-100 m-0" : "remove-background"}
+        contentClassName={
+          mobile
+            ? "h-100 d-flex flex-row justify-content-center align-items-center"
+            : "py-7 d-flex flex-row justify-content-center"
+        }
+        fullscreen="true"
+      >
+        <Spinner />
+      </Modal>
+    );
   }
 
   return (
@@ -127,7 +143,7 @@ const ApprovalConfirmationModal = ({ show, hide, talent, setTalent, railsContext
               <Checkbox
                 className="form-check-input mt-4"
                 checked={isWhitelisted[option.id]}
-                disabled={isWhitelisted[option.id]}
+                disabled={isWhitelisted[option.id] || loading}
                 onChange={() => whitelistAddress(option.id)}
               >
                 <div className="d-flex flex-wrap">

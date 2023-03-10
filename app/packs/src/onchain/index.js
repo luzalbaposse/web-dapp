@@ -23,7 +23,6 @@ class OnChain {
   constructor(env) {
     this.account = null;
     this.talentFactory = null;
-    this.talentFactoryV3 = null;
     this.staking = null;
     this.stabletoken = null;
     this.stableDecimals = null;
@@ -211,34 +210,7 @@ class OnChain {
       if (await this.recognizedChain()) {
         const factoryAddress = Addresses[this.env][chainId]["factory"];
 
-        this.talentFactory = new ethers.Contract(factoryAddress, TalentFactory.abi, provider);
-
-        return true;
-      } else {
-        return false;
-      }
-    } catch (error) {
-      console.log(error);
-      return false;
-    }
-  }
-
-  async loadFactoryV3() {
-    try {
-      const web3ModalInstance = await this.web3ModalConnect();
-      let provider;
-
-      const chainId = await this.getChainID();
-      if (web3ModalInstance !== undefined) {
-        provider = new ethers.providers.Web3Provider(web3ModalInstance);
-      } else {
-        provider = new ethers.providers.JsonRpcProvider(Addresses[this.env][chainId]["rpcURL"]);
-      }
-
-      if (await this.recognizedChain()) {
-        const factoryAddress = Addresses[this.env][chainId]["factory"];
-
-        this.talentFactoryV3 = new ethers.Contract(factoryAddress, TalentFactoryV3.abi, provider);
+        this.talentFactory = new ethers.Contract(factoryAddress, TalentFactoryV3.abi, provider);
 
         return true;
       } else {
@@ -484,18 +456,18 @@ class OnChain {
     const provider = new ethers.providers.JsonRpcProvider(Addresses[this.env][chainId]["rpcURL"]);
 
     const factoryAddress = Addresses[this.env][chainId]["factory"];
-    const talentFactoryV3 = new ethers.Contract(factoryAddress, TalentFactoryV3.abi, provider);
+    const talentFactory = new ethers.Contract(factoryAddress, TalentFactoryV3.abi, provider);
 
-    return await talentFactoryV3.whitelist(address);
+    return await talentFactory.whitelist(address);
   }
 
   async whitelistAddress(address) {
     try {
-      if (!this.talentFactoryV3) {
+      if (!this.talentFactory) {
         return;
       }
 
-      const tx = await this.talentFactoryV3.connect(this.signer).whitelistAddress(address);
+      const tx = await this.talentFactory.connect(this.signer).whitelistAddress(address);
 
       await tx.wait();
 
