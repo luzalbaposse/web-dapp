@@ -12,6 +12,7 @@ import drawLabel from "./canvas-utils";
 import { H4 } from "src/components/design_system/typography";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExpand, faCompress, faTimes, faColumns } from "@fortawesome/free-solid-svg-icons";
+import { omit } from "lodash";
 
 const SocialGraph = ({ talent }) => {
   const [showContents, setShowContents] = useState(false);
@@ -23,7 +24,7 @@ const SocialGraph = ({ talent }) => {
   const [hoveredNode, setHoveredNode] = useState(null);
 
   const talentToken = talent.talentToken;
-  const howManyConnections = 50;
+  const howManyConnections = 150;
   const getConnectionTypeCluster = type => {
     switch (type) {
       case "super_connection":
@@ -101,12 +102,12 @@ const SocialGraph = ({ talent }) => {
         : "",
       URL: `https://beta.talentprotocol.com/u/${talent.user.username}`,
       cluster: "0",
-      profile_picture_url: talent.profile_picture_url
+      profile_picture_url: talent.profile_picture_url,
       x: 0,
       y: 0,
       score: 1.5
     });
-    
+
     // add connection nodes & edges
     response.connections.map((connection, i) => {
       nodes.push({
@@ -154,7 +155,7 @@ const SocialGraph = ({ talent }) => {
     <div id="social-graph-wrapper" className={`social-graph-wrapper ` + (showContents ? "show-contents" : "")}>
       <H4 className="text-center mb-3" text="Connections" />
       <SigmaContainer
-        style={{height: "500px"}}
+        style={{ height: "500px" }}
         graphOptions={{ type: "directed" }}
         settings={{
           nodeProgramClasses: { image: getNodeProgramImage() },
