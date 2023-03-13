@@ -8,7 +8,7 @@ module Users
 
     def call(params)
       ActiveRecord::Base.transaction do
-        invite = Invite.find_by(code: params[:invite_code])
+        invite = Invite.find_by(code: params[:code])
         invite&.update(uses: invite.uses + 1)
         params[:invite] = invite if invite
         user = create_user(params)
@@ -61,6 +61,7 @@ module Users
 
     def create_user(params)
       user = User.new(attributes(params))
+      user.onboarded_at = Time.current
       user.save!
       user
     end
@@ -90,7 +91,7 @@ module Users
       talent.update(nationality: params[:nationality])
       talent.update(headline: params[:headline])
 
-      params[:tags].each do |description|
+      params[:tags]&.each do |description|
         tag = Tag.find_or_create_by(description: description.downcase)
         UserTag.find_or_create_by!(user: user, tag: tag)
       end

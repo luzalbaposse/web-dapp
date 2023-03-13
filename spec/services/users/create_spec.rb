@@ -10,7 +10,7 @@ RSpec.describe Users::Create do
       email: email,
       password: password,
       username: username,
-      invite_code: invite_code,
+      code: invite_code,
       wallet_id: wallet_id,
       gender: gender,
       nationality: nationality,
@@ -60,6 +60,15 @@ RSpec.describe Users::Create do
       expect(talent_profile_data["location"]).to eq(location)
       expect(talent_profile_data["nationality"]).to eq(nationality)
       expect(talent_profile_data["headline"]).to eq(headline)
+    end
+
+    it "onboards the created user" do
+      freeze_time do
+        result = create_user
+        user = result[:user]
+
+        expect(user.onboarded_at).to eq(Time.current)
+      end
     end
 
     context "when a display name is provided" do
@@ -161,6 +170,26 @@ RSpec.describe Users::Create do
             source_id: result[:user].id,
             type: InviteUsedNotification
           )
+      end
+    end
+
+    context "when there is an unexpected error" do
+      let(:error) { StandardError.new }
+
+      before do
+        allow(notification_creator_class).to receive(:new).and_raise(error)
+        allow(Rollbar).to receive(:error)
+      end
+
+      it "raises an error" do
+        expect { create_user }.to raise_error(error)
+
+        expect(Rollbar).to have_received(:error).with(
+          error,
+          "Unable to create user with unexpected error.",
+          email: email,
+          username: username
+        )
       end
     end
   end

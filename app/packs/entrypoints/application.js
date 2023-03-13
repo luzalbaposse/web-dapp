@@ -20,7 +20,6 @@ import Notifications from "src/components/notifications";
 
 // New Layout components - @TODO: we need to check which of the above components we'll still be using or not
 
-import RegistrationFlow from "src/components/registration/RegistrationFlow";
 import Login from "src/components/login/Login";
 import ResetPassword from "src/components/login/ResetPassword";
 import ChangePassword from "src/components/login/ChangePassword";
@@ -68,7 +67,6 @@ ReactOnRails.register({
   Notifications,
   ProfileShow,
   QuestShow,
-  RegistrationFlow,
   ResetPassword,
   Rewards,
   TalentKeywordSearch,

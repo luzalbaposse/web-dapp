@@ -52,16 +52,16 @@ module Users
       end
 
       {success: true, user: user}
-    rescue ActiveRecord::RecordNotUnique => e
-      if e.to_s.include?("username")
+    rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid => e
+      error_message = e.message.downcase
+
+      if error_message.include?("username")
         {success: false, errors: {username: "Username is taken"}}
-      elsif e.to_s.include?("email")
+      elsif error_message.include?("email")
         {success: false, errors: {email: "Email is taken"}}
-      else
+      elsif error_message.include?("wallet")
         {success: false, errors: "Wallet already exists in the system"}
       end
-    rescue ActiveRecord::RecordInvalid
-      {success: false, errors: "Wallet already exists in the system"}
     end
 
     private

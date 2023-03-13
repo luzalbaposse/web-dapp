@@ -2,7 +2,7 @@ module CareerNeeds
   class Upsert
     class Error < StandardError; end
 
-    def initialize(career_goal:, titles:)
+    def initialize(career_goal:, titles: [])
       @career_goal = career_goal
       @titles = titles
     end

@@ -137,7 +137,7 @@ const Overview = ({
   });
 
   const saveProfile = async updatedTalent => {
-    const response = await patch(`/api/v1/talent/${talent.id}`, {
+    const response = await patch(`/api/v1/talent/${currentUserId}`, {
       user: {
         ...snakeCaseObject(updatedTalent.user)
       },

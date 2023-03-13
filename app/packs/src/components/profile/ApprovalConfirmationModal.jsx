@@ -29,7 +29,7 @@ const ApprovalConfirmationModal = ({ show, hide, talent, setTalent, railsContext
       }
     };
 
-    const response = await patch(`/api/v1/talent/${talent.id}`, params).catch(() => {
+    const response = await patch(`/api/v1/talent/${talent.user.id}`, params).catch(() => {
       return false;
     });
 

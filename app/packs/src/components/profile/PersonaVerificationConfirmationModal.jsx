@@ -47,7 +47,7 @@ const PersonaVerificationConfirmationModal = ({ show, hide, talent, setTalent, r
             id: talent.user.id
           }
         };
-        patch(`/api/v1/talent/${talent.id}`, params)
+        patch(`/api/v1/talent/${talent.user.id}`, params)
           .then(response => {
             setTalent(prev => ({
               ...prev,
@@ -69,7 +69,7 @@ const PersonaVerificationConfirmationModal = ({ show, hide, talent, setTalent, r
   const saveProfile = async () => {
     setLoading(true);
 
-    const response = await patch(`/api/v1/talent/${talent.id}`, {
+    const response = await patch(`/api/v1/talent/${talent.user.id}`, {
       user: {
         ...snakeCaseObject(editedTalent.user)
       },
