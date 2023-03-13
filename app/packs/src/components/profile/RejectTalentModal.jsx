@@ -20,7 +20,7 @@ const RejectTalentModal = ({ show, setShow, mode, mobile, talent, setTalent }) =
       }
     };
 
-    const response = await patch(`/api/v1/talent/${talent.id}`, params).catch(() => {
+    const response = await patch(`/api/v1/talent/${talent.user.id}`, params).catch(() => {
       return false;
     });
 

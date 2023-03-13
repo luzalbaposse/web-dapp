@@ -36,7 +36,7 @@ RSpec.describe "Talent", type: :request do
 
   describe "#update" do
     let!(:talent) { create :talent, user: current_user }
-    subject(:update_talent_request) { put api_v1_talent_path(id: talent.id, params: params, as: current_user) }
+    subject(:update_talent_request) { put api_v1_talent_path(id: current_user.uuid, params: params, as: current_user) }
 
     let(:params) do
       {
@@ -69,13 +69,13 @@ RSpec.describe "Talent", type: :request do
       let(:role) { "basic" }
 
       it "returns an authorization error" do
-        put api_v1_talent_path(id: talent.id, params: params, as: another_user)
+        put api_v1_talent_path(id: current_user.uuid, params: params, as: another_user)
 
         expect(response).to have_http_status(:unauthorized)
       end
 
       it "renders the appropriate error message" do
-        put api_v1_talent_path(id: talent.id, params: params, as: another_user)
+        put api_v1_talent_path(id: current_user.uuid, params: params, as: another_user)
 
         expect(json).to eq(
           {
@@ -88,7 +88,7 @@ RSpec.describe "Talent", type: :request do
         let(:role) { "admin" }
 
         it "returns a successful response" do
-          put api_v1_talent_path(id: talent.id, params: params, as: another_user)
+          put api_v1_talent_path(id: current_user.uuid, params: params, as: another_user)
 
           expect(response).to have_http_status(:ok)
         end
@@ -98,7 +98,7 @@ RSpec.describe "Talent", type: :request do
         let(:role) { "moderator" }
 
         it "returns a successful response" do
-          put api_v1_talent_path(id: talent.id, params: params, as: another_user)
+          put api_v1_talent_path(id: current_user.uuid, params: params, as: another_user)
 
           expect(response).to have_http_status(:ok)
         end
@@ -146,7 +146,7 @@ RSpec.describe "Talent", type: :request do
 
     context "when the param is an empty string" do
       let!(:talent) { create :talent, user: current_user, profile: {github: "https://github.com/talentprotocol"} }
-      subject(:update_talent_request) { put api_v1_talent_path(id: talent.id, params: params, as: current_user) }
+      subject(:update_talent_request) { put api_v1_talent_path(id: current_user.uuid, params: params, as: current_user) }
 
       let(:params) do
         {

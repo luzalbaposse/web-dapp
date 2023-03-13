@@ -46,6 +46,17 @@ class API::V1::TalentController < ApplicationController
 
   def update
     if !current_user.admin? && !current_user.moderator? && talent.id != current_acting_user.talent&.id
+      Rollbar.error(
+        "You don't have access to perform that action",
+        admin: current_user.admin?,
+        moderator: current_user.moderator?,
+        talent_id: talent.id,
+        acting_talent_id: current_acting_user.talent&.id,
+        talent_params: talent_params.to_h,
+        user_params: user_params.to_h,
+        tag_params: tag_params.to_h,
+        career_need_params: career_need_params.to_h
+      )
       return render json: {error: "You don't have access to perform that action"}, status: :unauthorized
     end
 
@@ -65,7 +76,7 @@ class API::V1::TalentController < ApplicationController
   def talent
     @talent ||=
       if talent_id_param
-        Talent.joins(:user).find_by!("talent.id::text = :id OR users.id::text = :id OR users.uuid::text = :id", id: params[:id])
+        Talent.joins(:user).find_by!("users.id::text = :id OR users.uuid::text = :id", id: params[:id].to_s)
       else
         Talent.find_by!(public_key: params[:talent_id])
       end
