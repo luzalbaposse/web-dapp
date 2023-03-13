@@ -92,7 +92,7 @@ const EditAboutModal = ({ show, hide, talent, setTalent }) => {
       return setValidationErrors(errors);
     }
 
-    const talentResponse = await patch(`/api/v1/talent/${talent.id}`, {
+    const talentResponse = await patch(`/api/v1/talent/${talent.user.id}`, {
       user: {
         ...snakeCaseObject(editedTalent.user)
       },

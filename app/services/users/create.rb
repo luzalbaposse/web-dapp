@@ -90,7 +90,7 @@ module Users
       talent.update(nationality: params[:nationality])
       talent.update(headline: params[:headline])
 
-      params[:tags].each do |description|
+      params[:tags]&.each do |description|
         tag = Tag.find_or_create_by(description: description.downcase)
         UserTag.find_or_create_by!(user: user, tag: tag)
       end
