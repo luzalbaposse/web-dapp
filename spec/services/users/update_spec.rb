@@ -21,6 +21,46 @@ RSpec.describe Users::Update do
   let(:wallet_id) { nil }
   let(:first_quest_popup) { nil }
 
+  context "when a user with the same username already exists" do
+    let(:username) { "dinis" }
+    let(:user_params) { {username: username} }
+
+    before do
+      create :user, username: username
+    end
+
+    it "returns an error" do
+      result = update_user
+
+      expect(result[:success]).to eq(false)
+      expect(result[:errors]).to eq(
+        {
+          username: "Username is taken"
+        }
+      )
+    end
+  end
+
+  context "when a user with the same email already exists" do
+    let(:email) { "dinis@talentprotocol.com" }
+    let(:user_params) { {email: email} }
+
+    before do
+      create :user, email: email
+    end
+
+    it "returns an error" do
+      result = update_user
+
+      expect(result[:success]).to eq(false)
+      expect(result[:errors]).to eq(
+        {
+          email: "Email is taken"
+        }
+      )
+    end
+  end
+
   context "when the wallet_id is passed" do
     let(:wallet_id) { SecureRandom.hex }
 

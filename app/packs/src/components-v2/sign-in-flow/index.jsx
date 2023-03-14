@@ -14,7 +14,7 @@ import {
 } from "./styled";
 
 export const SignInFlow = props => {
-  const { linkedinClientId, linkedinRedirectUri } = props;
+  const { linkedinClientId, linkedinRedirectUri } = props.railsContext;
   const [hasErrors, setHasErrors] = useState(false);
   const formRef = useRef(null);
   const emailRef = useRef(null);

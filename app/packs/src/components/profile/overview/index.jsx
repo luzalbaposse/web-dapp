@@ -452,6 +452,7 @@ const Overview = ({
                             type="primary-default"
                             text={`Buy ${talent.talentToken.ticker}`}
                             onClick={() => setShowStakeModal(true)}
+                            disabled
                           />
                         )}
                         <Button
@@ -497,6 +498,7 @@ const Overview = ({
                               type="primary-default"
                               size="big"
                               text={`Buy $${talent.talentToken.ticker} on Talent Protocol`}
+                              disabled
                               style={{ "min-width": "340px" }}
                               onClick={() => null}
                             />
@@ -634,6 +636,7 @@ const Overview = ({
                             type="primary-default"
                             size="big"
                             text={`Buy ${talent.talentToken.ticker}`}
+                            disabled
                             onClick={() => setShowStakeModal(true)}
                           />
                         )}
@@ -682,6 +685,7 @@ const Overview = ({
                               size="big"
                               style={{ "min-width": "340px" }}
                               text={`Buy $${talent.talentToken.ticker} on Talent Protocol`}
+                              disabled
                               onClick={() => null}
                             />
                           </a>

@@ -13,7 +13,10 @@ module RenderingExtension
       withPersonaTemplateId: ENV["WITH_PERSONA_TEMPLATE_ID"],
       withPersonaEnvironment: ENV["WITH_PERSONA_ENVIRONMENT"],
       withPersonaVerificationsLimit: ENV["WITH_PERSONA_VERIFICATIONS_LIMIT"],
-      talBaseDomain: ENV["TAL_BASE_DOMAIN"]
+      talBaseDomain: ENV["TAL_BASE_DOMAIN"],
+      linkedinClientId: ENV["LINKEDIN_CLIENT_ID"],
+      linkedinRedirectUri: ENV["LINKEDIN_REDIRECT_URI"],
+      captchaKey: ENV["RECAPTCHA_SITE_KEY"]
     }
   end
 end

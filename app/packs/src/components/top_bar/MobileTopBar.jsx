@@ -17,7 +17,8 @@ const MobileUserMenu = ({
   onClickTransak,
   copyCodeToClipboard,
   inviteNumbers,
-  signOut
+  signOut,
+  children
 }) => {
   const [showMenu, setShowMenu] = useState(false);
 
@@ -51,6 +52,7 @@ const MobileUserMenu = ({
           />
         </div>
       </nav>
+      {children}
     </div>
   );
 };

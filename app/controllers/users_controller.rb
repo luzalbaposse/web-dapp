@@ -1,22 +1,4 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: %i[destroy edit_profile show]
-
-  def index
-    if user_params[:email].present?
-      @user = User.find_by(email: user_params[:email].downcase)
-    elsif user_params[:username].present?
-      @user = User.find_by(username: user_params[:username])
-    end
-
-    if @user.present?
-      @user.update!(nounce: SecureRandom.uuid) if @user.nounce.nil?
-
-      render json: {id: @user.id, nounce: @user.nounce}, status: :ok
-    else
-      render json: {error: "Couldn't find the user for that email or username"}, status: :not_found
-    end
-  end
-
   def create
     if !verify_captcha
       render json: {error: "We were unable to validate your captcha.", field: "captcha"}, status: :conflict
@@ -26,21 +8,7 @@ class UsersController < ApplicationController
       render json: {error: "Email is not valid.", field: "email"}, status: :conflict
     else
       service = Users::Create.new
-      @result = service.call(
-        email: user_params[:email],
-        username: user_params[:username],
-        password: user_params[:password],
-        invite_code: user_params[:code],
-        theme_preference: user_params[:theme_preference],
-        legal_first_name: user_params[:legal_first_name],
-        legal_last_name: user_params[:legal_last_name],
-        headline: user_params[:headline],
-        gender: user_params[:gender],
-        location: user_params[:location],
-        nationality: user_params[:nationality],
-        career_needs: user_params[:career_needs],
-        tags: user_params[:tags]
-      )
+      @result = service.call(user_params.to_h)
 
       if @result[:success]
         UserMailer.with(user_id: @result[:user].id).send_sign_up_email.deliver_later(wait: 5.seconds)
@@ -53,11 +21,11 @@ class UsersController < ApplicationController
   end
 
   def edit_profile
-    if @user.id != current_acting_user.id
+    if user.id != current_acting_user.id
       redirect_to root_url
     end
 
-    @talent = @user.talent
+    @talent = user.talent
   end
 
   def send_confirmation_email
@@ -69,22 +37,22 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    return redirect_to root_url unless @user == current_acting_user
+    return redirect_to root_url unless user == current_acting_user
 
-    if @user.valid_delete_account_token?(params[:token])
-      result = Users::Destroy.new(user: @user).call
+    if user.valid_delete_account_token?(params[:token])
+      result = Users::Destroy.new(user: user).call
       return redirect_to root_url, flash: {success: "Account deleted"} if result
 
-      redirect_to account_settings_path(username: @user.username), flash: {error: "Unable to delete account"}
+      redirect_to account_settings_path(username: user.username), flash: {error: "Unable to delete account"}
     else
-      redirect_to account_settings_path(username: @user.username), flash: {error: "Invalid token"}
+      redirect_to account_settings_path(username: user.username), flash: {error: "Invalid token"}
     end
   end
 
   private
 
-  def set_user
-    @user = User.find_by!("username=? or wallet_id=? or ens_domain=?", params[:username], params[:username].downcase, params[:username])
+  def user
+    @user ||= User.find_by!("username=? or wallet_id=? or ens_domain=?", params[:username], params[:username].downcase, params[:username])
   end
 
   def user_params

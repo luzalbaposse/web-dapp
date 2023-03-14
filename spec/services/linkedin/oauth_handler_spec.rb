@@ -155,6 +155,34 @@ RSpec.describe Linkedin::OauthHandler do
       end
     end
 
+    context "when the picture download raises an error" do
+      let(:error) { StandardError.new }
+
+      before do
+        allow(Down).to receive(:open).and_raise(error)
+        allow(Rollbar).to receive(:error)
+      end
+
+      it "returns an successful response" do
+        expect(handle_linkedin_oauth).to eq({success: true, user: user})
+      end
+
+      it "raises the error to Rollbar with extra data" do
+        handle_linkedin_oauth
+
+        expect(Rollbar).to have_received(:error).with(
+          error,
+          "Unable to upload linkedin picture",
+          email_address: "john-doe@gmail.com",
+          display_name: "John Doe",
+          username: "johndoe",
+          linkedin_id: "8U-184SDzjs",
+          lite_profile_request_body: JSON.parse(retrieve_lite_profile_response.body),
+          email_address_request_body: JSON.parse(retrieve_email_address_response.body)
+        )
+      end
+    end
+
     it "calls #retrieve_lite_profile on the client with the access token" do
       handle_linkedin_oauth
 

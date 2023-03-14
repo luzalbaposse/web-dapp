@@ -20,7 +20,6 @@ import Notifications from "src/components/notifications";
 
 // New Layout components - @TODO: we need to check which of the above components we'll still be using or not
 
-import RegistrationFlow from "src/components/registration/RegistrationFlow";
 import Login from "src/components/login/Login";
 import ResetPassword from "src/components/login/ResetPassword";
 import ChangePassword from "src/components/login/ChangePassword";
@@ -42,8 +41,8 @@ import FirstQuestPopup from "src/components/one_time_popups/FirstQuestPopup";
 import FlashMessages from "src/components/FlashMessages";
 import ProfileShow from "src/components/profile/show";
 import OnboardingFlow from "src/components/onboarding/OnboardingFlow";
-import { SignInPage } from "src/components-v2/pages/sign-in";
-import { SignUpPage } from "src/components-v2/pages/sign-up";
+import SignInPage from "src/components-v2/pages/sign-in";
+import SignUpPage from "src/components-v2/pages/sign-up";
 
 import "stylesheets/application.scss";
 
@@ -68,7 +67,6 @@ ReactOnRails.register({
   Notifications,
   ProfileShow,
   QuestShow,
-  RegistrationFlow,
   ResetPassword,
   Rewards,
   TalentKeywordSearch,
