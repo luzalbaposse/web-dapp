@@ -23,7 +23,7 @@ module CareerNeeds
     end
 
     def upsert_career_needs
-      titles.each do |title|
+      titles&.each do |title|
         CareerNeed.find_or_create_by!(career_goal: career_goal, title: title)
       end
     end
