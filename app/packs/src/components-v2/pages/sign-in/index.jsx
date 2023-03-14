@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import { TalentThemeProvider } from "@talentprotocol/design-system";
+import ThemeContainer from "src/contexts/ThemeContext";
 import {
   Container,
   DesktopColoredContainer,
@@ -11,7 +12,7 @@ import { SignInFlow } from "../../sign-in-flow";
 import { useWindowDimensionsHook } from "../../../utils/window";
 import { OnboardingDesktopSlider } from "../../onboarding-desktop-slider";
 
-export const SignInPage = props => {
+const SignInPage = props => {
   const { mobile } = useWindowDimensionsHook(false);
   const pageContent = useMemo(() => {
     if (mobile) return <SignInFlow {...props} />;
@@ -39,5 +40,13 @@ export const SignInPage = props => {
       </style>
       <Container>{pageContent}</Container>
     </TalentThemeProvider>
+  );
+};
+
+export default (props, railsContext) => {
+  return () => (
+    <ThemeContainer>
+      <SignInPage {...props} railsContext={railsContext} />
+    </ThemeContainer>
   );
 };

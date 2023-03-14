@@ -46,11 +46,12 @@ const STEP_TO_COMPONENT_MAP = isDesktop =>
 
 export const SignUpFlow = props => {
   const captchaModalState = useModal();
-  const { linkedinClientId, linkedinRedirectUri } = props;
+  const { linkedinClientId, linkedinRedirectUri } = props.railsContext;
   const [isNextDisabled, setIsNextDisable] = useState(true);
   const [hasCreateAccountError, setHasCreateAccountError] = useState(false);
   const [createdUser, setCreatedUser] = useState({});
   const userBuilderState = useUserBuilder();
+
   useEffect(() => {
     if (userBuilderState.user.code === props.code) return;
     userBuilderState.setUser({
@@ -116,7 +117,11 @@ export const SignUpFlow = props => {
       case 2:
         return !props.isDesktop ? <WelcomeFooter /> : MemoizedDefaultFooter;
       case 9:
-        return !props.isDesktop ? MemoizedDefaultFooter : <EmailFooter hasCreateAccountError={hasCreateAccountError} createdUser={createdUser} />;
+        return !props.isDesktop ? (
+          MemoizedDefaultFooter
+        ) : (
+          <EmailFooter hasCreateAccountError={hasCreateAccountError} createdUser={createdUser} />
+        );
       case 10:
         return <EmailFooter hasCreateAccountError={hasCreateAccountError} createdUser={createdUser} />;
       default:
@@ -127,7 +132,7 @@ export const SignUpFlow = props => {
     <>
       <Modal title="Captcha" isOpen={captchaModalState.isOpen} closeModal={captchaModalState.closeModal}>
         <Captcha
-          captchaKey={props.captchaKey}
+          captchaKey={props.railsContext.captchaKey}
           nextStep={stepsState.nextStep}
           user={userBuilderState.user}
           setUser={userBuilderState.setUser}

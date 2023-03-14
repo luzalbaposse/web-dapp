@@ -7,7 +7,8 @@ module Web3Api
         params = {
           module: "account",
           action: "tokentx",
-          address: wallet_address
+          address: wallet_address,
+          apikey: ENV["BLOCKSCOUT_API_KEY"]
         }
         Faraday.get(BASE_URI, params, headers)
       end

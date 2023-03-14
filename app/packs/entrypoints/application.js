@@ -41,8 +41,8 @@ import FirstQuestPopup from "src/components/one_time_popups/FirstQuestPopup";
 import FlashMessages from "src/components/FlashMessages";
 import ProfileShow from "src/components/profile/show";
 import OnboardingFlow from "src/components/onboarding/OnboardingFlow";
-import { SignInPage } from "src/components-v2/pages/sign-in";
-import { SignUpPage } from "src/components-v2/pages/sign-up";
+import SignInPage from "src/components-v2/pages/sign-in";
+import SignUpPage from "src/components-v2/pages/sign-up";
 
 import "stylesheets/application.scss";
 

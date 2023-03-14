@@ -128,6 +128,17 @@ class Linkedin::OauthHandler
     talent.profile_picture_attacher.context[:omniauth] = true
     talent.profile_picture = Down.open(profile_picture_url)
     talent.save!
+  rescue => error
+    Rollbar.error(
+      error,
+      "Unable to upload linkedin picture",
+      email_address: email_address,
+      display_name: display_name,
+      username: username,
+      linkedin_id: lite_profile["id"],
+      lite_profile_request_body: lite_profile,
+      email_address_request_body: email_address_request_body
+    )
   end
 
   def profile_picture_url
