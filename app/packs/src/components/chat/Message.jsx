@@ -77,7 +77,7 @@ const Message = props => {
     <div className="d-flex flex-row w-100 mt-2 message-div">
       {!previousMessageSameUser && (
         <TalentProfilePicture
-          src={mine ? user.profilePictureUrl : profilePictureUrl}
+          src={mine ? user.profile_picture_url : profilePictureUrl}
           userId={userId}
           link={profileLink}
           height={48}
