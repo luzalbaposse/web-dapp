@@ -143,3 +143,23 @@
     }
   }
 }
+
+.search-dropdown-menu {
+  padding: 0;
+  width: 365px;
+}
+
+.search-dropdown-results {
+  max-height: 425px;
+  overflow-y: auto;
+}
+
+.search-dropdown-results-mobile {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.search-dropdown-modal-body {
+  height: calc(100vh - 82px);
+  // overflow-y: auto;
+}

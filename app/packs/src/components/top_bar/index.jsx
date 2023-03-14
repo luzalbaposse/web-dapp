@@ -22,6 +22,7 @@ import EarnMenu from "src/components/menus/EarnMenu";
 import { H5 } from "src/components/design_system/typography";
 import { Container, IconContainer, InnerContainer } from "./styled";
 import { Icon, Typography } from "@talentprotocol/design-system";
+import SearchDropdown from "./SearchDropdown";
 
 const WARNING_MESSAGE =
   "Token minting is temporarily paused while we are upgrading our smart contracts. This is a temporary warning.";
@@ -294,11 +295,14 @@ export const TopBar = ({
     <div className="navbar-container">
       <nav className={`navbar ${theme.mode()} d-flex justify-content-between align-items-center`}>
         <TransakDone show={transakDone} hide={() => setTransakDone(false)} />
-        <a href="/" className="mr-6">
-          <H5 bold className="mb-0">
-            Talent Protocol
-          </H5>
-        </a>
+        <div className="align-items-center d-flex">
+          <a href="/" className="mr-3">
+            <H5 bold className="mb-0">
+              Talent Protocol
+            </H5>
+          </a>
+          <SearchDropdown className="talent-button white-subtle-button" />
+        </div>
         <div className="d-flex align-items-center">
           <Tab href="/talent" text="Explore" type="white" active={activeTab.includes("/talent")} className="mr-4" />
           <Tab href="/portfolio" text="Portfolio" type="white" active={activeTab === "/portfolio"} className="mr-4" />
