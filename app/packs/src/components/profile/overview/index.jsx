@@ -173,8 +173,8 @@ const Overview = ({
         ...talent,
         profilePictureUrl: response.uploadURL,
         profilePictureData: {
-          // eslint-disable-next-line no-useless-escape
           new_upload: true,
+          // eslint-disable-next-line no-useless-escape
           id: response.uploadURL.match(/\/cache\/([^\?]+)/)[1], // extract key without prefix
           storage: "cache",
           metadata: {

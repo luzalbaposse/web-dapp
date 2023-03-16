@@ -111,6 +111,7 @@ export const EmailPasswordStep = ({ setIsNextDisable, setUser, user }) => {
               fillPills(e.target.value);
               validateStep();
             }}
+            onEnterCallback={validateStep}
           />
         </PasswordRow>
         <Pills pillList={pills} />
@@ -136,6 +137,7 @@ export const EmailPasswordStep = ({ setIsNextDisable, setUser, user }) => {
               }
             }}
             onBlur={validateStep}
+            onEnterCallback={validateStep}
           />
         </PasswordRow>
       </SignUpForm>

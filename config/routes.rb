@@ -111,22 +111,23 @@ Rails.application.routes.draw do
   resources :discovery, only: [:show], param: :slug
 
   # Auth - Clearance generated routes
-
-  resources :passwords, controller: "passwords", only: [:create, :new]
+  resources :passwords, controller: "passwords", only: [:create]
   resource :session, controller: "sessions", only: [:create]
 
   resources :users, only: [:create, :index] do
     post :send_confirmation_email
     resource :password,
       controller: "passwords",
-      only: [:edit, :update]
+      only: [:update]
   end
 
   constraints Routes::FormatConstraints.new(:html) do
     get "/join(/:invite_code)" => "onboard#sign_up", :as => :sign_up
     get "/" => "onboard#sign_in"
     delete "/" => "sessions#new", :as => "sign_in_redirect"
+    get "/passwords/new" => "onboard#forgot_password", :as => "forgot_password"
     get "/confirm_email(/:token)" => "email_confirmations#update", :as => "confirm_email"
+    get "/users(/:user_id)/password(?token=:token)" => "onboard#reset_password"
   end
 
   get "/auth/linkedin/callback", to: "oauth_callbacks#linkedin"

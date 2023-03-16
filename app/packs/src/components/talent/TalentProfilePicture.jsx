@@ -15,8 +15,7 @@ const TalentProfilePicture = ({
   border,
   link,
   style,
-  contained,
-  userId
+  contained
 }) => {
   const { mode } = useTheme();
 

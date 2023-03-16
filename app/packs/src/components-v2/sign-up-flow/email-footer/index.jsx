@@ -7,19 +7,20 @@ import { ToastBody } from "src/components/design_system/toasts";
 
 export const EmailFooter = ({ hasCreateAccountError, createdUser }) => {
   const resendEmailCallback = useCallback(() => {
-    users.sendConfirmationEmail(createdUser.id)
+    users
+      .sendConfirmationEmail(createdUser.uuid)
       .then(() => {
-        toast.success(<ToastBody heading="Success" />)
+        toast.success(<ToastBody heading="Success" />);
       })
       .catch(() => {
-        toast.error(<ToastBody heading="Something happened" />)
+        toast.error(<ToastBody heading="Something happened" />);
       });
   }, [createdUser]);
   return hasCreateAccountError ? (
     <></>
   ) : (
     <ActionArea>
-      <Button size="small" hierarchy="tertiary" text="Resend email" onClick={resendEmailCallback}/>
+      <Button size="medium" hierarchy="tertiary" text="Resend email" onClick={resendEmailCallback} />
     </ActionArea>
   );
-}
+};

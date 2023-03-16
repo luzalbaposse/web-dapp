@@ -7,18 +7,21 @@ export const DefineStep = ({ user, setUser, setIsNextDisable }) => {
   const [gender, setGender] = useState(user.gender || "");
   const [nationality, setNationality] = useState(user.nationality || "");
   const locationRef = useRef(null);
-  const validateStep = useCallback((genderParameter, nationalityParameter) => {
-    if ((!!genderParameter || !!gender) && (!!nationalityParameter || !!nationality) && locationRef.current.value) {
-      setUser({
-        ...user,
-        gender: gender || genderParameter,
-        nationality: nationality || nationalityParameter,
-        location: locationRef.current.value
-      });
-    } else {
-      setIsNextDisable(true);
-    }
-  }, [gender, nationality, locationRef, user, setUser]);
+  const validateStep = useCallback(
+    (genderParameter, nationalityParameter) => {
+      if ((!!genderParameter || !!gender) && (!!nationalityParameter || !!nationality) && locationRef.current.value) {
+        setUser({
+          ...user,
+          gender: gender || genderParameter,
+          nationality: nationality || nationalityParameter,
+          location: locationRef.current.value
+        });
+      } else {
+        setIsNextDisable(true);
+      }
+    },
+    [gender, nationality, locationRef, user, setUser]
+  );
   useEffect(() => {
     setIsNextDisable(false);
   }, [user, setIsNextDisable]);
@@ -77,7 +80,6 @@ export const DefineStep = ({ user, setUser, setIsNextDisable }) => {
     </>
   );
 };
-
 
 /*
 
