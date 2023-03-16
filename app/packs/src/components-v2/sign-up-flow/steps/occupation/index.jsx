@@ -115,7 +115,7 @@ export const OccupationStep = ({ user, setUser, setIsNextDisable }) => {
     if (user.tags.length) {
       requestAnimationFrame(() => {
         setIsNextDisable(false);
-      })
+      });
     }
   }, [user]);
   return (

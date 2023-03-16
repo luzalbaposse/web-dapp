@@ -15,7 +15,7 @@ const Panel = ({ title, initiallyDeployed, children }) => {
         if (dom.current)
           dom.current.parentElement.scrollTo({
             top: dom.current.offsetTop - 5,
-            behavior: "smooth",
+            behavior: "smooth"
           });
       }, DURATION);
   }, [isDeployed]);
@@ -24,12 +24,8 @@ const Panel = ({ title, initiallyDeployed, children }) => {
     <div className="panel" ref={dom}>
       <h2>
         {title}{" "}
-        <button type="button" onClick={() => setIsDeployed((v) => !v)}>
-          {isDeployed ? (
-            <FontAwesomeIcon icon={faChevronUp} />
-          ) : (
-            <FontAwesomeIcon icon={faChevronDown} />
-          )}
+        <button type="button" onClick={() => setIsDeployed(v => !v)}>
+          {isDeployed ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />}
         </button>
       </h2>
       <AnimateHeight duration={DURATION} height={isDeployed ? "auto" : 0}>

@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useSigma } from "@react-sigma/core";
 
 import { drawHover } from "./canvas-utils";
-import drawLabel from "./canvas-utils";
 import useDebounce from "./use-debounce";
 
 const NODE_FADE_COLOR = "#bbb";

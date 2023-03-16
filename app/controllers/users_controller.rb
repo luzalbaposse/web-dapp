@@ -29,11 +29,12 @@ class UsersController < ApplicationController
   end
 
   def send_confirmation_email
-    User.find_by!(id: params[:user_id]).update(email_confirmation_token: Clearance::Token.new)
+    user = User.find_by!(uuid: params[:user_id])
+    user.update(email_confirmation_token: Clearance::Token.new)
 
-    UserMailer.with(user_id: params[:user_id]).send_sign_up_email.deliver_later
+    UserMailer.with(user_id: user.uuid).send_sign_up_email.deliver_later
 
-    render json: {id: params[:user_id]}, status: :ok
+    render json: {uuid: user.uuid}, status: :ok
   end
 
   def destroy

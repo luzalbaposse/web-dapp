@@ -4,7 +4,7 @@ const TEXT_COLOR = "#000000";
  * This function draw in the input canvas 2D context a rectangle.
  * It only deals with tracing the path, and does not fill or stroke.
  */
-export function drawRoundRect( ctx, x, y, width, height, radius ) {
+export function drawRoundRect(ctx, x, y, width, height, radius) {
   ctx.beginPath();
   ctx.moveTo(x + radius, y);
   ctx.lineTo(x + width - radius, y);
@@ -22,14 +22,13 @@ export function drawRoundRect( ctx, x, y, width, height, radius ) {
  * Custom hover renderer
  */
 export function drawHover(context, data, settings) {
-
   const size = settings.labelSize;
   const font = settings.labelFont;
   const weight = settings.labelWeight;
   const connectionTypeLabelSize = size - 2;
 
   const label = data.label;
-  const connectionTypeLabel = data.clusterLabel;//data.tag !== "unknown" ? data.tag : "";
+  const connectionTypeLabel = data.clusterLabel; //data.tag !== "unknown" ? data.tag : "";
   const coinsLabel = data.coinLabel;
 
   // Then we draw the label background

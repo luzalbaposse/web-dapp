@@ -99,7 +99,7 @@ export const LookingForStep = ({ user, setUser, setIsNextDisable }) => {
     if (user.careerNeeds.length) {
       requestAnimationFrame(() => {
         setIsNextDisable(false);
-      })
+      });
     }
   }, [user]);
   return (

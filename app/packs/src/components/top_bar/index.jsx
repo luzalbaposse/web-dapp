@@ -81,12 +81,15 @@ export const TopBar = ({
   stopImpersonationPath
 }) => {
   const [isWarningEnabled, setIsWarningEnabled] = useState(() => {
+    return false; 
+    /*
     if (typeof window !== "undefined") {
       const hasDisabledWarning = sessionStorage.getItem("hasDisabledWarning");
       if (!hasDisabledWarning) return true;
       return false;
     }
     return false;
+    */
   });
   const url = new URL(document.location);
   const [walletConnected, setWalletConnected] = useState(false);

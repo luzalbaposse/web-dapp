@@ -93,8 +93,7 @@ const RewardsModal = ({
             type="primary-default"
             size="big"
             onClick={claim}
-            disabled
-            //disabled={loadingRewards || railsContext.disableSmartContracts == "true"}
+            disabled={loadingRewards || railsContext.disableSmartContracts == "true"}
           >
             Buy ${activeTalent.symbol} {loadingRewards ? <FontAwesomeIcon icon={faSpinner} spin /> : ""}
           </Button>

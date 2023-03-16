@@ -35,6 +35,12 @@ class OnboardController < ApplicationController
     end
   end
 
+  def forgot_password
+  end
+
+  def reset_password
+  end
+
   private
 
   def profile_subdomain?

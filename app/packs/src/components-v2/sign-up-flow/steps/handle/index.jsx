@@ -29,7 +29,7 @@ export const HandleStep = ({ user, setUser, setIsNextDisable }) => {
   }, [handleRef, setHandleError, setUser, user]);
   useEffect(() => {
     if (user.handle) {
-      validateStep()
+      validateStep();
     }
   }, [user]);
   return (

@@ -25,7 +25,7 @@ RSpec.describe UserMailer, type: :mailer do
     end
 
     it "assigns reset password url" do
-      expect { url_for([user, :password, action: :edit, token: user.confirmation_token]) }.not_to raise_error
+      expect { url_for(controller: "onboard", action: "reset_password", user_id: user.uuid, token: user.confirmation_token) }.not_to raise_error
     end
   end
 

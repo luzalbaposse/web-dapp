@@ -1,4 +1,4 @@
-import React, { KeyboardEvent, ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSigma } from "@react-sigma/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -21,11 +21,7 @@ const SearchField = ({ filters }) => {
     const lcSearch = search.toLowerCase();
     if (!selected && search.length > 1) {
       sigma.getGraph().forEachNode((key, attributes) => {
-        if (
-          !attributes.hidden &&
-          attributes.label &&
-          attributes.label.toLowerCase().indexOf(lcSearch) === 0
-        )
+        if (!attributes.hidden && attributes.label && attributes.label.toLowerCase().indexOf(lcSearch) === 0)
           newValues.push({ id: key, label: attributes.label });
       });
     }
@@ -50,7 +46,7 @@ const SearchField = ({ filters }) => {
       sigma.getCamera().animate(
         { ...nodeDisplayData, ratio: 0.05 },
         {
-          duration: 600,
+          duration: 600
         }
       );
 
@@ -59,9 +55,9 @@ const SearchField = ({ filters }) => {
     };
   }, [selected]);
 
-  const onInputChange = (e) => {
+  const onInputChange = e => {
     const searchString = e.target.value;
-    const valueItem = values.find((value) => value.label === searchString);
+    const valueItem = values.find(value => value.label === searchString);
     if (valueItem) {
       setSearch(valueItem.label);
       setValues([]);
@@ -72,7 +68,7 @@ const SearchField = ({ filters }) => {
     }
   };
 
-  const onKeyPress = (e) => {
+  const onKeyPress = e => {
     if (e.key === "Enter" && values.length) {
       setSearch(values[0].label);
       setSelected(values[0].id);
@@ -91,7 +87,7 @@ const SearchField = ({ filters }) => {
       />
       <FontAwesomeIcon icon={faSearch} className={"icon"} />
       <datalist id="nodes">
-        {values.map((value) => (
+        {values.map(value => (
           <option key={value.id} value={value.label}>
             {value.label}
           </option>

@@ -6,21 +6,21 @@ import { keyBy, omit } from "lodash";
 const GraphDataController = ({ dataset, filters, children }) => {
   const sigma = useSigma();
   const graph = sigma.getGraph();
-  const { positions, assign } = useLayoutCirclepack({
+  const { assign } = useLayoutCirclepack({
     center: 0,
     hierarchyAttributes: ["cluster"],
     scale: 10
   });
 
-  const calcMinMaxFromSize = (size,min=true) => {
-    if(min){
-      if(size<30)return 24;
-      if(size>80)return 12;
-    }else{
-      if(size<30)return 50;
-      if(size>80)return 30;
+  const calcMinMaxFromSize = (size, min = true) => {
+    if (min) {
+      if (size < 30) return 10;
+      if (size > 80) return 5;
+    } else {
+      if (size < 30) return 50;
+      if (size > 80) return 30;
     }
-  }
+  };
   /**
    * Feed graphology with the new dataset:
    */
@@ -42,7 +42,7 @@ const GraphDataController = ({ dataset, filters, children }) => {
     const minDegree = Math.min(...scores);
     const maxDegree = Math.max(...scores);
     const MIN_NODE_SIZE = calcMinMaxFromSize(dataset.nodes.length);
-    const MAX_NODE_SIZE = calcMinMaxFromSize(dataset.nodes.length,false);
+    const MAX_NODE_SIZE = calcMinMaxFromSize(dataset.nodes.length, false);
     graph.forEachNode(node =>
       graph.setNodeAttribute(
         node,
@@ -63,7 +63,7 @@ const GraphDataController = ({ dataset, filters, children }) => {
    */
   useEffect(() => {
     const { clusters } = filters;
-    graph.forEachNode((node, { cluster, tag }) => graph.setNodeAttribute(node, "hidden", !clusters[cluster]));
+    graph.forEachNode((node, { cluster }) => graph.setNodeAttribute(node, "hidden", !clusters[cluster]));
   }, [graph, filters]);
 
   return <>{children}</>;

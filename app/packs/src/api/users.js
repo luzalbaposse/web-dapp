@@ -1,12 +1,9 @@
 import axios from "axios";
-import { defaultHeaders, getAuthToken } from "./utils";
+import { defaultHeaders, appendCSRFToken } from "./utils";
 
 const createAccount = user => {
-  const headers = defaultHeaders();
-
-  if (getAuthToken) {
-    headers["X-CSRF-Token"] = getAuthToken();
-  }
+  const baseHeaders = defaultHeaders();
+  const headers = appendCSRFToken(baseHeaders);
   return axios.post(
     "/users.json",
     {
@@ -33,10 +30,28 @@ const createAccount = user => {
   );
 };
 
-const sendConfirmationEmail = userId =>
-  axios.post(`users/${userId}/send_confirmation_email.json`);
+const sendConfirmationEmail = userUUID => axios.post(`users/${userUUID}/send_confirmation_email.json`);
+
+const sendResetPasswordEmail = email => axios.post("/passwords", { email });
+
+const resetPassword = (userUUID, token, password) => {
+  const baseHeaders = defaultHeaders();
+  const headers = appendCSRFToken(baseHeaders);
+
+  return axios.put(`/users/${userUUID}/password`, {
+    token,
+    password_reset: { password }
+  }, {
+    headers: {
+      ...headers
+    }
+  });
+
+}
 
 export const users = {
   createAccount,
-  sendConfirmationEmail
+  sendConfirmationEmail,
+  sendResetPasswordEmail,
+  resetPassword
 };

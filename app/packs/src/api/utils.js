@@ -6,3 +6,11 @@ export const defaultHeaders = () => {
     "Content-Type": "application/json"
   };
 };
+
+export const appendCSRFToken = (headers) => {
+  const parsedHeaders = {...headers};
+  if (getAuthToken) {
+    parsedHeaders["X-CSRF-Token"] = getAuthToken();
+  }
+  return parsedHeaders;
+}

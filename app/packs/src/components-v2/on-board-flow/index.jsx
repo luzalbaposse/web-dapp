@@ -30,7 +30,7 @@ const SLIDER_CONTENT = [
     }
   },
   {
-    title: "Support the people you believe in.",
+    title: "Support people you believe in.",
     description:
       "Transform loose connections into meaningful connections. Discover inspiring talent to support, contribute to their professional journey, and unlock perks and rewards as they grow.",
     image: {
@@ -65,7 +65,7 @@ export const OnBoardFlow = ({ isDesktop = false, nextStep }) => {
     return sliderState.selectedElement < SLIDER_CONTENT.length - 1 ? (
       <>
         <Button hierarchy="primary" size="large" text="Next" isStretched onClick={sliderState.jumpElement} />
-        <Button hierarchy="tertiary" size="large" text="I already have an account" isStretched href="/ " />
+        <Button hierarchy="tertiary" size="large" text="I already have an account" isStretched href="/" />
       </>
     ) : (
       <Button hierarchy="primary" size="large" text="Join the community" onClick={nextStep} isStretched />

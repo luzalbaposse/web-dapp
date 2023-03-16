@@ -43,6 +43,8 @@ import ProfileShow from "src/components/profile/show";
 import OnboardingFlow from "src/components/onboarding/OnboardingFlow";
 import SignInPage from "src/components-v2/pages/sign-in";
 import SignUpPage from "src/components-v2/pages/sign-up";
+import ForgotPasswordPage from "src/components-v2/pages/forgot-password";
+import SetPasswordPage from "src/components-v2/pages/set-password";
 
 import "stylesheets/application.scss";
 
@@ -78,7 +80,9 @@ ReactOnRails.register({
   Support,
   UserSupportPage,
   SignInPage,
-  SignUpPage
+  SignUpPage,
+  ForgotPasswordPage,
+  SetPasswordPage
 });
 
 Rails.start();
