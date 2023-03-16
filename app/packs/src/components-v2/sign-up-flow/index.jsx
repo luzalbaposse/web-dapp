@@ -12,6 +12,7 @@ import { IntroductionStep } from "./steps/introduction";
 import { ConfirmEmailStep } from "./steps/confirm-email";
 import { useUserBuilder } from "./hooks/use-user-builder";
 import { WelcomeFooter } from "./welcome-footer";
+import { CreateAccountFooter } from "./create-account-footer";
 import { DefaultFooter } from "./default-footer";
 import { ActionContainer, Container, StepContainer, StepCounterContainer } from "./styled";
 import { EmailFooter } from "./email-footer";
@@ -73,6 +74,7 @@ export const SignUpFlow = props => {
         openCaptchaModal={captchaModalState.openModal}
         nextStep={stepsState.nextStep}
         setIsNextDisable={setIsNextDisable}
+        isNextDisabled={isNextDisabled}
         user={userBuilderState.user}
         setUser={userBuilderState.setUser}
         linkedinClientId={linkedinClientId}
@@ -91,6 +93,7 @@ export const SignUpFlow = props => {
       captchaModalState,
       stepsState,
       setIsNextDisable,
+      isNextDisabled,
       useUserBuilder,
       linkedinClientId,
       linkedinRedirectUri,
@@ -116,9 +119,21 @@ export const SignUpFlow = props => {
         return !props.isDesktop ? <></> : <WelcomeFooter />;
       case 2:
         return !props.isDesktop ? <WelcomeFooter /> : MemoizedDefaultFooter;
-      case 9:
+      case 8:
         return !props.isDesktop ? (
           MemoizedDefaultFooter
+        ) : (
+          <CreateAccountFooter 
+            previousStep={stepsState.previousStep}
+            openCaptchaModal={captchaModalState.openModal}
+            isNextDisabled={isNextDisabled}/>
+        );
+      case 9:
+        return !props.isDesktop ? (
+          <CreateAccountFooter 
+            previousStep={stepsState.previousStep}
+            openCaptchaModal={captchaModalState.openModal}
+            isNextDisabled={isNextDisabled}/>
         ) : (
           <EmailFooter hasCreateAccountError={hasCreateAccountError} createdUser={createdUser} />
         );

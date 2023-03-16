@@ -8,7 +8,7 @@ import {
   PrivacyPolicyStatementContainer
 } from "./styled";
 
-export const WelcomeStep = ({ linkedinRedirectUri, linkedinClientId, inviteProps, openCaptchaModal }) => {
+export const WelcomeStep = ({ linkedinRedirectUri, linkedinClientId, inviteProps, nextStep }) => {
   const [state, setState] = useState("loading");
   const signInWithLinkedinURL = useMemo(
     () =>
@@ -57,7 +57,7 @@ export const WelcomeStep = ({ linkedinRedirectUri, linkedinClientId, inviteProps
           iconColor="bg01"
           text="Sign up with Email"
           isStretched
-          onClick={openCaptchaModal}
+          onClick={nextStep}
         />
         <Button
           hierarchy="secondary"
