@@ -32,9 +32,6 @@ export const Update = ({ data, profile, currentUserId }) => {
   const debouncedNewMessage = debounce(() => sendNewMessage(), 200);
 
   const disabled = () => {
-    console.log(currentUserId);
-    console.log(profile.user.uuid);
-    console.log(!currentUserId || currentUserId == profile.user.uuid);
     return !currentUserId || currentUserId == profile.user.uuid;
   };
 
