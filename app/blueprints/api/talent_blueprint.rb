@@ -1,6 +1,6 @@
 class API::TalentBlueprint < Blueprinter::Base
   view :normal do
-    fields :username, :name, :email, :profile_picture_url
+    fields :username, :name, :email, :profile_picture_url, :ticker
 
     field :wallet_address do |user, _options|
       user.wallet_id
@@ -8,6 +8,10 @@ class API::TalentBlueprint < Blueprinter::Base
 
     field :headline do |user, _options|
       user.talent&.headline
+    end
+
+    field :occupation do |user, _options|
+      user.talent&.occupation
     end
   end
 
