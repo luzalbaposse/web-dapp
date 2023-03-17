@@ -109,7 +109,7 @@ const SocialGraph = ({ talent }) => {
     });
 
     // add connection nodes & edges
-    response.connections.map((connection) => {
+    response.connections.map(connection => {
       nodes.push({
         key: connection.username,
         label: connection.name,

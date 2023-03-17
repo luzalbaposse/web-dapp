@@ -23,7 +23,8 @@ import { H5 } from "src/components/design_system/typography";
 import { Container, IconContainer, InnerContainer } from "./styled";
 import { Icon, Typography } from "@talentprotocol/design-system";
 
-const WARNING_MESSAGE = "Token minting is temporarily paused while we are upgrading our smart contracts. This is a temporary warning.";
+const WARNING_MESSAGE =
+  "Token minting is temporarily paused while we are upgrading our smart contracts. This is a temporary warning.";
 
 const UnreadMessagesIndicator = () => {
   return (
@@ -81,7 +82,7 @@ export const TopBar = ({
   stopImpersonationPath
 }) => {
   const [isWarningEnabled, setIsWarningEnabled] = useState(() => {
-    return false; 
+    return false;
     /*
     if (typeof window !== "undefined") {
       const hasDisabledWarning = sessionStorage.getItem("hasDisabledWarning");
@@ -264,27 +265,27 @@ export const TopBar = ({
         userHasInvitesLeft={userHasInvitesLeft}
         signOut={signOut}
       >
-
-      {
-        isWarningEnabled && (
+        {isWarningEnabled && (
           <Container>
             <InnerContainer>
               <Typography specs={{ variant: "p3", type: "bold" }} color="primary01">
-                  Alert:
+                Alert:
               </Typography>
               <Typography specs={{ variant: "p3", type: "regular" }} color="primary02">
-                  {WARNING_MESSAGE}
+                {WARNING_MESSAGE}
               </Typography>
-              <IconContainer onClick={() => {
-                setIsWarningEnabled(false);
-                sessionStorage.setItem("hasDisabledWarning", "true");
-              }}>
+              <IconContainer
+                onClick={() => {
+                  setIsWarningEnabled(false);
+                  sessionStorage.setItem("hasDisabledWarning", "true");
+                }}
+              >
                 <Icon name="remove" color="primary01" size={12} />
               </IconContainer>
             </InnerContainer>
-          </Container>  
+          </Container>
         )}
-        </MobileTopBar>
+      </MobileTopBar>
     );
   }
 
@@ -332,25 +333,26 @@ export const TopBar = ({
           <Notifications mode={theme.mode()} />
         </div>
       </nav>
-      {
-        isWarningEnabled && (
-          <Container>
-            <InnerContainer>
-              <Typography specs={{ variant: "p3", type: "bold" }} color="primary01">
-                  Alert:
-              </Typography>
-              <Typography specs={{ variant: "p3", type: "regular" }} color="primary02">
-                  {WARNING_MESSAGE}
-              </Typography>
-              <IconContainer onClick={() => {
+      {isWarningEnabled && (
+        <Container>
+          <InnerContainer>
+            <Typography specs={{ variant: "p3", type: "bold" }} color="primary01">
+              Alert:
+            </Typography>
+            <Typography specs={{ variant: "p3", type: "regular" }} color="primary02">
+              {WARNING_MESSAGE}
+            </Typography>
+            <IconContainer
+              onClick={() => {
                 setIsWarningEnabled(false);
                 sessionStorage.setItem("hasDisabledWarning", "true");
-              }}>
-                <Icon name="remove" color="primary01" size={12} />
-              </IconContainer>
-            </InnerContainer>
-          </Container>  
-        )}
+              }}
+            >
+              <Icon name="remove" color="primary01" size={12} />
+            </IconContainer>
+          </InnerContainer>
+        </Container>
+      )}
     </div>
   );
 };

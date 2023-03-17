@@ -123,17 +123,19 @@ export const SignUpFlow = props => {
         return !props.isDesktop ? (
           MemoizedDefaultFooter
         ) : (
-          <CreateAccountFooter 
+          <CreateAccountFooter
             previousStep={stepsState.previousStep}
             openCaptchaModal={captchaModalState.openModal}
-            isNextDisabled={isNextDisabled}/>
+            isNextDisabled={isNextDisabled}
+          />
         );
       case 9:
         return !props.isDesktop ? (
-          <CreateAccountFooter 
+          <CreateAccountFooter
             previousStep={stepsState.previousStep}
             openCaptchaModal={captchaModalState.openModal}
-            isNextDisabled={isNextDisabled}/>
+            isNextDisabled={isNextDisabled}
+          />
         ) : (
           <EmailFooter hasCreateAccountError={hasCreateAccountError} createdUser={createdUser} />
         );

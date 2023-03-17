@@ -38,16 +38,19 @@ const resetPassword = (userUUID, token, password) => {
   const baseHeaders = defaultHeaders();
   const headers = appendCSRFToken(baseHeaders);
 
-  return axios.put(`/users/${userUUID}/password`, {
-    token,
-    password_reset: { password }
-  }, {
-    headers: {
-      ...headers
+  return axios.put(
+    `/users/${userUUID}/password`,
+    {
+      token,
+      password_reset: { password }
+    },
+    {
+      headers: {
+        ...headers
+      }
     }
-  });
-
-}
+  );
+};
 
 export const users = {
   createAccount,
