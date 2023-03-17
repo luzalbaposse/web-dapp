@@ -42,4 +42,9 @@ export const ForgotPasswordPage = props => {
   );
 };
 
-export default ForgotPasswordPage;
+
+export default (props, railsContext) => {
+  return () => (
+    <ForgotPasswordPage {...props} railsContext={railsContext} />
+  );
+};

@@ -139,7 +139,8 @@ Rails.application.routes.draw do
   resources :wait_list, only: [:create, :index]
 
   get "/u/:username/delete_account" => "users#destroy", :as => "delete_account", :constraints => {username: /[^\/]+/}
-  get "/u/:username" => "profiles#show", :as => "user", :constraints => {username: /[^\/]+/}
+  get "/u/:username/profile" => "profiles#show", :as => "user_profile", :constraints => {username: /[^\/]+/}
+  get "/u/:username" => "profiles#talentmodels", :as => "user", :constraints => {username: /[^\/]+/}
   get "/u/:username/account_settings" => "users#edit_profile", :as => "account_settings", :constraints => {username: /[^\/]+/}
   # redirect /talent to /u so we have the old route still working
   get "/talent/:username", to: redirect("/u/%{username}"), as: "talent_profile"
