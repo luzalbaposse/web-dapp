@@ -16,6 +16,11 @@ class ProfilesController < ApplicationController
     )
 
     @with_persona_request = WithPersonaRequestBlueprint.render_as_json(WithPersonaRequest.current_month_persona_request)
+
+    respond_to do |format|
+      format.html {}
+      format.json { render json: {profile: @talent}, status: :ok }
+    end
   end
 
   private
