@@ -15,7 +15,7 @@ export const FinalHero = ({ profile }) => (
         {!!profile.profile.headline && profile.profile.headline
           .split(" ")
           .map((word, index) =>
-            profile.profile.highlighted_headline_words_index.includes(index) ? (
+            (!!profile.profile.highlighted_headline_words_index ? profile.profile.highlighted_headline_words_index : []).includes(index) ? (
               <HighlightedWord key={word + index}>{word} </HighlightedWord>
             ) : (
               <React.Fragment key={word + index}>{word} </React.Fragment>
