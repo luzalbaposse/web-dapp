@@ -30,6 +30,7 @@ export const ListItem = styled.div`
 export const ListItemInfo = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
 `;
 
 export const ListItemInfoRow = styled.div`
