@@ -1,10 +1,20 @@
-class API::V1::FollowsController < ApplicationController
+class API::V1::PublicAPI::FollowsController < ApplicationController
+  before_action :internal_only
+
   def index
-    @follows = current_user.follows
-    @following = current_user.following
+    user = current_impersonated_user || current_user
+    return not_found unless user
+
+    render json: {
+      follows: current_user.follows,
+      following: current_user.following
+    }, status: :ok
   end
 
   def create
+    user = current_impersonated_user || current_user
+    return not_found unless user
+
     Follows::Create.new(follower_user: current_user, following_user: following_user).call
 
     render json: {success: "Follow successfully created."}, status: :created
@@ -16,6 +26,9 @@ class API::V1::FollowsController < ApplicationController
   end
 
   def destroy
+    user = current_impersonated_user || current_user
+    return not_found unless user
+
     follow = Follow.find_by!(user: following_user, follower: current_user)
 
     Follows::Destroy.new(follow: follow).call
