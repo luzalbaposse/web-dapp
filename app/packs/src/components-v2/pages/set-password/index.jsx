@@ -20,7 +20,7 @@ export const SetPasswordPage = props => {
   const parsedProps = {
     ...props,
     ...urlParams
-  }
+  };
   const { mobile } = useWindowDimensionsHook(false);
   const pageContent = useMemo(() => {
     if (mobile) return <SetPasswordFLow {...parsedProps} />;
@@ -51,4 +51,6 @@ export const SetPasswordPage = props => {
   );
 };
 
-export default SetPasswordPage;
+export default (props, railsContext) => {
+  return () => <SetPasswordPage {...props} railsContext={railsContext} />;
+};

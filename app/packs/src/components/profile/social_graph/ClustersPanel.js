@@ -59,7 +59,7 @@ const ClustersPanel = ({ clusters, filters, toggleCluster, setClusters }) => {
         <button className="btn" onClick={() => setClusters(mapValues(keyBy(clusters, "key"), () => true))}>
           <FontAwesomeIcon icon={faCheckCircle} /> Check all
         </button>{" "}
-        <button className="btn" onClick={() => setClusters(mapValues(keyBy(clusters, "key"), (key) => key.key == 0))}>
+        <button className="btn" onClick={() => setClusters(mapValues(keyBy(clusters, "key"), key => key.key == 0))}>
           <FontAwesomeIcon icon={faTimesCircle} /> Uncheck all
         </button>
       </p>

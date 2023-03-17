@@ -2,15 +2,17 @@ import { Input, Typography } from "@talentprotocol/design-system";
 import React, { useCallback, useEffect, useRef } from "react";
 import { TitleRow, Row, RowWithMargin, Form } from "./styled";
 
-export const LegalNameStep = ({ setIsNextDisable, setUser, user }) => {
+export const LegalNameStep = ({ setIsNextDisable, setUser, user, isNextDisabled }) => {
   const firstNameRef = useRef(null);
   const lastNameRef = useRef(null);
   const validateStep = useCallback(() => {
-    if (firstNameRef.current.value && lastNameRef.current.value) {
+    if (firstNameRef.current.value && lastNameRef.current.value && isNextDisabled) {
       setUser({ ...user, firstName: firstNameRef.current.value, lastName: lastNameRef.current.value });
       setIsNextDisable(false);
+    } else if ((!firstNameRef.current.value || !lastNameRef.current.value) && !isNextDisabled) {
+      setIsNextDisable(true);
     }
-  }, [firstNameRef, lastNameRef, setIsNextDisable]);
+  }, [firstNameRef, lastNameRef, setIsNextDisable, isNextDisabled]);
   useEffect(() => {
     validateStep();
   }, [user]);
