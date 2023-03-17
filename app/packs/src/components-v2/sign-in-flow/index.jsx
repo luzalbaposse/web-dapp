@@ -39,7 +39,7 @@ export const SignInFlow = props => {
     [emailRef, passwordRef]
   );
   const submitSignInForm = useCallback(() => {
-    formRef?.current.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }))
+    formRef?.current.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
   }, [formRef]);
   return (
     <Container>
@@ -71,13 +71,7 @@ export const SignInFlow = props => {
         </PasswordBox>
       </SignInFormContainer>
       <ActionContainer>
-        <Button
-          hierarchy="primary"
-          size="large"
-          isStretched
-          text="Login"
-          onClick={submitSignInForm}
-        />
+        <Button hierarchy="primary" size="large" isStretched text="Login" onClick={submitSignInForm} />
         <Divider>
           <DividerLine />
           <Typography specs={{ variant: "p2", type: "medium" }} color="primary03">

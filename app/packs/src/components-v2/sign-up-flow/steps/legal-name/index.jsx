@@ -6,10 +6,10 @@ export const LegalNameStep = ({ setIsNextDisable, setUser, user, isNextDisabled 
   const firstNameRef = useRef(null);
   const lastNameRef = useRef(null);
   const validateStep = useCallback(() => {
-    if (firstNameRef.current.value && lastNameRef.current.value && isNextDisabled ) {
+    if (firstNameRef.current.value && lastNameRef.current.value && isNextDisabled) {
       setUser({ ...user, firstName: firstNameRef.current.value, lastName: lastNameRef.current.value });
       setIsNextDisable(false);
-    } else if ((!firstNameRef.current.value || !lastNameRef.current.value) && !isNextDisabled ) {
+    } else if ((!firstNameRef.current.value || !lastNameRef.current.value) && !isNextDisabled) {
       setIsNextDisable(true);
     }
   }, [firstNameRef, lastNameRef, setIsNextDisable, isNextDisabled]);
