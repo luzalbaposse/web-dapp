@@ -13,6 +13,4 @@ class API::V1::PublicAPI::SessionsController < API::V1::PublicAPI::APIController
 
     render json: response_body, status: :ok
   end
-
-  private
 end
