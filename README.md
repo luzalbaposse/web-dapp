@@ -2,7 +2,7 @@
 
 # Talent Protocol
 
-> Support talent you believe in and be rewarded when they succeed.
+> Support talent you believe in and be rewarded when they succeed!
 
 Talent Protocol is a decentralized platform where talent can create a personal token, and where supporters can make angel investments in someone's career to become a part of their journey.
 

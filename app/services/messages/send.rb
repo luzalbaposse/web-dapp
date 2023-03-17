@@ -1,10 +1,10 @@
 module Messages
   class Send
-    def call(sender:, receiver:, message:, sent_to_supporters: false)
+    def call(sender:, receiver:, message:, sent_to_supporters: false, career_update: nil)
       return if sender.id == receiver.id
 
       chat = upsert_chat(sender, receiver, message)
-      message = create_message(chat, sender, receiver, message, sent_to_supporters)
+      message = create_message(chat, sender, receiver, message, sent_to_supporters, career_update)
       create_notification_for(receiver, sender)
       broadcast(chat, message)
 
@@ -15,14 +15,15 @@ module Messages
 
     attr_reader :sender, :receiver, :message
 
-    def create_message(chat, sender, receiver, message, sent_to_supporters)
+    def create_message(chat, sender, receiver, message, sent_to_supporters, career_update)
       ActiveRecord::Base.transaction do
         Message.create!(
           chat: chat,
           sender: sender,
           receiver: receiver,
           text: message,
-          sent_to_supporters: sent_to_supporters
+          sent_to_supporters: sent_to_supporters,
+          career_update: career_update
         )
       end
     end

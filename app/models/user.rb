@@ -34,6 +34,7 @@ class User < ApplicationRecord
   has_many :notifications, as: :recipient
   has_many :quests
   has_many :connections, dependent: :destroy
+  has_many :career_updates
 
   # Rewards
   has_many :rewards
