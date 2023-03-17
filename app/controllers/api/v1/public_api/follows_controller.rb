@@ -1,4 +1,4 @@
-class API::V1::PublicAPI::FollowsController < ApplicationController
+class API::V1::PublicAPI::FollowsController < API::V1::PublicAPI::APIController
   before_action :internal_only
 
   def index

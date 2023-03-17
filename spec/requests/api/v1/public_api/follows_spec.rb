@@ -4,7 +4,7 @@ RSpec.describe "Follows", type: :request do
   let(:current_user) { create :user }
 
   describe "#create" do
-    subject(:create_follow_request) { post api_v1_follows_path(params: params, as: current_user) }
+    subject(:create_follow_request) { post api_v1_public_follows_path(params: params, as: current_user) }
 
     let(:params) do
       {
@@ -19,6 +19,8 @@ RSpec.describe "Follows", type: :request do
     let(:create_follow_instance) { instance_double(create_follow_class, call: true) }
 
     before do
+      stub_const("API::V1::PublicAPI::APIController::INTERNAL_DOMAINS", ["talentprotocol.com"])
+      host! "app.talentprotocol.com"
       allow(create_follow_class).to receive(:new).and_return(create_follow_instance)
     end
 
@@ -99,7 +101,7 @@ RSpec.describe "Follows", type: :request do
   end
 
   describe "#destroy" do
-    subject(:destroy_follow_request) { delete api_v1_follows_path(params: params, as: current_user) }
+    subject(:destroy_follow_request) { delete api_v1_public_follows_path(params: params, as: current_user) }
 
     let(:params) do
       {
@@ -117,6 +119,9 @@ RSpec.describe "Follows", type: :request do
 
     before do
       allow(destroy_follow_class).to receive(:new).and_return(destroy_follow_instance)
+
+      stub_const("API::V1::PublicAPI::APIController::INTERNAL_DOMAINS", ["talentprotocol.com"])
+      host! "app.talentprotocol.com"
     end
 
     it "returns a successful response" do

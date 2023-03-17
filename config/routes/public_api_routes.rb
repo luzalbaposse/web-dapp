@@ -14,6 +14,8 @@ module PublicAPIRoutes
             resources :sessions, only: [] do
               get :logged_in_user, on: :collection
             end
+            resources :follows, only: [:index, :create]
+            delete "follows", to: "follows#destroy"
           end
 
           # API non authenticated endpoints
