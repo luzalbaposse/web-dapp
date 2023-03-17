@@ -52,9 +52,18 @@ const resetPassword = (userUUID, token, password) => {
   );
 };
 
+const getProfile = username =>
+  axios.get(`/u/${username}/profile`, {
+    headers: {
+      accept: "application/json",
+      "content-type": "application/json"
+    }
+  });
+
 export const users = {
   createAccount,
   sendConfirmationEmail,
   sendResetPasswordEmail,
-  resetPassword
+  resetPassword,
+  getProfile
 };

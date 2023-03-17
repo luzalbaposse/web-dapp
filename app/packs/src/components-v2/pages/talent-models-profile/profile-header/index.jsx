@@ -10,33 +10,37 @@ import {
   DetailedInfoContainer
 } from "./styled";
 
-export const ProfileHeader = () => (
-  <Container>
-    <AvatarContainer>
-      <Avatar size="lg" />
-    </AvatarContainer>
-    <BannerContainer>
-      <Banner src="https://t4.ftcdn.net/jpg/04/95/28/65/360_F_495286577_rpsT2Shmr6g81hOhGXALhxWOfx1vOQBa.jpg" />
-    </BannerContainer>
-    <ActionArea>
-      <Button size="small" hierarchy="secondary" leftIcon="bulb" iconColor="primary01" />
-      <Button size="small" hierarchy="secondary" text="See profile" href={window.location.href + "/profile"} />
-    </ActionArea>
-    <InfoArea>
-      <DetailedInfoContainer>
-        <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
-          Pedro Pereira
-        </Typography>
-        <Icon name="verified-2" color="primary" size={20} />
-      </DetailedInfoContainer>
-      <DetailedInfoContainer>
-        <Typography specs={{ variant: "p2", type: "bold" }} color="primary01">
-          $XPM
-        </Typography>
-        <Typography specs={{ variant: "p2", type: "regular" }} color="primary01">
-          Product Designer at Talent Protocol
-        </Typography>
-      </DetailedInfoContainer>
-    </InfoArea>
-  </Container>
-);
+export const ProfileHeader = ({ profile }) => {
+  return (
+    <Container>
+      <AvatarContainer>
+        <Avatar size="lg" url={profile.profile_picture_url} />
+      </AvatarContainer>
+      <BannerContainer>
+        <Banner src={profile.banner_url} />
+      </BannerContainer>
+      <ActionArea>
+        <Button size="small" hierarchy="secondary" leftIcon="bulb" iconColor="primary01" />
+        <Button size="small" hierarchy="secondary" text="See profile" href={window.location.href + "/profile"} />
+      </ActionArea>
+      <InfoArea>
+        <DetailedInfoContainer>
+          <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
+            {profile.user.legal_first_name} {profile.user.legal_last_name}
+          </Typography>
+          {profile.user.verified && <Icon name="verified-2" color="primary" size={20} />}
+        </DetailedInfoContainer>
+        <DetailedInfoContainer>
+          {profile.talent_token.ticker && (
+            <Typography specs={{ variant: "p2", type: "bold" }} color="primary01">
+              {profile.talent_token.ticker}
+            </Typography>
+          )}
+          <Typography specs={{ variant: "p2", type: "regular" }} color="primary01">
+            {profile.profile.occupation}
+          </Typography>
+        </DetailedInfoContainer>
+      </InfoArea>
+    </Container>
+  );
+};
