@@ -4,7 +4,7 @@ import { useTalentCareerUpdatesFetcher } from "../../../../hooks/use-talent-care
 import { Container, TitleContainer } from "./styled";
 import { Update } from "./update";
 
-export const CareerUpdates = ({ profile }) => {
+export const CareerUpdates = ({ profile, currentUserId }) => {
   const [isLoading, setIsLoading] = useState(true);
   const { careerUpdates, fetchCareerUpdates } = useTalentCareerUpdatesFetcher();
   useEffect(() => {
@@ -22,7 +22,7 @@ export const CareerUpdates = ({ profile }) => {
             </Typography>
           </TitleContainer>
           {careerUpdates.map(update => (
-            <Update key={update.created_at} data={update} profile={profile} />
+            <Update key={update.created_at} data={update} profile={profile} currentUserId={currentUserId} />
           ))}
         </>
       )}

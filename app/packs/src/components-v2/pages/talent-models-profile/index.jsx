@@ -7,10 +7,20 @@ import { SupportedBy } from "./supported-by";
 import { FinalHero } from "./final-hero";
 import { CareerUpdates } from "./career-updates";
 import { useProfileFetcher } from "../../../hooks/use-profile-fetcher";
+import { loggedInUserStore } from "src/contexts/state";
 
 export const TalentModelsProfilePage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { profile, fetchProfile } = useProfileFetcher();
+
+  const { currentUser, fetchCurrentUser } = loggedInUserStore();
+
+  useEffect(() => {
+    if (!currentUser) {
+      fetchCurrentUser();
+    }
+  }, []);
+
   useEffect(() => {
     if (typeof window === "undefined") return;
     const username = window.location.href.split("/u/")[1];
@@ -26,7 +36,7 @@ export const TalentModelsProfilePage = () => {
             <ProfileHeader profile={profile} />
             <Models />
             <SupportedBy profile={profile} />
-            <CareerUpdates profile={profile} />
+            <CareerUpdates profile={profile} currentUserId={currentUser?.id} />
             <FinalHero profile={profile} />
           </>
         )}
