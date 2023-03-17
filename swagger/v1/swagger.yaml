@@ -4,6 +4,132 @@ info:
   title: API V1
   version: v1
 paths:
+  "/career_updates":
+    get:
+      summary: Retrieves the career updates of a talent
+      tags:
+      - Career Updates
+      parameters:
+      - name: id
+        in: query
+        description: Wallet address or username
+        schema:
+          type: string
+      - name: cursor
+        in: query
+        description: The cursor to fetch the next page
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        description: Your Talent Protocol API key
+        schema:
+          type: string
+      responses:
+        '200':
+          description: talent found
+          content:
+            application/json:
+              example:
+                career_updates:
+                - created_at: '2023-03-17T16:38:56.000Z'
+                  id: da694701-f726-4057-aa56-e742b7c6f6a4
+                  message: Career update
+                - created_at: '2023-03-17T16:38:56.000Z'
+                  id: 2cf8765d-c175-4523-b66e-8e2c9f4c2a70
+                  message: Career update
+                pagination:
+                  total: 2
+                  cursor:
+              schema:
+                type: object
+                properties:
+                  career_updates:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        message:
+                          type: string
+                          description: The message sent by the talent
+                        created_at:
+                          type: string
+                          format: datetime
+                          description: The creation date of the career update
+                  pagination:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        description: The total amount of records
+                      cursor:
+                        type: string
+                        description: The cursor to fetch the next page of records
+                        nullable: true
+        '404':
+          description: talent not found
+        '401':
+          description: unauthorized request
+    post:
+      summary: Creates a career update for the talent
+      tags:
+      - Career Updates
+      parameters:
+      - name: X-API-KEY
+        in: header
+        description: Your Talent Protocol API key
+        schema:
+          type: string
+      responses:
+        '201':
+          description: talent found
+          content:
+            application/json:
+              example:
+                career_update:
+                  created_at: '2023-03-17T16:38:56.000Z'
+                  id: 22a88d5a-6659-4908-ab21-9be157a9fd53
+                  message: Created Update!
+              schema:
+                type: object
+                properties:
+                  career_update:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        description: The message sent by the talent
+                      created_at:
+                        type: string
+                        format: datetime
+                        description: The creation date of the career update
+        '404':
+          description: talent not found
+        '400':
+          description: message not present
+        '401':
+          description: unauthorized request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                career_update:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      description: The content of the career update
+                talent:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: Wallet address or username
+              required:
+              - message
+              - user
   "/connections":
     get:
       summary: Retrieves the connections of a talent
@@ -49,42 +175,46 @@ paths:
             application/json:
               example:
                 connections:
-                - connected_at: '2023-03-07T19:53:09.000Z'
+                - connected_at: '2023-03-17T16:38:56.000Z'
                   connected_user_invested_amount: '0'
                   connection_type: super_connection
-                  name: user111
+                  id: 56bd8b10-124b-4a7e-9a02-6b3153850442
+                  name: user118
                   profile_picture_url:
                   ticker:
                   user_invested_amount: '0'
-                  username: user111
-                  wallet_address: 2191ed69e54176178e6b524a25228188
-                - connected_at: '2023-03-07T19:53:09.000Z'
+                  username: user118
+                  wallet_address: '08d3e5cf1fd6f889d131da24f6288ba4'
+                - connected_at: '2023-03-17T16:38:56.000Z'
                   connected_user_invested_amount: '0'
                   connection_type: supporter
-                  name: user112
+                  id: 2c4722ee-b316-48d8-8e14-6ee39d5874b5
+                  name: user119
                   profile_picture_url:
                   ticker:
                   user_invested_amount: '0'
-                  username: user112
-                  wallet_address: bb57ec2638026b5b4a0005192831ad9a
-                - connected_at: '2023-03-07T19:53:09.000Z'
+                  username: user119
+                  wallet_address: 9659cbcea55afbdc0cfaa8d3158b34fe
+                - connected_at: '2023-03-17T16:38:56.000Z'
                   connected_user_invested_amount: '0'
                   connection_type: supporting
-                  name: user113
+                  id: 7a94a1df-4d06-491d-9a9f-06ad5beb7391
+                  name: user120
                   profile_picture_url:
                   ticker:
                   user_invested_amount: '0'
-                  username: user113
-                  wallet_address: 250348fa04e54b61ad9a8a9a5e5c86f9
-                - connected_at: '2023-03-07T19:53:09.000Z'
+                  username: user120
+                  wallet_address: 5cb132734703d1c59c1427c361a0f794
+                - connected_at: '2023-03-17T16:38:56.000Z'
                   connected_user_invested_amount: '0'
                   connection_type: follower
-                  name: user114
+                  id: 6e471759-22e3-4640-80c6-0275917586a4
+                  name: user121
                   profile_picture_url:
                   ticker:
                   user_invested_amount: '0'
-                  username: user114
-                  wallet_address: 42b2f7dbeb16e4980e25dda940ec73f8
+                  username: user121
+                  wallet_address: 91f04508ad42d839a96a5282bebdfb4c
                 pagination:
                   total: 4
                   cursor:
@@ -176,18 +306,18 @@ paths:
             application/json:
               example:
                 followers:
-                - email: user_126@talentprotocol.com
+                - email: user_133@talentprotocol.com
                   headline:
-                  name: user126
+                  name: user133
                   profile_picture_url:
-                  username: user126
-                  wallet_address: 5adca4cd7e444ca96ea2e8a686a433f4
-                - email: user_127@talentprotocol.com
+                  username: user133
+                  wallet_address: 698652f1880258f3eb1543be31935d6a
+                - email: user_134@talentprotocol.com
                   headline:
-                  name: user127
+                  name: user134
                   profile_picture_url:
-                  username: user127
-                  wallet_address: 6339296badcfd7f8bd6c650eb18ce6d8
+                  username: user134
+                  wallet_address: ca12f1c1f8a9791310ec6a97ad786915
                 pagination:
                   total: 2
                   cursor:
@@ -256,18 +386,18 @@ paths:
             application/json:
               example:
                 supporters:
-                - email: user_154@talentprotocol.com
+                - email: user_165@talentprotocol.com
                   headline:
-                  name: user154
+                  name: user165
                   profile_picture_url:
-                  username: user154
-                  wallet_address: 7f0c12cb9d0350279d023b07da412dba
-                - email: user_155@talentprotocol.com
+                  username: user165
+                  wallet_address: 8cc7c98e906a666a3ac3598c8d69c30d
+                - email: user_166@talentprotocol.com
                   headline:
-                  name: user155
+                  name: user166
                   profile_picture_url:
-                  username: user155
-                  wallet_address: 6c23876996484f51ce08767095c1ebed
+                  username: user166
+                  wallet_address: 4e8f2c35ae59a8c13f05a0aba769ca23
                 pagination:
                   total: 2
                   cursor:
@@ -338,30 +468,30 @@ paths:
             application/json:
               example:
                 talents:
-                - email: user_162@talentprotocol.com
+                - email: user_176@talentprotocol.com
                   headline:
-                  name: user162
+                  name: user176
                   profile_picture_url:
-                  username: user162
-                  wallet_address: 88c2fb9f2e5d50b69853606d63ec2b8c
-                - email: user_163@talentprotocol.com
+                  username: user176
+                  wallet_address: 2ce508d4cfe0c0bc019854884ef67fac
+                - email: user_174@talentprotocol.com
                   headline:
-                  name: user163
+                  name: user174
                   profile_picture_url:
-                  username: user163
-                  wallet_address: 28369985053af9ba1e0dd53daede1007
-                - email: user_164@talentprotocol.com
+                  username: user174
+                  wallet_address: 58a1a7ba844f62930e0e40d6e6c7f4f2
+                - email: user_175@talentprotocol.com
                   headline:
-                  name: user164
+                  name: user175
                   profile_picture_url:
-                  username: user164
-                  wallet_address: 3d94cddea1f8980e9d2e09846f0e7eeb
-                - email: user_165@talentprotocol.com
+                  username: user175
+                  wallet_address: 5905b62c96bcd16c48c2cada83ce9066
+                - email: user_173@talentprotocol.com
                   headline:
-                  name: user165
+                  name: user173
                   profile_picture_url:
-                  username: user165
-                  wallet_address: 31b13f7087c0318999a573da68b65d6a
+                  username: user173
+                  wallet_address: b7c7ff4f21efced1842a82ef0cfc583f
                 pagination:
                   total: 4
                   cursor:
@@ -424,7 +554,7 @@ paths:
             application/json:
               example:
                 talent:
-                  email: user_174@talentprotocol.com
+                  email: user_185@talentprotocol.com
                   followers_count: 1
                   following_count: 2
                   headline:
@@ -432,8 +562,8 @@ paths:
                   profile_picture_url:
                   supporters_count: 1
                   supporting_count: 1
-                  username: user174
-                  wallet_address: da0aa137c497a20102cc89f07e5f3ff2
+                  username: user185
+                  wallet_address: 9988f2fa54587b6437a15ead5fb83342
               schema:
                 type: object
                 properties:

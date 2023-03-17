@@ -7,6 +7,7 @@ import { post } from "src/utils/requests";
 import Button from "src/components/design_system/button";
 import { useWindowDimensionsHook } from "src/utils/window";
 import TextArea from "src/components/design_system/fields/textarea";
+import Divider from "src/components/design_system/other/Divider";
 
 import { toast } from "react-toastify";
 import { ToastBody } from "src/components/design_system/toasts";
@@ -124,9 +125,13 @@ const SendCareerUpdateModal = ({ show, hide, placeholder }) => {
       onHide={hide}
       centered
       dialogClassName={mobile ? "mw-100 mh-100 m-0" : "remove-background"}
-      contentClassName={mobile ? "h-100" : ""}
+      contentClassName={mobile ? "h-75" : ""}
       fullscreen="true"
     >
+      <Modal.Header closeButton>
+        <Modal.Title>Career Update</Modal.Title>
+      </Modal.Header>
+      <Divider />
       <Modal.Body>
         <TextArea
           placeholder={placeholder}
