@@ -6,7 +6,7 @@ RSpec.describe BroadcastCareerUpdateJob, type: :job do
   let(:talent_token) { sender.talent.talent_token }
   let(:message) { "Career update!" }
 
-  subject(:broadcast_update) { BroadcastCareerUpdateJob.perform_now(career_update.id) }
+  subject(:broadcast_update) { BroadcastCareerUpdateJob.perform_now(career_update_id: career_update.id) }
 
   let(:send_message_class) { Messages::Send }
   let(:send_message_instance) { instance_double(send_message_class, call: true) }

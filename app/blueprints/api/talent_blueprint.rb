@@ -9,6 +9,14 @@ class API::TalentBlueprint < Blueprinter::Base
     field :headline do |user, _options|
       user.talent&.headline
     end
+
+    field :occupation do |user, _options|
+      user.talent&.occupation
+    end
+
+    field :ticker do |user, _options|
+      user.talent&.talent_token&.ticker
+    end
   end
 
   view :detailed do

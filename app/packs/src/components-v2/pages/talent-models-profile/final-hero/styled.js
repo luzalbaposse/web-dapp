@@ -1,3 +1,4 @@
+import { buildColor } from "@talentprotocol/design-system";
 import styled from "styled-components";
 
 export const Container = styled.section`
@@ -28,11 +29,15 @@ export const SocialList = styled.div`
 export const ActionArea = styled.div`
   margin-top: 24px;
 
-  button {
+  a {
     margin: auto;
   }
 
-  button:nth-child(2) {
+  a:nth-child(2) {
     margin-top: 8px;
   }
+`;
+
+export const HighlightedWord = styled.span`
+  color: ${buildColor("primary")};
 `;

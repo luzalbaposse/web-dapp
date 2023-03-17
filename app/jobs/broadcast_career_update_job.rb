@@ -1,7 +1,7 @@
 class BroadcastCareerUpdateJob < ApplicationJob
   queue_as :default
 
-  def perform(career_update_id)
+  def perform(career_update_id:)
     career_update = CareerUpdate.find(career_update_id)
     sender = career_update.user
     supporters = sender.supporters(including_self: false)
