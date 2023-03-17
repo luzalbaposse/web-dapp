@@ -10,7 +10,6 @@ export const SupportedBy = ({ profile }) => {
   useEffect(() => {
     fetchConnections(profile.user.username).then(() => setIsLoading(false));
   }, [setIsLoading, fetchConnections, profile]);
-  console.log(connections)
   return (
     <Container>
       {isLoading ? (
