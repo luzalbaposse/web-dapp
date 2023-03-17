@@ -4,6 +4,8 @@ class Message < ApplicationRecord
   # TODO make it mandatory after running migrations
   belongs_to :chat, optional: true
 
+  belongs_to :career_update, optional: true
+
   belongs_to :sender, class_name: "User"
   belongs_to :receiver, class_name: "User"
 

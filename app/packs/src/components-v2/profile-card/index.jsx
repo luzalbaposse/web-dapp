@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { ethers } from "ethers";
 import dayjs from "dayjs";
 import SocialRow from "src/components/profile/SocialRow";
@@ -10,6 +10,7 @@ import { P2 } from "src/components/design_system/typography";
 import { useTheme } from "src/contexts/ThemeContext";
 import Button from "src/components/design_system/button";
 import { lightTextPrimary04 } from "src/utils/colors";
+import TextInput from "src/components/design_system/fields/textinput";
 import {
   Container,
   InfoColumn,
@@ -37,7 +38,8 @@ export const ProfileCard = ({
   profileSubdomain,
   talentTokenPrice,
   mobile,
-  children
+  children,
+  setShowCareerUpdateModal
 }) => {
   const { mode } = useTheme();
   const joinedAt = useMemo(() => {
@@ -59,6 +61,7 @@ export const ProfileCard = ({
       );
     return <HeadlinePiece className="text-primary-01" text={`--E ${talent.profile.headline}`} />;
   }, [talent.profile.headline]);
+
   return (
     <Container>
       <InfoColumn>
@@ -69,6 +72,13 @@ export const ProfileCard = ({
         <DataRow>
           {talent.talentToken.contractId && <P2 className="medium mr-2" text={`$${talent.talentToken.ticker}`} />}
           <P2 className="text-primary-03" text={talent.occupation} />
+        </DataRow>
+        <DataRow>
+          <TextInput
+            placeholder={`What's new in your career ${talent.user.name}?`}
+            onClick={() => setShowCareerUpdateModal(true)}
+            className="w-100 mt-4"
+          />
         </DataRow>
         {!profileSubdomain && mobile && <ActionArea>{children}</ActionArea>}
         <HeadlineContainer>{Headline}</HeadlineContainer>

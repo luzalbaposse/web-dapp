@@ -10,6 +10,7 @@ const TextInput = ({
   disabled,
   value,
   onChange,
+  onClick,
   onBlur,
   className,
   inputClassName,
@@ -43,6 +44,7 @@ const TextInput = ({
         disabled={disabled}
         value={value}
         onChange={onChange}
+        onClick={onClick}
         onBlur={onBlur}
         maxLength={maxLength}
       />

@@ -20,6 +20,7 @@ import RejectTalentModal from "../RejectTalentModal";
 import ApprovalConfirmationModal from "../ApprovalConfirmationModal";
 import AdminVerificationConfirmationModal from "../AdminVerificationConfirmationModal";
 import PersonaVerificationConfirmationModal from "../PersonaVerificationConfirmationModal";
+import SendCareerUpdateModal from "../SendCareerUpdateModal";
 import { Banner } from "src/components-v2/banner";
 import { darkBg01, lightBg01 } from "src/utils/colors";
 import { ProfileCard } from "src/components-v2/profile-card";
@@ -48,6 +49,7 @@ const Overview = ({
   const [showApprovalConfirmationModal, setShowApprovalConfirmationModal] = useState(false);
   const [showAdminVerificationConfirmationModal, setShowAdminVerificationConfirmationModal] = useState(false);
   const [showPersonaVerificationConfirmationModal, setShowPersonaVerificationConfirmationModal] = useState(false);
+  const [showCareerUpdateModal, setShowCareerUpdateModal] = useState(false);
   const [isUploadingProfile, setIsUploadingProfile] = useState(false);
   const [isUploadingBanner, setIsUploadingBanner] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -410,6 +412,7 @@ const Overview = ({
         profileSubdomain={profileSubdomain}
         mobile={mobile}
         talentTokenPrice={talentTokenPrice}
+        setShowCareerUpdateModal={setShowCareerUpdateModal}
       >
         {mobile ? (
           <>
@@ -738,6 +741,14 @@ const Overview = ({
         talent={talent}
         setTalent={setTalent}
       />
+      {showCareerUpdateModal && (
+        <SendCareerUpdateModal
+          show={showCareerUpdateModal}
+          hide={() => setShowCareerUpdateModal(false)}
+          placeholder={`What's new in your career ${talent.user.name}?`}
+          contractsEnv={railsContext.contractsEnv}
+        />
+      )}
       {editMode && (
         <EditOverviewModal show={editMode} hide={() => setEditMode(false)} talent={talent} setTalent={setTalent} />
       )}
