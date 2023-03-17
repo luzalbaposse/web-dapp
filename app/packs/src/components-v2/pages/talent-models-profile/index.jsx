@@ -25,7 +25,7 @@ export const TalentModelsProfilePage = () => {
           <>
             <ProfileHeader profile={profile} />
             <Models />
-            <SupportedBy profile={profile}/>
+            <SupportedBy profile={profile} />
             <CareerUpdates profile={profile} />
             <FinalHero profile={profile} />
           </>

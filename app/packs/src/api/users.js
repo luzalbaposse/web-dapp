@@ -60,10 +60,19 @@ const getProfile = username =>
     }
   });
 
+const getConnections = username =>
+  axios.get(`/api/v1/connections?id=${username}`, {
+    headers: {
+      accept: "application/json",
+      "content-type": "application/json"
+    }
+  });
+
 export const users = {
   createAccount,
   sendConfirmationEmail,
   sendResetPasswordEmail,
   resetPassword,
+  getConnections,
   getProfile
 };

@@ -40,4 +40,4 @@ export const ActionArea = styled.div`
 
 export const HighlightedWord = styled.span`
   color: ${buildColor("primary")};
-  `;
+`;
