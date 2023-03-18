@@ -11,9 +11,11 @@ import { loggedInUserStore } from "src/contexts/state";
 
 export const TalentModelsProfilePage = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const { profile, fetchProfile } = useProfileFetcher();
+  const { profile, fetchProfile, setProfile } = useProfileFetcher();
 
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
+
+  const isCurrentUserProfile = currentUser?.id == profile?.user?.uuid;
 
   useEffect(() => {
     if (!currentUser) {
@@ -26,6 +28,7 @@ export const TalentModelsProfilePage = () => {
     const username = window.location.href.split("/u/")[1];
     fetchProfile(username).then(() => setIsLoading(false));
   }, [fetchProfile]);
+
   return (
     <TalentThemeProvider>
       <Container isLoading={isLoading}>
@@ -34,9 +37,13 @@ export const TalentModelsProfilePage = () => {
         ) : (
           <>
             <ProfileHeader profile={profile} />
-            <Models />
+            <Models profile={profile} setProfile={setProfile} isCurrentUserProfile={isCurrentUserProfile} />
             <SupportedBy profile={profile} />
-            <CareerUpdates profile={profile} currentUserId={currentUser?.id} />
+            <CareerUpdates
+              profile={profile}
+              currentUserId={currentUser?.id}
+              isCurrentUserProfile={isCurrentUserProfile}
+            />
             <FinalHero profile={profile} />
           </>
         )}

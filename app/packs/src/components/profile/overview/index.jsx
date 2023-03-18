@@ -413,6 +413,7 @@ const Overview = ({
         profileSubdomain={profileSubdomain}
         mobile={mobile}
         talentTokenPrice={talentTokenPrice}
+        canUpdate={canUpdate}
         setShowCareerUpdateModal={setShowCareerUpdateModal}
       >
         {mobile ? (
@@ -742,7 +743,7 @@ const Overview = ({
         talent={talent}
         setTalent={setTalent}
       />
-      {showCareerUpdateModal && (
+      {showCareerUpdateModal && canUpdate && (
         <SendCareerUpdateModal
           show={showCareerUpdateModal}
           hide={() => setShowCareerUpdateModal(false)}
