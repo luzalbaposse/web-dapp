@@ -17,6 +17,7 @@ export const useProfileFetcher = () => {
   );
   return {
     profile,
+    setProfile,
     fetchProfile
   };
 };

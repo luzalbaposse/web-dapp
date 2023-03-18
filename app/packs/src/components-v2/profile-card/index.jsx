@@ -39,7 +39,8 @@ export const ProfileCard = ({
   talentTokenPrice,
   mobile,
   children,
-  setShowCareerUpdateModal
+  setShowCareerUpdateModal,
+  canUpdate
 }) => {
   const { mode } = useTheme();
   const joinedAt = useMemo(() => {
@@ -73,13 +74,15 @@ export const ProfileCard = ({
           {talent.talentToken.contractId && <P2 className="medium mr-2" text={`$${talent.talentToken.ticker}`} />}
           <P2 className="text-primary-03" text={talent.occupation} />
         </DataRow>
-        <DataRow>
-          <TextInput
-            placeholder={`What's new in your career ${talent.user.name}?`}
-            onClick={() => setShowCareerUpdateModal(true)}
-            className="w-100 mt-4"
-          />
-        </DataRow>
+        {canUpdate && (
+          <DataRow>
+            <TextInput
+              placeholder={`What's new in your career ${talent.user.name}?`}
+              onClick={() => setShowCareerUpdateModal(true)}
+              className="w-100 mt-4"
+            />
+          </DataRow>
+        )}
         {!profileSubdomain && mobile && <ActionArea>{children}</ActionArea>}
         <HeadlineContainer>{Headline}</HeadlineContainer>
         <TagsContainer>

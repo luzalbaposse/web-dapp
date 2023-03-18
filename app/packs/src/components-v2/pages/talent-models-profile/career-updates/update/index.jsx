@@ -12,7 +12,7 @@ import debounce from "lodash/debounce";
 
 dayjs.extend(customParseFormat);
 
-export const Update = ({ data, profile, currentUserId }) => {
+export const Update = ({ data, profile, currentUserId, isCurrentUserProfile }) => {
   const [message, setMessage] = useState("");
 
   const sendNewMessage = () => {
@@ -30,10 +30,6 @@ export const Update = ({ data, profile, currentUserId }) => {
   };
 
   const debouncedNewMessage = debounce(() => sendNewMessage(), 200);
-
-  const disabled = () => {
-    return !currentUserId || currentUserId == profile.user.uuid;
-  };
 
   return (
     <Container>
@@ -54,14 +50,14 @@ export const Update = ({ data, profile, currentUserId }) => {
           placeholder="Reply..."
           onChange={e => setMessage(e.target.value)}
           value={message}
-          isDisabled={disabled()}
+          isDisabled={isCurrentUserProfile}
         />
         <Button
           hierarchy="secondary"
           size="medium"
           leftIcon="flame"
           onClick={debouncedNewMessage}
-          isDisabled={disabled()}
+          isDisabled={isCurrentUserProfile}
         />
       </ReplyArea>
     </Container>
