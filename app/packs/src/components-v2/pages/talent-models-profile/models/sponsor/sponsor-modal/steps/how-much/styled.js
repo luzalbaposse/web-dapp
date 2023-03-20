@@ -1,4 +1,3 @@
-import { buildColor } from "@talentprotocol/design-system";
 import styled from "styled-components";
 
 export const Container = styled.section`

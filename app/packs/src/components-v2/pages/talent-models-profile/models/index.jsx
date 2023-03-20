@@ -19,7 +19,6 @@ export const Models = ({ profile, setProfile, isCurrentUserProfile, currentUserI
       railsContext={railsContext}
       currentUserId={currentUserId}
     />
-    <SponsorModel isCurrentUserProfile={isCurrentUserProfile} />
     <SponsorModel isCurrentUserProfile={isCurrentUserProfile} profile={profile} />
   </Container>
 );
