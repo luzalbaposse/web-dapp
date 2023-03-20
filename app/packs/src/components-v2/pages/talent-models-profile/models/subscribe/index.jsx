@@ -10,7 +10,6 @@ export const SubscribeModel = ({ profile, setProfile, isCurrentUserProfile }) =>
     let response;
     let successMessage;
     let successHeader;
-    console.log(profile);
     if (profile.is_following) {
       response = await destroy(`/api/v1/follows?user_id=${profile.user.id}`);
       successHeader = "New subscription added";

@@ -14,6 +14,6 @@ export const Models = ({ profile, setProfile, isCurrentUserProfile }) => (
     </TitleContainer>
     <SubscribeModel profile={profile} setProfile={setProfile} isCurrentUserProfile={isCurrentUserProfile} />
     <StakingModel />
-    <SponsorModel isCurrentUserProfile={isCurrentUserProfile} />
+    <SponsorModel isCurrentUserProfile={isCurrentUserProfile} profile={profile} />
   </Container>
 );
