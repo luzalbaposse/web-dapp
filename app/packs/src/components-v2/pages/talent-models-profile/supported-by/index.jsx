@@ -24,7 +24,7 @@ export const SupportedBy = ({ profile }) => {
           <ListContainer>
             {connections.map(connection => (
               <ListItem key={connection.id}>
-                <Avatar size="md" url={connection.profile_picture_url}/>
+                <Avatar size="md" url={connection.profile_picture_url} />
                 <ListItemInfo>
                   <ListItemInfoRow>
                     <Typography specs={{ variant: "label2", type: "medium" }} color="primary01">

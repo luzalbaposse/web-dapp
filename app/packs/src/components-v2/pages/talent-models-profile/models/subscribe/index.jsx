@@ -6,27 +6,26 @@ import { ToastBody } from "src/components/design_system/toasts";
 import { post, destroy } from "src/utils/requests";
 
 export const SubscribeModel = ({ profile, setProfile, isCurrentUserProfile }) => {
-  const updateFollow = async () => {
+  const updateSubscription = async () => {
     let response;
     let successMessage;
     let successHeader;
-    console.log(profile);
-    if (profile.is_following) {
-      response = await destroy(`/api/v1/follows?user_id=${profile.user.id}`);
-      successHeader = "New subscription added";
+    if (profile.is_subscribing) {
+      response = await destroy(`/api/v1/subscriptions?talent_id=${profile.user.username}`);
+      successHeader = "Subscription removed";
       successMessage = `You're no longer subscribed to ${profile.user.name} career updates`;
     } else {
-      response = await post(`/api/v1/follows`, {
-        user_id: profile.user.id
+      response = await post(`/api/v1/subscriptions`, {
+        talent_id: profile.user.username
       });
-      successHeader = "Subscription removed";
+      successHeader = "New subscription added";
       successMessage = `You're now subscribed to ${profile.user.name} career updates`;
     }
 
     if (response.success) {
       setProfile(prev => ({
         ...prev,
-        is_following: !profile.is_following
+        is_subscribing: !profile.is_subscribing
       }));
       toast.success(<ToastBody heading={successHeader} body={successMessage} />);
     } else {
@@ -49,8 +48,8 @@ export const SubscribeModel = ({ profile, setProfile, isCurrentUserProfile }) =>
         hierarchy="primary"
         size="large"
         isStretched
-        text={profile.is_following ? "Unsubscribe" : "Subscribe"}
-        onClick={() => updateFollow()}
+        text={profile.is_subscribing ? "Unsubscribe" : "Subscribe"}
+        onClick={() => updateSubscription()}
         isDisabled={isCurrentUserProfile}
       />
     </Container>

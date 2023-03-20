@@ -5,10 +5,10 @@ class BroadcastCareerUpdateJob < ApplicationJob
     career_update = CareerUpdate.find(career_update_id)
     sender = career_update.user
     supporters = sender.supporters(including_self: false)
-    followers = sender.followers
+    subscribers = sender.subscribers
 
     ids = supporters.pluck(:id)
-    ids += followers.pluck(:id)
+    ids += subscribers.pluck(:id)
 
     receivers = User.where(id: ids)
 

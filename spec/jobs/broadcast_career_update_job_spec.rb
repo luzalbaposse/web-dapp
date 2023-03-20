@@ -14,15 +14,15 @@ RSpec.describe BroadcastCareerUpdateJob, type: :job do
   let(:investor_user_one) { create :user }
   let(:investor_user_two) { create :user }
 
-  let(:follower_one) { create :user }
-  let(:follower_two) { create :user }
+  let(:subscriber_one) { create :user }
+  let(:subscriber_two) { create :user }
 
   before do
     create :talent_supporter, supporter_wallet_id: investor_user_one.wallet_id, talent_contract_id: talent_token.contract_id
     create :talent_supporter, supporter_wallet_id: investor_user_two.wallet_id, talent_contract_id: talent_token.contract_id
 
-    create :follow, user: sender, follower: follower_one
-    create :follow, user: sender, follower: follower_two
+    create :subscription, user: sender, subscriber: subscriber_one
+    create :subscription, user: sender, subscriber: subscriber_two
 
     allow(send_message_class).to receive(:new).and_return(send_message_instance)
   end
@@ -45,20 +45,20 @@ RSpec.describe BroadcastCareerUpdateJob, type: :job do
     )
   end
 
-  it "initializes and calls the send message to all followers" do
+  it "initializes and calls the send message to all subscribers" do
     broadcast_update
 
     expect(send_message_class).to have_received(:new)
     expect(send_message_instance).to have_received(:call).with(
       message: message,
       sender: sender,
-      receiver: follower_one,
+      receiver: subscriber_one,
       career_update: career_update
     )
     expect(send_message_instance).to have_received(:call).with(
       message: message,
       sender: sender,
-      receiver: follower_two,
+      receiver: subscriber_two,
       career_update: career_update
     )
   end
@@ -80,9 +80,9 @@ RSpec.describe BroadcastCareerUpdateJob, type: :job do
     end
   end
 
-  context "when a user has invested and followed the sender user" do
+  context "when a user has invested and subscribed the sender user" do
     before do
-      create :follow, user: sender, follower: investor_user_one
+      create :subscription, user: sender, subscriber: investor_user_one
     end
 
     it "does not send a message twice to the same user" do
