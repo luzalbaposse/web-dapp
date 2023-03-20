@@ -9,7 +9,6 @@ import {
   TALENT_PROTOCOL_TELEGRAM,
   ABOUT,
   BLOG,
-  PARTNERSHIPS,
   FAQ,
   USER_GUIDE,
   TERMS_HREF,
@@ -45,7 +44,6 @@ const Footer = () => {
             <P2 className="text-black mb-2" bold text="Project" />
             <Tab href={ABOUT} text="About" type="white" className="mb-2" target="_blank" />
             <Tab href={BLOG} text="Blog" type="white" className="mb-2" target="_blank" />
-            <Tab href={PARTNERSHIPS} text="Partnerships" type="white" className="mb-2" target="_blank" />
           </div>
           <div className="col-lg-2 d-flex flex-column mt-5 mt-lg-0">
             <P2 className="text-black mb-2" bold text="Help" />
