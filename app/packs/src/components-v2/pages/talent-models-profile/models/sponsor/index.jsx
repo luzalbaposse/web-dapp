@@ -1,4 +1,4 @@
-import { Button, Icon, Modal, Typography, useModal } from "@talentprotocol/design-system";
+import { Button, Icon, Typography, useModal } from "@talentprotocol/design-system";
 import React from "react";
 import { SponsorModal } from "./sponsor-modal";
 import { Container, ImageContainer } from "./styled";
