@@ -14,8 +14,12 @@ import { OnboardingDesktopSlider } from "../../onboarding-desktop-slider";
 
 const SignUpPage = props => {
   const { mobile } = useWindowDimensionsHook(false);
+  const code = useMemo(() => {
+    if (typeof window === "undefined") return undefined;
+    return window.location.pathname.split("/").pop();
+  }, []);
   const pageContent = useMemo(() => {
-    if (mobile) return <SignUpFlow {...props} />;
+    if (mobile) return <SignUpFlow {...props} code={code} />;
     return (
       <DesktopInnerContainer>
         <DesktopColoredContainer>
@@ -23,7 +27,7 @@ const SignUpPage = props => {
         </DesktopColoredContainer>
         <DesktopSimpleContainer>
           <DesktopSimpleInnerContainer>
-            <SignUpFlow {...props} isDesktop />
+            <SignUpFlow {...props} isDesktop code={code} />
           </DesktopSimpleInnerContainer>
         </DesktopSimpleContainer>
       </DesktopInnerContainer>
