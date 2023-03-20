@@ -12,7 +12,7 @@ import debounce from "lodash/debounce";
 
 dayjs.extend(customParseFormat);
 
-export const Update = ({ data, profile, currentUserId, isCurrentUserProfile }) => {
+export const Update = ({ data, profile, isCurrentUserProfile }) => {
   const [message, setMessage] = useState("");
 
   const sendNewMessage = () => {
@@ -20,7 +20,7 @@ export const Update = ({ data, profile, currentUserId, isCurrentUserProfile }) =
       return;
     }
 
-    post("/messages", { id: currentUserId, message }).then(response => {
+    post("/messages", { id: profile.user.uuid, message }).then(response => {
       if (response.error) {
         toast.error(<ToastBody heading="Error!" body={response.error} />);
       } else {

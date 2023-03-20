@@ -39,14 +39,14 @@ class OnChain {
       walletconnect: {
         package: WalletConnectProvider, // required
         options: {
-          rpc: CHAIN_RPC_URLS
-        }
-      }
+          rpc: CHAIN_RPC_URLS,
+        },
+      },
     };
 
     return new Web3Modal({
       cacheProvider: true,
-      providerOptions
+      providerOptions,
     });
   };
 
@@ -79,7 +79,8 @@ class OnChain {
 
       if (web3ModalInstance !== undefined) {
         const provider = new ethers.providers.Web3Provider(web3ModalInstance);
-        web3ModalInstance.on("chainChanged", (/*_chainId*/) => window.location.reload());
+        web3ModalInstance.on("chainChanged", (/*_chainId*/) =>
+          window.location.reload());
 
         const signer = await provider.getSigner();
         this.signer = signer;
@@ -116,7 +117,9 @@ class OnChain {
 
   getEnvBlockExplorerUrls(chainId = 42220) {
     if (Addresses[this.env][chainId]) {
-      return Addresses[this.env][chainId]["paramsForMetamask"]["blockExplorerUrls"][0];
+      return Addresses[this.env][chainId]["paramsForMetamask"][
+        "blockExplorerUrls"
+      ][0];
     } else {
       return "/";
     }
@@ -130,7 +133,7 @@ class OnChain {
 
       await web3ModalInstance.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: chainHex }]
+        params: [{ chainId: chainHex }],
       });
     } catch (error) {
       console.log(error);
@@ -141,11 +144,11 @@ class OnChain {
 
         await web3ModalInstance.request({
           method: "wallet_addEthereumChain",
-          params: [Addresses[this.env][chainId]["paramsForMetamask"]]
+          params: [Addresses[this.env][chainId]["paramsForMetamask"]],
         });
         await web3ModalInstance.request({
           method: "wallet_switchEthereumChain",
-          params: [{ chainId: chainHex }]
+          params: [{ chainId: chainHex }],
         });
       }
     }
@@ -174,7 +177,8 @@ class OnChain {
         const provider = new ethers.providers.Web3Provider(web3ModalInstance);
         await web3ModalInstance.enable();
 
-        web3ModalInstance.on("chainChanged", (/*_chainId*/) => window.location.reload());
+        web3ModalInstance.on("chainChanged", (/*_chainId*/) =>
+          window.location.reload());
         const signer = await provider.getSigner();
         this.signer = signer;
         const account = await signer.getAddress();
@@ -205,13 +209,19 @@ class OnChain {
       if (web3ModalInstance !== undefined) {
         provider = new ethers.providers.Web3Provider(web3ModalInstance);
       } else {
-        provider = new ethers.providers.JsonRpcProvider(Addresses[this.env][chainId]["rpcURL"]);
+        provider = new ethers.providers.JsonRpcProvider(
+          Addresses[this.env][chainId]["rpcURL"]
+        );
       }
 
       if (await this.recognizedChain()) {
         const factoryAddress = Addresses[this.env][chainId]["factory"];
 
-        this.talentFactory = new ethers.Contract(factoryAddress, TalentFactory.abi, provider);
+        this.talentFactory = new ethers.Contract(
+          factoryAddress,
+          TalentFactory.abi,
+          provider
+        );
 
         return true;
       } else {
@@ -231,14 +241,20 @@ class OnChain {
       if (web3ModalInstance !== undefined) {
         provider = new ethers.providers.Web3Provider(web3ModalInstance);
       } else {
-        provider = new ethers.providers.JsonRpcProvider(Addresses[this.env][chainId]["rpcURL"]);
+        provider = new ethers.providers.JsonRpcProvider(
+          Addresses[this.env][chainId]["rpcURL"]
+        );
       }
       const chainId = await this.getChainID();
 
       if (await this.recognizedChain()) {
         const stakingAddress = Addresses[this.env][chainId]["staking"];
 
-        this.staking = new ethers.Contract(stakingAddress, Staking.abi, provider);
+        this.staking = new ethers.Contract(
+          stakingAddress,
+          Staking.abi,
+          provider
+        );
 
         return true;
       } else {
@@ -258,14 +274,20 @@ class OnChain {
       if (web3ModalInstance !== undefined) {
         provider = new ethers.providers.Web3Provider(web3ModalInstance);
       } else {
-        provider = new ethers.providers.JsonRpcProvider(Addresses[this.env][chainId]["rpcURL"]);
+        provider = new ethers.providers.JsonRpcProvider(
+          Addresses[this.env][chainId]["rpcURL"]
+        );
       }
       const chainId = await this.getChainID();
 
       if (await this.recognizedChain()) {
         const sponsorshipAddress = Addresses[this.env][chainId]["sponsorship"];
 
-        this.sponsorship = new ethers.Contract(sponsorshipAddress, TalentSponsorship.abi, provider);
+        this.sponsorship = new ethers.Contract(
+          sponsorshipAddress,
+          TalentSponsorship.abi,
+          provider
+        );
 
         return true;
       } else {
@@ -286,7 +308,9 @@ class OnChain {
         provider = new ethers.providers.Web3Provider(web3ModalInstance);
       } else {
         const chainId = await this.getChainID();
-        provider = new ethers.providers.JsonRpcProvider(Addresses[this.env][chainId]["rpcURL"]);
+        provider = new ethers.providers.JsonRpcProvider(
+          Addresses[this.env][chainId]["rpcURL"]
+        );
       }
 
       if (await this.recognizedChain()) {
@@ -296,14 +320,21 @@ class OnChain {
         let stableTokenAddress;
 
         if (!Addresses[this.env][chainId]["stableAddress"]) {
-          stableTokenAddress = await this.celoKit.registry.addressFor(CeloContract.StableToken);
+          stableTokenAddress = await this.celoKit.registry.addressFor(
+            CeloContract.StableToken
+          );
           this.stableDecimals = 18;
         } else {
           stableTokenAddress = Addresses[this.env][chainId]["stableAddress"];
-          this.stableDecimals = Addresses[this.env][chainId]["stableDecimals"] || 18;
+          this.stableDecimals =
+            Addresses[this.env][chainId]["stableDecimals"] || 18;
         }
 
-        this.stabletoken = new ethers.Contract(stableTokenAddress, StableToken.abi, provider);
+        this.stabletoken = new ethers.Contract(
+          stableTokenAddress,
+          StableToken.abi,
+          provider
+        );
 
         return true;
       } else {
@@ -323,7 +354,7 @@ class OnChain {
     const tx = await this.talentFactory
       .connect(this.signer)
       .createTalent(this.account, name, symbol)
-      .catch(e => {
+      .catch((e) => {
         if (e.data?.message.includes(ERROR_MESSAGES.ticker_reserved)) {
           return { error: "Ticker is already in use" };
         } else if (e.code === 4001) {
@@ -340,7 +371,7 @@ class OnChain {
 
     const receipt = await tx.wait();
 
-    const event = receipt.events?.find(e => {
+    const event = receipt.events?.find((e) => {
       return e.event === "TalentCreated";
     });
 
@@ -354,7 +385,11 @@ class OnChain {
 
     const timestamp = dayjs().unix();
 
-    const result = await this.staking.calculateEstimatedReturns(_account || this.account, token, timestamp);
+    const result = await this.staking.calculateEstimatedReturns(
+      _account || this.account,
+      token,
+      timestamp
+    );
 
     return result;
   }
@@ -367,7 +402,9 @@ class OnChain {
       provider = new ethers.providers.Web3Provider(web3ModalInstance);
     } else {
       const chainId = await this.getChainID();
-      provider = new ethers.providers.JsonRpcProvider(Addresses[this.env][chainId]["rpcURL"]);
+      provider = new ethers.providers.JsonRpcProvider(
+        Addresses[this.env][chainId]["rpcURL"]
+      );
     }
     if (await this.recognizedChain()) {
       return new ethers.Contract(address, TalentToken.abi, provider);
@@ -387,11 +424,15 @@ class OnChain {
     // so that we can manually override the gas limit
     // - this doesn't increase the cost, since the cost will
     //   be whatever it is, it simply allows a higher value
-    const estimatedGasPrice = await this.staking.connect(this.signer).estimateGas.stakeStable(token, amount);
+    const estimatedGasPrice = await this.staking
+      .connect(this.signer)
+      .estimateGas.stakeStable(token, amount);
 
-    const tx = await this.staking.connect(this.signer).stakeStable(token, amount, {
-      gasLimit: estimatedGasPrice.mul(130).div(100) // increase amount by 30%
-    });
+    const tx = await this.staking
+      .connect(this.signer)
+      .stakeStable(token, amount, {
+        gasLimit: estimatedGasPrice.mul(130).div(100), // increase amount by 30%
+      });
 
     const receipt = await tx.wait();
 
@@ -417,7 +458,10 @@ class OnChain {
 
     const tx = await this.stabletoken
       .connect(this.signer)
-      .approve(this.staking.address, ethers.utils.parseUnits(_amount, this.stableDecimals));
+      .approve(
+        this.staking.address,
+        ethers.utils.parseUnits(_amount, this.stableDecimals)
+      );
 
     const result = await tx.wait();
 
@@ -429,7 +473,10 @@ class OnChain {
       return "0";
     }
 
-    const result = await this.stabletoken.allowance(this.account, this.staking.address);
+    const result = await this.stabletoken.allowance(
+      this.account,
+      this.staking.address
+    );
 
     if (formatted) {
       return ethers.utils.formatUnits(result, this.stableDecimals);
@@ -445,7 +492,9 @@ class OnChain {
 
     const amount = ethers.utils.parseUnits(_amount, this.stableDecimals);
 
-    const tx = await this.sponsorship.connect(this.signer).sponsor(talent, amount, this.stabletoken.address);
+    const tx = await this.sponsorship
+      .connect(this.signer)
+      .sponsor(talent, amount, this.stabletoken.address);
 
     const receipt = await tx.wait();
 
@@ -457,7 +506,9 @@ class OnChain {
       return;
     }
 
-    const tx = await this.sponsorship.connect(this.signer).withdrawToken(this.stabletoken.address);
+    const tx = await this.sponsorship
+      .connect(this.signer)
+      .withdrawToken(this.stabletoken.address);
 
     const receipt = await tx.wait();
 
@@ -471,7 +522,10 @@ class OnChain {
 
     const tx = await this.stabletoken
       .connect(this.signer)
-      .approve(this.sponsorship.address, ethers.utils.parseUnits(_amount, this.stableDecimals));
+      .approve(
+        this.sponsorship.address,
+        ethers.utils.parseUnits(_amount, this.stableDecimals)
+      );
 
     const result = await tx.wait();
 
@@ -483,7 +537,10 @@ class OnChain {
       return "0";
     }
 
-    const result = await this.stabletoken.allowance(this.account, this.sponsorship.address);
+    const result = await this.stabletoken.allowance(
+      this.account,
+      this.sponsorship.address
+    );
 
     if (formatted) {
       return ethers.utils.formatUnits(result, this.stableDecimals);
@@ -551,9 +608,9 @@ class OnChain {
           options: {
             address: contract_id, // The address that the token is at.
             symbol: symbol, // A ticker symbol or shorthand, up to 5 chars.
-            decimals: 18 // The number of decimals in the token
-          }
-        }
+            decimals: 18, // The number of decimals in the token
+          },
+        },
       });
 
       if (wasAdded) {
@@ -574,7 +631,9 @@ class OnChain {
       provider = new ethers.providers.Web3Provider(web3ModalInstance);
     } else {
       const chainId = await this.getChainID();
-      provider = new ethers.providers.JsonRpcProvider(Addresses[this.env][chainId]["rpcURL"]);
+      provider = new ethers.providers.JsonRpcProvider(
+        Addresses[this.env][chainId]["rpcURL"]
+      );
     }
 
     const nft = new ethers.Contract(contract_id, CommunityUser.abi, provider);
