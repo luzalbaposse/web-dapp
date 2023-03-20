@@ -17,7 +17,7 @@ export const SponsorModal = ({ modalState, profile }) => {
     [stepsState.currentStep]
   );
   return (
-    <Modal title="Sponsorship" isOpen={true || modalState.isOpen} closeModal={modalState.closeModal}>
+    <Modal title="Sponsorship" isOpen={modalState.isOpen} closeModal={modalState.closeModal}>
       {
         <StepScreen profile={profile} token={token} setToken={setToken} />
       }
