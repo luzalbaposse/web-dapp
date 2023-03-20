@@ -24,21 +24,20 @@ export const SponsorModel = ({ isCurrentUserProfile, profile, railsContext }) =>
           The first step to support someone is being present. Unlock access to career updates, supporter NFT & much
           more!
         </Typography>
-        {!isCurrentUserProfile && (
-          <Button
-            hierarchy="primary"
-            size="large"
-            text="Sponsor"
-            isStretched
-            onClick={() => {
-              if (modalState.isOpen) {
-                modalState.closeModal();
-              } else {
-                modalState.openModal();
-              }
-            }}
-          />
-        )}
+        <Button
+          hierarchy="primary"
+          size="large"
+          text="Sponsor"
+          isStretched
+          onClick={() => {
+            if (modalState.isOpen) {
+              modalState.closeModal();
+            } else {
+              modalState.openModal();
+            }
+          }}
+          isDisabled={isCurrentUserProfile}
+        />
       </Container>
     </>
   );
