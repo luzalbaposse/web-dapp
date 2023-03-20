@@ -13,6 +13,6 @@ export const SponsorModel = ({ isCurrentUserProfile }) => (
     <Typography specs={{ variant: "p2", type: "regular" }} color="primary01">
       The first step to support someone is being present. Unlock access to career updates, supporter NFT & much more!
     </Typography>
-    <Button hierarchy="primary" size="large" text="Sponsor" isStretched isDisabled={isCurrentUserProfile} />
+    {!isCurrentUserProfile && <Button hierarchy="primary" size="large" text="Sponsor" isStretched />}
   </Container>
 );

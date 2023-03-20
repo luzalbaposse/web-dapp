@@ -45,14 +45,15 @@ export const SubscribeModel = ({ profile, setProfile, isCurrentUserProfile }) =>
       <Typography specs={{ variant: "p2", type: "regular" }} color="primary01">
         The first step to support someone is being present. Unlock access to career updates, supporter NFT & much more!
       </Typography>
-      <Button
-        hierarchy="primary"
-        size="large"
-        isStretched
-        text={profile.is_following ? "Unsubscribe" : "Subscribe"}
-        onClick={() => updateFollow()}
-        isDisabled={isCurrentUserProfile}
-      />
+      {!isCurrentUserProfile && (
+        <Button
+          hierarchy="primary"
+          size="large"
+          isStretched
+          text={profile.is_following ? "Unsubscribe" : "Subscribe"}
+          onClick={() => updateFollow()}
+        />
+      )}
     </Container>
   );
 };

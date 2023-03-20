@@ -9,7 +9,7 @@ import { CareerUpdates } from "./career-updates";
 import { useProfileFetcher } from "../../../hooks/use-profile-fetcher";
 import { loggedInUserStore } from "src/contexts/state";
 
-export const TalentModelsProfilePage = () => {
+export const TalentModelsProfilePage = props => {
   const [isLoading, setIsLoading] = useState(true);
   const { profile, fetchProfile, setProfile } = useProfileFetcher();
 
@@ -37,7 +37,13 @@ export const TalentModelsProfilePage = () => {
         ) : (
           <>
             <ProfileHeader profile={profile} />
-            <Models profile={profile} setProfile={setProfile} isCurrentUserProfile={isCurrentUserProfile} />
+            <Models
+              profile={profile}
+              setProfile={setProfile}
+              currentUserId={currentUser?.id}
+              isCurrentUserProfile={isCurrentUserProfile}
+              railsContext={props.railsContext}
+            />
             <SupportedBy profile={profile} />
             <CareerUpdates
               profile={profile}
