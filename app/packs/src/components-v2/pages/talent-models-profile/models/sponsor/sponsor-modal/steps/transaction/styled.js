@@ -37,4 +37,7 @@ export const DetailsRow = styled.div`
 export const BottomContainer = styled.div`
   width: 100%;
   padding-top: 34px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 `;

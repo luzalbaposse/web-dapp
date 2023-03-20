@@ -1,14 +1,26 @@
-import { Modal } from "@talentprotocol/design-system";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { HowMuchStep } from "./steps/how-much";
 import { TransactionStep } from "./steps/transaction";
+import { useStepExperience } from "../../../../../../hooks/use-step-experience";
+import { Modal } from "@talentprotocol/design-system";
+
+const STEPS = {
+  1: HowMuchStep,
+  2: TransactionStep
+};
 
 export const SponsorModal = ({ modalState, profile }) => {
   const [token, setToken] = useState("USDC");
+  const stepsState = useStepExperience(Object.keys(STEPS).length);
+  const StepScreen = useMemo(
+    () => STEPS[stepsState.currentStep],
+    [stepsState.currentStep]
+  );
   return (
     <Modal title="Sponsorship" isOpen={true || modalState.isOpen} closeModal={modalState.closeModal}>
-      <TransactionStep profile={profile} />
-      {/*<HowMuchStep token={token} setToken={setToken} />*/}
+      {
+        <StepScreen profile={profile} token={token} setToken={setToken} />
+      }
     </Modal>
   );
 };
