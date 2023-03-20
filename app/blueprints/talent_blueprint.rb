@@ -46,6 +46,9 @@ class TalentBlueprint < Blueprinter::Base
     field :banner_data do |talent, _options|
       talent.banner_data ? JSON.parse(talent.banner_data) : nil
     end
+    field :tal_domain do |talent, options|
+      talent.user.tal_domain&.domain
+    end
     association :milestones, blueprint: MilestoneBlueprint, view: :normal
     association :career_goal, blueprint: CareerGoalBlueprint, view: :normal
   end
