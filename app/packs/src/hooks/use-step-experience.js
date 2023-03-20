@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
 
-export const useStepExperience = size => {
+export const useStepExperience = (size) => {
   const [currentStep, setCurrentStep] = useState(1);
   const jumpToStep = useCallback(
-    stepToJumpTo => {
+    (stepToJumpTo) => {
       if (stepToJumpTo < 1 || stepToJumpTo > size) {
         console.error("Can't jump to an unexistent index");
         return;
@@ -30,6 +30,6 @@ export const useStepExperience = size => {
     currentStep,
     jumpToStep,
     nextStep,
-    previousStep
+    previousStep,
   };
 };

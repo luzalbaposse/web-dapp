@@ -6,20 +6,34 @@ import { Modal } from "@talentprotocol/design-system";
 
 const STEPS = {
   1: HowMuchStep,
-  2: TransactionStep
+  2: TransactionStep,
 };
 
-export const SponsorModal = ({ modalState, profile }) => {
-  const [token, setToken] = useState("USDC");
+export const SponsorModal = ({ modalState, profile, railsContext, close }) => {
+  const [token, setToken] = useState("CUSD");
+  const [amount, setAmount] = useState(0);
   const stepsState = useStepExperience(Object.keys(STEPS).length);
   const StepScreen = useMemo(
     () => STEPS[stepsState.currentStep],
     [stepsState.currentStep]
   );
   return (
-    <Modal title="Sponsorship" isOpen={true || modalState.isOpen} closeModal={modalState.closeModal}>
+    <Modal
+      title="Sponsorship"
+      isOpen={modalState.isOpen}
+      closeModal={modalState.closeModal}
+    >
       {
-        <StepScreen profile={profile} token={token} setToken={setToken} />
+        <StepScreen
+          profile={profile}
+          token={token}
+          setToken={setToken}
+          railsContext={railsContext}
+          close={close}
+          nextStep={() => stepsState.nextStep()}
+          amount={amount}
+          setAmount={setAmount}
+        />
       }
     </Modal>
   );
