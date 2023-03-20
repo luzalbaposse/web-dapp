@@ -32,8 +32,6 @@ export const PROMOTE_YOUR_TOKENS =
 
 export const ABOUT = "https://talentprotocol.notion.site/Talent-Protocol-101-26a6c4b9f8284e5e8f55603a38629e76";
 
-export const PARTNERSHIPS = "https://talentprotocol.notion.site/Official-Partnerships-8569a066554c41b197e113d977932f9f";
-
 export const BLOG = "https://blog.talentprotocol.com/";
 
 export const FAQ = "https://help.talentprotocol.com/";
