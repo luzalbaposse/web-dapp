@@ -19,7 +19,7 @@ export const ProfileHeader = ({ profile }) => {
       <QRCodeModal modalState={modalState} profile={profile} />
       <Container>
         <AvatarContainer>
-          <Avatar size="md" url={profile.profile_picture_url} />
+          <Avatar size="lg" url={profile.profile_picture_url} />
         </AvatarContainer>
         <BannerContainer>
           <Banner src={profile.banner_url} />

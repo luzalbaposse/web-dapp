@@ -2289,10 +2289,10 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
-"@talentprotocol/design-system@^0.0.54":
-  version "0.0.54"
-  resolved "https://registry.yarnpkg.com/@talentprotocol/design-system/-/design-system-0.0.54.tgz#3fef3fb54a6815e93f8b6ba17ab13438a24241f8"
-  integrity sha512-r15FUgbWhdQ1YaUIks599Bzq0KFJeV1KsyX5zRQ2WRaeuiMjLfM1/yV7sS+42vOGyGMlzosUsUGhISMqPmdeMA==
+"@talentprotocol/design-system@^0.0.55":
+  version "0.0.55"
+  resolved "https://registry.yarnpkg.com/@talentprotocol/design-system/-/design-system-0.0.55.tgz#279e86030b180a5e821ac8b7a3c8a50a0b58109b"
+  integrity sha512-JlohYNkBIzvrzYFDkaZ7dC8MWGdoLG2LYig0ntyorTqEbRJ4BTpoaYGGxa3mhejiPYh3vEVMKXxZM9hQQ04jPg==
 
 "@transak/transak-sdk@^1.0.30":
   version "1.0.31"
