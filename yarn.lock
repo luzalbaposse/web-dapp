@@ -2289,10 +2289,10 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
-"@talentprotocol/design-system@^0.0.53":
-  version "0.0.53"
-  resolved "https://registry.yarnpkg.com/@talentprotocol/design-system/-/design-system-0.0.53.tgz#29ce2b6ee16493be292b8982a16f5c2c7c18999d"
-  integrity sha512-/YcO6S3Zli5kj5aNLergc4SA6SB1Cvxqk6LeQ4doUZwhqt7hLos+doIB3HLvGlYy95NtNj5GFjwn9vVNrqNRmQ==
+"@talentprotocol/design-system@^0.0.55":
+  version "0.0.55"
+  resolved "https://registry.yarnpkg.com/@talentprotocol/design-system/-/design-system-0.0.55.tgz#279e86030b180a5e821ac8b7a3c8a50a0b58109b"
+  integrity sha512-JlohYNkBIzvrzYFDkaZ7dC8MWGdoLG2LYig0ntyorTqEbRJ4BTpoaYGGxa3mhejiPYh3vEVMKXxZM9hQQ04jPg==
 
 "@transak/transak-sdk@^1.0.30":
   version "1.0.31"
@@ -8027,6 +8027,11 @@ punycode@^2.1.0, punycode@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
+
+qrcode.react@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/qrcode.react/-/qrcode.react-3.1.0.tgz#5c91ddc0340f768316fbdb8fff2765134c2aecd8"
+  integrity sha512-oyF+Urr3oAMUG/OiOuONL3HXM+53wvuH3mtIWQrYmsXoAq0DkvZp2RYUWFSMFtbdOpuS++9v+WAkzNVkMlNW6Q==
 
 qrcode@1.4.4:
   version "1.4.4"

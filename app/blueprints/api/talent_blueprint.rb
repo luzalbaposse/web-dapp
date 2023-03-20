@@ -37,5 +37,9 @@ class API::TalentBlueprint < Blueprinter::Base
     field :subscribing_count do |user, _options|
       user.users_subscribing.count
     end
+
+    field :ticker do |user, _options|
+      user.talent&.talent_token&.ticker
+    end
   end
 end
