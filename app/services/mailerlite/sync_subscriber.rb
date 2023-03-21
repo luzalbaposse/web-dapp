@@ -1,10 +1,7 @@
 class Mailerlite::SyncSubscriber
   include Rails.application.routes.url_helpers
 
-  def initialize
-    @url = "https://api.mailerlite.com/api/v2/subscribers"
-    @token = ENV["MAILER_LITE_API_KEY"]
-  end
+  BASE_URL = "https://api.mailerlite.com/api/v2/subscribers"
 
   def call(user)
     check_request = search_for_email_request(user)
@@ -24,11 +21,11 @@ class Mailerlite::SyncSubscriber
   private
 
   def add_subscriber(user)
-    Faraday.post(@url, {email: user.email, fields: fields(user)}.to_json, {"Content-Type": "application/json", "X-MailerLite-ApiKey": @token})
+    Faraday.post(BASE_URL, {email: user.email, fields: fields(user)}.to_json, headers)
   end
 
   def update_subscriber(user)
-    Faraday.put("#{@url}/#{user.email}", {fields: fields(user)}.to_json, {"Content-Type": "application/json", "X-MailerLite-ApiKey": @token})
+    Faraday.put("#{BASE_URL}/#{user.email}", {fields: fields(user)}.to_json, headers)
   end
 
   def fields(user)
@@ -46,7 +43,7 @@ class Mailerlite::SyncSubscriber
   end
 
   def search_for_email_request(user)
-    Faraday.get("#{@url}/search?query=#{user.email}", {}, {"X-MailerLite-ApiKey": @token})
+    Faraday.get("#{BASE_URL}/search?query=#{user.email}", {}, headers)
   end
 
   def account_type(user)
@@ -54,7 +51,7 @@ class Mailerlite::SyncSubscriber
   end
 
   def status(user)
-    if user.talent? && user.talent.talent_token.contract_id.present?
+    if user.talent? && user.talent.talent_token&.contract_id&.present?
       if user.talent.public?
         "Token Live Public"
       else
@@ -67,5 +64,13 @@ class Mailerlite::SyncSubscriber
     else
       "Registered"
     end
+  end
+
+  def headers
+    {"Content-Type": "application/json", "X-MailerLite-ApiKey": token}
+  end
+
+  def token
+    @token ||= ENV["MAILER_LITE_API_KEY"]
   end
 end
