@@ -56,7 +56,7 @@
     "42220": {
       "chainId": 42220,
       "chainName": "Celo",
-      "factory": "0xa902DA7a40a671B84bA3Dd0BdBA6FD9d2D888246",
+      "factory": "0x8C92E5778E3b4BF3A7B2B7EB060854Bd2251A6F4",
       "staking": "0x5a6eF881E3707AAf7201dDb7c198fc94B4b12636",
       "rpcURL": "https://forno.celo.org",
       "icon": "celo",
@@ -72,7 +72,7 @@
     "137": {
       "chainId": 137,
       "chainName": "Polygon",
-      "factory": "0xBBFeDA7c4d8d9Df752542b03CdD715F790B32D0B",
+      "factory": "0xA91b75E8aA2Dc62B2957333B1a1412532444FdE0",
       "staking": "0xE23104E89fF4c93A677136C4cBdFD2037B35BE67",
       "rpcURL": "https://polygon-rpc.com/",
       "stableAddress": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
@@ -88,5 +88,4 @@
       }
     }
   }
-  
 }
