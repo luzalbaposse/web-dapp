@@ -60,6 +60,7 @@ class API::V1::PublicAPI::APIController < ActionController::Base
     response_status = :internal_server_error
 
     log_request(response_body, response_status)
+
     Rollbar.error(
       error,
       {

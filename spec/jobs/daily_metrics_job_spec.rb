@@ -11,7 +11,7 @@ RSpec.describe DailyMetricsJob, type: :job do
   let!(:message) { create :message, sender: user_3, receiver: user_1, created_at: 10.days.ago }
 
   let!(:user_4) { create :user, onboarded_at: nil }
-  let!(:follow) { create :follow, follower: user_4, user: user_1, created_at: 26.days.ago }
+  let!(:subscribe) { create :subscription, subscriber: user_4, user: user_1, created_at: 26.days.ago }
 
   let!(:user_5) { create :user }
   let!(:talent_supporter) { create :talent_supporter, supporter_wallet_id: user_5.wallet_id, talent_contract_id: talent_token.contract_id, last_time_bought_at: 15.days.ago }

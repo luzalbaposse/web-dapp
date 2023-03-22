@@ -22,7 +22,7 @@ class API::V1::Talent::TokensController < ApplicationController
         # Wait for blockchain transaction to settle
         TalentSupportersRefreshJob.set(wait: 5.minutes).perform_later(talent_token.contract_id)
       end
-      CreateNotificationTalentChangedJob.perform_later(talent.user.followers.pluck(:follower_id), talent.user_id)
+      CreateNotificationTalentChangedJob.perform_later(talent.user.subscriptions.pluck(:subscriber_id), talent.user_id)
 
       render json: TalentBlueprint.render(
         talent,
@@ -38,7 +38,7 @@ class API::V1::Talent::TokensController < ApplicationController
   private
 
   def notify_of_change
-    CreateNotificationTalentChangedJob.perform_later(talent.user.followers.pluck(:follower_id), talent.user_id)
+    CreateNotificationTalentChangedJob.perform_later(talent.user.subscriptions.pluck(:subscriber_id), talent.user_id)
   end
 
   def talent

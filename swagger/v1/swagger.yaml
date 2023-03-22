@@ -28,9 +28,9 @@ paths:
           - super_connection
           - supporter
           - supporting
-          - mutual_follow
-          - follower
-          - following
+          - mutual_subscription
+          - subscriber
+          - subscribing
         description: Filter by a specific connection type
       - name: cursor
         in: query
@@ -49,42 +49,46 @@ paths:
             application/json:
               example:
                 connections:
-                - connected_at: '2023-03-07T19:53:09.000Z'
+                - connected_at: '2023-03-22T15:23:39.000Z'
                   connected_user_invested_amount: '0'
                   connection_type: super_connection
-                  name: user111
+                  id: 2a7b1316-8646-49c9-a7c0-070f42fbad26
+                  name: user88
                   profile_picture_url:
                   ticker:
                   user_invested_amount: '0'
-                  username: user111
-                  wallet_address: 2191ed69e54176178e6b524a25228188
-                - connected_at: '2023-03-07T19:53:09.000Z'
+                  username: user88
+                  wallet_address: 6dd07cb43136af1a9388ce6244281d3a
+                - connected_at: '2023-03-22T15:23:39.000Z'
                   connected_user_invested_amount: '0'
                   connection_type: supporter
-                  name: user112
+                  id: a131bc21-76bb-48bd-8fdb-3f11d05e1e50
+                  name: user89
                   profile_picture_url:
                   ticker:
                   user_invested_amount: '0'
-                  username: user112
-                  wallet_address: bb57ec2638026b5b4a0005192831ad9a
-                - connected_at: '2023-03-07T19:53:09.000Z'
+                  username: user89
+                  wallet_address: 237e17e5ce092ef3b63b258db163a9b4
+                - connected_at: '2023-03-22T15:23:39.000Z'
                   connected_user_invested_amount: '0'
                   connection_type: supporting
-                  name: user113
+                  id: 650068fa-8010-4254-8928-36670f204770
+                  name: user90
                   profile_picture_url:
                   ticker:
                   user_invested_amount: '0'
-                  username: user113
-                  wallet_address: 250348fa04e54b61ad9a8a9a5e5c86f9
-                - connected_at: '2023-03-07T19:53:09.000Z'
+                  username: user90
+                  wallet_address: c2aa639bb65edb008dfdaf599ed4c426
+                - connected_at: '2023-03-22T15:23:39.000Z'
                   connected_user_invested_amount: '0'
-                  connection_type: follower
-                  name: user114
+                  connection_type: subscriber
+                  id: 986b7bbd-1f65-4ebb-940d-cde88a3d33af
+                  name: user91
                   profile_picture_url:
                   ticker:
                   user_invested_amount: '0'
-                  username: user114
-                  wallet_address: 42b2f7dbeb16e4980e25dda940ec73f8
+                  username: user91
+                  wallet_address: 7455de4a6bf456d6eb11e64bbbaf6067
                 pagination:
                   total: 4
                   cursor:
@@ -117,9 +121,9 @@ paths:
                           - super_connection
                           - supporter
                           - supporting
-                          - mutual_follow
-                          - follower
-                          - following
+                          - mutual_subscription
+                          - subscriber
+                          - subscribing
                           description: The type of the connection
                         connected_at:
                           type: string
@@ -148,11 +152,11 @@ paths:
           description: talent not found
         '401':
           description: unauthorized request
-  "/followers":
+  "/subscribers":
     get:
-      summary: Retrieves the followers of a talent
+      summary: Retrieves the subscribers of a talent
       tags:
-      - Followers
+      - Subscribers
       parameters:
       - name: id
         in: query
@@ -175,26 +179,106 @@ paths:
           content:
             application/json:
               example:
-                followers:
+                subscribers:
                 - email: user_126@talentprotocol.com
                   headline:
                   name: user126
                   profile_picture_url:
                   username: user126
-                  wallet_address: 5adca4cd7e444ca96ea2e8a686a433f4
+                  wallet_address: 0e7a52df6dec25cb2da69f20a7e88ff2
                 - email: user_127@talentprotocol.com
                   headline:
                   name: user127
                   profile_picture_url:
                   username: user127
-                  wallet_address: 6339296badcfd7f8bd6c650eb18ce6d8
+                  wallet_address: 80e647fc168d808c4028e650773c042d
                 pagination:
                   total: 2
                   cursor:
               schema:
                 type: object
                 properties:
-                  followers:
+                  subscribers:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        username:
+                          type: string
+                        name:
+                          type: string
+                        headline:
+                          type: string
+                          nullable: true
+                        profile_picture_url:
+                          type: string
+                          nullable: true
+                        email:
+                          type: string
+                        wallet_address:
+                          type: string
+                          nullable: true
+                  pagination:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        description: The total amount of records
+                      cursor:
+                        type: string
+                        description: The cursor to fetch the next page of records
+                        nullable: true
+        '404':
+          description: talent not found
+        '401':
+          description: unauthorized request
+  "/subscribing":
+    get:
+      summary: Retrieves the talents a talent is subscribing
+      tags:
+      - Subscribing
+      parameters:
+      - name: id
+        in: query
+        description: Wallet address or username
+        schema:
+          type: string
+      - name: cursor
+        in: query
+        description: The cursor to fetch the next page
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        description: Your Talent Protocol API key
+        schema:
+          type: string
+      responses:
+        '200':
+          description: talent found
+          content:
+            application/json:
+              example:
+                subscribing:
+                - email: user_136@talentprotocol.com
+                  headline:
+                  name: user136
+                  profile_picture_url:
+                  username: user136
+                  wallet_address: '02119da1bb3dd254876744d159a539ff'
+                - email: user_135@talentprotocol.com
+                  headline:
+                  name: user135
+                  profile_picture_url:
+                  username: user135
+                  wallet_address: 6e6d549cd29920f588ca730522431606
+                pagination:
+                  total: 2
+                  cursor:
+              schema:
+                type: object
+                properties:
+                  subscribing:
                     type: array
                     items:
                       type: object
@@ -256,18 +340,18 @@ paths:
             application/json:
               example:
                 supporters:
-                - email: user_154@talentprotocol.com
+                - email: user_167@talentprotocol.com
                   headline:
-                  name: user154
+                  name: user167
                   profile_picture_url:
-                  username: user154
-                  wallet_address: 7f0c12cb9d0350279d023b07da412dba
-                - email: user_155@talentprotocol.com
+                  username: user167
+                  wallet_address: c907e984186f817e4d442e77e71d1e5f
+                - email: user_168@talentprotocol.com
                   headline:
-                  name: user155
+                  name: user168
                   profile_picture_url:
-                  username: user155
-                  wallet_address: 6c23876996484f51ce08767095c1ebed
+                  username: user168
+                  wallet_address: '0379c2b0904afbb3cad6fdd79f34d2d7'
                 pagination:
                   total: 2
                   cursor:
@@ -338,30 +422,30 @@ paths:
             application/json:
               example:
                 talents:
-                - email: user_162@talentprotocol.com
+                - email: user_176@talentprotocol.com
                   headline:
-                  name: user162
+                  name: user176
                   profile_picture_url:
-                  username: user162
-                  wallet_address: 88c2fb9f2e5d50b69853606d63ec2b8c
-                - email: user_163@talentprotocol.com
+                  username: user176
+                  wallet_address: 1eff98675f1a490ef7416125d251e576
+                - email: user_178@talentprotocol.com
                   headline:
-                  name: user163
+                  name: user178
                   profile_picture_url:
-                  username: user163
-                  wallet_address: 28369985053af9ba1e0dd53daede1007
-                - email: user_164@talentprotocol.com
+                  username: user178
+                  wallet_address: f6f1cc6037bda0687f818e53088b7fd1
+                - email: user_175@talentprotocol.com
                   headline:
-                  name: user164
+                  name: user175
                   profile_picture_url:
-                  username: user164
-                  wallet_address: 3d94cddea1f8980e9d2e09846f0e7eeb
-                - email: user_165@talentprotocol.com
+                  username: user175
+                  wallet_address: 96b7e805d3fb4f7fc69db10cb06be5d4
+                - email: user_177@talentprotocol.com
                   headline:
-                  name: user165
+                  name: user177
                   profile_picture_url:
-                  username: user165
-                  wallet_address: 31b13f7087c0318999a573da68b65d6a
+                  username: user177
+                  wallet_address: 6a2da620e6c37123f745b50c005bc6c7
                 pagination:
                   total: 4
                   cursor:
@@ -424,16 +508,16 @@ paths:
             application/json:
               example:
                 talent:
-                  email: user_174@talentprotocol.com
-                  followers_count: 1
-                  following_count: 2
+                  email: user_187@talentprotocol.com
                   headline:
                   name: API user
                   profile_picture_url:
+                  subscribers_count: 1
+                  subscribing_count: 2
                   supporters_count: 1
                   supporting_count: 1
-                  username: user174
-                  wallet_address: da0aa137c497a20102cc89f07e5f3ff2
+                  username: user187
+                  wallet_address: c24a13b73248f61bf15d3e99a942303f
               schema:
                 type: object
                 properties:

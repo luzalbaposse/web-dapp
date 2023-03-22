@@ -64,7 +64,7 @@ class API::V1::TalentController < ApplicationController
     service.call(talent_params, user_params, tag_params, career_need_params)
 
     if service.success
-      CreateNotificationTalentChangedJob.perform_later(talent.user.followers.pluck(:follower_id), talent.user_id)
+      CreateNotificationTalentChangedJob.perform_later(talent.user.subscriptions.pluck(:subscriber_id), talent.user_id)
       render json: TalentBlueprint.render(talent, view: :extended, current_user_watchlist: current_user_watchlist), status: :ok
     else
       render json: {error: "Unable to update Talent."}, status: :unprocessable_entity

@@ -33,7 +33,7 @@ class API::V1::Talent::PerksController < ApplicationController
   private
 
   def notify_of_change
-    CreateNotificationTalentChangedJob.perform_later(talent.user.followers.pluck(:follower_id), talent.user_id)
+    CreateNotificationTalentChangedJob.perform_later(talent.user.subscriptions.pluck(:subscriber_id), talent.user_id)
   end
 
   def talent
