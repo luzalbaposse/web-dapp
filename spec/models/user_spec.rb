@@ -12,9 +12,10 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_many(:receivers).through(:messaged) }
 
     # Feed
-    it { is_expected.to have_many(:follows) }
-    it { is_expected.to have_many(:followers).through(:follows) }
-    it { is_expected.to have_many(:following) }
+    it { is_expected.to have_many(:subscriptions) }
+    it { is_expected.to have_many(:subscribers).through(:subscriptions) }
+    it { is_expected.to have_many(:subscribing) }
+    it { is_expected.to have_many(:users_subscribing) }
     it { is_expected.to have_many(:connections) }
   end
 
@@ -443,12 +444,12 @@ RSpec.describe User, type: :model do
     let(:talent) { create :talent }
     let(:talent_token) { create :talent_token, talent: talent, deployed: true }
 
-    context "when the user is only following the other user" do
+    context "when the user is only subscribing the other user" do
       before do
-        create :follow, user: other_user, follower: user, created_at: Date.yesterday
+        create :subscription, user: other_user, subscriber: user, created_at: Date.yesterday
       end
 
-      it "returns the date of the follow" do
+      it "returns the date of the subscribe" do
         expect(user.connected_with_since(other_user)).to eq Date.yesterday
       end
     end
@@ -463,9 +464,9 @@ RSpec.describe User, type: :model do
       end
     end
 
-    context "when the user is invested in and is following the other user" do
+    context "when the user is invested in and is subscribing the other user" do
       before do
-        create :follow, user: other_user, follower: user, created_at: Date.yesterday
+        create :subscription, user: other_user, subscriber: user, created_at: Date.yesterday
         create :talent_supporter, supporter_wallet_id: user.wallet_id, talent_contract_id: talent_token.contract_id, first_time_bought_at: Date.today - 10.days
       end
 

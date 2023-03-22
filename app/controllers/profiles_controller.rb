@@ -15,6 +15,9 @@ class ProfilesController < ApplicationController
       tags: user.tags.where(hidden: false)
     )
 
+    puts "TALENT"
+    puts @talent
+
     @with_persona_request = WithPersonaRequestBlueprint.render_as_json(WithPersonaRequest.current_month_persona_request)
   end
 

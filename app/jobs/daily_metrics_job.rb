@@ -140,9 +140,9 @@ class DailyMetricsJob < ApplicationJob
           where messages.created_at > :one_month_ago
       )
       OR users.id IN (
-          select follows.follower_id
-          from follows
-          where follows.created_at > :one_month_ago
+          select subscriptions.subscriber_id
+          from subscriptions
+          where subscriptions.created_at > :one_month_ago
       )
     SQL
 

@@ -23,7 +23,7 @@ module Users
 
         create_invite(user)
         create_tasks(user)
-        create_follow(invite, user)
+        create_subscription(invite, user)
 
         UserMailer.with(user: user).send_welcome_email.deliver_later(wait: 5.seconds)
 
@@ -61,7 +61,7 @@ module Users
 
     def create_user(params)
       user = User.new(attributes(params))
-      user.onboarded_at = Time.current
+      user.onboarded_at = Time.current unless params[:linkedin_id]
       user.save!
       user
     end
@@ -124,14 +124,15 @@ module Users
       user.reload
     end
 
-    def create_follow(invite, user)
+    def create_subscription(invite, user)
       return unless invite
 
       invited_by_user = invite.user
       return unless invited_by_user
 
-      follow = Follow.find_or_initialize_by(user_id: user.id, follower_id: invited_by_user.id)
-      unless follow.persisted? # validate if the watchlist quest is completed
+      subscription = Subscription.find_or_create_by(user_id: user.id, subscriber_id: invited_by_user.id)
+
+      unless subscription.persisted? # validate if the watchlist quest is completed
         UpdateTasksJob.perform_later(type: "Tasks::Watchlist", user_id: invited_by_user.id)
       end
     end

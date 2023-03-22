@@ -22,8 +22,8 @@ module PublicAPI
     }
 
     DETAILED_TALENT_PROPERTIES = TALENT_PROPERTIES.merge({
-      followers_count: {type: :integer},
-      following_count: {type: :integer},
+      subscriber_count: {type: :integer},
+      subscribing_count: {type: :integer},
       supporters_count: {type: :integer},
       supporting_count: {type: :integer}
     })

@@ -6,12 +6,15 @@ module PublicAPIRoutes
           # API authenticated endpoints
           scope module: :public_api, as: "public" do
             resources :talents, only: [:show, :index]
-            resources :followers, only: [:index]
             resources :supporters, only: [:index]
             resources :connections, only: [:index]
             resources :sessions, only: [] do
               get :logged_in_user, on: :collection
             end
+            resources :subscriptions, only: [:create]
+            delete "subscriptions", to: "subscriptions#destroy"
+            get "subscribers", to: "subscriptions#subscribers"
+            get "subscribing", to: "subscriptions#subscribing"
           end
 
           # API non authenticated endpoints

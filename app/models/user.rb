@@ -27,9 +27,10 @@ class User < ApplicationRecord
   has_many :receivers, through: :messaged
 
   # Feed
-  has_many :follows
-  has_many :followers, through: :follows # only use to load users, never to count
-  has_many :following, foreign_key: :follower_id, class_name: "Follow"
+  has_many :subscriptions
+  has_many :subscribers, through: :subscriptions # only use to load users, never to count
+  has_many :subscribing, foreign_key: :subscriber_id, class_name: "Subscription"
+  has_many :users_subscribing, foreign_key: :user_id, source: "user", through: :subscribing
   has_many :notifications, as: :recipient
   has_many :quests
   has_many :connections, dependent: :destroy
@@ -224,14 +225,14 @@ class User < ApplicationRecord
   def connected_with_since(other_user)
     supporter_data = TalentSupporter.find_by(supporter_wallet_id: wallet_id, talent_contract_id: other_user.talent&.talent_token&.contract_id)
     supporting_data = TalentSupporter.find_by(supporter_wallet_id: other_user.wallet_id, talent_contract_id: talent&.talent_token&.contract_id)
-    follower_data = follows.find_by(follower: other_user)
-    following_data = following.find_by(user: other_user)
+    subscriber_data = subscriptions.find_by(subscriber: other_user)
+    subscribing_data = subscribing.find_by(user: other_user)
 
     [
       supporter_data&.first_time_bought_at,
       supporting_data&.first_time_bought_at,
-      follower_data&.created_at,
-      following_data&.created_at
+      subscriber_data&.created_at,
+      subscribing_data&.created_at
     ].compact.min
   end
 

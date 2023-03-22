@@ -33,7 +33,7 @@ RSpec.describe "Connections API" do
         create :connection, user: talent_user, connected_user: user_1, connection_type: "super_connection"
         create :connection, user: talent_user, connected_user: user_2, connection_type: "supporter"
         create :connection, user: talent_user, connected_user: user_3, connection_type: "supporting"
-        create :connection, user: talent_user, connected_user: user_4, connection_type: "follower"
+        create :connection, user: talent_user, connected_user: user_4, connection_type: "subscriber"
       end
 
       response "200", "talent found", save_example: true do

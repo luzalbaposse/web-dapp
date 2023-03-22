@@ -133,10 +133,10 @@ RSpec.describe Talents::ChewySearch do
     end
 
     before do
-      create :follow, user: user_2, follower: user_1
+      create :subscription, user: user_2, subscriber: user_1
     end
 
-    it "returns user they are following" do
+    it "returns user they are subscribing" do
       expect(search_talents[1].map { |t| t["id"] }).to match_array([talent_2].pluck(:id))
     end
   end

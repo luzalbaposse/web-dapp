@@ -33,11 +33,11 @@ const SocialGraph = ({ talent }) => {
         return "2";
       case "supporting":
         return "3";
-      case "mutual_follow":
+      case "mutual_subscription":
         return "4";
-      case "follower":
+      case "subscriber":
         return "5";
-      case "following":
+      case "subscribing":
       default:
         return "6";
     }
@@ -55,11 +55,11 @@ const SocialGraph = ({ talent }) => {
       case "supporter":
         score = 1 + (1000 * connection.connected_user_invested_amount) / talent.totalSupply;
         break;
-      case "mutual_follow":
+      case "mutual_subscription":
         score = 1.1;
         break;
-      case "follower":
-      case "following":
+      case "subscriber":
+      case "subscribing":
       default:
         score = 1;
         break;
@@ -86,9 +86,9 @@ const SocialGraph = ({ talent }) => {
       { key: "1", color: "#bbed55", clusterLabel: "Super Connection" },
       { key: "2", color: "#579f5f", clusterLabel: "Supporter" },
       { key: "3", color: "#7145cd", clusterLabel: "Supporting" },
-      { key: "4", color: "#E1C3FF", clusterLabel: "Mutual Follow" },
-      { key: "5", color: "#328AFF", clusterLabel: "Follower" },
-      { key: "6", color: "#7aa1d5", clusterLabel: "Following" }
+      { key: "4", color: "#E1C3FF", clusterLabel: "Mutual Subscriptionr" },
+      { key: "5", color: "#328AFF", clusterLabel: "Subscriber" },
+      { key: "6", color: "#7aa1d5", clusterLabel: "Subscribing" }
     ];
 
     // add self node
@@ -109,7 +109,7 @@ const SocialGraph = ({ talent }) => {
     });
 
     // add connection nodes & edges
-    response.connections.map((connection) => {
+    response.connections.map(connection => {
       nodes.push({
         key: connection.username,
         label: connection.name,

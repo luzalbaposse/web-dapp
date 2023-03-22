@@ -97,7 +97,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user_watchlist
-    current_acting_user ? current_acting_user.following.pluck(:user_id) : []
+    current_acting_user ? current_acting_user.subscribing.pluck(:user_id) : []
   end
 
   def user_from_impersonated_cookie

@@ -22,12 +22,12 @@ class API::TalentBlueprint < Blueprinter::Base
       user.portfolio.count
     end
 
-    field :followers_count do |user, _options|
-      user.followers.count
+    field :subscribers_count do |user, _options|
+      user.subscribers.count
     end
 
-    field :following_count do |user, _options|
-      user.following.count
+    field :subscribing_count do |user, _options|
+      user.users_subscribing.count
     end
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_08_183046) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_21_154101) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -117,6 +117,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_183046) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["career_goal_id"], name: "index_career_needs_on_career_goal_id"
+  end
+
+  create_table "career_updates", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.text "text_ciphertext", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_career_updates_on_user_id"
+    t.index ["uuid"], name: "index_career_updates_on_uuid"
   end
 
   create_table "chats", force: :cascade do |t|
@@ -240,16 +250,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_183046) do
     t.index ["user_id"], name: "index_erc721_tokens_on_user_id"
   end
 
-  create_table "follows", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "user_id"
-    t.bigint "follower_id"
-    t.index ["follower_id"], name: "index_follows_on_follower_id"
-    t.index ["user_id", "follower_id"], name: "index_follows_on_user_id_and_follower_id", unique: true
-    t.index ["user_id"], name: "index_follows_on_user_id"
-  end
-
   create_table "goal_images", force: :cascade do |t|
     t.bigint "goal_id", null: false
     t.text "image_data"
@@ -316,6 +316,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_183046) do
     t.boolean "is_read", default: false, null: false
     t.boolean "sent_to_supporters", default: false
     t.bigint "chat_id"
+    t.bigint "career_update_id"
+    t.index ["career_update_id"], name: "index_messages_on_career_update_id"
     t.index ["chat_id"], name: "index_messages_on_chat_id"
     t.index ["receiver_id"], name: "index_messages_on_receiver_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"
@@ -422,6 +424,29 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_183046) do
     t.index ["creator_id"], name: "index_rewards_on_creator_id"
     t.index ["identifier"], name: "index_rewards_on_identifier", unique: true
     t.index ["user_id"], name: "index_rewards_on_user_id"
+  end
+
+  create_table "sponsorships", force: :cascade do |t|
+    t.string "sponsor", null: false
+    t.string "talent", null: false
+    t.bigint "amount", null: false
+    t.string "token", null: false
+    t.string "symbol", null: false
+    t.string "tx_hash", null: false
+    t.integer "chain_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tx_hash", "chain_id"], name: "index_sponsorships_on_tx_hash_and_chain_id", unique: true
+  end
+
+  create_table "subscriptions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.bigint "subscriber_id"
+    t.index ["subscriber_id"], name: "index_subscriptions_on_subscriber_id"
+    t.index ["user_id", "subscriber_id"], name: "index_subscriptions_on_user_id_and_subscriber_id", unique: true
+    t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
   create_table "tags", force: :cascade do |t|
@@ -574,8 +599,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_183046) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.string "theme_preference", default: "light"
     t.boolean "disabled", default: false
+    t.string "theme_preference", default: "light"
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"
@@ -646,6 +671,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_183046) do
   add_foreign_key "api_log_requests", "api_keys"
   add_foreign_key "career_goals", "talent"
   add_foreign_key "career_needs", "career_goals"
+  add_foreign_key "career_updates", "users"
   add_foreign_key "chats", "users", column: "receiver_id"
   add_foreign_key "chats", "users", column: "sender_id"
   add_foreign_key "connections", "users"
@@ -653,8 +679,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_183046) do
   add_foreign_key "discovery_rows", "partnerships"
   add_foreign_key "erc20_tokens", "users"
   add_foreign_key "erc721_tokens", "users"
-  add_foreign_key "follows", "users"
-  add_foreign_key "follows", "users", column: "follower_id"
   add_foreign_key "goal_images", "goals"
   add_foreign_key "goals", "career_goals"
   add_foreign_key "impersonations", "users", column: "impersonated_id"
@@ -662,6 +686,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_183046) do
   add_foreign_key "invites", "partnerships"
   add_foreign_key "invites", "users"
   add_foreign_key "marketing_articles", "users"
+  add_foreign_key "messages", "career_updates"
   add_foreign_key "messages", "chats"
   add_foreign_key "milestone_images", "milestones"
   add_foreign_key "milestones", "talent"
@@ -671,6 +696,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_183046) do
   add_foreign_key "quests", "users"
   add_foreign_key "rewards", "users"
   add_foreign_key "rewards", "users", column: "creator_id"
+  add_foreign_key "subscriptions", "users"
+  add_foreign_key "subscriptions", "users", column: "subscriber_id"
   add_foreign_key "tags", "discovery_rows"
   add_foreign_key "talent_tokens", "talent"
   add_foreign_key "tasks", "quests"

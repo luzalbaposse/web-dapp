@@ -102,8 +102,8 @@ export const ProfileCard = ({
               <P2 className="text-primary-04" text="Supporting" />
             </Button>
             <Button className="d-flex mr-2 mt-2 button-link p-0" onClick={() => changeSection("#community")}>
-              <P2 className="text-primary-01 mr-1" bold text={talent.followersCount || "0"} />
-              <P2 className="text-primary-04" text="Followers" />
+              <P2 className="text-primary-01 mr-1" bold text={talent.subscribersCount || "0"} />
+              <P2 className="text-primary-04" text="Subscribers" />
             </Button>
           </TalentDetails>
         )}

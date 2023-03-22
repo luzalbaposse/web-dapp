@@ -14,8 +14,8 @@ module Users
           user.invites.update_all(user_id: 1, max_uses: 0)
         end
 
-        user.follows.destroy_all
-        user.following.destroy_all
+        user.subscriptions.destroy_all
+        user.users_subscribing.destroy_all
 
         destroy_talent_relations!
 

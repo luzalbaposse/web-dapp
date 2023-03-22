@@ -79,8 +79,6 @@ Rails.application.routes.draw do
           end
         end
 
-        resources :follows, only: [:index, :create]
-        delete "follows", to: "follows#destroy"
         resources :notifications, only: [:index] do
           put :mark_as_read
         end

@@ -103,24 +103,24 @@ const DiscoveryShow = ({ discoveryRow, env }) => {
     setTalents(sortedTalent);
   }, [selectedSort, sortDirection]);
 
-  const updateFollow = async talent => {
+  const updateSubcriber = async talent => {
     const newTalents = talents.map(currTalent => {
       if (currTalent.id === talent.id) {
-        return { ...currTalent, isFollowing: !talent.isFollowing };
+        return { ...currTalent, isSubscribing: !talent.isSubscribing };
       } else {
         return { ...currTalent };
       }
     });
 
-    if (talent.isFollowing) {
-      const response = await destroy(`/api/v1/follows?user_id=${talent.userId}`);
+    if (talent.isSubscribing) {
+      const response = await destroy(`/api/v1/subscriptions?talent_id=${talent.user.username}`);
 
       if (response.success) {
         setTalents([...newTalents]);
       }
     } else {
-      const response = await post(`/api/v1/follows`, {
-        user_id: talent.userId
+      const response = await post(`/api/v1/subscriptions`, {
+        talent_id: talent.user.username
       });
 
       if (response.success) {
@@ -300,10 +300,10 @@ const DiscoveryShow = ({ discoveryRow, env }) => {
           sortDirection={sortDirection}
           setSortDirection={setSortDirection}
           showFirstBoughtField={false}
-          updateFollow={updateFollow}
+          updateSubcriber={updateSubcriber}
         />
       ) : (
-        <TalentTableCardMode talents={talents} updateFollow={updateFollow} env={env} />
+        <TalentTableCardMode talents={talents} updateSubcriber={updateSubcriber} env={env} />
       )}
       {loading && (
         <div className="w-100 d-flex flex-row my-2 justify-content-center">

@@ -88,7 +88,7 @@ const MobileTalentTableDropdown = ({
 const TalentTableListMode = ({
   talents,
   theme,
-  updateFollow,
+  updateSubscription,
   selectedSort,
   setSelectedSort,
   sortDirection,
@@ -177,8 +177,8 @@ const TalentTableListMode = ({
                 <Table.Td>
                   <div className="d-flex flex-row align-items-center">
                     {!publicPageViewer && (
-                      <button className="border-0 text-warning button-link" onClick={() => updateFollow(talent)}>
-                        {talent.isFollowing ? (
+                      <button className="border-0 text-warning button-link" onClick={() => updateSubscription(talent)}>
+                        {talent.isSubscribing ? (
                           <FontAwesomeIcon icon={faStar} />
                         ) : (
                           <FontAwesomeIcon icon={faStarOutline} />
@@ -272,8 +272,8 @@ const TalentTableListMode = ({
           <Table.Tr key={`talent-${talent.id}`}>
             {!publicPageViewer && (
               <Table.Td>
-                <button className="border-0 text-warning button-link" onClick={() => updateFollow(talent)}>
-                  {talent.isFollowing ? <FontAwesomeIcon icon={faStar} /> : <FontAwesomeIcon icon={faStarOutline} />}
+                <button className="border-0 text-warning button-link" onClick={() => updateSubscription(talent)}>
+                  {talent.isSubscribing ? <FontAwesomeIcon icon={faStar} /> : <FontAwesomeIcon icon={faStarOutline} />}
                 </button>
               </Table.Td>
             )}

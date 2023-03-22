@@ -62,6 +62,18 @@ RSpec.describe Users::Create do
       expect(talent_profile_data["headline"]).to eq(headline)
     end
 
+    it "creates a new subscribe" do
+      expect { create_user }.to change(Subscription, :count).from(0).to(1)
+
+      created_subscribe = Subscription.last
+      created_user = User.last
+
+      aggregate_failures do
+        expect(created_subscribe.subscriber).to eq invite.user
+        expect(created_subscribe.user).to eq created_user
+      end
+    end
+
     it "onboards the created user" do
       freeze_time do
         result = create_user
@@ -113,6 +125,13 @@ RSpec.describe Users::Create do
 
         expect(user.linkedin_id).to eq(linkedin_id)
         expect(user.password).to be_nil
+      end
+
+      it "does not onboard the user" do
+        result = create_user
+        user = result[:user]
+
+        expect(user.onboarded_at).to eq(nil)
       end
     end
 
