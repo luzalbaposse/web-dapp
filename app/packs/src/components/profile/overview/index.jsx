@@ -730,6 +730,7 @@ const Overview = ({
         hide={() => setShowApprovalConfirmationModal(false)}
         talent={talent}
         setTalent={setTalent}
+        railsContext={railsContext}
       />
       <RejectTalentModal
         show={showRejectModal}
