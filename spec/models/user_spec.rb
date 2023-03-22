@@ -16,6 +16,7 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_many(:subscribers).through(:subscriptions) }
     it { is_expected.to have_many(:subscribing) }
     it { is_expected.to have_many(:users_subscribing) }
+    it { is_expected.to have_many(:pending_subscriptions) }
     it { is_expected.to have_many(:connections) }
   end
 
