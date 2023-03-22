@@ -106,21 +106,21 @@ const DiscoveryShow = ({ discoveryRow, env }) => {
   const updateFollow = async talent => {
     const newTalents = talents.map(currTalent => {
       if (currTalent.id === talent.id) {
-        return { ...currTalent, isFollowing: !talent.isFollowing };
+        return { ...currTalent, isSubscribing: !talent.isSubscribing };
       } else {
         return { ...currTalent };
       }
     });
 
-    if (talent.isFollowing) {
-      const response = await destroy(`/api/v1/follows?user_id=${talent.userId}`);
+    if (talent.isSubscribing) {
+      const response = await destroy(`/api/v1/subscribes?user_id=${talent.user.uuid}`);
 
       if (response.success) {
         setTalents([...newTalents]);
       }
     } else {
-      const response = await post(`/api/v1/follows`, {
-        user_id: talent.userId
+      const response = await post(`/api/v1/subscribes`, {
+        user_id: talent.user.uuid
       });
 
       if (response.success) {

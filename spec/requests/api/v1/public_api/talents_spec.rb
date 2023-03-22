@@ -138,8 +138,8 @@ RSpec.describe "Talents API" do
             expect(returned_talent["headline"]).to eq(talent_user.talent.headline)
             expect(returned_talent["wallet_address"]).to eq(talent_user.wallet_id)
             expect(returned_talent["profile_picture_url"]).to eq(talent_user.profile_picture_url)
-            expect(returned_talent["followers_count"]).to eq(1)
-            expect(returned_talent["following_count"]).to eq(2)
+            expect(returned_talent["subscribers_count"]).to eq(1)
+            expect(returned_talent["subscribing_count"]).to eq(2)
             expect(returned_talent["supporters_count"]).to eq(1)
             expect(returned_talent["supporting_count"]).to eq(1)
           end

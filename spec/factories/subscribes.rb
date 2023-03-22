@@ -1,4 +1,4 @@
 FactoryBot.define do
-  factory :follow do
+  factory :subscribe do
   end
 end

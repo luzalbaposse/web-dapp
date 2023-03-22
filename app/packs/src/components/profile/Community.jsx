@@ -34,9 +34,9 @@ const CommunityTable = ({ connections, mode, ticker, mobile }) => {
       super_connection: "Super Connection",
       supporter: "Supporter",
       supporting: "Supporting",
-      mutual_follow: "Mutual Follow",
-      follower: "Follower",
-      following: "Following"
+      mutual_subscribe: "Mutual Subscribe",
+      subscriber: "Subscriber",
+      subscribing: "Subscribing"
     }[connection_type];
   };
 
@@ -175,9 +175,9 @@ const Community = ({ userId, talent, canUpdate }) => {
     { name: "Super Connection", value: "super_connection" },
     { name: "Supporter", value: "supporter" },
     { name: "Supporting", value: "supporting" },
-    { name: "Mutual Follow", value: "mutual_follow" },
-    { name: "Follower", value: "follower" },
-    { name: "Following", value: "following" }
+    { name: "Mutual Subscriber", value: "mutual_subscriber" },
+    { name: "Subscriber", value: "subscriber" },
+    { name: "Subscribing", value: "subscribing" }
   ];
   const connectionTypeOption = value => {
     for (let i = 0; i < options.length; i++) {
@@ -284,12 +284,12 @@ const Community = ({ userId, talent, canUpdate }) => {
           <P2 className="text-primary-04" text="Supporting" />
         </div>
         <div className="col-6 col-lg-2 d-flex">
-          <P2 className={cx("text-primary-01 mr-1", mobile && "ml-5")} bold text={talent.followersCount || "0"} />
-          <P2 className="text-primary-04" text="Followers" />
+          <P2 className={cx("text-primary-01 mr-1", mobile && "ml-5")} bold text={talent.subscribersCount || "0"} />
+          <P2 className="text-primary-04" text="Subscribers" />
         </div>
         <div className="col-6 col-lg-2 d-flex">
-          <P2 className="text-primary-01 mr-1" bold text={talent.followingCount || "0"} />
-          <P2 className="text-primary-04" text="Following" />
+          <P2 className="text-primary-01 mr-1" bold text={talent.subscribingCount || "0"} />
+          <P2 className="text-primary-04" text="Subscribing" />
         </div>
       </div>
       {talent.connectionsCount > 0 && (

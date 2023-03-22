@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "API pagination" do
-  subject(:api_request) { get(api_v1_public_followers_path(id: id, params: params), headers: headers) }
+  subject(:api_request) { get(api_v1_public_subscribers_path(id: id, params: params), headers: headers) }
   let!(:api_key) { create :api_key, :activated, access_key: access_key }
   let(:access_key) { SecureRandom.hex }
 
@@ -21,10 +21,10 @@ RSpec.describe "API pagination" do
   end
 
   before do
-    create :follow, user: user, follower: user_1
-    create :follow, user: user, follower: user_2
-    create :follow, user: user, follower: user_3
-    create :follow, user: user, follower: user_4
+    create :subscribe, user: user, subscriber: user_1
+    create :subscribe, user: user, subscriber: user_2
+    create :subscribe, user: user, subscriber: user_3
+    create :subscribe, user: user, subscriber: user_4
 
     # Sets the number of returned items per page
     ENV["API_PAGINATION_PER_PAGE"] = "2"
@@ -38,8 +38,8 @@ RSpec.describe "API pagination" do
     api_request
 
     aggregate_failures do
-      expect(json[:followers].count).to eq 2
-      expect(json[:followers].pluck(:username)).to eq([user_4.username, user_3.username])
+      expect(json[:subscribers].count).to eq 2
+      expect(json[:subscribers].pluck(:username)).to eq([user_4.username, user_3.username])
       expect(json[:pagination]).to eq(
         {
           total: 4,
@@ -56,8 +56,8 @@ RSpec.describe "API pagination" do
       api_request
 
       aggregate_failures do
-        expect(json[:followers].count).to eq 2
-        expect(json[:followers].pluck(:username)).to eq([user_2.username, user_1.username])
+        expect(json[:subscribers].count).to eq 2
+        expect(json[:subscribers].pluck(:username)).to eq([user_2.username, user_1.username])
         expect(json[:pagination]).to eq(
           {
             total: 4,

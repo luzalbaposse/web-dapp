@@ -235,27 +235,27 @@ const Overview = ({
     }
   };
 
-  const updateFollow = async () => {
+  const updateSubscriber = async () => {
     let response;
-    if (talent.isFollowing) {
-      response = await destroy(`/api/v1/follows?user_id=${talent.user.id}`);
+    if (talent.isSubscribing) {
+      response = await destroy(`/api/v1/subscribes?user_id=${talent.user.uuid}`);
     } else {
-      response = await post(`/api/v1/follows`, {
-        user_id: talent.user.id
+      response = await post(`/api/v1/subscribes`, {
+        user_id: talent.user.uuid
       });
     }
 
     if (response.success) {
       setTalent(prev => ({
         ...prev,
-        isFollowing: !talent.isFollowing
+        isSubscribing: !talent.isSubscribing
       }));
     } else {
-      toast.error(<ToastBody heading="Unable to update follow" body={response?.error} />);
+      toast.error(<ToastBody heading="Unable to update subscribe" body={response?.error} />);
     }
   };
 
-  const showFollowButton = () => {
+  const showSubscribeButton = () => {
     return currentUserId && talent.user.id != currentUserId && !profileSubdomain;
   };
 
@@ -474,13 +474,13 @@ const Overview = ({
                             </Button>
                           </a>
                         )}
-                        {showFollowButton() && (
+                        {showSubscribeButton() && (
                           <Button
                             className="mr-2"
                             type="white-outline"
                             size="big"
-                            text={talent.isFollowing ? "Unfollow" : "Follow"}
-                            onClick={() => updateFollow()}
+                            text={talent.isSubscribing ? "Unsubscribe" : "Subscribe"}
+                            onClick={() => updateSubscriber()}
                           />
                         )}
                         {talent.talentToken.contractId && !profileSubdomain && (
@@ -658,13 +658,13 @@ const Overview = ({
                             </Button>
                           </a>
                         )}
-                        {showFollowButton() && (
+                        {showSubscribeButton() && (
                           <Button
                             className="mr-2"
                             type="white-outline"
                             size="big"
-                            text={talent.isFollowing ? "Unfollow" : "Follow"}
-                            onClick={() => updateFollow()}
+                            text={talent.isSubscribing ? "Unsubscribe" : "Subscribe"}
+                            onClick={() => updateSubscriber()}
                           />
                         )}
                         {talent.talentToken.contractId && !profileSubdomain && (

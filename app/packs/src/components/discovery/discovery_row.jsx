@@ -51,20 +51,20 @@ const DiscoveryRow = ({ discoveryRow, env }) => {
     });
   };
 
-  const updateFollow = async talent => {
+  const updateSubscribe = async talent => {
     let response;
-    if (talent.is_following) {
-      response = await destroy(`/api/v1/follows?user_id=${talent.user_id}`);
+    if (talent.is_subscribing) {
+      response = await destroy(`/api/v1/subscribes?user_id=${talent.user.uuid}`);
     } else {
-      response = await post(`/api/v1/follows`, {
-        user_id: talent.user_id
+      response = await post(`/api/v1/subscribes`, {
+        user_id: talent.user.uuid
       });
     }
 
     if (response.success) {
       const newLocalTalents = talents.map(currentTalent => {
         if (currentTalent.id === talent.id) {
-          return { ...currentTalent, is_following: !talent.is_following };
+          return { ...currentTalent, is_subscribing: !talent.is_subscribing };
         } else {
           return { ...currentTalent };
         }
@@ -72,7 +72,7 @@ const DiscoveryRow = ({ discoveryRow, env }) => {
 
       setTalents(newLocalTalents);
     } else {
-      toast.error(<ToastBody heading="Unable to update follow" body={response?.error} />);
+      toast.error(<ToastBody heading="Unable to update subscribe" body={response?.error} />);
     }
   };
 
@@ -155,9 +155,9 @@ const DiscoveryRow = ({ discoveryRow, env }) => {
                   occupation={talent.occupation}
                   profilePictureUrl={talent.profile_picture_url}
                   headline={talent.headline}
-                  isFollowing={talent.is_following}
+                  isSubscribing={talent.is_subscribing}
                   isVerified={talent.verified}
-                  updateFollow={() => updateFollow(talent)}
+                  updateSubscribe={() => updateSubscribe(talent)}
                   talentLink={`/u/${talent.user.username}`}
                   profileType={talent.profile_type}
                   marketCap={displayableAmount(talent.market_cap)}

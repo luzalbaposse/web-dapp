@@ -24,27 +24,27 @@ RSpec.describe Connection, type: :model do
       end
     end
 
-    context "when the user is following the connected user" do
+    context "when the user is subscribing the connected user" do
       before do
-        create :follow, user: connected_user, follower: user
+        create :subscriber, user: connected_user, subscriber: user
       end
 
-      it "updates the connection type to follower" do
+      it "updates the connection type to subscriber" do
         updated_connection = connection.refresh_connection!
 
-        expect(updated_connection.connection_type).to eq "follower"
+        expect(updated_connection.connection_type).to eq "subscriber"
       end
     end
 
-    context "when the user is followed the connected user" do
+    context "when the user is being subscribed by the connected user" do
       before do
-        create :follow, user: user, follower: connected_user
+        create :subscriber, user: user, subscriber: connected_user
       end
 
-      it "updates the connection type to following" do
+      it "updates the connection type to subscribing" do
         updated_connection = connection.refresh_connection!
 
-        expect(updated_connection.connection_type).to eq "following"
+        expect(updated_connection.connection_type).to eq "subscribing"
       end
     end
 
@@ -95,16 +95,16 @@ RSpec.describe Connection, type: :model do
       end
     end
 
-    context "when the users follow each other" do
+    context "when the users subscribe each other" do
       before do
-        create :follow, user: user, follower: connected_user
-        create :follow, user: connected_user, follower: user
+        create :subscriber, user: user, subscriber: connected_user
+        create :subscriber, user: connected_user, subscriber: user
       end
 
       it "updates the connection type to super connection" do
         updated_connection = connection.refresh_connection!
 
-        expect(updated_connection.connection_type).to eq "mutual_follow"
+        expect(updated_connection.connection_type).to eq "mutual_subscribe"
       end
     end
   end

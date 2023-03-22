@@ -178,7 +178,7 @@ const TalentTableListMode = ({
                   <div className="d-flex flex-row align-items-center">
                     {!publicPageViewer && (
                       <button className="border-0 text-warning button-link" onClick={() => updateFollow(talent)}>
-                        {talent.isFollowing ? (
+                        {talent.isSubscribing ? (
                           <FontAwesomeIcon icon={faStar} />
                         ) : (
                           <FontAwesomeIcon icon={faStarOutline} />
@@ -273,7 +273,7 @@ const TalentTableListMode = ({
             {!publicPageViewer && (
               <Table.Td>
                 <button className="border-0 text-warning button-link" onClick={() => updateFollow(talent)}>
-                  {talent.isFollowing ? <FontAwesomeIcon icon={faStar} /> : <FontAwesomeIcon icon={faStarOutline} />}
+                  {talent.isSubscribing ? <FontAwesomeIcon icon={faStar} /> : <FontAwesomeIcon icon={faStarOutline} />}
                 </button>
               </Table.Td>
             )}

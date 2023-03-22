@@ -10,9 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_17_161451) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_21_154101) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
@@ -250,16 +249,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_17_161451) do
     t.index ["user_id"], name: "index_erc721_tokens_on_user_id"
   end
 
-  create_table "follows", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "user_id"
-    t.bigint "follower_id"
-    t.index ["follower_id"], name: "index_follows_on_follower_id"
-    t.index ["user_id", "follower_id"], name: "index_follows_on_user_id_and_follower_id", unique: true
-    t.index ["user_id"], name: "index_follows_on_user_id"
-  end
-
   create_table "goal_images", force: :cascade do |t|
     t.bigint "goal_id", null: false
     t.text "image_data"
@@ -449,6 +438,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_17_161451) do
     t.index ["tx_hash", "chain_id"], name: "index_sponsorships_on_tx_hash_and_chain_id", unique: true
   end
 
+  create_table "subscribes", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.bigint "subscriber_id"
+    t.index ["subscriber_id"], name: "index_subscribes_on_subscriber_id"
+    t.index ["user_id", "subscriber_id"], name: "index_subscribes_on_user_id_and_subscriber_id", unique: true
+    t.index ["user_id"], name: "index_subscribes_on_user_id"
+  end
+
   create_table "tags", force: :cascade do |t|
     t.string "description"
     t.datetime "created_at", null: false
@@ -599,8 +598,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_17_161451) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.boolean "disabled", default: false
     t.string "theme_preference", default: "light"
+    t.boolean "disabled", default: false
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"
@@ -679,8 +678,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_17_161451) do
   add_foreign_key "discovery_rows", "partnerships"
   add_foreign_key "erc20_tokens", "users"
   add_foreign_key "erc721_tokens", "users"
-  add_foreign_key "follows", "users"
-  add_foreign_key "follows", "users", column: "follower_id"
   add_foreign_key "goal_images", "goals"
   add_foreign_key "goals", "career_goals"
   add_foreign_key "impersonations", "users", column: "impersonated_id"
@@ -698,6 +695,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_17_161451) do
   add_foreign_key "quests", "users"
   add_foreign_key "rewards", "users"
   add_foreign_key "rewards", "users", column: "creator_id"
+  add_foreign_key "subscribes", "users"
+  add_foreign_key "subscribes", "users", column: "subscriber_id"
   add_foreign_key "tags", "discovery_rows"
   add_foreign_key "talent_tokens", "talent"
   add_foreign_key "tasks", "quests"

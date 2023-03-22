@@ -6,7 +6,7 @@ class TalentBlueprint < Blueprinter::Base
     association :talent_token, blueprint: TalentTokenBlueprint, view: :normal
     association :user, blueprint: UserBlueprint, view: :normal
 
-    field :is_following do |talent, options|
+    field :is_subscribing do |talent, options|
       options[:current_user_watchlist]&.include?(talent.user_id) || false
     end
 
@@ -34,11 +34,11 @@ class TalentBlueprint < Blueprinter::Base
     field :connections_count do |talent, _options|
       talent.user.connections.count
     end
-    field :followers_count do |talent, _options|
-      talent.user.followers.count
+    field :subscribers_count do |talent, _options|
+      talent.user.subscribers.count
     end
-    field :following_count do |talent, _options|
-      talent.user.following.count
+    field :subscribing_count do |talent, _options|
+      talent.user.users_subscribing.count
     end
     field :supporting_count do |talent, _options|
       TalentSupporter.where(supporter_wallet_id: talent.user.wallet_id).count

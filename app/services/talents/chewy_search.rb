@@ -33,14 +33,14 @@ module Talents
       talents = query_for_status(talents)
       talents = sort(talents)
       total_count = talents.count
-      following_user_ids = searching_user&.following&.pluck(:user_id) || []
+      subscribing_user_ids = searching_user&.users_subscribing&.pluck(:user_id) || []
       talents = talents.limit(size).offset(from)
       [{
         current_page: ((from + PAGE_NEUTRALIZER) / size.to_f).ceil,
         last_page: (total_count / size.to_f).ceil
       }, talents.entries.map do |talent|
         attributes = talent.attributes.deep_stringify_keys
-        attributes["is_following"] = following_user_ids.include?(attributes["user_id"])
+        attributes["is_subscribing"] = subscribing_user_ids.include?(attributes["user_id"])
         attributes["profile_picture_url"] = Talent.find_by!(id: talent.id).profile_picture_url
         attributes
       end]
@@ -143,7 +143,7 @@ module Talents
     end
 
     def filter_by_watchlist(talents)
-      talents.query({terms: {"user.id": searching_user.following.pluck(:user_id)}})
+      talents.query({terms: {"user.id": searching_user.users_subscribing.pluck(:user_id)}})
     end
 
     def filter_by_discovery_row(talents)

@@ -22,8 +22,8 @@ const NewTalentCard = ({
   occupation,
   profilePictureUrl,
   headline,
-  isFollowing,
-  updateFollow,
+  isSubscribing,
+  updateSubscriber,
   talentLink,
   marketCap,
   supporterCount,
@@ -39,9 +39,9 @@ const NewTalentCard = ({
   const { mode } = useTheme();
   const chainName = chainIdToName(chainId, env);
 
-  const updateFollowing = e => {
+  const updateSubscribing = e => {
     e.preventDefault();
-    updateFollow();
+    updateSubscriber();
   };
 
   const talentCardFooter = () => (
@@ -109,8 +109,8 @@ const NewTalentCard = ({
                 </div>
               </div>
               {!publicPageViewer && (
-                <button className="button-link ml-2" onClick={e => updateFollowing(e)}>
-                  <Star pathClassName={isFollowing ? "star" : "star-outline"} />
+                <button className="button-link ml-2" onClick={e => updateSubscribing(e)}>
+                  <Star pathClassName={isSubscribing ? "star" : "star-outline"} />
                 </button>
               )}
             </div>
@@ -140,8 +140,8 @@ NewTalentCard.propTypes = {
   occupation: string,
   profilePictureUrl: string,
   headline: string,
-  isFollowing: bool.isRequired,
-  updateFollow: func.isRequired,
+  isSubscribing: bool.isRequired,
+  updateSubscriber: func.isRequired,
   talentLink: string.isRequired,
   marketCap: string,
   supporterCount: string

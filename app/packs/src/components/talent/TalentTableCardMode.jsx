@@ -6,7 +6,7 @@ import { displayableAmount } from "src/utils/viewHelpers";
 
 import cx from "classnames";
 
-const TalentTableCardMode = ({ updateFollow, talents, publicPageViewer = false, env }) => {
+const TalentTableCardMode = ({ updateSubscriber, talents, publicPageViewer = false, env }) => {
   const { mobile } = useWindowDimensionsHook();
 
   return (
@@ -25,8 +25,8 @@ const TalentTableCardMode = ({ updateFollow, talents, publicPageViewer = false, 
             occupation={talent.occupation}
             profilePictureUrl={talent.profilePictureUrl}
             headline={talent.headline}
-            isFollowing={talent.isFollowing}
-            updateFollow={() => updateFollow(talent)}
+            isSubscribing={talent.isSubscribing}
+            updateSubscriber={() => updateSubscriber(talent)}
             talentLink={`/u/${talent.user.username}`}
             marketCap={displayableAmount(talent.marketCap)}
             supporterCount={talent.supportersCount?.toString()}
