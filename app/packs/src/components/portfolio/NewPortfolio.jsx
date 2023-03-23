@@ -361,6 +361,7 @@ const NewPortfolio = ({
           rewards={returnValues[activeContract] || "0"}
           supportedTalents={supportedTalents}
           railsContext={railsContext}
+          currentChain={currentChain}
         />
         <TransakDone show={transakDone} hide={() => setTransakDone(false)} />
         {listLoaded ? (
@@ -408,6 +409,7 @@ const NewPortfolio = ({
         supportedTalents={supportedTalents}
         mode={theme.mode()}
         railsContext={railsContext}
+        currentChain={currentChain}
       />
       <TransakDone show={transakDone} hide={() => setTransakDone(false)} />
       <div className="d-flex flex-row justify-content-between flex-wrap w-100 card disabled p-4">

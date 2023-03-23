@@ -76,8 +76,10 @@ const ApprovalConfirmationModal = ({ show, hide, talent, setTalent, railsContext
     await newOnChain.retrieveAccount();
     await newOnChain.loadFactory();
     for await (const option of getAllChainOptions(railsContext.contractsEnv)) {
-      const isWhitelisted = await newOnChain.isAddressWhitelisted(talent.user.walletId, option.id);
-      setIsWhitelisted(prev => ({ ...prev, [option.id]: isWhitelisted }));
+      if (option.name == "Polygon") {
+        const isWhitelisted = await newOnChain.isAddressWhitelisted(talent.user.walletId, option.id);
+        setIsWhitelisted(prev => ({ ...prev, [option.id]: isWhitelisted }));
+      }
     }
 
     if (newOnChain) {
@@ -140,16 +142,18 @@ const ApprovalConfirmationModal = ({ show, hide, talent, setTalent, railsContext
         <div className="mt-2">
           {getAllChainOptions(railsContext.contractsEnv).map(option => (
             <div className="d-flex align-items-center mb-2" key={option.id}>
-              <Checkbox
-                className="form-check-input mt-4"
-                checked={isWhitelisted[option.id]}
-                disabled={isWhitelisted[option.id] || loading}
-                onChange={() => whitelistAddress(option.id)}
-              >
-                <div className="d-flex flex-wrap">
-                  <P2 className="ml-1" text={option.name} />
-                </div>
-              </Checkbox>
+              {option.name == "Polygon" && (
+                <Checkbox
+                  className="form-check-input mt-4"
+                  checked={isWhitelisted[option.id]}
+                  disabled={isWhitelisted[option.id] || loading}
+                  onChange={() => whitelistAddress(option.id)}
+                >
+                  <div className="d-flex flex-wrap">
+                    <P2 className="ml-1" text={option.name} />
+                  </div>
+                </Checkbox>
+              )}
             </div>
           ))}
         </div>
