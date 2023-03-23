@@ -10,6 +10,7 @@ module RenderingExtension
       transakApiKey: ENV["TRANSAK_API_KEY"],
       emailRegexWithoutAliases: ENV["EMAIL_REGEX_WITHOUT_ALIASES"],
       disableSmartContracts: ENV["DISABLE_SMART_CONTRACTS"],
+      disableSmartContractsMessage: ENV["DISABLE_SMART_CONTRACTS_MESSAGE"],
       withPersonaTemplateId: ENV["WITH_PERSONA_TEMPLATE_ID"],
       withPersonaEnvironment: ENV["WITH_PERSONA_ENVIRONMENT"],
       withPersonaVerificationsLimit: ENV["WITH_PERSONA_VERIFICATIONS_LIMIT"],

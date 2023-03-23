@@ -59,7 +59,7 @@ const LaunchToken = ({ talent, railsContext, setLocalTalent, canUpdate }) => {
           <div className={cx("col-12 col-lg-6", !mobile && "d-flex flex-column justify-content-end")}>
             <div className="d-flex mt-6">
               <Button
-                disabled={requiredFields.length > 0}
+                disabled={requiredFields.length > 0 || railsContext.disableSmartContracts == "true"}
                 className={cx(
                   "d-flex justify-content-center align-items-center inverted-button",
                   mobile ? "w-75" : "ml-auto"
