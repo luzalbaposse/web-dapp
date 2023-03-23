@@ -12,18 +12,22 @@ module Subscriptions
     end
 
     def call
-      subscribe = Subscription.find_or_initialize_by(user: subscribing_user, subscriber: subscriber_user)
+      subscription = Subscription.find_or_initialize_by(user: subscribing_user, subscriber: subscriber_user)
 
-      raise AlreadyExistsError.new if subscribe.persisted?
+      if subscription.persisted?
+        raise AlreadyExistsError.new
+      else
+        subscription.accepted_at = Time.current
+      end
 
-      raise CreationError.new(subscribe.error.full_messages) unless subscribe.save
+      raise CreationError.new(subscription.error.full_messages) unless subscription.save
 
       update_tasks if more_than_2_subscribers?
 
       update_subscriber_connection
       update_subscribing_connection
 
-      subscribe
+      subscription
     end
 
     private

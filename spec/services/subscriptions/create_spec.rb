@@ -8,7 +8,7 @@ RSpec.describe Subscriptions::Create do
   let(:subscriber_user) { create :user }
   let(:subscribing_user) { create :user }
 
-  it "creates a new subscription" do
+  it "creates a new active subscription" do
     expect { create_subscription }.to change(Subscription, :count).from(0).to(1)
   end
 

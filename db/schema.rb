@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_21_154101) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_22_175332) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -444,6 +444,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_21_154101) do
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.bigint "subscriber_id"
+    t.datetime "accepted_at", precision: nil
     t.index ["subscriber_id"], name: "index_subscriptions_on_subscriber_id"
     t.index ["user_id", "subscriber_id"], name: "index_subscriptions_on_user_id_and_subscriber_id", unique: true
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
