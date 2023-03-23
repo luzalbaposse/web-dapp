@@ -264,7 +264,9 @@ const StakeModal = ({
         <>
           <Modal.Header closeButton className="pt-4 px-4 pb-0">
             <P1
-              text={`BUY ${ticker} ${railsContext.disableSmartContracts == "true" ? "(currently unavailable)" : ""}`}
+              text={`BUY ${ticker} ${
+                railsContext.disableSmartContracts == "true" && chainName == "Polygon" ? "(currently unavailable)" : ""
+              }`}
               bold
               className="text-black mb-3"
             />
@@ -272,7 +274,7 @@ const StakeModal = ({
           <Modal.Body className="show-grid p-4">
             <div className="container-fluid">
               <div className="row d-flex flex-column">
-                {railsContext.disableSmartContracts == "true" ? (
+                {railsContext.disableSmartContracts == "true" && chainName == "Polygon" ? (
                   <P2
                     className="my-2"
                     text="For security reasons buying talent tokens is currently disabled, we're working
@@ -299,7 +301,7 @@ const StakeModal = ({
                       title={"Total Amount"}
                       mode={mode}
                       type={"number"}
-                      disabled={railsContext.disableSmartContracts == "true"}
+                      disabled={railsContext.disableSmartContracts == "true" && chainName == "Polygon"}
                       topCaption={
                         currentAccount ? `Available amount: ${parseAndCommify(availableAmount)} ${stableSymbol()}` : ""
                       }
@@ -345,7 +347,11 @@ const StakeModal = ({
                             mode={mode}
                             className="w-100 mr-2"
                             loading={approving}
-                            disabled={approving || didAllowance || railsContext.disableSmartContracts == "true"}
+                            disabled={
+                              approving ||
+                              didAllowance ||
+                              (railsContext.disableSmartContracts == "true" && chainName == "Polygon")
+                            }
                             success={didAllowance}
                             fillPrimary={darkTextPrimary01}
                             fillSecondary={black}
@@ -359,7 +365,9 @@ const StakeModal = ({
                             mode={mode}
                             className="w-100 ml-2"
                             disabled={
-                              !didAllowance || stage == "Confirm" || railsContext.disableSmartContracts == "true"
+                              !didAllowance ||
+                              stage == "Confirm" ||
+                              (railsContext.disableSmartContracts == "true" && chainName == "Polygon")
                             }
                             loading={stage == "Confirm"}
                             success={stage == "Verified"}

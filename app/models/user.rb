@@ -31,6 +31,7 @@ class User < ApplicationRecord
   has_many :subscribers, through: :subscriptions # only use to load users, never to count
   has_many :subscribing, foreign_key: :subscriber_id, class_name: "Subscription"
   has_many :users_subscribing, foreign_key: :user_id, source: "user", through: :subscribing
+  has_many :pending_subscriptions, -> { pending }, class_name: "Subscription"
   has_many :notifications, as: :recipient
   has_many :quests
   has_many :connections, dependent: :destroy

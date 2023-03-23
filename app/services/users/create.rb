@@ -130,9 +130,10 @@ module Users
       invited_by_user = invite.user
       return unless invited_by_user
 
-      subscription = Subscription.find_or_create_by(user_id: user.id, subscriber_id: invited_by_user.id)
+      subscription = Subscription.find_by(user_id: user.id, subscriber_id: invited_by_user.id)
 
-      unless subscription.persisted? # validate if the watchlist quest is completed
+      if subscription.nil? # validate if the watchlist quest is completed
+        Subscription.create!(user_id: user.id, subscriber_id: invited_by_user.id, accepted_at: Time.current)
         UpdateTasksJob.perform_later(type: "Tasks::Watchlist", user_id: invited_by_user.id)
       end
     end

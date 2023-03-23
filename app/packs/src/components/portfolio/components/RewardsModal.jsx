@@ -20,7 +20,8 @@ const RewardsModal = ({
   rewardValues,
   supportedTalents,
   mode,
-  railsContext
+  railsContext,
+  currentChain
 }) => {
   if (!activeContract) {
     return null;
@@ -52,7 +53,9 @@ const RewardsModal = ({
           )}
           <P1
             className="text-black"
-            text={`Claim rewards ${railsContext.disableSmartContracts == "true" ? "(currently unavailable)" : ""}`}
+            text={`Claim rewards ${
+              railsContext.disableSmartContracts == "true" && currentChain == "Polygon" ? "(currently unavailable)" : ""
+            }`}
             bold
           />
         </Modal.Header>
@@ -60,7 +63,7 @@ const RewardsModal = ({
           <P2
             className="mb-6"
             text={
-              railsContext.disableSmartContracts == "true"
+              railsContext.disableSmartContracts == "true" && currentChain == "Polygon"
                 ? "For security reasons buying talent tokens is currently disabled, we're working to solve this and apologize for any inconvenience."
                 : "Rewards are calculated in real time and are always displayed in $TAL."
             }
@@ -93,7 +96,7 @@ const RewardsModal = ({
             type="primary-default"
             size="big"
             onClick={claim}
-            disabled={loadingRewards || railsContext.disableSmartContracts == "true"}
+            disabled={loadingRewards || (railsContext.disableSmartContracts == "true" && currentChain == "Polygon")}
           >
             Buy ${activeTalent.symbol} {loadingRewards ? <FontAwesomeIcon icon={faSpinner} spin /> : ""}
           </Button>
