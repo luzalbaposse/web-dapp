@@ -23,7 +23,8 @@ import { H5 } from "src/components/design_system/typography";
 import { Container, IconContainer, InnerContainer } from "./styled";
 import { Icon, Typography } from "@talentprotocol/design-system";
 
-const WARNING_MESSAGE = "Token minting is temporarily paused while we are upgrading our smart contracts. This is a temporary warning.";
+const WARNING_MESSAGE =
+  "Token minting is temporarily paused while we are upgrading our smart contracts. This is a temporary warning.";
 
 const UnreadMessagesIndicator = () => {
   return (
@@ -80,16 +81,17 @@ export const TopBar = ({
   impersonatedUsername,
   stopImpersonationPath
 }) => {
+  const sessionItem = railsContext.disableSmartContractsMessage.replace(" ", "-").substring(0, 3);
   const [isWarningEnabled, setIsWarningEnabled] = useState(() => {
-    return false; 
-    /*
+    if (railsContext.disableSmartContracts != "true") {
+      return false;
+    }
     if (typeof window !== "undefined") {
-      const hasDisabledWarning = sessionStorage.getItem("hasDisabledWarning");
+      const hasDisabledWarning = sessionStorage.getItem(sessionItem);
       if (!hasDisabledWarning) return true;
       return false;
     }
     return false;
-    */
   });
   const url = new URL(document.location);
   const [walletConnected, setWalletConnected] = useState(false);
@@ -264,27 +266,27 @@ export const TopBar = ({
         userHasInvitesLeft={userHasInvitesLeft}
         signOut={signOut}
       >
-
-      {
-        isWarningEnabled && (
+        {isWarningEnabled && (
           <Container>
             <InnerContainer>
               <Typography specs={{ variant: "p3", type: "bold" }} color="primary01">
-                  Alert:
+                Alert:
               </Typography>
               <Typography specs={{ variant: "p3", type: "regular" }} color="primary02">
-                  {WARNING_MESSAGE}
+                {railsContext.disableSmartContractsMessage}
               </Typography>
-              <IconContainer onClick={() => {
-                setIsWarningEnabled(false);
-                sessionStorage.setItem("hasDisabledWarning", "true");
-              }}>
+              <IconContainer
+                onClick={() => {
+                  setIsWarningEnabled(false);
+                  sessionStorage.setItem(sessionItem, "true");
+                }}
+              >
                 <Icon name="remove" color="primary01" size={12} />
               </IconContainer>
             </InnerContainer>
-          </Container>  
+          </Container>
         )}
-        </MobileTopBar>
+      </MobileTopBar>
     );
   }
 
@@ -332,25 +334,26 @@ export const TopBar = ({
           <Notifications mode={theme.mode()} />
         </div>
       </nav>
-      {
-        isWarningEnabled && (
-          <Container>
-            <InnerContainer>
-              <Typography specs={{ variant: "p3", type: "bold" }} color="primary01">
-                  Alert:
-              </Typography>
-              <Typography specs={{ variant: "p3", type: "regular" }} color="primary02">
-                  {WARNING_MESSAGE}
-              </Typography>
-              <IconContainer onClick={() => {
+      {isWarningEnabled && (
+        <Container>
+          <InnerContainer>
+            <Typography specs={{ variant: "p3", type: "bold" }} color="primary01">
+              Alert:
+            </Typography>
+            <Typography specs={{ variant: "p3", type: "regular" }} color="primary02">
+              {railsContext.disableSmartContractsMessage}
+            </Typography>
+            <IconContainer
+              onClick={() => {
                 setIsWarningEnabled(false);
-                sessionStorage.setItem("hasDisabledWarning", "true");
-              }}>
-                <Icon name="remove" color="primary01" size={12} />
-              </IconContainer>
-            </InnerContainer>
-          </Container>  
-        )}
+                sessionStorage.setItem(sessionItem, "true");
+              }}
+            >
+              <Icon name="remove" color="primary01" size={12} />
+            </IconContainer>
+          </InnerContainer>
+        </Container>
+      )}
     </div>
   );
 };
