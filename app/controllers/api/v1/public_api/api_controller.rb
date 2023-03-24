@@ -146,4 +146,8 @@ class API::V1::PublicAPI::APIController < ActionController::Base
 
     collection.reorder(pagy.order).limit(pagy.items)
   end
+
+  def downcase_id
+    params[:id]&.downcase
+  end
 end

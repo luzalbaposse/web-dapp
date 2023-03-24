@@ -36,11 +36,11 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
   private
 
   def user
-    @user ||= User.find_by!("wallet_id = :id OR username = :id", id: params[:id])
+    @user ||= User.find_by!("wallet_id = :id OR username = :id", id: downcase_id)
   end
 
   def filter_by_ids?
-    filter_params[:ids].present? && filter_params[:ids].reject(&:blank?).any?
+    filter_params[:ids].present? && filter_params[:ids].reject(&:blank?).map(&:downcase).any?
   end
 
   def filter_params

@@ -84,6 +84,6 @@ class API::V1::PublicAPI::SubscriptionsController < API::V1::PublicAPI::APIContr
   end
 
   def user
-    @user ||= User.find_by("uuid::text = :id OR wallet_id = :id OR username = :id", id: params[:id])
+    @user ||= User.find_by("uuid::text = :id OR wallet_id = :id OR username = :id", id: downcase_id)
   end
 end

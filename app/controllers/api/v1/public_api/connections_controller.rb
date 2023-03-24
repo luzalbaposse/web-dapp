@@ -31,7 +31,7 @@ class API::V1::PublicAPI::ConnectionsController < API::V1::PublicAPI::APIControl
   private
 
   def user
-    @user ||= User.find_by!("uuid::text = :id OR wallet_id = :id OR username = :id", id: params[:id])
+    @user ||= User.find_by!("uuid::text = :id OR wallet_id = :id OR username = :id", id: downcase_id)
   end
 
   def search_params
