@@ -22,7 +22,11 @@ const SearchDropdown = ({ className }) => {
   const [talents, setTalents] = useState([]);
 
   useEffect(() => {
-    if (keyword.length === 0) fetchTalents("page=1&per_page=10&status=Verified");
+    if (keyword.length === 0) {
+      fetchTalents("page=1&per_page=10&status=Verified");
+    } else {
+      debouncedSearch();
+    }
   }, [keyword]);
 
   const fetchTalents = params => {
@@ -47,12 +51,11 @@ const SearchDropdown = ({ className }) => {
 
   const showLoadMoreTalents = pagination.currentPage < pagination.lastPage;
 
-  const onChange = value => {
-    setKeyword(value);
-    value.length > 2 ? fetchTalents(`keyword=${value}`) : setTalents([]);
+  const onKeywordChange = () => {
+    keyword.length > 2 ? fetchTalents(`keyword=${keyword}`) : setTalents([]);
   };
 
-  const debouncedOnChange = debounce(value => onChange(value), 200);
+  const debouncedSearch = debounce(onKeywordChange, 200);
 
   if (width < 992) {
     return (
@@ -79,7 +82,7 @@ const SearchDropdown = ({ className }) => {
             </Button>
             <TextInput
               className="w-100"
-              onChange={e => debouncedOnChange(e.target.value)}
+              onChange={e => setKeyword(e.target.value)}
               placeholder="Search"
               value={keyword}
             />
@@ -104,7 +107,7 @@ const SearchDropdown = ({ className }) => {
       <Dropdown.Menu className="search-dropdown-menu">
         <TextInput
           className="my-3 px-2 w-100"
-          onChange={e => debouncedOnChange(e.target.value)}
+          onChange={e => setKeyword(e.target.value)}
           placeholder="Search"
           value={keyword}
         />
@@ -149,7 +152,7 @@ const NoResults = ({ keyword }) => {
 
 const TalentDropdownItem = ({ talent }) => {
   return (
-    <Dropdown.Item className="align-items-center d-flex" href={`/u/${talent.user.username}`} key={talent.id}>
+    <Dropdown.Item className="align-items-center d-flex mb-2" href={`/u/${talent.user.username}`} key={talent.id}>
       <TalentProfilePicture className="mr-2" height={24} src={talent.profilePictureUrl} />
       {talent.user.name}
     </Dropdown.Item>
