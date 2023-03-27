@@ -48,6 +48,7 @@ const STEP_TO_COMPONENT_MAP = isDesktop =>
 export const SignUpFlow = props => {
   const captchaModalState = useModal();
   const { linkedinClientId, linkedinRedirectUri } = props.railsContext;
+  const [linkedinRedirectWithCode, setLinkedinRedirectWithCode] = useState(linkedinRedirectUri);
   const [isNextDisabled, setIsNextDisable] = useState(true);
   const [hasCreateAccountError, setHasCreateAccountError] = useState(false);
   const [createdUser, setCreatedUser] = useState({});
@@ -59,6 +60,8 @@ export const SignUpFlow = props => {
       ...userBuilderState.user,
       code: props.code
     });
+
+    setLinkedinRedirectWithCode(`${linkedinRedirectUri}?invite_code=${props.code}`);
   }, [props.code, userBuilderState]);
   const stepsState = useStepExperience(Object.keys(STEP_TO_COMPONENT_MAP(props.isDesktop)).length);
   const StepScreen = useMemo(
@@ -78,7 +81,7 @@ export const SignUpFlow = props => {
         user={userBuilderState.user}
         setUser={userBuilderState.setUser}
         linkedinClientId={linkedinClientId}
-        linkedinRedirectUri={linkedinRedirectUri}
+        linkedinRedirectUri={linkedinRedirectWithCode}
         setHasCreateAccountError={setHasCreateAccountError}
         setCreatedUser={setCreatedUser}
         inviteProps={{
@@ -96,7 +99,7 @@ export const SignUpFlow = props => {
       isNextDisabled,
       useUserBuilder,
       linkedinClientId,
-      linkedinRedirectUri,
+      linkedinRedirectWithCode,
       props.name,
       props.profilePictureUrl,
       props.inviteCode,
@@ -123,17 +126,19 @@ export const SignUpFlow = props => {
         return !props.isDesktop ? (
           MemoizedDefaultFooter
         ) : (
-          <CreateAccountFooter 
+          <CreateAccountFooter
             previousStep={stepsState.previousStep}
             openCaptchaModal={captchaModalState.openModal}
-            isNextDisabled={isNextDisabled}/>
+            isNextDisabled={isNextDisabled}
+          />
         );
       case 9:
         return !props.isDesktop ? (
-          <CreateAccountFooter 
+          <CreateAccountFooter
             previousStep={stepsState.previousStep}
             openCaptchaModal={captchaModalState.openModal}
-            isNextDisabled={isNextDisabled}/>
+            isNextDisabled={isNextDisabled}
+          />
         ) : (
           <EmailFooter hasCreateAccountError={hasCreateAccountError} createdUser={createdUser} />
         );

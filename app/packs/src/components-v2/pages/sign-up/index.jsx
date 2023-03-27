@@ -14,9 +14,11 @@ import { OnboardingDesktopSlider } from "../../onboarding-desktop-slider";
 
 const SignUpPage = props => {
   const { mobile } = useWindowDimensionsHook(false);
+
   const code = useMemo(() => {
     if (typeof window === "undefined") return undefined;
-    return window.location.pathname.split("/").pop();
+    const inviteCode = window.location.pathname.split("/").pop();
+    return inviteCode.toLowerCase() !== "join" ? inviteCode : "";
   }, []);
   const pageContent = useMemo(() => {
     if (mobile) return <SignUpFlow {...props} code={code} />;

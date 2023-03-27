@@ -71,6 +71,10 @@ class DailyMetricsJob < ApplicationJob
       time_on_page: time_on_page,
       total_polygon_tvl: total_polygon_tvl,
       total_celo_tvl: total_celo_tvl,
+      total_stables_stored_polygon: total_stables_stored_polygon,
+      total_stables_stored_celo: total_stables_stored_celo,
+      tal_rewards_given_polygon: tal_rewards_given_polygon,
+      tal_rewards_given_celo: tal_rewards_given_celo,
       total_twitter_followers: total_twitter_followers,
       total_discord_members: total_discord_members
     )
@@ -318,6 +322,22 @@ class DailyMetricsJob < ApplicationJob
   # TVL in USD
   def total_celo_tvl
     (celo_provider.call(celo_staking_contract, "totalTokensStaked") * TalentToken::TAL_VALUE_IN_USD) / TalentToken::TAL_DECIMALS
+  end
+
+  def total_stables_stored_polygon
+    polygon_provider.call(celo_staking_contract, "totalStableStored") / TalentToken::TAL_DECIMALS
+  end
+
+  def total_stables_stored_celo
+    celo_provider.call(celo_staking_contract, "totalStableStored") / TalentToken::TAL_DECIMALS
+  end
+
+  def tal_rewards_given_polygon
+    polygon_provider.call(celo_staking_contract, "rewardsGiven") / TalentToken::TAL_DECIMALS
+  end
+
+  def tal_rewards_given_celo
+    celo_provider.call(celo_staking_contract, "rewardsGiven") / TalentToken::TAL_DECIMALS
   end
 
   def polygon_staking_contract

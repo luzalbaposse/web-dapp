@@ -6,7 +6,8 @@ RSpec.describe "OAuth callbacks", type: :request do
 
     let(:params) do
       {
-        code: "linkedin-code"
+        code: "linkedin-code",
+        invite_code: "tp-invite"
       }
     end
 
@@ -30,7 +31,7 @@ RSpec.describe "OAuth callbacks", type: :request do
       linkedin_login
 
       aggregate_failures do
-        expect(login_class).to have_received(:new).with(code: "linkedin-code")
+        expect(login_class).to have_received(:new).with(code: "linkedin-code", invite_code: "tp-invite")
 
         expect(login).to have_received(:call)
       end
