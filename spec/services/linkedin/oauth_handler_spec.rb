@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Linkedin::OauthHandler do
   subject(:handle_linkedin_oauth) do
-    described_class.new(code: code).call
+    described_class.new(code: code, invite_code: invite_code).call
   end
 
   let(:client) do
@@ -75,6 +75,7 @@ RSpec.describe Linkedin::OauthHandler do
 
   let(:access_token) { "access_token" }
   let(:code) { "code" }
+  let(:invite_code) { "test-invite-code" }
 
   let(:creator_class) { Users::Create }
   let(:creator) { instance_double(creator_class, call: result) }
@@ -226,7 +227,8 @@ RSpec.describe Linkedin::OauthHandler do
               email: "john-doe@gmail.com",
               linkedin_id: "8U-184SDzjs",
               password: nil,
-              username: "johndoe"
+              username: "johndoe",
+              code: invite_code
             )
         end
       end
@@ -248,7 +250,8 @@ RSpec.describe Linkedin::OauthHandler do
                 email: "john-doe@gmail.com",
                 linkedin_id: "8U-184SDzjs",
                 password: nil,
-                username: "johndoe414835"
+                username: "johndoe414835",
+                code: invite_code
               )
           end
         end
@@ -269,7 +272,8 @@ RSpec.describe Linkedin::OauthHandler do
                 email: "john-doe@gmail.com",
                 linkedin_id: "8U-184SDzjs",
                 password: nil,
-                username: "rubendoe"
+                username: "rubendoe",
+                code: invite_code
               )
           end
         end

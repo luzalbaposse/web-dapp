@@ -2,7 +2,7 @@
 
 class OauthCallbacksController < ApplicationController
   def linkedin
-    result = Linkedin::OauthHandler.new(code: params[:code]).call
+    result = Linkedin::OauthHandler.new(code: params[:code], invite_code: params[:invite_code]).call
     if result[:success]
       sign_in(result[:user])
       redirect_to root_path

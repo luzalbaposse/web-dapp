@@ -5,8 +5,9 @@ class Linkedin::OauthHandler
 
   class BadResponseError < Error; end
 
-  def initialize(code:)
+  def initialize(code:, invite_code:)
     @code = code
+    @invite_code = invite_code
   end
 
   def call
@@ -41,7 +42,7 @@ class Linkedin::OauthHandler
 
   private
 
-  attr_reader :code
+  attr_reader :code, :invite_code
 
   def retrieve_access_token!
     raise BadResponseError, access_token_request.body unless access_token_request.success?
@@ -89,7 +90,8 @@ class Linkedin::OauthHandler
       email: email_address,
       linkedin_id: lite_profile["id"],
       password: nil,
-      username: username
+      username: username,
+      code: invite_code
     )
 
     raise BadResponseError, result[:error] unless result[:success]

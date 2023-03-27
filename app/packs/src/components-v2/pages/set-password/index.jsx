@@ -13,14 +13,15 @@ import { SetPasswordFLow } from "../../set-password-flow";
 
 export const SetPasswordPage = props => {
   const url = new URL(window.location.href);
+  const inviteCode = url.pathname.split("/")[2];
   const urlParams = {
     token: url.searchParams.get("token"),
-    userId: url.pathname.split("/")[2]
+    userId: inviteCode.toLowerCase() !== "join" ? inviteCode : ""
   };
   const parsedProps = {
     ...props,
     ...urlParams
-  }
+  };
   const { mobile } = useWindowDimensionsHook(false);
   const pageContent = useMemo(() => {
     if (mobile) return <SetPasswordFLow {...parsedProps} />;
