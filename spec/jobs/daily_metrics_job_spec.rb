@@ -126,6 +126,10 @@ RSpec.describe DailyMetricsJob, type: :job do
       expect(created_daily_metric.total_claimed_domains).to eq 1
       expect(created_daily_metric.total_polygon_tvl).to eq 1200
       expect(created_daily_metric.total_celo_tvl).to eq 1200
+      expect(created_daily_metric.total_stables_stored_polygon).to eq "60000"
+      expect(created_daily_metric.total_stables_stored_celo).to eq "60000"
+      expect(created_daily_metric.tal_rewards_given_polygon).to eq "60000"
+      expect(created_daily_metric.tal_rewards_given_celo).to eq "60000"
       expect(created_daily_metric.time_on_page).to eq 18
       expect(created_daily_metric.visitors).to eq 300
       expect(created_daily_metric.wtfcrypto_visitors).to eq 33

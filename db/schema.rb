@@ -10,9 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_22_175332) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_27_104456) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
@@ -119,16 +118,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_22_175332) do
     t.index ["career_goal_id"], name: "index_career_needs_on_career_goal_id"
   end
 
-  create_table "career_updates", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
-    t.text "text_ciphertext", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_career_updates_on_user_id"
-    t.index ["uuid"], name: "index_career_updates_on_uuid"
-  end
-
   create_table "chats", force: :cascade do |t|
     t.datetime "last_message_at", precision: nil, null: false
     t.bigint "sender_id", null: false
@@ -198,6 +187,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_22_175332) do
     t.integer "total_tal_subdomain_transactions"
     t.jsonb "daily_page_visitors", default: {}
     t.jsonb "total_onboarding_metrics", default: {}
+    t.string "total_stables_stored_polygon"
+    t.string "total_stables_stored_celo"
+    t.string "tal_rewards_given_polygon"
+    t.string "tal_rewards_given_celo"
   end
 
   create_table "discovery_rows", force: :cascade do |t|
@@ -316,8 +309,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_22_175332) do
     t.boolean "is_read", default: false, null: false
     t.boolean "sent_to_supporters", default: false
     t.bigint "chat_id"
-    t.bigint "career_update_id"
-    t.index ["career_update_id"], name: "index_messages_on_career_update_id"
     t.index ["chat_id"], name: "index_messages_on_chat_id"
     t.index ["receiver_id"], name: "index_messages_on_receiver_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"
@@ -424,19 +415,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_22_175332) do
     t.index ["creator_id"], name: "index_rewards_on_creator_id"
     t.index ["identifier"], name: "index_rewards_on_identifier", unique: true
     t.index ["user_id"], name: "index_rewards_on_user_id"
-  end
-
-  create_table "sponsorships", force: :cascade do |t|
-    t.string "sponsor", null: false
-    t.string "talent", null: false
-    t.bigint "amount", null: false
-    t.string "token", null: false
-    t.string "symbol", null: false
-    t.string "tx_hash", null: false
-    t.integer "chain_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["tx_hash", "chain_id"], name: "index_sponsorships_on_tx_hash_and_chain_id", unique: true
   end
 
   create_table "subscriptions", force: :cascade do |t|
@@ -600,8 +578,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_22_175332) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.boolean "disabled", default: false
     t.string "theme_preference", default: "light"
+    t.boolean "disabled", default: false
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"
@@ -672,7 +650,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_22_175332) do
   add_foreign_key "api_log_requests", "api_keys"
   add_foreign_key "career_goals", "talent"
   add_foreign_key "career_needs", "career_goals"
-  add_foreign_key "career_updates", "users"
   add_foreign_key "chats", "users", column: "receiver_id"
   add_foreign_key "chats", "users", column: "sender_id"
   add_foreign_key "connections", "users"
@@ -687,7 +664,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_22_175332) do
   add_foreign_key "invites", "partnerships"
   add_foreign_key "invites", "users"
   add_foreign_key "marketing_articles", "users"
-  add_foreign_key "messages", "career_updates"
   add_foreign_key "messages", "chats"
   add_foreign_key "milestone_images", "milestones"
   add_foreign_key "milestones", "talent"
