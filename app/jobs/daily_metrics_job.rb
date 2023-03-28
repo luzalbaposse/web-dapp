@@ -325,7 +325,7 @@ class DailyMetricsJob < ApplicationJob
   end
 
   def total_stables_stored_polygon
-    polygon_provider.call(celo_staking_contract, "totalStableStored") / TalentToken::TAL_DECIMALS
+    polygon_provider.call(polygon_staking_contract, "totalStableStored") / TalentToken::TAL_DECIMALS
   end
 
   def total_stables_stored_celo
@@ -333,7 +333,7 @@ class DailyMetricsJob < ApplicationJob
   end
 
   def tal_rewards_given_polygon
-    polygon_provider.call(celo_staking_contract, "rewardsGiven") / TalentToken::TAL_DECIMALS
+    polygon_provider.call(polygon_staking_contract, "rewardsGiven") / TalentToken::TAL_DECIMALS
   end
 
   def tal_rewards_given_celo
