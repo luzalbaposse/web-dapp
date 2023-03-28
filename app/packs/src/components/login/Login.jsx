@@ -6,7 +6,6 @@ import LinkedinSignInButton from "src/components/button/LinkedinSignInButton";
 import { useTheme } from "src/contexts/ThemeContext";
 import { useWindowDimensionsHook } from "src/utils/window";
 import { H5, P2, P3 } from "src/components/design_system/typography";
-import { USER_GUIDE } from "src/utils/constants";
 import { post } from "src/utils/requests";
 
 import cx from "classnames";
@@ -83,10 +82,6 @@ const Login = props => {
         <div className="d-flex mb-2">
           <P2 className="text-black mr-1" text="Don't have an account yet?" />
           <Link bold href="/join" text="Sign up here" />
-        </div>
-        <div className="d-flex">
-          <P2 className="text-black mr-1" text="Want more info?" />
-          <Link bold href={USER_GUIDE} target="_blank" text="Check our user guide" />
         </div>
       </div>
     </div>
