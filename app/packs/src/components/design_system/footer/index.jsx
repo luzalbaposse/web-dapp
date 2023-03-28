@@ -48,7 +48,6 @@ const Footer = () => {
           <div className="col-lg-2 d-flex flex-column mt-5 mt-lg-0">
             <P2 className="text-black mb-2" bold text="Help" />
             <Tab href={FAQ} text="FAQ" type="white" className="mb-2" target="_blank" />
-            <Tab href={USER_GUIDE} text="User Guide" type="white" className="mb-2" target="_blank" />
             <Tab href={TERMS_HREF} text="Terms of Service" type="white" className="mb-2" target="_blank" />
             <Tab href={PRIVACY_HREF} text="Privacy Policy" type="white" className="mb-2" target="_blank" />
           </div>
