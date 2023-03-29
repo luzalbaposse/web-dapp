@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_27_104456) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_29_105914) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -627,16 +627,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_27_104456) do
     t.datetime "created_at", precision: nil
     t.text "object_changes"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
-  end
-
-  create_table "wait_list", force: :cascade do |t|
-    t.boolean "approved", default: false
-    t.string "email", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "talent", default: false
-    t.index ["approved"], name: "index_wait_list_on_approved"
-    t.index ["email"], name: "index_wait_list_on_email", unique: true
   end
 
   create_table "with_persona_requests", force: :cascade do |t|

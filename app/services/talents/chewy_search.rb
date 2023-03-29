@@ -148,7 +148,12 @@ module Talents
 
     def filter_by_discovery_row(talents)
       talents = talents.query({term: {"user.discovery_row_ids": discovery_row.id}})
-      talents.query({term: {"user.profile_type": "talent"}})
+      talents.query({bool: {
+        should: [
+          {term: {"user.profile_type": "talent"}},
+          {term: {"user.profile_type": "approved"}}
+        ]
+      }})
     end
 
     def sort(talents)

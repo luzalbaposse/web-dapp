@@ -9,10 +9,6 @@ FactoryBot.define do
   factory :message do
   end
 
-  factory :wait_list do
-    email { Faker::Internet.email }
-  end
-
   factory :notification do
     type { MessageReceivedNotification.name }
   end
