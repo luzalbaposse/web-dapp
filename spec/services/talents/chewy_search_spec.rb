@@ -166,4 +166,35 @@ RSpec.describe Talents::ChewySearch do
       end
     end
   end
+
+  context "when is filtered by discovery row" do
+    let!(:discovery_row) { create :discovery_row }
+    let!(:tag) { create :tag, hidden: true, discovery_row_id: discovery_row.id }
+
+    let!(:user_6) { create :user, talent: talent_6, username: "discover1", profile_type: "approved" }
+    let(:talent_6) { create :talent, :with_token, public: true }
+    let!(:user_7) { create :user, talent: talent_7, username: "discover2", profile_type: "talent" }
+    let(:talent_7) { create :talent, :with_token, public: true }
+    let!(:user_8) { create :user, talent: talent_8, username: "discover3", profile_type: "applying" }
+    let(:talent_8) { create :talent, :with_token, public: true }
+
+    before do
+      discovery_row.tags << tag
+      create :quest, type: "Quests::TalentProfile", status: "done", user: user_6
+      create :quest, type: "Quests::TalentProfile", status: "done", user: user_7
+      create :quest, type: "Quests::TalentProfile", status: "done", user: user_8
+      user_6.tags << tag
+      user_7.tags << tag
+      user_8.tags << tag
+      TalentsIndex.import!
+    end
+
+    it "returns filtered users" do
+      result = described_class.new(
+        discovery_row: discovery_row
+      ).call
+
+      expect(result[1].map { |t| t["id"] }).to match_array([talent_6.id, talent_7.id])
+    end
+  end
 end
