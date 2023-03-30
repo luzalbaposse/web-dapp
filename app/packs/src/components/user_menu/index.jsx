@@ -14,7 +14,7 @@ const UserMenu = ({ user, toggleTheme, mode, onClickTransak, signOut }) => {
   return (
     <Dropdown>
       <Dropdown.Toggle
-        className="talent-button white-subtle-button normal-size-button p-2 no-caret d-flex align-items-center text-primary-03"
+        className="talent-button white-subtle-button normal-size-button p-2 no-caret d-flex align-items-center text-primary-03 mr-2"
         id="user-dropdown"
         bsPrefix=""
         as="div"
