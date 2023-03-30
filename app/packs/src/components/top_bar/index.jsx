@@ -22,6 +22,7 @@ import EarnMenu from "src/components/menus/EarnMenu";
 import { H5 } from "src/components/design_system/typography";
 import { Container, IconContainer, InnerContainer } from "./styled";
 import { Icon, Typography } from "@talentprotocol/design-system";
+import SearchDropdown from "./SearchDropdown";
 
 const WARNING_MESSAGE =
   "Token minting is temporarily paused while we are upgrading our smart contracts. This is a temporary warning.";
@@ -331,6 +332,7 @@ export const TopBar = ({
             onClickTransak={onClickTransak}
             signOut={signOut}
           />
+          <SearchDropdown className="talent-button white-subtle-button" />
           <Notifications mode={theme.mode()} />
         </div>
       </nav>
