@@ -15,17 +15,19 @@ import { useWindowDimensionsHook } from "src/utils/window";
 import UserTags from "src/components/talent/UserTags";
 import Button from "src/components/design_system/button";
 import { Spinner } from "src/components/icons";
-import EditAboutwModal from "src/components/profile/edit/EditAboutModal";
+import EditAboutModal from "src/components/profile/edit/EditAboutModal";
 
 import cx from "classnames";
 
-const About = ({ className, talent, setTalent, canUpdate, previewMode }) => {
+const About = ({ className, profile, setProfile, canUpdate, previewMode }) => {
   const { mobile } = useWindowDimensionsHook();
   const [isUploading, setIsUploading] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [aboutBannerFileInput, setAboutBannerFileInput] = useState(null);
 
-  const imageSrc = talent.careerGoal.imageUrl || AboutImage;
+  const careerGoal = profile?.career_goal;
+
+  const imageSrc = careerGoal?.imageUrl || AboutImage;
 
   const uppyBanner = new Uppy({
     meta: { type: "avatar" },
@@ -69,21 +71,21 @@ const About = ({ className, talent, setTalent, canUpdate, previewMode }) => {
   });
 
   const saveProfile = async updatedTalent => {
-    const response = await patch(`/api/v1/talent/${talent.id}/career_goals/${talent.careerGoal.id}`, {
+    const response = await patch(`/api/v1/talent/${profile.id}/career_goals/${profile.career_goal.id}`, {
       talent: {
-        ...snakeCaseObject(updatedTalent)
+        ...updatedTalent
       },
       career_goal: {
-        ...snakeCaseObject(updatedTalent.careerGoal)
+        ...updatedTalent.career_goal
       }
     });
 
     if (response) {
-      setTalent(prev => ({
+      setProfile(prev => ({
         ...prev,
-        careerGoal: {
-          ...prev.careerGoal,
-          ...camelCaseObject(response)
+        career_goal: {
+          ...prev.career_goal,
+          ...response
         }
       }));
     }
@@ -91,11 +93,11 @@ const About = ({ className, talent, setTalent, canUpdate, previewMode }) => {
 
   const deleteBannerImg = () => {
     saveProfile({
-      ...talent,
-      careerGoal: {
-        ...talent.careerGoal,
-        imageUrl: null,
-        imageData: null
+      ...profile,
+      career_goal: {
+        ...careerGoal,
+        image_url: null,
+        image_data: null
       }
     });
   };
@@ -107,11 +109,11 @@ const About = ({ className, talent, setTalent, canUpdate, previewMode }) => {
     uppyBanner.on("upload-success", (file, response) => {
       setIsUploading(false);
       saveProfile({
-        ...talent,
-        careerGoal: {
-          ...talent.careerGoal,
-          imageUrl: response.uploadURL,
-          imageData: {
+        ...profile,
+        career_goal: {
+          ...profile.career_goal,
+          image_url: response.uploadURL,
+          image_data: {
             // eslint-disable-next-line no-useless-escape
             id: response.uploadURL.match(/\/cache\/([^\?]+)/)[1], // extract key without prefix
             storage: "cache",
@@ -201,16 +203,16 @@ const About = ({ className, talent, setTalent, canUpdate, previewMode }) => {
             {canUpdate && <Button type="primary-default" size="big" text="Edit" onClick={() => setEditMode(true)} />}
           </div>
           <UserTags
-            tags={talent.careerGoal.careerNeeds.map(need => need.title)}
+            tags={careerGoal?.career_needs.map(need => need.title)}
             className="mr-2 mb-4"
             clickable={false}
             talent_id={"show-about"}
           />
         </div>
-        <P1 text={talent.careerGoal.pitch} />
+        <P1 text={careerGoal?.pitch} />
       </div>
       {editMode && (
-        <EditAboutwModal show={editMode} hide={() => setEditMode(false)} talent={talent} setTalent={setTalent} />
+        <EditAboutModal show={editMode} hide={() => setEditMode(false)} profile={profile} setProfile={setProfile} />
       )}
     </div>
   );

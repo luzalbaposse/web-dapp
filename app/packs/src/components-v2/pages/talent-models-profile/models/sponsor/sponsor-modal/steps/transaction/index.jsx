@@ -56,7 +56,7 @@ export const TransactionStep = ({ profile, token, railsContext, amount, closeMod
     setPrimaryButtonState(PRIMARY_BUTTON_STATES.LOADING_SPONSOR);
     const result = await onchain.createSponsorship(profile.user.wallet_id, amount).catch(error => {
       console.error(error);
-      toast.error(<ToastBody title="Error" body="Something went wrong" />);
+      toast.error(<ToastBody title="Error" body="Something went wrong" />, { autoClose: 5000 });
       setPrimaryButtonState(PRIMARY_BUTTON_STATES.SPONSOR);
       return;
     });

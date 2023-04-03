@@ -22,11 +22,11 @@ export const QRCodeModal = ({ modalState, profile }) => {
           <Button
             size="large"
             hierarchy="primary"
-            text="Share your profile"
+            text="Share this profile"
             isStretched
             rightIcon="copy"
             onClick={() => {
-              toast.success(<ToastBody heading="Success" body="Copied to clipboard" />);
+              toast.success(<ToastBody heading="Success" body="Copied to clipboard" />, { autoClose: 5000 });
               navigator.clipboard.writeText(window.location.href);
             }}
           />

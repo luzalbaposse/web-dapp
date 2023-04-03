@@ -91,12 +91,12 @@ export const Subscribers = ({ currentUserId }) => {
     careerCircle
       .acceptSubscription(currentUserId, subscriber.id)
       .then(({ data }) => {
-        toast.success(<ToastBody heading="Success!" body={"Subscription accepted!"} />);
+        toast.success(<ToastBody heading="Success!" body={"Subscription accepted!"} />, { autoClose: 5000 });
         removePendingSubscriber(subscriber);
         addActiveSubscriber(subscriber);
       })
       .catch(() => {
-        toast.error(<ToastBody heading="Error!" body={"We were not able to accept the subscription."} />);
+        toast.error(<ToastBody heading="Error!" body={"We were not able to accept the subscription."} />, { autoClose: 5000 });
       });
   };
 
@@ -104,11 +104,11 @@ export const Subscribers = ({ currentUserId }) => {
     careerCircle
       .destroySubscription(currentUserId, subscriber.id)
       .then(({ data }) => {
-        toast.success(<ToastBody heading="Success!" body={"Subscription rejected!"} />);
+        toast.success(<ToastBody heading="Success!" body={"Subscription rejected!"} />, { autoClose: 5000 });
         removePendingSubscriber(subscriber);
       })
       .catch(() => {
-        toast.error(<ToastBody heading="Error!" body={"We were not able to reject the subscription."} />);
+        toast.error(<ToastBody heading="Error!" body={"We were not able to reject the subscription."} />, { autoClose: 5000 });
       });
   };
 

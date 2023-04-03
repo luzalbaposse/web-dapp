@@ -21,15 +21,17 @@ const ApprovalConfirmationModal = ({ show, hide, talent, setTalent, railsContext
   const [firstLoading, setFirstLoading] = useState(true);
   const [isWhitelisted, setIsWhitelisted] = useState({});
 
+  const user = talent?.user;
+
   const approveUser = async () => {
     const params = {
       user: {
-        id: talent.user.id,
+        id: user?.id,
         profile_type: "approved"
       }
     };
 
-    const response = await patch(`/api/v1/talent/${talent.user.id}`, params).catch(() => {
+    const response = await patch(`/api/v1/talent/${user?.id}`, params).catch(() => {
       return false;
     });
 
@@ -53,7 +55,7 @@ const ApprovalConfirmationModal = ({ show, hide, talent, setTalent, railsContext
       await chainAPI.switchChain(chainId);
     } else {
       setLoading(true);
-      const isWhitelisted = await chainAPI.whitelistAddress(talent.user.walletId);
+      const isWhitelisted = await chainAPI.whitelistAddress(user?.wallet_id);
       setLoading(false);
       setIsWhitelisted(prev => ({ ...prev, [chainId]: isWhitelisted }));
     }
@@ -77,7 +79,7 @@ const ApprovalConfirmationModal = ({ show, hide, talent, setTalent, railsContext
     await newOnChain.loadFactory();
     for await (const option of getAllChainOptions(railsContext.contractsEnv)) {
       if (option.name == "Polygon") {
-        const isWhitelisted = await newOnChain.isAddressWhitelisted(talent.user.walletId, option.id);
+        const isWhitelisted = await newOnChain.isAddressWhitelisted(user?.wallet_id, option.id);
         setIsWhitelisted(prev => ({ ...prev, [option.id]: isWhitelisted }));
       }
     }
@@ -134,7 +136,7 @@ const ApprovalConfirmationModal = ({ show, hide, talent, setTalent, railsContext
             <Spinner />
           </div>
         )}
-        <P2 text={`Are you sure you want to approve ${talent.user.name || talent.user.username}?`} />
+        <P2 text={`Are you sure you want to approve ${user?.name || user?.username}?`} />
         <P2
           className="mt-2"
           text="Before you do, you'll need to whitelist this user's address in both chains before approving them:"

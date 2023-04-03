@@ -16,10 +16,10 @@ import cx from "classnames";
 const Token = ({ talent, talentTokenPrice, railsContext }) => {
   const { mobile } = useWindowDimensionsHook();
   const { mode } = useTheme();
-  const talentToken = talent.talentToken;
+  const talentToken = talent.talent_token;
 
-  const totalSupply = ethers.utils.formatUnits(talent.totalSupply);
-  const maxSupply = ethers.utils.formatUnits(talent.maxSupply);
+  const totalSupply = ethers.utils.formatUnits(talent.total_supply);
+  const maxSupply = ethers.utils.formatUnits(talent.max_supply);
 
   const addTokenToMetamask = async () => {
     const onChainAPI = new OnChain(railsContext.contractsEnv);
@@ -27,10 +27,10 @@ const Token = ({ talent, talentTokenPrice, railsContext }) => {
     const chainId = await onChainAPI.getChainID();
 
     if (chainId != talentToken.chainId) {
-      await onChainAPI.switchChain(talentToken.chainId);
+      await onChainAPI.switchChain(talentToken.chain_id);
     }
 
-    await onChainAPI.addTokenToWallet(talentToken.contractId, talentToken.ticker);
+    await onChainAPI.addTokenToWallet(talentToken.contract_id, talentToken.ticker);
   };
 
   return (
@@ -60,7 +60,7 @@ const Token = ({ talent, talentTokenPrice, railsContext }) => {
       </div>
       <div className={cx("row", mobile ? "" : "mt-7")}>
         <div className={cx("col-12 col-lg-4", mobile && "mb-6")}>
-          <H3 text={talent.supportersCount || "0"} className="text-center inverted-text-primary-01"></H3>
+          <H3 text={talent.supporters_count || "0"} className="text-center inverted-text-primary-01"></H3>
           <P3 className="text-center inverted-text-primary-03">Supporters</P3>
         </div>
         <div className={cx("col-12 col-lg-4", mobile && "mb-6")}>
@@ -68,9 +68,9 @@ const Token = ({ talent, talentTokenPrice, railsContext }) => {
           <P3 className="text-center inverted-text-primary-03">Current Price</P3>
         </div>
         <div className={cx("col-12 col-lg-4", mobile && "mb-6")}>
-          <H3 text={shortenAddress(talentToken.contractId)} className="text-center inverted-text-primary-01"></H3>
+          <H3 text={shortenAddress(talentToken.contract_id)} className="text-center inverted-text-primary-01"></H3>
           <P3
-            text={`${chainIdToName(talentToken.chainId, railsContext.contractsEnv)} Network`}
+            text={`${chainIdToName(talentToken.chain_id, railsContext.contractsEnv)} Network`}
             className="text-center inverted-text-primary-03"
           ></P3>
         </div>

@@ -1,4 +1,4 @@
-import { Avatar, Button, Icon, Typography, useModal, getTheme } from "@talentprotocol/design-system";
+import { Avatar, Button, Icon, Typography, useModal } from "@talentprotocol/design-system";
 import React from "react";
 import { QRCodeModal } from "./qr-code-modal";
 import defaultBanner from "../../../../../images/standard-banner.png";
@@ -37,7 +37,7 @@ export const ProfileHeader = ({ profile }) => {
         <InfoArea>
           <DetailedInfoContainer>
             <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
-              {profile.user.legal_first_name} {profile.user.legal_last_name}
+              {profile.user.display_name}
             </Typography>
             {profile.user.verified && <Icon name="verified-2" color="primary" size={20} />}
           </DetailedInfoContainer>

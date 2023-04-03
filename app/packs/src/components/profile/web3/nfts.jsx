@@ -22,7 +22,7 @@ const Nfts = ({ user, canUpdate, setShowLastDivider, onWalletConnect, railsConte
   // Display placeholder until the image fully loads
   const [loadedImageNfts, setLoadedImageNfts] = useState({});
   const userId = user.id;
-  const walletConnected = user.walletId;
+  const walletConnected = user.wallet_id;
 
   const loadedImage = nft =>
     setLoadedImageNfts(previousLoadedImages => ({

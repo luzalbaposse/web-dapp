@@ -14,7 +14,7 @@ const UserTags = ({
   clickable = true,
   onClick = null
 }) => {
-  const validTags = tags.filter(item => item != "");
+  const validTags = tags?.filter(item => item != "");
 
   if (validTags && validTags.length > 0) {
     return (

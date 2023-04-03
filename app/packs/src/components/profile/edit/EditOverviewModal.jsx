@@ -4,7 +4,6 @@ import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
 
 import { patch, get, getAuthToken } from "src/utils/requests";
-import { snakeCaseObject, camelCaseObject } from "src/utils/transformObjects";
 
 import Uppy from "@uppy/core";
 import { FileInput } from "@uppy/react";
@@ -41,13 +40,13 @@ const Option = props => {
   );
 };
 
-const EditOverviewModal = ({ show, hide, talent, setTalent, mode }) => {
+const EditOverviewModal = ({ show, hide, profile, setProfile, mode }) => {
   const { mobile } = useWindowDimensionsHook();
-  const [editedTalent, setEditedTalent] = useState(talent);
+  const [editedTalent, setEditedTalent] = useState(profile);
   const [profileFileInput, setProfileFileInput] = useState(null);
   const [bannerFileInput, setBannerFileInput] = useState(null);
   const [selectedCareerNeeds, setSelectedCareerNeeds] = useState(
-    editedTalent.careerGoal.careerNeeds.map(need => need.title)
+    editedTalent.career_goal.career_needs.map(need => need.title)
   );
   const [selectedTags, setSelectedTags] = useState(
     editedTalent.tags.map(tag => ({
@@ -56,9 +55,9 @@ const EditOverviewModal = ({ show, hide, talent, setTalent, mode }) => {
     }))
   );
   const [validationErrors, setValidationErrors] = useState({
-    legalFirstName: false,
-    legalLastName: false,
-    displayName: false,
+    legal_first_name: false,
+    legal_last_name: false,
+    display_name: false,
     occupation: false,
     location: false,
     headline: false
@@ -66,8 +65,8 @@ const EditOverviewModal = ({ show, hide, talent, setTalent, mode }) => {
 
   const talentErrors = () => {
     const errors = {};
-    if (editedTalent.user.displayName == "") {
-      errors.displayName = true;
+    if (editedTalent.user.display_name == "") {
+      errors.display_name = true;
     }
     if (editedTalent.profile.occupation == "") {
       errors.occupation = true;
@@ -166,21 +165,21 @@ const EditOverviewModal = ({ show, hide, talent, setTalent, mode }) => {
       return setValidationErrors(errors);
     }
 
-    const response = await patch(`/api/v1/talent/${talent.user.id}`, {
+    const response = await patch(`/api/v1/talent/${profile.user.id}`, {
       user: {
-        ...snakeCaseObject(editedTalent.user)
+        ...editedTalent.user
       },
       talent: {
-        ...snakeCaseObject(editedTalent)
+        ...editedTalent
       },
       tags: selectedTags.map(tag => tag.value),
       career_needs: selectedCareerNeeds
     });
 
     if (response && !response.error) {
-      setTalent(prev => ({
+      setProfile(prev => ({
         ...prev,
-        ...camelCaseObject(response)
+        ...response
       }));
 
       toast.success(<ToastBody heading="Success!" body={"Header created successfully."} />, { autoClose: 1500 });
@@ -198,8 +197,8 @@ const EditOverviewModal = ({ show, hide, talent, setTalent, mode }) => {
     uppyProfile.on("upload-success", (file, response) => {
       setEditedTalent(prev => ({
         ...prev,
-        profilePictureUrl: response.uploadURL,
-        profilePictureData: {
+        profile_picture_url: response.uploadURL,
+        profile_picture_data: {
           // eslint-disable-next-line  no-useless-escape
           id: response.uploadURL.match(/\/cache\/([^\?]+)/)[1], // extract key without prefix
           new_upload: true,
@@ -222,8 +221,8 @@ const EditOverviewModal = ({ show, hide, talent, setTalent, mode }) => {
     uppyBanner.on("upload-success", (file, response) => {
       setEditedTalent(prev => ({
         ...prev,
-        bannerUrl: response.uploadURL,
-        bannerData: {
+        banner_url: response.uploadURL,
+        banner_data: {
           // eslint-disable-next-line  no-useless-escape
           id: response.uploadURL.match(/\/cache\/([^\?]+)/)[1], // extract key without prefix
           storage: "cache",
@@ -313,7 +312,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent, mode }) => {
   }, [editedTalent.profile.headline]);
 
   const changeHeadlineHighlightedWords = tagIndex => {
-    let highlightedHeadlineWordsIndex = editedTalent.profile.highlightedHeadlineWordsIndex || [];
+    let highlightedHeadlineWordsIndex = editedTalent.profile.highlighted_headline_words_index || [];
 
     if (highlightedHeadlineWordsIndex.includes(tagIndex)) {
       const index = highlightedHeadlineWordsIndex.indexOf(tagIndex);
@@ -322,7 +321,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent, mode }) => {
         ...prev,
         profile: {
           ...prev.profile,
-          highlightedHeadlineWordsIndex: [...highlightedHeadlineWordsIndex]
+          highlighted_headline_words_index: [...highlightedHeadlineWordsIndex]
         }
       }));
     } else {
@@ -330,7 +329,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent, mode }) => {
         ...prev,
         profile: {
           ...prev.profile,
-          highlightedHeadlineWordsIndex: [...highlightedHeadlineWordsIndex, tagIndex]
+          highlighted_headline_words_index: [...highlightedHeadlineWordsIndex, tagIndex]
         }
       }));
     }
@@ -339,8 +338,8 @@ const EditOverviewModal = ({ show, hide, talent, setTalent, mode }) => {
   const deleteBannerImg = () => {
     setEditedTalent(prev => ({
       ...prev,
-      bannerUrl: null,
-      bannerData: null
+      banner_url: null,
+      banner_data: null
     }));
   };
 
@@ -373,7 +372,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent, mode }) => {
             <TalentProfilePicture
               className="mb-2 cursor-pointer"
               style={{ borderRadius: "24px" }}
-              src={editedTalent.bannerUrl || TalentBanner}
+              src={editedTalent.banner_url || TalentBanner}
               straight
               height={257}
               width={328}
@@ -396,7 +395,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent, mode }) => {
                 <TalentProfilePicture
                   className="mb-2 cursor-pointer"
                   style={{ borderRadius: "24px" }}
-                  src={editedTalent.profilePictureUrl}
+                  src={editedTalent.profile_picture_url}
                   userId={editedTalent.id}
                   height={112}
                   width={112}
@@ -420,7 +419,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent, mode }) => {
             <div className="position-relative mr-5">
               <TalentProfilePicture
                 className="position-relative"
-                src={editedTalent.profilePictureUrl}
+                src={editedTalent.profile_picture_url}
                 userId={editedTalent.id}
                 height={112}
               />
@@ -438,7 +437,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent, mode }) => {
             <div className="position-relative">
               <TalentProfilePicture
                 className="position-relative banner-profile cursor-pointer"
-                src={editedTalent.bannerUrl || TalentBanner}
+                src={editedTalent.banner_url || TalentBanner}
                 straight
                 height={332}
                 width={424}
@@ -468,10 +467,10 @@ const EditOverviewModal = ({ show, hide, talent, setTalent, mode }) => {
             <TextInput
               className="mb-2"
               title="First Name"
-              onChange={e => changeUserAttribute("legalFirstName", e.target.value)}
-              value={editedTalent.user.legalFirstName}
-              error={validationErrors?.legalFirstName}
-              disabled={editedTalent.withPersonaId}
+              onChange={e => changeUserAttribute("legal_first_name", e.target.value)}
+              value={editedTalent.user.legal_first_name}
+              error={validationErrors?.legal_first_name}
+              disabled={editedTalent.with_persona_id}
             />
             <P2
               className="text-primary-04"
@@ -482,10 +481,10 @@ const EditOverviewModal = ({ show, hide, talent, setTalent, mode }) => {
             <TextInput
               className="mb-2"
               title="Last Name"
-              onChange={e => changeUserAttribute("legalLastName", e.target.value)}
-              value={editedTalent.user.legalLastName}
-              error={validationErrors?.legalLastName}
-              disabled={editedTalent.withPersonaId}
+              onChange={e => changeUserAttribute("legal_last_name", e.target.value)}
+              value={editedTalent.user.legal_last_name}
+              error={validationErrors?.legal_last_name}
+              disabled={editedTalent.with_persona_id}
             />
             <P2 className="text-primary-04" text="Your legal last name that will be used when verifying your account" />
           </div>
@@ -493,10 +492,10 @@ const EditOverviewModal = ({ show, hide, talent, setTalent, mode }) => {
             <TextInput
               className="mb-2"
               title="Display Name"
-              onChange={e => changeUserAttribute("displayName", e.target.value)}
-              value={editedTalent.user.displayName}
+              onChange={e => changeUserAttribute("display_name", e.target.value)}
+              value={editedTalent.user.display_name}
               required={true}
-              error={validationErrors?.displayName}
+              error={validationErrors?.display_name}
             />
             <P2 className="text-primary-04" text="The name that we will generally use" />
           </div>
@@ -547,7 +546,7 @@ const EditOverviewModal = ({ show, hide, talent, setTalent, mode }) => {
           <P2 className="text-primary-01 mb-2" bold text="Highlight headline keywords" />
           <TagsWithIndex
             tags={headlineHighlightedWords}
-            tagsIndexSelected={editedTalent.profile.highlightedHeadlineWordsIndex || []}
+            tagsIndexSelected={editedTalent.profile.highlighted_headline_words_index || []}
             className="mr-2 mb-4"
             clickable={false}
             onClick={tagIndex => changeHeadlineHighlightedWords(tagIndex)}

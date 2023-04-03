@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 
 import { patch } from "src/utils/requests";
-import { snakeCaseObject, camelCaseObject } from "src/utils/transformObjects";
+import {} from "src/utils/transformObjects";
 
 import { H5, P2 } from "src/components/design_system/typography";
 import { toast } from "react-toastify";
@@ -17,6 +17,7 @@ const PersonaVerificationConfirmationModal = ({ show, hide, talent, setTalent, r
   const { mobile } = useWindowDimensionsHook();
   const [editedTalent, setEditedTalent] = useState(talent);
   const [loading, setLoading] = useState(false);
+  const user = talent.user;
 
   const changeUserAttribute = (attribute, value) => {
     setEditedTalent(prev => ({
@@ -44,14 +45,14 @@ const PersonaVerificationConfirmationModal = ({ show, hide, talent, setTalent, r
             with_persona_id: inquiryId
           },
           user: {
-            id: talent.user.id
+            id: user.id
           }
         };
-        patch(`/api/v1/talent/${talent.user.id}`, params)
+        patch(`/api/v1/talent/${user.id}`, params)
           .then(response => {
             setTalent(prev => ({
               ...prev,
-              withPersonaId: response.with_persona_id
+              with_persona_id: response.with_persona_id
             }));
 
             toast.success(<ToastBody heading="Success!" body={"You're being verified. It can take up to 24 hours"} />, {
@@ -69,19 +70,19 @@ const PersonaVerificationConfirmationModal = ({ show, hide, talent, setTalent, r
   const saveProfile = async () => {
     setLoading(true);
 
-    const response = await patch(`/api/v1/talent/${talent.user.id}`, {
+    const response = await patch(`/api/v1/talent/${user.id}`, {
       user: {
-        ...snakeCaseObject(editedTalent.user)
+        ...editedTalent.user
       },
       talent: {
-        ...snakeCaseObject(editedTalent)
+        ...editedTalent
       }
     });
 
     if (response && !response.error) {
       setTalent(prev => ({
         ...prev,
-        ...camelCaseObject(response)
+        ...response
       }));
 
       verifyTalent();
@@ -111,8 +112,8 @@ const PersonaVerificationConfirmationModal = ({ show, hide, talent, setTalent, r
           <TextInput
             className="mb-2"
             title="First Name"
-            onChange={e => changeUserAttribute("legalFirstName", e.target.value)}
-            value={editedTalent.user.legalFirstName}
+            onChange={e => changeUserAttribute("legal_first_name", e.target.value)}
+            value={editedTalent.user.legal_first_name}
           />
           <P2 className="text-primary-04" text="Your legal first name that will be used when verifying your account" />
         </div>
@@ -120,8 +121,8 @@ const PersonaVerificationConfirmationModal = ({ show, hide, talent, setTalent, r
           <TextInput
             className="mb-2"
             title="Last Name"
-            onChange={e => changeUserAttribute("legalLastName", e.target.value)}
-            value={editedTalent.user.legalLastName}
+            onChange={e => changeUserAttribute("legal_last_name", e.target.value)}
+            value={editedTalent.user.legal_last_name}
           />
           <P2 className="text-primary-04" text="Your legal last name that will be used when verifying your account" />
         </div>

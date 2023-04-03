@@ -17,14 +17,14 @@ import LaunchTokenModals from "../talent/Edit/LaunchTokenModals";
 const LaunchToken = ({ talent, railsContext, setLocalTalent, canUpdate }) => {
   const { mobile } = useWindowDimensionsHook();
   const { mode } = useTheme();
-  const talentToken = talent.talentToken;
+  const talentToken = talent.talent_token;
   const user = talent.user;
   const [ticker, setTicker] = useState(talentToken.ticker || "");
   const [show, setShow] = useState(false);
   const requiredFields = missingFields({
     talent: talent,
-    profilePictureUrl: talent.profilePictureUrl,
-    careerGoal: talent.careerGoal
+    profilePictureUrl: talent.profile_picture_url,
+    careerGoal: talent.career_goal
   });
 
   if (!canUpdate) {

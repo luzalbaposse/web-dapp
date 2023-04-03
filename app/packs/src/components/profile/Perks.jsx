@@ -141,7 +141,7 @@ const Perks = ({ talent, canUpdate }) => {
                 <div className="card perk-card p-2">
                   <div className="header d-flex flex-column justify-content-between p-3">
                     <div className="d-flex align-items-center mb-1">
-                      <TalentProfilePicture src={talent.profilePictureUrl} userId={talent.id} height={24} />
+                      <TalentProfilePicture src={talent.profile_picture_url} userId={talent.id} height={24} />
                       <P2
                         text={`$${talentToken.ticker}`}
                         className="ml-2 text-uppercase"

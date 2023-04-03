@@ -27,6 +27,8 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
   const [journeyItemInEditing, setJourneyItemInEditing] = useState(null);
   const [journeyItemSelected, setJourneyItemSelected] = useState(null);
 
+  const careerGoal = talent?.career_goal;
+
   const progressMap = {
     planned: "Planned",
     executing: "Executing",
@@ -36,11 +38,11 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
   };
 
   useEffect(() => {
-    const allItems = mergeAndSortJourney(talent.milestones, talent.careerGoal.goals);
+    const allItems = mergeAndSortJourney(talent?.milestones, careerGoal?.goals);
     setJourneyItems(allItems);
 
     setFilteredJourneyItems(applyCategoryFilter(allItems));
-  }, [talent.milestones, talent.careerGoal.goals, activeFilter]);
+  }, [talent?.milestones, careerGoal?.goals, activeFilter]);
 
   const compareEndData = (milestone1, milestone2) => compareDates(milestone2.startDate, milestone1.startDate);
 
@@ -48,10 +50,10 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
 
   const mergeAndSortJourney = (milestones, goals) => {
     const allElements = [].concat(
-      goals.map(goal => ({
+      goals?.map(goal => ({
         ...goal,
         category: "Goal",
-        startDate: goal.dueDate
+        startDate: goal.due_date
       })),
       milestones
     );
@@ -62,7 +64,7 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
   };
 
   const cssForBorder = (journeyItem, index, arrayLength) => {
-    if (dayjs(journeyItem.startDate).isAfter(currentDate)) {
+    if (dayjs(journeyItem?.start_date).isAfter(currentDate)) {
       if (index === arrayLength - 1) {
         return "";
       } else {
@@ -78,15 +80,15 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
   };
 
   const useDashedLine = journeyItem => {
-    return dayjs(journeyItem.startDate).isAfter(currentDate);
+    return dayjs(journeyItem?.start_date).isAfter(currentDate);
   };
 
   const iconForItem = (item, addSpacing = false) => {
-    if (item.category == "Other") {
+    if (item?.category == "Other") {
       return <Bulb className={`h-100${addSpacing ? " mr-1" : ""}`} size={16} />;
-    } else if (item.category == "Education") {
+    } else if (item?.category == "Education") {
       return <Learn className={`h-100${addSpacing ? " mr-1" : ""}`} size={16} />;
-    } else if (item.category == "Goal") {
+    } else if (item?.category == "Goal") {
       return (
         <Rocket
           className={`h-100${addSpacing ? " mr-1" : ""}`}
@@ -107,24 +109,8 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
     }
   };
 
-  /*
-  const displayYear = (index) => {
-    const currentJourneyItem = journeyItems[index];
-    const previousJourneyItem = index == 0 ? null : journeyItems[index - 1];
-
-    if (previousJourneyItem) {
-      return !dayjs(currentJourneyItem.startDate).isSame(
-        previousJourneyItem.startDate,
-        "year"
-      );
-    } else {
-      return true;
-    }
-  };
-  */
-
   const categoryCount = category => {
-    return `(${journeyItems.filter(item => item.category == category).length})`;
+    return `(${journeyItems.filter(item => item?.category == category).length})`;
   };
 
   const applyCategoryFilter = items => {
@@ -132,7 +118,7 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
       return items;
     }
 
-    return items.filter(item => item.category == activeFilter);
+    return items.filter(item => item?.category == activeFilter);
   };
 
   const openJourneyImagesModal = journeyItem => {
@@ -217,9 +203,11 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
                 {!mobile && (
                   <div className="d-flex flex-column col-2 pr-6 pt-1 text-right">
                     <P3 className="text-primary-04" bold>
-                      {dayjs(journeyItem.startDate, "YYYY-MM-DD").format("MMM YYYY")}
-                      {journeyItem.inProgress && !journeyItem.endDate && " - Today"}
-                      {journeyItem.endDate ? ` - ${dayjs(journeyItem.endDate, "YYYY-MM-DD").format("MMM YYYY")}` : ""}
+                      {dayjs(journeyItem?.start_date, "YYYY-MM-DD").format("MMM YYYY")}
+                      {journeyItem?.in_progress && !journeyItem?.end_date && " - Today"}
+                      {journeyItem?.end_date
+                        ? ` - ${dayjs(journeyItem?.end_date, "YYYY-MM-DD").format("MMM YYYY")}`
+                        : ""}
                     </P3>
                   </div>
                 )}
@@ -237,13 +225,15 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
                   {mobile && (
                     <div className="d-flex flex-column mb-4">
                       <P3 className="text-primary-04" bold>
-                        {dayjs(journeyItem.startDate, "YYYY-MM-DD").format("MMM YYYY")}
-                        {journeyItem.endDate ? ` - ${dayjs(journeyItem.endDate, "YYYY-MM-DD").format("MMM YYYY")}` : ""}
+                        {dayjs(journeyItem?.start_date, "YYYY-MM-DD").format("MMM YYYY")}
+                        {journeyItem?.end_date
+                          ? ` - ${dayjs(journeyItem?.end_date, "YYYY-MM-DD").format("MMM YYYY")}`
+                          : ""}
                       </P3>
                     </div>
                   )}
                   <div className="d-flex justify-content-between">
-                    <P1 className="text-primary-01 medium mb-3" text={journeyItem.title} />
+                    <P1 className="text-primary-01 medium mb-3" text={journeyItem?.title} />
                     {canUpdate && (
                       <Button
                         type="primary-outline"
@@ -257,21 +247,21 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
                       />
                     )}
                   </div>
-                  {journeyItem.link && (
-                    <a target="_blank" href={journeyItem.link}>
-                      <P2 className="text-primary-01 mb-3" text={journeyItem.institution} />
+                  {journeyItem?.link && (
+                    <a target="_blank" href={journeyItem?.link}>
+                      <P2 className="text-primary-01 mb-3" text={journeyItem?.institution} />
                     </a>
                   )}
-                  <P2 className="text-primary-03" text={journeyItem.description} />
-                  {journeyItem.progress && (
-                    <Tag className={cx(journeyItem.progress == "accomplished" ? "positive" : "secondary", "mt-3")}>
-                      <P3 className="current-color" medium text={progressMap[journeyItem.progress]} />
+                  <P2 className="text-primary-03" text={journeyItem?.description} />
+                  {journeyItem?.progress && (
+                    <Tag className={cx(journeyItem?.progress == "accomplished" ? "positive" : "secondary", "mt-3")}>
+                      <P3 className="current-color" medium text={progressMap[journeyItem?.progress]} />
                     </Tag>
                   )}
                   <div className="d-flex flex-wrap">
-                    {journeyItem.images?.length > 3 ? (
+                    {journeyItem?.images?.length > 3 ? (
                       <>
-                        {journeyItem.images.slice(0, 2).map(image => (
+                        {journeyItem?.images.slice(0, 2).map(image => (
                           <TalentProfilePicture
                             className="position-relative mr-2 mt-2"
                             style={{ borderRadius: "24px" }}
@@ -281,7 +271,7 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
                             width={225}
                           />
                         ))}
-                        {journeyItem.images.slice(2, 3).map(image => (
+                        {journeyItem?.images.slice(2, 3).map(image => (
                           <button
                             className="d-flex button-link p-0 position-relative mt-2"
                             onClick={() => openJourneyImagesModal(journeyItem)}
@@ -298,18 +288,18 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
                             <H4
                               className="position-absolute permanent-text-white"
                               style={{ top: "45%", left: "45%" }}
-                              text={`+${journeyItem.images.slice(3).length}`}
+                              text={`+${journeyItem?.images.slice(3).length}`}
                             />
                           </button>
                         ))}
                       </>
                     ) : (
                       <>
-                        {journeyItem.images.map(image => (
+                        {journeyItem?.images.map(image => (
                           <TalentProfilePicture
                             className="mr-2 mt-2"
                             style={{ borderRadius: "24px" }}
-                            src={image.imageUrl}
+                            src={image.image_url}
                             straight
                             height={176}
                             width={225}

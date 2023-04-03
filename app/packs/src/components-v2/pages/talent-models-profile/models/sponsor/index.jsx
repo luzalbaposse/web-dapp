@@ -16,13 +16,12 @@ export const SponsorModel = ({ isCurrentUserProfile, profile, railsContext }) =>
           Sponsorship
         </Typography>
         <Typography specs={{ variant: "p2", type: "regular" }} color="primary01">
-          The first step to support someone is being present. Unlock access to career updates, supporter NFT & much
-          more!
+          Help talent grow through direct sponsorships. Talent have 30 days to claim sponsorships, after that you can claim back your funds.
         </Typography>
         <Button
           hierarchy="primary"
           size="large"
-          text="Sponsor [Soon]"
+          text="Soon"
           isStretched
           onClick={() => {
             if (modalState.isOpen) {

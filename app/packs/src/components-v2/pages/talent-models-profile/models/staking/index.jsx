@@ -29,7 +29,7 @@ export const StakingModel = ({ profile, isCurrentUserProfile, currentUserId, rai
         Staking
       </Typography>
       <Typography specs={{ variant: "p2", type: "regular" }} color="primary01">
-        The first step to support someone is being present. Unlock access to career updates, supporter NFT & much more!
+        Stake to vouch for someone you truly believe in. Unlock access to a TAL yield pool for both yourself and who you are supporting.
       </Typography>
       <Button hierarchy="primary" size="large" text="Stake" isStretched onClick={() => setShowStakeModal(true)} />
     </Container>

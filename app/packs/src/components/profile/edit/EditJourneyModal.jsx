@@ -10,7 +10,6 @@ import { FileInput } from "@uppy/react";
 import AwsS3Multipart from "@uppy/aws-s3-multipart";
 
 import { post, patch, destroy, getAuthToken } from "src/utils/requests";
-import { snakeCaseObject, camelCaseObject } from "src/utils/transformObjects";
 import { useTheme } from "src/contexts/ThemeContext";
 
 import TalentProfilePicture from "src/components/talent/TalentProfilePicture";
@@ -122,10 +121,10 @@ const MilestoneExperience = ({
   uppyBanner,
   deleteImage
 }) => {
-  const [startMonth, setStartMonth] = useState(returnMonth(currentJourneyItem.startDate));
-  const [startYear, setStartYear] = useState(returnYear(currentJourneyItem.startDate));
-  const [endMonth, setEndMonth] = useState(returnMonth(currentJourneyItem.endDate));
-  const [endYear, setEndYear] = useState(returnYear(currentJourneyItem.endDate));
+  const [startMonth, setStartMonth] = useState(returnMonth(currentJourneyItem.start_date));
+  const [startYear, setStartYear] = useState(returnYear(currentJourneyItem.start_date));
+  const [endMonth, setEndMonth] = useState(returnMonth(currentJourneyItem.end_date));
+  const [endYear, setEndYear] = useState(returnYear(currentJourneyItem.end_date));
 
   const monthOptions = [
     "January",
@@ -157,15 +156,15 @@ const MilestoneExperience = ({
 
   useEffect(() => {
     if (startMonth != "" && startYear != "") {
-      changeAttribute("startDate", dayjs(`${startMonth}-${startYear}`, "MMMM-YYYY").format("DD-MM-YYYY"));
+      changeAttribute("start_date", dayjs(`${startMonth}-${startYear}`, "MMMM-YYYY").format("DD-MM-YYYY"));
     }
   }, [startMonth, startYear]);
 
   useEffect(() => {
     if (endMonth != "" && endYear != "") {
-      changeAttribute("endDate", dayjs(`${endMonth}-${endYear}`, "MMMM-YYYY").format("DD-MM-YYYY"));
+      changeAttribute("end_date", dayjs(`${endMonth}-${endYear}`, "MMMM-YYYY").format("DD-MM-YYYY"));
     } else {
-      changeAttribute("endDate", "");
+      changeAttribute("end_date", "");
     }
   }, [endMonth, endYear]);
 
@@ -243,7 +242,7 @@ const MilestoneExperience = ({
           <Checkbox
             className="form-check-input"
             checked={currentJourneyItem.inProgress}
-            onChange={() => changeAttribute("inProgress", !currentJourneyItem.inProgress)}
+            onChange={() => changeAttribute("in_progress", !currentJourneyItem.in_progress)}
           >
             <P2 className="mr-1" text="I am currently working on this role" />
           </Checkbox>
@@ -340,11 +339,11 @@ const MilestoneExperience = ({
           />
           <div className={cx("d-flex", "flex-wrap", mobile ? "justify-content-center" : "justify-content-between")}>
             {currentJourneyItem.images?.map(image => (
-              <div className="position-relative" key={`${image.imageUrl}`}>
+              <div className="position-relative" key={`${image.image_url}`}>
                 <TalentProfilePicture
                   className="position-relative mt-2"
                   style={{ borderRadius: "24px" }}
-                  src={image.imageUrl}
+                  src={image.image_url}
                   straight
                   height={213}
                   width={272}
@@ -354,7 +353,7 @@ const MilestoneExperience = ({
                   style={{ top: "16px", right: "8px" }}
                   type="white-subtle"
                   size="icon"
-                  onClick={() => deleteImage(image.imageUrl)}
+                  onClick={() => deleteImage(image.image_url)}
                 >
                   <Delete color={mode() == "light" ? lightTextPrimary01 : darkTextPrimary01} size={16} />
                 </Button>
@@ -394,8 +393,8 @@ const GoalExperience = ({
   uppyBanner,
   deleteImage
 }) => {
-  const [dueMonth, setDueMonth] = useState(returnMonth(currentJourneyItem.dueDate));
-  const [dueYear, setDueYear] = useState(returnYear(currentJourneyItem.dueDate));
+  const [dueMonth, setDueMonth] = useState(returnMonth(currentJourneyItem.due_date));
+  const [dueYear, setDueYear] = useState(returnYear(currentJourneyItem.due_date));
 
   const progressOptions = [
     { value: "planned", title: "Planned" },
@@ -433,7 +432,7 @@ const GoalExperience = ({
 
   useEffect(() => {
     if (dueMonth != "" && dueYear != "") {
-      changeAttribute("dueDate", dayjs(`${dueMonth}-${dueYear}`, "MMMM-YYYY").format("DD-MM-YYYY"));
+      changeAttribute("due_date", dayjs(`${dueMonth}-${dueYear}`, "MMMM-YYYY").format("DD-MM-YYYY"));
     }
   }, [dueMonth, dueYear]);
 
@@ -549,11 +548,11 @@ const GoalExperience = ({
           />
           <div className={cx("d-flex", "flex-wrap", mobile ? "justify-content-center" : "justify-content-between")}>
             {currentJourneyItem.images?.map(image => (
-              <div className="position-relative" key={`${image.imageUrl}`}>
+              <div className="position-relative" key={`${image.image_url}`}>
                 <TalentProfilePicture
                   className="position-relative mt-2"
                   style={{ borderRadius: "24px" }}
-                  src={image.imageUrl}
+                  src={image.image_url}
                   straight
                   height={213}
                   width={272}
@@ -563,7 +562,7 @@ const GoalExperience = ({
                   style={{ top: "16px", right: "8px" }}
                   type="white-subtle"
                   size="icon"
-                  onClick={() => deleteImage(image.imageUrl)}
+                  onClick={() => deleteImage(image.image_url)}
                 >
                   <Delete color={mode() == "light" ? lightTextPrimary01 : darkTextPrimary01} size={16} />
                 </Button>
@@ -595,13 +594,13 @@ const EditJourneyModal = ({ show, hide, talent, setTalent, editType, setJourneyI
   const [currentJourneyItem, setCurrentJourneyItem] = useState({
     id: journeyItem?.id || "",
     title: journeyItem?.title || "",
-    startDate: journeyItem?.startDate ? dayjs(journeyItem.startDate, "YYYY-MM-DD").format("YYYY-MM") : "",
-    endDate: journeyItem?.endDate ? dayjs(journeyItem.endDate, "YYYY-MM-DD").format("YYYY-MM") : "",
-    dueDate: journeyItem?.dueDate ? dayjs(journeyItem.dueDate, "YYYY-MM-DD").format("YYYY-MM") : "",
+    start_date: journeyItem?.start_date ? dayjs(journeyItem.start_date, "YYYY-MM-DD").format("YYYY-MM") : "",
+    end_date: journeyItem?.end_date ? dayjs(journeyItem.end_date, "YYYY-MM-DD").format("YYYY-MM") : "",
+    due_date: journeyItem?.due_date ? dayjs(journeyItem.due_date, "YYYY-MM-DD").format("YYYY-MM") : "",
     description: journeyItem?.description || "",
     link: journeyItem?.link || "",
     institution: journeyItem?.institution || "",
-    inProgress: journeyItem?.inProgress || false,
+    in_progress: journeyItem?.in_progress || false,
     progress: journeyItem?.progress || "",
     category: journeyItem?.category || "",
     images: journeyItem?.images || []
@@ -621,8 +620,8 @@ const EditJourneyModal = ({ show, hide, talent, setTalent, editType, setJourneyI
     if (currentJourneyItem.title == "") {
       errors.title = true;
     }
-    if (currentJourneyItem.startDate == "") {
-      errors.startDate = true;
+    if (currentJourneyItem.start_date == "") {
+      errors.start_date = true;
     }
     if (currentJourneyItem.description == "") {
       errors.description = true;
@@ -639,8 +638,8 @@ const EditJourneyModal = ({ show, hide, talent, setTalent, editType, setJourneyI
     if (currentJourneyItem.title == "") {
       errors.title = true;
     }
-    if (currentJourneyItem.dueDate == "") {
-      errors.dueDate = true;
+    if (currentJourneyItem.due_date == "") {
+      errors.due_date = true;
     }
     if (currentJourneyItem.description == "") {
       errors.description = true;
@@ -676,14 +675,14 @@ const EditJourneyModal = ({ show, hide, talent, setTalent, editType, setJourneyI
 
     const response = await post(`/api/v1/talent/${talent.id}/milestones`, {
       milestone: {
-        ...snakeCaseObject(currentJourneyItem)
+        ...currentJourneyItem
       }
     });
 
     if (response && !response.error) {
       setTalent(prev => ({
         ...prev,
-        milestones: [...prev.milestones, camelCaseObject(response)]
+        milestones: [...prev.milestones, response]
       }));
 
       toast.success(<ToastBody heading="Success!" body={"Milestone created successfully."} mode={mode} />, {
@@ -704,13 +703,13 @@ const EditJourneyModal = ({ show, hide, talent, setTalent, editType, setJourneyI
     }
 
     const response = await patch(`/api/v1/talent/${talent.id}/milestones/${currentJourneyItem.id}`, {
-      milestone: snakeCaseObject(currentJourneyItem)
+      milestone: currentJourneyItem
     });
 
     if (response && !response.error) {
       const newMilestones = talent.milestones.map(milestone => {
         if (milestone.id === response.id) {
-          return { ...camelCaseObject(response) };
+          return { ...response };
         }
         return { ...milestone };
       });
@@ -756,16 +755,16 @@ const EditJourneyModal = ({ show, hide, talent, setTalent, editType, setJourneyI
       return setValidationErrors(errors);
     }
 
-    const response = await post(`/api/v1/career_goals/${talent.careerGoal.id}/goals`, {
-      goal: snakeCaseObject(currentJourneyItem)
+    const response = await post(`/api/v1/career_goals/${talent.career_goal.id}/goals`, {
+      goal: currentJourneyItem
     });
 
     if (response && !response.error) {
       setTalent(prev => ({
         ...prev,
-        careerGoal: {
-          ...prev.careerGoal,
-          goals: [...prev.careerGoal.goals, camelCaseObject(response)]
+        career_goal: {
+          ...prev.career_goal,
+          goals: [...prev.career_goal.goals, response]
         }
       }));
 
@@ -786,22 +785,22 @@ const EditJourneyModal = ({ show, hide, talent, setTalent, editType, setJourneyI
       return setValidationErrors(errors);
     }
 
-    const response = await patch(`/api/v1/career_goals/${talent.careerGoal.id}/goals/${currentJourneyItem.id}`, {
-      goal: snakeCaseObject(currentJourneyItem)
+    const response = await patch(`/api/v1/career_goals/${talent.career_goal.id}/goals/${currentJourneyItem.id}`, {
+      goal: currentJourneyItem
     });
 
     if (response && !response.error) {
-      const newGoals = talent.careerGoal.goals.map(goal => {
+      const newGoals = talent.career_goal.goals.map(goal => {
         if (goal.id === response.id) {
-          return { ...camelCaseObject(response) };
+          return { ...response };
         }
         return { ...goal };
       });
 
       setTalent(prev => ({
         ...prev,
-        careerGoal: {
-          ...prev.careerGoal,
+        career_goal: {
+          ...prev.career_goal,
           goals: newGoals
         }
       }));
@@ -817,16 +816,16 @@ const EditJourneyModal = ({ show, hide, talent, setTalent, editType, setJourneyI
   };
 
   const deleteGoal = async () => {
-    const response = await destroy(`/api/v1/career_goals/${talent.careerGoal.id}/goals/${currentJourneyItem.id}`);
+    const response = await destroy(`/api/v1/career_goals/${talent.career_goal.id}/goals/${currentJourneyItem.id}`);
 
     if (response) {
-      const index = talent.careerGoal.goals.findIndex(goal => goal.id === response.id);
-      const newGoals = [...talent.careerGoal.goals.slice(0, index), ...talent.careerGoal.goals.slice(index + 1)];
+      const index = talent.career_goal.goals.findIndex(goal => goal.id === response.id);
+      const newGoals = [...talent.career_goal.goals.slice(0, index), ...talent.career_goal.goals.slice(index + 1)];
 
       setTalent(prev => ({
         ...prev,
-        careerGoal: {
-          ...prev.careerGoal,
+        career_goal: {
+          ...prev.career_goal,
           goals: newGoals
         }
       }));
@@ -840,7 +839,7 @@ const EditJourneyModal = ({ show, hide, talent, setTalent, editType, setJourneyI
   };
 
   const deleteImage = imageUrl => {
-    const index = currentJourneyItem.images.findIndex(image => image.imageUrl === imageUrl);
+    const index = currentJourneyItem.images.findIndex(image => image.image_url === imageUrl);
 
     const newImages = [...currentJourneyItem.images.slice(0, index), ...currentJourneyItem.images.slice(index + 1)];
 
@@ -881,13 +880,13 @@ const EditJourneyModal = ({ show, hide, talent, setTalent, editType, setJourneyI
     setCurrentJourneyItem({
       id: "",
       title: "",
-      startDate: "",
-      endDate: "",
-      dueDate: "",
+      start_date: "",
+      end_date: "",
+      due_date: "",
       description: "",
       link: "",
       institution: "",
-      inProgress: false,
+      in_progress: false,
       progress: "",
       category: ""
     });
@@ -905,8 +904,8 @@ const EditJourneyModal = ({ show, hide, talent, setTalent, editType, setJourneyI
         images: [
           ...prev.images,
           {
-            imageUrl: response.uploadURL,
-            imageData: {
+            image_url: response.uploadURL,
+            image_data: {
               // eslint-disable-next-line no-useless-escape
               id: response.uploadURL.match(/\/cache\/([^\?]+)/)[1], // extract key without prefix
               storage: "cache",
