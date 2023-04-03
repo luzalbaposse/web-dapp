@@ -52,4 +52,6 @@ export const SetPasswordPage = props => {
   );
 };
 
-export default SetPasswordPage;
+export default (props, railsContext) => {
+  return () => <SetPasswordPage {...props} railsContext={railsContext} />;
+};

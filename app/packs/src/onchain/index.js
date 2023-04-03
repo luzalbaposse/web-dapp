@@ -8,10 +8,11 @@ dayjs.extend(customParseFormat);
 
 import TalentToken from "../abis/recent/TalentToken.json";
 import Staking from "../abis/recent/Staking.json";
-import TalentFactory from "../abis/recent/TalentFactory.json";
+// import TalentFactory from "../abis/recent/TalentFactory.json";
 import TalentFactoryV3 from "../abis/recent/TalentFactoryV3.json";
 import StableToken from "../abis/recent/StableToken.json";
 import CommunityUser from "../abis/recent/CommunityUser.json";
+import TalentSponsorship from "../abis/TalentSponsorship.json";
 
 import Addresses from "./addresses.json";
 import { ERROR_MESSAGES } from "../utils/constants";
@@ -24,6 +25,7 @@ class OnChain {
     this.account = null;
     this.talentFactory = null;
     this.staking = null;
+    this.sponsorship = null;
     this.stabletoken = null;
     this.stableDecimals = null;
     this.celoKit = null;
@@ -249,6 +251,69 @@ class OnChain {
     }
   }
 
+  async getStableBalanceERC20(address) {
+    try {
+      const web3ModalInstance = await this.web3ModalConnect();
+      let provider;
+      // to change to polygon and muumbai
+      if (web3ModalInstance !== undefined) {
+        provider = new ethers.providers.Web3Provider(web3ModalInstance);
+      } else {
+        const chainId = await this.getChainID();
+        provider = new ethers.providers.JsonRpcProvider(Addresses[this.env][chainId]["rpcURL"]);
+      }
+
+      if (await this.recognizedChain()) {
+        this.stabletoken = new ethers.Contract(address, StableToken.abi, provider);
+        this.stableDecimals = await this.stabletoken.decimals();
+        const balance = await this.stabletoken.balanceOf(this.account);
+        const balanceFormatted = ethers.utils.formatUnits(balance, this.tokenDecimals);
+
+        return balanceFormatted;
+      } else {
+        return "0.0";
+      }
+    } catch (error) {
+      console.log(error);
+      return "0.0";
+    }
+  }
+
+  async loadSponsorship() {
+    try {
+      const web3ModalInstance = await this.web3ModalConnect();
+      let provider;
+
+      if (web3ModalInstance !== undefined) {
+        provider = new ethers.providers.Web3Provider(web3ModalInstance);
+      } else {
+        provider = new ethers.providers.JsonRpcProvider(Addresses[this.env][chainId]["rpcURL"]);
+      }
+      const chainId = await this.getChainID();
+
+      if (await this.recognizedChain()) {
+        const sponsorshipAddress = Addresses[this.env][chainId]["sponsorship"];
+
+        this.sponsorship = new ethers.Contract(sponsorshipAddress, TalentSponsorship.abi, provider);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
+
+  async getSponsorsOfTalent() {
+    try {
+      return this.sponsorship.connect(this.signer).amountAvailable();
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
+
   async loadStableToken() {
     try {
       const web3ModalInstance = await this.web3ModalConnect();
@@ -408,6 +473,36 @@ class OnChain {
     } else {
       return result;
     }
+  }
+
+  async createSponsorship(talent, _amount) {
+    if (!this.sponsorship) {
+      return;
+    }
+
+    const amount = ethers.utils.parseUnits(_amount, this.stableDecimals);
+    const tx = await this.sponsorship.connect(this.signer).sponsor(talent, amount, this.stabletoken.address);
+    const receipt = await tx.wait();
+
+    return receipt;
+  }
+
+  claimSponsorship() {
+    if (!this.sponsorship) {
+      return;
+    }
+
+    return this.sponsorship.connect(this.signer).withdrawToken(this.stabletoken.address);
+  }
+
+  async approveStableSponsorship(_amount) {
+    if (!this.sponsorship || !this.stabletoken) {
+      return;
+    }
+
+    return await this.stabletoken
+      .connect(this.signer)
+      .approve(this.sponsorship.address, ethers.utils.parseUnits(_amount, this.stableDecimals));
   }
 
   async getStableBalance(formatted = false) {

@@ -124,23 +124,6 @@ RSpec.describe Talents::ChewySearch do
     end
   end
 
-  context "when is filtered by watchlist" do
-    let(:filter_params) do
-      {
-        status: "Admin all",
-        watchlist_only: "true"
-      }
-    end
-
-    before do
-      create :subscription, user: user_2, subscriber: user_1
-    end
-
-    it "returns user they are subscribing" do
-      expect(search_talents[1].map { |t| t["id"] }).to match_array([talent_2].pluck(:id))
-    end
-  end
-
   context "when is filtered by status" do
     context "when status is Admin all" do
       let(:filter_params) do

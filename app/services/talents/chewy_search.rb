@@ -27,20 +27,17 @@ module Talents
     def call
       talents = talent_scope
       talents = talents.query.not({match: {"user.profile_type": "applying"}})
-      talents = filter_by_watchlist(talents) if watchlist_only == "true"
       talents = filter_by_discovery_row(talents) if discovery_row
       talents = query_for_keyword(talents) if keyword.present?
       talents = query_for_status(talents)
       talents = sort(talents)
       total_count = talents.count
-      subscribing_user_ids = searching_user&.users_subscribing&.pluck(:user_id) || []
       talents = talents.limit(size).offset(from)
       [{
         current_page: ((from + PAGE_NEUTRALIZER) / size.to_f).ceil,
         last_page: (total_count / size.to_f).ceil
       }, talents.entries.map do |talent|
         attributes = talent.attributes.deep_stringify_keys
-        attributes["is_subscribing"] = subscribing_user_ids.include?(attributes["user_id"])
         attributes["profile_picture_url"] = Talent.find_by!(id: talent.id).profile_picture_url
         attributes
       end]
@@ -48,7 +45,7 @@ module Talents
 
     private
 
-    attr_reader :filter_params, :admin_or_moderator, :size, :from, :current_user_watchlist, :searching_user, :discovery_row
+    attr_reader :filter_params, :admin_or_moderator, :size, :from, :searching_user, :discovery_row
 
     def talent_scope
       if admin_or_moderator && ADMIN_FILTER_STATUS.include?(filter_params[:status])
@@ -172,10 +169,6 @@ module Talents
       contract_env = ENV["CONTRACTS_ENV"]
       network = (contract_env == "production") ? Web3Api::ApiProxy.const_get("#{network_name.upcase}_CHAIN") : Web3Api::ApiProxy.const_get("TESTNET_#{network_name.upcase}_CHAIN")
       network[2].to_i
-    end
-
-    def watchlist_only
-      @watchlist_only ||= filter_params[:watchlist_only]
     end
   end
 end

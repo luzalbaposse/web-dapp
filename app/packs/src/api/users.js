@@ -38,20 +38,59 @@ const resetPassword = (userUUID, token, password) => {
   const baseHeaders = defaultHeaders();
   const headers = appendCSRFToken(baseHeaders);
 
-  return axios.put(`/users/${userUUID}/password`, {
-    token,
-    password_reset: { password }
-  }, {
+  return axios.put(
+    `/users/${userUUID}/password`,
+    {
+      token,
+      password_reset: { password }
+    },
+    {
+      headers: {
+        ...headers
+      }
+    }
+  );
+};
+
+const getProfile = username =>
+  axios.get(`/u/${username}/profile`, {
     headers: {
-      ...headers
+      accept: "application/json",
+      "content-type": "application/json"
     }
   });
 
-}
+const getConnections = username =>
+  axios.get(`/api/v1/connections?id=${username}`, {
+    headers: {
+      accept: "application/json",
+      "content-type": "application/json"
+    }
+  });
+
+const getSupporters = username =>
+  axios.get(`/api/v1/supporters?id=${username}`, {
+    headers: {
+      accept: "application/json",
+      "content-type": "application/json"
+    }
+  });
+
+const getSubscribers = username =>
+  axios.get(`/api/v1/subscribing?id=${username}`, {
+    headers: {
+      accept: "application/json",
+      "content-type": "application/json"
+    }
+  });
 
 export const users = {
   createAccount,
   sendConfirmationEmail,
   sendResetPasswordEmail,
-  resetPassword
+  resetPassword,
+  getConnections,
+  getProfile,
+  getSupporters,
+  getSubscribers
 };

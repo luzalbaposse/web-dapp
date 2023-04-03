@@ -23,11 +23,13 @@ class API::V1::PublicAPI::APIController < ActionController::Base
   end
 
   def internal_request?
-    return false if request.domain.blank?
+    @internal_request ||= begin
+      return false if request.domain.blank?
 
-    return true if INTERNAL_DOMAINS.include?(request.domain)
+      return true if INTERNAL_DOMAINS.include?(request.domain)
 
-    false
+      false
+    end
   end
 
   def api_key_from_headers

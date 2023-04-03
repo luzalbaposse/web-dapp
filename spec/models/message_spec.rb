@@ -5,6 +5,7 @@ RSpec.describe Message, type: :model do
 
   describe "associations" do
     it { is_expected.to belong_to(:chat).optional }
+    it { is_expected.to belong_to(:career_update).optional }
     it { is_expected.to belong_to(:sender) }
     it { is_expected.to belong_to(:receiver) }
   end

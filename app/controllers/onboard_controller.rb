@@ -15,7 +15,8 @@ class OnboardController < ApplicationController
       @talent = TalentBlueprint.render_as_json(
         talent,
         view: :extended,
-        current_user_watchlist: current_user_watchlist,
+        current_user_active_subscribing: current_user_active_subscribing,
+        current_user_pending_subscribing: current_user_pending_subscribing,
         tags: user.tags.where(hidden: false)
       )
 

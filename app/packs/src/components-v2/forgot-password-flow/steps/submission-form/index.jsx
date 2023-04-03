@@ -28,13 +28,18 @@ export const SubmissionFormStep = props => {
           <Typography specs={{ variant: "p2", type: "bold" }} color="primary01">
             Email
           </Typography>
-          <Input placeholder="johndoe@mail.com" inputRef={props.emailRef} onChange={emailChangeCallback} onEnterCallback={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            if (!props.isContinueDisabled) {
-              props.onContinueCallback();
-            }
-          }} />
+          <Input
+            placeholder="johndoe@mail.com"
+            inputRef={props.emailRef}
+            onChange={emailChangeCallback}
+            onEnterCallback={e => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (!props.isContinueDisabled) {
+                props.onContinueCallback();
+              }
+            }}
+          />
         </EmailBox>
       </Form>
     </>

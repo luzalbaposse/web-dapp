@@ -13,7 +13,7 @@ RSpec.describe User, type: :model do
 
     # Feed
     it { is_expected.to have_many(:subscriptions) }
-    it { is_expected.to have_many(:subscribers).through(:subscriptions) }
+    it { is_expected.to have_many(:subscribers).through(:active_subscriptions) }
     it { is_expected.to have_many(:subscribing) }
     it { is_expected.to have_many(:users_subscribing) }
     it { is_expected.to have_many(:pending_subscriptions) }
@@ -534,6 +534,37 @@ RSpec.describe User, type: :model do
 
       it "returns true" do
         expect(user.moderator?).to be_truthy
+      end
+    end
+  end
+
+  describe "#subscriber_of?" do
+    let(:subscriber) { create :user }
+    let(:user) { create :user }
+
+    context "when the subscriber is not subscribing the user" do
+      it "returns false" do
+        expect(subscriber.subscriber_of?(user)).to be_falsey
+      end
+    end
+
+    context "when the subscriber has a pending subscription with the user" do
+      before do
+        create :pending_subscription, user: user, subscriber: subscriber
+      end
+
+      it "returns false" do
+        expect(subscriber.subscriber_of?(user)).to eq false
+      end
+    end
+
+    context "when the subscriber has an active subscription with the user" do
+      before do
+        create :subscription, user: user, subscriber: subscriber
+      end
+
+      it "returns true" do
+        expect(subscriber.subscriber_of?(user)).to eq true
       end
     end
   end

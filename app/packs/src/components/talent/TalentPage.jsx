@@ -7,7 +7,6 @@ import { useWindowDimensionsHook } from "src/utils/window";
 import { get } from "src/utils/requests";
 
 import { camelCaseObject } from "src/utils/transformObjects";
-import { post, destroy } from "src/utils/requests";
 import ThemeContainer, { ThemeContext } from "src/contexts/ThemeContext";
 
 import Button from "src/components/design_system/button";
@@ -34,7 +33,6 @@ const TalentPage = ({ env }) => {
   const url = new URL(document.location);
 
   const [talents, setTalents] = useState([]);
-  const [watchlistOnly, setWatchlistOnly] = useState(url.searchParams.get("watchlist_only") == "true" || false);
   const [listModeOnly, setListModeOnly] = useState(false);
   const [selectedSort, setSelectedSort] = useState("");
   const [sortDirection, setSortDirection] = useState("asc");
@@ -56,39 +54,8 @@ const TalentPage = ({ env }) => {
   useEffect(() => {
     const params = new URLSearchParams(document.location.search);
     params.set("page", 1);
-    params.set("watchlist_only", watchlistOnly);
     loadTalents(params);
-  }, [watchlistOnly]);
-
-  const changeTab = tab => {
-    setWatchlistOnly(tab === "Watchlist" ? true : false);
-  };
-
-  const updateSubscription = async talent => {
-    const newtalents = talents.map(currTalent => {
-      if (currTalent.id === talent.id) {
-        return { ...currTalent, isSubscribing: !talent.isSubscribing };
-      } else {
-        return { ...currTalent };
-      }
-    });
-
-    if (talent.isSubscribing) {
-      const response = await destroy(`/api/v1/subscriptions?talent_id=${talent.user.username}`);
-
-      if (response.success) {
-        setTalents([...newtalents]);
-      }
-    } else {
-      const response = await post(`/api/v1/subscriptions`, {
-        talent_id: talent.user.username
-      });
-
-      if (response.success) {
-        setTalents([...newtalents]);
-      }
-    }
-  };
+  }, []);
 
   useEffect(() => {
     let sortedTalent = [...talents];
@@ -169,8 +136,6 @@ const TalentPage = ({ env }) => {
         <P1 className="text-primary-03" text="Support undiscovered talent and be rewarded as they grow." />
       </div>
       <TalentOptions
-        changeTab={changeTab}
-        watchlistOnly={watchlistOnly}
         listModeOnly={listModeOnly}
         searchUrl="/api/v1/talent"
         setListModeOnly={setListModeOnly}
@@ -189,7 +154,6 @@ const TalentPage = ({ env }) => {
         <TalentTableListMode
           theme={theme}
           talents={talents}
-          updateSubscription={updateSubscription}
           selectedSort={selectedSort}
           setSelectedSort={setSelectedSort}
           sortDirection={sortDirection}
@@ -197,7 +161,7 @@ const TalentPage = ({ env }) => {
           showFirstBoughtField={false}
         />
       ) : (
-        <TalentTableCardMode talents={talents} updateSubscription={updateSubscription} env={env} />
+        <TalentTableCardMode talents={talents} env={env} />
       )}
       {loading && (
         <div className="w-100 d-flex flex-row my-2 justify-content-center">

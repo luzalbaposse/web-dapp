@@ -6,8 +6,11 @@ class TalentBlueprint < Blueprinter::Base
     association :talent_token, blueprint: TalentTokenBlueprint, view: :normal
     association :user, blueprint: UserBlueprint, view: :normal
 
-    field :is_subscribing do |talent, options|
-      options[:current_user_watchlist]&.include?(talent.user_id) || false
+    field :subscribing_status do |talent, options|
+      status = "unsubscribed"
+      status = "subscribed" if options[:current_user_active_subscribing]&.include?(talent.user_id)
+      status = "pending" if options[:current_user_pending_subscribing]&.include?(talent.user_id)
+      status
     end
 
     field :profile_picture_data do |talent, _options|
@@ -45,6 +48,9 @@ class TalentBlueprint < Blueprinter::Base
     end
     field :banner_data do |talent, _options|
       talent.banner_data ? JSON.parse(talent.banner_data) : nil
+    end
+    field :tal_domain do |talent, options|
+      talent.user.tal_domain&.domain
     end
     association :milestones, blueprint: MilestoneBlueprint, view: :normal
     association :career_goal, blueprint: CareerGoalBlueprint, view: :normal

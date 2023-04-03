@@ -8,12 +8,17 @@ module PublicAPIRoutes
             resources :talents, only: [:show, :index]
             resources :supporters, only: [:index]
             resources :connections, only: [:index]
+            resources :career_updates, only: [:index, :create]
+            resources :sponsorships, only: [:create]
             resources :sessions, only: [] do
               get :logged_in_user, on: :collection
             end
-            resources :subscriptions, only: [:create]
+            resources :subscriptions, only: [:create] do
+              put "accept", on: :collection
+            end
             delete "subscriptions", to: "subscriptions#destroy"
             get "subscribers", to: "subscriptions#subscribers"
+            get "pending_subscribers", to: "subscriptions#pending_subscribers"
             get "subscribing", to: "subscriptions#subscribing"
           end
 

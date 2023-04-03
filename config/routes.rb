@@ -62,9 +62,11 @@ Rails.application.routes.draw do
     # Quests
     resources :quests, only: [:show]
 
+    # Career circle
+    resource :career_circle, only: [:show]
+
     namespace :api, defaults: {format: :json} do
       namespace :v1 do
-        resources :tokens, only: [:show]
         resources :users, only: [:index, :update] do
           resources :delete_account_tokens, module: "users", only: [:create]
 
@@ -135,7 +137,8 @@ Rails.application.routes.draw do
   # end Auth
 
   get "/u/:username/delete_account" => "users#destroy", :as => "delete_account", :constraints => {username: /[^\/]+/}
-  get "/u/:username" => "profiles#show", :as => "user", :constraints => {username: /[^\/]+/}
+  get "/u/:username/profile" => "profiles#show", :as => "user_profile", :constraints => {username: /[^\/]+/}
+  get "/u/:username" => "profiles#talentmodels", :as => "user", :constraints => {username: /[^\/]+/}
   get "/u/:username/account_settings" => "users#edit_profile", :as => "account_settings", :constraints => {username: /[^\/]+/}
   # redirect /talent to /u so we have the old route still working
   get "/talent/:username", to: redirect("/u/%{username}"), as: "talent_profile"

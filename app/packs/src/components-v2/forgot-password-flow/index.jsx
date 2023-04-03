@@ -29,7 +29,14 @@ export const ForgotPasswordFlow = () => {
   }, [emailRef, setEmail, stepsState]);
   const Step = useMemo(() => {
     if (stepsState.currentStep === 1) {
-      return <SubmissionFormStep setIsContinueDisabled={setIsContinueDisabled} emailRef={emailRef} isContinueDisabled={isContinueDisabled} onContinueCallback={onContinueCallback} />;
+      return (
+        <SubmissionFormStep
+          setIsContinueDisabled={setIsContinueDisabled}
+          emailRef={emailRef}
+          isContinueDisabled={isContinueDisabled}
+          onContinueCallback={onContinueCallback}
+        />
+      );
     } else {
       return <CheckEmailStep email={email} resendEmailCallback={resendEmailCallback} />;
     }

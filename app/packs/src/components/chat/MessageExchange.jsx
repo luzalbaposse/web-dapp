@@ -97,7 +97,7 @@ const MessageExchange = props => {
   };
 
   return (
-    <div className="d-flex flex-column lg-h-100">
+    <div className="d-flex flex-column lg-h-100 display-messages">
       {props.smallScreen && (
         <>
           <div className="d-flex flex-row align-items-center w-100 py-2">
@@ -131,7 +131,7 @@ const MessageExchange = props => {
           userId={searchParams.get("user")}
         />
       )}
-      <div id="messages" className="px-3 overflow-y-scroll d-flex flex-column pb-3 display-messages">
+      <div id="messages" className="px-3 overflow-y-scroll d-flex flex-column pb-3" style={{ height: "100%" }}>
         {props.messages.length === 0 && props.activeUserUsername === 0 && <CommunicateFirst />}
         {props.messages.length === 0 && props.activeUserUsername !== 0 && <EmptyMessages />}
         {props.messages.map((message, index) => (

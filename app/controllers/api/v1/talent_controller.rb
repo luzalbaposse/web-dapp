@@ -30,7 +30,12 @@ class API::V1::TalentController < ApplicationController
         []
       end
 
-    render json: TalentBlueprint.render(talents, view: :normal, current_user_watchlist: current_user_watchlist), status: :ok
+    render json: TalentBlueprint.render(
+      talents,
+      view: :normal,
+      current_user_active_subscribing: current_user_active_subscribing,
+      current_user_pending_subscribing: current_user_pending_subscribing
+    ), status: :ok
   end
 
   # Public endpoint
@@ -38,7 +43,12 @@ class API::V1::TalentController < ApplicationController
     talent = Talent.joins(:talent_token).find_by(talent_tokens: {contract_id: params[:id]})
 
     if talent
-      render json: TalentBlueprint.render(talent, view: :normal, current_user_watchlist: current_user_watchlist), status: :ok
+      render json: TalentBlueprint.render(
+        talent,
+        view: :normal,
+        current_user_active_subscribing: current_user_active_subscribing,
+        current_user_pending_subscribing: current_user_pending_subscribing
+      ), status: :ok
     else
       render json: {error: "Not found."}, status: :not_found
     end
@@ -65,7 +75,12 @@ class API::V1::TalentController < ApplicationController
 
     if service.success
       CreateNotificationTalentChangedJob.perform_later(talent.user.subscriptions.pluck(:subscriber_id), talent.user_id)
-      render json: TalentBlueprint.render(talent, view: :extended, current_user_watchlist: current_user_watchlist), status: :ok
+      render json: TalentBlueprint.render(
+        talent,
+        view: :extended,
+        current_user_active_subscribing: current_user_active_subscribing,
+        current_user_pending_subscribing: current_user_pending_subscribing
+      ), status: :ok
     else
       render json: {error: "Unable to update Talent."}, status: :unprocessable_entity
     end
