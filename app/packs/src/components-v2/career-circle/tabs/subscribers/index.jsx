@@ -96,7 +96,9 @@ export const Subscribers = ({ currentUserId }) => {
         addActiveSubscriber(subscriber);
       })
       .catch(() => {
-        toast.error(<ToastBody heading="Error!" body={"We were not able to accept the subscription."} />, { autoClose: 5000 });
+        toast.error(<ToastBody heading="Error!" body={"We were not able to accept the subscription."} />, {
+          autoClose: 5000
+        });
       });
   };
 
@@ -108,7 +110,9 @@ export const Subscribers = ({ currentUserId }) => {
         removePendingSubscriber(subscriber);
       })
       .catch(() => {
-        toast.error(<ToastBody heading="Error!" body={"We were not able to reject the subscription."} />, { autoClose: 5000 });
+        toast.error(<ToastBody heading="Error!" body={"We were not able to reject the subscription."} />, {
+          autoClose: 5000
+        });
       });
   };
 

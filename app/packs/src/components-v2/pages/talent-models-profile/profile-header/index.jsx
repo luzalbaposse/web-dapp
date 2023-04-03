@@ -14,6 +14,15 @@ import {
 
 export const ProfileHeader = ({ profile }) => {
   const modalState = useModal();
+
+  const profileButtonCopy = () => {
+    if (document.referrer.includes(`/u/${profile.user.username}`)) {
+      return "Return to profile";
+    } else {
+      return "See profile";
+    }
+  };
+
   return (
     <>
       <QRCodeModal modalState={modalState} profile={profile} />
@@ -32,7 +41,7 @@ export const ProfileHeader = ({ profile }) => {
             iconColor="primary01"
             onClick={modalState.openModal}
           />
-          <Button size="small" hierarchy="secondary" text="See profile" href={window.location.href + "/profile"} />
+          <Button size="small" hierarchy="secondary" text={profileButtonCopy()} href={`/u/${profile.user.username}`} />
         </ActionArea>
         <InfoArea>
           <DetailedInfoContainer>
