@@ -72,7 +72,7 @@ gem "down"
 
 # Prevent boot time warnings
 gem "net-http"
-gem "uri", "0.10.0"
+gem "uri", "0.10.0.1"
 gem "matrix", "~> 0.4.2"
 
 # GraphQL
