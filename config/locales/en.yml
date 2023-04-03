@@ -39,6 +39,12 @@ en:
       title: "New messages"
       body: "You have new messages"
       button: "Check your inbox"
+    subscription_request_received_notification:
+      title: "Subscription requests"
+      body: "You have new subscription requests to manage"
+    subscription_accepted_notification:
+      title: "Subscription accepted"
+      body: "You are now subscribing %{name}"
     talent_changed_notification:
       title: "Talent info updated"
       body: "%{name} profile has been updated"

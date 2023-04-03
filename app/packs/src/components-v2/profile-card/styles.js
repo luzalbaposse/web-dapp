@@ -6,7 +6,7 @@ import { margins, paddings } from "../shared-styles";
 export const Container = styled.section`
   display: flex;
   justify-content: space-between;
-  ${margins.mt24}
+  margin-top: 12px;
 
   @media (max-width: 991px) {
     ${paddings.p0_24}

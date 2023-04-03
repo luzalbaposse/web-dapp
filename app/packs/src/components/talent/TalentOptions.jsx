@@ -15,8 +15,6 @@ import { lightPrimary, darkPrimary } from "src/utils/colors";
 import cx from "classnames";
 
 const TalentOptions = ({
-  changeTab,
-  watchlistOnly,
   searchUrl,
   discoveryRowId,
   listModeOnly,
@@ -77,16 +75,7 @@ const TalentOptions = ({
       className="my-6 d-flex flex-wrap justify-content-between align-items-center"
       style={{ height: mobile ? "" : 34 }}
     >
-      {headerDescription ? (
-        <P1 bold className="text-black" text={headerDescription} />
-      ) : (
-        <TabButton
-          textActiveTab={watchlistOnly ? "Watchlist" : "All Talent"}
-          textTabPrimary="All Talent"
-          textTabSecondary="Watchlist"
-          onClick={tab => changeTab(tab)}
-        />
-      )}
+      {headerDescription && <P1 bold className="text-black" text={headerDescription} />}
       <div className={cx("d-flex ml-auto", mobile && "mt-3")}>
         <TalentKeywordSearch keyword={keyword} setKeyword={setKeyword} filter={filter} />
         <div className="ml-2">

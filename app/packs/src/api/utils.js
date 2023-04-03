@@ -7,10 +7,10 @@ export const defaultHeaders = () => {
   };
 };
 
-export const appendCSRFToken = (headers) => {
-  const parsedHeaders = {...headers};
+export const appendCSRFToken = headers => {
+  const parsedHeaders = { ...headers };
   if (getAuthToken) {
     parsedHeaders["X-CSRF-Token"] = getAuthToken();
   }
   return parsedHeaders;
-}
+};

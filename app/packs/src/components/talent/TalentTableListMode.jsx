@@ -88,12 +88,10 @@ const MobileTalentTableDropdown = ({
 const TalentTableListMode = ({
   talents,
   theme,
-  updateSubscription,
   selectedSort,
   setSelectedSort,
   sortDirection,
   setSortDirection,
-  publicPageViewer,
   showFirstBoughtField = true
 }) => {
   const { mobile } = useWindowDimensionsHook();
@@ -176,15 +174,6 @@ const TalentTableListMode = ({
               <Table.Tr key={`talent-${talent.id}`}>
                 <Table.Td>
                   <div className="d-flex flex-row align-items-center">
-                    {!publicPageViewer && (
-                      <button className="border-0 text-warning button-link" onClick={() => updateSubscription(talent)}>
-                        {talent.isSubscribing ? (
-                          <FontAwesomeIcon icon={faStar} />
-                        ) : (
-                          <FontAwesomeIcon icon={faStarOutline} />
-                        )}
-                      </button>
-                    )}
                     <div
                       className="d-flex flex-row align-items-center"
                       onClick={() => (window.location.href = `/u/${talent.user.username}`)}
@@ -211,11 +200,6 @@ const TalentTableListMode = ({
   return (
     <Table mode={theme.mode()} className="px-3 horizontal-scroll">
       <Table.Head>
-        {!publicPageViewer && (
-          <Table.Th>
-            <Caption bold text="" />
-          </Table.Th>
-        )}
         <Table.Th>
           <Caption
             onClick={() => onOptionClick("Alphabetical Order")}
@@ -270,13 +254,6 @@ const TalentTableListMode = ({
       <Table.Body>
         {talents.map(talent => (
           <Table.Tr key={`talent-${talent.id}`}>
-            {!publicPageViewer && (
-              <Table.Td>
-                <button className="border-0 text-warning button-link" onClick={() => updateSubscription(talent)}>
-                  {talent.isSubscribing ? <FontAwesomeIcon icon={faStar} /> : <FontAwesomeIcon icon={faStarOutline} />}
-                </button>
-              </Table.Td>
-            )}
             <Table.Td onClick={() => (window.location.href = `/u/${talent.user.username}`)}>
               <div className="d-flex align-items-center">
                 <TalentProfilePicture src={talent.profilePictureUrl} userId={talent.id} height="24" />

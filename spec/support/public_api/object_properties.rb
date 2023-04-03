@@ -39,5 +39,10 @@ module PublicAPI
       profile_picture_url: {type: :string, nullable: true, description: "The profile picture of the connected user"},
       ticker: {type: :string, nullable: true, description: "The token ticker of the connected user"}
     }
+
+    CAREER_UPDATES_PROPERTIES = {
+      message: {type: :string, description: "The message sent by the talent"},
+      created_at: {type: :string, format: :datetime, description: "The creation date of the career update"}
+    }
   end
 end

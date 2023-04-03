@@ -103,32 +103,6 @@ const DiscoveryShow = ({ discoveryRow, env }) => {
     setTalents(sortedTalent);
   }, [selectedSort, sortDirection]);
 
-  const updateSubcriber = async talent => {
-    const newTalents = talents.map(currTalent => {
-      if (currTalent.id === talent.id) {
-        return { ...currTalent, isSubscribing: !talent.isSubscribing };
-      } else {
-        return { ...currTalent };
-      }
-    });
-
-    if (talent.isSubscribing) {
-      const response = await destroy(`/api/v1/subscriptions?talent_id=${talent.user.username}`);
-
-      if (response.success) {
-        setTalents([...newTalents]);
-      }
-    } else {
-      const response = await post(`/api/v1/subscriptions`, {
-        talent_id: talent.user.username
-      });
-
-      if (response.success) {
-        setTalents([...newTalents]);
-      }
-    }
-  };
-
   const loadTalents = params => {
     setLoading(true);
     get(`/api/v1/talent?${params.toString()}`).then(response => {
@@ -300,10 +274,9 @@ const DiscoveryShow = ({ discoveryRow, env }) => {
           sortDirection={sortDirection}
           setSortDirection={setSortDirection}
           showFirstBoughtField={false}
-          updateSubcriber={updateSubcriber}
         />
       ) : (
-        <TalentTableCardMode talents={talents} updateSubcriber={updateSubcriber} env={env} />
+        <TalentTableCardMode talents={talents} env={env} />
       )}
       {loading && (
         <div className="w-100 d-flex flex-row my-2 justify-content-center">

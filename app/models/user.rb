@@ -28,13 +28,19 @@ class User < ApplicationRecord
 
   # Feed
   has_many :subscriptions
-  has_many :subscribers, through: :subscriptions # only use to load users, never to count
+  has_many :active_subscriptions, class_name: "ActiveSubscription"
+  has_many :pending_subscriptions, class_name: "PendingSubscription"
+
+  has_many :subscribers, through: :active_subscriptions # only use to load users, never to count
   has_many :subscribing, foreign_key: :subscriber_id, class_name: "Subscription"
-  has_many :users_subscribing, foreign_key: :user_id, source: "user", through: :subscribing
-  has_many :pending_subscriptions, -> { pending }, class_name: "Subscription"
+  has_many :active_subscribing, foreign_key: :subscriber_id, class_name: "ActiveSubscription"
+  has_many :pending_subscribing, foreign_key: :subscriber_id, class_name: "PendingSubscription"
+  has_many :users_subscribing, foreign_key: :user_id, source: "user", through: :active_subscribing
+
   has_many :notifications, as: :recipient
   has_many :quests
   has_many :connections, dependent: :destroy
+  has_many :career_updates
 
   # Rewards
   has_many :rewards
@@ -215,6 +221,10 @@ class User < ApplicationRecord
     supporters = User.where(wallet_id: supporters_wallet_ids)
 
     including_self ? supporters : supporters.where.not(id: id)
+  end
+
+  def subscriber_of?(user)
+    active_subscribing.find_by(user: user).present?
   end
 
   def amount_invested_in(user)

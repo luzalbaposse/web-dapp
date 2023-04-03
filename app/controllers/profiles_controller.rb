@@ -11,14 +11,17 @@ class ProfilesController < ApplicationController
     @talent = TalentBlueprint.render_as_json(
       talent,
       view: :extended,
-      current_user_watchlist: current_user_watchlist,
+      current_user_active_subscribing: current_user_active_subscribing,
+      current_user_pending_subscribing: current_user_pending_subscribing,
       tags: user.tags.where(hidden: false)
     )
 
-    puts "TALENT"
-    puts @talent
-
     @with_persona_request = WithPersonaRequestBlueprint.render_as_json(WithPersonaRequest.current_month_persona_request)
+
+    respond_to do |format|
+      format.html {}
+      format.json { render json: {profile: @talent}, status: :ok }
+    end
   end
 
   private

@@ -182,18 +182,4 @@ class UserMailer < ApplicationMailer
 
     bootstrap_mail(to: @user.email, subject: "Did you meet talented builders?")
   end
-
-  private
-
-  def indifferent_access_params
-    @indifferent_access_params ||= params.with_indifferent_access
-  end
-
-  def set_profile_pictures_attachments(users)
-    users.each do |user|
-      attachments.inline["profile_picture-#{user.id}.png"] = Down.download(user.profile_picture_url).read
-    end
-  rescue => e
-    Rollbar.error(e, "Error downloading picture of users: ##{users.map(&:id).join(", ")}")
-  end
 end

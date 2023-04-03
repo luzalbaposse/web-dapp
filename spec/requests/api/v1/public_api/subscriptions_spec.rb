@@ -178,4 +178,93 @@ RSpec.describe "Subscriptions", type: :request do
       end
     end
   end
+
+  describe "#accept" do
+    let(:accept_subscription_request) { put accept_api_v1_public_subscriptions_path(params: params, as: current_user) }
+
+    let(:params) do
+      {
+        talent_id: subscribing_user_id
+      }
+    end
+
+    let(:subscribing_user) { create :user }
+    let(:subscribing_user_id) { subscribing_user.uuid }
+
+    let!(:subscription) { create :pending_subscription, subscriber: subscribing_user, user: current_user, accepted_at: nil }
+
+    let(:accept_subscription_class) { Subscriptions::Accept }
+    let(:accept_subscription_instance) { instance_double(accept_subscription_class, call: true) }
+
+    before do
+      allow(accept_subscription_class).to receive(:new).and_return(accept_subscription_instance)
+
+      stub_const("API::V1::PublicAPI::APIController::INTERNAL_DOMAINS", ["talentprotocol.com"])
+      host! "app.talentprotocol.com"
+    end
+
+    it "returns a successful response" do
+      accept_subscription_request
+
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "initializes and calls the destroy subscription service with the correct params" do
+      accept_subscription_request
+
+      aggregate_failures do
+        expect(accept_subscription_class).to have_received(:new).with(
+          subscription: subscription
+        )
+        expect(accept_subscription_instance).to have_received(:call)
+      end
+    end
+
+    context "when the subscription is already accepted" do
+      let!(:subscription) { create :subscription, subscriber: current_user, user: subscribing_user, accepted_at: Time.current }
+
+      it "returns a not found response" do
+        accept_subscription_request
+
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when the subscribing user does not exist" do
+      let(:subscribing_user_id) { -1 }
+
+      it "returns a not found response" do
+        accept_subscription_request
+
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when the create subscribe service returns a destroy error" do
+      let(:error) { accept_subscription_class::AcceptError.new }
+
+      before do
+        allow(accept_subscription_instance).to receive(:call).and_raise(error)
+        allow(Rollbar).to receive(:error)
+      end
+
+      it "returns a bad request response response" do
+        accept_subscription_request
+
+        expect(response).to have_http_status(:bad_request)
+      end
+
+      it "raises the error to Rollbar" do
+        accept_subscription_request
+
+        expect(Rollbar).to have_received(:error).with(
+          error,
+          "Error accepting subscription",
+          subscription_id: subscription.id,
+          subscribed_user_id: current_user.id,
+          subscribing_user_id: subscribing_user.id
+        )
+      end
+    end
+  end
 end

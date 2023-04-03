@@ -207,7 +207,7 @@ const Chat = ({ chats, pagination }) => {
     <>
       <div className="d-flex flex-column w-100 h-100 themed-border-top">
         <main className="d-flex flex-row h-100 themed-border-left chat-container">
-          {(!mobile || activeUserUsername == 0) && (
+          {(!mobile || !activeUserUsername) && (
             <section className="col-lg-4 mx-auto mx-lg-0 px-0 d-flex flex-column themed-border-right chat-section">
               <MessageUserList
                 onClick={userName => setActiveUser(userName)}
@@ -224,7 +224,7 @@ const Chat = ({ chats, pagination }) => {
               />
             </section>
           )}
-          {(!mobile || activeUserUsername > 0) && !gettingMessages && (
+          {(!mobile || activeUserUsername) && !gettingMessages && (
             <section className="col-lg-8 px-0 lg-overflow-y-hidden themed-border-right chat-section">
               <MessageExchange
                 smallScreen={mobile}

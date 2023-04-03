@@ -26,14 +26,4 @@ class TokenAcquiredMailer < ApplicationMailer
 
     bootstrap_mail(to: @user.email, subject: subject)
   end
-
-  private
-
-  def set_profile_picture_attachment(user)
-    return unless user.profile_picture_url
-
-    attachments.inline["profile_picture-#{user.id}.png"] = Down.download(user.profile_picture_url).read
-  rescue => e
-    Rollbar.error(e, "Error downloading picture of user_id: ##{user.id}")
-  end
 end

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Modal, Typography, useModal } from "@talentprotocol/design-system";
+import { ModalDialog, Typography, useModal } from "@talentprotocol/design-system";
 import { useStepExperience } from "../../hooks/use-step-experience";
 import { EmailPasswordStep } from "./steps/email-password";
 import { WelcomeStep } from "./steps/welcome";
@@ -150,7 +150,7 @@ export const SignUpFlow = props => {
   }, [stepsState.currentStep, isNextDisabled, props.isDesktop, hasCreateAccountError]);
   return (
     <>
-      <Modal title="Captcha" isOpen={captchaModalState.isOpen} closeModal={captchaModalState.closeModal}>
+      <ModalDialog title="Captcha" isOpen={captchaModalState.isOpen} closeModal={captchaModalState.closeModal}>
         <Captcha
           captchaKey={props.railsContext.captchaKey}
           nextStep={stepsState.nextStep}
@@ -158,7 +158,7 @@ export const SignUpFlow = props => {
           setUser={userBuilderState.setUser}
           closeModal={captchaModalState.closeModal}
         />
-      </Modal>
+      </ModalDialog>
       <Container>
         {(!props.isDesktop && stepsState.currentStep === 1) ||
         stepsState.currentStep === 10 ||

@@ -20,6 +20,7 @@ import RejectTalentModal from "../RejectTalentModal";
 import ApprovalConfirmationModal from "../ApprovalConfirmationModal";
 import AdminVerificationConfirmationModal from "../AdminVerificationConfirmationModal";
 import PersonaVerificationConfirmationModal from "../PersonaVerificationConfirmationModal";
+import SendCareerUpdateModal from "../SendCareerUpdateModal";
 import { Banner } from "src/components-v2/banner";
 import { darkBg01, lightBg01 } from "src/utils/colors";
 import { ProfileCard } from "src/components-v2/profile-card";
@@ -48,11 +49,18 @@ const Overview = ({
   const [showApprovalConfirmationModal, setShowApprovalConfirmationModal] = useState(false);
   const [showAdminVerificationConfirmationModal, setShowAdminVerificationConfirmationModal] = useState(false);
   const [showPersonaVerificationConfirmationModal, setShowPersonaVerificationConfirmationModal] = useState(false);
+  const [showCareerUpdateModal, setShowCareerUpdateModal] = useState(false);
   const [isUploadingProfile, setIsUploadingProfile] = useState(false);
   const [isUploadingBanner, setIsUploadingBanner] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [overviewProfileFileInput, setOverviewProfileFileInput] = useState(null);
   const [overviewBannerFileInput, setOverviewBannerFileInput] = useState(null);
+
+  const subscriptionButtonText = {
+    pending: "Pending",
+    subscribed: "Unsubscribe",
+    unsubscribed: "Subscribe"
+  };
 
   const uppyProfile = new Uppy({
     meta: { type: "avatar" },
@@ -235,22 +243,25 @@ const Overview = ({
 
   const updateSubscription = async () => {
     let response;
-    console.log("Profile", talent);
-    if (talent.isSubscribing) {
+    let new_status;
+
+    if (talent.subscribingStatus === "subscribed") {
       response = await destroy(`/api/v1/subscriptions?talent_id=${talent.user.username}`);
+      new_status = "unsubscribed";
     } else {
       response = await post(`/api/v1/subscriptions`, {
         talent_id: talent.user.username
       });
+      new_status = "pending";
     }
 
     if (response.success) {
       setTalent(prev => ({
         ...prev,
-        isSubscribing: !talent.isSubscribing
+        subscribingStatus: new_status
       }));
     } else {
-      toast.error(<ToastBody heading="Unable to update subscribe" body={response?.error} />);
+      toast.error(<ToastBody heading="Unable to update subscription" body={response?.error} />);
     }
   };
 
@@ -283,7 +294,6 @@ const Overview = ({
                 <>
                   <Banner bannerUrl={talent.bannerUrl} deleteBannerCallback={deleteBannerImg} />
                   <TalentProfilePicture
-                    className="mb-3"
                     src={talent.profilePictureUrl}
                     height={120}
                     style={{
@@ -411,6 +421,8 @@ const Overview = ({
         profileSubdomain={profileSubdomain}
         mobile={mobile}
         talentTokenPrice={talentTokenPrice}
+        canUpdate={canUpdate}
+        setShowCareerUpdateModal={setShowCareerUpdateModal}
       >
         {mobile ? (
           <>
@@ -476,7 +488,8 @@ const Overview = ({
                             className="mr-2"
                             type="white-outline"
                             size="big"
-                            text={talent.isSubscribing ? "Unsubscribe" : "Subscribe"}
+                            text={subscriptionButtonText[talent.subscribingStatus]}
+                            disabled={talent.subscribingStatus == "pending"}
                             onClick={() => updateSubscription()}
                           />
                         )}
@@ -660,7 +673,8 @@ const Overview = ({
                             className="mr-2"
                             type="white-outline"
                             size="big"
-                            text={talent.isSubscribing ? "Unsubscribe" : "Subscribe"}
+                            text={subscriptionButtonText[talent.subscribingStatus]}
+                            disabled={talent.subscribingStatus == "pending"}
                             onClick={() => updateSubscription()}
                           />
                         )}
@@ -740,6 +754,14 @@ const Overview = ({
         talent={talent}
         setTalent={setTalent}
       />
+      {showCareerUpdateModal && canUpdate && (
+        <SendCareerUpdateModal
+          show={showCareerUpdateModal}
+          hide={() => setShowCareerUpdateModal(false)}
+          placeholder={`What's new in your career ${talent.user.name}?`}
+          contractsEnv={railsContext.contractsEnv}
+        />
+      )}
       {editMode && (
         <EditOverviewModal show={editMode} hide={() => setEditMode(false)} talent={talent} setTalent={setTalent} />
       )}

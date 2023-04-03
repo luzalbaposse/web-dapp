@@ -96,8 +96,12 @@ class ApplicationController < ActionController::Base
     0
   end
 
-  def current_user_watchlist
-    current_acting_user ? current_acting_user.subscribing.pluck(:user_id) : []
+  def current_user_active_subscribing
+    current_acting_user ? current_acting_user.active_subscribing.pluck(:user_id) : []
+  end
+
+  def current_user_pending_subscribing
+    current_acting_user ? current_acting_user.pending_subscribing.pluck(:user_id) : []
   end
 
   def user_from_impersonated_cookie

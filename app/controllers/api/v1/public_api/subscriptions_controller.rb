@@ -12,9 +12,34 @@ class API::V1::PublicAPI::SubscriptionsController < API::V1::PublicAPI::APIContr
     )
 
     response_body = {
-      subscribers: API::TalentBlueprint.render_as_json(subscribers, view: :normal),
+      subscribers: API::TalentBlueprint.render_as_json(subscribers.includes(talent: :talent_token), view: view),
       pagination: {
         total: user.subscribers.count,
+        cursor: pagy.has_more? ? subscribers.last.uuid : nil
+      }
+    }
+    log_request(response_body, :ok)
+
+    render json: response_body, status: :ok
+  end
+
+  def pending_subscribers
+    return not_found unless user
+
+    pending_subscriptions = user.pending_subscriptions
+    pending_subscribers = User.where(id: pending_subscriptions.pluck(:subscriber_id))
+
+    pagy, subscribers = pagy_uuid_cursor(
+      pending_subscribers,
+      before: cursor,
+      items: per_page,
+      order: {created_at: :desc, uuid: :desc}
+    )
+
+    response_body = {
+      subscribers: API::TalentBlueprint.render_as_json(subscribers.includes(talent: :talent_token), view: view),
+      pagination: {
+        total: pending_subscribers.count,
         cursor: pagy.has_more? ? subscribers.last.uuid : nil
       }
     }
@@ -34,7 +59,7 @@ class API::V1::PublicAPI::SubscriptionsController < API::V1::PublicAPI::APIContr
     )
 
     response_body = {
-      subscribing: API::TalentBlueprint.render_as_json(subscribing, view: :normal),
+      subscribing: API::TalentBlueprint.render_as_json(subscribing.includes(talent: :talent_token), view: view),
       pagination: {
         total: user.users_subscribing.count,
         cursor: pagy.has_more? ? subscribing.last.uuid : nil
@@ -51,12 +76,28 @@ class API::V1::PublicAPI::SubscriptionsController < API::V1::PublicAPI::APIContr
 
     Subscriptions::Create.new(subscriber_user: subscriber_user, subscribing_user: subscribing_user).call
 
-    render json: {success: "Subscribe successfully created."}, status: :created
+    render json: {success: "Subscription successfully created."}, status: :created
   rescue Subscriptions::Create::AlreadyExistsError
     render json: {error: "Already subscribing."}, status: :conflict
   rescue Subscriptions::Create::CreationError => error
     Rollbar.error(error, "Error creating subscription", subscriber_user_id: subscriber_user.id, subscribing_user_id: subscribing_user.id)
     render json: {error: "Unable to create subscription."}, status: :bad_request
+  end
+
+  def accept
+    subscribed_user = user || current_user
+    return not_found unless subscribed_user
+
+    subscription = PendingSubscription.find_by!(user: subscribed_user, subscriber: subscribing_user)
+
+    Subscriptions::Accept.new(subscription: subscription).call
+
+    render json: {success: "Subscription accepted."}, status: :ok
+  rescue Subscriptions::Accept::AlreadyAcceptedError
+    render json: {error: "Already subscribing."}, status: :conflict
+  rescue Subscriptions::Accept::AcceptError => error
+    Rollbar.error(error, "Error accepting subscription", subscribing_user_id: subscribing_user.id, subscribed_user_id: subscribed_user.id, subscription_id: subscription.id)
+    render json: {error: "Unable to accept subscription."}, status: :bad_request
   end
 
   def destroy
@@ -85,5 +126,9 @@ class API::V1::PublicAPI::SubscriptionsController < API::V1::PublicAPI::APIContr
 
   def user
     @user ||= User.find_by("uuid::text = :id OR wallet_id = :id OR username = :id", id: downcase_id)
+  end
+
+  def view
+    internal_request? ? :subscriber : :normal
   end
 end

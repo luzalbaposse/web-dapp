@@ -3,9 +3,12 @@ FactoryBot.define do
     association :user
     association :subscriber, factory: :user
     accepted_at { Time.current }
+  end
 
-    trait :pending do
-      accepted_at { nil }
-    end
+  factory :pending_subscription do
+    association :user
+    association :subscriber, factory: :user
+
+    accepted_at { nil }
   end
 end

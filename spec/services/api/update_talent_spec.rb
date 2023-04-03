@@ -24,6 +24,37 @@ RSpec.describe API::UpdateTalent do
     end
   end
 
+  context "when the user profile was set to public" do
+    let(:user_params) { {} }
+    let(:talent_params) { {public: true} }
+    let(:tag_params) { {} }
+    let(:career_needs_params) { {} }
+
+    it "the talent becomes public" do
+      update_talent.call(talent_params, user_params, tag_params, career_needs_params)
+
+      expect(user.talent.public).to eq true
+    end
+
+    it "enqueues a job to send add the user to mailerlite" do
+      expect { update_talent.call(talent_params, user_params, tag_params, career_needs_params) }.to have_enqueued_job(AddUsersToMailerliteJob)
+    end
+  end
+
+  context "when the user legal names are passed" do
+    let(:user_params) { {legal_first_name: "Talent", legal_last_name: "Test"} }
+    let(:talent_params) { {} }
+    let(:tag_params) { {} }
+    let(:career_needs_params) { {} }
+
+    it "updates the user legal names" do
+      update_talent.call(talent_params, user_params, tag_params, career_needs_params)
+
+      expect(user.legal_first_name).to eq "Talent"
+      expect(user.legal_last_name).to eq "Test"
+    end
+  end
+
   context "when a new profile picture data is passed" do
     let(:user_params) { {} }
     let(:tag_params) { {} }

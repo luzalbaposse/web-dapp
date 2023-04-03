@@ -27,7 +27,8 @@ class API::V1::Talent::TokensController < ApplicationController
       render json: TalentBlueprint.render(
         talent,
         view: :extended,
-        current_user_watchlist: current_user_watchlist,
+        current_user_active_subscribing: current_user_active_subscribing,
+        current_user_pending_subscribing: current_user_pending_subscribing,
         tags: current_acting_user.tags.where(hidden: false)
       )
     else

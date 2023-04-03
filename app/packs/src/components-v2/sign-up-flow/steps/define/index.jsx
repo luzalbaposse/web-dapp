@@ -41,12 +41,14 @@ export const DefineStep = ({ user, setUser, setIsNextDisable }) => {
             Gender
           </Typography>
           <Dropdown
-            options={genderOptions}
-            selectValue={value => {
+            options={genderOptions.map(option => ({
+              value: option
+            }))}
+            selectOption={value => {
               setGender(value);
               validateStep(value);
             }}
-            value={gender || user.gender || ""}
+            selectedOption={gender || user.gender || ""}
             placeholder="Select a gender"
           />
         </Row>
@@ -55,12 +57,14 @@ export const DefineStep = ({ user, setUser, setIsNextDisable }) => {
             Nationality
           </Typography>
           <Dropdown
-            options={nationalityOptions}
-            selectValue={value => {
+            options={nationalityOptions.map(option => ({
+              value: option
+            }))}
+            selectOption={value => {
               setNationality(value);
               validateStep(undefined, value);
             }}
-            value={nationality || user.nationality || ""}
+            selectedOption={nationality || user.nationality || ""}
             placeholder="Select a nationality"
           />
         </RowWithMargin>

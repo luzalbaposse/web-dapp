@@ -9,8 +9,7 @@ import Divider from "src/components/design_system/other/Divider";
 import Tag from "src/components/design_system/tag";
 import { H5, P1, P2, P3 } from "src/components/design_system/typography";
 import { useWindowDimensionsHook } from "src/utils/window";
-import { Star, Polygon, Celo } from "src/components/icons";
-import { func } from "prop-types";
+import { Polygon, Celo } from "src/components/icons";
 import { Verified } from "../../icons";
 import { chainIdToName } from "src/onchain/utils";
 import { darkTextPrimary02, grayPrimary } from "src/utils/colors";
@@ -22,8 +21,6 @@ const NewTalentCard = ({
   occupation,
   profilePictureUrl,
   headline,
-  isSubscribing,
-  updateSubscription,
   talentLink,
   marketCap,
   supporterCount,
@@ -38,11 +35,6 @@ const NewTalentCard = ({
   const [showUserDetails, setShowUserDetails] = useState(false);
   const { mode } = useTheme();
   const chainName = chainIdToName(chainId, env);
-
-  const updateSubscribing = e => {
-    e.preventDefault();
-    updateSubscription();
-  };
 
   const talentCardFooter = () => (
     <>
@@ -108,11 +100,6 @@ const NewTalentCard = ({
                   <P3 className="text-primary-03 talent-card-details-title" text={occupation} />
                 </div>
               </div>
-              {!publicPageViewer && (
-                <button className="button-link ml-2" onClick={e => updateSubscribing(e)}>
-                  <Star pathClassName={isSubscribing ? "star" : "star-outline"} />
-                </button>
-              )}
             </div>
             <P1 className="text-black talent-card-details-headline mt-3" bold text={headline} />
           </div>
@@ -140,8 +127,6 @@ NewTalentCard.propTypes = {
   occupation: string,
   profilePictureUrl: string,
   headline: string,
-  isSubscribing: bool.isRequired,
-  updateSubscription: func.isRequired,
   talentLink: string.isRequired,
   marketCap: string,
   supporterCount: string

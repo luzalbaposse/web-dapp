@@ -1,0 +1,23 @@
+
+<div class="container mt-5 mb-10 sub-content">
+  <h3 class="main-title">Hey <%= @recipient.name || "Talented human" %>! 👋 <br/> You have new subscription requests!</h3>
+</div>
+
+<% if @pending_subscribers_total_count > 0 %>
+  <div class="container mb-5 sub-content">
+    <p class="w-full lh-lg text-lg mb-5 sub-title">
+      Pending subscribers
+    </p>
+    <% @pending_subscribers.each do |user| %>
+      <%= render "shared_mailer/talent", talent: user.talent %>
+    <% end %>
+  </div>
+  <% if @pending_subscribers_total_count > @pending_subscribers.count %>
+    <p class="w-full lh-lg text-lg mb-5 sub-title">
+      And more...
+    </p>
+  <% end %>
+  <div class="mb-5 border-bottom footer-border"></div>
+<% end %>
+
+<%= link_to "Manage your subscriptions", career_circle_url, class: "btn btn-primary fw-800 text-5xl py-4 mb-5 w-full", style: "width: 90%" %>

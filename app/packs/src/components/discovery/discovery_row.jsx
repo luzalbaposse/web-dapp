@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { ToastBody } from "src/components/design_system/toasts";
 import cx from "classnames";
 import { useWindowDimensionsHook } from "src/utils/window";
 import { P1, P3 } from "src/components/design_system/typography";
@@ -9,8 +10,8 @@ import NewTalentCard from "src/components/design_system/cards/NewTalentCard";
 import Button from "src/components/design_system/button";
 import Tag from "src/components/design_system/tag";
 import { displayableAmount } from "src/utils/viewHelpers";
-import { ToastBody } from "src/components/design_system/toasts";
-import { get, post, destroy } from "src/utils/requests";
+
+import { get } from "src/utils/requests";
 
 const DiscoveryRow = ({ discoveryRow, env }) => {
   const { mobile, width } = useWindowDimensionsHook();
@@ -49,31 +50,6 @@ const DiscoveryRow = ({ discoveryRow, env }) => {
         setTalents(response.talents);
       }
     });
-  };
-
-  const updateSubscription = async talent => {
-    let response;
-    if (talent.is_subscribing) {
-      response = await destroy(`/api/v1/subscriptions?talent_id=${talent.user.username}`);
-    } else {
-      response = await post(`/api/v1/subscriptions`, {
-        talent_id: talent.user.username
-      });
-    }
-
-    if (response.success) {
-      const newLocalTalents = talents.map(currentTalent => {
-        if (currentTalent.id === talent.id) {
-          return { ...currentTalent, is_subscribing: !talent.is_subscribing };
-        } else {
-          return { ...currentTalent };
-        }
-      });
-
-      setTalents(newLocalTalents);
-    } else {
-      toast.error(<ToastBody heading="Unable to update subscribe" body={response?.error} />);
-    }
   };
 
   const slideLeft = () => {
@@ -155,9 +131,7 @@ const DiscoveryRow = ({ discoveryRow, env }) => {
                   occupation={talent.occupation}
                   profilePictureUrl={talent.profile_picture_url}
                   headline={talent.headline}
-                  isSubscribing={talent.is_subscribing}
                   isVerified={talent.verified}
-                  updateSubscription={() => updateSubscription(talent)}
                   talentLink={`/u/${talent.user.username}`}
                   profileType={talent.profile_type}
                   marketCap={displayableAmount(talent.market_cap)}
