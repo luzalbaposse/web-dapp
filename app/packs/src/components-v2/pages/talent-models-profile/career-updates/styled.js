@@ -27,3 +27,9 @@ export const TitleContainer = styled.div`
     margin-bottom: 24px;
   `)}
 `;
+
+export const InputContainer = styled.div`
+  ${mobileStyles(css`
+    padding: 0 16px;
+  `)}
+`;

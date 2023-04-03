@@ -25,7 +25,7 @@ export const TalentModelsProfilePage = props => {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const username = window.location.href.split("/u/")[1];
+    const username = window.location.href.split("/u/")[1].split("/support")[0];
     fetchProfile(username).then(() => setIsLoading(false));
   }, [fetchProfile]);
 
@@ -46,7 +46,11 @@ export const TalentModelsProfilePage = props => {
             />
             <ContentDesktopRow>
               <SupportedBy profile={profile} />
-              <CareerUpdates profile={profile} isCurrentUserProfile={isCurrentUserProfile} />
+              <CareerUpdates
+                profile={profile}
+                isCurrentUserProfile={isCurrentUserProfile}
+                railsContext={props.railsContext}
+              />
             </ContentDesktopRow>
             <FinalHero
               profile={profile}

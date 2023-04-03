@@ -10,7 +10,6 @@ import { useWindowDimensionsHook } from "src/utils/window";
 import { useTheme } from "src/contexts/ThemeContext";
 import { ToastBody } from "src/components/design_system/toasts";
 import Button from "src/components/design_system/button";
-import StakeModal from "src/components/token/StakeModal";
 import Tooltip from "src/components/design_system/tooltip";
 import { Envelope, Spinner, Help } from "src/components/icons";
 import { lightTextPrimary03 } from "src/utils/colors";
@@ -43,7 +42,6 @@ const Overview = ({
 }) => {
   const { mobile } = useWindowDimensionsHook();
   const { mode } = useTheme();
-  const [showStakeModal, setShowStakeModal] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [showApprovalConfirmationModal, setShowApprovalConfirmationModal] = useState(false);
   const [showAdminVerificationConfirmationModal, setShowAdminVerificationConfirmationModal] = useState(false);
@@ -230,7 +228,7 @@ const Overview = ({
 
   const impersonateUser = async () => {
     const params = {
-      username: user?.username
+      username: user.username
     };
 
     const response = await post(`/api/v1/impersonations`, params).catch(() => {
@@ -248,11 +246,11 @@ const Overview = ({
     let new_status;
 
     if (profile.subscribing_status === "subscribed") {
-      response = await destroy(`/api/v1/subscriptions?talent_id=${user?.username}`);
+      response = await destroy(`/api/v1/subscriptions?talent_id=${user.username}`);
       new_status = "unsubscribed";
     } else {
       response = await post(`/api/v1/subscriptions`, {
-        talent_id: user?.username
+        talent_id: user.username
       });
       new_status = "pending";
     }
@@ -268,7 +266,7 @@ const Overview = ({
   };
 
   const showSubscribeButton = () => {
-    return currentUserId && user?.id != currentUserId && !profileSubdomain;
+    return currentUserId && user.id != currentUserId && !profileSubdomain;
   };
 
   const verifyTooltipBody = () => {
@@ -437,7 +435,7 @@ const Overview = ({
                             type="primary-default"
                             onClick={() => setShowPersonaVerificationConfirmationModal(true)}
                             disabled={
-                              !user?.profile_completed ||
+                              !user.profile_completed ||
                               profile.with_persona_id ||
                               withPersonaRequest.requests_counter > railsContext.withPersonaVerificationsLimit
                             }
@@ -455,15 +453,13 @@ const Overview = ({
                           </Button>
                         )}
                         <Button className="mr-2" type="primary-default" text="Edit" onClick={() => setEditMode(true)} />
-                        {talentToken.contract_id && (
-                          <Button
-                            style={{ whiteSpace: "pre" }}
-                            className="mr-2"
-                            type="primary-default"
-                            text={`Buy ${talentToken.ticker}`}
-                            onClick={() => setShowStakeModal(true)}
-                          />
-                        )}
+                        <Button
+                          style={{ whiteSpace: "pre" }}
+                          className="mr-2"
+                          type="primary-default"
+                          text="Support"
+                          onClick={() => window.location.replace(`/u/${user.username}/support`)}
+                        />
                         <Button
                           className="mr-2"
                           type="white-outline"
@@ -474,7 +470,7 @@ const Overview = ({
                     ) : (
                       <>
                         {currentUserId && !profileSubdomain && (
-                          <a href={`/messages?user=${user?.username}`} className="button-link">
+                          <a href={`/messages?user=${user.username}`} className="button-link">
                             <Button className="mr-2" type="white-outline" size="big" onClick={() => null}>
                               <Envelope className="h-100" color="currentColor" size={16} viewBox="0 0 24 24" />
                             </Button>
@@ -490,24 +486,24 @@ const Overview = ({
                             onClick={() => updateSubscription()}
                           />
                         )}
-                        {talentToken.contract_id && !profileSubdomain && (
+                        {!profileSubdomain && (
                           <Button
                             type="primary-default"
                             size="big"
                             text="Support"
-                            onClick={() => setShowStakeModal(true)}
+                            onClick={() => window.location.replace(`/u/${user.username}/support`)}
                           />
                         )}
                         {profileSubdomain && talentToken.contract_id && (
                           <a
-                            href={`https://beta.talentprotocol.com/join/${user?.username}`}
+                            href={`https://beta.talentprotocol.com/join/${user.username}/support`}
                             className="button-link"
                             target="_blank"
                           >
                             <Button
                               type="primary-default"
                               size="big"
-                              text={`Buy $${profile.talen_token?.ticker} on Talent Protocol`}
+                              text={`Support $${profile.talen_token?.ticker} on Talent Protocol`}
                               style={{ "min-width": "340px" }}
                               onClick={() => null}
                             />
@@ -528,7 +524,7 @@ const Overview = ({
                       onClick={() => setShowAdminVerificationConfirmationModal(true)}
                     />
                   )}
-                  {user?.profileType == "waiting_for_approval" && (
+                  {user.profileType == "waiting_for_approval" && (
                     <>
                       <Button
                         type="primary-default"
@@ -571,7 +567,7 @@ const Overview = ({
                         onClick={() => setShowAdminVerificationConfirmationModal(true)}
                       />
                     )}
-                    {user?.profileType == "waiting_for_approval" && (
+                    {user.profileType == "waiting_for_approval" && (
                       <>
                         <Button
                           className="mr-2"
@@ -614,7 +610,7 @@ const Overview = ({
                             size="big"
                             onClick={() => setShowPersonaVerificationConfirmationModal(true)}
                             disabled={
-                              !user?.profile_completed ||
+                              !user.profile_completed ||
                               profile.with_persona_id ||
                               withPersonaRequest.requests_counter > railsContext.withPersonaVerificationsLimit
                             }
@@ -638,16 +634,14 @@ const Overview = ({
                           text="Edit"
                           onClick={() => setEditMode(true)}
                         />
-                        {talentToken.contract_id && (
-                          <Button
-                            style={{ whiteSpace: "pre" }}
-                            className="mr-2"
-                            type="primary-default"
-                            size="big"
-                            text={`Buy ${talentToken.ticker}`}
-                            onClick={() => setShowStakeModal(true)}
-                          />
-                        )}
+                        <Button
+                          style={{ whiteSpace: "pre" }}
+                          className="mr-2"
+                          type="primary-default"
+                          size="big"
+                          text="Support"
+                          onClick={() => window.location.replace(`/u/${user.username}/support`)}
+                        />
                         <Button
                           className="mr-2"
                           type="white-outline"
@@ -659,7 +653,7 @@ const Overview = ({
                     ) : (
                       <>
                         {currentUserId && !profileSubdomain && (
-                          <a href={`/messages?user=${user?.username}`} className="button-link">
+                          <a href={`/messages?user=${user.username}`} className="button-link">
                             <Button className="mr-2" type="white-outline" size="big" onClick={() => null}>
                               <Envelope className="h-100" color="currentColor" size={16} viewBox="0 0 24 24" />
                             </Button>
@@ -675,17 +669,17 @@ const Overview = ({
                             onClick={() => updateSubscription()}
                           />
                         )}
-                        {talentToken.contract_id && !profileSubdomain && (
+                        {!profileSubdomain && (
                           <Button
                             type="primary-default"
                             size="big"
                             text="Support"
-                            onClick={() => setShowStakeModal(true)}
+                            onClick={() => window.location.replace(`/u/${user.username}/support`)}
                           />
                         )}
                         {profileSubdomain && talentToken.contract_id && (
                           <a
-                            href={`https://beta.talentprotocol.com/join/${user?.username}`}
+                            href={`https://beta.talentprotocol.com/join/${user.username}/support`}
                             className="button-link"
                             target="_blank"
                           >
@@ -693,7 +687,7 @@ const Overview = ({
                               type="primary-default"
                               size="big"
                               style={{ "min-width": "340px" }}
-                              text={`Buy $${talentToken.ticker} on Talent Protocol`}
+                              text={`Support $${talentToken.ticker} on Talent Protocol`}
                               onClick={() => null}
                             />
                           </a>
@@ -707,19 +701,6 @@ const Overview = ({
           </div>
         )}
       </ProfileCard>
-      <StakeModal
-        show={showStakeModal}
-        setShow={setShowStakeModal}
-        tokenAddress={talentToken.contract_id}
-        tokenId={talentToken.id}
-        userId={currentUserId}
-        userUsername={user?.username}
-        tokenChainId={talentToken.chain_id}
-        talentName={user?.displayName || user?.username}
-        ticker={talentToken.ticker}
-        talentIsFromCurrentUser={canUpdate}
-        railsContext={railsContext}
-      />
       <AdminVerificationConfirmationModal
         show={showAdminVerificationConfirmationModal}
         setShow={setShowAdminVerificationConfirmationModal}
@@ -755,7 +736,7 @@ const Overview = ({
         <SendCareerUpdateModal
           show={showCareerUpdateModal}
           hide={() => setShowCareerUpdateModal(false)}
-          placeholder={`What's new in your career ${user?.name}?`}
+          placeholder={`What's new in your career ${user.name}?`}
           contractsEnv={railsContext.contractsEnv}
         />
       )}

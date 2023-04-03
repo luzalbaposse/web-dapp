@@ -45,21 +45,23 @@ export const Update = ({ data, profile, isCurrentUserProfile }) => {
       <Typography specs={{ variant: "p2", type: "regular" }} color="primary04">
         {data.message}
       </Typography>
-      <ReplyArea>
-        <Input
-          placeholder="Reply..."
-          onChange={e => setMessage(e.target.value)}
-          value={message}
-          isDisabled={isCurrentUserProfile}
-        />
-        <Button
-          hierarchy="secondary"
-          size="medium"
-          leftIcon="flame"
-          onClick={debouncedNewMessage}
-          isDisabled={isCurrentUserProfile}
-        />
-      </ReplyArea>
+      {!isCurrentUserProfile && (
+        <ReplyArea>
+          <Input
+            placeholder="Reply..."
+            onChange={e => setMessage(e.target.value)}
+            value={message}
+            isDisabled={isCurrentUserProfile}
+          />
+          <Button
+            hierarchy="secondary"
+            size="medium"
+            leftIcon="flame"
+            onClick={debouncedNewMessage}
+            isDisabled={isCurrentUserProfile}
+          />
+        </ReplyArea>
+      )}
     </Container>
   );
 };
