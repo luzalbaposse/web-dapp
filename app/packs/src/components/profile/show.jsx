@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Divider from "src/components/design_system/other/Divider";
+import { Spinner } from "@talentprotocol/design-system";
 import { loggedInUserStore } from "src/contexts/state";
+import { useProfileFetcher } from "src/hooks/use-profile-fetcher";
 
 import ThemeContainer from "src/contexts/ThemeContext";
-import { camelCaseObject } from "src/utils/transformObjects";
 import { useWindowDimensionsHook } from "src/utils/window";
 import Button from "src/components/design_system/button";
 
@@ -20,17 +21,19 @@ import ApplyToLaunchToken from "./ApplyToLaunchToken";
 import Perks from "./Perks";
 import SocialGraph from "./social_graph/SocialGraph";
 
-const Show = ({ talent, railsContext, withPersonaRequest, profileSubdomain }) => {
-  const [localTalent, setLocalTalent] = useState(camelCaseObject(talent));
-  const user = localTalent.user;
-  const talentToken = localTalent.talentToken;
+const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
   const [selectedSection, setSelectedSection] = useState(window.location.hash);
   const [showLastDivider, setShowLastDivider] = useState(false);
   const [previewMode, setPreviewMode] = useState(false);
   const talentTokenPrice = 0.1;
+  const [isLoading, setIsLoading] = useState(true);
 
+  const { profile, fetchProfile, setProfile } = useProfileFetcher();
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
-  const canUpdate = talent.user.uuid == currentUser?.id && !previewMode;
+
+  const user = profile?.user;
+  const talentToken = profile?.talent_token;
+  const canUpdate = user?.uuid == currentUser?.id && !previewMode;
 
   const { mobile } = useWindowDimensionsHook();
 
@@ -39,6 +42,12 @@ const Show = ({ talent, railsContext, withPersonaRequest, profileSubdomain }) =>
       fetchCurrentUser();
     }
   }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const username = window.location.href.split("/u/")[1].split("/profile")[0];
+    fetchProfile(username).then(() => setIsLoading(false));
+  }, [fetchProfile]);
 
   const changeSection = newSection => {
     setSelectedSection(newSection);
@@ -58,26 +67,26 @@ const Show = ({ talent, railsContext, withPersonaRequest, profileSubdomain }) =>
     if (selectedSection) {
       const scrollDiv = document.getElementById(selectedSection).offsetTop;
       window.scrollTo({ top: scrollDiv - 70, behavior: "smooth" });
-      window.history.replaceState({}, document.title, `${localTalent.user.username}${selectedSection}`);
+      window.history.replaceState({}, document.title, `${user.username}${selectedSection}`);
     }
   }, [selectedSection]);
 
   const onWalletConnect = account => {
-    setLocalTalent(prev => ({
+    setProfile(prev => ({
       ...prev,
       user: {
         ...prev.user,
-        walletId: account
+        wallet_id: account
       }
     }));
   };
 
   const getCurrentTokenSection = () => {
-    if ((user.profileType == "approved" || user.profileType == "talent") && !talentToken.contractId) {
+    if ((user?.profile_type == "approved" || user?.profile_type == "talent") && !talentToken?.contract_id) {
       return LaunchToken;
     }
 
-    if (user.profileType != "approved" && user.profileType != "talent") {
+    if (user?.profile_type != "approved" && user?.profile_type != "talent") {
       return ApplyToLaunchToken;
     }
 
@@ -86,12 +95,23 @@ const Show = ({ talent, railsContext, withPersonaRequest, profileSubdomain }) =>
 
   const CurrentTokenSection = getCurrentTokenSection();
 
+  if (isLoading || !profile) {
+    return (
+      <div
+        className="d-flex flex-column align-items-center align-content-center"
+        style={{ "min-height": "400px", marginTop: "200px" }}
+      >
+        <Spinner />
+      </div>
+    );
+  }
+
   return (
     <div className="d-flex flex-column lg-h-100 p-0">
       <Overview
         className="mb-2"
-        talent={localTalent}
-        setTalent={setLocalTalent}
+        profile={profile}
+        setProfile={setProfile}
         currentUserId={currentUser?.id}
         currentUserAdmin={currentUser?.admin}
         currentUserModerator={currentUser?.moderator}
@@ -114,7 +134,7 @@ const Show = ({ talent, railsContext, withPersonaRequest, profileSubdomain }) =>
           text="Journey"
           onClick={() => changeSection("#journey")}
         />
-        {(talentToken.contractId || canUpdate) && (
+        {(talentToken.contract_id || canUpdate) && (
           <Button
             className="mr-2"
             type={buttonType("#token")}
@@ -128,7 +148,7 @@ const Show = ({ talent, railsContext, withPersonaRequest, profileSubdomain }) =>
           text="Community"
           onClick={() => changeSection("#community")}
         />
-        {((user.walletId && user.visibleDigitalCollectibles) || canUpdate) && (
+        {((user.wallet_id && user.visible_digital_collectibles) || canUpdate) && (
           <Button
             type={buttonType("#digital-collectibles")}
             text={"Digital Collectibles"}
@@ -137,56 +157,56 @@ const Show = ({ talent, railsContext, withPersonaRequest, profileSubdomain }) =>
         )}
       </div>
       <div className="my-7 w-100 col-12" id="#about">
-        <About talent={localTalent} setTalent={setLocalTalent} canUpdate={canUpdate} previewMode={previewMode} />
+        <About profile={profile} setProfile={setProfile} canUpdate={canUpdate} previewMode={previewMode} />
       </div>
       {mobile && <Divider />}
       <div className="my-7 w-100 col-12" id="#journey">
-        <Journey talent={localTalent} setTalent={setLocalTalent} canUpdate={canUpdate} />
+        <Journey talent={profile} setTalent={setProfile} canUpdate={canUpdate} />
       </div>
       <div className="my-7 w-100" id={"#token"}>
-        {talentToken.contractId && <Perks talent={localTalent} canUpdate={canUpdate} />}
+        {talentToken.contractId && <Perks talent={profile} canUpdate={canUpdate} />}
         <CurrentTokenSection
-          talent={localTalent}
+          talent={profile}
           talentTokenPrice={talentTokenPrice}
-          setLocalTalent={setLocalTalent}
+          setProfile={setProfile}
           railsContext={railsContext}
-          waitingApproval={user.profileType == "waiting_for_approval"}
+          waitingApproval={user.profile_type == "waiting_for_approval"}
           canUpdate={canUpdate}
         />
       </div>
       <div className="my-7 w-100 col-12" id="#community">
-        <Community userId={localTalent.user.uuid} talent={localTalent} canUpdate={canUpdate} />
+        <Community userId={user.uuid} talent={profile} canUpdate={canUpdate} />
       </div>
       {currentUser?.admin && (
         <div className="my-7 w-100 col-12" id="#social-graph">
           <div className="social-graph">
-            <SocialGraph talent={localTalent} />
+            <SocialGraph talent={profile} />
           </div>
         </div>
       )}
       {(showLastDivider || canUpdate) && <Divider className="my-6" />}
       <div className="mt-7 w-100" id="#digital-collectibles">
         <Poaps
-          user={localTalent.user}
+          user={user}
           canUpdate={canUpdate}
           setShowLastDivider={setShowLastDivider}
-          setTalent={setLocalTalent}
+          setTalent={setProfile}
           railsContext={railsContext}
           onWalletConnect={onWalletConnect}
         />
         <Nfts
-          user={localTalent.user}
+          user={user}
           canUpdate={canUpdate}
           setShowLastDivider={setShowLastDivider}
-          setTalent={setLocalTalent}
+          setTalent={setProfile}
           railsContext={railsContext}
           onWalletConnect={onWalletConnect}
         />
         <Tokens
-          user={localTalent.user}
+          user={user}
           canUpdate={canUpdate}
           setShowLastDivider={setShowLastDivider}
-          setTalent={setLocalTalent}
+          setTalent={setProfile}
           railsContext={railsContext}
           onWalletConnect={onWalletConnect}
         />

@@ -23,6 +23,7 @@ export const Headline = styled.div`
   text-align: center;
   max-width: 327px;
   margin: auto;
+  overflow: hidden;
 
   h4 {
     display: inline;
@@ -31,6 +32,7 @@ export const Headline = styled.div`
   ${desktopStyles(css`
     margin: 0;
     max-width: 100%;
+    text-align: left;
   `)}
 `;
 

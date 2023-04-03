@@ -36,7 +36,7 @@ export const SetPasswordFLow = props => {
         stepsState.nextStep();
       })
       .catch(() => {
-        toast.error(<ToastBody title="Error" />);
+        toast.error(<ToastBody title="Error" />, { autoClose: 5000 });
       });
   }, [passwordRef, stepsState.nextStep, props.userId, props.token]);
   const Footer = useMemo(() => {

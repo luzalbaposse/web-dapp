@@ -5,7 +5,7 @@ import { Container, ListContainer, ListItem, TitleContainer } from "./styled";
 
 export const SupportedBy = ({ profile }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const { supporters, fetchSupporters } = useSupportersFetcher();
+  const { supporters, fetchSupporters, totalSupporters } = useSupportersFetcher();
   useEffect(() => {
     fetchSupporters(profile.user.username).then(() => setIsLoading(false));
   }, [setIsLoading, fetchSupporters, profile]);
@@ -21,6 +21,7 @@ export const SupportedBy = ({ profile }) => {
                 name={supporter.name}
                 ticker={supporter.ticker}
                 occupation={supporter.occupation}
+                ellipsisAt={100}
               />
             </ListItem>
           );
@@ -30,14 +31,14 @@ export const SupportedBy = ({ profile }) => {
     [supporters, profile]
   );
   return (
-    <Container hasSupporters={SupporterList.length}>
+    <Container hasSupporters={profile.supporters_count}>
       {isLoading ? (
         <Spinner />
       ) : (
         <>
           <TitleContainer>
             <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
-              {profile.user.legal_first_name} is supported by {SupporterList.length} people
+              {profile.user.legal_first_name} is supported by {totalSupporters - 1} people
             </Typography>
           </TitleContainer>
           <ListContainer>{SupporterList}</ListContainer>

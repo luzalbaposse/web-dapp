@@ -10,10 +10,10 @@ export const EmailFooter = ({ hasCreateAccountError, createdUser }) => {
     users
       .sendConfirmationEmail(createdUser.uuid)
       .then(() => {
-        toast.success(<ToastBody heading="Success" />);
+        toast.success(<ToastBody heading="Success" />, { autoClose: 5000 });
       })
       .catch(() => {
-        toast.error(<ToastBody heading="Something happened" />);
+        toast.error(<ToastBody heading="Something happened" />, { autoClose: 5000 });
       });
   }, [createdUser]);
   return hasCreateAccountError ? (

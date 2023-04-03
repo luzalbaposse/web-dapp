@@ -37,9 +37,9 @@ export const SubscribeModel = ({ profile, setProfile, isCurrentUserProfile }) =>
         ...prev,
         subscribing_status: new_status
       }));
-      toast.success(<ToastBody heading={successHeader} body={successMessage} />);
+      toast.success(<ToastBody heading={successHeader} body={successMessage} />, { autoClose: 5000 });
     } else {
-      toast.error(<ToastBody heading="Unable to update subscription" body={response?.error} />);
+      toast.error(<ToastBody heading="Unable to update subscription" body={response?.error} />, { autoClose: 5000 });
     }
   };
 
@@ -52,16 +52,42 @@ export const SubscribeModel = ({ profile, setProfile, isCurrentUserProfile }) =>
         Career Updates
       </Typography>
       <Typography specs={{ variant: "p2", type: "regular" }} color="primary01">
-        The first step to support someone is being present. Unlock access to career updates, supporter NFT & much more!
+        The first step to support someone is being present. Subscribe to have access and receive Career Updates.
       </Typography>
-      <Button
-        hierarchy="primary"
-        size="large"
-        isStretched
-        text={subscriptionButtonText[profile.subscribing_status]}
-        onClick={() => updateSubscription()}
-        isDisabled={isCurrentUserProfile || profile.subscribing_status === "pending"}
-      />
+      {profile.subscribing_status === "pending" && (
+        <Button
+          hierarchy="secondary"
+          size="large"
+          isStretched
+          leftIcon="clock"
+          iconColor="primary01"
+          text={subscriptionButtonText[profile.subscribing_status]}
+          onClick={updateSubscription}
+          isDisabled
+        />
+      )}
+      {profile.subscribing_status === "subscribed" && (
+        <Button
+          hierarchy="secondary"
+          size="large"
+          isStretched
+          leftIcon="check-chat"
+          iconColor="primary01"
+          text={subscriptionButtonText[profile.subscribing_status]}
+          onClick={updateSubscription}
+          isDisabled
+        />
+      )}
+      {profile.subscribing_status === "unsubscribed" && (
+        <Button
+          hierarchy="primary"
+          size="large"
+          isStretched
+          text={subscriptionButtonText[profile.subscribing_status]}
+          onClick={updateSubscription}
+          isDisabled={isCurrentUserProfile}
+        />
+      )}
     </Container>
   );
 };

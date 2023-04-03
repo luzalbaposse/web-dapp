@@ -23,7 +23,7 @@ const Tokens = ({ user, canUpdate, setShowLastDivider, onWalletConnect, railsCon
   const [pagination, setPagination] = useState({});
   const { mobile } = useWindowDimensionsHook();
   const userId = user.id;
-  const walletConnected = user.walletId;
+  const walletConnected = user.wallet_id;
 
   useEffect(() => {
     if (!walletConnected) {

@@ -17,10 +17,10 @@ export const ForgotPasswordFlow = () => {
     users
       .sendResetPasswordEmail(email)
       .then(() => {
-        toast.success(<ToastBody heading="Success" />);
+        toast.success(<ToastBody heading="Success" />, { autoClose: 5000 });
       })
       .catch(() => {
-        toast.error(<ToastBody heading="Something happened" />);
+        toast.error(<ToastBody heading="Something happened" />, { autoClose: 5000 });
       });
   }, [email]);
   const onContinueCallback = useCallback(() => {

@@ -4,7 +4,6 @@ import { patch, getAuthToken, post, destroy } from "src/utils/requests";
 import { toast } from "react-toastify";
 import Uppy from "@uppy/core";
 import AwsS3Multipart from "@uppy/aws-s3-multipart";
-import { snakeCaseObject, camelCaseObject } from "src/utils/transformObjects";
 import TalentProfilePicture from "src/components/talent/TalentProfilePicture";
 import CameraButton from "images/camera-button.png";
 import { useWindowDimensionsHook } from "src/utils/window";
@@ -27,8 +26,8 @@ import { ProfileCard } from "src/components-v2/profile-card";
 
 const Overview = ({
   className,
-  talent,
-  setTalent,
+  profile,
+  setProfile,
   talentTokenPrice,
   currentUserId,
   currentUserAdmin,
@@ -55,6 +54,9 @@ const Overview = ({
   const [editMode, setEditMode] = useState(false);
   const [overviewProfileFileInput, setOverviewProfileFileInput] = useState(null);
   const [overviewBannerFileInput, setOverviewBannerFileInput] = useState(null);
+
+  const user = profile.user;
+  const talentToken = profile.talent_token;
 
   const subscriptionButtonText = {
     pending: "Pending",
@@ -147,17 +149,17 @@ const Overview = ({
   const saveProfile = async updatedTalent => {
     const response = await patch(`/api/v1/talent/${currentUserId}`, {
       user: {
-        ...snakeCaseObject(updatedTalent.user)
+        ...updatedTalent.user
       },
       talent: {
-        ...snakeCaseObject(updatedTalent)
+        ...updatedTalent
       }
     });
 
     if (response) {
-      setTalent(prev => ({
+      setProfile(prev => ({
         ...prev,
-        ...camelCaseObject(response)
+        ...response
       }));
     }
   };
@@ -165,8 +167,8 @@ const Overview = ({
   const deleteBannerImg = () => {
     saveProfile({
       ...talent,
-      bannerUrl: null,
-      bannerData: null
+      banner_url: null,
+      banner_data: null
     });
   };
 
@@ -179,8 +181,8 @@ const Overview = ({
       setIsUploadingBanner(false);
       saveProfile({
         ...talent,
-        profilePictureUrl: response.uploadURL,
-        profilePictureData: {
+        profile_picture_url: response.uploadURL,
+        profile_picture_data: {
           new_upload: true,
           // eslint-disable-next-line no-useless-escape
           id: response.uploadURL.match(/\/cache\/([^\?]+)/)[1], // extract key without prefix
@@ -205,8 +207,8 @@ const Overview = ({
       setIsUploadingBanner(false);
       saveProfile({
         ...talent,
-        bannerUrl: response.uploadURL,
-        bannerData: {
+        banner_url: response.uploadURL,
+        banner_data: {
           // eslint-disable-next-line no-useless-escape
           id: response.uploadURL.match(/\/cache\/([^\?]+)/)[1], // extract key without prefix
           storage: "cache",
@@ -228,7 +230,7 @@ const Overview = ({
 
   const impersonateUser = async () => {
     const params = {
-      username: talent.user.username
+      username: user?.username
     };
 
     const response = await post(`/api/v1/impersonations`, params).catch(() => {
@@ -245,20 +247,20 @@ const Overview = ({
     let response;
     let new_status;
 
-    if (talent.subscribingStatus === "subscribed") {
-      response = await destroy(`/api/v1/subscriptions?talent_id=${talent.user.username}`);
+    if (profile.subscribing_status === "subscribed") {
+      response = await destroy(`/api/v1/subscriptions?talent_id=${user?.username}`);
       new_status = "unsubscribed";
     } else {
       response = await post(`/api/v1/subscriptions`, {
-        talent_id: talent.user.username
+        talent_id: user?.username
       });
       new_status = "pending";
     }
 
     if (response.success) {
-      setTalent(prev => ({
+      setProfile(prev => ({
         ...prev,
-        subscribingStatus: new_status
+        subscribing_status: new_status
       }));
     } else {
       toast.error(<ToastBody heading="Unable to update subscription" body={response?.error} />);
@@ -266,16 +268,11 @@ const Overview = ({
   };
 
   const showSubscribeButton = () => {
-    return currentUserId && talent.user.id != currentUserId && !profileSubdomain;
+    return currentUserId && user?.id != currentUserId && !profileSubdomain;
   };
 
-  // eslint-disable-next-line no-unused-vars
-  const headlineArray = useMemo(() => {
-    return talent.profile.headline?.split(" ");
-  }, [talent.profile.headline]);
-
   const verifyTooltipBody = () => {
-    if (talent.withPersonaId) {
+    if (profile.with_persona_id) {
       return "Your verification is being processed";
     } else if (withPersonaRequest.requests_counter > railsContext.withPersonaVerificationsLimit) {
       return "The number of verifications we can do is limited. Please check back later to verify your account";
@@ -292,9 +289,9 @@ const Overview = ({
             <div className="d-flex flex-column">
               {previewMode || !canUpdate ? (
                 <>
-                  <Banner bannerUrl={talent.bannerUrl} deleteBannerCallback={deleteBannerImg} />
+                  <Banner bannerUrl={profile.banner_url} deleteBannerCallback={deleteBannerImg} />
                   <TalentProfilePicture
-                    src={talent.profilePictureUrl}
+                    src={profile.profile_picture_url}
                     height={120}
                     style={{
                       marginTop: "56px",
@@ -307,7 +304,7 @@ const Overview = ({
               ) : (
                 <>
                   <Banner
-                    bannerUrl={talent.bannerUrl}
+                    bannerUrl={profile.banner_url}
                     deleteBannerCallback={deleteBannerImg}
                     canUpdate
                     isUploading={isUploadingBanner}
@@ -322,7 +319,7 @@ const Overview = ({
                   >
                     <TalentProfilePicture
                       className="position-relative"
-                      src={talent.profilePictureUrl}
+                      src={profile.profile_picture_url}
                       style={{
                         border: `4px solid ${mode() === "dark" ? darkBg01 : lightBg01}`,
                         zIndex: 1
@@ -352,7 +349,7 @@ const Overview = ({
             <div style={{ marginTop: "225px", zIndex: 1 }}>
               {previewMode || !canUpdate ? (
                 <TalentProfilePicture
-                  src={talent.profilePictureUrl}
+                  src={profile.profile_picture_url}
                   style={{
                     border: `4px solid ${mode() === "dark" ? darkBg01 : lightBg01}`,
                     zIndex: 1
@@ -369,7 +366,7 @@ const Overview = ({
                     <>
                       <TalentProfilePicture
                         className="position-relative"
-                        src={talent.profilePictureUrl}
+                        src={profile.profile_picture_url}
                         style={{
                           border: `4px solid ${mode() === "dark" ? darkBg01 : lightBg01}`,
                           zIndex: 1
@@ -402,10 +399,10 @@ const Overview = ({
         {!mobile && (
           <>
             {previewMode || !canUpdate ? (
-              <Banner bannerUrl={talent.bannerUrl} deleteBannerCallback={deleteBannerImg} />
+              <Banner bannerUrl={profile.banner_url} deleteBannerCallback={deleteBannerImg} />
             ) : (
               <Banner
-                bannerUrl={talent.bannerUrl}
+                bannerUrl={profile.banner_url}
                 deleteBannerCallback={deleteBannerImg}
                 canUpdate
                 isUploading={isUploadingBanner}
@@ -415,7 +412,7 @@ const Overview = ({
         )}
       </div>
       <ProfileCard
-        talent={talent}
+        profile={profile}
         changeSection={changeSection}
         currentUserAdmin={currentUserAdmin}
         profileSubdomain={profileSubdomain}
@@ -434,14 +431,14 @@ const Overview = ({
                   <>
                     {canUpdate ? (
                       <>
-                        {!talent.verified && (
+                        {!profile.verified && (
                           <Button
                             className="mr-2"
                             type="primary-default"
                             onClick={() => setShowPersonaVerificationConfirmationModal(true)}
                             disabled={
-                              !talent.user.profileCompleted ||
-                              talent.withPersonaId ||
+                              !user?.profile_completed ||
+                              profile.with_persona_id ||
                               withPersonaRequest.requests_counter > railsContext.withPersonaVerificationsLimit
                             }
                           >
@@ -458,12 +455,12 @@ const Overview = ({
                           </Button>
                         )}
                         <Button className="mr-2" type="primary-default" text="Edit" onClick={() => setEditMode(true)} />
-                        {talent.talentToken.contractId && (
+                        {talentToken.contract_id && (
                           <Button
                             style={{ whiteSpace: "pre" }}
                             className="mr-2"
                             type="primary-default"
-                            text={`Buy ${talent.talentToken.ticker}`}
+                            text={`Buy ${talentToken.ticker}`}
                             onClick={() => setShowStakeModal(true)}
                           />
                         )}
@@ -477,7 +474,7 @@ const Overview = ({
                     ) : (
                       <>
                         {currentUserId && !profileSubdomain && (
-                          <a href={`/messages?user=${talent.user.username}`} className="button-link">
+                          <a href={`/messages?user=${user?.username}`} className="button-link">
                             <Button className="mr-2" type="white-outline" size="big" onClick={() => null}>
                               <Envelope className="h-100" color="currentColor" size={16} viewBox="0 0 24 24" />
                             </Button>
@@ -488,12 +485,12 @@ const Overview = ({
                             className="mr-2"
                             type="white-outline"
                             size="big"
-                            text={subscriptionButtonText[talent.subscribingStatus]}
-                            disabled={talent.subscribingStatus == "pending"}
+                            text={subscriptionButtonText[profile.subscribing_status]}
+                            disabled={profile.subscribing_status == "pending"}
                             onClick={() => updateSubscription()}
                           />
                         )}
-                        {talent.talentToken.contractId && !profileSubdomain && (
+                        {talentToken.contract_id && !profileSubdomain && (
                           <Button
                             type="primary-default"
                             size="big"
@@ -501,16 +498,16 @@ const Overview = ({
                             onClick={() => setShowStakeModal(true)}
                           />
                         )}
-                        {profileSubdomain && talent.talentToken.contractId && (
+                        {profileSubdomain && talentToken.contract_id && (
                           <a
-                            href={`https://beta.talentprotocol.com/join/${talent.user.username}`}
+                            href={`https://beta.talentprotocol.com/join/${user?.username}`}
                             className="button-link"
                             target="_blank"
                           >
                             <Button
                               type="primary-default"
                               size="big"
-                              text={`Buy $${talent.talentToken.ticker} on Talent Protocol`}
+                              text={`Buy $${profile.talen_token?.ticker} on Talent Protocol`}
                               style={{ "min-width": "340px" }}
                               onClick={() => null}
                             />
@@ -523,7 +520,7 @@ const Overview = ({
               </div>
               {(currentUserAdmin || currentUserModerator) && (
                 <div className="d-flex align-items-center mt-3">
-                  {!talent.verified && (
+                  {!profile.verified && (
                     <Button
                       type="primary-default"
                       className="mr-2"
@@ -531,7 +528,7 @@ const Overview = ({
                       onClick={() => setShowAdminVerificationConfirmationModal(true)}
                     />
                   )}
-                  {talent.user.profileType == "waiting_for_approval" && (
+                  {user?.profileType == "waiting_for_approval" && (
                     <>
                       <Button
                         type="primary-default"
@@ -565,7 +562,7 @@ const Overview = ({
               <div className="d-flex align-items-center">
                 {(currentUserAdmin || currentUserModerator) && (
                   <>
-                    {!talent.verified && (
+                    {!profile.verified && (
                       <Button
                         className="mr-2"
                         size="big"
@@ -574,7 +571,7 @@ const Overview = ({
                         onClick={() => setShowAdminVerificationConfirmationModal(true)}
                       />
                     )}
-                    {talent.user.profileType == "waiting_for_approval" && (
+                    {user?.profileType == "waiting_for_approval" && (
                       <>
                         <Button
                           className="mr-2"
@@ -610,15 +607,15 @@ const Overview = ({
                   <>
                     {canUpdate ? (
                       <>
-                        {!talent.verified && (
+                        {!profile.verified && (
                           <Button
                             className="mr-2"
                             type="primary-default"
                             size="big"
                             onClick={() => setShowPersonaVerificationConfirmationModal(true)}
                             disabled={
-                              !talent.user.profileCompleted ||
-                              talent.withPersonaId ||
+                              !user?.profile_completed ||
+                              profile.with_persona_id ||
                               withPersonaRequest.requests_counter > railsContext.withPersonaVerificationsLimit
                             }
                           >
@@ -641,13 +638,13 @@ const Overview = ({
                           text="Edit"
                           onClick={() => setEditMode(true)}
                         />
-                        {talent.talentToken.contractId && (
+                        {talentToken.contract_id && (
                           <Button
                             style={{ whiteSpace: "pre" }}
                             className="mr-2"
                             type="primary-default"
                             size="big"
-                            text={`Buy ${talent.talentToken.ticker}`}
+                            text={`Buy ${talentToken.ticker}`}
                             onClick={() => setShowStakeModal(true)}
                           />
                         )}
@@ -662,7 +659,7 @@ const Overview = ({
                     ) : (
                       <>
                         {currentUserId && !profileSubdomain && (
-                          <a href={`/messages?user=${talent.user.username}`} className="button-link">
+                          <a href={`/messages?user=${user?.username}`} className="button-link">
                             <Button className="mr-2" type="white-outline" size="big" onClick={() => null}>
                               <Envelope className="h-100" color="currentColor" size={16} viewBox="0 0 24 24" />
                             </Button>
@@ -673,12 +670,12 @@ const Overview = ({
                             className="mr-2"
                             type="white-outline"
                             size="big"
-                            text={subscriptionButtonText[talent.subscribingStatus]}
-                            disabled={talent.subscribingStatus == "pending"}
+                            text={subscriptionButtonText[profile.subscribing_status]}
+                            disabled={profile.subscribing_status == "pending"}
                             onClick={() => updateSubscription()}
                           />
                         )}
-                        {talent.talentToken.contractId && !profileSubdomain && (
+                        {talentToken.contract_id && !profileSubdomain && (
                           <Button
                             type="primary-default"
                             size="big"
@@ -686,9 +683,9 @@ const Overview = ({
                             onClick={() => setShowStakeModal(true)}
                           />
                         )}
-                        {profileSubdomain && talent.talentToken.contractId && (
+                        {profileSubdomain && talentToken.contract_id && (
                           <a
-                            href={`https://beta.talentprotocol.com/join/${talent.user.username}`}
+                            href={`https://beta.talentprotocol.com/join/${user?.username}`}
                             className="button-link"
                             target="_blank"
                           >
@@ -696,7 +693,7 @@ const Overview = ({
                               type="primary-default"
                               size="big"
                               style={{ "min-width": "340px" }}
-                              text={`Buy $${talent.talentToken.ticker} on Talent Protocol`}
+                              text={`Buy $${talentToken.ticker} on Talent Protocol`}
                               onClick={() => null}
                             />
                           </a>
@@ -713,13 +710,13 @@ const Overview = ({
       <StakeModal
         show={showStakeModal}
         setShow={setShowStakeModal}
-        tokenAddress={talent.talentToken.contractId}
-        tokenId={talent.talentToken.id}
+        tokenAddress={talentToken.contract_id}
+        tokenId={talentToken.id}
         userId={currentUserId}
-        userUsername={talent.user.username}
-        tokenChainId={talent.talentToken.chainId}
-        talentName={talent.user.displayName || talent.user.username}
-        ticker={talent.talentToken.ticker}
+        userUsername={user?.username}
+        tokenChainId={talentToken.chain_id}
+        talentName={user?.displayName || user?.username}
+        ticker={talentToken.ticker}
         talentIsFromCurrentUser={canUpdate}
         railsContext={railsContext}
       />
@@ -727,23 +724,23 @@ const Overview = ({
         show={showAdminVerificationConfirmationModal}
         setShow={setShowAdminVerificationConfirmationModal}
         hide={() => setShowAdminVerificationConfirmationModal(false)}
-        talent={talent}
-        setTalent={setTalent}
+        talent={profile}
+        setProfile={setProfile}
       />
       <PersonaVerificationConfirmationModal
         show={showPersonaVerificationConfirmationModal}
         setShow={setShowPersonaVerificationConfirmationModal}
         hide={() => setShowPersonaVerificationConfirmationModal(false)}
-        talent={talent}
-        setTalent={setTalent}
+        talent={profile}
+        setProfile={setProfile}
         railsContext={railsContext}
       />
       <ApprovalConfirmationModal
         show={showApprovalConfirmationModal}
         setShow={setShowApprovalConfirmationModal}
         hide={() => setShowApprovalConfirmationModal(false)}
-        talent={talent}
-        setTalent={setTalent}
+        talent={profile}
+        setProfile={setProfile}
         railsContext={railsContext}
       />
       <RejectTalentModal
@@ -751,19 +748,19 @@ const Overview = ({
         setShow={setShowRejectModal}
         mobile={mobile}
         mode={mode()}
-        talent={talent}
-        setTalent={setTalent}
+        talent={profile}
+        setProfile={setProfile}
       />
       {showCareerUpdateModal && canUpdate && (
         <SendCareerUpdateModal
           show={showCareerUpdateModal}
           hide={() => setShowCareerUpdateModal(false)}
-          placeholder={`What's new in your career ${talent.user.name}?`}
+          placeholder={`What's new in your career ${user?.name}?`}
           contractsEnv={railsContext.contractsEnv}
         />
       )}
       {editMode && (
-        <EditOverviewModal show={editMode} hide={() => setEditMode(false)} talent={talent} setTalent={setTalent} />
+        <EditOverviewModal show={editMode} hide={() => setEditMode(false)} profile={profile} setProfile={setProfile} />
       )}
     </div>
   );

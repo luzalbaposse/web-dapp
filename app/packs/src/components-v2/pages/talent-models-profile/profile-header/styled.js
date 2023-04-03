@@ -32,15 +32,19 @@ export const AvatarContainer = styled.div`
   top: 33px;
 
   ${desktopStyles(css`
-    top: 217px;
+    top: 231px;
   `)}
 `;
 
 export const ActionArea = styled.div`
   display: flex;
   justify-content: flex-end;
-  margin: 16px;
+  margin: 19px 16px 0;
   gap: 16px;
+
+  ${mobileStyles(css`
+    margin: 16px;
+  `)}
 `;
 
 export const InfoArea = styled.div`

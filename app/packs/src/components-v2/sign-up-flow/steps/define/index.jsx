@@ -84,15 +84,3 @@ export const DefineStep = ({ user, setUser, setIsNextDisable }) => {
     </>
   );
 };
-
-/*
-
-          <Input
-            placeholder="Italian, Japonese, Colombian..."
-            onChange={validateStep}
-            onBlur={validateStep}
-            inputRef={nationalityRef}
-            defaultValue={user.nationality}
-          />
-
-*/

@@ -3,7 +3,6 @@ import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
 
 import { patch, getAuthToken } from "src/utils/requests";
-import { snakeCaseObject, camelCaseObject } from "src/utils/transformObjects";
 import { useTheme } from "src/contexts/ThemeContext";
 
 import Uppy from "@uppy/core";
@@ -26,26 +25,26 @@ import { useWindowDimensionsHook } from "src/utils/window";
 
 import cx from "classnames";
 
-const EditAboutModal = ({ show, hide, talent, setTalent }) => {
+const EditAboutModal = ({ show, hide, profile, setProfile }) => {
   const { mobile } = useWindowDimensionsHook();
   const { mode } = useTheme();
-  const [editedTalent, setEditedTalent] = useState(talent);
+  const [editedTalent, setEditedTalent] = useState(profile);
   const [aboutBannerFileInput, setAboutBannerFileInput] = useState(null);
   const [selectedCareerNeeds, setSelectedCareerNeeds] = useState(
-    editedTalent.careerGoal.careerNeeds.map(need => need.title)
+    editedTalent.career_goal.career_needs.map(need => need.title)
   );
   const [validationErrors, setValidationErrors] = useState({ pitch: false });
 
   const talentErrors = () => {
     const errors = {};
-    if (editedTalent.careerGoal.pitch == "") {
+    if (editedTalent.career_goal.pitch == "") {
       errors.pitch = true;
     }
 
     return errors;
   };
 
-  const imageSrc = editedTalent.careerGoal.imageUrl || (mode() == "light" ? AboutImageLight : AboutImageDark);
+  const imageSrc = editedTalent.career_goal.image_url || (mode() == "light" ? AboutImageLight : AboutImageDark);
 
   const uppyBanner = new Uppy({
     meta: { type: "avatar" },
@@ -92,41 +91,41 @@ const EditAboutModal = ({ show, hide, talent, setTalent }) => {
       return setValidationErrors(errors);
     }
 
-    const talentResponse = await patch(`/api/v1/talent/${talent.user.id}`, {
+    const talentResponse = await patch(`/api/v1/talent/${profile.user.id}`, {
       user: {
-        ...snakeCaseObject(editedTalent.user)
+        ...editedTalent.user
       },
       talent: {
-        ...snakeCaseObject(editedTalent)
+        ...editedTalent
       },
       career_needs: selectedCareerNeeds
     });
 
     const careerGoalResponse = await patch(
-      `/api/v1/talent/${editedTalent.id}/career_goals/${editedTalent.careerGoal.id}`,
+      `/api/v1/talent/${editedTalent.id}/career_goals/${editedTalent.career_goal.id}`,
       {
         talent: {
-          ...snakeCaseObject(editedTalent)
+          ...editedTalent
         },
         career_goal: {
-          ...snakeCaseObject(editedTalent.careerGoal)
+          ...editedTalent.career_goal
         }
       }
     );
 
     if (talentResponse) {
-      setTalent(prev => ({
+      setProfile(prev => ({
         ...prev,
-        ...camelCaseObject(talentResponse)
+        ...talentResponse
       }));
     }
 
     if (careerGoalResponse) {
-      setTalent(prev => ({
+      setProfile(prev => ({
         ...prev,
-        careerGoal: {
-          ...prev.careerGoal,
-          ...camelCaseObject(careerGoalResponse)
+        career_goal: {
+          ...prev.career_goal,
+          ...careerGoalResponse
         }
       }));
     }
@@ -143,10 +142,10 @@ const EditAboutModal = ({ show, hide, talent, setTalent }) => {
     uppyBanner.on("upload-success", (file, response) => {
       setEditedTalent(prev => ({
         ...prev,
-        careerGoal: {
-          ...prev.careerGoal,
-          imageUrl: response.uploadURL,
-          imageData: {
+        career_goal: {
+          ...prev.career_goal,
+          image_url: response.uploadURL,
+          image_data: {
             // eslint-disable-next-line  no-useless-escape
             id: response.uploadURL.match(/\/cache\/([^\?]+)/)[1], // extract key without prefix
             storage: "cache",
@@ -166,7 +165,7 @@ const EditAboutModal = ({ show, hide, talent, setTalent }) => {
     if (show) {
       setAboutBannerFileInput(document.getElementById("aboutBannerFileInput"));
     } else {
-      setEditedTalent(talent);
+      setEditedTalent(profile);
     }
   }, [show]);
 
@@ -174,8 +173,8 @@ const EditAboutModal = ({ show, hide, talent, setTalent }) => {
     setValidationErrors(prev => ({ ...prev, [attribute]: false }));
     setEditedTalent(prev => ({
       ...prev,
-      careerGoal: {
-        ...prev.careerGoal,
+      career_goal: {
+        ...prev.career_goal,
         [attribute]: value
       }
     }));
@@ -184,10 +183,10 @@ const EditAboutModal = ({ show, hide, talent, setTalent }) => {
   const deleteBannerImg = () => {
     setEditedTalent(prev => ({
       ...prev,
-      careerGoal: {
-        ...prev.careerGoal,
-        imageUrl: null,
-        imageData: null
+      career_goal: {
+        ...prev.career_goal,
+        image_url: null,
+        image_data: null
       }
     }));
   };
@@ -267,7 +266,7 @@ const EditAboutModal = ({ show, hide, talent, setTalent }) => {
           <TextArea
             className="mb-2"
             onChange={e => changeCareerGoalAttribute("pitch", e.target.value)}
-            value={editedTalent.careerGoal.pitch || ""}
+            value={editedTalent.career_goal.pitch || ""}
             rows={3}
             required={true}
             error={validationErrors?.pitch}

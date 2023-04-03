@@ -276,23 +276,23 @@ const Community = ({ userId, talent, canUpdate }) => {
       <H4 className="text-center mb-3" text="Community" />
       <div className="mb-5 row justify-content-center ">
         <div className="col-6 col-lg-2 d-flex">
-          <P2 className={cx("text-primary-01 mr-1", mobile && "ml-5")} bold text={talent.supportersCount || "0"} />
+          <P2 className={cx("text-primary-01 mr-1", mobile && "ml-5")} bold text={talent?.supporters_count || "0"} />
           <P2 className="text-primary-04" text="Supporters" />
         </div>
         <div className="col-6 col-lg-2 d-flex">
-          <P2 className="text-primary-01 mr-1" bold text={talent.supportingCount || "0"} />
+          <P2 className="text-primary-01 mr-1" bold text={talent?.supporting_count || "0"} />
           <P2 className="text-primary-04" text="Supporting" />
         </div>
         <div className="col-6 col-lg-2 d-flex">
-          <P2 className={cx("text-primary-01 mr-1", mobile && "ml-5")} bold text={talent.subscribersCount || "0"} />
+          <P2 className={cx("text-primary-01 mr-1", mobile && "ml-5")} bold text={talent?.subscribers_count || "0"} />
           <P2 className="text-primary-04" text="Subscribers" />
         </div>
         <div className="col-6 col-lg-2 d-flex">
-          <P2 className="text-primary-01 mr-1" bold text={talent.subscribingCount || "0"} />
+          <P2 className="text-primary-01 mr-1" bold text={talent?.subscribing_count || "0"} />
           <P2 className="text-primary-04" text="Subscribing" />
         </div>
       </div>
-      {talent.connectionsCount > 0 && (
+      {talent?.connections_count > 0 && (
         <>
           <SearchForm
             options={options}
@@ -301,11 +301,16 @@ const Community = ({ userId, talent, canUpdate }) => {
             keyword={keyword}
             mobile={mobile}
           />
-          <CommunityTable connections={connections} mode={mode()} ticker={talent.talentToken.ticker} mobile={mobile} />
+          <CommunityTable
+            connections={connections}
+            mode={mode()}
+            ticker={talent?.talent_token.ticker}
+            mobile={mobile}
+          />
         </>
       )}
 
-      {talent.connectionsCount == 0 && canUpdate && (
+      {talent?.connections_count == 0 && canUpdate && (
         <>
           <H5 bold text={"You don't have any Community members"} className="text-primary-01 text-center mt-7 mb-2" />
           <P2

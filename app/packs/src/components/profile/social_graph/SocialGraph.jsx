@@ -23,7 +23,7 @@ const SocialGraph = ({ talent }) => {
   });
   const [hoveredNode, setHoveredNode] = useState(null);
 
-  const talentToken = talent.talentToken;
+  const talentToken = talent.talent_token;
   const howManyConnections = 150;
   const getConnectionTypeCluster = type => {
     switch (type) {
@@ -47,13 +47,13 @@ const SocialGraph = ({ talent }) => {
     let score = 1;
     switch (connection.connection_type) {
       case "super_connection":
-        score = 1.1 + (1000 * connection.connected_user_invested_amount) / talent.totalSupply;
+        score = 1.1 + (1000 * connection.connected_user_invested_amount) / talent.total_supply;
         break;
       case "supporting":
-        score = 1 + (1000 * connection.user_invested_amount) / talent.totalSupply;
+        score = 1 + (1000 * connection.user_invested_amount) / talent.total_supply;
         break;
       case "supporter":
-        score = 1 + (1000 * connection.connected_user_invested_amount) / talent.totalSupply;
+        score = 1 + (1000 * connection.connected_user_invested_amount) / talent.total_supply;
         break;
       case "mutual_subscription":
         score = 1.1;
@@ -96,13 +96,13 @@ const SocialGraph = ({ talent }) => {
       key: talent.user.username,
       label: talent.user.name,
       coinLabel: talentToken.ticker
-        ? `${ethers.utils.formatUnits(talent.totalSupply)} $${talentToken.ticker} - ${
-            talent.supportersCount
+        ? `${ethers.utils.formatUnits(talent.total_supply)} $${talentToken.ticker} - ${
+            talent.supporters_count
           } supporters`
         : "",
       URL: `https://beta.talentprotocol.com/u/${talent.user.username}`,
       cluster: "0",
-      profile_picture_url: talent.profilePictureUrl,
+      profile_picture_url: talent.profile_picture_url,
       x: 0,
       y: 0,
       score: 1.5

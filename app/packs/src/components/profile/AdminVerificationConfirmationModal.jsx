@@ -12,6 +12,7 @@ import { useWindowDimensionsHook } from "src/utils/window";
 
 const AdminVerificationConfirmationModal = ({ show, hide, talent, setTalent }) => {
   const { mobile } = useWindowDimensionsHook();
+  const user = talent?.user;
 
   const verifyTalent = async () => {
     const params = {
@@ -19,11 +20,11 @@ const AdminVerificationConfirmationModal = ({ show, hide, talent, setTalent }) =
         verified: true
       },
       user: {
-        id: talent.user.id
+        id: user?.id
       }
     };
 
-    const response = await patch(`/api/v1/talent/${talent.user.id}`, params).catch(() => {
+    const response = await patch(`/api/v1/talent/${user?.id}`, params).catch(() => {
       return false;
     });
 
@@ -56,7 +57,7 @@ const AdminVerificationConfirmationModal = ({ show, hide, talent, setTalent }) =
       </Modal.Header>
       <Divider />
       <Modal.Body>
-        <P2 text={`Are you sure you want to verify ${talent.user.name || talent.user.username}?`} />
+        <P2 text={`Are you sure you want to verify ${user?.name || user?.username}?`} />
       </Modal.Body>
       <Modal.Footer className="px-6 py-3" style={{ borderTop: "none" }}>
         <Button className="mr-2" type="white-ghost" text="Cancel" onClick={hide} />

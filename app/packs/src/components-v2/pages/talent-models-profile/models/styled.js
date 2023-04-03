@@ -3,15 +3,18 @@ import styled, { css } from "styled-components";
 
 export const Container = styled.section`
   max-width: 1128px;
-  padding: 0 16px;
+  padding: 0 16px 48px;
   margin: 40px auto 0;
   display: flex;
   flex-direction: column;
   gap: 24px;
-  padding-bottom: 48px;
 
   ${mobileStyles(css`
     border-bottom: 1px solid ${buildColor("surfaceHover02")};
+  `)}
+
+  ${desktopStyles(css`
+    padding: 0 0 48px;
   `)}
 `;
 

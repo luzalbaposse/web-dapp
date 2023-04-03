@@ -26,7 +26,7 @@ export const HowMuchStep = ({ token, setToken, railsContext, setAmount, closeMod
     const _availableAmount = await newOnChain.getStableBalanceERC20("0xe11A86849d99F524cAC3E7A0Ec1241828e332C62");
 
     if (_availableAmount === undefined) {
-      toast.error(<ToastBody heading="We couldn't find your wallet" />);
+      toast.error(<ToastBody heading="We couldn't find your wallet" />, { autoClose: 5000 });
       closeModal();
       return;
     }

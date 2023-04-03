@@ -21,7 +21,7 @@ const Poaps = ({ user, canUpdate, setShowLastDivider, onWalletConnect, railsCont
   // Display placeholder until the image fully loads
   const [loadedImagePoaps, setLoadedImagePoaps] = useState({});
   const userId = user.id;
-  const walletConnected = user.walletId;
+  const walletConnected = user.wallet_id;
 
   const loadedImage = poap =>
     setLoadedImagePoaps(previousLoadedImages => ({

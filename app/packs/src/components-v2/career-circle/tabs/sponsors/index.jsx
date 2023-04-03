@@ -90,13 +90,13 @@ export const Sponsors = ({ currentUserId, railsContext }) => {
   const acceptSubscription = subscriber => {
     careerCircle
       .acceptSubscription(currentUserId, subscriber.id)
-      .then(({ data }) => {
-        toast.success(<ToastBody heading="Success!" body={"Subscription accepted!"} />);
+      .then(() => {
+        toast.success(<ToastBody heading="Success!" body={"Subscription accepted!"} />, { autoClose: 5000 });
         removePendingSubscriber(subscriber);
         addActiveSubscriber(subscriber);
       })
       .catch(() => {
-        toast.error(<ToastBody heading="Error!" body={"We were not able to accept the subscription."} />);
+        toast.error(<ToastBody heading="Error!" body={"We were not able to accept the subscription."} />, { autoClose: 5000 });
       });
   };
 
@@ -104,11 +104,11 @@ export const Sponsors = ({ currentUserId, railsContext }) => {
     careerCircle
       .destroySubscription(currentUserId, subscriber.id)
       .then(({ data }) => {
-        toast.success(<ToastBody heading="Success!" body={"Subscription rejected!"} />);
+        toast.success(<ToastBody heading="Success!" body={"Subscription rejected!"} />, { autoClose: 5000 });
         removePendingSubscriber(subscriber);
       })
       .catch(() => {
-        toast.error(<ToastBody heading="Error!" body={"We were not able to reject the subscription."} />);
+        toast.error(<ToastBody heading="Error!" body={"We were not able to reject the subscription."} />, { autoClose: 5000 });
       });
   };
 

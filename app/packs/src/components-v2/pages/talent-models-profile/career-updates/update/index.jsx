@@ -22,9 +22,9 @@ export const Update = ({ data, profile, isCurrentUserProfile }) => {
 
     post("/messages", { id: profile.user.uuid, message }).then(response => {
       if (response.error) {
-        toast.error(<ToastBody heading="Error!" body={response.error} />);
+        toast.error(<ToastBody heading="Error!" body={response.error} />, { autoClose: 5000 });
       } else {
-        toast.success(<ToastBody heading="Success!" body={"Your reply was sent!"} />);
+        toast.success(<ToastBody heading="Success!" body={"Your reply was sent!"} />, { autoClose: 5000 });
       }
     });
   };

@@ -197,7 +197,7 @@ const LaunchTokenModals = props => {
     changeTicker
   } = props;
 
-  const profileType = user.profile_type || user.profileType;
+  const profileType = user.profile_type;
   if (profileType !== "approved" && profileType !== "talent") {
     window.location.href = "edit_profile";
     return;
@@ -252,12 +252,11 @@ const LaunchTokenModals = props => {
           setContractId(contractAddress.toLowerCase());
           changeSharedState(prev => ({
             ...prev,
-            totalSupply: response.total_supply,
+            total_supply: response.total_supply,
             talentToken: {
-              ...prev.talentToken,
+              ...prev.talent_token,
               contract_id: contractAddress.toLowerCase(),
-              contractId: contractAddress.toLowerCase(),
-              chainId: response.token.chain_id,
+              chain_id: response.token.chain_id,
               deployed: true
             }
           }));
@@ -320,8 +319,8 @@ const LaunchTokenModals = props => {
       if (!response.error) {
         changeSharedState(prev => ({
           ...prev,
-          talentToken: {
-            ...prev.talentToken,
+          talent_token: {
+            ...prev.talent_token,
             ticker
           }
         }));
