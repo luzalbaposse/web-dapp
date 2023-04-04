@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext } from "react";
+import { toggleTheme as toggleDSTheme } from "@talentprotocol/design-system";
 
 import { patch } from "src/utils/requests";
 
@@ -27,6 +28,7 @@ const ThemeContainer = ({ user, children }) => {
     await patch(`/api/v1/users/${user.id}`, {
       user: { theme_preference: newTheme }
     });
+    toggleDSTheme();
 
     document.body.className = `${newTheme}-body`;
 
