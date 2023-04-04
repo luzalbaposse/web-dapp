@@ -81,13 +81,22 @@ module Talents
           supporter_wallet_id: supporter.supporter.id
         )
 
-        talent_supporter.update!(
-          amount: supporter.amount,
-          tal_amount: supporter.tal_amount,
-          last_time_bought_at: Time.at(supporter.last_time_bought_at.to_i),
-          first_time_bought_at: Time.at(supporter.first_time_bought_at.to_i),
-          synced_at: Time.zone.now
-        )
+        if talent_supporter.first_time_bought_at
+          talent_supporter.update!(
+            amount: supporter.amount,
+            tal_amount: supporter.tal_amount,
+            last_time_bought_at: Time.at(supporter.last_time_bought_at.to_i),
+            synced_at: Time.zone.now
+          )
+        else
+          talent_supporter.update!(
+            amount: supporter.amount,
+            tal_amount: supporter.tal_amount,
+            last_time_bought_at: Time.at(supporter.last_time_bought_at.to_i),
+            first_time_bought_at: Time.at(supporter.first_time_bought_at.to_i),
+            synced_at: Time.zone.now
+          )
+        end
 
         user_supporter = User.find_by(wallet_id: supporter.supporter.id)
         upsert_connections(user_supporter) if user_supporter && user.id != user_supporter.id

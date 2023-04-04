@@ -53,7 +53,7 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
       goals?.map(goal => ({
         ...goal,
         category: "Goal",
-        startDate: goal.due_date
+        start_date: goal.due_date
       })),
       milestones
     );
@@ -279,7 +279,7 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
                             <TalentProfilePicture
                               className="position-relative"
                               style={{ borderRadius: "24px" }}
-                              src={image.imageUrl}
+                              src={image.image_url}
                               straight
                               height={176}
                               width={225}
