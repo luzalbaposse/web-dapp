@@ -44,6 +44,10 @@ const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
   }, []);
 
   useEffect(() => {
+    if (profileSubdomain) {
+      fetchProfile(window.location.hostname).then(() => setIsLoading(false));
+      return;
+    }
     if (typeof window === "undefined") return;
     const username = window.location.href.split("/u/")[1].split("/profile")[0];
     fetchProfile(username).then(() => setIsLoading(false));

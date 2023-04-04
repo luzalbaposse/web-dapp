@@ -27,6 +27,12 @@ class ProfilesController < ApplicationController
   private
 
   def user
-    @user ||= User.find_by!("username=? or wallet_id=? or ens_domain=?", params[:username], params[:username].downcase, params[:username])
+    @user ||= begin
+      user = User.find_by("username=? or wallet_id=?", params[:username], params[:username].downcase)
+      return user if user.present?
+
+      user_domain = UserDomain.find_by!(domain: params[:username], tal_domain: true)
+      user_domain.user
+    end
   end
 end

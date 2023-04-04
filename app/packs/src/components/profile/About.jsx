@@ -27,7 +27,7 @@ const About = ({ className, profile, setProfile, canUpdate, previewMode }) => {
 
   const careerGoal = profile?.career_goal;
 
-  const imageSrc = careerGoal?.imageUrl || AboutImage;
+  const imageSrc = careerGoal?.image_url || AboutImage;
 
   const uppyBanner = new Uppy({
     meta: { type: "avatar" },
