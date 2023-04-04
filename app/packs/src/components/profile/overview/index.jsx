@@ -164,7 +164,7 @@ const Overview = ({
 
   const deleteBannerImg = () => {
     saveProfile({
-      ...talent,
+      ...profile,
       banner_url: null,
       banner_data: null
     });
@@ -178,7 +178,7 @@ const Overview = ({
       setIsUploadingProfile(false);
       setIsUploadingBanner(false);
       saveProfile({
-        ...talent,
+        ...profile,
         profile_picture_url: response.uploadURL,
         profile_picture_data: {
           new_upload: true,
@@ -204,7 +204,7 @@ const Overview = ({
       setIsUploadingProfile(false);
       setIsUploadingBanner(false);
       saveProfile({
-        ...talent,
+        ...profile,
         banner_url: response.uploadURL,
         banner_data: {
           // eslint-disable-next-line no-useless-escape
