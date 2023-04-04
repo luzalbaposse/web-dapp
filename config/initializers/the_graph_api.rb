@@ -47,7 +47,7 @@ module TheGraphAPI
   end
 
   module Polygon
-    HTTP = GraphQL::Client::HTTP.new("https://api.thegraph.com/subgraphs/name/talent-protocol/polygon-prod") do
+    HTTP = GraphQL::Client::HTTP.new("https://api.thegraph.com/subgraphs/name/talent-protocol/polygon-prod-v3") do
       def headers(context)
         {"User-Agent": "Talent Protocol"}
       end
