@@ -587,4 +587,20 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe "#pending_subscribers" do
+    let(:user_1) { create :user }
+    let(:user_2) { create :user }
+    let(:user_3) { create :user }
+
+    before do
+      create :pending_subscription, user: user_1, subscriber: user_2
+      create :subscription, user: user_1, subscriber: user_3
+      create :pending_subscription, user: user_2, subscriber: user_3
+    end
+
+    it "only returns users pending a subscription" do
+      expect(user_1.pending_subscribers).to eq [user_2]
+    end
+  end
 end

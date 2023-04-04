@@ -26,8 +26,7 @@ class API::V1::PublicAPI::SubscriptionsController < API::V1::PublicAPI::APIContr
   def pending_subscribers
     return not_found unless user
 
-    pending_subscriptions = user.pending_subscriptions
-    pending_subscribers = User.where(id: pending_subscriptions.pluck(:subscriber_id))
+    pending_subscribers = user.pending_subscribers
 
     pagy, subscribers = pagy_uuid_cursor(
       pending_subscribers,
