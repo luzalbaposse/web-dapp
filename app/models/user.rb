@@ -174,6 +174,10 @@ class User < ApplicationRecord
     onboarded_at.present?
   end
 
+  def pending_subscribers
+    User.where(id: pending_subscriptions.pluck(:subscriber_id))
+  end
+
   def portfolio(including_self: true, invested_after: nil)
     return User.none unless wallet_id
 
