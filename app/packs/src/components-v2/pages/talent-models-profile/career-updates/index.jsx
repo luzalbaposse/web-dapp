@@ -28,7 +28,13 @@ export const CareerUpdates = ({ profile, isCurrentUserProfile, railsContext }) =
       return <CareerUpdateLockedState profile={profile} />;
     }
     if (!careerUpdates.length) {
-      return <CareerUpdateEmptyState profile={profile} />;
+      return (
+        <CareerUpdateEmptyState
+          profile={profile}
+          isCurrentUserProfile={isCurrentUserProfile}
+          contractsEnv={railsContext}
+        />
+      );
     }
     return (
       <>
@@ -60,6 +66,14 @@ export const CareerUpdates = ({ profile, isCurrentUserProfile, railsContext }) =
         ))}
       </>
     );
-  }, [careerUpdates, profile, isLocked, isSendCareerUpdateModalOpen, setShowCareerUpdateModal, railsContext, isCurrentUserProfile]);
+  }, [
+    careerUpdates,
+    profile,
+    isLocked,
+    isSendCareerUpdateModalOpen,
+    setShowCareerUpdateModal,
+    railsContext,
+    isCurrentUserProfile
+  ]);
   return <Container>{isLoading ? <Spinner /> : RenderedContent}</Container>;
 };
