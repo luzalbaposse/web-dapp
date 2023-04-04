@@ -24,7 +24,7 @@ module PublicAPIRoutes
 
           # API non authenticated endpoints
           resources :portfolio_supporters, only: [:index]
-          resources :talent, only: [:show]
+          resources :talent, only: [:show, :index]
           get "/public_talent" => "talent#public_index"
 
           resource :username, only: [] do
