@@ -68,6 +68,7 @@ const Chat = ({ chats, pagination }) => {
     setMessages([]);
 
     get(`messages/${activeUserUsername}`).then(response => {
+      setLocalChats(previousChats => updateChats(previousChats, response.readChat));
       setMessages(response.messages);
       setLastMessageId(response.messages[response.messages.length - 1]?.id);
       setChatId(response.chat_id || "");

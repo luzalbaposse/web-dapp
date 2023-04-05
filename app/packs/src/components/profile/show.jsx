@@ -69,7 +69,9 @@ const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
 
   useEffect(() => {
     if (selectedSection) {
-      const scrollDiv = document.getElementById(selectedSection).offsetTop;
+      const element = document.getElementById(selectedSection);
+      if (!element) return;
+      const scrollDiv = element.offsetTop;
       window.scrollTo({ top: scrollDiv - 70, behavior: "smooth" });
       window.history.replaceState({}, document.title, `${user.username}${selectedSection}`);
     }
@@ -103,7 +105,7 @@ const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
     return (
       <div
         className="d-flex flex-column align-items-center align-content-center"
-        style={{ "min-height": "400px", marginTop: "200px" }}
+        style={{ minHeight: "400px", marginTop: "200px" }}
       >
         <Spinner />
       </div>
