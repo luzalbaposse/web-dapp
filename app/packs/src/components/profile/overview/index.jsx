@@ -524,7 +524,7 @@ const Overview = ({
                       onClick={() => setShowAdminVerificationConfirmationModal(true)}
                     />
                   )}
-                  {user.profileType == "waiting_for_approval" && (
+                  {user.profile_type == "waiting_for_approval" && (
                     <>
                       <Button
                         type="primary-default"
@@ -567,7 +567,7 @@ const Overview = ({
                         onClick={() => setShowAdminVerificationConfirmationModal(true)}
                       />
                     )}
-                    {user.profileType == "waiting_for_approval" && (
+                    {user.profile_type == "waiting_for_approval" && (
                       <>
                         <Button
                           className="mr-2"
