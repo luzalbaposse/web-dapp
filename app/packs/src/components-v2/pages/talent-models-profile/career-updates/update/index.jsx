@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Avatar, Button, Input, Typography } from "@talentprotocol/design-system";
 import dayjs from "dayjs";
-import { AvatarHeader, Container, ReplyArea } from "./styled";
+import { AvatarHeader, Container, ReplyArea, StyledUpdateContent } from "./styled";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { post } from "src/utils/requests";
 
@@ -42,9 +42,9 @@ export const Update = ({ data, profile, isCurrentUserProfile }) => {
           {dayjs(data.created_at).format("MMM D, YYYY, h:mm A")}
         </Typography>
       </AvatarHeader>
-      <Typography specs={{ variant: "p2", type: "regular" }} color="primary04">
+      <StyledUpdateContent specs={{ variant: "p2", type: "regular" }} color="primary04">
         {data.message}
-      </Typography>
+      </StyledUpdateContent>
       {!isCurrentUserProfile && (
         <ReplyArea>
           <Input
