@@ -93,7 +93,7 @@ const SearchDropdown = ({ className }) => {
                 <>
                   <div className="mb-4">
                     {talents.map(talent => (
-                      <TalentDropdownItem talent={talent} />
+                      <TalentDropdownItem talent={talent} key={talent.id} />
                     ))}
                   </div>
                   {showLoadMoreTalents && <LoadMore onClick={fetchMoreTalents} />}
@@ -118,7 +118,7 @@ const SearchDropdown = ({ className }) => {
           <>
             <div className="search-dropdown-results">
               {talents.map(talent => (
-                <TalentDropdownItem talent={talent} />
+                <TalentDropdownItem talent={talent} key={talent.id} />
               ))}
             </div>
             {showLoadMoreTalents && <LoadMore onClick={fetchMoreTalents} />}

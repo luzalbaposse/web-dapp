@@ -1,4 +1,4 @@
-import { buildColor, desktopStyles, mobileStyles } from "@talentprotocol/design-system";
+import { Typography, buildColor, desktopStyles, mobileStyles } from "@talentprotocol/design-system";
 import styled, { css } from "styled-components";
 
 export const Container = styled.div`
@@ -31,4 +31,8 @@ export const ReplyArea = styled.div`
   display: flex;
   align-items: flex-end;
   gap: 16px;
+`;
+
+export const StyledUpdateContent = styled(Typography)`
+  white-space: pre-line;
 `;
