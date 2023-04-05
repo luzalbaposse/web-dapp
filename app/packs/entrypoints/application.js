@@ -47,6 +47,7 @@ import ForgotPasswordPage from "src/components-v2/pages/forgot-password";
 import SetPasswordPage from "src/components-v2/pages/set-password";
 import TalentModelsProfilePage from "src/components-v2/pages/talent-models-profile";
 import CareerCirclePage from "src/components-v2/pages/career-circle";
+import HomepagePage from "../src/components-v2/pages/homepage";
 
 import "stylesheets/application.scss";
 
@@ -86,7 +87,8 @@ ReactOnRails.register({
   ForgotPasswordPage,
   SetPasswordPage,
   TalentModelsProfilePage,
-  CareerCirclePage
+  CareerCirclePage,
+  HomepagePage
 });
 
 Rails.start();

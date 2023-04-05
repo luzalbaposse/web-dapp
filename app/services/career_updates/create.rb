@@ -11,6 +11,10 @@ module CareerUpdates
       career_update.reload
     end
 
+    def highlighted
+      CareerUpdate.order("RANDOM()").limit(5)
+    end
+
     private
 
     attr_reader :sender, :message

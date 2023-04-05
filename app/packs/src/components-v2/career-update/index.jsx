@@ -12,7 +12,7 @@ import debounce from "lodash/debounce";
 
 dayjs.extend(customParseFormat);
 
-export const Update = ({ data, profile, isCurrentUserProfile }) => {
+export const CareerUpdate = ({ data, profile, isCurrentUserProfile }) => {
   const [message, setMessage] = useState("");
 
   const sendNewMessage = () => {
