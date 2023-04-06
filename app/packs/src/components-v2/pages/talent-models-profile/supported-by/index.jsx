@@ -38,7 +38,7 @@ export const SupportedBy = ({ profile }) => {
         <>
           <TitleContainer>
             <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
-              {profile.user.legal_first_name} is supported by {totalSupporters - 1} people
+              {profile.user.legal_first_name} is supported by {totalSupporters} people
             </Typography>
           </TitleContainer>
           <ListContainer>{SupporterList}</ListContainer>
