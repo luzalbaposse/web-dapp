@@ -14,7 +14,7 @@ import cx from "classnames";
 
 import LaunchTokenModals from "../talent/Edit/LaunchTokenModals";
 
-const LaunchToken = ({ talent, railsContext, setLocalTalent, canUpdate }) => {
+const LaunchToken = ({ talent, railsContext, setProfile, canUpdate }) => {
   const { mobile } = useWindowDimensionsHook();
   const { mode } = useTheme();
   const talentToken = talent.talent_token;
@@ -37,7 +37,7 @@ const LaunchToken = ({ talent, railsContext, setLocalTalent, canUpdate }) => {
         <LaunchTokenModals
           show={show}
           setShow={setShow}
-          changeSharedState={setLocalTalent}
+          changeSharedState={setProfile}
           mode={mode()}
           talent={talent}
           talentToken={talentToken}
