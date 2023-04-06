@@ -11,7 +11,7 @@ import { white, lightTextPrimary01 } from "src/utils/colors.js";
 
 import cx from "classnames";
 
-const ApplyToLaunchToken = ({ talent, waitingApproval, setLocalTalent, canUpdate }) => {
+const ApplyToLaunchToken = ({ talent, waitingApproval, setProfile, canUpdate }) => {
   const { mobile } = useWindowDimensionsHook();
   const { mode } = useTheme();
 
@@ -28,7 +28,7 @@ const ApplyToLaunchToken = ({ talent, waitingApproval, setLocalTalent, canUpdate
     });
 
     if (response && !response.error) {
-      setLocalTalent(prev => ({
+      setProfile(prev => ({
         ...prev,
         user: { ...prev.user, profileType: response.user.profile_type }
       }));
