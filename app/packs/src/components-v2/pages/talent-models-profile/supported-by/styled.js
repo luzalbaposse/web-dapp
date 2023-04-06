@@ -13,12 +13,15 @@ export const Container = styled.section`
       display: none;
     `}
 
-  ${mobileStyles(css`
-    border-bottom: 1px solid ${buildColor("surfaceHover02")};
-  `)}
+    ${mobileStyles(css`
+      border-bottom: 1px solid ${buildColor("surfaceHover02")};
+    `)}
+  
 
   ${desktopStyles(css`
     width: 100%;
+    max-height: 560px;
+    overflow: hidden;
     max-width: 456px;
     padding: 24px;
     border: 1px solid ${buildColor("surfaceHover02")};
@@ -27,8 +30,19 @@ export const Container = styled.section`
 `;
 
 export const TitleContainer = styled.div`
-  max-width: 327px;
-  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  text-align: left;
+  gap: 52px;
+
+  span {
+    display: block;
+    display: flex;
+    a {
+      white-space: nowrap;
+    }
+  }
 
   ${desktopStyles(css`
     margin: 0;

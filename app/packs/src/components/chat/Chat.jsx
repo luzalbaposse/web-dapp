@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import debounce from "lodash/debounce";
 import { loggedInUserStore } from "src/contexts/state";
 
@@ -202,7 +202,7 @@ const Chat = ({ chats, pagination }) => {
     });
   };
 
-  const debouncedSearchChats = debounce(searchChats, 300);
+  const debouncedSearchChats = useCallback(debounce(searchChats, 300), []);
 
   return (
     <>

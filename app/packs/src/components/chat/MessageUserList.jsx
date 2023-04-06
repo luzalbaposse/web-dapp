@@ -138,7 +138,6 @@ const MessageUserList = ({
             <TextInput
               disabled={chats.length == 0 && searchValue.length == 0}
               onChange={e => searchChats(e.target.value)}
-              value={searchValue}
               placeholder="Search in messages..."
               inputClassName="pl-5"
               className="w-100"

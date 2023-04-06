@@ -22,7 +22,7 @@ import Perks from "./Perks";
 import SocialGraph from "./social_graph/SocialGraph";
 
 const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
-  const [selectedSection, setSelectedSection] = useState(window.location.hash);
+  const [selectedSection, setSelectedSection] = useState("");
   const [showLastDivider, setShowLastDivider] = useState(false);
   const [previewMode, setPreviewMode] = useState(false);
   const talentTokenPrice = 0.1;
@@ -41,8 +41,12 @@ const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
     if (!currentUser) {
       fetchCurrentUser();
     }
+    if (typeof window === "undefined") return;
+    setTimeout(() => {
+      setSelectedSection(window.location.hash);
+    }, 800);
   }, []);
-
+  
   useEffect(() => {
     if (profileSubdomain) {
       fetchProfile(window.location.hostname).then(() => setIsLoading(false));
