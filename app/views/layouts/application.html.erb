@@ -28,7 +28,7 @@
           <%= render "shared/navbar" %>
           <%= yield %>
         </div>
-        <%= render "shared/footer" %>
+        <%= render "shared/footer" unless current_page?(controller: 'messages') %>
       </div>
     </body>
   <% else %>

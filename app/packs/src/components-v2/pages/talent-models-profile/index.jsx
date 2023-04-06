@@ -48,6 +48,7 @@ export const TalentModelsProfilePage = props => {
               <SupportedBy profile={profile} />
               <CareerUpdates
                 profile={profile}
+                setProfile={setProfile}
                 isCurrentUserProfile={isCurrentUserProfile}
                 railsContext={props.railsContext}
               />

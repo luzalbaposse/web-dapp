@@ -26,12 +26,12 @@ export const CareerUpdateEmptyState = ({ profile, isCurrentUserProfile, railsCon
         )}
       </TextColumn>
       {isCurrentUserProfile ? (
-          <SendCareerUpdateModal
-            show={isSendCareerUpdateModalOpen}
-            hide={() => setShowCareerUpdateModal(false)}
-            placeholder={`What's new in your career ${profile.user.name}?`}
-            contractsEnv={railsContext}
-          />
+        <SendCareerUpdateModal
+          show={isSendCareerUpdateModalOpen}
+          hide={() => setShowCareerUpdateModal(false)}
+          placeholder={`What's new in your career ${profile.user.name}?`}
+          contractsEnv={railsContext}
+        />
       ) : (
         <Button
           hierarchy="primary"

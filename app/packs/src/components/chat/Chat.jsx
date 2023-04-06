@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import debounce from "lodash/debounce";
 import { loggedInUserStore } from "src/contexts/state";
 
@@ -202,11 +202,11 @@ const Chat = ({ chats, pagination }) => {
     });
   };
 
-  const debouncedSearchChats = debounce(searchChats, 300);
+  const debouncedSearchChats = useCallback(debounce(searchChats, 300), []);
 
   return (
     <>
-      <div className="d-flex flex-column w-100 h-100 themed-border-top">
+      <div className="d-flex flex-column w-100 themed-border-top" style={{ height: "100vh", paddingTop: "66px" }}>
         <main className="d-flex flex-row h-100 themed-border-left chat-container">
           {(!mobile || !activeUserUsername) && (
             <section className="col-lg-4 mx-auto mx-lg-0 px-0 d-flex flex-column themed-border-right chat-section">

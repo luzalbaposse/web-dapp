@@ -43,7 +43,7 @@ const SendMessage = ({ mode, setMessage, amountBought, ticker, talentName, hide,
         mode={mode}
         onChange={e => setMessage(e.target.value)}
         placeholder={`Share something with ${talentName}`}
-        className="w-100 mr-2 py-3"
+        className="w-100 py-3"
         rows="5"
       />
 
