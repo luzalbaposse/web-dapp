@@ -8,6 +8,7 @@ import { GmHeader } from "../../gm-header";
 import { CompleteProfileWidget } from "../../complete-profile-widget";
 import { QuestsWidget } from "../../quests-widget";
 import { MyWalletWidget } from "../../my-wallet-widget";
+import { LeadderboradWidget } from "../../leadderboard-widget";
 
 export const HomepagePage = ({}) => {
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
@@ -27,6 +28,7 @@ export const HomepagePage = ({}) => {
         <QuickNavigator />
         <MyWalletWidget />
         <ActivityWidget />
+        <LeadderboradWidget />
       </Container>
     </TalentThemeProvider>
   );
