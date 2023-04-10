@@ -13,6 +13,7 @@ import ThemedButton from "src/components/design_system/button";
 import { P2, P3 } from "src/components/design_system/typography";
 import TextInput from "src/components/design_system/fields/textinput";
 import { NewChat, Search } from "src/components/icons";
+import { buildColor } from "@talentprotocol/design-system";
 
 const lastMessageText = lastMessage => {
   if (lastMessage) {
@@ -131,13 +132,12 @@ const MessageUserList = ({
         setShow={setShowNewMessageToAllSupporters}
         mobile={mobile}
       />
-      <div className="d-flex flex-column align-items-stretch lg-h-100">
+      <div className="d-flex flex-column align-items-stretch" style={{ paddingBottom: "32px" }}>
         <div className="w-100 d-flex flex-row themed-border-bottom align-items-center py-4 pl-6 pr-6">
           <div className="position-relative w-100">
             <TextInput
               disabled={chats.length == 0 && searchValue.length == 0}
               onChange={e => searchChats(e.target.value)}
-              value={searchValue}
               placeholder="Search in messages..."
               inputClassName="pl-5"
               className="w-100"
@@ -166,7 +166,17 @@ const MessageUserList = ({
             />
           ))}
           {showLoadMoreChats && (
-            <ThemedButton onClick={() => loadMoreChats()} type="white-subtle" mode={mode} className="mx-6 mt-4">
+            <ThemedButton
+              onClick={() => loadMoreChats()}
+              type="white-subtle"
+              mode={mode}
+              style={{
+                margin: "auto",
+                boxShadow: "0px 0px 16px #000",
+                marginTop: "32px",
+                boxShadow: `0px 0px 0px 3px ${buildColor("primaryTint02")};`
+              }}
+            >
               Load more
             </ThemedButton>
           )}

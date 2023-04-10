@@ -26,7 +26,11 @@ class API::V1::PublicAPI::CareerUpdatesController < API::V1::PublicAPI::APIContr
   end
 
   def highlighted
-    response_body = CareerUpdate.joins(:user).select("users.username, career_updates.*").order("RANDOM()").limit(5)
+    # some_data = CareerUpdate.joins(:users).order("RANDOM()").limit(5)
+    # response_body = CareerUpdateBlueprint.
+
+    # .select("users.username, career_updates.*").order("RANDOM()").limit(5)
+    # cenas = CareerUpdateBlueprint.render_as_json(response_body, view: :normal)
 
     render json: response_body, status: :ok
   end

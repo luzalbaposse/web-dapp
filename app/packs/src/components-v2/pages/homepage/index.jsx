@@ -3,8 +3,12 @@ import { TalentThemeProvider } from "@talentprotocol/design-system";
 import { Container } from "./styled";
 import { loggedInUserStore } from "src/contexts/state";
 import { ActivityWidget } from "../../activity-widget";
+import { QuickNavigator } from "../../quick-navigator";
+import { GmHeader } from "../../gm-header";
+import { CompleteProfileWidget } from "../../complete-profile-widget";
+import { QuestsWidget } from "../../quests-widget";
 
-export const HomepagePage = ({ }) => {
+export const HomepagePage = ({}) => {
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
 
   useEffect(() => {
@@ -16,6 +20,10 @@ export const HomepagePage = ({ }) => {
   return (
     <TalentThemeProvider>
       <Container>
+        <GmHeader profile={currentUser} />
+        <CompleteProfileWidget />
+        <QuestsWidget />
+        <QuickNavigator />
         <ActivityWidget />
       </Container>
     </TalentThemeProvider>

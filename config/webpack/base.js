@@ -23,7 +23,18 @@ const customConfig = {
       Buffer: ["buffer", "Buffer"],
       process: "process/browser.js"
     })
-  ]
+  ],
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendor",
+          chunks: "all"
+        }
+      }
+    }
+  }
 };
 
 module.exports = merge(webpackConfig, customConfig);

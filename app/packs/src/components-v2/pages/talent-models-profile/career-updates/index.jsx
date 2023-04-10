@@ -8,7 +8,7 @@ import { CareerUpdateLockedState } from "./locked-state";
 import SendCareerUpdateModal from "../../../../components/profile/SendCareerUpdateModal";
 import TextInput from "src/components/design_system/fields/textinput";
 
-export const CareerUpdates = ({ profile, isCurrentUserProfile, railsContext }) => {
+export const CareerUpdates = ({ profile, isCurrentUserProfile, railsContext, setProfile }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLocked, setIsLocked] = useState(false);
   const [isSendCareerUpdateModalOpen, setShowCareerUpdateModal] = useState(false);
@@ -25,7 +25,7 @@ export const CareerUpdates = ({ profile, isCurrentUserProfile, railsContext }) =
   }, [fetchCareerUpdates, profile]);
   const RenderedContent = useMemo(() => {
     if (isLocked) {
-      return <CareerUpdateLockedState profile={profile} />;
+      return <CareerUpdateLockedState profile={profile} setProfile={setProfile} />;
     }
     if (!careerUpdates.length) {
       return (
@@ -62,7 +62,12 @@ export const CareerUpdates = ({ profile, isCurrentUserProfile, railsContext }) =
           )}
         </InputContainer>
         {careerUpdates.map(update => (
-          <CareerUpdate key={update.created_at} data={update} profile={profile} isCurrentUserProfile={isCurrentUserProfile} />
+          <CareerUpdate
+            key={update.created_at}
+            data={update}
+            profile={profile}
+            isCurrentUserProfile={isCurrentUserProfile}
+          />
         ))}
       </>
     );
@@ -73,7 +78,8 @@ export const CareerUpdates = ({ profile, isCurrentUserProfile, railsContext }) =
     isSendCareerUpdateModalOpen,
     setShowCareerUpdateModal,
     railsContext,
-    isCurrentUserProfile
+    isCurrentUserProfile,
+    setProfile
   ]);
   return <Container>{isLoading ? <Spinner /> : RenderedContent}</Container>;
 };

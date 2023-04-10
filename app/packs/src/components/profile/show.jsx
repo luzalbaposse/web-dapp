@@ -22,7 +22,7 @@ import Perks from "./Perks";
 import SocialGraph from "./social_graph/SocialGraph";
 
 const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
-  const [selectedSection, setSelectedSection] = useState(window.location.hash);
+  const [selectedSection, setSelectedSection] = useState("");
   const [showLastDivider, setShowLastDivider] = useState(false);
   const [previewMode, setPreviewMode] = useState(false);
   const talentTokenPrice = 0.1;
@@ -41,6 +41,10 @@ const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
     if (!currentUser) {
       fetchCurrentUser();
     }
+    if (typeof window === "undefined") return;
+    setTimeout(() => {
+      setSelectedSection(window.location.hash);
+    }, 800);
   }, []);
 
   useEffect(() => {
@@ -69,7 +73,9 @@ const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
 
   useEffect(() => {
     if (selectedSection) {
-      const scrollDiv = document.getElementById(selectedSection).offsetTop;
+      const element = document.getElementById(selectedSection);
+      if (!element) return;
+      const scrollDiv = element.offsetTop;
       window.scrollTo({ top: scrollDiv - 70, behavior: "smooth" });
       window.history.replaceState({}, document.title, `${user.username}${selectedSection}`);
     }
@@ -103,7 +109,7 @@ const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
     return (
       <div
         className="d-flex flex-column align-items-center align-content-center"
-        style={{ "min-height": "400px", marginTop: "200px" }}
+        style={{ minHeight: "400px", marginTop: "200px" }}
       >
         <Spinner />
       </div>

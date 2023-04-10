@@ -97,12 +97,12 @@ const MessageExchange = props => {
   };
 
   return (
-    <div className="d-flex flex-column lg-h-100 display-messages">
+    <div className="d-flex flex-column display-messages" style={{ height: "100%", paddingBottom: "16px" }}>
       {props.smallScreen && (
         <>
           <div className="d-flex flex-row align-items-center w-100 py-2">
             <ThemedButton
-              onClick={() => props.clearActiveUserId()}
+              onClick={() => props.clearActiveUserUsername()}
               type="white-ghost"
               size="icon"
               mode={mode}
@@ -150,7 +150,7 @@ const MessageExchange = props => {
         ))}
       </div>
       {props.activeUserUsername !== "" && (
-        <div className="d-flex flex-row w-100 p-2">
+        <div className="d-flex flex-row w-100 p-2" style={{ padding: "0 16px" }}>
           <TextArea
             mode={mode}
             disabled={

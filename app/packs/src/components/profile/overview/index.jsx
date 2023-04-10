@@ -207,6 +207,7 @@ const Overview = ({
         ...profile,
         banner_url: response.uploadURL,
         banner_data: {
+          new_upload: true,
           // eslint-disable-next-line no-useless-escape
           id: response.uploadURL.match(/\/cache\/([^\?]+)/)[1], // extract key without prefix
           storage: "cache",
@@ -524,7 +525,7 @@ const Overview = ({
                       onClick={() => setShowAdminVerificationConfirmationModal(true)}
                     />
                   )}
-                  {user.profileType == "waiting_for_approval" && (
+                  {user.profile_type == "waiting_for_approval" && (
                     <>
                       <Button
                         type="primary-default"
@@ -567,7 +568,7 @@ const Overview = ({
                         onClick={() => setShowAdminVerificationConfirmationModal(true)}
                       />
                     )}
-                    {user.profileType == "waiting_for_approval" && (
+                    {user.profile_type == "waiting_for_approval" && (
                       <>
                         <Button
                           className="mr-2"

@@ -71,11 +71,9 @@ export const SubscribeModel = ({ profile, setProfile, isCurrentUserProfile }) =>
           hierarchy="secondary"
           size="large"
           isStretched
-          leftIcon="check-chat"
-          iconColor="primary01"
           text={subscriptionButtonText[profile.subscribing_status]}
           onClick={updateSubscription}
-          isDisabled
+          isDisabled={isCurrentUserProfile}
         />
       )}
       {profile.subscribing_status === "unsubscribed" && (

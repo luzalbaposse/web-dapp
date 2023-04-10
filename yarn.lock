@@ -2289,10 +2289,10 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
-"@talentprotocol/design-system@^0.0.76":
-  version "0.0.76"
-  resolved "https://registry.yarnpkg.com/@talentprotocol/design-system/-/design-system-0.0.76.tgz#b483e82703c56c1cdaafce26bd06e9641ef5bb88"
-  integrity sha512-AnXxMEF4f0rHIEldf1NvxWSt/Eo1v/eq7Jf7SXtcrV+66/ja1fsRX27SBxkf+bzrgD2Gfk1lWjiQRQv/6Eg58A==
+"@talentprotocol/design-system@^0.0.77":
+  version "0.0.77"
+  resolved "https://registry.yarnpkg.com/@talentprotocol/design-system/-/design-system-0.0.77.tgz#b076b718708eb9e2834ddf58fe5c870eb65c8dc5"
+  integrity sha512-ADydts/POcKfnnQGNoi7qw2mc6DNA8vxv3BlL42et415iyhjv+30gU4AOb6aw522dHNyTtSGDs2brUaevY+YKA==
 
 "@transak/transak-sdk@^1.0.30":
   version "1.0.31"
@@ -4503,9 +4503,9 @@ dns-equal@^1.0.0:
   integrity sha1-s55/HabrCnW6nBcySzR1PEfgZU0=
 
 dns-packet@^5.2.2:
-  version "5.3.1"
-  resolved "https://registry.yarnpkg.com/dns-packet/-/dns-packet-5.3.1.tgz#eb94413789daec0f0ebe2fcc230bdc9d7c91b43d"
-  integrity sha512-spBwIj0TK0Ey3666GwIdWVfUpLyubpU53BTCu8iPn4r4oXd9O14Hjg3EHw3ts2oed77/SeckunUYCyRlSngqHw==
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/dns-packet/-/dns-packet-5.5.0.tgz#f59cbf3396c130957c56a6ad5fd3959ccdc30065"
+  integrity sha512-USawdAUzRkV6xrqTjiAEp6M9YagZEzWcSUaZTcIFAiyQWW1SoI6KyId8y2+/71wbgHKQAKd+iupLv4YvEwYWvA==
   dependencies:
     "@leichtgewicht/ip-codec" "^2.0.1"
 
