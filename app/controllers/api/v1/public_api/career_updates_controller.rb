@@ -26,7 +26,7 @@ class API::V1::PublicAPI::CareerUpdatesController < API::V1::PublicAPI::APIContr
   end
 
   def highlighted
-    response_body = CareerUpdates.highlighted
+    response_body = CareerUpdate.joins(:user).select("users.username, career_updates.*").order("RANDOM()").limit(5)
 
     render json: response_body, status: :ok
   end

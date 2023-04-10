@@ -8,6 +8,7 @@ module PublicAPIRoutes
             resources :talents, only: [:show, :index]
             resources :supporters, only: [:index]
             resources :connections, only: [:index]
+            get "/career_updates/highlighted", to: "career_updates#highlighted"
             resources :career_updates, only: [:index, :create]
             resources :sponsorships, only: [:create]
             resources :sessions, only: [] do
