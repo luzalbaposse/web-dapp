@@ -32,7 +32,7 @@ export const SponsorModel = ({ isCurrentUserProfile, profile, railsContext }) =>
             }
           }}
           isDisabled
-          //isDisabled={isCurrentUserProfile}
+          // isDisabled={isCurrentUserProfile}
         />
       </Container>
     </>

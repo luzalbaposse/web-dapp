@@ -10,6 +10,8 @@ module PublicAPIRoutes
             resources :connections, only: [:index]
             resources :career_updates, only: [:index, :create]
             resources :sponsorships, only: [:create]
+            get "sponsorships", to: "sponsorships#index"
+            get "sponsors", to: "sponsorships#sponsors"
             resources :sessions, only: [] do
               get :logged_in_user, on: :collection
             end

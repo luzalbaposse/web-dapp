@@ -603,4 +603,30 @@ RSpec.describe User, type: :model do
       expect(user_1.pending_subscribers).to eq [user_2]
     end
   end
+
+  describe "#sponsors" do
+    let(:user) { create :user, wallet_id: wallet_id }
+    let(:wallet_id) { SecureRandom.hex }
+
+    let!(:sponsorship_one) { create :sponsorship, talent: wallet_id }
+    let!(:sponsorship_two) { create :sponsorship, sponsor: wallet_id }
+    let!(:sponsorship_three) { create :sponsorship, talent: wallet_id }
+
+    it "returns sponsorships where the user acted as a receiver" do
+      expect(user.sponsors).to match_array([sponsorship_one, sponsorship_three])
+    end
+  end
+
+  describe "#sponsorships" do
+    let(:user) { create :user, wallet_id: wallet_id }
+    let(:wallet_id) { SecureRandom.hex }
+
+    let!(:sponsorship_one) { create :sponsorship, sponsor: wallet_id }
+    let!(:sponsorship_two) { create :sponsorship, talent: wallet_id }
+    let!(:sponsorship_three) { create :sponsorship, sponsor: wallet_id }
+
+    it "returns sponsorships where the user acted as a receiver" do
+      expect(user.sponsorships).to match_array([sponsorship_one, sponsorship_three])
+    end
+  end
 end

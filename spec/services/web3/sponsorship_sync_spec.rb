@@ -1,71 +1,127 @@
 require "rails_helper"
 
 RSpec.describe Web3::SponsorshipSync do
+  subject(:sponsorship_sync) { described_class.new(tx_hash, chain_id) }
+  let(:tx_hash) { "0x9edaf3a5e15695457319969406024b59fd156a0b5433c4a5bbfe0444572b3561" }
+  let(:chain_id) { 44787 }
+
+  let(:block_by_hash_response_mock) do
+    {
+      "result" => {
+        "timestamp" => hex_timestamp
+      }
+    }
+  end
+  let(:hex_timestamp) { "0x642da1f1" }
+  let(:expected_timestamp_time) { Time.at(hex_timestamp.to_i(16)) }
+
   let(:eth_client_class) { Eth::Client }
   let(:provider) { instance_double(eth_client_class) }
-
-  subject(:sponsorship_sync) { described_class.new }
+  let(:eth_contract_class) { Eth::Contract }
+  let(:eth_contract) { instance_double(eth_contract_class) }
 
   before do
+    ENV["CELO_RPC_URL"] = "https://alfajores-forno.celo-testnet.org"
     allow(eth_client_class).to receive(:create).and_return(provider)
-    allow(provider).to receive(:eth_get_transaction_receipt).and_return(
-      {"jsonrpc" => "2.0",
-       "id" => 1,
-       "result" =>
-         {"blockHash" => "0x8c789dbe728f26f623dd234e0b9f24f5bf7a5ea36a40d07abee3b6ebd1843d1d",
-          "blockNumber" => "0xff6e1d",
-          "contractAddress" => nil,
-          "cumulativeGasUsed" => "0x24e513",
-          "from" => "0x33041027dd8f4dc82b6e825fb37adf8f15d44053",
-          "gasUsed" => "0x234e2",
-          "logs" =>
-           [{"address" => "0x874069fa1eb16d44d622f2e0ca25eea172369bc1",
-             "topics" => ["0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef", "0x00000000000000000000000033041027dd8f4dc82b6e825fb37adf8f15d44053", "0x000000000000000000000000fb32c3635fba97046e83804fb903254507ae32a4"],
-             "data" => "0x0000000000000000000000000000000000000000000000001bc16d674ec80000",
-             "blockNumber" => "0xff6e1d",
-             "transactionHash" => "0x9edaf3a5e15695457319969406024b59fd156a0b5433c4a5bbfe0444572b3561",
-             "transactionIndex" => "0x2",
-             "blockHash" => "0x8c789dbe728f26f623dd234e0b9f24f5bf7a5ea36a40d07abee3b6ebd1843d1d",
-             "logIndex" => "0x31",
-             "removed" => false},
-             {"address" => "0xfb32c3635fba97046e83804fb903254507ae32a4",
-              "topics" =>
-               ["0x731fa8c1fe722772dcb0c9b11e0a53af551dd3d2ac3f2c1e0892eee5d118e59d",
-                 "0x00000000000000000000000033041027dd8f4dc82b6e825fb37adf8f15d44053",
-                 "0x00000000000000000000000033041027dd8f4dc82b6e825fb37adf8f15d44053",
-                 "0x000000000000000000000000874069fa1eb16d44d622f2e0ca25eea172369bc1"],
-              "data" =>
-               "0x0000000000000000000000000000000000000000000000001bc16d674ec80000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000046355534400000000000000000000000000000000000000000000000000000000",
-              "blockNumber" => "0xff6e1d",
-              "transactionHash" => "0x9edaf3a5e15695457319969406024b59fd156a0b5433c4a5bbfe0444572b3561",
-              "transactionIndex" => "0x2",
-              "blockHash" => "0x8c789dbe728f26f623dd234e0b9f24f5bf7a5ea36a40d07abee3b6ebd1843d1d",
-              "logIndex" => "0x32",
-              "removed" => false}],
-          "logsBloom" =>
-           "0x00000000000000000000000004000000000000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000000400000100000000000000008000000000000000000000000000000000000000000040000000001000000000010000000000000000800000040000000000000000000400000000000000000000000000000000000000000004000000000000000020000000000000000000000000000800000000006000000000800000000000000000000000000000000001000000000000000000000080000000000000000000000000000000000020000000000000000",
-          "status" => "0x1",
-          "to" => "0xfb32c3635fba97046e83804fb903254507ae32a4",
-          "transactionHash" => "0x9edaf3a5e15695457319969406024b59fd156a0b5433c4a5bbfe0444572b3561",
-          "transactionIndex" => "0x2",
-          "type" => "0x2"}}
-    )
+    allow(provider).to receive(:eth_get_transaction_receipt).and_return(transaction_receipt)
+    allow(provider).to receive(:eth_get_block_by_hash).and_return(block_by_hash_response_mock)
     allow(provider).to receive(:chain_id).and_return(44787)
+    allow(Rollbar).to receive(:error)
   end
 
-  it "creates a new daily record with the correct arguments" do
-    sponsorship_sync.call("0x9edaf3a5e15695457319969406024b59fd156a0b5433c4a5bbfe0444572b3561")
+  let(:block_hash) { transaction_receipt["result"]["blockHash"] }
 
-    sponsorship = Sponsorship.last
+  context "when the transaction receipt has a sponsor created event" do
+    let(:transaction_receipt) { JSON.parse(file_fixture("talent_sponsorship/sponsor_created_transaction_receipt.json").read) }
 
-    aggregate_failures do
-      expect(sponsorship.sponsor).to eq "0x33041027dd8f4dc82b6e825fb37adf8f15d44053"
-      expect(sponsorship.talent).to eq "0x33041027dd8f4dc82b6e825fb37adf8f15d44053"
-      expect(sponsorship.amount).to eq 2000000000000000000
-      expect(sponsorship.token).to eq "0x874069fa1eb16d44d622f2e0ca25eea172369bc1"
-      expect(sponsorship.symbol).to eq "cUSD"
-      expect(sponsorship.tx_hash).to eq "0x9edaf3a5e15695457319969406024b59fd156a0b5433c4a5bbfe0444572b3561"
-      expect(sponsorship.chain_id).to eq 44787
+    it "creates a new daily record with the correct arguments" do
+      sponsorship_sync.call
+
+      sponsorship = Sponsorship.last
+
+      aggregate_failures do
+        expect(sponsorship.sponsor).to eq "0x33041027dd8f4dc82b6e825fb37adf8f15d44053"
+        expect(sponsorship.talent).to eq "0x33041027dd8f4dc82b6e825fb37adf8f15d44053"
+        expect(sponsorship.amount).to eq 2000000000000000000
+        expect(sponsorship.token).to eq "0x874069fa1eb16d44d622f2e0ca25eea172369bc1"
+        expect(sponsorship.symbol).to eq "cUSD"
+        expect(sponsorship.chain_id).to eq 44787
+        expect(sponsorship.transactions).to match_array([tx_hash])
+      end
+    end
+  end
+
+  context "when the transaction receipt has a sponsor revoked event" do
+    let(:transaction_receipt) { JSON.parse(file_fixture("talent_sponsorship/sponsor_revoked_transaction_receipt.json").read) }
+
+    context "when there's an existing sponsorship" do
+      let!(:existing_sponsorship) do
+        create(
+          :sponsorship,
+          talent: "0xe3103d2482ca341f75892a69696b3014ca673049",
+          sponsor: "0xe3103d2482ca341f75892a69696b3014ca673049",
+          token: "0x874069fa1eb16d44d622f2e0ca25eea172369bc1",
+          symbol: "cUSD",
+          chain_id: chain_id,
+          transactions: ["transaction_1", "transaction_2"],
+          claimed_at: nil,
+          revoked_at: nil
+        )
+      end
+
+      it "creates a new daily record with the correct arguments" do
+        expect { sponsorship_sync.call }.not_to change(Sponsorship, :count)
+
+        sponsorship = existing_sponsorship.reload
+
+        expect(sponsorship.revoked_at).to eq expected_timestamp_time
+        expect(sponsorship.transactions).to match_array ["transaction_1", "transaction_2", tx_hash]
+      end
+    end
+
+    context "when there's no existing sponsorship" do
+      it "raises the error to Rollbar" do
+        sponsorship_sync.call
+
+        expect(Rollbar).to have_received(:error)
+      end
+    end
+  end
+
+  context "when the transaction receipt has a sponsor withdraw event" do
+    let(:transaction_receipt) { JSON.parse(file_fixture("talent_sponsorship/withdraw_transaction_receipt.json").read) }
+
+    context "when there's an existing sponsorship" do
+      let!(:existing_sponsorship) do
+        create(
+          :sponsorship,
+          talent: "0xe3103d2482ca341f75892a69696b3014ca673049",
+          sponsor: "0xe3103d2482ca341f75892a69696b3014ca673049",
+          token: "0x874069fa1eb16d44d622f2e0ca25eea172369bc1",
+          symbol: "cUSD",
+          chain_id: chain_id,
+          transactions: ["transaction_1", "transaction_2"],
+          claimed_at: nil,
+          revoked_at: nil
+        )
+      end
+
+      it "creates a new daily record with the correct arguments" do
+        expect { sponsorship_sync.call }.not_to change(Sponsorship, :count)
+
+        sponsorship = existing_sponsorship.reload
+
+        expect(sponsorship.claimed_at).to eq expected_timestamp_time
+        expect(sponsorship.transactions).to match_array ["transaction_1", "transaction_2", tx_hash]
+      end
+    end
+
+    context "when there's no existing sponsorship" do
+      it "raises the error to Rollbar" do
+        sponsorship_sync.call
+
+        expect(Rollbar).to have_received(:error)
+      end
     end
   end
 end
