@@ -16,15 +16,17 @@ export const Update = ({ data, profile, isCurrentUserProfile }) => {
   const [message, setMessage] = useState("");
 
   const sendNewMessage = () => {
+    let content = message;
     if (message.replace(/\s+/g, "") == "") {
-      return;
+      content = "🔥";
     }
 
-    post("/messages", { id: profile.user.uuid, message }).then(response => {
+    post("/messages", { id: profile.user.uuid, message: content }).then(response => {
       if (response.error) {
         toast.error(<ToastBody heading="Error!" body={response.error} />, { autoClose: 5000 });
       } else {
         toast.success(<ToastBody heading="Success!" body={"Your reply was sent!"} />, { autoClose: 5000 });
+        setMessage("");
       }
     });
   };
@@ -56,7 +58,8 @@ export const Update = ({ data, profile, isCurrentUserProfile }) => {
           <Button
             hierarchy="secondary"
             size="medium"
-            leftIcon="flame"
+            leftIcon={message.length === 0 ? "flame" : "send"}
+            iconColor={message.length === 0 ? "bg01" : "primary01"}
             onClick={debouncedNewMessage}
             isDisabled={isCurrentUserProfile}
           />

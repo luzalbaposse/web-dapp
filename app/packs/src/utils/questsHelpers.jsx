@@ -13,7 +13,7 @@ export const questDescription = type => {
     case "Quests::User":
       return "Complete your 'About' section and connect your wallet";
     case "Quests::Supporter":
-      return "Add 3 talent to your Watchlist and buy at least 1 Talent Token";
+      return "Subscribe to at least 3 talents and buy at least 1 Talent Token";
     case "Quests::TalentProfile":
       return "Complete the mandatory fields of your profile and share it with your network.";
     case "Quests::VerifiedProfile":
@@ -46,7 +46,7 @@ export const taskDescription = type => {
       return (
         <P2
           className="text-primary-03"
-          text="Use the watchlist feature (the little star in each talent profile) to save your favourite people for later."
+          text="Visit a talent profile and connect with them by sending a subscription request."
         />
       );
     case "Tasks::BuyTalentToken":
