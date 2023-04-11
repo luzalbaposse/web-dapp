@@ -1,7 +1,8 @@
-import { buildColor } from "@talentprotocol/design-system";
-import styled from "styled-components";
+import { buildColor, desktopStyles } from "@talentprotocol/design-system";
+import styled, { css } from "styled-components";
 
 export const Container = styled.section`
+  grid-area: CompleteProfileWidget;
   margin: 16px;
   display: flex;
   flex-direction: column;
@@ -9,6 +10,10 @@ export const Container = styled.section`
   border: 1px solid ${buildColor("surfaceHover02")};
   border-radius: 24px;
   gap: 16px;
+
+  ${desktopStyles(css`
+    margin-top: 0;
+  `)}
 `;
 
 export const ProgressContainer = styled.div`

@@ -1,11 +1,18 @@
-import { buildColor } from "@talentprotocol/design-system";
-import styled from "styled-components";
+import { buildColor, desktopStyles } from "@talentprotocol/design-system";
+import styled, { css } from "styled-components";
 
 export const Container = styled.section`
+  grid-area: LeaderboardWidget;
   padding: 30px 16px 48px;
   border-radius: 24px 24px 0px 0px;
   background: ${buildColor("primaryTint02")};
   overflow-x: hidden;
+
+  ${desktopStyles(css`
+    border: 1px solid ${buildColor("primaryTint01")};
+    border-radius: 24px;
+    padding: 24px;
+  `)}
 `;
 
 export const TitleContainer = styled.div`

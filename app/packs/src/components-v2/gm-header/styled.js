@@ -5,6 +5,7 @@ export const Container = styled.section`
   display: flex;
   align-items: center;
   gap: 8px;
+  grid-area: GMContainer;
 `;
 
 export const InnerContainer = styled.div`

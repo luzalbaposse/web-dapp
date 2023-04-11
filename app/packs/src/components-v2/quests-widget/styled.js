@@ -2,6 +2,7 @@ import { buildColor } from "@talentprotocol/design-system";
 import styled from "styled-components";
 
 export const Container = styled.section`
+  grid-area: QuestsWidget;
   display: flex;
   flex-direction: column;
   padding: 16px;
