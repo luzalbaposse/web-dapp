@@ -19,7 +19,6 @@ import Token from "./Token";
 import LaunchToken from "./LaunchToken";
 import ApplyToLaunchToken from "./ApplyToLaunchToken";
 import Perks from "./Perks";
-import SocialGraph from "./social_graph/SocialGraph";
 
 const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
   const [selectedSection, setSelectedSection] = useState("");
@@ -46,7 +45,7 @@ const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
       setSelectedSection(window.location.hash);
     }, 800);
   }, []);
-  
+
   useEffect(() => {
     if (profileSubdomain) {
       fetchProfile(window.location.hostname).then(() => setIsLoading(false));
@@ -57,11 +56,11 @@ const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
     fetchProfile(username).then(() => setIsLoading(false));
   }, [fetchProfile]);
 
-  const changeSection = newSection => {
+  const changeSection = (newSection) => {
     setSelectedSection(newSection);
   };
 
-  const buttonType = section => {
+  const buttonType = (section) => {
     if (section == selectedSection) {
       return "white-default";
     } else if (!selectedSection && section == "#about") {
@@ -77,22 +76,29 @@ const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
       if (!element) return;
       const scrollDiv = element.offsetTop;
       window.scrollTo({ top: scrollDiv - 70, behavior: "smooth" });
-      window.history.replaceState({}, document.title, `${user.username}${selectedSection}`);
+      window.history.replaceState(
+        {},
+        document.title,
+        `${user.username}${selectedSection}`
+      );
     }
   }, [selectedSection]);
 
-  const onWalletConnect = account => {
-    setProfile(prev => ({
+  const onWalletConnect = (account) => {
+    setProfile((prev) => ({
       ...prev,
       user: {
         ...prev.user,
-        wallet_id: account
-      }
+        wallet_id: account,
+      },
     }));
   };
 
   const getCurrentTokenSection = () => {
-    if ((user?.profile_type == "approved" || user?.profile_type == "talent") && !talentToken?.contract_id) {
+    if (
+      (user?.profile_type == "approved" || user?.profile_type == "talent") &&
+      !talentToken?.contract_id
+    ) {
       return LaunchToken;
     }
 
@@ -137,7 +143,12 @@ const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
       />
       <Divider className="my-6" />
       <div className="d-flex justify-content-lg-center overflow-x-scroll mx-4">
-        <Button className="mr-2" type={buttonType("#about")} text="About" onClick={() => changeSection("#about")} />
+        <Button
+          className="mr-2"
+          type={buttonType("#about")}
+          text="About"
+          onClick={() => changeSection("#about")}
+        />
         <Button
           className="mr-2"
           type={buttonType("#journey")}
@@ -158,7 +169,8 @@ const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
           text="Community"
           onClick={() => changeSection("#community")}
         />
-        {((user.wallet_id && user.visible_digital_collectibles) || canUpdate) && (
+        {((user.wallet_id && user.visible_digital_collectibles) ||
+          canUpdate) && (
           <Button
             type={buttonType("#digital-collectibles")}
             text={"Digital Collectibles"}
@@ -167,14 +179,25 @@ const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
         )}
       </div>
       <div className="my-7 w-100 col-12" id="#about">
-        <About profile={profile} setProfile={setProfile} canUpdate={canUpdate} previewMode={previewMode} />
+        <About
+          profile={profile}
+          setProfile={setProfile}
+          canUpdate={canUpdate}
+          previewMode={previewMode}
+        />
       </div>
       {mobile && <Divider />}
       <div className="my-7 w-100 col-12" id="#journey">
-        <Journey talent={profile} setTalent={setProfile} canUpdate={canUpdate} />
+        <Journey
+          talent={profile}
+          setTalent={setProfile}
+          canUpdate={canUpdate}
+        />
       </div>
       <div className="my-7 w-100" id={"#token"}>
-        {talentToken.contractId && <Perks talent={profile} canUpdate={canUpdate} />}
+        {talentToken.contractId && (
+          <Perks talent={profile} canUpdate={canUpdate} />
+        )}
         <CurrentTokenSection
           talent={profile}
           talentTokenPrice={talentTokenPrice}
@@ -187,13 +210,6 @@ const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
       <div className="my-7 w-100 col-12" id="#community">
         <Community userId={user.uuid} talent={profile} canUpdate={canUpdate} />
       </div>
-      {currentUser?.admin && (
-        <div className="my-7 w-100 col-12" id="#social-graph">
-          <div className="social-graph">
-            <SocialGraph talent={profile} />
-          </div>
-        </div>
-      )}
       {(showLastDivider || canUpdate) && <Divider className="my-6" />}
       <div className="mt-7 w-100" id="#digital-collectibles">
         <Poaps

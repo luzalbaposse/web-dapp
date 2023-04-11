@@ -8,7 +8,7 @@ export const parseAndCommify = (value, nrOfDecimals = 2) => {
   return ethers.utils.commify(parseFloat(value).toFixed(nrOfDecimals));
 };
 
-export const ipfsToURL = ipfsAddress => {
+export const ipfsToURL = (ipfsAddress) => {
   if (ipfsAddress.includes("http")) {
     return ipfsAddress;
   }
@@ -22,7 +22,9 @@ export const chainIdToName = (chainId, env) => {
 };
 
 export const chainNameToId = (chainName, env) => {
-  const chainId = Object.keys(Addresses[env]).filter(item => Addresses[env][item].chainName == chainName);
+  const chainId = Object.keys(Addresses[env]).filter(
+    (item) => Addresses[env][item].chainName == chainName
+  );
 
   if (chainId.length == 0) {
     return undefined;
@@ -31,10 +33,10 @@ export const chainNameToId = (chainName, env) => {
   return Addresses[env][chainId[0]].chainId;
 };
 
-export const getAllChainOptions = env => {
-  return Object.keys(Addresses[env]).map(chain => ({
+export const getAllChainOptions = (env) => {
+  return Object.keys(Addresses[env]).map((chain) => ({
     name: Addresses[env][chain].chainName,
-    id: Addresses[env][chain].chainId
+    id: Addresses[env][chain].chainId,
   }));
 };
 
@@ -42,7 +44,7 @@ const XDAI_PARAMS = {
   chainId: "0x64",
   chainName: "Gnosis Chain",
   rpcUrl: "https://rpc.gnosischain.com",
-  blockExplorerUrls: ["https://blockscout.com/xdai/mainnet/"]
+  blockExplorerUrls: ["https://blockscout.com/xdai/mainnet/"],
 };
 
 export const getPOAPData = async (contractId, tokenId) => {
@@ -59,22 +61,23 @@ export const CHAIN_RPC_URLS = {
   137: "https://polygon-rpc.com/",
   42220: "https://forno.celo.org",
   44787: "https://alfajores-forno.celo-testnet.org",
-  80001: "https://matic-mumbai.chainstacklabs.com"
+  80001: "https://matic-mumbai.chainstacklabs.com",
 };
 
-export const getNftData = async nft => {
+export const getNftData = async (nft) => {
   try {
     const provider = new ethers.providers.JsonRpcProvider({
       url: CHAIN_RPC_URLS[nft.chain_id],
-      timeout: 5000
+      timeout: 5000,
     });
 
     const fetcher = [
       "ethers",
       {
         provider: provider,
-        jsonProxy: url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`
-      }
+        jsonProxy: (url) =>
+          `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+      },
     ];
 
     const fetchWrapper = new FetchWrapper(fetcher);
@@ -82,7 +85,6 @@ export const getNftData = async nft => {
     const result = await fetchWrapper.fetchNft(nft.address, nft.token_id);
     return result;
   } catch (e) {
-    // console.log("error", e);
     return {};
   }
 };
