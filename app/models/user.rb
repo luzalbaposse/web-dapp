@@ -134,10 +134,6 @@ class User < ApplicationRecord
     quests.where(type: "Quests::User", status: "done").any?
   end
 
-  def profile_completed?
-    quests.where(type: "Quests::TalentProfile", status: "done").any?
-  end
-
   def confirm_email
     self.email_confirmed_at = Time.current
     save
@@ -199,6 +195,10 @@ class User < ApplicationRecord
       notification_preferences[type.name] == Delivery::IMMEDIATE
   end
 
+  def profile_completed?
+    quests.where(type: "Quests::TalentProfile", status: "done").any?
+  end
+
   def profile_picture_url
     talent&.profile_picture_url
   end
@@ -213,6 +213,20 @@ class User < ApplicationRecord
 
   def sender_chat_id(chat_user)
     [id, chat_user.id].join("")
+  end
+
+  # user acted as talent (sponsor receiver)
+  def sponsors
+    return Sponsorship.none unless wallet_id
+
+    Sponsorship.where(talent: wallet_id)
+  end
+
+  # user acted as sponsor
+  def sponsorships
+    return Sponsorship.none unless wallet_id
+
+    Sponsorship.where(sponsor: wallet_id)
   end
 
   def supporters(including_self: true, invested_after: nil)

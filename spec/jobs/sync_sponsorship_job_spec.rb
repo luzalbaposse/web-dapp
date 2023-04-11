@@ -4,7 +4,8 @@ RSpec.describe SyncSponsorshipJob, type: :job do
   let(:user) { create :user }
 
   let(:tx) { SecureRandom.hex }
-  subject(:sync_sponsorship) { SyncSponsorshipJob.perform_now(tx) }
+  let(:chain_id) { 137 }
+  subject(:sync_sponsorship) { SyncSponsorshipJob.perform_now(tx, chain_id) }
 
   let(:sponsorship_sync_class) { Web3::SponsorshipSync }
   let(:sponsorship_sync_service) { instance_double(sponsorship_sync_class, call: true) }
@@ -17,10 +18,11 @@ RSpec.describe SyncSponsorshipJob, type: :job do
     sync_sponsorship
 
     aggregate_failures do
-      expect(sponsorship_sync_class).to have_received(:new)
-      expect(sponsorship_sync_service).to have_received(:call).with(
-        tx
+      expect(sponsorship_sync_class).to have_received(:new).with(
+        tx,
+        chain_id
       )
+      expect(sponsorship_sync_service).to have_received(:call)
     end
   end
 end

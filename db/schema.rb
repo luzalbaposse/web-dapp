@@ -10,8 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_29_105914) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_05_150033) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
@@ -435,11 +436,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_29_105914) do
     t.bigint "amount", null: false
     t.string "token", null: false
     t.string "symbol", null: false
-    t.string "tx_hash", null: false
     t.integer "chain_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["tx_hash", "chain_id"], name: "index_sponsorships_on_tx_hash_and_chain_id", unique: true
+    t.datetime "claimed_at", precision: nil
+    t.datetime "revoked_at", precision: nil
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.string "transactions", default: [], array: true
   end
 
   create_table "subscriptions", force: :cascade do |t|
