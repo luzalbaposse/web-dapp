@@ -3,6 +3,7 @@ import { string, number, oneOfType, bool } from "prop-types";
 import ThemeContainer, { useTheme } from "src/contexts/ThemeContext";
 import DefaultBannerLight from "images/default-banner-light.png";
 import DefaultBannerDark from "images/default-banner-dark.png";
+import DefaultProfilePicture from "images/default-profile-icon-0.png";
 
 const TalentProfilePicture = ({
   src,
@@ -15,7 +16,7 @@ const TalentProfilePicture = ({
   border,
   link,
   style,
-  contained
+  contained,
 }) => {
   const { mode } = useTheme();
 
@@ -23,8 +24,7 @@ const TalentProfilePicture = ({
     if (src) {
       return src;
     } else if (!straight) {
-      // eslint-disable-next-line no-undef
-      return require(`images/default-profile-icon-${Math.floor(Math.random() * 5)}.png`);
+      return DefaultProfilePicture;
     } else if (mode() === "light" && straight) {
       return DefaultBannerLight;
     } else if (mode() === "dark" && straight) {
@@ -38,12 +38,15 @@ const TalentProfilePicture = ({
   const borderPhoto = !border ? "" : "border-photo ";
   const imageContained = !contained ? "image-fit" : "image-contain";
 
-  const WithLink = ({ link, children }) => (link ? <a href={link}>{children}</a> : children);
+  const WithLink = ({ link, children }) =>
+    link ? <a href={link}>{children}</a> : children;
 
   return (
     <WithLink link={link}>
       <img
-        className={`${roundPhoto}${grey}${blurPhoto}${borderPhoto} ${className || ""} ${imageContained}`}
+        className={`${roundPhoto}${grey}${blurPhoto}${borderPhoto} ${
+          className || ""
+        } ${imageContained}`}
         src={imgSrc()}
         width={width || height}
         height={height}
@@ -64,7 +67,7 @@ TalentProfilePicture.defaultProps = {
   blur: null,
   border: null,
   link: null,
-  userId: 0
+  userId: 0,
 };
 
 TalentProfilePicture.propTypes = {
@@ -76,7 +79,7 @@ TalentProfilePicture.propTypes = {
   straight: bool,
   blur: bool,
   border: bool,
-  link: string
+  link: string,
 };
 
 // eslint-disable-next-line no-unused-vars

@@ -11,11 +11,15 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 
 const EmptyMessages = () => {
-  return <div className="my-auto align-self-center">Send your first message!</div>;
+  return (
+    <div className="my-auto align-self-center">Send your first message!</div>
+  );
 };
 
 const CommunicateFirst = () => {
-  return <div className="my-auto align-self-center">Find someone to chat with!</div>;
+  return (
+    <div className="my-auto align-self-center">Find someone to chat with!</div>
+  );
 };
 
 const ChatHeader = ({ profilePictureUrl, link, lastOnline, username }) => {
@@ -31,8 +35,16 @@ const ChatHeader = ({ profilePictureUrl, link, lastOnline, username }) => {
   }
 
   return (
-    <div className="d-flex flex-row w-100 pt-3 themed-border-bottom" style={{ paddingBottom: 18 }}>
-      <TalentProfilePicture src={profilePictureUrl} link={link} height={48} className="ml-3 mr-2" />
+    <div
+      className="d-flex flex-row w-100 pt-3 themed-border-bottom"
+      style={{ paddingBottom: 18 }}
+    >
+      <TalentProfilePicture
+        src={profilePictureUrl}
+        link={link}
+        height={48}
+        className="ml-3 mr-2"
+      />
       <div className="d-flex flex-column">
         <P2 bold className="text-black">
           {username}
@@ -43,7 +55,7 @@ const ChatHeader = ({ profilePictureUrl, link, lastOnline, username }) => {
   );
 };
 
-const MessageExchange = props => {
+const MessageExchange = (props) => {
   const { mode } = props;
   const url = new URL(window.location.href);
   const searchParams = new URLSearchParams(url.search);
@@ -51,7 +63,11 @@ const MessageExchange = props => {
   useEffect(() => {
     if (searchParams.has("perk")) {
       searchParams.delete("perk");
-      window.history.replaceState({}, document.title, "/messages?" + searchParams.toString());
+      window.history.replaceState(
+        {},
+        document.title,
+        "/messages?" + searchParams.toString()
+      );
     }
   }, [props.value]);
 
@@ -60,7 +76,7 @@ const MessageExchange = props => {
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
   }, [props.messages]);
 
-  const isPreviousMessageFromSameSender = index => {
+  const isPreviousMessageFromSameSender = (index) => {
     if (index == 0) {
       return false;
     }
@@ -74,19 +90,21 @@ const MessageExchange = props => {
       return false;
     }
 
-    return props.messages[index - 1].sender_id === props.messages[index].sender_id;
+    return (
+      props.messages[index - 1].sender_id === props.messages[index].sender_id
+    );
   };
 
-  const onEnterPress = e => {
+  const onEnterPress = (e) => {
     if (e.keyCode == 13 && e.shiftKey == false) {
       e.preventDefault();
       props.onSubmit(e);
     }
   };
 
-  const mine = message => message && message.sender_id === props.user?.id;
+  const mine = (message) => message && message.sender_id === props.user?.id;
 
-  const link = message => {
+  const link = (message) => {
     const { user, username } = props;
 
     if (mine(message)) {
@@ -97,7 +115,10 @@ const MessageExchange = props => {
   };
 
   return (
-    <div className="d-flex flex-column display-messages" style={{ height: "100%", paddingBottom: "16px" }}>
+    <div
+      className="d-flex flex-column display-messages"
+      style={{ height: "100%", paddingBottom: "16px" }}
+    >
       {props.smallScreen && (
         <>
           <div className="d-flex flex-row align-items-center w-100 py-2">
@@ -122,7 +143,7 @@ const MessageExchange = props => {
           <div className={`divider ${mode}`}></div>
         </>
       )}
-      {props.activeUserUsername !== 0 && (
+      {props.activeUserUsername !== "" && (
         <ChatHeader
           username={props.username}
           profilePictureUrl={props.profilePictureUrl}
@@ -131,9 +152,17 @@ const MessageExchange = props => {
           userId={searchParams.get("user")}
         />
       )}
-      <div id="messages" className="px-3 overflow-y-scroll d-flex flex-column pb-3" style={{ height: "100%" }}>
-        {props.messages.length === 0 && props.activeUserUsername === 0 && <CommunicateFirst />}
-        {props.messages.length === 0 && props.activeUserUsername !== 0 && <EmptyMessages />}
+      <div
+        id="messages"
+        className="px-3 overflow-y-scroll d-flex flex-column pb-3"
+        style={{ height: "100%" }}
+      >
+        {props.messages.length === 0 && props.activeUserUsername === 0 && (
+          <CommunicateFirst />
+        )}
+        {props.messages.length === 0 && props.activeUserUsername !== 0 && (
+          <EmptyMessages />
+        )}
         {props.messages.map((message, index) => (
           <Message
             key={`message_${message.id}`}
@@ -150,7 +179,10 @@ const MessageExchange = props => {
         ))}
       </div>
       {props.activeUserUsername !== "" && (
-        <div className="d-flex flex-row w-100 p-2" style={{ padding: "0 16px"}}>
+        <div
+          className="d-flex flex-row w-100 p-2"
+          style={{ padding: "0 16px" }}
+        >
           <TextArea
             mode={mode}
             disabled={
@@ -158,7 +190,7 @@ const MessageExchange = props => {
               (props.messages.length == 0 && props.user?.id == 0) ||
               props.messagingDisabled
             }
-            onChange={e => props.onChange(e.target.value)}
+            onChange={(e) => props.onChange(e.target.value)}
             value={props.value}
             placeholder={
               props.messagingDisabled
