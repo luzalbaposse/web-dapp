@@ -148,7 +148,7 @@ const MessageUserList = ({
         mobile={mobile}
       />
       <div
-        className="d-flex flex-column align-items-stretch"
+        className="d-flex flex-column align-items-stretch lg-overflow-y-scroll"
         style={{ paddingBottom: "32px" }}
       >
         <div className="w-100 d-flex flex-row themed-border-bottom align-items-center py-4 pl-6 pr-6">
