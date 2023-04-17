@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -131,6 +131,12 @@ const MessageUserList = ({
     return supportersCount > 0;
   };
 
+  const sortedChats = useMemo(() => {
+    return chats.sort((a, b) =>
+      Date.parse(a.last_message_at) < Date.parse(b.last_message_at) ? 1 : -1
+    );
+  }, [chats, activeUserUsername]);
+
   return (
     <>
       <NewMessageModal
@@ -179,7 +185,7 @@ const MessageUserList = ({
           <EmptyChats mode={mode} />
         )}
         <div className="w-100 d-flex flex-column lg-overflow-y-scroll lg-h-50">
-          {chats.map((chat) => (
+          {sortedChats.map((chat) => (
             <ChatMessage
               onClick={onClick}
               key={`user-message-list-${chat.receiver_username}`}
