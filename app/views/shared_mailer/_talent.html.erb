@@ -1,7 +1,7 @@
 <% user = talent.user %>
 <% profile_picture_url = attachments["profile_picture-#{user.id}.png"]&.url %>
 
-<%= link_to profile_url(username: user.username) do %>
+<%= link_to user_url(username: user.username) do %>
   <div class="row mb-5 border rounded-xl mx-0 gap-2">
     <% if profile_picture_url %>
       <div class="col-1 py-3">
@@ -10,7 +10,7 @@
     <% end %>
     <div class="col-11 py-3">
       <p class="ay-middle user-title primary-2 ml-1">
-        &nbsp;&nbsp; <%= user.display_name || user.username %>
+        &nbsp;&nbsp; <%= user.name %>
       </p>
       <p class="ay-middle primary-3 text-xs ml-1">
         &nbsp;&nbsp; <%= talent.occupation %>
