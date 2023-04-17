@@ -15,6 +15,7 @@ import {
 
 export const SignInFlow = props => {
   const { linkedinClientId, linkedinRedirectUri } = props.railsContext;
+  const [isShowPasswordActive, setIsShowPasswordActive] = useState(false);
   const [hasErrors, setHasErrors] = useState(false);
   const formRef = useRef(null);
   const emailRef = useRef(null);
@@ -62,11 +63,13 @@ export const SignInFlow = props => {
           </PasswordLabelRow>
           <Input
             placeholder="*********"
-            type="password"
+            type={isShowPasswordActive ? "text" : "password"}
             inputRef={passwordRef}
             hasError={hasErrors}
             shortDescription={hasErrors && "Wrong email or password"}
             onEnterCallback={submitSignInForm}
+            rightIcon={isShowPasswordActive ? "eye-disabled" : "eye"}
+            rightIconCallback={() => setIsShowPasswordActive(!isShowPasswordActive)}
           />
         </PasswordBox>
       </SignInFormContainer>

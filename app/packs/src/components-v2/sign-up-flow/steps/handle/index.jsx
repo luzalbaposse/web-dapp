@@ -36,16 +36,16 @@ export const HandleStep = ({ user, setUser, setIsNextDisable }) => {
     <>
       <TitleRow>
         <Typography specs={{ variant: "h3", type: "bold" }} color="primary01">
-          Choose your @handle.
+          Choose your username.
         </Typography>
         <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
-          Your handle is your username on Talent Protocol and you’ll be also able to claim it as your domain.
+          Your username on Talent Protocol and you’ll be also able to claim it as your domain.
         </Typography>
       </TitleRow>
       <Form>
         <Row>
           <Typography specs={{ variant: "p2", type: "bold" }} color="primary01">
-            Handle
+            Username
           </Typography>
           <Input
             placeholder="johndoe"
