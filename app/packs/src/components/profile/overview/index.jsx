@@ -599,7 +599,7 @@ const Overview = ({
                   </>
                 )}
                 {previewMode ? (
-                  <Button type="white-outline" text="Back to edit profile" onClick={() => setPreviewMode(false)} />
+                  <Button type="white-outline" text="Back to edit profile" onClick={() => setPreviewMode(false)} style={{ whiteSpace: "nowrap"}} />
                 ) : (
                   <>
                     {canUpdate ? (
