@@ -25,16 +25,6 @@ class API::V1::PublicAPI::CareerUpdatesController < API::V1::PublicAPI::APIContr
     render json: response_body, status: :ok
   end
 
-  def highlighted
-    # some_data = CareerUpdate.joins(:users).order("RANDOM()").limit(5)
-    # response_body = CareerUpdateBlueprint.
-
-    # .select("users.username, career_updates.*").order("RANDOM()").limit(5)
-    # cenas = CareerUpdateBlueprint.render_as_json(response_body, view: :normal)
-
-    render json: response_body, status: :ok
-  end
-
   def create
     sender = User.find_by("wallet_id::text = :id OR username::text = :id", id: user_param_id) if user_param_id
     sender ||= current_user

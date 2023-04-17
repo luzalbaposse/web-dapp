@@ -67,7 +67,6 @@ Rails.application.routes.draw do
 
     namespace :api, defaults: {format: :json} do
       namespace :v1 do
-        resources :career_updates, only: [:highlighted]
         resources :users, only: [:index, :update] do
           resources :delete_account_tokens, module: "users", only: [:create]
 

@@ -33,6 +33,13 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
     render json: response_body, status: :ok
   end
 
+  def recommended
+    subscribed_users = Subscription.where(user_id: current_user.id)
+    recomended_users = User.where.not(id: subscribed_users.select(:subscriber_id)).order("RANDOM()").limit(10)
+    response_body = API::UserBlueprint.render_as_json(recomended_users, view: :normal)
+    render json: response_body, status: :ok
+  end
+
   private
 
   def user
