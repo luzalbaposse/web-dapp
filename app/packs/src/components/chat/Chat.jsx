@@ -168,6 +168,24 @@ const Chat = ({ chats, pagination }) => {
   };
 
   const setActiveUser = (userUsername) => {
+    setLocalChats((previousChats) => {
+      const index = previousChats.findIndex(
+        (chat) => chat.receiver_username === userUsername
+      );
+      if (index > -1) {
+        const newChats = [
+          ...previousChats.slice(0, index),
+          {
+            ...previousChats[index],
+            unreadMessagesCount: 0,
+          },
+          ...previousChats.slice(index + 1),
+        ];
+        return newChats;
+      } else {
+        return previousChats;
+      }
+    });
     setActiveUserUsername(userUsername);
     window.history.pushState(
       {},
@@ -180,28 +198,6 @@ const Chat = ({ chats, pagination }) => {
     const params = new URLSearchParams(document.location.search);
     setActiveUserUsername(params.get("user"));
   });
-
-  useEffect(() => {
-    const activeChatIndex = localChats.findIndex(
-      (chat) => chat.receiver_username === activeUserUsername
-    );
-
-    if (
-      activeChatIndex > 0 &&
-      localChats.length > 0 &&
-      localChats[activeChatIndex].unreadMessagesCount > 0
-    ) {
-      const newChats = [
-        ...localChats.slice(0, activeChatIndex),
-        {
-          ...localChats[activeChatIndex],
-          unreadMessagesCount: 0,
-        },
-        ...localChats.slice(activeChatIndex + 1),
-      ];
-      setLocalChats(newChats);
-    }
-  }, [activeUserUsername]);
 
   const messagingDisabled = () => {
     const activeUser = chats.find(
