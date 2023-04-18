@@ -553,7 +553,12 @@ class OnChain {
     const factoryAddress = Addresses[this.env][chainId]["factory"];
     const talentFactory = new ethers.Contract(factoryAddress, TalentFactoryV3.abi, provider);
 
-    return await talentFactory.whitelist(address);
+    try {
+      return await talentFactory.whitelist(address);
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   }
 
   async whitelistAddress(address) {

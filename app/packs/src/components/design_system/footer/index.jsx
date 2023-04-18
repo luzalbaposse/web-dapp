@@ -12,7 +12,7 @@ import {
   FAQ,
   TERMS_HREF,
   PRIVACY_HREF,
-  BOUNTIES,
+  BOUNTIES
 } from "src/utils/constants";
 import Tab from "src/components/design_system/tab";
 import SocialRow from "src/components/talent/Show/SocialRow";
@@ -25,7 +25,7 @@ const Footer = () => {
     github: TALENT_PROTOCOL_GITHUB,
     discord: TALENT_PROTOCOL_DISCORD,
     twitter: TALENT_PROTOCOL_TWITTER,
-    telegram: TALENT_PROTOCOL_TELEGRAM,
+    telegram: TALENT_PROTOCOL_TELEGRAM
   };
 
   return (
@@ -35,96 +35,29 @@ const Footer = () => {
         <div className="d-flex flex-lg-row flex-column mb-0 mb-lg-7">
           <div className="col-lg-3">
             <a href="/" style={{ height: 30 }}>
-              {theme.mode() == "light" ? (
-                <LogoLight width={128} height={20} />
-              ) : (
-                <LogoDark width={128} height={20} />
-              )}
+              {theme.mode() == "light" ? <LogoLight width={128} height={20} /> : <LogoDark width={128} height={20} />}
             </a>
-            <P2
-              className="text-primary-03 mt-2"
-              text="The web3 professional community for high-potential builders."
-            />
+            <P2 className="text-primary-03 mt-2" text="The web3 professional community for high-potential builders." />
           </div>
           <div className="col-lg-3"></div>
           <div className="col-lg-2 d-flex flex-column mt-5 mt-lg-0">
             <P2 className="text-black mb-2" bold text="Project" />
-            <Tab
-              href={ABOUT}
-              text="About"
-              type="white"
-              className="mb-2"
-              target="_blank"
-            />
-            <Tab
-              href={BLOG}
-              text="Blog"
-              type="white"
-              className="mb-2"
-              target="_blank"
-            />
-            <Tab
-              href={BOUNTIES}
-              text="Bounties"
-              type="white"
-              className="mb-2"
-              target="_blank"
-            />
+            <Tab href={ABOUT} text="About" type="white" className="mb-2" target="_blank" />
+            <Tab href={BLOG} text="Blog" type="white" className="mb-2" target="_blank" />
+            <Tab href={BOUNTIES} text="Bounties" type="white" className="mb-2" target="_blank" />
           </div>
           <div className="col-lg-2 d-flex flex-column mt-5 mt-lg-0">
             <P2 className="text-black mb-2" bold text="Help" />
-            <Tab
-              href={FAQ}
-              text="FAQ"
-              type="white"
-              className="mb-2"
-              target="_blank"
-            />
-            <Tab
-              href={TERMS_HREF}
-              text="Terms of Service"
-              type="white"
-              className="mb-2"
-              target="_blank"
-            />
-            <Tab
-              href={PRIVACY_HREF}
-              text="Privacy Policy"
-              type="white"
-              className="mb-2"
-              target="_blank"
-            />
+            <Tab href={FAQ} text="FAQ" type="white" className="mb-2" target="_blank" />
+            <Tab href={TERMS_HREF} text="Terms of Service" type="white" className="mb-2" target="_blank" />
+            <Tab href={PRIVACY_HREF} text="Privacy Policy" type="white" className="mb-2" target="_blank" />
           </div>
           <div className="col-lg-2 d-flex flex-column mt-5 mt-lg-0">
             <P2 className="text-black mb-2" bold text="Socials" />
-            <Tab
-              href={TALENT_PROTOCOL_TWITTER}
-              text="Twitter"
-              type="white"
-              className="mb-2"
-              target="_blank"
-            />
-            <Tab
-              href={TALENT_PROTOCOL_DISCORD}
-              text="Discord"
-              type="white"
-              className="mb-2"
-              target="_blank"
-            />
-            <Tab
-              href={TALENT_PROTOCOL_GITHUB}
-              text="Github"
-              type="white"
-              className="mb-2"
-              target="_blank"
-            />
-            <Tab
-              href={TALENT_PROTOCOL_TELEGRAM}
-              text="Telegram"
-              type="white"
-              className="mb-2"
-              target="_blank"
-            />
+            <Tab href={TALENT_PROTOCOL_TWITTER} text="Twitter" type="white" className="mb-2" target="_blank" />
+            <Tab href={TALENT_PROTOCOL_DISCORD} text="Discord" type="white" className="mb-2" target="_blank" />
+            <Tab href={TALENT_PROTOCOL_GITHUB} text="Github" type="white" className="mb-2" target="_blank" />
+            <Tab href={TALENT_PROTOCOL_TELEGRAM} text="Telegram" type="white" className="mb-2" target="_blank" />
           </div>
         </div>
         <div className="my-5 mt-lg-0 px-2 px-lg-0">
@@ -135,11 +68,7 @@ const Footer = () => {
               text={`Talent Protocol MTU © ${new Date().getFullYear()}`}
             />
             <P2 className="text-primary-03 mr-4 d-lg-block d-none" text="|" />
-            <a
-              href="mailto:contact@talentprotocol.com"
-              target="self"
-              className="mr-4 text-primary-03"
-            >
+            <a href="mailto:contact@talentprotocol.com" target="self" className="mr-4 text-primary-03">
               Contact us
             </a>
           </div>

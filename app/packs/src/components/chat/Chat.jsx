@@ -13,9 +13,7 @@ import { useWindowDimensionsHook } from "../../utils/window";
 
 const Chat = ({ chats, pagination }) => {
   const url = new URL(document.location);
-  const [activeUserUsername, setActiveUserUsername] = useState(
-    url.searchParams.get("user") || ""
-  );
+  const [activeUserUsername, setActiveUserUsername] = useState(url.searchParams.get("user") || "");
   const [localChats, setLocalChats] = useState(chats);
   const [localPagination, setLocalPagination] = useState(pagination);
   const [perkId] = useState(url.searchParams.get("perk") || 0);
@@ -23,9 +21,7 @@ const Chat = ({ chats, pagination }) => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [lastMessageId, setLastMessageId] = useState(0);
-  const [searchValue, setSearchValue] = useState(
-    url.searchParams.get("q") || ""
-  );
+  const [searchValue, setSearchValue] = useState(url.searchParams.get("q") || "");
   const [chatId, setChatId] = useState("");
   const [sendingMessage, setSendingMessage] = useState(false);
   const [gettingMessages, setGettingMessages] = useState(false);
@@ -38,17 +34,15 @@ const Chat = ({ chats, pagination }) => {
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
 
   const updateChats = (previousChats, newChat) => {
-    const receiverIndex = previousChats.findIndex(
-      (chat) => chat.receiver_username === newChat?.receiver_username
-    );
+    const receiverIndex = previousChats.findIndex(chat => chat.receiver_username === newChat?.receiver_username);
 
     const newChats = [
       {
         ...previousChats[receiverIndex],
-        ...newChat,
+        ...newChat
       },
       ...previousChats.slice(0, receiverIndex),
-      ...previousChats.slice(receiverIndex + 1),
+      ...previousChats.slice(receiverIndex + 1)
     ];
     return newChats;
   };
@@ -73,13 +67,13 @@ const Chat = ({ chats, pagination }) => {
     setMessage("");
     setMessages([]);
 
-    get(`messages/${activeUserUsername}`).then((response) => {
-      setLocalChats((previousChats) =>
+    get(`messages/${activeUserUsername}`).then(response => {
+      setLocalChats(previousChats =>
         updateChats(
           previousChats,
           response.readChat || {
             receiver_username: response.username,
-            last_message_text: "No messages exchanged yet..",
+            last_message_text: "No messages exchanged yet.."
           }
         )
       );
@@ -98,11 +92,9 @@ const Chat = ({ chats, pagination }) => {
       return;
     }
 
-    get(`api/v1/perks/${perkId}`).then((response) => {
+    get(`api/v1/perks/${perkId}`).then(response => {
       if (response.title) {
-        setMessage(
-          `Hi! I'm reaching out because of your perk "${response.title}"`
-        );
+        setMessage(`Hi! I'm reaching out because of your perk "${response.title}"`);
       }
     });
   }, [perkId]);
@@ -126,7 +118,7 @@ const Chat = ({ chats, pagination }) => {
     }
   }, [lastMessageId, messages]);
 
-  const getNewMessage = (response) => {
+  const getNewMessage = response => {
     setMessages([...messages, response.message]);
     setLastMessageId(response.message.id);
   };
@@ -138,14 +130,12 @@ const Chat = ({ chats, pagination }) => {
 
     setSendingMessage(true);
 
-    post("/messages", { id: activeUserUsername, message }).then((response) => {
+    post("/messages", { id: activeUserUsername, message }).then(response => {
       if (response.error) {
         console.log(response.error);
         // setError("Unable to send message, try again") // @TODO: Create error box (absolute positioned)
       } else {
-        setLocalChats((previousChats) =>
-          updateChats(previousChats, response.chat)
-        );
+        setLocalChats(previousChats => updateChats(previousChats, response.chat));
         setMessages([...messages, response.message]);
         setLastMessageId(response.message.id);
         setMessage("");
@@ -156,7 +146,7 @@ const Chat = ({ chats, pagination }) => {
 
   const debouncedNewMessage = debounce(() => sendNewMessage(), 200);
 
-  const ignoreAndCallDebounce = (e) => {
+  const ignoreAndCallDebounce = e => {
     e.preventDefault();
     debouncedNewMessage();
   };
@@ -167,19 +157,17 @@ const Chat = ({ chats, pagination }) => {
     setMessage("");
   };
 
-  const setActiveUser = (userUsername) => {
-    setLocalChats((previousChats) => {
-      const index = previousChats.findIndex(
-        (chat) => chat.receiver_username === userUsername
-      );
+  const setActiveUser = userUsername => {
+    setLocalChats(previousChats => {
+      const index = previousChats.findIndex(chat => chat.receiver_username === userUsername);
       if (index > -1) {
         const newChats = [
           ...previousChats.slice(0, index),
           {
             ...previousChats[index],
-            unreadMessagesCount: 0,
+            unreadMessagesCount: 0
           },
-          ...previousChats.slice(index + 1),
+          ...previousChats.slice(index + 1)
         ];
         return newChats;
       } else {
@@ -187,11 +175,7 @@ const Chat = ({ chats, pagination }) => {
       }
     });
     setActiveUserUsername(userUsername);
-    window.history.pushState(
-      {},
-      document.title,
-      `/messages?user=${userUsername}`
-    );
+    window.history.pushState({}, document.title, `/messages?user=${userUsername}`);
   };
 
   window.addEventListener("popstate", () => {
@@ -200,19 +184,14 @@ const Chat = ({ chats, pagination }) => {
   });
 
   const messagingDisabled = () => {
-    const activeUser = chats.find(
-      (chat) => chat.receiver_username == activeUserUsername
-    );
-    return (
-      currentUser?.messaging_disabled ||
-      (activeUser && activeUser.messagingDisabled)
-    );
+    const activeUser = chats.find(chat => chat.receiver_username == activeUserUsername);
+    return currentUser?.messaging_disabled || (activeUser && activeUser.messagingDisabled);
   };
 
   const loadMoreChats = () => {
     const nextPage = localPagination.currentPage + 1;
 
-    get(`messages?page=${nextPage}&q=${searchValue}`).then((response) => {
+    get(`messages?page=${nextPage}&q=${searchValue}`).then(response => {
       const newChats = [...localChats, ...response.chats];
       setLocalChats(newChats);
       setLocalPagination(response.pagination);
@@ -223,9 +202,9 @@ const Chat = ({ chats, pagination }) => {
     return localPagination.currentPage < localPagination.lastPage;
   };
 
-  const searchChats = (value) => {
+  const searchChats = value => {
     setSearchValue(value);
-    get(`messages?page=1&q=${value}`).then((response) => {
+    get(`messages?page=1&q=${value}`).then(response => {
       setLocalChats(response.chats);
       setLocalPagination(response.pagination);
     });
@@ -235,15 +214,12 @@ const Chat = ({ chats, pagination }) => {
 
   return (
     <>
-      <div
-        className="d-flex flex-column w-100 themed-border-top"
-        style={{ height: "100vh", paddingTop: "66px" }}
-      >
+      <div className="d-flex flex-column w-100 themed-border-top" style={{ height: "100vh", paddingTop: "66px" }}>
         <main className="d-flex flex-row h-100 themed-border-left chat-container">
           {(!mobile || !activeUserUsername) && (
             <section className="col-lg-4 mx-auto mx-lg-0 px-0 d-flex flex-column themed-border-right chat-section">
               <MessageUserList
-                onClick={(userName) => setActiveUser(userName)}
+                onClick={userName => setActiveUser(userName)}
                 activeUserUsername={activeUserUsername}
                 chats={localChats}
                 setChats={setLocalChats}
