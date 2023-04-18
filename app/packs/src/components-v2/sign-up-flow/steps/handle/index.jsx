@@ -7,8 +7,9 @@ export const HandleStep = ({ user, setUser, setIsNextDisable }) => {
   const [handleError, setHandleError] = useState("");
   const handleRef = useRef(null);
   const validateStep = useCallback(() => {
+    const handle = handleRef.current.value?.toLowerCase();
     username
-      .validateHandle(handleRef.current.value)
+      .validateHandle(handle)
       .then(({ data }) => {
         if (data.error) {
           setHandleError(data.error);
@@ -18,7 +19,7 @@ export const HandleStep = ({ user, setUser, setIsNextDisable }) => {
           setIsNextDisable(false);
           setUser({
             ...user,
-            handle: handleRef.current.value
+            handle
           });
         }
       })
@@ -55,6 +56,7 @@ export const HandleStep = ({ user, setUser, setIsNextDisable }) => {
             onChange={validateStep}
             onBlur={validateStep}
             shortDescription={handleError}
+            forceLowerCase
           />
         </Row>
       </Form>
