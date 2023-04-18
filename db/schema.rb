@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_05_150033) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_18_153404) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -476,7 +476,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_05_150033) do
     t.text "profile_picture_data"
     t.boolean "public", default: false
     t.jsonb "profile", default: {}
-    t.boolean "disable_messages", default: false
     t.text "banner_data"
     t.boolean "token_launch_reminder_sent", default: false
     t.string "notion_page_id"

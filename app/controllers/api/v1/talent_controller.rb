@@ -134,7 +134,6 @@ class API::V1::TalentController < ApplicationController
       :username,
       :display_name,
       :public,
-      :disable_messages,
       :open_to_job_offers,
       :verified,
       :with_persona_id,
