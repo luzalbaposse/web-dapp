@@ -69,6 +69,7 @@ export const SignInFlow = props => {
             shortDescription={hasErrors && "Wrong email or password"}
             onEnterCallback={submitSignInForm}
             rightIcon={isShowPasswordActive ? "eye-disabled" : "eye"}
+            iconColor="primary04"
             rightIconCallback={() => setIsShowPasswordActive(!isShowPasswordActive)}
           />
         </PasswordBox>

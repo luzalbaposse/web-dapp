@@ -114,6 +114,7 @@ export const EmailPasswordStep = ({ setIsNextDisable, setUser, user }) => {
             }}
             onEnterCallback={validateStep}
             rightIcon={isShowPasswordActive ? "eye-disabled" : "eye"}
+            iconColor="primary04"
             rightIconCallback={() => setIsShowPasswordActive(!isShowPasswordActive)}
           />
         </PasswordRow>
@@ -142,6 +143,7 @@ export const EmailPasswordStep = ({ setIsNextDisable, setUser, user }) => {
             onBlur={validateStep}
             onEnterCallback={validateStep}
             rightIcon={isShowPasswordActive ? "eye-disabled" : "eye"}
+            iconColor="primary04"
             rightIconCallback={() => setIsShowPasswordActive(!isShowPasswordActive)}
           />
         </PasswordRow>
