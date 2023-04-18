@@ -26,11 +26,11 @@ export const StakingModel = ({ profile, isCurrentUserProfile, currentUserId, rai
         <Icon name="flower" color="primary" size={40} />
       </ImageContainer>
       <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
-        Staking
+        Endorsement
       </Typography>
       <Typography specs={{ variant: "p2", type: "regular" }} color="primary01">
-        Stake to vouch for someone you truly believe in. Unlock access to a TAL yield pool for both yourself and{" "}
-        {profile.user.name}.
+        Stake to vouch for someone you truly believe in. Both you and {profile.user.name} will earn interest in TAL for
+        the amount staked.
       </Typography>
       <Button hierarchy="primary" size="large" text="Stake" isStretched onClick={() => setShowStakeModal(true)} />
     </Container>
