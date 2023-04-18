@@ -19,7 +19,6 @@ import Token from "./Token";
 import LaunchToken from "./LaunchToken";
 import ApplyToLaunchToken from "./ApplyToLaunchToken";
 import Perks from "./Perks";
-import SocialGraph from "./social_graph/SocialGraph";
 
 const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
   const [selectedSection, setSelectedSection] = useState("");
@@ -187,13 +186,6 @@ const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
       <div className="my-7 w-100 col-12" id="#community">
         <Community userId={user.uuid} talent={profile} canUpdate={canUpdate} />
       </div>
-      {currentUser?.admin && (
-        <div className="my-7 w-100 col-12" id="#social-graph">
-          <div className="social-graph">
-            <SocialGraph talent={profile} />
-          </div>
-        </div>
-      )}
       {(showLastDivider || canUpdate) && <Divider className="my-6" />}
       <div className="mt-7 w-100" id="#digital-collectibles">
         <Poaps

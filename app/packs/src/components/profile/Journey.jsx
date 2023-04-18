@@ -44,7 +44,7 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
     setFilteredJourneyItems(applyCategoryFilter(allItems));
   }, [talent?.milestones, careerGoal?.goals, activeFilter]);
 
-  const compareEndData = (milestone1, milestone2) => compareDates(milestone2.startDate, milestone1.startDate);
+  const compareEndData = (milestone1, milestone2) => compareDates(milestone2.start_date, milestone1.start_date);
 
   const currentDate = dayjs();
 
@@ -251,6 +251,9 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
                     <a target="_blank" href={journeyItem?.link}>
                       <P2 className="text-primary-01 mb-3" text={journeyItem?.institution} />
                     </a>
+                  )}
+                  {!journeyItem?.link && journeyItem.institution && (
+                    <P2 className="text-primary-01 mb-3" text={journeyItem?.institution} />
                   )}
                   <P2 className="text-primary-03" text={journeyItem?.description} />
                   {journeyItem?.progress && (

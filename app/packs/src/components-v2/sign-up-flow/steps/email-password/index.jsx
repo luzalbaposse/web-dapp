@@ -4,6 +4,7 @@ import { validateEmail, validatePassword } from "../../utils/field-validators";
 import { EmailRow, PasswordRow, SignUpForm } from "./styled";
 
 export const EmailPasswordStep = ({ setIsNextDisable, setUser, user }) => {
+  const [isShowPasswordActive, setIsShowPasswordActive] = useState(false);
   const [isEmailCorrect, setIsEmailCorrect] = useState(true);
   const [isPasswordCorrect, setIsPasswordCorrect] = useState(true);
   const [passwordsMatch, setPasswordsMatch] = useState(true);
@@ -96,7 +97,7 @@ export const EmailPasswordStep = ({ setIsNextDisable, setUser, user }) => {
           </Typography>
           <Input
             placeholder="*********"
-            type="password"
+            type={isShowPasswordActive ? "text" : "password"}
             inputRef={passwordRef}
             defaultValue={user.password}
             onFocus={() => {
@@ -112,6 +113,9 @@ export const EmailPasswordStep = ({ setIsNextDisable, setUser, user }) => {
               validateStep();
             }}
             onEnterCallback={validateStep}
+            rightIcon={isShowPasswordActive ? "eye-disabled" : "eye"}
+            iconColor="primary04"
+            rightIconCallback={() => setIsShowPasswordActive(!isShowPasswordActive)}
           />
         </PasswordRow>
         <Pills pillList={pills} />
@@ -121,7 +125,7 @@ export const EmailPasswordStep = ({ setIsNextDisable, setUser, user }) => {
           </Typography>
           <Input
             placeholder="*********"
-            type="password"
+            type={isShowPasswordActive ? "text" : "password"}
             inputRef={confirmPasswordRef}
             onFocus={() => {
               setIsPasswordCorrect(true);
@@ -138,6 +142,9 @@ export const EmailPasswordStep = ({ setIsNextDisable, setUser, user }) => {
             }}
             onBlur={validateStep}
             onEnterCallback={validateStep}
+            rightIcon={isShowPasswordActive ? "eye-disabled" : "eye"}
+            iconColor="primary04"
+            rightIconCallback={() => setIsShowPasswordActive(!isShowPasswordActive)}
           />
         </PasswordRow>
       </SignUpForm>

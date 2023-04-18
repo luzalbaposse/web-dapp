@@ -122,7 +122,7 @@ const MessageExchange = props => {
           <div className={`divider ${mode}`}></div>
         </>
       )}
-      {props.activeUserUsername !== 0 && (
+      {props.activeUserUsername !== "" && (
         <ChatHeader
           username={props.username}
           profilePictureUrl={props.profilePictureUrl}

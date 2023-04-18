@@ -82,7 +82,6 @@ export const getNftData = async nft => {
     const result = await fetchWrapper.fetchNft(nft.address, nft.token_id);
     return result;
   } catch (e) {
-    // console.log("error", e);
     return {};
   }
 };

@@ -7,8 +7,9 @@ export const HandleStep = ({ user, setUser, setIsNextDisable }) => {
   const [handleError, setHandleError] = useState("");
   const handleRef = useRef(null);
   const validateStep = useCallback(() => {
+    const handle = handleRef.current.value?.toLowerCase();
     username
-      .validateHandle(handleRef.current.value)
+      .validateHandle(handle)
       .then(({ data }) => {
         if (data.error) {
           setHandleError(data.error);
@@ -18,7 +19,7 @@ export const HandleStep = ({ user, setUser, setIsNextDisable }) => {
           setIsNextDisable(false);
           setUser({
             ...user,
-            handle: handleRef.current.value
+            handle
           });
         }
       })
@@ -36,16 +37,16 @@ export const HandleStep = ({ user, setUser, setIsNextDisable }) => {
     <>
       <TitleRow>
         <Typography specs={{ variant: "h3", type: "bold" }} color="primary01">
-          Choose your @handle.
+          Choose your username.
         </Typography>
         <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
-          Your handle is your username on Talent Protocol and you’ll be also able to claim it as your domain.
+          Your username on Talent Protocol and you’ll be also able to claim it as your domain.
         </Typography>
       </TitleRow>
       <Form>
         <Row>
           <Typography specs={{ variant: "p2", type: "bold" }} color="primary01">
-            Handle
+            Username
           </Typography>
           <Input
             placeholder="johndoe"
@@ -55,6 +56,7 @@ export const HandleStep = ({ user, setUser, setIsNextDisable }) => {
             onChange={validateStep}
             onBlur={validateStep}
             shortDescription={handleError}
+            forceLowerCase
           />
         </Row>
       </Form>

@@ -16,8 +16,8 @@ export const SponsorModel = ({ isCurrentUserProfile, profile, railsContext }) =>
           Sponsorship
         </Typography>
         <Typography specs={{ variant: "p2", type: "regular" }} color="primary01">
-          Help talent grow through direct sponsorships. Talent have 30 days to claim sponsorships, after that you can
-          claim back your funds.
+          Help talent grow through direct sponsorships. {profile.user.name} has 30 days to claim sponsorships, after
+          that you can claim your funds back.
         </Typography>
         <Button
           hierarchy="primary"
@@ -32,7 +32,7 @@ export const SponsorModel = ({ isCurrentUserProfile, profile, railsContext }) =>
             }
           }}
           isDisabled
-          //isDisabled={isCurrentUserProfile}
+          // isDisabled={isCurrentUserProfile}
         />
       </Container>
     </>

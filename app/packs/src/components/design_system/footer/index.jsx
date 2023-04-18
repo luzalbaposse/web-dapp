@@ -10,9 +10,9 @@ import {
   ABOUT,
   BLOG,
   FAQ,
-  USER_GUIDE,
   TERMS_HREF,
-  PRIVACY_HREF
+  PRIVACY_HREF,
+  BOUNTIES
 } from "src/utils/constants";
 import Tab from "src/components/design_system/tab";
 import SocialRow from "src/components/talent/Show/SocialRow";
@@ -44,6 +44,7 @@ const Footer = () => {
             <P2 className="text-black mb-2" bold text="Project" />
             <Tab href={ABOUT} text="About" type="white" className="mb-2" target="_blank" />
             <Tab href={BLOG} text="Blog" type="white" className="mb-2" target="_blank" />
+            <Tab href={BOUNTIES} text="Bounties" type="white" className="mb-2" target="_blank" />
           </div>
           <div className="col-lg-2 d-flex flex-column mt-5 mt-lg-0">
             <P2 className="text-black mb-2" bold text="Help" />
@@ -53,7 +54,10 @@ const Footer = () => {
           </div>
           <div className="col-lg-2 d-flex flex-column mt-5 mt-lg-0">
             <P2 className="text-black mb-2" bold text="Socials" />
-            <SocialRow className="ml-lg-0" profile={profile} />
+            <Tab href={TALENT_PROTOCOL_TWITTER} text="Twitter" type="white" className="mb-2" target="_blank" />
+            <Tab href={TALENT_PROTOCOL_DISCORD} text="Discord" type="white" className="mb-2" target="_blank" />
+            <Tab href={TALENT_PROTOCOL_GITHUB} text="Github" type="white" className="mb-2" target="_blank" />
+            <Tab href={TALENT_PROTOCOL_TELEGRAM} text="Telegram" type="white" className="mb-2" target="_blank" />
           </div>
         </div>
         <div className="my-5 mt-lg-0 px-2 px-lg-0">

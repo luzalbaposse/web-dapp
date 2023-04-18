@@ -47,7 +47,7 @@ RSpec.describe UserMailer, type: :mailer do
     end
 
     it "assigns profile url" do
-      expect { talent_profile_url(user.username) }.not_to raise_error
+      expect { user_url(user.username) }.not_to raise_error
     end
   end
 

@@ -253,10 +253,10 @@ const LaunchTokenModals = props => {
           changeSharedState(prev => ({
             ...prev,
             total_supply: response.total_supply,
-            talentToken: {
+            talent_token: {
               ...prev.talent_token,
               contract_id: contractAddress.toLowerCase(),
-              chain_id: response.token.chain_id,
+              chain_id: response.talent_token.chain_id,
               deployed: true
             }
           }));
@@ -310,7 +310,7 @@ const LaunchTokenModals = props => {
         chain_id: currentChain
       }
     }).catch(() => {
-      console.log("error updating ticker");
+      // Error updating ticker
       setShow(false);
       return;
     });

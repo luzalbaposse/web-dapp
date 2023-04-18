@@ -11,7 +11,7 @@ export const Container = styled.main`
     grid-template-columns: 1fr 456px;
     grid-auto-rows: minmax(0, auto);
     gap: 24px;
-    grid-template-areas: 
+    grid-template-areas:
       "GMContainer GMContainer"
       "CompleteProfileWidget MyWallet"
       "QuestsWidget RecommendedBuilders"

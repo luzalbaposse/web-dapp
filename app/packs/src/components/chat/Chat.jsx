@@ -34,7 +34,7 @@ const Chat = ({ chats, pagination }) => {
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
 
   const updateChats = (previousChats, newChat) => {
-    const receiverIndex = previousChats.findIndex(chat => chat.receiver_username === newChat.receiver_username);
+    const receiverIndex = previousChats.findIndex(chat => chat.receiver_username === newChat?.receiver_username);
 
     const newChats = [
       {
@@ -68,7 +68,15 @@ const Chat = ({ chats, pagination }) => {
     setMessages([]);
 
     get(`messages/${activeUserUsername}`).then(response => {
-      setLocalChats(previousChats => updateChats(previousChats, response.readChat));
+      setLocalChats(previousChats =>
+        updateChats(
+          previousChats,
+          response.readChat || {
+            receiver_username: response.username,
+            last_message_text: "No messages exchanged yet.."
+          }
+        )
+      );
       setMessages(response.messages);
       setLastMessageId(response.messages[response.messages.length - 1]?.id);
       setChatId(response.chat_id || "");
@@ -150,6 +158,22 @@ const Chat = ({ chats, pagination }) => {
   };
 
   const setActiveUser = userUsername => {
+    setLocalChats(previousChats => {
+      const index = previousChats.findIndex(chat => chat.receiver_username === userUsername);
+      if (index > -1) {
+        const newChats = [
+          ...previousChats.slice(0, index),
+          {
+            ...previousChats[index],
+            unreadMessagesCount: 0
+          },
+          ...previousChats.slice(index + 1)
+        ];
+        return newChats;
+      } else {
+        return previousChats;
+      }
+    });
     setActiveUserUsername(userUsername);
     window.history.pushState({}, document.title, `/messages?user=${userUsername}`);
   };
@@ -158,22 +182,6 @@ const Chat = ({ chats, pagination }) => {
     const params = new URLSearchParams(document.location.search);
     setActiveUserUsername(params.get("user"));
   });
-
-  useEffect(() => {
-    const activeChatIndex = localChats.findIndex(chat => chat.receiver_username === activeUserUsername);
-
-    if (activeChatIndex > 0 && localChats.length > 0 && localChats[activeChatIndex].unreadMessagesCount > 0) {
-      const newChats = [
-        ...localChats.slice(0, activeChatIndex),
-        {
-          ...localChats[activeChatIndex],
-          unreadMessagesCount: 0
-        },
-        ...localChats.slice(activeChatIndex + 1)
-      ];
-      setLocalChats(newChats);
-    }
-  }, [activeUserUsername]);
 
   const messagingDisabled = () => {
     const activeUser = chats.find(chat => chat.receiver_username == activeUserUsername);

@@ -44,5 +44,19 @@ module PublicAPI
       message: {type: :string, description: "The message sent by the talent"},
       created_at: {type: :string, format: :datetime, description: "The creation date of the career update"}
     }
+
+    SPONSORSHIP_PROPERTIES = {
+      amount: {type: :integer, description: "The amount sponsored"},
+      chain_id: {type: :integer, description: "The id of the chain"},
+      token: {type: :string, description: "The token address"},
+      symbol: {type: :string, description: "The token ticker"},
+      claimed_at: {type: :string, format: :datetime, description: "The timestamp of the sponsor claim", nullable: true},
+      revoked_at: {type: :string, format: :datetime, description: "The timestamp of the sponsor revoke", nullable: true},
+      status: {type: :string, enum: %w[pending claimed revoked], description: "The status of the sponsorship"},
+      sponsor_address: {type: :string, description: "The wallet address of the sponsor"},
+      sponsored_address: {type: :string, description: "The wallet address of the sponsored talent"},
+      sponsor: {type: :object, properties: TALENT_PROPERTIES, description: "The sponsor talent", nullable: true},
+      sponsored: {type: :object, properties: TALENT_PROPERTIES, description: "The sponsored talent", nullable: true}
+    }
   end
 end

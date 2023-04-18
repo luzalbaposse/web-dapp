@@ -3,6 +3,7 @@ import { string, number, oneOfType, bool } from "prop-types";
 import ThemeContainer, { useTheme } from "src/contexts/ThemeContext";
 import DefaultBannerLight from "images/default-banner-light.png";
 import DefaultBannerDark from "images/default-banner-dark.png";
+import DefaultProfilePicture from "images/default-profile-icon-0.png";
 
 const TalentProfilePicture = ({
   src,
@@ -23,8 +24,7 @@ const TalentProfilePicture = ({
     if (src) {
       return src;
     } else if (!straight) {
-      // eslint-disable-next-line no-undef
-      return require(`images/default-profile-icon-${Math.floor(Math.random() * 5)}.png`);
+      return DefaultProfilePicture;
     } else if (mode() === "light" && straight) {
       return DefaultBannerLight;
     } else if (mode() === "dark" && straight) {

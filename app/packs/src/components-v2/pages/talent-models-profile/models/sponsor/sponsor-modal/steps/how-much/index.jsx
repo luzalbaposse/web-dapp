@@ -52,7 +52,7 @@ export const HowMuchStep = ({ token, setToken, railsContext, setAmount, closeMod
             You will send
           </Typography>
           <Typography specs={{ variant: "p3", type: "bold" }} color="primary04">
-            Balance: {parseAndCommify(availableAmount)} {token}
+            Balance: {parseAndCommify(availableAmount)} {token.value}
           </Typography>
         </ClaimAreaHeader>
         <ClaimAreaInput>
@@ -60,10 +60,14 @@ export const HowMuchStep = ({ token, setToken, railsContext, setAmount, closeMod
             <Input type="number" placeholder="10" onChange={e => setAmount(e.target.value)} />
           </ClaimAreaInputContainer>
           <Dropdown
-            value={token}
-            options={["cUSD", "USDC"]}
-            placeholder="cUSD"
-            selectValue={token => {
+            value={token.value}
+            selectedOption={token}
+            options={[
+              { value: "cUSD", iconName: "celo" },
+              { value: "USDC", iconName: "polygon" }
+            ]}
+            placeholder="USDC"
+            selectOption={token => {
               setToken(token);
             }}
           />

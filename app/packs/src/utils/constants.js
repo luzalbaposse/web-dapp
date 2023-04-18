@@ -32,6 +32,8 @@ export const ABOUT = "https://talentprotocol.notion.site/Talent-Protocol-101-26a
 
 export const BLOG = "https://blog.talentprotocol.com/";
 
+export const BOUNTIES = "https://app.dework.xyz/talent-protocol";
+
 export const FAQ = "https://help.talentprotocol.com/";
 
 export const TALENT_PROTOCOL_DISCORD = "https://discord.gg/talentprotocol";

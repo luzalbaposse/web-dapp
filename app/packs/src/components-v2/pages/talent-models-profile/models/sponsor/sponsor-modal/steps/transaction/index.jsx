@@ -28,17 +28,20 @@ const PRIMARY_BUTTON_STATES = {
 export const TransactionStep = ({ profile, token, railsContext, amount, closeModal }) => {
   const [onchain, setOnchain] = useState(null);
   const [account, setAccount] = useState(null);
+  const [chainId, setChainId] = useState(null);
   const [primaryButtonState, setPrimaryButtonState] = useState(PRIMARY_BUTTON_STATES.APPROVE);
 
   const setupOnChain = useCallback(async () => {
     const newOnChain = new OnChain(railsContext.contractsEnv);
 
     const _account = await newOnChain.connectedAccount();
+    const _chainId = await newOnChain.getChainID();
     await newOnChain.loadSponsorship();
     await newOnChain.loadStableToken();
 
     setOnchain(newOnChain);
     setAccount(_account);
+    setChainId(_chainId);
   }, [setOnchain, setAccount]);
 
   useEffect(() => {
@@ -62,7 +65,7 @@ export const TransactionStep = ({ profile, token, railsContext, amount, closeMod
     });
     if (result) {
       await post(`/api/v1/sponsorships`, {
-        sponsorship: { tx_hash: result.transactionHash }
+        sponsorship: { tx_hash: result.transactionHash, chain_id: chainId }
       })
         .then(() => {
           closeModal();
@@ -82,10 +85,10 @@ export const TransactionStep = ({ profile, token, railsContext, amount, closeMod
         <Avatar size="lg" url={profile.profile_picture_url} />
         <HeaderContainer>
           <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
-            You will become {profile.user.name}’s sponsor
+            You will become {profile.user.name}'s sponsor
           </Typography>
           <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
-            You will become {profile.user.name}’ sponsor
+            You will become {profile.user.name}' sponsor
           </Typography>
         </HeaderContainer>
         <DetailsContainer>
@@ -94,7 +97,7 @@ export const TransactionStep = ({ profile, token, railsContext, amount, closeMod
               Sponsorship
             </Typography>
             <Typography specs={{ variant: "p2", type: "regular" }} color="primary01">
-              {amount} {token}
+              {amount} {token.value}
             </Typography>
           </DetailsRow>
           <DetailsRow>
@@ -112,12 +115,12 @@ export const TransactionStep = ({ profile, token, railsContext, amount, closeMod
               Total
             </Typography>
             <Typography specs={{ variant: "p1", type: "bold" }} color="primary01">
-              {amount} {token} + Gas Fee
+              {amount} {token.value} + Gas Fee
             </Typography>
           </DetailsRow>
         </DetailsContainer>
         <Typography specs={{ variant: "p3", type: "regular" }} color="primary03">
-          Please note that this is an estimate and the actual value may vary based on the Ethereum gas fee.
+          Please note that this is an estimate and the actual value may vary based on the network gas fee.
         </Typography>
         <BottomContainer>
           <Button

@@ -119,12 +119,12 @@ const StakeModal = ({
     e.preventDefault();
 
     if (!currentAccount) {
-      console.log("NO CURRENT ACCOUNT");
+      // No current account
       return;
     }
 
     if (parseFloat(amount) > parseFloat(availableAmount)) {
-      console.log("AMOUNT IS TOO HIGH");
+      // AMOUNT IS TOO HIGH
       return;
     }
 

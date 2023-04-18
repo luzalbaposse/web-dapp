@@ -328,8 +328,8 @@ const Settings = props => {
             <P3 className="text-danger mt-1" text={validationErrors.talDomain} />
           ) : (
             <P3 className="mt-1">
-              Set your handle to configure your Talent Protocol custom domain.{" "}
-              <a href="https://talentprotocol.com/handle" target="_blank">
+              Set your purchased username to configure your Talent Protocol custom domain.{" "}
+              <a href="https://talentprotocol.com/username" target="_blank">
                 Learn More
               </a>
             </P3>

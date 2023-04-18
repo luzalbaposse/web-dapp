@@ -29,8 +29,8 @@ export const StakingModel = ({ profile, isCurrentUserProfile, currentUserId, rai
         Staking
       </Typography>
       <Typography specs={{ variant: "p2", type: "regular" }} color="primary01">
-        Stake to vouch for someone you truly believe in. Unlock access to a TAL yield pool for both yourself and who you
-        are supporting.
+        Stake to vouch for someone you truly believe in. Unlock access to a TAL yield pool for both yourself and{" "}
+        {profile.user.name}.
       </Typography>
       <Button hierarchy="primary" size="large" text="Stake" isStretched onClick={() => setShowStakeModal(true)} />
     </Container>

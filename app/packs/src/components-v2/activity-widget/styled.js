@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.section`
-grid-area: ActivityWidget;
+  grid-area: ActivityWidget;
   display: flex;
   flex-direction: column;
   gap: 24px;

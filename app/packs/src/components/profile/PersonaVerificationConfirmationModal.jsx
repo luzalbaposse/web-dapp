@@ -13,7 +13,7 @@ import Button from "src/components/design_system/button";
 import TextInput from "src/components/design_system/fields/textinput";
 import { useWindowDimensionsHook } from "src/utils/window";
 
-const PersonaVerificationConfirmationModal = ({ show, hide, talent, setTalent, railsContext, mode }) => {
+const PersonaVerificationConfirmationModal = ({ show, hide, talent, setProfile, railsContext, mode }) => {
   const { mobile } = useWindowDimensionsHook();
   const [editedTalent, setEditedTalent] = useState(talent);
   const [loading, setLoading] = useState(false);
@@ -50,7 +50,7 @@ const PersonaVerificationConfirmationModal = ({ show, hide, talent, setTalent, r
         };
         patch(`/api/v1/talent/${user.id}`, params)
           .then(response => {
-            setTalent(prev => ({
+            setProfile(prev => ({
               ...prev,
               with_persona_id: response.with_persona_id
             }));
@@ -80,7 +80,7 @@ const PersonaVerificationConfirmationModal = ({ show, hide, talent, setTalent, r
     });
 
     if (response && !response.error) {
-      setTalent(prev => ({
+      setProfile(prev => ({
         ...prev,
         ...response
       }));

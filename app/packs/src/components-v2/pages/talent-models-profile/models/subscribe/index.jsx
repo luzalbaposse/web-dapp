@@ -52,7 +52,8 @@ export const SubscribeModel = ({ profile, setProfile, isCurrentUserProfile }) =>
         Career Updates
       </Typography>
       <Typography specs={{ variant: "p2", type: "regular" }} color="primary01">
-        The first step to support someone is being present. Subscribe to have access and receive Career Updates.
+        The first step to support someone is being present. Subscribe to have access and receive Career Updates from{" "}
+        {profile.user.name}.
       </Typography>
       {profile.subscribing_status === "pending" && (
         <Button

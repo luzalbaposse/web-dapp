@@ -48,7 +48,7 @@ export const ProfileCard = ({
   const userProfile = profile.profile;
   const talentToken = profile.talent_token;
   const joinedAt = useMemo(() => {
-    return dayjs(user?.createdAt).format("MMMM YYYY");
+    return dayjs(user?.created_at).format("MMMM YYYY");
   }, [user?.createdAt]);
   const Headline = useMemo(() => {
     if (!userProfile.headline) return <></>;
@@ -103,8 +103,8 @@ export const ProfileCard = ({
                 className="text-primary-01 mr-1"
                 bold
                 text={
-                  profile.totalSupply
-                    ? formatNumberWithSymbol(ethers.utils.formatUnits(profile.totalSupply) * talentTokenPrice)
+                  profile.total_supply
+                    ? formatNumberWithSymbol(ethers.utils.formatUnits(profile.total_supply) * talentTokenPrice)
                     : "-"
                 }
               />
