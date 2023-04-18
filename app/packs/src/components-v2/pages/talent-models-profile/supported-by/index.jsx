@@ -40,7 +40,13 @@ export const SupportedBy = ({ profile }) => {
             <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
               {profile.user.legal_first_name} is supported by {totalSupporters} people
             </Typography>
-            <TextLink href={`/u/${profile.user.username}#community`} text="View all" rightIcon="carret" color="primary" size="small"/>
+            <TextLink
+              href={`/u/${profile.user.username}#community`}
+              text="View all"
+              rightIcon="carret"
+              color="primary"
+              size="small"
+            />
           </TitleContainer>
           <ListContainer>{SupporterList}</ListContainer>
         </>

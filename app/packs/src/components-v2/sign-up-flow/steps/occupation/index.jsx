@@ -109,8 +109,8 @@ export const OccupationStep = ({ user, setUser, setIsNextDisable }) => {
   useEffect(() => {
     requestAnimationFrame(() => {
       setIsNextDisable(false);
-    })
-  }, []);
+    });
+  }, [setIsNextDisable]);
   return (
     <>
       <TitleRow>

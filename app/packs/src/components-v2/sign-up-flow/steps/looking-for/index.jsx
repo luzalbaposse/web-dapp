@@ -93,8 +93,8 @@ export const LookingForStep = ({ user, setUser, setIsNextDisable }) => {
   useEffect(() => {
     requestAnimationFrame(() => {
       setIsNextDisable(false);
-    })
-  }, []);
+    });
+  }, [setIsNextDisable]);
   return (
     <>
       <TitleRow>

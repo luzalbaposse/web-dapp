@@ -95,19 +95,16 @@ const SendCareerUpdateModal = ({ show, hide, placeholder }) => {
 
     const body = {
       career_update: {
-        message: message,
-      },
+        message: message
+      }
     };
 
-    post("/api/v1/career_updates", body).then((response) => {
+    post("/api/v1/career_updates", body).then(response => {
       if (response.error) {
         toast.error(<ToastBody heading="Error!" body={response.error} />);
       } else {
         toast.success(
-          <ToastBody
-            heading="Success!"
-            body={"Your career update was created and sent to your supporters."}
-          />
+          <ToastBody heading="Success!" body={"Your career update was created and sent to your supporters."} />
         );
         hide();
       }
@@ -135,7 +132,7 @@ const SendCareerUpdateModal = ({ show, hide, placeholder }) => {
       <Modal.Body>
         <TextArea
           placeholder={placeholder}
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={e => setMessage(e.target.value)}
           value={message}
           rows="10"
           className="w-100 mt-4"
@@ -143,18 +140,8 @@ const SendCareerUpdateModal = ({ show, hide, placeholder }) => {
         />
       </Modal.Body>
       <Modal.Footer className="px-3 py-3">
-        <Button
-          className="mr-2"
-          type="white-ghost"
-          text="Cancel"
-          onClick={hide}
-        />
-        <Button
-          type="primary-default"
-          text="Send Career Update"
-          onClick={debouncedNewMessage}
-          disabled={disabled()}
-        />
+        <Button className="mr-2" type="white-ghost" text="Cancel" onClick={hide} />
+        <Button type="primary-default" text="Send Career Update" onClick={debouncedNewMessage} disabled={disabled()} />
       </Modal.Footer>
     </Modal>
   );

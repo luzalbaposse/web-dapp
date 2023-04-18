@@ -1,5 +1,5 @@
 import { TextArea, Typography } from "@talentprotocol/design-system";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Row, Form, TitleRow, WordCounterContainer } from "./styled";
 
 const MAX_CHARACTERS = 70;
@@ -21,11 +21,13 @@ export const IntroductionStep = ({ user, setUser, setIsNextDisable }) => {
         ...user,
         headline
       });
-      setIsNextDisable(false);
-    } else {
-      setIsNextDisable(true);
     }
-  }, [user, setUser, setIsNextDisable, headline, setIsFirstRender]);
+  }, [user, setUser, headline, setIsFirstRender]);
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      setIsNextDisable(false);
+    });
+  }, [setIsNextDisable]);
   return (
     <>
       <TitleRow>

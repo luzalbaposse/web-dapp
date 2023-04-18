@@ -13,9 +13,9 @@ export const Container = styled.section`
       display: none;
     `}
 
-    ${mobileStyles(css`
-      border-bottom: 1px solid ${buildColor("surfaceHover02")};
-    `)}
+  ${mobileStyles(css`
+    border-bottom: 1px solid ${buildColor("surfaceHover02")};
+  `)}
   
 
   ${desktopStyles(css`
