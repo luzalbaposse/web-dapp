@@ -16,6 +16,7 @@ export const DefineStep = ({ user, setUser, setIsNextDisable }) => {
           nationality: nationality || nationalityParameter,
           location: locationRef.current.value
         });
+        setIsNextDisable(false)
       } else {
         setIsNextDisable(true);
       }
@@ -23,7 +24,9 @@ export const DefineStep = ({ user, setUser, setIsNextDisable }) => {
     [gender, nationality, locationRef, user, setUser]
   );
   useEffect(() => {
-    setIsNextDisable(false);
+    requestAnimationFrame(() => {
+      validateStep();
+    });
   }, [user, setIsNextDisable]);
   return (
     <>
