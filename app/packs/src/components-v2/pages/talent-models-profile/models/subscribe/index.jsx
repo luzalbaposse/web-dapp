@@ -5,15 +5,11 @@ import { toast } from "react-toastify";
 import { ToastBody } from "src/components/design_system/toasts";
 import { post, destroy } from "src/utils/requests";
 
-export const SubscribeModel = ({
-  profile,
-  setProfile,
-  isCurrentUserProfile,
-}) => {
+export const SubscribeModel = ({ profile, setProfile, isCurrentUserProfile }) => {
   const subscriptionButtonText = {
     pending: "Pending",
     subscribed: "Unsubscribe",
-    unsubscribed: "Subscribe",
+    unsubscribed: "Subscribe"
   };
 
   const updateSubscription = async () => {
@@ -23,15 +19,13 @@ export const SubscribeModel = ({
     let new_status;
 
     if (profile.subscribing_status == "subscribed") {
-      response = await destroy(
-        `/api/v1/subscriptions?talent_id=${profile.user.username}`
-      );
+      response = await destroy(`/api/v1/subscriptions?talent_id=${profile.user.username}`);
       successHeader = "Subscription removed";
       successMessage = `You're no longer subscribed to ${profile.user.name} career updates`;
       new_status = "unsubscribed";
     } else if (profile.subscribing_status == "unsubscribed") {
       response = await post(`/api/v1/subscriptions`, {
-        talent_id: profile.user.username,
+        talent_id: profile.user.username
       });
       successHeader = "New subscription requested";
       successMessage = `A subscription request was sent to ${profile.user.name}`;
@@ -39,22 +33,13 @@ export const SubscribeModel = ({
     }
 
     if (response.success) {
-      setProfile((prev) => ({
+      setProfile(prev => ({
         ...prev,
-        subscribing_status: new_status,
+        subscribing_status: new_status
       }));
-      toast.success(
-        <ToastBody heading={successHeader} body={successMessage} />,
-        { autoClose: 5000 }
-      );
+      toast.success(<ToastBody heading={successHeader} body={successMessage} />, { autoClose: 5000 });
     } else {
-      toast.error(
-        <ToastBody
-          heading="Unable to update subscription"
-          body={response?.error}
-        />,
-        { autoClose: 5000 }
-      );
+      toast.error(<ToastBody heading="Unable to update subscription" body={response?.error} />, { autoClose: 5000 });
     }
   };
 
@@ -67,8 +52,8 @@ export const SubscribeModel = ({
         Career Updates
       </Typography>
       <Typography specs={{ variant: "p2", type: "regular" }} color="primary01">
-        The first step to support someone is being present. Subscribe to have
-        access and receive Career Updates from {profile.user.name}.
+        The first step to support someone is being present. Subscribe to have access and receive Career Updates from{" "}
+        {profile.user.name}.
       </Typography>
       {profile.subscribing_status === "pending" && (
         <Button

@@ -16,7 +16,7 @@ const TalentProfilePicture = ({
   border,
   link,
   style,
-  contained,
+  contained
 }) => {
   const { mode } = useTheme();
 
@@ -38,15 +38,12 @@ const TalentProfilePicture = ({
   const borderPhoto = !border ? "" : "border-photo ";
   const imageContained = !contained ? "image-fit" : "image-contain";
 
-  const WithLink = ({ link, children }) =>
-    link ? <a href={link}>{children}</a> : children;
+  const WithLink = ({ link, children }) => (link ? <a href={link}>{children}</a> : children);
 
   return (
     <WithLink link={link}>
       <img
-        className={`${roundPhoto}${grey}${blurPhoto}${borderPhoto} ${
-          className || ""
-        } ${imageContained}`}
+        className={`${roundPhoto}${grey}${blurPhoto}${borderPhoto} ${className || ""} ${imageContained}`}
         src={imgSrc()}
         width={width || height}
         height={height}
@@ -67,7 +64,7 @@ TalentProfilePicture.defaultProps = {
   blur: null,
   border: null,
   link: null,
-  userId: 0,
+  userId: 0
 };
 
 TalentProfilePicture.propTypes = {
@@ -79,7 +76,7 @@ TalentProfilePicture.propTypes = {
   straight: bool,
   blur: bool,
   border: bool,
-  link: string,
+  link: string
 };
 
 // eslint-disable-next-line no-unused-vars

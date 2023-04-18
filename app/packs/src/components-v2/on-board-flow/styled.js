@@ -29,6 +29,7 @@ export const InfoContainer = styled.section`
   flex-direction: column;
   gap: 8px;
   padding: 24px;
+  min-height: 226px;
 
   ${desktopStyles(css`
     text-align: center;

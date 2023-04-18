@@ -20,12 +20,7 @@ const Celo = ({ className, pathClassName, style, width }) => (
     </g>
     <defs>
       <clipPath id="clip0_9270_14334">
-        <rect
-          width="14"
-          height="13.9635"
-          fill="white"
-          transform="translate(5.8418 5)"
-        />
+        <rect width="14" height="13.9635" fill="white" transform="translate(5.8418 5)" />
       </clipPath>
     </defs>
   </svg>
@@ -34,13 +29,13 @@ const Celo = ({ className, pathClassName, style, width }) => (
 Celo.defaultProps = {
   className: "",
   pathClassName: "",
-  width: 16,
+  width: 16
 };
 
 Celo.propTypes = {
   className: string,
   pathClassName: string,
-  width: number,
+  width: number
 };
 
 export default Celo;

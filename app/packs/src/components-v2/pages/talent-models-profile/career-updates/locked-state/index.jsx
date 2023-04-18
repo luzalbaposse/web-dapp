@@ -13,29 +13,20 @@ export const CareerUpdateLockedState = ({ profile, setProfile }) => {
     let new_status;
 
     response = await post(`/api/v1/subscriptions`, {
-      talent_id: profile.user.username,
+      talent_id: profile.user.username
     });
     successHeader = "New subscription requested";
     successMessage = `A subscription request was sent to ${profile.user.name}`;
     new_status = "pending";
 
     if (response.success) {
-      setProfile((prev) => ({
+      setProfile(prev => ({
         ...prev,
-        subscribing_status: new_status,
+        subscribing_status: new_status
       }));
-      toast.success(
-        <ToastBody heading={successHeader} body={successMessage} />,
-        { autoClose: 5000 }
-      );
+      toast.success(<ToastBody heading={successHeader} body={successMessage} />, { autoClose: 5000 });
     } else {
-      toast.error(
-        <ToastBody
-          heading="Unable to update subscription"
-          body={response?.error}
-        />,
-        { autoClose: 5000 }
-      );
+      toast.error(<ToastBody heading="Unable to update subscription" body={response?.error} />, { autoClose: 5000 });
     }
   };
   return (
@@ -45,10 +36,7 @@ export const CareerUpdateLockedState = ({ profile, setProfile }) => {
         <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
           Unlock career updates
         </Typography>
-        <Typography
-          specs={{ variant: "p2", type: "regular" }}
-          color="primary01"
-        >
+        <Typography specs={{ variant: "p2", type: "regular" }} color="primary01">
           By becoming a subscriber!
         </Typography>
       </TextColumn>

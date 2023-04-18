@@ -36,7 +36,8 @@ export const ConfirmEmailStep = ({ user, goToFirstStep, setHasCreateAccountError
           Something went wrong
         </Typography>
         <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
-          Please check your registration data for errors or reach out to the team
+          Please check your registration data for errors or reach out to the team. Normally this error occurs by an
+          invalid or already in use email.
         </Typography>
         <Button hierarchy="primary" size="medium" text="Review data" onClick={goToFirstStep} />
       </Container>

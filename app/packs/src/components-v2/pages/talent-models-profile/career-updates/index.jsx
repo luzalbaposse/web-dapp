@@ -11,8 +11,7 @@ import TextInput from "src/components/design_system/fields/textinput";
 export const CareerUpdates = ({ profile, isCurrentUserProfile, railsContext, setProfile }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLocked, setIsLocked] = useState(false);
-  const [isSendCareerUpdateModalOpen, setShowCareerUpdateModal] =
-    useState(false);
+  const [isSendCareerUpdateModalOpen, setShowCareerUpdateModal] = useState(false);
   const { careerUpdates, fetchCareerUpdates } = useTalentCareerUpdatesFetcher();
   useEffect(() => {
     fetchCareerUpdates(profile.user.username)
@@ -26,9 +25,7 @@ export const CareerUpdates = ({ profile, isCurrentUserProfile, railsContext, set
   }, [fetchCareerUpdates, profile]);
   const RenderedContent = useMemo(() => {
     if (isLocked) {
-      return (
-        <CareerUpdateLockedState profile={profile} setProfile={setProfile} />
-      );
+      return <CareerUpdateLockedState profile={profile} setProfile={setProfile} />;
     }
     if (!careerUpdates.length) {
       return (
@@ -64,13 +61,8 @@ export const CareerUpdates = ({ profile, isCurrentUserProfile, railsContext, set
             />
           )}
         </InputContainer>
-        {careerUpdates.map((update) => (
-          <Update
-            key={update.created_at}
-            data={update}
-            profile={profile}
-            isCurrentUserProfile={isCurrentUserProfile}
-          />
+        {careerUpdates.map(update => (
+          <Update key={update.created_at} data={update} profile={profile} isCurrentUserProfile={isCurrentUserProfile} />
         ))}
       </>
     );

@@ -87,21 +87,14 @@ export const LookingForStep = ({ user, setUser, setIsNextDisable }) => {
           return acc;
         }, [])
       });
-      if (parsedTags.some(pill => pill.isSelected)) {
-        setIsNextDisable(false);
-      } else {
-        setIsNextDisable(true);
-      }
     },
     [tags, setTags, user, setUser]
   );
   useEffect(() => {
-    if (user.careerNeeds.length) {
-      requestAnimationFrame(() => {
-        setIsNextDisable(false);
-      });
-    }
-  }, [user]);
+    requestAnimationFrame(() => {
+      setIsNextDisable(false);
+    });
+  }, [setIsNextDisable]);
   return (
     <>
       <TitleRow>
@@ -109,7 +102,7 @@ export const LookingForStep = ({ user, setUser, setIsNextDisable }) => {
           What are you looking for?
         </Typography>
         <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
-          Choose at least 1 tag. You can add more later.
+          Choose one or more. You can add more later.
         </Typography>
       </TitleRow>
       <PillsContainer>
