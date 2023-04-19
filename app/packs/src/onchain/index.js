@@ -271,7 +271,7 @@ class OnChain {
         );
         this.stableDecimals = await this.stabletoken.decimals();
         const balance = await this.stabletoken.balanceOf(this.account);
-        const balanceFormatted = ethers.utils.formatUnits(balance, this.tokenDecimals);
+        const balanceFormatted = ethers.utils.formatUnits(balance, this.stableDecimals);
 
         return balanceFormatted;
       } else {
