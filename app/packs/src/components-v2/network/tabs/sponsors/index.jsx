@@ -146,7 +146,7 @@ export const Sponsors = ({ currentUserId, railsContext }) => {
       {pendingSponsors.sponsors.length > 0 && (
         <Container>
           <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
-            New Sponsors
+            New requests
           </Typography>
           <NewSponsorsContainer>
             <NewSponsorsList>

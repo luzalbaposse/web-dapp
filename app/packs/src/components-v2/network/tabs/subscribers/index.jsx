@@ -159,7 +159,7 @@ export const Subscribers = ({ currentUserId }) => {
       {pendingSubscribers.subscribers.length > 0 && (
         <Container>
           <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
-            New Subscribers
+            New requests
           </Typography>
           <NewSubscribersContainer>
             <NewSubscribersList>
