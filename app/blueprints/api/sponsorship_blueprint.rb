@@ -1,6 +1,6 @@
 class API::SponsorshipBlueprint < Blueprinter::Base
   view :normal do
-    fields :amount, :chain_id, :token, :symbol, :claimed_at, :revoked_at
+    fields :amount, :chain_id, :token, :symbol, :token_decimals, :claimed_at, :revoked_at
 
     field :status do |sponsorship, _options|
       sponsorship.status

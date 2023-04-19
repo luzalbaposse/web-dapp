@@ -17,6 +17,8 @@ module Web3
     def call
       decoded_event = decoded_transaction_event
       args = decoded_event.kwargs
+      token = token_contract(args[:token])
+      token_decimals = provider.call(token, "decimals")
 
       sponsorship = Sponsorship.find_or_initialize_by(
         chain_id: provider.chain_id,
@@ -24,9 +26,11 @@ module Web3
         talent: args[:talent],
         token: args[:token],
         symbol: args[:symbol],
+        token_decimals: token_decimals,
         claimed_at: nil,
         revoked_at: nil
       )
+
       transactions = sponsorship.transactions
       transactions << tx_hash unless transactions.include?(tx_hash)
 
@@ -77,6 +81,7 @@ module Web3
         e,
         "Something went wrong upserting transaction",
         tx_hash: tx_hash,
+        token_decimals: token_decimals,
         chain_id: chain_id,
         decoded_event: decoded_event,
         sponsorship_id: sponsorship&.id
@@ -95,6 +100,14 @@ module Web3
       event = results.find { |r| r[1].present? }
       # The first item is the log, the second is the decoded log
       event[1]
+    end
+
+    def erc20_abi
+      @erc20_abi ||= JSON.parse(File.read("lib/abi/ERC20.json"))
+    end
+
+    def token_contract(token_address)
+      @token_contract ||= Eth::Contract.from_abi(name: "ERC20", address: token_address, abi: erc20_abi)
     end
 
     def transaction_timestamp

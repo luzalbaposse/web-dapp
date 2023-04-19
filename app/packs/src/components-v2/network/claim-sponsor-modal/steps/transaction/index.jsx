@@ -85,8 +85,8 @@ export const TransactionStep = ({ sponsorship, railsContext, closeModal, nextSte
         <Avatar size="lg" url={sponsorship.sponsor.profile_picture_url} />
         <HeaderContainer>
           <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
-            {sponsorship.sponsor.name} wants to sponsor you with {parseStableAmount(sponsorship.amount)}{" "}
-            {sponsorship.symbol}
+            {sponsorship.sponsor.name} wants to sponsor you with{" "}
+            {parseStableAmount(sponsorship.amount, sponsorship.token_decimals)} {sponsorship.symbol}
           </Typography>
           <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
             The funds will be available in your wallet after you accept this transaction.
@@ -98,7 +98,7 @@ export const TransactionStep = ({ sponsorship, railsContext, closeModal, nextSte
               You will receive
             </Typography>
             <Typography specs={{ variant: "p2", type: "regular" }} color="primary01">
-              {parseStableAmount(sponsorship.amount)} {sponsorship.symbol}
+              {parseStableAmount(sponsorship.amount, sponsorship.token_decimals)} {sponsorship.symbol}
             </Typography>
           </DetailsRow>
           <DetailsRow>
