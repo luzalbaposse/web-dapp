@@ -95,7 +95,7 @@ export const TransactionStep = ({ sponsorship, railsContext, closeModal, nextSte
               You will receive
             </Typography>
             <Typography specs={{ variant: "p2", type: "regular" }} color="primary01">
-              {parseStableAmount(sponsorship.amount)} {sponsorship.symbol}
+              {parseStableAmount(sponsorship.amount, sponsorship.token_decimals)} {sponsorship.symbol}
             </Typography>
           </DetailsRow>
           <DetailsRow>

@@ -170,8 +170,8 @@ export const Sponsors = ({ currentUserId, railsContext }) => {
                       </a>
                       <MessageContainer>
                         <Typography specs={{ variant: "p2", type: "regular" }} color={"primary03"}>
-                          Is interested in sponsorsing you with {parseStableAmount(sponsorship.amount)}{" "}
-                          {sponsorship.symbol}
+                          Is interested in sponsorsing you with{" "}
+                          {parseStableAmount(sponsorship.amount, sponsorship.token_decimals)} {sponsorship.symbol}
                         </Typography>
                       </MessageContainer>
                       <Tag

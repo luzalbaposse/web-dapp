@@ -30,6 +30,7 @@ RSpec.describe Web3::SponsorshipSync do
     allow(provider).to receive(:eth_get_transaction_receipt).and_return(transaction_receipt)
     allow(provider).to receive(:eth_get_block_by_hash).and_return(block_by_hash_response_mock)
     allow(provider).to receive(:chain_id).and_return(44787)
+    allow(provider).to receive(:call).and_return(6)
     allow(Rollbar).to receive(:error)
     allow(create_notification_class).to receive(:new).and_return(create_notification_instance)
   end
@@ -49,6 +50,7 @@ RSpec.describe Web3::SponsorshipSync do
         expect(sponsorship.talent).to eq "0x33041027dd8f4dc82b6e825fb37adf8f15d44052"
         expect(sponsorship.amount).to eq "2000000000000000000"
         expect(sponsorship.token).to eq "0x874069fa1eb16d44d622f2e0ca25eea172369bc1"
+        expect(sponsorship.token_decimals).to eq 6
         expect(sponsorship.symbol).to eq "cUSD"
         expect(sponsorship.chain_id).to eq 44787
         expect(sponsorship.transactions).to match_array([tx_hash])
@@ -84,6 +86,7 @@ RSpec.describe Web3::SponsorshipSync do
           sponsor: "0xe3103d2482ca341f75892a69696b3014ca673049",
           token: "0x874069fa1eb16d44d622f2e0ca25eea172369bc1",
           symbol: "cUSD",
+          token_decimals: 6,
           chain_id: chain_id,
           transactions: ["transaction_1", "transaction_2"],
           claimed_at: nil,
@@ -121,6 +124,7 @@ RSpec.describe Web3::SponsorshipSync do
           sponsor: "0xe3103d2482ca341f75892a69696b3014ca673049",
           token: "0x874069fa1eb16d44d622f2e0ca25eea172369bc1",
           symbol: "cUSD",
+          token_decimals: 6,
           chain_id: chain_id,
           transactions: ["transaction_1", "transaction_2"],
           claimed_at: nil,
