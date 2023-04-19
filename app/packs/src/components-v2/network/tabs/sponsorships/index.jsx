@@ -130,7 +130,7 @@ export const Sponsorships = ({ currentUserId, railsContext }) => {
           title="You don't have any sponsorships"
           text="Take a look around the app and search for talents needing help!"
           buttonText="See all Talent"
-          buttonURl="/talent"
+          buttonUrl="/talent"
         />
       )}
       {pendingSponsorships.sponsorships.length > 0 && (

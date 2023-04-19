@@ -54,8 +54,8 @@ class Connection < ApplicationRecord
     return 5 if connected_user_invested_amount.to_i.positive?
     return 4 if user_invested_amount.to_i.positive?
     return 3 if user.subscribing.find_by(user_id: connected_user_id).present? && connected_user.subscribing.find_by(user_id: user_id).present?
-    return 2 if user.subscribing.find_by(user_id: connected_user_id).present?
-    return 1 if connected_user.subscribing.find_by(user_id: user_id).present?
+    return 2 if connected_user.subscribing.find_by(user_id: user_id).present?
+    return 1 if user.subscribing.find_by(user_id: connected_user_id).present?
   end
 
   def users_with_wallets_connected?

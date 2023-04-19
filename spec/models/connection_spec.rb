@@ -29,10 +29,10 @@ RSpec.describe Connection, type: :model do
         create :subscription, user: connected_user, subscriber: user
       end
 
-      it "updates the connection type to subscriber" do
+      it "updates the connection type to subscribing" do
         updated_connection = connection.refresh_connection!
 
-        expect(updated_connection.connection_type).to eq "subscriber"
+        expect(updated_connection.connection_type).to eq "subscribing"
       end
     end
 
@@ -41,10 +41,10 @@ RSpec.describe Connection, type: :model do
         create :subscription, user: user, subscriber: connected_user
       end
 
-      it "updates the connection type to subscribing" do
+      it "updates the connection type to subscriber" do
         updated_connection = connection.refresh_connection!
 
-        expect(updated_connection.connection_type).to eq "subscribing"
+        expect(updated_connection.connection_type).to eq "subscriber"
       end
     end
 

@@ -280,11 +280,11 @@ const Network = ({ userId, talent, canUpdate }) => {
       <div className="mb-5 row justify-content-center ">
         <div className="col-6 col-lg-2 d-flex">
           <P2 className={cx("text-primary-01 mr-1", mobile && "ml-5")} bold text={talent?.supporters_count || "0"} />
-          <P2 className="text-primary-04" text="Supporters" />
+          <P2 className="text-primary-04" text="Stakers" />
         </div>
         <div className="col-6 col-lg-2 d-flex">
           <P2 className="text-primary-01 mr-1" bold text={talent?.supporting_count || "0"} />
-          <P2 className="text-primary-04" text="Supporting" />
+          <P2 className="text-primary-04" text="Staking" />
         </div>
         <div className="col-6 col-lg-2 d-flex">
           <P2 className={cx("text-primary-01 mr-1", mobile && "ml-5")} bold text={talent?.subscribers_count || "0"} />

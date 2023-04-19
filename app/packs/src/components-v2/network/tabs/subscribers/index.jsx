@@ -153,7 +153,7 @@ export const Subscribers = ({ currentUserId }) => {
           title="You don't have any subscribers"
           text="Start engaging with the community! Send a message, subscribe, stake or sponsor Talent career"
           buttonText="See all Talent"
-          buttonURl="/talent"
+          buttonUrl="/talent"
         />
       )}
       {pendingSubscribers.subscribers.length > 0 && (
