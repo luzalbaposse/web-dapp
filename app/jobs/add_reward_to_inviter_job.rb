@@ -10,7 +10,7 @@ class AddRewardToInviterJob < ApplicationJob
 
       user = invite.user
 
-      return if user.admin?
+      return if user&.admin?
 
       invite.max_uses = invite.uses + 1
       invite.save!
