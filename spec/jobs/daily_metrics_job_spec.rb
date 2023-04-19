@@ -119,8 +119,8 @@ RSpec.describe DailyMetricsJob, type: :job do
       expect(created_daily_metric.total_engaged_users).to eq 5
       expect(created_daily_metric.total_active_users).to eq 1
       expect(created_daily_metric.total_onboarded_users).to eq 5
-      expect(created_daily_metric.total_celo_token_transactions).to eq 20
-      expect(created_daily_metric.total_polygon_token_transactions).to eq 20
+      expect(created_daily_metric.total_celo_token_transactions).to eq 30
+      expect(created_daily_metric.total_polygon_token_transactions).to eq 30
       expect(created_daily_metric.total_mates_nfts).to eq 400
       expect(created_daily_metric.total_tal_subdomain_transactions).to eq 10
       expect(created_daily_metric.total_claimed_domains).to eq 1

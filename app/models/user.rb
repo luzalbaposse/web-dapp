@@ -252,12 +252,16 @@ class User < ApplicationRecord
   end
 
   def connected_with_since(other_user)
+    sponsor_data = sponsors.claimed.where(sponsor: other_user.wallet_id).order(:claimed_at).first
+    sponsoring_data = sponsorships.claimed.where(talent: other_user.wallet_id).order(:claimed_at).first
     supporter_data = TalentSupporter.find_by(supporter_wallet_id: wallet_id, talent_contract_id: other_user.talent&.talent_token&.contract_id)
     supporting_data = TalentSupporter.find_by(supporter_wallet_id: other_user.wallet_id, talent_contract_id: talent&.talent_token&.contract_id)
     subscriber_data = subscriptions.find_by(subscriber: other_user)
     subscribing_data = subscribing.find_by(user: other_user)
 
     [
+      sponsor_data&.claimed_at,
+      sponsoring_data&.claimed_at,
       supporter_data&.first_time_bought_at,
       supporting_data&.first_time_bought_at,
       subscriber_data&.created_at,

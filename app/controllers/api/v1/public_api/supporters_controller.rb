@@ -1,7 +1,9 @@
 class API::V1::PublicAPI::SupportersController < API::V1::PublicAPI::APIController
   def index
+    supporters = user.supporters.includes(talent: :talent_token)
+
     pagy, supporters = pagy_uuid_cursor(
-      user.supporters,
+      supporters,
       before: cursor,
       items: per_page,
       order: {created_at: :desc, uuid: :desc}

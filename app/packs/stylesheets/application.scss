@@ -147,3 +147,9 @@ textarea {
 a:hover {
   text-decoration: none;
 }
+
+@media (max-width: 1240px) {
+  #helpkit-launcherButton--talentprotocol {
+    bottom: 72px;
+  }
+}

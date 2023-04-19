@@ -8,6 +8,17 @@ export const parseAndCommify = (value, nrOfDecimals = 2) => {
   return ethers.utils.commify(parseFloat(value).toFixed(nrOfDecimals));
 };
 
+export const parseStableAmount = amount => {
+  try {
+    const balanceFormatted = ethers.utils.formatUnits(`${amount}`);
+
+    return balanceFormatted;
+  } catch (error) {
+    console.log(error);
+    return "0.0";
+  }
+};
+
 export const ipfsToURL = ipfsAddress => {
   if (ipfsAddress.includes("http")) {
     return ipfsAddress;

@@ -12,7 +12,7 @@ export const SupportedBy = ({ profile }) => {
   const SupporterList = useMemo(
     () =>
       (supporters || []).reduce((acc, supporter) => {
-        if (supporter.id !== profile.user.uuid && acc.length < 6) {
+        if (acc.length < 6) {
           acc.push(
             <ListItem key={supporter.id} href={`/u/${supporter.username}`}>
               <Avatar
@@ -41,7 +41,7 @@ export const SupportedBy = ({ profile }) => {
               {profile.user.legal_first_name} is supported by {totalSupporters} people
             </Typography>
             <TextLink
-              href={`/u/${profile.user.username}#community`}
+              href={`/u/${profile.user.username}#network`}
               text="View all"
               rightIcon="carret"
               color="primary"

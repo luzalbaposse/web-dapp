@@ -14,7 +14,13 @@ export const SuccessStep = ({ closeModal, profile }) => {
           Congratulations! Your officially a {profile.user.name} Sponsor!
         </Typography>
       </InfoContainer>
-      <Button hierarchy="primary" size="large" onClick={closeModal} text="Return" />
+      <Button
+        hierarchy="primary"
+        size="large"
+        onClick={() => (window.location.href = `/messages?user=${profile.user.username}`)}
+        text="Send Message"
+      />
+      <Button hierarchy="secondary" size="medium" onClick={closeModal} text="Return" />
     </Container>
   );
 };

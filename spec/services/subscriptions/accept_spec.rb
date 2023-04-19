@@ -94,11 +94,11 @@ RSpec.describe Subscriptions::Accept do
       aggregate_failures do
         expect(subscriber_connection.user).to eq(subscriber_user)
         expect(subscriber_connection.connected_user).to eq(subscribing_user)
-        expect(subscriber_connection.connection_type).to eq("supporting")
+        expect(subscriber_connection.connection_type).to eq("staking")
 
         expect(subscribing_connection.user).to eq(subscribing_user)
         expect(subscribing_connection.connected_user).to eq(subscriber_user)
-        expect(subscribing_connection.connection_type).to eq("supporter")
+        expect(subscribing_connection.connection_type).to eq("staker")
       end
     end
   end

@@ -9,6 +9,7 @@ RSpec.describe "Sponsorships API" do
       produces "application/json"
       parameter name: :id, in: :query, type: :string, description: "Wallet address or username"
       parameter name: :cursor, in: :query, type: :string, description: "The cursor to fetch the next page"
+      parameter name: "status", in: :query, schema: {type: :string, enum: %w[pending claimed revoked]}, description: "The status of the sponsor"
       parameter name: "X-API-KEY", in: :header, type: :string, description: "Your Talent Protocol API key"
 
       let!(:api_key_object) { create(:api_key, :activated, access_key: access_key) }
@@ -24,8 +25,8 @@ RSpec.describe "Sponsorships API" do
       let!(:user_2) { create :user }
 
       before do
-        create :sponsorship, talent: wallet_id, sponsor: user_1.wallet_id
-        create :sponsorship, talent: wallet_id, sponsor: user_2.wallet_id
+        create :sponsorship, talent: wallet_id, sponsor: user_1.wallet_id, claimed_at: Time.current, revoked_at: nil
+        create :sponsorship, talent: wallet_id, sponsor: user_2.wallet_id, claimed_at: nil, revoked_at: nil
       end
 
       response "200", "talent found", save_example: true do
@@ -50,14 +51,53 @@ RSpec.describe "Sponsorships API" do
           returned_sponsors = data["sponsors"]
           returned_sponsor_usernames = returned_sponsors.map { |f| f["sponsor"]["username"] }
           returned_sponsored_usernames = returned_sponsors.map { |f| f["sponsored"]["username"] }
+          returned_status = returned_sponsors.map { |f| f["status"] }
           returned_pagination = data["pagination"]
           aggregate_failures do
             expect(data["sponsors"].count).to eq 2
             expect(returned_sponsor_usernames).to match_array([user_1.username, user_2.username])
             expect(returned_sponsored_usernames).to match_array([talent_user.username, talent_user.username])
+            expect(returned_status).to match_array(["claimed", "pending"])
 
             expect(returned_pagination["total"]).to eq 2
             expect(returned_pagination["cursor"]).to eq nil
+          end
+        end
+      end
+
+      response "200", "get all sponsors with filter", document: false do
+        let(:status) { "claimed" }
+
+        schema type: :object,
+          properties: {
+            talents: {
+              type: :array,
+              items: {
+                type: :object,
+                properties: PublicAPI::ObjectProperties::DETAILED_TALENT_PROPERTIES
+              }
+            },
+            pagination: {
+              type: :object,
+              properties: PublicAPI::ObjectProperties::PAGINATION_PROPERTIES
+            }
+          }
+
+        run_test! do |response|
+          data = JSON.parse(response.body)
+
+          returned_sponsors = data["sponsors"]
+          returned_sponsor_usernames = returned_sponsors.map { |f| f["sponsor"]["username"] }
+          returned_sponsored_usernames = returned_sponsors.map { |f| f["sponsored"]["username"] }
+          returned_status = returned_sponsors.map { |f| f["status"] }
+          returned_pagination = data["pagination"]
+          aggregate_failures do
+            expect(data["sponsors"].count).to eq 1
+            expect(returned_sponsor_usernames).to match_array([user_1.username])
+            expect(returned_sponsored_usernames).to match_array([talent_user.username])
+            expect(returned_status).to match_array(["claimed"])
+
+            expect(returned_pagination["total"]).to eq 2
           end
         end
       end
@@ -81,6 +121,7 @@ RSpec.describe "Sponsorships API" do
       produces "application/json"
       parameter name: :id, in: :query, type: :string, description: "Wallet address or username"
       parameter name: :cursor, in: :query, type: :string, description: "The cursor to fetch the next page"
+      parameter name: "status", in: :query, schema: {type: :string, enum: %w[pending claimed revoked]}, description: "The status of the sponsorship"
       parameter name: "X-API-KEY", in: :header, type: :string, description: "Your Talent Protocol API key"
 
       let!(:api_key_object) { create(:api_key, :activated, access_key: access_key) }
@@ -96,8 +137,8 @@ RSpec.describe "Sponsorships API" do
       let!(:user_2) { create :user }
 
       before do
-        create :sponsorship, sponsor: wallet_id, talent: user_1.wallet_id
-        create :sponsorship, sponsor: wallet_id, talent: user_2.wallet_id
+        create :sponsorship, sponsor: wallet_id, talent: user_1.wallet_id, claimed_at: nil, revoked_at: Time.current
+        create :sponsorship, sponsor: wallet_id, talent: user_2.wallet_id, claimed_at: nil, revoked_at: nil
       end
 
       response "200", "talent found", save_example: true do
@@ -122,14 +163,53 @@ RSpec.describe "Sponsorships API" do
           returned_sponsorships = data["sponsorships"]
           returned_sponsor_usernames = returned_sponsorships.map { |f| f["sponsor"]["username"] }
           returned_sponsored_usernames = returned_sponsorships.map { |f| f["sponsored"]["username"] }
+          returned_status = returned_sponsorships.map { |f| f["status"] }
           returned_pagination = data["pagination"]
           aggregate_failures do
             expect(returned_sponsorships.count).to eq 2
             expect(returned_sponsor_usernames).to match_array([talent_user.username, talent_user.username])
             expect(returned_sponsored_usernames).to match_array([user_1.username, user_2.username])
+            expect(returned_status).to match_array(["pending", "revoked"])
 
             expect(returned_pagination["total"]).to eq 2
             expect(returned_pagination["cursor"]).to eq nil
+          end
+        end
+      end
+
+      response "200", "get all sponsors with filter", document: false do
+        let(:status) { "revoked" }
+
+        schema type: :object,
+          properties: {
+            talents: {
+              type: :array,
+              items: {
+                type: :object,
+                properties: PublicAPI::ObjectProperties::DETAILED_TALENT_PROPERTIES
+              }
+            },
+            pagination: {
+              type: :object,
+              properties: PublicAPI::ObjectProperties::PAGINATION_PROPERTIES
+            }
+          }
+
+        run_test! do |response|
+          data = JSON.parse(response.body)
+
+          returned_sponsorships = data["sponsorships"]
+          returned_sponsor_usernames = returned_sponsorships.map { |f| f["sponsor"]["username"] }
+          returned_sponsored_usernames = returned_sponsorships.map { |f| f["sponsored"]["username"] }
+          returned_status = returned_sponsorships.map { |f| f["status"] }
+          returned_pagination = data["pagination"]
+          aggregate_failures do
+            expect(data["sponsorships"].count).to eq 1
+            expect(returned_sponsor_usernames).to match_array([talent_user.username])
+            expect(returned_sponsored_usernames).to match_array([user_1.username])
+            expect(returned_status).to match_array(["revoked"])
+
+            expect(returned_pagination["total"]).to eq 2
           end
         end
       end

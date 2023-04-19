@@ -62,8 +62,8 @@ Rails.application.routes.draw do
     # Quests
     resources :quests, only: [:show]
 
-    # Career circle
-    resource :career_circle, only: [:show]
+    # Network
+    resource :network, only: [:show]
 
     namespace :api, defaults: {format: :json} do
       namespace :v1 do

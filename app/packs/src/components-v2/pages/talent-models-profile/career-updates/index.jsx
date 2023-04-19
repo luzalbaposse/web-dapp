@@ -57,7 +57,7 @@ export const CareerUpdates = ({ profile, isCurrentUserProfile, railsContext, set
             <TextInput
               placeholder={`What's new in your career ${profile.user.name}?`}
               onClick={() => setShowCareerUpdateModal(true)}
-              className="w-100 mt-3"
+              className="w-100"
             />
           )}
         </InputContainer>

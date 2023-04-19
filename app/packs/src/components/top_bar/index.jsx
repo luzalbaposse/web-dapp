@@ -303,13 +303,7 @@ export const TopBar = ({
         <div className="d-flex align-items-center">
           <Tab href="/talent" text="Explore" type="white" active={activeTab.includes("/talent")} className="mr-4" />
           <Tab href="/portfolio" text="Portfolio" type="white" active={activeTab === "/portfolio"} className="mr-4" />
-          <Tab
-            href="/career_circle"
-            text="Career Circle"
-            type="white"
-            active={activeTab === "/career_circle"}
-            className="mr-4"
-          />
+          <Tab href="/network" text="Network" type="white" active={activeTab === "/network"} className="mr-4" />
           <Tab
             href="/messages"
             text="Messages"

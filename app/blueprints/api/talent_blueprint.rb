@@ -59,15 +59,15 @@ class API::TalentBlueprint < Blueprinter::Base
     end
 
     field :occupation do |user, _options|
-      user.talent.occupation
+      user.talent&.occupation
     end
 
     field :banner_url do |user, _options|
-      user.talent.banner_url
+      user.talent&.banner_url
     end
 
     field :ticker do |user, _options|
-      user.talent.talent_token&.ticker
+      user.talent&.talent_token&.ticker
     end
   end
 end

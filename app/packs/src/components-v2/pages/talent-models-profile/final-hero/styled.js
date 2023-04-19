@@ -10,7 +10,7 @@ export const Container = styled.section`
   gap: 24px;
 
   ${desktopStyles(css`
-    max-width: 1128px;
+    max-width: 1153px;
     margin: 56px auto 0;
     border: 1px solid ${buildColor("surfaceHover02")};
     border-radius: 24px;
@@ -31,7 +31,7 @@ export const Headline = styled.div`
 
   ${desktopStyles(css`
     margin: 0;
-    max-width: 100%;
+    max-width: 608px;
     text-align: left;
   `)}
 `;

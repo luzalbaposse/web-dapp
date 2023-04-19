@@ -15,8 +15,14 @@ export const Container = styled.main`
 `;
 
 export const ContentDesktopRow = styled.div`
+  ${({ hasSupporters }) =>
+    !hasSupporters &&
+    css`
+      justify-content: center;
+    `}
+
   ${desktopStyles(css`
-    max-width: 1128px;
+    max-width: 1153px;
     margin: auto;
     width: 100%;
     display: flex;

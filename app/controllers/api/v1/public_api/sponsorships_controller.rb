@@ -12,8 +12,11 @@ class API::V1::PublicAPI::SponsorshipsController < API::V1::PublicAPI::APIContro
 
   # user acted as sponsor
   def index
+    sponsorships = user.sponsorships
+    sponsorships = filter_by_status(sponsorships) if filter_by_status?
+
     pagy, sponsorships = pagy_uuid_cursor(
-      user.sponsorships,
+      sponsorships,
       before: cursor,
       items: per_page,
       order: {created_at: :desc, uuid: :desc}
@@ -33,8 +36,11 @@ class API::V1::PublicAPI::SponsorshipsController < API::V1::PublicAPI::APIContro
 
   # user acted as talent (sponsor receiver)
   def sponsors
+    sponsors = user.sponsors
+    sponsors = filter_by_status(sponsors) if filter_by_status?
+
     pagy, sponsors = pagy_uuid_cursor(
-      user.sponsors,
+      sponsors,
       before: cursor,
       items: per_page,
       order: {created_at: :desc, uuid: :desc}
@@ -55,10 +61,29 @@ class API::V1::PublicAPI::SponsorshipsController < API::V1::PublicAPI::APIContro
   private
 
   def user
-    @user ||= User.find_by!("wallet_id = :id OR username = :id", id: downcase_id)
+    @user ||= User.find_by!("uuid::text = :id OR wallet_id = :id OR username = :id", id: downcase_id)
   end
 
   def sponsorship_params
     params.require(:sponsorship).permit(:tx_hash, :chain_id)
+  end
+
+  def filter_by_status(sponsorships)
+    case filter_params[:status]
+    when "claimed"
+      sponsorships.claimed
+    when "pending"
+      sponsorships.pending
+    when "revoked"
+      sponsorships.revoked
+    end
+  end
+
+  def filter_by_status?
+    filter_params[:status].present?
+  end
+
+  def filter_params
+    params.permit(:status)
   end
 end
