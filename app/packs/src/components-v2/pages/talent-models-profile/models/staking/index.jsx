@@ -5,7 +5,7 @@ import StakeModal from "src/components/token/StakeModal";
 
 export const StakingModel = ({ profile, isCurrentUserProfile, currentUserId, railsContext }) => {
   const [showStakeModal, setShowStakeModal] = useState(false);
-  const tokenLaunched = !!profile.talent?.talent_token?.contract_id;
+  const tokenLaunched = !!profile.talent_token?.contract_id;
   return (
     <Container>
       {tokenLaunched && (
