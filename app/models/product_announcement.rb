@@ -1,0 +1,2 @@
+class ProductAnnouncement < ApplicationRecord
+end
