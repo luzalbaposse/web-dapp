@@ -46,7 +46,7 @@ module PublicAPI
     }
 
     SPONSORSHIP_PROPERTIES = {
-      amount: {type: :integer, description: "The amount sponsored"},
+      amount: {type: :string, description: "The amount sponsored"},
       chain_id: {type: :integer, description: "The id of the chain"},
       token: {type: :string, description: "The token address"},
       symbol: {type: :string, description: "The token ticker"},

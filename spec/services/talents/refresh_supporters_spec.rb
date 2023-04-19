@@ -212,22 +212,22 @@ RSpec.describe Talents::RefreshSupporters do
       aggregate_failures do
         expect(connection_one.user_invested_amount).to eq "0"
         expect(connection_one.connected_user_invested_amount).to eq "60000000000000000000"
-        expect(connection_one.connection_type).to eq "supporter"
+        expect(connection_one.connection_type).to eq "staker"
         expect(connection_one.connected_at).to eq Time.at(1627727823)
 
         expect(connection_two.user_invested_amount).to eq "60000000000000000000"
         expect(connection_two.connected_user_invested_amount).to eq "0"
-        expect(connection_two.connection_type).to eq "supporting"
+        expect(connection_two.connection_type).to eq "staking"
         expect(connection_two.connected_at).to eq Time.at(1627727823)
 
         expect(connection_three.user_invested_amount).to eq "0"
         expect(connection_three.connected_user_invested_amount).to eq "90000000000000000000"
-        expect(connection_three.connection_type).to eq "supporter"
+        expect(connection_three.connection_type).to eq "staker"
         expect(connection_three.connected_at).to eq Time.at(1627564775)
 
         expect(connection_four.user_invested_amount).to eq "90000000000000000000"
         expect(connection_four.connected_user_invested_amount).to eq "0"
-        expect(connection_four.connection_type).to eq "supporting"
+        expect(connection_four.connection_type).to eq "staking"
         expect(connection_four.connected_at).to eq Time.at(1627564775)
       end
     end

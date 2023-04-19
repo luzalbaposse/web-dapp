@@ -8,9 +8,10 @@ module Web3
 
     class InvalidEventError < Error; end
 
-    def initialize(tx_hash, chain_id)
+    def initialize(tx_hash, chain_id, with_notifications = true)
       @tx_hash = tx_hash
       @chain_id = chain_id
+      @with_notifications = with_notifications
     end
 
     def call
@@ -32,10 +33,20 @@ module Web3
       case decoded_event.event_interface["name"]
       when "SponsorshipCreated"
         amount = sponsorship.amount.to_i + args[:amount]
+        persisted_sponsorship = sponsorship.persisted?
+
         sponsorship.update!(
           amount: amount,
           transactions: transactions
         )
+
+        if !persisted_sponsorship && sponsorship.talent_user && sponsorship.sponsor_user && with_notifications
+          CreateNotification.new.call(
+            recipient: sponsorship.talent_user,
+            type: NewSponsorNotification,
+            source_id: sponsorship.sponsor_user.id
+          )
+        end
       when "SponsorshipRevoked"
         sponsorship.update!(
           revoked_at: transaction_timestamp,
@@ -46,6 +57,18 @@ module Web3
           claimed_at: transaction_timestamp,
           transactions: transactions
         )
+
+        if sponsorship.talent_user && sponsorship.sponsor_user
+          if with_notifications
+            CreateNotification.new.call(
+              recipient: sponsorship.sponsor_user,
+              type: SponsorshipClaimedNotification,
+              source_id: sponsorship.talent_user.id
+            )
+          end
+
+          update_connections(sponsorship.sponsor_user, sponsorship.talent_user)
+        end
       else
         raise InvalidEventError.new
       end
@@ -62,7 +85,7 @@ module Web3
 
     private
 
-    attr_reader :tx_hash, :chain_id
+    attr_reader :tx_hash, :chain_id, :with_notifications
 
     def decoded_transaction_event
       events_interface = talent_sponsorship_contract_abi["abi"].select { |i| i["type"] == "event" }
@@ -100,6 +123,22 @@ module Web3
 
     def talent_sponsorship_contract_abi
       @talent_sponsorship_contract_abi ||= JSON.parse(File.read("lib/abi/TalentSponsorship.json"))
+    end
+
+    def update_connections(sponsor_user, talent_user)
+      sponsor_connection ||= Connection.find_or_initialize_by(
+        user: sponsor_user,
+        connected_user: talent_user
+      )
+
+      sponsor_connection.refresh_connection!
+
+      sponsored_connection ||= Connection.find_or_initialize_by(
+        user: talent_user,
+        connected_user: sponsor_user
+      )
+
+      sponsored_connection.refresh_connection!
     end
   end
 end

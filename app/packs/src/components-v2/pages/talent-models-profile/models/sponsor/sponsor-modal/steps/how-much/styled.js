@@ -1,36 +1,38 @@
-import { mobileStyles } from "@talentprotocol/design-system";
+import { mobileStyles, buildColor } from "@talentprotocol/design-system";
 import styled, { css } from "styled-components";
 
-export const OutterContainer = styled.div`
-  ${mobileStyles(css`
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  `)}
-`;
-
-export const Container = styled.section`
+export const OutterContainer = styled.section`
+  height: 100%;
   display: flex;
   flex-direction: column;
-  flex-gow: 1;
+  align-items: flex-start;
+  gap: 16px;
+`;
+
+export const Container = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
   gap: 8px;
+  margin-bottom: 40px;
 `;
 
 export const ClaimArea = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
-`;
-
-export const ClaimAreaHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 `;
 
 export const ClaimAreaInput = styled.div`
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
   gap: 4px;
+`;
+
+export const ClaimAreaAmountContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
 `;
 
 export const ClaimAreaInputContainer = styled.div`
@@ -39,9 +41,26 @@ export const ClaimAreaInputContainer = styled.div`
 
 export const BottomContainer = styled.div`
   width: 100%;
-  padding-top: 34px;
+  margin: 16px 0 0 0;
   display: flex;
-  flex-direction: column;
+  flex-direction: row-reverse;
   gap: 8px;
-  padding: 34px 0;
+
+  ${mobileStyles(css`
+    margin: 0 0 0 0;
+  `)}
+`;
+
+export const BottomDivider = styled.div`
+  width: calc(100% + 32px);
+  height: 1px;
+  background-color: ${buildColor("surfaceHover02")};
+  overflow: hidden;
+  margin-left: -16px;
+  margin-top: auto;
+  margin-bottom: -16px;
+
+  ${mobileStyles(css`
+    margin-bottom: 0;
+  `)}
 `;

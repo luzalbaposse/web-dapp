@@ -2,7 +2,7 @@ import { buildColor, desktopStyles, mobileStyles } from "@talentprotocol/design-
 import styled, { css } from "styled-components";
 
 export const Container = styled.div`
-  max-width: 1128px;
+  max-width: 1153px;
   margin: auto;
   position: relative;
 `;
@@ -28,7 +28,7 @@ export const AvatarContainer = styled.div`
   z-index: 1;
   border: 4px solid ${buildColor("bg01")};
   border-radius: 50%;
-  left: 24px;
+  left: 16px;
   top: 33px;
 
   ${desktopStyles(css`

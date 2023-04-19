@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 
 export const Container = styled.section`
   padding: 16px;
-  margin-top: 32px;
+  margin-top: 84px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -15,6 +15,7 @@ export const Container = styled.section`
 
   ${mobileStyles(css`
     border-bottom: 1px solid ${buildColor("surfaceHover02")};
+    margin-top: 32px;
   `)}
   
 

@@ -6,6 +6,6 @@ class SubscriptionRequestReceivedNotification < BaseNotification
   end
 
   def url
-    career_circle_url
+    network_url
   end
 end

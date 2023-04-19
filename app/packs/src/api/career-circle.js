@@ -45,9 +45,25 @@ const destroySubscription = (userUUID, subscribingUserId) => {
   );
 };
 
+const getSponsors = (userUUID, status, perPage, cursor) =>
+  axios.get(
+    `/api/v1/sponsors?id=${userUUID}&per_page=${perPage}${cursor ? `&cursor=${cursor}` : ""}${
+      status ? `&status=${status}` : ""
+    }`
+  );
+
+const getSponsorships = (userUUID, status, perPage, cursor) =>
+  axios.get(
+    `/api/v1/sponsorships?id=${userUUID}&per_page=${perPage}${cursor ? `&cursor=${cursor}` : ""}${
+      status ? `&status=${status}` : ""
+    }`
+  );
+
 export const careerCircle = {
   acceptSubscription,
   destroySubscription,
   getActiveSubscribers,
-  getPendingSubscribers
+  getPendingSubscribers,
+  getSponsors,
+  getSponsorships
 };

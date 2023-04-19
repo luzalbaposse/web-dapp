@@ -465,6 +465,28 @@ RSpec.describe User, type: :model do
       end
     end
 
+    context "when the user is sponsoring the other user" do
+      before do
+        create :sponsorship, sponsor: user.wallet_id, talent: other_user.wallet_id, claimed_at: Date.today - 3.days
+        create :sponsorship, sponsor: user.wallet_id, talent: other_user.wallet_id, claimed_at: Date.today - 4.days
+      end
+
+      it "returns the date of the first claimed sponsorship" do
+        expect(user.connected_with_since(other_user)).to eq Date.today - 4.days
+      end
+    end
+
+    context "when the other user is sponsoring user" do
+      before do
+        create :sponsorship, sponsor: other_user.wallet_id, talent: user.wallet_id, claimed_at: Date.today - 3.days
+        create :sponsorship, sponsor: other_user.wallet_id, talent: user.wallet_id, claimed_at: Date.today - 5.days
+      end
+
+      it "returns the date of the first claimed sponsorship" do
+        expect(user.connected_with_since(other_user)).to eq Date.today - 5.days
+      end
+    end
+
     context "when the user is invested in and is subscribing the other user" do
       before do
         create :subscription, user: other_user, subscriber: user, created_at: Date.yesterday

@@ -110,15 +110,15 @@ export const ProfileCard = ({
               />
               <P2 className="text-primary-04" text="Market Value" />
             </Button>
-            <Button className="d-flex mr-2 mt-2 button-link p-0" onClick={() => changeSection("#community")}>
+            <Button className="d-flex mr-2 mt-2 button-link p-0" onClick={() => changeSection("#network")}>
               <P2 className="text-primary-01 mr-1" bold text={profile.supporters_count || "0"} />
               <P2 className="text-primary-04" text="Supporters" />
             </Button>
-            <Button className="d-flex mr-2 mt-2 button-link p-0" onClick={() => changeSection("#community")}>
+            <Button className="d-flex mr-2 mt-2 button-link p-0" onClick={() => changeSection("#network")}>
               <P2 className="text-primary-01 mr-1" bold text={profile.supporting_count || "0"} />
               <P2 className="text-primary-04" text="Supporting" />
             </Button>
-            <Button className="d-flex mr-2 mt-2 button-link p-0" onClick={() => changeSection("#community")}>
+            <Button className="d-flex mr-2 mt-2 button-link p-0" onClick={() => changeSection("#network")}>
               <P2 className="text-primary-01 mr-1" bold text={profile.subscribers_count || "0"} />
               <P2 className="text-primary-04" text="Subscribers" />
             </Button>

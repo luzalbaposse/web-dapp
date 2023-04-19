@@ -6,16 +6,20 @@ class Connection < ApplicationRecord
   validates :user_id, uniqueness: {scope: :connected_user_id}
 
   # Try reading it like this:
-  # user is a super connection of connected_user
-  # user is a supporter of connected_user
-  # user is supporting the connected_user
+  # user is sponsor of connected_user
+  # user is sponsored by the connected_user
+  # user is a mutual sponsor of connected_user
+  # user is a staker of connected_user
+  # user is staking in the connected_user
   # user is subscribing and is a being subscribed by the connected_user
   # user is a subscriber of connected_user
   # user is subscribing the connected_user
   enum connection_type: {
-    super_connection: 6,
-    supporter: 5,
-    supporting: 4,
+    sponsor: 8,
+    sponsored: 7,
+    mutual_stake: 6,
+    staker: 5,
+    staking: 4,
     mutual_subscription: 3,
     subscriber: 2,
     subscribing: 1
@@ -44,11 +48,25 @@ class Connection < ApplicationRecord
   private
 
   def calculate_connection_type(user_invested_amount, connected_user_invested_amount)
+    return 8 if users_with_wallets_connected? && user_sponsoring_connected_user?
+    return 7 if users_with_wallets_connected? && connected_user_sponsorsing_user?
     return 6 if user_invested_amount.to_i.positive? && connected_user_invested_amount.to_i.positive?
     return 5 if connected_user_invested_amount.to_i.positive?
     return 4 if user_invested_amount.to_i.positive?
     return 3 if user.subscribing.find_by(user_id: connected_user_id).present? && connected_user.subscribing.find_by(user_id: user_id).present?
     return 2 if user.subscribing.find_by(user_id: connected_user_id).present?
     return 1 if connected_user.subscribing.find_by(user_id: user_id).present?
+  end
+
+  def users_with_wallets_connected?
+    connected_user.wallet_id && user.wallet_id
+  end
+
+  def user_sponsoring_connected_user?
+    Sponsorship.claimed.where(sponsor: user.wallet_id, talent: connected_user.wallet_id).any?
+  end
+
+  def connected_user_sponsorsing_user?
+    Sponsorship.claimed.where(sponsor: connected_user.wallet_id, talent: user.wallet_id).any?
   end
 end

@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.describe Web3::SponsorshipSync do
-  subject(:sponsorship_sync) { described_class.new(tx_hash, chain_id) }
+  subject(:sponsorship_sync) { described_class.new(tx_hash, chain_id, with_notifications) }
   let(:tx_hash) { "0x9edaf3a5e15695457319969406024b59fd156a0b5433c4a5bbfe0444572b3561" }
   let(:chain_id) { 44787 }
+  let(:with_notifications) { false }
 
   let(:block_by_hash_response_mock) do
     {
@@ -20,6 +21,9 @@ RSpec.describe Web3::SponsorshipSync do
   let(:eth_contract_class) { Eth::Contract }
   let(:eth_contract) { instance_double(eth_contract_class) }
 
+  let(:create_notification_class) { CreateNotification }
+  let(:create_notification_instance) { instance_double(create_notification_class, call: true) }
+
   before do
     ENV["CELO_RPC_URL"] = "https://alfajores-forno.celo-testnet.org"
     allow(eth_client_class).to receive(:create).and_return(provider)
@@ -27,6 +31,7 @@ RSpec.describe Web3::SponsorshipSync do
     allow(provider).to receive(:eth_get_block_by_hash).and_return(block_by_hash_response_mock)
     allow(provider).to receive(:chain_id).and_return(44787)
     allow(Rollbar).to receive(:error)
+    allow(create_notification_class).to receive(:new).and_return(create_notification_instance)
   end
 
   let(:block_hash) { transaction_receipt["result"]["blockHash"] }
@@ -41,12 +46,29 @@ RSpec.describe Web3::SponsorshipSync do
 
       aggregate_failures do
         expect(sponsorship.sponsor).to eq "0x33041027dd8f4dc82b6e825fb37adf8f15d44053"
-        expect(sponsorship.talent).to eq "0x33041027dd8f4dc82b6e825fb37adf8f15d44053"
-        expect(sponsorship.amount).to eq 2000000000000000000
+        expect(sponsorship.talent).to eq "0x33041027dd8f4dc82b6e825fb37adf8f15d44052"
+        expect(sponsorship.amount).to eq "2000000000000000000"
         expect(sponsorship.token).to eq "0x874069fa1eb16d44d622f2e0ca25eea172369bc1"
         expect(sponsorship.symbol).to eq "cUSD"
         expect(sponsorship.chain_id).to eq 44787
         expect(sponsorship.transactions).to match_array([tx_hash])
+      end
+    end
+
+    context "when notifications are enabled" do
+      let(:with_notifications) { true }
+      let!(:talent_user) { create :user, wallet_id: "0x33041027dd8f4dc82b6e825fb37adf8f15d44052" }
+      let!(:sponsor_user) { create :user, wallet_id: "0x33041027dd8f4dc82b6e825fb37adf8f15d44053" }
+
+      it "initializes and calls the create notification service" do
+        sponsorship_sync.call
+
+        expect(create_notification_class).to have_received(:new)
+        expect(create_notification_instance).to have_received(:call).with(
+          recipient: talent_user,
+          type: NewSponsorNotification,
+          source_id: sponsor_user.id
+        )
       end
     end
   end
@@ -95,7 +117,7 @@ RSpec.describe Web3::SponsorshipSync do
       let!(:existing_sponsorship) do
         create(
           :sponsorship,
-          talent: "0xe3103d2482ca341f75892a69696b3014ca673049",
+          talent: "0xe3103d2482ca341f75892a69696b3014ca673048",
           sponsor: "0xe3103d2482ca341f75892a69696b3014ca673049",
           token: "0x874069fa1eb16d44d622f2e0ca25eea172369bc1",
           symbol: "cUSD",
@@ -113,6 +135,49 @@ RSpec.describe Web3::SponsorshipSync do
 
         expect(sponsorship.claimed_at).to eq expected_timestamp_time
         expect(sponsorship.transactions).to match_array ["transaction_1", "transaction_2", tx_hash]
+      end
+
+      it "does not initialize the create notification service" do
+        sponsorship_sync.call
+
+        expect(create_notification_class).not_to have_received(:new)
+      end
+
+      context "when both users have wallets connected" do
+        let!(:talent_user) { create :user, wallet_id: "0xe3103d2482ca341f75892a69696b3014ca673048" }
+        let!(:sponsor_user) { create :user, wallet_id: "0xe3103d2482ca341f75892a69696b3014ca673049" }
+
+        it "creates the connections with the correct arguments" do
+          sponsorship_sync.call
+
+          sponsor_connection = sponsor_user.connections.last
+          sponsored_connection = talent_user.connections.last
+
+          aggregate_failures do
+            expect(sponsor_connection.user).to eq(sponsor_user)
+            expect(sponsor_connection.connected_user).to eq(talent_user)
+            expect(sponsor_connection.connection_type).to eq("sponsor")
+
+            expect(sponsored_connection.user).to eq(talent_user)
+            expect(sponsored_connection.connected_user).to eq(sponsor_user)
+            expect(sponsored_connection.connection_type).to eq("sponsored")
+          end
+        end
+
+        context "when notifications are enabled" do
+          let(:with_notifications) { true }
+
+          it "initializes and calls the create notification service" do
+            sponsorship_sync.call
+
+            expect(create_notification_class).to have_received(:new)
+            expect(create_notification_instance).to have_received(:call).with(
+              recipient: sponsor_user,
+              type: SponsorshipClaimedNotification,
+              source_id: talent_user.id
+            )
+          end
+        end
       end
     end
 

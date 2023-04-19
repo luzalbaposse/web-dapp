@@ -88,7 +88,7 @@ export const FinalHero = ({ profile, isCurrentUserProfile, railsContext }) => {
         </SocialList>
         <ActionArea>
           <Button hierarchy="primary" size="medium" text="Become a supporter" onClick={() => setShowStakeModal(true)} />
-          <Button hierarchy="secondary" size="medium" text="See my profile" href={window.location.href + "/profile"} />
+          <Button hierarchy="secondary" size="medium" text="See my profile" href={`/u/${profile.user.username}`} />
         </ActionArea>
       </DesktopBottomContainer>
     </Container>

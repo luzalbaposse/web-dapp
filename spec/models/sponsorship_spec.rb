@@ -12,6 +12,19 @@ RSpec.describe Sponsorship, type: :model do
     it { is_expected.to validate_presence_of(:token) }
   end
 
+  describe ".scopes" do
+    let!(:sponsorship_one) { create :sponsorship, claimed_at: nil, revoked_at: nil }
+    let!(:sponsorship_two) { create :sponsorship, claimed_at: Time.current, revoked_at: nil }
+    let!(:sponsorship_three) { create :sponsorship, claimed_at: nil, revoked_at: Time.current }
+    let!(:sponsorship_four) { create :sponsorship, claimed_at: nil, revoked_at: nil }
+
+    it "reyurns thge correct sponsorships" do
+      expect(Sponsorship.claimed).to match_array([sponsorship_two])
+      expect(Sponsorship.revoked).to match_array([sponsorship_three])
+      expect(Sponsorship.pending).to match_array([sponsorship_one, sponsorship_four])
+    end
+  end
+
   describe "#status" do
     let!(:sponsorship) { create :sponsorship, claimed_at: claimed_at, revoked_at: revoked_at }
     let(:revoked_at) { nil }

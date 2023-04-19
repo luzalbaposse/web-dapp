@@ -1,6 +1,15 @@
 import { Avatar, Button, Typography } from "@talentprotocol/design-system";
 import React, { useCallback, useState, useEffect } from "react";
-import { BottomContainer, Container, DetailsContainer, DetailsRow, HeaderContainer } from "./styled";
+import {
+  BottomContainer,
+  Container,
+  DetailsContainer,
+  DetailsRow,
+  HeaderContainer,
+  BottomDivider,
+  FixedBottom,
+  ContentContainer
+} from "./styled";
 import { OnChain } from "src/onchain";
 import { post } from "src/utils/requests";
 import { toast } from "react-toastify";
@@ -9,39 +18,36 @@ import { ToastBody } from "src/components/design_system/toasts";
 const PRIMARY_BUTTON_STATES = {
   APPROVE: {
     title: "Approve Transaction",
-    isDisabled: false
+    isLoading: false
   },
   CONFIRMING_TRANSACTION: {
     title: "Approving Transaction...",
-    isDisabled: true
+    isLoading: true
   },
   SPONSOR: {
     title: "Sponsor",
-    isDisabled: false
+    isLoading: false
   },
   LOADING_SPONSOR: {
     title: "Sponsoring...",
-    isDisabled: true
+    isLoading: true
   }
 };
 
-export const TransactionStep = ({ profile, token, railsContext, amount, closeModal }) => {
+export const TransactionStep = ({ profile, token, railsContext, amount, closeModal, nextStep }) => {
   const [onchain, setOnchain] = useState(null);
   const [account, setAccount] = useState(null);
-  const [chainId, setChainId] = useState(null);
   const [primaryButtonState, setPrimaryButtonState] = useState(PRIMARY_BUTTON_STATES.APPROVE);
 
   const setupOnChain = useCallback(async () => {
     const newOnChain = new OnChain(railsContext.contractsEnv);
 
     const _account = await newOnChain.connectedAccount();
-    const _chainId = await newOnChain.getChainID();
     await newOnChain.loadSponsorship();
     await newOnChain.loadStableToken();
 
     setOnchain(newOnChain);
     setAccount(_account);
-    setChainId(_chainId);
   }, [setOnchain, setAccount]);
 
   useEffect(() => {
@@ -49,8 +55,8 @@ export const TransactionStep = ({ profile, token, railsContext, amount, closeMod
   }, []);
 
   const approveTransactionCallback = useCallback(async () => {
-    const tx = await onchain.approveStableSponsorship(amount);
     setPrimaryButtonState(PRIMARY_BUTTON_STATES.CONFIRMING_TRANSACTION);
+    const tx = await onchain.approveStableSponsorship(amount);
     await tx.wait();
     setPrimaryButtonState(PRIMARY_BUTTON_STATES.SPONSOR);
   }, [onchain, setPrimaryButtonState]);
@@ -59,16 +65,19 @@ export const TransactionStep = ({ profile, token, railsContext, amount, closeMod
     setPrimaryButtonState(PRIMARY_BUTTON_STATES.LOADING_SPONSOR);
     const result = await onchain.createSponsorship(profile.user.wallet_id, amount).catch(error => {
       console.error(error);
-      toast.error(<ToastBody title="Error" body="Something went wrong" />, { autoClose: 5000 });
+      toast.warning(<ToastBody title="Warning" body="We were not able to perform the action in your metamask" />, {
+        autoClose: 5000
+      });
       setPrimaryButtonState(PRIMARY_BUTTON_STATES.SPONSOR);
       return;
     });
     if (result) {
+      const _chainId = await onchain.getChainID();
       await post(`/api/v1/sponsorships`, {
-        sponsorship: { tx_hash: result.transactionHash, chain_id: chainId }
+        sponsorship: { tx_hash: result.transactionHash, chain_id: _chainId }
       })
         .then(() => {
-          closeModal();
+          nextStep();
         })
         .catch(e => {
           setPrimaryButtonState(PRIMARY_BUTTON_STATES.SPONSOR);
@@ -82,61 +91,65 @@ export const TransactionStep = ({ profile, token, railsContext, amount, closeMod
   return (
     <>
       <Container>
-        <Avatar size="lg" url={profile.profile_picture_url} />
-        <HeaderContainer>
-          <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
-            You will become {profile.user.name}'s sponsor
-          </Typography>
-          <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
-            You will become {profile.user.name}' sponsor
-          </Typography>
-        </HeaderContainer>
-        <DetailsContainer>
-          <DetailsRow>
+        <ContentContainer>
+          <Avatar size="lg" url={profile.profile_picture_url} />
+          <HeaderContainer>
+            <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
+              You will become {profile.user.name}'s sponsor
+            </Typography>
             <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
-              Sponsorship
+              You will send money directly to {profile.user.name} wallet and the money will be available once claimed.
             </Typography>
-            <Typography specs={{ variant: "p2", type: "regular" }} color="primary01">
-              {amount} {token.value}
-            </Typography>
-          </DetailsRow>
-          <DetailsRow>
-            <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
-              Gas fee
-            </Typography>
-            <Typography specs={{ variant: "p2", type: "regular" }} color="primary01">
-              Network gas fee
-            </Typography>
-          </DetailsRow>
-        </DetailsContainer>
-        <DetailsContainer>
-          <DetailsRow>
-            <Typography specs={{ variant: "p1", type: "bold" }} color="primary01">
-              Total
-            </Typography>
-            <Typography specs={{ variant: "p1", type: "bold" }} color="primary01">
-              {amount} {token.value} + Gas Fee
-            </Typography>
-          </DetailsRow>
-        </DetailsContainer>
-        <Typography specs={{ variant: "p3", type: "regular" }} color="primary03">
-          Please note that this is an estimate and the actual value may vary based on the network gas fee.
-        </Typography>
-        <BottomContainer>
-          <Button
-            size="large"
-            hierarchy="primary"
-            text={primaryButtonState.title}
-            isDisabled={primaryButtonState.isDisabled}
-            isStretched
-            onClick={
-              primaryButtonState.title === PRIMARY_BUTTON_STATES.APPROVE.title
-                ? approveTransactionCallback
-                : sponsorCallback
-            }
-          />
-          <Button size="large" hierarchy="tertiary" text="Cancel" isStretched onClick={closeModal} />
-        </BottomContainer>
+          </HeaderContainer>
+          <DetailsContainer>
+            <DetailsRow>
+              <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
+                Confirm your Sponsorship
+              </Typography>
+              <Typography specs={{ variant: "p2", type: "regular" }} color="primary01">
+                {amount} {token.value}
+              </Typography>
+            </DetailsRow>
+            <DetailsRow>
+              <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
+                Gas fee
+              </Typography>
+              <Typography specs={{ variant: "p2", type: "regular" }} color="primary01">
+                Network gas fee
+              </Typography>
+            </DetailsRow>
+          </DetailsContainer>
+          <DetailsContainer>
+            <DetailsRow>
+              <Typography specs={{ variant: "p1", type: "bold" }} color="primary01">
+                Total
+              </Typography>
+              <Typography specs={{ variant: "p1", type: "bold" }} color="primary01">
+                {amount} {token.value} + Gas Fee
+              </Typography>
+            </DetailsRow>
+          </DetailsContainer>
+          <Typography specs={{ variant: "p3", type: "regular" }} color="primary03" className="mt-4 mb-4">
+            Please note that this is an estimate and the actual value may vary based on the network gas fee.
+          </Typography>
+        </ContentContainer>
+        <FixedBottom>
+          <BottomDivider />
+          <BottomContainer>
+            <Button
+              size="small"
+              hierarchy="primary"
+              text={primaryButtonState.title}
+              isLoading={primaryButtonState.isLoading}
+              onClick={
+                primaryButtonState.title === PRIMARY_BUTTON_STATES.APPROVE.title
+                  ? approveTransactionCallback
+                  : sponsorCallback
+              }
+            />
+            <Button size="small" hierarchy="tertiary" text="Cancel" onClick={closeModal} />
+          </BottomContainer>
+        </FixedBottom>
       </Container>
     </>
   );
