@@ -1,4 +1,4 @@
-import { Typography, buildColor, desktopStyles, mobileStyles } from "@talentprotocol/design-system";
+import { Typography, buildColor, mobileStyles } from "@talentprotocol/design-system";
 import styled, { css } from "styled-components";
 
 export const Container = styled.div`

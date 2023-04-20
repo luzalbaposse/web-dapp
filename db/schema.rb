@@ -10,9 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_19_130605) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_19_170151) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
@@ -182,8 +181,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_19_130605) do
     t.integer "total_polygon_supporters"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "total_polygon_token_transactions"
-    t.integer "total_celo_token_transactions"
+    t.integer "total_polygon_stake_transactions"
+    t.integer "total_celo_stake_transactions"
     t.integer "total_mates_nfts"
     t.integer "total_onboarded_users"
     t.integer "total_talent_token_applications"
@@ -202,6 +201,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_19_130605) do
     t.string "total_stables_stored_celo"
     t.string "tal_rewards_given_polygon"
     t.string "tal_rewards_given_celo"
+    t.integer "total_polygon_sponsorship_transactions"
+    t.integer "total_celo_sponsorship_transactions"
+    t.integer "total_users_with_subscribers"
+    t.integer "total_users_subscribing"
+    t.integer "total_users_with_career_updates"
+    t.integer "total_career_updates"
+    t.decimal "daily_conversion_rate", precision: 10, scale: 4, default: "0.0"
+    t.integer "total_users_with_three_or_more_subscribers"
+    t.integer "total_users_subscribing_three_or_more"
   end
 
   create_table "discovery_rows", force: :cascade do |t|
@@ -606,8 +614,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_19_130605) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.boolean "disabled", default: false
     t.string "theme_preference", default: "light"
+    t.boolean "disabled", default: false
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"

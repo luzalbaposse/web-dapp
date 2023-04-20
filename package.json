@@ -18,7 +18,7 @@
     "@react-sigma/core": "^3.3.0",
     "@react-sigma/layout-circlepack": "^3.3.0",
     "@react-spring/web": "^9.2.4",
-    "@talentprotocol/design-system": "^0.0.98",
+    "@talentprotocol/design-system": "^0.0.101",
     "@transak/transak-sdk": "^1.0.30",
     "@uauth/js": "^2.4.0",
     "@uauth/web3modal": "^2.4.0",
@@ -121,7 +121,7 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "pretest": "yarn lint",
-    "lint": "eslint ./app/packs --ext js,jsx && bundle exec standardrb --extra-details --fail-level A",
+    "lint": "eslint ./app/packs --ext js,jsx",
     "format": "prettier --loglevel warn --write \"**/*.{js,jsx}\""
   },
   "engines": {

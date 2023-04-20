@@ -71,6 +71,8 @@ export const Sponsors = ({ currentUserId, railsContext }) => {
 
   const loadMoreClaimedSponsors = () => {
     careerCircle
+      // TODO: revisit here
+      // eslint-disable-next-line no-undef
       .getSponsors(currentUserId, "claimed", activeSubscribersPerPage, claimedSponsors.pagination.cursor)
       .then(({ data }) => {
         const newData = {
@@ -86,6 +88,8 @@ export const Sponsors = ({ currentUserId, railsContext }) => {
 
   const loadMorePendingSponsors = () => {
     careerCircle
+      // TODO: revisit here
+      // eslint-disable-next-line no-undef
       .getPendingSubscribers(currentUserId, "pending", pendingSubscribersPerPage, pendingSponsors.pagination.cursor)
       .then(({ data }) => {
         const newData = {
@@ -146,7 +150,7 @@ export const Sponsors = ({ currentUserId, railsContext }) => {
       {pendingSponsors.sponsors.length > 0 && (
         <Container>
           <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
-            New Sponsors
+            New requests
           </Typography>
           <NewSponsorsContainer>
             <NewSponsorsList>

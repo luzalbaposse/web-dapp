@@ -6,16 +6,15 @@ export const Container = styled.section`
   text-align: center;
   display: flex;
   flex-direction: column;
-  padding: 0 16px;
 
   ${mobileStyles(css`
     border-bottom: 1px solid ${buildColor("surfaceHover02")};
+    padding: 0 16px;
   `)}
 
   ${desktopStyles(css`
     flex-grow: 1;
     border-radius: 24px;
-    max-width: 40vw;
   `)}
 `;
 

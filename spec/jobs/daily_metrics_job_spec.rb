@@ -7,11 +7,10 @@ RSpec.describe DailyMetricsJob, type: :job do
   let!(:user_2) { create :user, last_access_at: Date.yesterday, talent: talent_2 }
   let!(:talent_2) { create :talent, updated_at: Date.yesterday }
 
-  let!(:user_3) { create :user }
+  let!(:user_3) { create :user, created_at: Date.yesterday }
   let!(:message) { create :message, sender: user_3, receiver: user_1, created_at: 10.days.ago }
 
   let!(:user_4) { create :user, onboarded_at: nil }
-  let!(:subscribe) { create :subscription, subscriber: user_4, user: user_1, created_at: 26.days.ago }
 
   let!(:user_5) { create :user }
   let!(:talent_supporter) { create :talent_supporter, supporter_wallet_id: user_5.wallet_id, talent_contract_id: talent_token.contract_id, last_time_bought_at: 15.days.ago }
@@ -19,6 +18,16 @@ RSpec.describe DailyMetricsJob, type: :job do
   let!(:user_6) { create :user, created_at: Date.new(2023, 0o1, 0o5), onboarded_at: Date.new(2023, 0o1, 6), invite_id: nil }
 
   let!(:tal_domain) { create :user_domain, domain: "dinis.tal.community", tal_domain: true, user: user_6 }
+
+  let!(:subscription_one) { create :subscription, user: user_1, subscriber: user_2, accepted_at: Date.yesterday }
+  let!(:subscription_two) { create :subscription, user: user_1, subscriber: user_3, accepted_at: Date.yesterday - 10.days }
+  let!(:subscription_three) { create :subscription, user: user_1, subscriber: user_4, accepted_at: Date.yesterday - 15.days }
+  let!(:subscription_four) { create :subscription, user: user_3, subscriber: user_2, accepted_at: Date.yesterday - 30.days }
+  let!(:subscription_five) { create :subscription, user: user_4, subscriber: user_2, accepted_at: Date.yesterday }
+
+  let!(:career_update_one) { create :career_update, user: user_1 }
+  let!(:career_update_two) { create :career_update, user: user_2 }
+  let!(:career_update_three) { create :career_update, user: user_2 }
 
   let(:web3_proxy_class) { Web3Api::ApiProxy }
   let(:web3_proxy) { instance_double(web3_proxy_class) }
@@ -42,27 +51,24 @@ RSpec.describe DailyMetricsJob, type: :job do
   let(:simple_analytics_body) do
     {
       seconds_on_page: 18,
-      visitors: 300,
-      pages: [
-        {
-          value: "/",
-          pageviews: 3145,
-          visitors: 1623,
-          seconds_on_page: 18
-        },
-        {
-          value: "/join/wtfcrypto",
-          pageviews: 38,
-          visitors: 33,
-          seconds_on_page: 56
-        },
-        {
-          value: "/join/voya",
-          pageviews: 6,
-          visitors: 4,
-          seconds_on_page: 84
-        }
-      ]
+      visitors: 300
+    }
+  end
+
+  let(:simple_analytics_join_request) { "https://simpleanalytics.com/beta.talentprotocol.com/join*.json?#{simple_analytics_join_request_params.to_query}" }
+  let(:simple_analytics_join_request_params) do
+    {
+      end: date.end_of_day,
+      fields: "visitors",
+      info: false,
+      start: date.beginning_of_day,
+      version: 5
+    }
+  end
+
+  let(:simple_analytics_join_body) do
+    {
+      visitors: 200
     }
   end
 
@@ -95,6 +101,7 @@ RSpec.describe DailyMetricsJob, type: :job do
     allow(web3_proxy).to receive(:retrieve_transactions_count).and_return(10)
     allow(web3_proxy).to receive(:retrieve_polygon_nfts_count).and_return(400)
     stub_request(:get, simple_analytics_request).to_return(body: simple_analytics_body.to_json)
+    stub_request(:get, simple_analytics_join_request).to_return(body: simple_analytics_join_body.to_json)
     stub_request(:get, twitter_request).to_return(body: twitter_body.to_json)
     stub_request(:get, discord_request).to_return(body: discord_body.to_json)
     allow(eth_client_class).to receive(:create).and_return(provider)
@@ -119,23 +126,28 @@ RSpec.describe DailyMetricsJob, type: :job do
       expect(created_daily_metric.total_engaged_users).to eq 5
       expect(created_daily_metric.total_active_users).to eq 1
       expect(created_daily_metric.total_onboarded_users).to eq 5
-      expect(created_daily_metric.total_celo_token_transactions).to eq 30
-      expect(created_daily_metric.total_polygon_token_transactions).to eq 30
+      expect(created_daily_metric.daily_conversion_rate).to eq(1.to_f / 200)
       expect(created_daily_metric.total_mates_nfts).to eq 400
       expect(created_daily_metric.total_tal_subdomain_transactions).to eq 10
+      expect(created_daily_metric.total_polygon_stake_transactions).to eq 30
+      expect(created_daily_metric.total_celo_stake_transactions).to eq 20
       expect(created_daily_metric.total_claimed_domains).to eq 1
       expect(created_daily_metric.total_polygon_tvl).to eq 1200
       expect(created_daily_metric.total_celo_tvl).to eq 1200
-      expect(created_daily_metric.total_stables_stored_polygon).to eq "60000"
+      expect(created_daily_metric.total_stables_stored_polygon).to eq "6.0e+16"
       expect(created_daily_metric.total_stables_stored_celo).to eq "60000"
       expect(created_daily_metric.tal_rewards_given_polygon).to eq "60000"
       expect(created_daily_metric.tal_rewards_given_celo).to eq "60000"
       expect(created_daily_metric.time_on_page).to eq 18
       expect(created_daily_metric.visitors).to eq 300
-      expect(created_daily_metric.wtfcrypto_visitors).to eq 33
-      expect(created_daily_metric.voya_visitors).to eq 4
       expect(created_daily_metric.total_twitter_followers).to eq 10000
       expect(created_daily_metric.total_discord_members).to eq 6000
+      expect(created_daily_metric.total_users_with_subscribers).to eq 3
+      expect(created_daily_metric.total_users_subscribing).to eq 3
+      expect(created_daily_metric.total_users_with_three_or_more_subscribers).to eq 1
+      expect(created_daily_metric.total_users_subscribing_three_or_more).to eq 1
+      expect(created_daily_metric.total_users_with_career_updates).to eq 2
+      expect(created_daily_metric.total_career_updates).to eq 3
     end
   end
 

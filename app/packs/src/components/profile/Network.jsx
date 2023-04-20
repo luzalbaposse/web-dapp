@@ -17,9 +17,9 @@ import { useWindowDimensionsHook } from "src/utils/window";
 import { useTheme } from "src/contexts/ThemeContext";
 import TalentProfilePicture from "src/components/talent/TalentProfilePicture";
 import Table from "src/components/design_system/table";
-import { darkBg01, lightBg01, lightTextPrimary03, darkTextPrimary03 } from "src/utils/colors.js";
+import { lightTextPrimary03, darkTextPrimary03 } from "src/utils/colors.js";
 import TextInput from "src/components/design_system/fields/textinput";
-import { Search, Star, OrderBy } from "src/components/icons";
+import { Search, OrderBy } from "src/components/icons";
 import Dropdown from "react-bootstrap/Dropdown";
 
 import cx from "classnames";

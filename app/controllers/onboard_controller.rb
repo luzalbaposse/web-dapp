@@ -36,6 +36,9 @@ class OnboardController < ApplicationController
     end
   end
 
+  def onboard
+  end
+
   def forgot_password
   end
 

@@ -20,7 +20,7 @@ export const EditImagePositioner = styled.div`
   align-items: flex-end;
   padding-right: 16px;
   gap: 8px;
-  border-radius: 8px;
+  border-radius: 0 0 8px 8px;
 `;
 
 export const SpinnerContainer = styled.div`
