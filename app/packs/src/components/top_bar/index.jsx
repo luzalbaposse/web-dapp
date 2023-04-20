@@ -24,8 +24,8 @@ import { Container, IconContainer, InnerContainer } from "./styled";
 import { Icon, Typography } from "@talentprotocol/design-system";
 import SearchDropdown from "./SearchDropdown";
 
-const WARNING_MESSAGE =
-  "Token minting is temporarily paused while we are upgrading our smart contracts. This is a temporary warning.";
+//const WARNING_MESSAGE =
+("Token minting is temporarily paused while we are upgrading our smart contracts. This is a temporary warning.");
 
 const UnreadMessagesIndicator = () => {
   return (

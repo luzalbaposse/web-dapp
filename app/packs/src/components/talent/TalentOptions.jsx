@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { get } from "src/utils/requests";
-
 import Button from "src/components/design_system/button";
-import TabButton from "src/components/design_system/tab/TabButton.jsx";
 import TalentKeywordSearch from "./TalentKeywordSearch";
 import TalentFilters from "./TalentFilters";
 import { Grid, List } from "src/components/icons";

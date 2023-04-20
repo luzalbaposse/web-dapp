@@ -7,9 +7,7 @@ import { camelCaseObject } from "src/utils/transformObjects";
 import cx from "classnames";
 import React, { useState, useContext, useEffect } from "react";
 import { loggedInUserStore } from "src/contexts/state";
-
 import { ArrowLeft, Help, Spinner } from "src/components/icons";
-
 import {
   compareName,
   compareOccupation,
@@ -17,8 +15,7 @@ import {
   compareMarketCap,
   compareMarketCapVariance
 } from "src/components/talent/utils/talent";
-
-import { destroy, post, get } from "src/utils/requests";
+import { get } from "src/utils/requests";
 import { H3, P1, P2 } from "src/components/design_system/typography";
 import { lightTextPrimary03 } from "src/utils/colors";
 import { parseAndCommify } from "src/onchain/utils";

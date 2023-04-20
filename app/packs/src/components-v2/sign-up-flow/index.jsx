@@ -112,7 +112,11 @@ export const SignUpFlow = props => {
   const MemoizedDefaultFooter = useMemo(
     () => (
       <DefaultFooter
-        showSkipButton={props.isDesktop ? CAN_SKIP_STEPS_DESKTOP.includes(stepsState.currentStep) : CAN_SKIP_STEPS_MOBILE.includes(stepsState.currentStep)}
+        showSkipButton={
+          props.isDesktop
+            ? CAN_SKIP_STEPS_DESKTOP.includes(stepsState.currentStep)
+            : CAN_SKIP_STEPS_MOBILE.includes(stepsState.currentStep)
+        }
         previousStep={stepsState.previousStep}
         nextStep={stepsState.nextStep}
         isNextDisabled={isNextDisabled}

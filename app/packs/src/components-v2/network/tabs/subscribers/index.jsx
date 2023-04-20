@@ -98,7 +98,7 @@ export const Subscribers = ({ currentUserId }) => {
   const acceptSubscription = subscriber => {
     careerCircle
       .acceptSubscription(currentUserId, subscriber.id)
-      .then(({ data }) => {
+      .then(() => {
         toast.success(<ToastBody heading="Success!" body={"Subscription accepted!"} />, { autoClose: 5000 });
         removePendingSubscriber(subscriber);
         addActiveSubscriber(subscriber);
@@ -113,7 +113,7 @@ export const Subscribers = ({ currentUserId }) => {
   const rejectSubscription = subscriber => {
     careerCircle
       .destroySubscription(currentUserId, subscriber.id)
-      .then(({ data }) => {
+      .then(() => {
         toast.success(<ToastBody heading="Success!" body={"Subscription rejected!"} />, { autoClose: 5000 });
         removePendingSubscriber(subscriber);
       })

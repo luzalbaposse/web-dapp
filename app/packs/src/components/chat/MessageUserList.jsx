@@ -176,7 +176,6 @@ const MessageUserList = ({
               mode={mode}
               style={{
                 margin: "auto",
-                boxShadow: "0px 0px 16px #000",
                 marginTop: "32px",
                 boxShadow: `0px 0px 0px 3px ${buildColor("primaryTint02")};`
               }}

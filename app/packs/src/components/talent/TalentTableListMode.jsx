@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import currency from "currency.js";
 import { displayableAmount } from "src/utils/viewHelpers";
-import { faStar as faStarOutline } from "@fortawesome/free-regular-svg-icons";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useWindowDimensionsHook } from "src/utils/window";
 import Modal from "react-bootstrap/Modal";
 import { OrderBy } from "src/components/icons";

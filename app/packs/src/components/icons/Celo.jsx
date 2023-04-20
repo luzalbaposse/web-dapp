@@ -1,7 +1,7 @@
 import React from "react";
 import { string, number } from "prop-types";
 
-const Celo = ({ className, pathClassName, style, width }) => (
+const Celo = ({ className, style, width }) => (
   <svg
     className={className}
     viewBox={"0 0 25 24"}

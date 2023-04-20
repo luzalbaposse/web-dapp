@@ -70,6 +70,8 @@ export const Sponsorships = ({ currentUserId, railsContext }) => {
 
   const loadMoreClaimedSponsors = () => {
     careerCircle
+      // TODO: revisit here
+      // eslint-disable-next-line no-undef
       .getSponsorships(currentUserId, "claimed", activeSubscribersPerPage, claimedSponsorships.pagination.cursor)
       .then(({ data }) => {
         const newData = {
@@ -85,6 +87,8 @@ export const Sponsorships = ({ currentUserId, railsContext }) => {
 
   const loadMorePendingSponsorships = () => {
     careerCircle
+      // TODO: revisit here
+      // eslint-disable-next-line no-undef
       .getPendingSubscribers(currentUserId, "pending", pendingSubscribersPerPage, pendingSponsorships.pagination.cursor)
       .then(({ data }) => {
         const newData = {

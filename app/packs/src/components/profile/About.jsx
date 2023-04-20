@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
-
 import { patch, getAuthToken } from "src/utils/requests";
-import { snakeCaseObject, camelCaseObject } from "src/utils/transformObjects";
-
 import Uppy from "@uppy/core";
 import AwsS3Multipart from "@uppy/aws-s3-multipart";
-
 import TalentProfilePicture from "src/components/talent/TalentProfilePicture";
 import CameraButton from "images/camera-button.png";
 import DeleteButton from "images/delete-button.png";

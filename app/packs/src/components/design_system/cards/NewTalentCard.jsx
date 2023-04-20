@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { string, bool } from "prop-types";
+import { string } from "prop-types";
 
 import { useTheme } from "src/contexts/ThemeContext";
 import currency from "currency.js";
@@ -24,7 +24,6 @@ const NewTalentCard = ({
   talentLink,
   marketCap,
   supporterCount,
-  publicPageViewer,
   isVerified,
   profileType,
   chainId,
