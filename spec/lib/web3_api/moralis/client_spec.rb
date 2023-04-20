@@ -98,8 +98,9 @@ RSpec.describe Web3Api::Moralis::Client do
     let(:address) { SecureRandom.hex }
     let(:chain) { "eth" }
     let(:start_timestamp) { Time.now.to_i }
+    let(:end_timestamp) { Time.now.to_i }
 
-    let(:request_path) { "#{described_class::BASE_URI}/#{address}?chain=#{chain}&from_date=#{start_timestamp}&disable_total=false" }
+    let(:request_path) { "#{described_class::BASE_URI}/#{address}?chain=#{chain}&from_date=#{start_timestamp}&to_date=#{end_timestamp}&disable_total=false" }
 
     before do
       stub_request(:get, request_path)
@@ -114,7 +115,7 @@ RSpec.describe Web3Api::Moralis::Client do
     end
 
     it "makes a request to retrieve address transactions" do
-      client.retrieve_transactions(address: address, start_timestamp: start_timestamp, chain: chain)
+      client.retrieve_transactions(address: address, start_timestamp: start_timestamp, chain: chain, end_timestamp: end_timestamp)
 
       expect(
         a_request(:get, request_path)

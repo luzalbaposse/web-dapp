@@ -36,8 +36,9 @@ RSpec.describe Web3Api::CeloExplorer::Client do
   describe "#retrieve_transactions" do
     let(:address) { SecureRandom.hex }
     let(:start_timestamp) { Time.now.to_i }
+    let(:end_timestamp) { Time.now.to_i }
 
-    let(:request_path) { "https://celo.api?module=account&action=txlist&address=#{address}&start_timestamp=#{start_timestamp}" }
+    let(:request_path) { "https://celo.api?module=account&action=txlist&address=#{address}&start_timestamp=#{start_timestamp}&end_timestamp=#{end_timestamp}" }
 
     before do
       stub_request(:get, request_path)
@@ -52,7 +53,7 @@ RSpec.describe Web3Api::CeloExplorer::Client do
     end
 
     it "makes a request to retrieve the wallet tokens" do
-      client.retrieve_transactions(address: address, start_timestamp: start_timestamp)
+      client.retrieve_transactions(address: address, start_timestamp: start_timestamp, end_timestamp: end_timestamp)
 
       expect(
         a_request(:get, request_path)

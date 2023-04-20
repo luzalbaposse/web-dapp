@@ -461,7 +461,8 @@ RSpec.shared_examples "a celo explorer client get transactions count request" do
     expect(client_class).to have_received(:new)
     expect(client).to have_received(:retrieve_transactions).with(
       address: wallet_address,
-      start_timestamp: start_timestamp
+      start_timestamp: start_timestamp,
+      end_timestamp: nil
     )
   end
 
@@ -502,6 +503,7 @@ RSpec.shared_examples "a moralis client get transactions count request" do
     expect(client).to have_received(:retrieve_transactions).with(
       address: wallet_address,
       start_timestamp: start_timestamp,
+      end_timestamp: nil,
       chain: formatted_chain
     )
   end

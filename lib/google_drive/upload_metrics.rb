@@ -26,6 +26,7 @@ module GoogleDrive
         daily_metric.total_active_users,
         daily_metric.total_onboarded_users,
         daily_metric.total_dead_accounts,
+        daily_metric.daily_conversion_rate * 100,
         daily_metric.total_talent_token_applications,
         daily_metric.total_approved_talent_token_applications,
         daily_metric.total_beginner_quests_completed,
@@ -34,15 +35,19 @@ module GoogleDrive
         daily_metric.time_on_page,
         daily_metric.visitors,
         daily_metric.total_celo_tokens,
-        daily_metric.total_polygon_tokens,
         daily_metric.total_celo_supporters,
+        daily_metric.total_polygon_tokens,
         daily_metric.total_polygon_supporters,
-        daily_metric.total_celo_token_transactions,
-        daily_metric.total_polygon_token_transactions,
+        daily_metric.total_celo_stake_transactions,
+        daily_metric.total_celo_sponsorship_transactions,
+        daily_metric.total_polygon_stake_transactions,
+        daily_metric.total_polygon_sponsorship_transactions,
         daily_metric.total_mates_nfts,
-        daily_metric.total_claimed_domains,
+        total_celo_transactions,
+        total_polygon_transactions,
         daily_metric.total_tal_subdomain_transactions,
         total_blockchain_transactions,
+        daily_metric.total_claimed_domains,
         daily_metric.total_polygon_tvl,
         daily_metric.total_celo_tvl,
         daily_metric.total_celo_tvl.to_i + daily_metric.total_polygon_tvl.to_i,
@@ -56,22 +61,29 @@ module GoogleDrive
         daily_metric.total_scouts,
         daily_metric.total_twitter_followers,
         daily_metric.total_discord_members,
-        daily_metric.voya_visitors.to_i,
-        daily_metric.wtfcrypto_visitors.to_i,
-        daily_metric.talenthouse_visitors.to_i,
-        daily_metric.talentmates_visitors.to_i,
         daily_metric.total_old_users_season_3.to_i,
         daily_metric.total_new_users_season_3.to_i,
         daily_metric.total_organic_users_season_3.to_i,
-        daily_metric.total_referral_users_season_3.to_i
+        daily_metric.total_referral_users_season_3.to_i,
+        daily_metric.total_users_with_subscribers,
+        daily_metric.total_users_subscribing,
+        daily_metric.total_users_with_three_or_more_subscribers,
+        daily_metric.total_users_subscribing_three_or_more,
+        daily_metric.total_users_with_career_updates,
+        daily_metric.total_career_updates
       ]]
     end
 
     def total_blockchain_transactions
-      daily_metric.total_celo_token_transactions.to_i +
-        daily_metric.total_polygon_token_transactions.to_i +
-        daily_metric.total_mates_nfts.to_i +
-        daily_metric.total_tal_subdomain_transactions.to_i
+      total_polygon_transactions + total_celo_transactions + daily_metric.total_tal_subdomain_transactions.to_i
+    end
+
+    def total_polygon_transactions
+      daily_metric.total_polygon_stake_transactions.to_i + daily_metric.total_polygon_sponsorship_transactions.to_i + daily_metric.total_mates_nfts.to_i
+    end
+
+    def total_celo_transactions
+      daily_metric.total_celo_stake_transactions.to_i + daily_metric.total_celo_sponsorship_transactions.to_i
     end
 
     def daily_data_sheet
