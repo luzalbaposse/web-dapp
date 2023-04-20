@@ -63,6 +63,7 @@ class OnChain {
       if (forceConnect) {
         web3ModalInstance = await this.web3Modal.connect();
       } else if (this.web3Modal && this.web3Modal.cachedProvider) {
+        this.web3Modal.resetState();
         web3ModalInstance = await this.web3Modal.connect();
       } else {
         return undefined;
@@ -167,6 +168,7 @@ class OnChain {
     }
   }
 
+  // this function is barely used use connectedAccount instead
   async retrieveAccount() {
     try {
       const web3ModalInstance = await this.web3ModalConnect(true);
