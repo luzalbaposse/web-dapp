@@ -135,7 +135,7 @@ export const OccupationStep = ({ user, setUser, setIsNextDisable }) => {
       }
     ].map(value => {
       const parsedValue = { ...value };
-      if (user.tags.includes(value.content)) {
+      if (user.tags.includes(value.content.toLowerCase())) {
         parsedValue.isSelected = true;
       }
       return parsedValue;

@@ -9,12 +9,11 @@ class OnboardingController < ApplicationController
     current_user.talent.profile["location"] = params[:location]
     current_user.talent.profile["gender"] = params[:gender]
     current_user.talent.profile["headline"] = params[:headline]
-    current_user.talent.profile["career_needs"] = params[:career_needs]
     current_user.talent.profile["tags"] = params[:tags]
     current_user.talent.save!
 
     CareerNeeds::Upsert
-      .new(career_goal: current_user.talent.career_goal, titles: params[:careerNeeds])
+      .new(career_goal: current_user.talent.career_goal, titles: params[:career_needs])
       .call
 
     current_user.update!(legal_first_name: params[:legal_first_name], legal_last_name: params[:legal_last_name], onboarded_at: Time.current)
@@ -27,17 +26,5 @@ class OnboardingController < ApplicationController
       params
     )
     render json: {error: e.message}, status: :bad_request
-  end
-
-  private
-
-  def milestone_params
-    params.permit(
-      :title,
-      :start_date,
-      :institution,
-      :description,
-      :link
-    )
   end
 end

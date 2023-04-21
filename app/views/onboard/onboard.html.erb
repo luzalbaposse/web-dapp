@@ -1,4 +1,13 @@
 <%= react_component("OnboardingPage",
-    props: {},
+    props: {
+      user: {
+        gender: @user.talent.profile["gender"] || "",
+        nationality: @user.talent.profile["nationality"] || "",
+        location: @user.talent.profile["location"] || "",
+        headline: @user.talent.profile["headline"] || "",
+        tags: @user.tags.map(&:description) || [],
+        careerNeeds: @user.talent.career_goal&.career_needs&.map(&:title) || []
+      }
+    },
     prerender: false
 ) %>

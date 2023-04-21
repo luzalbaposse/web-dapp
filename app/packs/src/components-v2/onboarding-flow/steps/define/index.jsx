@@ -4,18 +4,40 @@ import { genderOptions, nationalityOptions } from "../../../../components/talent
 import { TitleRow, Row, RowWithMargin, Form } from "./styled";
 
 export const DefineStep = ({ user, setUser, setIsNextDisable }) => {
-  const [gender, setGender] = useState(user.gender || "");
-  const [nationality, setNationality] = useState(user.nationality || "");
+  const [gender, setGender] = useState({ value: user.gender || "" });
+  const [nationality, setNationality] = useState({ value: user.nationality || "" });
   const locationRef = useRef(null);
   const validateStep = useCallback(
     (genderParameter, nationalityParameter) => {
-      if ((!!genderParameter || !!gender) && (!!nationalityParameter || !!nationality) && locationRef.current.value) {
-        setUser({
-          ...user,
-          gender: gender || genderParameter,
-          nationality: nationality || nationalityParameter,
+      let newOptions = {};
+
+      if (!!genderParameter) {
+        newOptions = {
+          ...newOptions,
+          gender: genderParameter?.value || gender?.value
+        };
+      }
+
+      if (!!nationalityParameter) {
+        newOptions = {
+          ...newOptions,
+          nationality: nationalityParameter?.value || nationality?.value
+        };
+      }
+
+      if (locationRef.current.value !== user.location) {
+        newOptions = {
+          ...newOptions,
           location: locationRef.current.value
-        });
+        };
+      }
+
+      setUser({
+        ...user,
+        ...newOptions
+      });
+
+      if (gender !== "" && nationality !== "" && locationRef.current.value !== "") {
         setIsNextDisable(false);
       } else {
         setIsNextDisable(true);
@@ -38,7 +60,7 @@ export const DefineStep = ({ user, setUser, setIsNextDisable }) => {
           Only Location will be visible in your profile.
         </Typography>
       </TitleRow>
-      <Form>
+      <Form onSubmit={e => e.preventDefault()}>
         <Row>
           <Typography specs={{ variant: "p2", type: "bold" }} color="primary01">
             Gender

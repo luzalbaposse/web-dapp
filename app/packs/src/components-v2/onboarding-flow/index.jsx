@@ -22,7 +22,7 @@ const CAN_SKIP_STEPS = [2, 3];
 
 export const OnboardingFlow = props => {
   const [isNextDisabled, setIsNextDisable] = useState(true);
-  const userBuilderState = useUserBuilder();
+  const userBuilderState = useUserBuilder(props.user || {});
   const stepsState = useStepExperience(Object.keys(STEP_TO_COMPONENT_MAP).length);
   const StepScreen = useMemo(() => STEP_TO_COMPONENT_MAP[stepsState.currentStep], [stepsState.currentStep]);
   useEffect(() => {
