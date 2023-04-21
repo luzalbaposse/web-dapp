@@ -22,12 +22,17 @@ const SearchDropdown = ({ className }) => {
   const [talents, setTalents] = useState([]);
 
   useEffect(() => {
+    // do not fetch talents if search dropdown is not visible
+    if (!showSearchDropdown) {
+      return;
+    }
+
     if (keyword.length === 0) {
       fetchTalents("page=1&per_page=10&status=Verified");
     } else {
       debouncedSearch();
     }
-  }, [keyword]);
+  }, [showSearchDropdown, keyword]);
 
   const fetchTalents = params => {
     get(`/api/v1/talent?${params}`).then(response => {
