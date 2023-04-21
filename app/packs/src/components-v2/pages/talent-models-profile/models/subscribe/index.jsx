@@ -51,8 +51,8 @@ export const SubscribeModel = ({ profile, setProfile, isCurrentUserProfile }) =>
       <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
         Career Updates
       </Typography>
-      <Typography specs={{ variant: "p2", type: "regular" }} color="primary01">
-        The first step to support someone is being present. Subscribe to have access and receive Career Updates from{" "}
+      <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
+        The first step to support someone is being present. Subscribe to get access to private Career Updates from{" "}
         {profile.user.name}.
       </Typography>
       {profile.subscribing_status === "pending" && (

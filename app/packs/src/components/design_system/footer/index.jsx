@@ -15,18 +15,10 @@ import {
   BOUNTIES
 } from "src/utils/constants";
 import Tab from "src/components/design_system/tab";
-import SocialRow from "src/components/talent/Show/SocialRow";
 import Divider from "src/components/design_system/other/Divider";
 
 const Footer = () => {
   const theme = useContext(ThemeContext);
-
-  const profile = {
-    github: TALENT_PROTOCOL_GITHUB,
-    discord: TALENT_PROTOCOL_DISCORD,
-    twitter: TALENT_PROTOCOL_TWITTER,
-    telegram: TALENT_PROTOCOL_TELEGRAM
-  };
 
   return (
     <div className="footer-container">

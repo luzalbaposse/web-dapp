@@ -41,16 +41,16 @@ RSpec.describe Subscriptions::Accept do
   it "creates the connections with the correct arguments" do
     accept_subscription
 
-    subscriber_connection = subscriber_user.connections.last
-    subscribing_connection = subscribing_user.connections.last
+    subscribing_connection = subscriber_user.connections.last
+    subscriber_connection = subscribing_user.connections.last
 
     aggregate_failures do
-      expect(subscriber_connection.user).to eq(subscriber_user)
-      expect(subscriber_connection.connected_user).to eq(subscribing_user)
+      expect(subscriber_connection.user).to eq(subscribing_user)
+      expect(subscriber_connection.connected_user).to eq(subscriber_user)
       expect(subscriber_connection.connection_type).to eq("subscriber")
 
-      expect(subscribing_connection.user).to eq(subscribing_user)
-      expect(subscribing_connection.connected_user).to eq(subscriber_user)
+      expect(subscribing_connection.user).to eq(subscriber_user)
+      expect(subscribing_connection.connected_user).to eq(subscribing_user)
       expect(subscribing_connection.connection_type).to eq("subscribing")
     end
   end
@@ -94,11 +94,11 @@ RSpec.describe Subscriptions::Accept do
       aggregate_failures do
         expect(subscriber_connection.user).to eq(subscriber_user)
         expect(subscriber_connection.connected_user).to eq(subscribing_user)
-        expect(subscriber_connection.connection_type).to eq("supporting")
+        expect(subscriber_connection.connection_type).to eq("staking")
 
         expect(subscribing_connection.user).to eq(subscribing_user)
         expect(subscribing_connection.connected_user).to eq(subscriber_user)
-        expect(subscribing_connection.connection_type).to eq("supporter")
+        expect(subscribing_connection.connection_type).to eq("staker")
       end
     end
   end

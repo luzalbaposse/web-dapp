@@ -45,6 +45,12 @@ en:
     subscription_accepted_notification:
       title: "Subscription accepted"
       body: "You are now subscribing %{name}"
+    sponsorship_claimed_notification:
+      title: "Sponsorship claimed"
+      body: "%{name} has claimed your sponsorship"
+    new_sponsor_notification:
+      title: "New Sponsor"
+      body: "%{name} wants to sponsor you"
     talent_changed_notification:
       title: "Talent info updated"
       body: "%{name} profile has been updated"

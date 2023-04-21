@@ -34,7 +34,7 @@ module Web3Api
         Faraday.get(url, params, headers)
       end
 
-      def retrieve_transactions(address:, start_timestamp:, chain:)
+      def retrieve_transactions(address:, start_timestamp:, chain:, end_timestamp: nil)
         url = "#{BASE_URI}/#{address}"
 
         params = {
@@ -42,6 +42,7 @@ module Web3Api
           from_date: start_timestamp,
           disable_total: false
         }
+        params[:to_date] = end_timestamp if end_timestamp.present?
         Faraday.get(url, params, headers)
       end
 

@@ -1,0 +1,27 @@
+<%= render "shared_mailer/user", user: @sender %>
+<h2 class="mb-10 main-title mt-4">You have a new sponsor request!</h2>
+<p class="w-full mb-6 primary-3 paragraph">
+  We're excited to share that someone wants to sponsor you on Talent Protocol! A user has expressed interest in supporting your growth and success by sponsoring you.
+</p>
+<p class="w-full mb-3 primary-3 paragraph">
+  To review and accept this sponsorship request, please follow these steps:
+</p>
+<ul class="w-full mb-5 primary-3 paragraph content-list">
+    <li>Log in to your Talent Protocol account.</li>
+    <li>Navigate to your <%= link_to "Sponsorships", network_url(tab: "sponsorships") %> section</li>
+    <li>Find the pending request, review the details, and click the checkmark button if you'd like to proceed.</li>
+</ul>
+<p class="w-full mb-3 primary-3 paragraph">
+  By accepting this sponsorship, you'll be strengthening your network and unlocking more opportunities for personal and professional growth. Remember, as more users stake on your Talent Token, the more value you'll be able to generate for yourself and your sponsors.
+</p>
+<p class="w-full mb-3 primary-3 paragraph">
+  Don't wait too long - the request may expire if not accepted within a certain time frame. Log in now to review and accept the sponsorship.
+</p>
+<p class="w-full mb-3 primary-3 paragraph">
+  If you have any questions or need assistance, please don't hesitate to reach out to our support team.
+</p>
+<p class="w-full primary-3 paragraph">
+  Let's do this,
+  <br/>
+  Talent Protocol team
+</p>

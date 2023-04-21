@@ -92,8 +92,10 @@ const ApprovalConfirmationModal = ({ show, hide, talent, setTalent, railsContext
   });
 
   useEffect(() => {
-    setupChain();
-  }, []);
+    if (show) {
+      setupChain();
+    }
+  }, [show]);
 
   if (firstLoading) {
     return (

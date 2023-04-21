@@ -50,14 +50,14 @@ module Web3Api
       gnosis_poaps(wallet_address)
     end
 
-    def retrieve_transactions_count(address:, start_timestamp:, chain:)
+    def retrieve_transactions_count(address:, start_timestamp:, chain:, end_timestamp: nil)
       validate_chain!(chain)
 
       formatted_chain = formatted_chain(chain)
 
-      return celo_explorer_transactions(address, start_timestamp).count if celo?(formatted_chain)
+      return celo_explorer_transactions(address, start_timestamp, end_timestamp).count if celo?(formatted_chain)
 
-      moralis_transactions_count(address, start_timestamp, formatted_chain)
+      moralis_transactions_count(address, start_timestamp, end_timestamp, formatted_chain)
     end
 
     def retrieve_polygon_nfts_count(address:)
@@ -213,8 +213,12 @@ module Web3Api
       token_ids_and_contract_address.compact
     end
 
-    def celo_explorer_transactions(address, start_timestamp)
-      response = celo_explorer_api_client.retrieve_transactions(address: address, start_timestamp: start_timestamp)
+    def celo_explorer_transactions(address, start_timestamp, end_timestamp)
+      response = celo_explorer_api_client.retrieve_transactions(
+        address: address,
+        start_timestamp: start_timestamp,
+        end_timestamp: end_timestamp
+      )
       validate_response!(response)
 
       response_body = JSON.parse(response.body)
@@ -222,8 +226,13 @@ module Web3Api
       response_body["result"]
     end
 
-    def moralis_transactions_count(address, start_timestamp, chain)
-      response = moralis_api_client.retrieve_transactions(address: address, start_timestamp: start_timestamp, chain: chain)
+    def moralis_transactions_count(address, start_timestamp, end_timestamp, chain)
+      response = moralis_api_client.retrieve_transactions(
+        address: address,
+        start_timestamp: start_timestamp,
+        end_timestamp: end_timestamp,
+        chain: chain
+      )
 
       validate_response!(response)
 

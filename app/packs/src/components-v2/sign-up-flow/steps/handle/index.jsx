@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import debounce from "lodash/debounce";
 import { Input, Typography } from "@talentprotocol/design-system";
 import { Row, Form, TitleRow } from "./styled";
 import { username } from "../../../../api/username";
@@ -6,7 +7,8 @@ import { username } from "../../../../api/username";
 export const HandleStep = ({ user, setUser, setIsNextDisable }) => {
   const [handleError, setHandleError] = useState("");
   const handleRef = useRef(null);
-  const validateStep = useCallback(() => {
+
+  const debouncedUsernameLookup = debounce(() => {
     const handle = handleRef.current.value?.toLowerCase();
     username
       .validateHandle(handle)
@@ -27,6 +29,10 @@ export const HandleStep = ({ user, setUser, setIsNextDisable }) => {
         setHandleError("Something happened");
         setIsNextDisable(true);
       });
+  }, 200);
+
+  const validateStep = useCallback(() => {
+    debouncedUsernameLookup();
   }, [handleRef, setHandleError, setUser, user]);
   useEffect(() => {
     if (user.handle) {

@@ -30,9 +30,9 @@ RSpec.describe "Connections API" do
       let(:user_4) { create :user }
 
       before do
-        create :connection, user: talent_user, connected_user: user_1, connection_type: "super_connection"
-        create :connection, user: talent_user, connected_user: user_2, connection_type: "supporter"
-        create :connection, user: talent_user, connected_user: user_3, connection_type: "supporting"
+        create :connection, user: talent_user, connected_user: user_1, connection_type: "mutual_stake"
+        create :connection, user: talent_user, connected_user: user_2, connection_type: "staker"
+        create :connection, user: talent_user, connected_user: user_3, connection_type: "staking"
         create :connection, user: talent_user, connected_user: user_4, connection_type: "subscriber"
       end
 

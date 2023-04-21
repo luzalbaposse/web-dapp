@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import cx from "classnames";
 import { patch, getAuthToken, post, destroy } from "src/utils/requests";
 import { toast } from "react-toastify";

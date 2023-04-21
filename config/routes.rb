@@ -24,7 +24,7 @@ Rails.application.routes.draw do
   end
 
   constraints Clearance::Constraints::SignedIn.new { |user| !user&.onboarding_complete? } do
-    root to: "onboarding#index", as: :onboarding_root
+    root to: "onboard#onboard", as: :onboarding_root
     post "/finish" => "onboarding#finish"
 
     match "*unmatched", to: redirect("/"), via: :all
@@ -62,8 +62,8 @@ Rails.application.routes.draw do
     # Quests
     resources :quests, only: [:show]
 
-    # Career circle
-    resource :career_circle, only: [:show]
+    # Network
+    resource :network, only: [:show]
 
     namespace :api, defaults: {format: :json} do
       namespace :v1 do

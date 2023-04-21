@@ -3,7 +3,7 @@
 module Tasks
   class Watchlist < Task
     def title
-      "Add 3 talents to your career circle"
+      "Add 3 talents to your network"
     end
 
     def description

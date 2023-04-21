@@ -13,7 +13,7 @@ module Web3
     end
 
     def call
-      return unless domain_data["domain"].present?
+      return unless domain_data.present? && domain_data["domain"].present?
 
       UserDomain.find_or_create_by!(
         user: user,

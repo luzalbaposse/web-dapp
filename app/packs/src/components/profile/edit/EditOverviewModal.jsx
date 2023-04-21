@@ -243,6 +243,8 @@ const EditOverviewModal = ({ show, hide, profile, setProfile, mode }) => {
       setProfileFileInput(document.getElementById("profileFileInput"));
       setBannerFileInput(document.getElementById("bannerFileInput"));
     } else {
+      // TODO: get code context and improve this
+      // eslint-disable-next-line no-undef
       setEditedTalent(talent);
     }
   }, [show]);

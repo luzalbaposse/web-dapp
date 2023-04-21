@@ -63,6 +63,7 @@ class OnChain {
       if (forceConnect) {
         web3ModalInstance = await this.web3Modal.connect();
       } else if (this.web3Modal && this.web3Modal.cachedProvider) {
+        this.web3Modal.resetState();
         web3ModalInstance = await this.web3Modal.connect();
       } else {
         return undefined;
@@ -167,6 +168,7 @@ class OnChain {
     }
   }
 
+  // this function is barely used use connectedAccount instead
   async retrieveAccount() {
     try {
       const web3ModalInstance = await this.web3ModalConnect(true);
@@ -251,7 +253,7 @@ class OnChain {
     }
   }
 
-  async getStableBalanceERC20(address) {
+  async getStableBalanceERC20() {
     try {
       const web3ModalInstance = await this.web3ModalConnect();
       let provider;
@@ -259,15 +261,19 @@ class OnChain {
       if (web3ModalInstance !== undefined) {
         provider = new ethers.providers.Web3Provider(web3ModalInstance);
       } else {
-        const chainId = await this.getChainID();
         provider = new ethers.providers.JsonRpcProvider(Addresses[this.env][chainId]["rpcURL"]);
       }
+      const chainId = await this.getChainID();
 
       if (await this.recognizedChain()) {
-        this.stabletoken = new ethers.Contract(address, StableToken.abi, provider);
+        this.stabletoken = new ethers.Contract(
+          Addresses[this.env][chainId]["stableAddress"],
+          StableToken.abi,
+          provider
+        );
         this.stableDecimals = await this.stabletoken.decimals();
         const balance = await this.stabletoken.balanceOf(this.account);
-        const balanceFormatted = ethers.utils.formatUnits(balance, this.tokenDecimals);
+        const balanceFormatted = ethers.utils.formatUnits(balance, this.stableDecimals);
 
         return balanceFormatted;
       } else {
@@ -283,15 +289,17 @@ class OnChain {
     try {
       const web3ModalInstance = await this.web3ModalConnect();
       let provider;
+      let chainId;
 
       if (web3ModalInstance !== undefined) {
         provider = new ethers.providers.Web3Provider(web3ModalInstance);
       } else {
+        chainId = await this.getChainID();
         provider = new ethers.providers.JsonRpcProvider(Addresses[this.env][chainId]["rpcURL"]);
       }
-      const chainId = await this.getChainID();
 
       if (await this.recognizedChain()) {
+        chainId = await this.getChainID();
         const sponsorshipAddress = Addresses[this.env][chainId]["sponsorship"];
 
         this.sponsorship = new ethers.Contract(sponsorshipAddress, TalentSponsorship.abi, provider);
@@ -299,15 +307,6 @@ class OnChain {
       } else {
         return false;
       }
-    } catch (error) {
-      console.log(error);
-      return false;
-    }
-  }
-
-  async getSponsorsOfTalent() {
-    try {
-      return this.sponsorship.connect(this.signer).amountAvailable();
     } catch (error) {
       console.log(error);
       return false;
@@ -487,12 +486,36 @@ class OnChain {
     return receipt;
   }
 
-  claimSponsorship() {
+  async claimSponsorship(sponsor, stableAddress) {
     if (!this.sponsorship) {
       return;
     }
 
-    return this.sponsorship.connect(this.signer).withdrawToken(this.stabletoken.address);
+    console.log("sponsorship", this.sponsorship);
+    console.log("sponsor", sponsor);
+    console.log("stableAddress", stableAddress);
+    console.log("signer", this.signer);
+
+    const tx = await this.sponsorship.connect(this.signer).withdrawToken(sponsor, stableAddress);
+    const receipt = await tx.wait();
+
+    return receipt;
+  }
+
+  async revokeSponsorship(talentAddress, stableAddress) {
+    if (!this.sponsorship) {
+      return;
+    }
+
+    console.log("sponsorship", this.sponsorship);
+    console.log("talentAddress", talentAddress);
+    console.log("stableAddress", stableAddress);
+    console.log("signer", this.signer);
+
+    const tx = await this.sponsorship.connect(this.signer).revokeSponsor(talentAddress, stableAddress);
+    const receipt = await tx.wait();
+
+    return receipt;
   }
 
   async approveStableSponsorship(_amount) {
@@ -553,7 +576,12 @@ class OnChain {
     const factoryAddress = Addresses[this.env][chainId]["factory"];
     const talentFactory = new ethers.Contract(factoryAddress, TalentFactoryV3.abi, provider);
 
-    return await talentFactory.whitelist(address);
+    try {
+      return await talentFactory.whitelist(address);
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   }
 
   async whitelistAddress(address) {

@@ -2,7 +2,7 @@ import { buildColor, desktopStyles, mobileStyles } from "@talentprotocol/design-
 import styled, { css } from "styled-components";
 
 export const Container = styled.section`
-  max-width: 1128px;
+  max-width: 1153px;
   padding: 0 16px 48px;
   margin: 40px auto 0;
   display: flex;

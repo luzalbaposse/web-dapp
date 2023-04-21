@@ -296,21 +296,6 @@ const Settings = props => {
           />
           {validationErrors?.email && <P3 className="text-danger" text={validationErrors.email} />}
         </div>
-        <div className="d-flex flex-column w-100 flex-wrap mt-4">
-          <P2 bold className="text-black mb-2">
-            Disable Messages
-          </P2>
-
-          <div className="d-flex flex-row align-middle align-items-center">
-            <Switch
-              isDarkTheme={mode == "dark"}
-              state="enabled"
-              isChecked={!settings.messagingDisabled}
-              onChange={() => changeAttribute("messagingDisabled", !settings.messagingDisabled)}
-            />
-            <P2 className="text-primary-01 ml-2 mb-2" text="I want to receive messages" />
-          </div>
-        </div>
         <div className="d-flex flex-row w-100 flex-wrap mt-4">
           <div className="d-flex flex-row align-middle align-items-center mb-2">
             <P2 className="text-primary-01" bold text="Custom domain" />

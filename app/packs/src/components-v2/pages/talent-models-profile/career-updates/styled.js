@@ -9,6 +9,7 @@ export const Container = styled.section`
 
   ${mobileStyles(css`
     border-bottom: 1px solid ${buildColor("surfaceHover02")};
+    padding: 0 16px;
   `)}
 
   ${desktopStyles(css`
@@ -19,16 +20,17 @@ export const Container = styled.section`
 
 export const TitleContainer = styled.div`
   max-width: 327px;
-  margin: auto;
+  margin: 0 auto 24px auto;
 
   ${desktopStyles(css`
-    margin: 0;
     text-align: left;
-    margin-bottom: 24px;
+    margin: 0 0 24px 0;
   `)}
 `;
 
 export const InputContainer = styled.div`
+  margin-bottom: 24px;
+
   ${mobileStyles(css`
     padding: 0 16px;
   `)}

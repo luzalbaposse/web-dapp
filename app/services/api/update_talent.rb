@@ -66,7 +66,6 @@ class API::UpdateTalent
 
     if params[:profile]
       if params[:profile][:headline]
-        talent[:disable_messages] = params[:disable_messages] || false
         talent.pronouns = params[:profile][:pronouns]
         talent.occupation = params[:profile][:occupation]
         talent.location = params[:profile][:location]

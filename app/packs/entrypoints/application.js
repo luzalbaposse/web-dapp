@@ -40,14 +40,14 @@ import SubdomainFooter from "src/components/design_system/subdomain_footer";
 import FirstQuestPopup from "src/components/one_time_popups/FirstQuestPopup";
 import FlashMessages from "src/components/FlashMessages";
 import ProfileShow from "src/components/profile/show";
-import OnboardingFlow from "src/components/onboarding/OnboardingFlow";
 import SignInPage from "src/components-v2/pages/sign-in";
 import SignUpPage from "src/components-v2/pages/sign-up";
+import OnboardingPage from "src/components-v2/pages/onboarding";
 import ForgotPasswordPage from "src/components-v2/pages/forgot-password";
 import SetPasswordPage from "src/components-v2/pages/set-password";
 import TalentModelsProfilePage from "src/components-v2/pages/talent-models-profile";
-import CareerCirclePage from "src/components-v2/pages/career-circle";
 import HomepagePage from "../src/components-v2/pages/homepage";
+import NetworkPage from "src/components-v2/pages/network";
 
 import "stylesheets/application.scss";
 
@@ -79,7 +79,6 @@ ReactOnRails.register({
   TopBar,
   UpcomingTalents,
   Web3ModalConnect,
-  OnboardingFlow,
   Support,
   UserSupportPage,
   SignInPage,
@@ -87,8 +86,9 @@ ReactOnRails.register({
   ForgotPasswordPage,
   SetPasswordPage,
   TalentModelsProfilePage,
-  CareerCirclePage,
-  HomepagePage
+  HomepagePage,
+  NetworkPage,
+  OnboardingPage
 });
 
 Rails.start();

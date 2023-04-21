@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_05_150033) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_19_170151) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -181,8 +181,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_05_150033) do
     t.integer "total_polygon_supporters"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "total_polygon_token_transactions"
-    t.integer "total_celo_token_transactions"
+    t.integer "total_polygon_stake_transactions"
+    t.integer "total_celo_stake_transactions"
     t.integer "total_mates_nfts"
     t.integer "total_onboarded_users"
     t.integer "total_talent_token_applications"
@@ -201,6 +201,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_05_150033) do
     t.string "total_stables_stored_celo"
     t.string "tal_rewards_given_polygon"
     t.string "tal_rewards_given_celo"
+    t.integer "total_polygon_sponsorship_transactions"
+    t.integer "total_celo_sponsorship_transactions"
+    t.integer "total_users_with_subscribers"
+    t.integer "total_users_subscribing"
+    t.integer "total_users_with_career_updates"
+    t.integer "total_career_updates"
+    t.decimal "daily_conversion_rate", precision: 10, scale: 4, default: "0.0"
+    t.integer "total_users_with_three_or_more_subscribers"
+    t.integer "total_users_subscribing_three_or_more"
   end
 
   create_table "discovery_rows", force: :cascade do |t|
@@ -432,7 +441,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_05_150033) do
   create_table "sponsorships", force: :cascade do |t|
     t.string "sponsor", null: false
     t.string "talent", null: false
-    t.bigint "amount", null: false
+    t.string "amount", null: false
     t.string "token", null: false
     t.string "symbol", null: false
     t.integer "chain_id", null: false
@@ -442,6 +451,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_05_150033) do
     t.datetime "revoked_at", precision: nil
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.string "transactions", default: [], array: true
+    t.integer "token_decimals", default: 18
   end
 
   create_table "subscriptions", force: :cascade do |t|
@@ -476,7 +486,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_05_150033) do
     t.text "profile_picture_data"
     t.boolean "public", default: false
     t.jsonb "profile", default: {}
-    t.boolean "disable_messages", default: false
     t.text "banner_data"
     t.boolean "token_launch_reminder_sent", default: false
     t.string "notion_page_id"
@@ -605,8 +614,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_05_150033) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.boolean "disabled", default: false
     t.string "theme_preference", default: "light"
+    t.boolean "disabled", default: false
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"

@@ -12,7 +12,7 @@ const STEPS = {
 };
 
 export const SponsorModal = ({ modalState, profile, railsContext }) => {
-  const [token, setToken] = useState({ value: "USDC", iconName: "polygon" });
+  const [token, setToken] = useState({ value: "USDC", iconName: "polygon", chain: "Polygon" });
   const [amount, setAmount] = useState(0);
   const stepsState = useStepExperience(Object.keys(STEPS).length);
   const StepScreen = useMemo(() => STEPS[stepsState.currentStep], [stepsState.currentStep]);

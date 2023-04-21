@@ -41,6 +41,7 @@ const LaunchToken = ({ mode, ticker, changeTicker, setSelectedChain, error }) =>
           {error?.length && <P2 className="text-danger">Your ticker needs to be between 3 and 8 characters.</P2>}
           {error?.characters && <P2 className="text-danger">Your ticker can only have uppercase characters.</P2>}
           {error?.tickerTaken && <P2 className="text-danger">Your ticker is already taken.</P2>}
+          {error?.notWhitelisted && <P2 className="text-danger">You need to be whitelisted.</P2>}
           <ChainSelectionDropdown
             className="my-3"
             selectedNetwork={selectedNetwork}
@@ -226,7 +227,12 @@ const LaunchTokenModals = props => {
       const result = await factory.createTalent(user.username, ticker);
 
       if (result.error) {
-        setError(prev => ({ ...prev, tickerTaken: true }));
+        if (result.error === "execution reverted: address needs to be whitelisted") {
+          setError(prev => ({ ...prev, notWhitelisted: true }));
+        } else {
+          setError(prev => ({ ...prev, tickerTaken: true }));
+        }
+
         setDeploying(false);
         return;
       }

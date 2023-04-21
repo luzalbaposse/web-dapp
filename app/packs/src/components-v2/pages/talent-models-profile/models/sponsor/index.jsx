@@ -15,14 +15,14 @@ export const SponsorModel = ({ isCurrentUserProfile, profile, railsContext }) =>
         <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
           Sponsorship
         </Typography>
-        <Typography specs={{ variant: "p2", type: "regular" }} color="primary01">
-          Help talent grow through direct sponsorships. {profile.user.name} has 30 days to claim sponsorships, after
-          that you can claim your funds back.
+        <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
+          Help {profile.user.name} grow by sending funds directly to their wallet. You can revoke your sponsorship
+          before {profile.user.name} claims it.
         </Typography>
         <Button
           hierarchy="primary"
           size="large"
-          text="Soon"
+          text="Sponsor"
           isStretched
           onClick={() => {
             if (modalState.isOpen) {
@@ -31,8 +31,7 @@ export const SponsorModel = ({ isCurrentUserProfile, profile, railsContext }) =>
               modalState.openModal();
             }
           }}
-          isDisabled
-          // isDisabled={isCurrentUserProfile}
+          isDisabled={isCurrentUserProfile}
         />
       </Container>
     </>

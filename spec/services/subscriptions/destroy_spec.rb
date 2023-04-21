@@ -48,8 +48,8 @@ RSpec.describe Subscriptions::Destroy do
         first_time_bought_at: Date.yesterday
       )
 
-      create :connection, user: subscribing_user, connected_user: subscriber_user, connection_type: "supporter"
-      create :connection, user: subscriber_user, connected_user: subscribing_user, connection_type: "supporting"
+      create :connection, user: subscribing_user, connected_user: subscriber_user, connection_type: "staker"
+      create :connection, user: subscriber_user, connected_user: subscribing_user, connection_type: "staking"
     end
 
     it "deletes the connections" do

@@ -1,4 +1,4 @@
-import { Typography, buildColor, desktopStyles, mobileStyles } from "@talentprotocol/design-system";
+import { Typography, buildColor, mobileStyles } from "@talentprotocol/design-system";
 import styled, { css } from "styled-components";
 
 export const Container = styled.div`
@@ -6,24 +6,19 @@ export const Container = styled.div`
   flex-direction: column;
   text-align: left;
   gap: 16px;
-  border-bottom: 1px solid ${buildColor("surfaceHover02")};
-
-  &:last-child {
-    border-bottom: none;
-  }
+  border: 1px solid ${buildColor("surfaceHover02")};
+  border-radius: 24px;
+  padding: 24px;
+  margin-bottom: 24px;
 
   ${mobileStyles(css`
     padding: 24px 16px;
-  `)}
-
-  ${desktopStyles(css`
-    padding: 24px 0;
   `)}
 `;
 
 export const AvatarHeader = styled.div`
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   gap: 8px;
 `;
 
@@ -40,4 +35,9 @@ export const StyledUpdateContent = styled(Typography)`
 export const UpdatesContainer = styled.div`
   display: flex;
   flex-direction: column;
+`;
+
+export const VerifiedIcon = styled.img`
+  width: 12px;
+  height: 12px;
 `;

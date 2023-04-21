@@ -1,6 +1,6 @@
 class API::SponsorshipBlueprint < Blueprinter::Base
   view :normal do
-    fields :amount, :chain_id, :token, :symbol, :claimed_at, :revoked_at
+    fields :amount, :chain_id, :token, :symbol, :token_decimals, :claimed_at, :revoked_at
 
     field :status do |sponsorship, _options|
       sponsorship.status
@@ -14,11 +14,11 @@ class API::SponsorshipBlueprint < Blueprinter::Base
       sponsorship.talent
     end
 
-    association :sponsor, blueprint: API::TalentBlueprint, view: :normal do |sponsorship, options|
+    association :sponsor, blueprint: API::TalentBlueprint, view: :subscriber do |sponsorship, options|
       sponsorship.sponsor_user
     end
 
-    association :sponsored, blueprint: API::TalentBlueprint, view: :normal do |sponsorship, options|
+    association :sponsored, blueprint: API::TalentBlueprint, view: :subscriber do |sponsorship, options|
       sponsorship.talent_user
     end
   end
