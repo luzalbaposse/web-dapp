@@ -74,7 +74,7 @@ export const EmailPasswordStep = ({ setIsNextDisable, setUser, user }) => {
       <Typography specs={{ variant: "h3", type: "bold" }} color="primary01">
         Set your email and password
       </Typography>
-      <SignUpForm>
+      <SignUpForm onSubmit={e => e.preventDefault()}>
         <EmailRow>
           <Typography specs={{ variant: "p2", type: "bold" }} color="primary01">
             Email

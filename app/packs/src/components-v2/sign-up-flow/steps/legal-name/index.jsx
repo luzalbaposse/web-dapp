@@ -13,9 +13,11 @@ export const LegalNameStep = ({ setIsNextDisable, setUser, user, isNextDisabled 
       setIsNextDisable(true);
     }
   }, [firstNameRef, lastNameRef, setIsNextDisable, isNextDisabled]);
+
   useEffect(() => {
     validateStep();
-  }, [user]);
+  }, [user, isNextDisabled]);
+
   return (
     <>
       <TitleRow>
@@ -27,7 +29,7 @@ export const LegalNameStep = ({ setIsNextDisable, setUser, user, isNextDisabled 
           not show it in your profile.
         </Typography>
       </TitleRow>
-      <Form>
+      <Form onSubmit={e => e.preventDefault()}>
         <Row>
           <Typography specs={{ variant: "p2", type: "bold" }} color="primary01">
             First Name

@@ -1,13 +1,14 @@
 import { useState } from "react";
 
-export const useUserBuilder = () => {
+export const useUserBuilder = (predefinedUser = {}) => {
   const [user, setUser] = useState({
     gender: "",
     nationality: "",
     location: "",
     headline: "",
     tags: [],
-    careerNeeds: []
+    careerNeeds: [],
+    ...predefinedUser
   });
   return { user, setUser };
 };

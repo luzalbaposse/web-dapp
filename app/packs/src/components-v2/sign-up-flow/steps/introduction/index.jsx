@@ -38,7 +38,7 @@ export const IntroductionStep = ({ user, setUser, setIsNextDisable }) => {
           What’s the headline of your career? You can edit this later.
         </Typography>
       </TitleRow>
-      <Form>
+      <Form onSubmit={e => e.preventDefault()}>
         <WordCounterContainer>
           <Typography specs={{ variant: "p3", type: "bold" }} color="primary01">
             {headline.length}/{MAX_CHARACTERS}

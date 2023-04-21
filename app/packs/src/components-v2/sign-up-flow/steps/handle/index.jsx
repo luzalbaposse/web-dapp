@@ -4,12 +4,16 @@ import { Input, Typography } from "@talentprotocol/design-system";
 import { Row, Form, TitleRow } from "./styled";
 import { username } from "../../../../api/username";
 
-export const HandleStep = ({ user, setUser, setIsNextDisable }) => {
+export const HandleStep = ({ user, setUser, isNextDisabled, setIsNextDisable }) => {
   const [handleError, setHandleError] = useState("");
   const handleRef = useRef(null);
 
   const debouncedUsernameLookup = debounce(() => {
-    const handle = handleRef.current.value?.toLowerCase();
+    const handle = handleRef.current?.value?.toLowerCase();
+    if (!handle) {
+      return;
+    }
+
     username
       .validateHandle(handle)
       .then(({ data }) => {
@@ -38,7 +42,7 @@ export const HandleStep = ({ user, setUser, setIsNextDisable }) => {
     if (user.handle) {
       validateStep();
     }
-  }, [user]);
+  }, [user, isNextDisabled]);
   return (
     <>
       <TitleRow>
@@ -49,7 +53,7 @@ export const HandleStep = ({ user, setUser, setIsNextDisable }) => {
           Your username on Talent Protocol and you’ll be also able to claim it as your domain.
         </Typography>
       </TitleRow>
-      <Form>
+      <Form onSubmit={e => e.preventDefault()}>
         <Row>
           <Typography specs={{ variant: "p2", type: "bold" }} color="primary01">
             Username
