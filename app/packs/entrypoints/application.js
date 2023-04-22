@@ -47,6 +47,7 @@ import ForgotPasswordPage from "src/components-v2/pages/forgot-password";
 import SetPasswordPage from "src/components-v2/pages/set-password";
 import TalentModelsProfilePage from "src/components-v2/pages/talent-models-profile";
 import NetworkPage from "src/components-v2/pages/network";
+import ProductAnnouncementModal from "src/components-v2/product-announcement-modal";
 
 import "stylesheets/application.scss";
 
@@ -86,7 +87,8 @@ ReactOnRails.register({
   SetPasswordPage,
   TalentModelsProfilePage,
   NetworkPage,
-  OnboardingPage
+  OnboardingPage,
+  ProductAnnouncementModal
 });
 
 Rails.start();
