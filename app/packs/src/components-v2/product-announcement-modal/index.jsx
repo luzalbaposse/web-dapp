@@ -1,5 +1,5 @@
 import { Button, Modal, useModal } from "@talentprotocol/design-system";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { H5, P2 } from "src/components/design_system/typography";
 import { productAnnouncements } from "src/api/product-announcements";
 import {
@@ -31,9 +31,16 @@ const ProductAnnouncementModal = () => {
       .catch(() => {});
   }, []);
 
-  const closeModal = useCallback(() => {
+  const closeModal = () => {
+    if (!productAnnouncement) return;
+
+    productAnnouncements
+      .markAsRead(productAnnouncement.id)
+      .then(() => {})
+      .catch(() => {});
+
     modalState.closeModal();
-  }, [modalState.closeModal]);
+  };
 
   return (
     <>
