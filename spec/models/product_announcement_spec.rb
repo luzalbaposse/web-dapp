@@ -19,6 +19,33 @@ RSpec.describe ProductAnnouncement, type: :model do
     end
   end
 
+  describe "mark_as_read_for!" do
+    let(:product_announcement) { create(:product_announcement) }
+    let(:user) { create(:user) }
+
+    context "when there is a user product announcement for the user" do
+      let!(:user_product_announcement) do
+        create(:user_product_announcement, product_announcement:, read_at: nil, user:)
+      end
+
+      it "marks the user product announcement as read" do
+        product_announcement.mark_as_read_for!(user)
+
+        expect(user_product_announcement.reload.read_at).not_to be_nil
+      end
+    end
+
+    context "when there is not a user product announcement for the user" do
+      it "creates a user product announcement for the user and marks it as read" do
+        expect { product_announcement.mark_as_read_for!(user) }
+          .to change(UserProductAnnouncement, :count)
+          .by(1)
+
+        expect(UserProductAnnouncement.last.read_at).not_to be_nil
+      end
+    end
+  end
+
   describe "read?" do
     let(:product_announcement) { create(:product_announcement) }
     let(:user) { create(:user) }

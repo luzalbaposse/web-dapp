@@ -52,4 +52,32 @@ RSpec.describe "Product Announcements" do
       end
     end
   end
+
+  describe "#update" do
+    let(:product_announcement) { create :product_announcement, uuid: "UUID" }
+
+    subject(:api_request) do
+      put api_v1_public_product_announcement_path(id: "UUID", as: user)
+    end
+
+    before do
+      stub_const("API::V1::PublicAPI::APIController::INTERNAL_DOMAINS", ["talentprotocol.com"])
+      host! "app.talentprotocol.com"
+
+      allow(ProductAnnouncement).to receive(:find_by).and_return(product_announcement)
+      allow(product_announcement).to receive(:mark_as_read_for!).and_call_original
+    end
+
+    it "calls #mark_as_read_for! on the product announcement with the user" do
+      api_request
+
+      expect(product_announcement).to have_received(:mark_as_read_for!).with(user)
+    end
+
+    it "returns a successful response" do
+      api_request
+
+      expect(response).to have_http_status(:ok)
+    end
+  end
 end
