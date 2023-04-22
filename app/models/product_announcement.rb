@@ -5,4 +5,8 @@ class ProductAnnouncement < ApplicationRecord
 
   validates :content, presence: true
   validates :title, presence: true
+
+  def read?(user)
+    user_product_announcements.find_by(user:)&.read_at&.present? || false
+  end
 end
