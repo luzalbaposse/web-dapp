@@ -18,6 +18,7 @@ class SupportsController < ApplicationController
     users = User
       .includes(:talent)
       .where("username ILIKE :keyword OR email ILIKE :keyword OR display_name ILIKE :keyword", keyword: "%#{params[:username]}%")
+      .limit(25)
     render json: UserBlueprint.render_as_json(users, view: :support), status: :ok
   end
 end
