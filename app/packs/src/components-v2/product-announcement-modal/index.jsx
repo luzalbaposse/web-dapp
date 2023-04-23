@@ -1,17 +1,9 @@
 import { Button, Modal, useModal } from "@talentprotocol/design-system";
 import React, { useEffect, useState } from "react";
+import { Container } from "./styled";
 import { H5, P2 } from "src/components/design_system/typography";
 import { productAnnouncements } from "src/api/product-announcements";
-import {
-  Container
-  // ClaimArea,
-  // ClaimAreaInput,
-  // ClaimAreaInputContainer,
-  // OutterContainer,
-  // BottomContainer,
-  // ClaimAreaAmountContainer,
-  // BottomDivider
-} from "./styled";
+import Divider from "src/components/design_system/other/Divider";
 import Link from "src/components/design_system/link";
 
 const ProductAnnouncementModal = () => {
@@ -45,21 +37,32 @@ const ProductAnnouncementModal = () => {
   return (
     <>
       {productAnnouncement && (
-        <Modal closeModal={closeModal} isOpen={modalState.isOpen} title="What's new?">
+        <Modal
+          closeModal={closeModal}
+          footer={
+            <>
+              <Divider />
+              <div className="align-items-center d-flex justify-content-end p-3">
+                {productAnnouncement.link && (
+                  <Link
+                    bold
+                    className="mr-4 light-text-primary-01"
+                    onClick={() => (window.location.href = productAnnouncement.link)}
+                    text="Learn more"
+                    type="white"
+                  />
+                )}
+                <Button hierarchy="primary" onClick={closeModal} size="small" text="Got it!" />
+              </div>
+            </>
+          }
+          isOpen={modalState.isOpen}
+          title="What's new?"
+        >
           <Container>
-            <div className="mb-4">
-              <img
-                className="mb-4"
-                src={"https://cdn.ttgtmedia.com/rms/onlineimages/networking-basic_url_structure_half_column_mobile.png"}
-                width="100%"
-              />
-              <H5 bold className="mb-3" text={productAnnouncement.title} />
-              <P2 text={productAnnouncement.content} />
-            </div>
-            <div className="align-items-center d-flex justify-content-end">
-              <Link bold className="mr-4 light-text-primary-01" text="Learn more" type="white" />
-              <Button hierarchy="primary" onClick={closeModal} size="small" text="Got it!" />
-            </div>
+            {productAnnouncement.image_url && <img className="mb-4" src={productAnnouncement.image_url} width="100%" />}
+            <H5 bold className="mb-3" text={productAnnouncement.title} />
+            <P2 text={productAnnouncement.content} />
           </Container>
         </Modal>
       )}
