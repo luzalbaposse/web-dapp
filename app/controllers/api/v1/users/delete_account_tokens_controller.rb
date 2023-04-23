@@ -15,6 +15,6 @@ class API::V1::Users::DeleteAccountTokensController < ApplicationController
   private
 
   def user
-    @user ||= User.find_by(id: params[:user_id])
+    @user ||= User.find_by(uuid: params[:user_id])
   end
 end
