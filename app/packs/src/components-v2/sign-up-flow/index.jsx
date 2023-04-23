@@ -155,7 +155,7 @@ export const SignUpFlow = props => {
       default:
         return MemoizedDefaultFooter;
     }
-  }, [stepsState.currentStep, isNextDisabled, props.isDesktop, hasCreateAccountError]);
+  }, [stepsState.currentStep, isNextDisabled, props.isDesktop, hasCreateAccountError, createdUser]);
   return (
     <>
       <ModalDialog title="Captcha" isOpen={captchaModalState.isOpen} closeModal={captchaModalState.closeModal}>
