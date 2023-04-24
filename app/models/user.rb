@@ -27,7 +27,7 @@ class User < ApplicationRecord
   has_many :receivers, through: :messaged
 
   # Feed
-  has_many :subscriptions
+  has_many :subscriptions, dependent: :destroy
   has_many :active_subscriptions, class_name: "ActiveSubscription"
   has_many :pending_subscriptions, class_name: "PendingSubscription"
 
