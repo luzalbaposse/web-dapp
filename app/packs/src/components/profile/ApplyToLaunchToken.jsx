@@ -11,26 +11,27 @@ import { white, lightTextPrimary01 } from "src/utils/colors.js";
 
 import cx from "classnames";
 
-const ApplyToLaunchToken = ({ talent, waitingApproval, setProfile, canUpdate }) => {
+const ApplyToLaunchToken = ({ profile, setProfile, canUpdate }) => {
   const { mobile } = useWindowDimensionsHook();
   const { mode } = useTheme();
+  const waitingApproval = profile.user.profile_type == "waiting_for_approval";
 
   const apply = async () => {
     let params = {
       user: {
-        id: talent.user.id,
+        id: profile.user.id,
         profile_type: "waiting_for_approval"
       }
     };
 
-    const response = await patch(`/api/v1/talent/${talent.user.id}`, params).catch(() => {
+    const response = await patch(`/api/v1/talent/${profile.user.id}`, params).catch(() => {
       return false;
     });
 
     if (response && !response.error) {
       setProfile(prev => ({
         ...prev,
-        user: { ...prev.user, profileType: response.user.profile_type }
+        user: { ...prev.user, profile_type: response.user.profile_type }
       }));
 
       return true;

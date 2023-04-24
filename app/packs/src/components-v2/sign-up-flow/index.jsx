@@ -45,8 +45,8 @@ const STEP_TO_COMPONENT_MAP = isDesktop =>
         10: ConfirmEmailStep
       };
 
-const CAN_SKIP_STEPS_DESKTOP = [6, 7];
-const CAN_SKIP_STEPS_MOBILE = [7, 8];
+const CAN_SKIP_STEPS_DESKTOP = [5, 6, 7];
+const CAN_SKIP_STEPS_MOBILE = [6, 7, 8];
 
 export const SignUpFlow = props => {
   const captchaModalState = useModal();
