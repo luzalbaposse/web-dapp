@@ -173,13 +173,12 @@ const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
         <Journey talent={profile} setTalent={setProfile} canUpdate={canUpdate} />
       </div>
       <div className="my-7 w-100" id={"#token"}>
-        {talentToken.contractId && <Perks talent={profile} canUpdate={canUpdate} />}
+        {talentToken.contract_id && <Perks talent={profile} canUpdate={canUpdate} />}
         <CurrentTokenSection
-          talent={profile}
+          profile={profile}
           talentTokenPrice={talentTokenPrice}
           setProfile={setProfile}
           railsContext={railsContext}
-          waitingApproval={user.profile_type == "waiting_for_approval"}
           canUpdate={canUpdate}
         />
       </div>

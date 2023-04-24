@@ -14,17 +14,17 @@ import cx from "classnames";
 
 import LaunchTokenModals from "../talent/Edit/LaunchTokenModals";
 
-const LaunchToken = ({ talent, railsContext, setProfile, canUpdate }) => {
+const LaunchToken = ({ profile, railsContext, setProfile, canUpdate }) => {
   const { mobile } = useWindowDimensionsHook();
   const { mode } = useTheme();
-  const talentToken = talent.talent_token;
-  const user = talent.user;
+  const talentToken = profile.talent_token;
+  const user = profile.user;
   const [ticker, setTicker] = useState(talentToken.ticker || "");
   const [show, setShow] = useState(false);
   const requiredFields = missingFields({
-    talent: talent,
-    profilePictureUrl: talent.profile_picture_url,
-    careerGoal: talent.career_goal
+    profile: profile,
+    profilePictureUrl: profile.profile_picture_url,
+    careerGoal: profile.career_goal
   });
 
   if (!canUpdate) {
@@ -39,7 +39,7 @@ const LaunchToken = ({ talent, railsContext, setProfile, canUpdate }) => {
           setShow={setShow}
           changeSharedState={setProfile}
           mode={mode()}
-          talent={talent}
+          talent={profile}
           talentToken={talentToken}
           user={user}
           railsContext={railsContext}

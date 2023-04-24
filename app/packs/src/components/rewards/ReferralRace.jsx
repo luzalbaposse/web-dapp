@@ -72,7 +72,7 @@ const RaceHeader = ({ beginnerQuestCompleted, race }) => {
     updateTimeUntilEnd();
 
     return () => clearTimeout(timeoutPointer);
-  }, [race]);
+  }, [race, beginnerQuestCompleted]);
 
   const activeRace = () => {
     return race && dayjs(race.started_at).utc() <= dayjs().utc();
