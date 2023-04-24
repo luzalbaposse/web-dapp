@@ -22,7 +22,7 @@ const LaunchToken = ({ profile, railsContext, setProfile, canUpdate }) => {
   const [ticker, setTicker] = useState(talentToken.ticker || "");
   const [show, setShow] = useState(false);
   const requiredFields = missingFields({
-    profile: profile,
+    talent: profile,
     profilePictureUrl: profile.profile_picture_url,
     careerGoal: profile.career_goal
   });
