@@ -3,6 +3,7 @@ require "pagy_cursor/pagy/extras/uuid_cursor"
 
 # Inherit from this controller for authenticated api requests
 class API::V1::PublicAPI::APIController < ActionController::Base
+  skip_before_action :verify_authenticity_token
   include Clearance::Controller
   include Pagy::Backend
 
