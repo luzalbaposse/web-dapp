@@ -24,7 +24,7 @@ const Perks = ({ talent, canUpdate }) => {
   const [editingPerk, setEditingPerk] = useState({});
   const { mobile } = useWindowDimensionsHook();
   const { mode } = useTheme();
-  const talentToken = talent.talentToken;
+  const talentToken = talent.talent_token;
   const user = talent.user;
   const userId = user.id;
 
