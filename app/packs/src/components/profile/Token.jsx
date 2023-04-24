@@ -13,13 +13,13 @@ import { parseAndCommify } from "src/onchain/utils";
 
 import cx from "classnames";
 
-const Token = ({ talent, talentTokenPrice, railsContext }) => {
+const Token = ({ profile, talentTokenPrice, railsContext }) => {
   const { mobile } = useWindowDimensionsHook();
   const { mode } = useTheme();
-  const talentToken = talent.talent_token;
+  const talentToken = profile.talent_token;
 
-  const totalSupply = ethers.utils.formatUnits(talent.total_supply);
-  const maxSupply = ethers.utils.formatUnits(talent.max_supply);
+  const totalSupply = ethers.utils.formatUnits(profile.total_supply);
+  const maxSupply = ethers.utils.formatUnits(profile.max_supply);
 
   const addTokenToMetamask = async () => {
     const onChainAPI = new OnChain(railsContext.contractsEnv);
@@ -60,7 +60,7 @@ const Token = ({ talent, talentTokenPrice, railsContext }) => {
       </div>
       <div className={cx("row", mobile ? "" : "mt-7")}>
         <div className={cx("col-12 col-lg-4", mobile && "mb-6")}>
-          <H3 text={talent.supporters_count || "0"} className="text-center inverted-text-primary-01"></H3>
+          <H3 text={profile.supporters_count || "0"} className="text-center inverted-text-primary-01"></H3>
           <P3 className="text-center inverted-text-primary-03">Supporters</P3>
         </div>
         <div className={cx("col-12 col-lg-4", mobile && "mb-6")}>
