@@ -1,6 +1,6 @@
 import { Button, Modal, useModal } from "@talentprotocol/design-system";
 import React, { useEffect, useState } from "react";
-import { Container } from "./styled";
+import { Container, Image } from "./styled";
 import { H5, P2 } from "src/components/design_system/typography";
 import { productAnnouncements } from "src/api/product-announcements";
 import Divider from "src/components/design_system/other/Divider";
@@ -60,7 +60,7 @@ const ProductAnnouncementModal = () => {
           title="What's new?"
         >
           <Container>
-            {productAnnouncement.image_url && <img className="mb-4" src={productAnnouncement.image_url} width="100%" />}
+            {productAnnouncement.image_url && <Image className="mb-4" src={productAnnouncement.image_url} />}
             <H5 bold className="mb-3" text={productAnnouncement.title} />
             <P2 text={productAnnouncement.content} />
           </Container>
