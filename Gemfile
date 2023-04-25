@@ -36,7 +36,7 @@ gem "pagy"
 gem "pagy_cursor"
 
 # Use Redis adapter to run Action Cable in production
-gem "redis", "~> 4.3"
+gem "redis"
 gem "bcrypt"
 
 # Image manipulation
