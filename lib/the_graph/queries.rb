@@ -1,6 +1,6 @@
 module TheGraph
   module Queries
-    TALENT_SUPPORTERS_QUERY = <<-'GRAPHQL'
+    TALENT_SUPPORTERS_QUERY = <<-GRAPHQL
       query($id: ID!, $skip: Int!, $first: Int!, $variance_start_date: Int!) {
         talentToken(id: $id) {
           supporterCounter

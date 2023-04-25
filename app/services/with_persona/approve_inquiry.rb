@@ -16,6 +16,16 @@ module WithPersona
         with_persona_id = talent.with_persona_id
         talent.update(with_persona_id: nil)
 
+        Rollbar.warning(
+          "Persona names mismatch",
+          legal_first_name: user.legal_first_name,
+          legal_last_name: user.legal_last_name,
+          inquiry_first_name: inquiry_first_name,
+          inquiry_last_name: inquiry_last_name,
+          user_id: user.id,
+          with_persona_id: with_persona_id
+        )
+
         CreateNotification.new.call(
           recipient: user,
           source_id: user.id,
