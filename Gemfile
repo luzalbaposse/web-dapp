@@ -36,7 +36,7 @@ gem "pagy"
 gem "pagy_cursor"
 
 # Use Redis adapter to run Action Cable in production
-gem "redis"
+gem "redis", "~> 4.3"
 gem "bcrypt"
 
 # Image manipulation
@@ -62,8 +62,8 @@ gem "faker"
 gem "rollbar"
 
 # Async jobs
-gem "sidekiq"
-gem "sidekiq-scheduler"
+gem "sidekiq", "~> 5.0"
+gem "sidekiq-scheduler", "~> 3.1.0"
 gem "sidekiq-status"
 
 # Requests
