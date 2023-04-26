@@ -23,7 +23,6 @@ import Notifications from "src/components/notifications";
 import Login from "src/components/login/Login";
 import ResetPassword from "src/components/login/ResetPassword";
 import ChangePassword from "src/components/login/ChangePassword";
-import BottomNav from "src/components/design_system/bottom_nav";
 import TopBar from "src/components/top_bar";
 import UserSettings from "src/components/talent/Edit/Settings";
 import NewPortfolio from "src/components/portfolio/NewPortfolio";
@@ -54,7 +53,6 @@ import "stylesheets/application.scss";
 require.context("../images", true);
 
 ReactOnRails.register({
-  BottomNav,
   ChangePassword,
   Chat,
   Discovery,

@@ -60,9 +60,17 @@ const Footer = () => {
               text={`Talent Protocol MTU © ${new Date().getFullYear()}`}
             />
             <P2 className="text-primary-03 mr-4 d-lg-block d-none" text="|" />
-            <a href="mailto:contact@talentprotocol.com" target="self" className="mr-4 text-primary-03">
+            <a href="mailto:contact@talentprotocol.com" target="self" className="mr-4 mb-3 mb-lg-0 text-primary-03">
               Contact us
             </a>
+            <P2 className="text-primary-03 mr-4 d-lg-block d-none" text="|" />
+            <P2 className="text-primary-03 mb-3 mb-lg-0">
+              We would love to hear from you. Let us know your challenges and goals{" "}
+              <a href="https://talentprotocol.typeform.com/productfeedback" target="_blank">
+                here
+              </a>
+              .
+            </P2>
           </div>
         </div>
       </div>

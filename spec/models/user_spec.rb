@@ -610,6 +610,36 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe "#pending_network_requests?" do
+    let(:user) { create :user }
+
+    context "when there are pending subscriptions" do
+      before do
+        create :pending_subscription, user: user, subscriber: create(:user)
+      end
+
+      it "returns true" do
+        expect(user.pending_network_requests?).to eq true
+      end
+    end
+
+    context "when there are pending sponsorships" do
+      before do
+        create :sponsorship, talent: user.wallet_id, sponsor: SecureRandom.hex
+      end
+
+      it "returns true" do
+        expect(user.pending_network_requests?).to eq true
+      end
+    end
+
+    context "when there are no pending subscriptions or sponsorships" do
+      it "returns false" do
+        expect(user.pending_network_requests?).to eq false
+      end
+    end
+  end
+
   describe "#pending_subscribers" do
     let(:user_1) { create :user }
     let(:user_2) { create :user }
