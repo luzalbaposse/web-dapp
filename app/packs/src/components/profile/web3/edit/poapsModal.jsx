@@ -114,6 +114,9 @@ const PoapsModal = ({ userId, show, setShow, mobile, appendPoap }) => {
       } else {
         setPagination(response.pagination);
         loadPoaps(response.tokens);
+        if (response.tokens.length == 0) {
+          setLoading(false);
+        }
       }
     });
   };
