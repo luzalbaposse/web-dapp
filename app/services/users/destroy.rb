@@ -31,6 +31,7 @@ module Users
         Impersonation.where(impersonated: user).destroy_all
         Connection.where(user_id: user.id).destroy_all
         Connection.where(connected_user_id: user.id).destroy_all
+        UserProductAnnouncement.where(user_id: user.id).destroy_all
 
         user.destroy!
       end

@@ -11,8 +11,9 @@ export const Container = styled.div`
 export const Image = styled.img`
   border-radius: 8px;
   width: 100%;
+  max-height: 300px;
+`;
 
-  ${mobileStyles(css`
-    border-radius: 0;
-  `)}
+export const LinkContainer = styled.div`
+  margin-right: 24px;
 `;
