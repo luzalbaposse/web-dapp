@@ -67,7 +67,7 @@ export const getPOAPData = async (contractId, tokenId) => {
 
 export const CHAIN_RPC_URLS = {
   1: "https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
-  137: "https://polygon-rpc.com/",
+  137: "https://polygon.llamarpc.com",
   42220: "https://forno.celo.org",
   44787: "https://alfajores-forno.celo-testnet.org",
   80001: "https://matic-mumbai.chainstacklabs.com"
