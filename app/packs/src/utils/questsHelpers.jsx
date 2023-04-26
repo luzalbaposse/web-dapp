@@ -13,7 +13,7 @@ export const questDescription = type => {
     case "Quests::User":
       return "Complete your 'About' section and connect your wallet";
     case "Quests::Supporter":
-      return "Subscribe to at least 3 talents and buy at least 1 Talent Token";
+      return "Subscribe to at least 3 talents and support someone through staking";
     case "Quests::TalentProfile":
       return "Complete the mandatory fields of your profile and share it with your network.";
     case "Quests::VerifiedProfile":
@@ -53,7 +53,7 @@ export const taskDescription = type => {
       return (
         <P2 className="text-primary-03">
           <ParagraphLink text="Top up your account" href={TOP_UP_YOUR_ACCOUNT} target="_blank" /> and{" "}
-          <ParagraphLink text="buy at least 1 Talent Token." href={BUY_TALENT_TOKENS} target="_blank" />
+          <ParagraphLink text="support someone through staking." href={BUY_TALENT_TOKENS} target="_blank" />
         </P2>
       );
     case "Tasks::LaunchToken":

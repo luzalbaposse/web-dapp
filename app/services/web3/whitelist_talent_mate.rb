@@ -18,22 +18,17 @@ module Web3
           user.update!(
             whitelisted_talent_mate: true
           )
-        else
-          log_error(user)
+        elsif response["statusCode"] == 400
+          Rollbar.warning("Unable to whitelist user ##{user.id}", response: response)
+          false
+        elsif response["statusCode"] == 500
+          Rollbar.error("Unable to whitelist user ##{user.id}", response: response)
           false
         end
       end
     end
 
     private
-
-    def log_error(user)
-      if Rails.env.production?
-        Rollbar.warning("Unable to whitelist user ##{user.id}")
-      else
-        puts "There was an issue whitelisting user ##{user.id}"
-      end
-    end
 
     def client
       @client ||= Aws::Lambda::Client.new(region: "eu-west-2")

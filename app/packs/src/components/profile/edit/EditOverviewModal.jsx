@@ -602,6 +602,20 @@ const EditOverviewModal = ({ show, hide, profile, setProfile, mode }) => {
           </div>
           <div className="mb-5">
             <TextInput
+              title="Lens"
+              onChange={e => changeProfileAttribute("lens", e.target.value)}
+              value={editedTalent.profile.lens || ""}
+            />
+          </div>
+          <div className="mb-5">
+            <TextInput
+              title="Mastodon"
+              onChange={e => changeProfileAttribute("mastodon", e.target.value)}
+              value={editedTalent.profile.mastodon || ""}
+            />
+          </div>
+          <div className="mb-5">
+            <TextInput
               title="Telegram"
               onChange={e => changeProfileAttribute("telegram", e.target.value)}
               value={editedTalent.profile.telegram || ""}

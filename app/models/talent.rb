@@ -18,6 +18,8 @@ class Talent < ApplicationRecord
     nationality
     pronouns
     telegram
+    mastodon
+    lens
     twitter
     video
     wallet_address

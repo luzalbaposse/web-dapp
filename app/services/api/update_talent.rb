@@ -98,6 +98,22 @@ class API::UpdateTalent
           params[:profile][:discord]
         end
       end
+      mastodon_link = params[:profile][:mastodon]
+      if mastodon_link
+        talent.mastodon = if mastodon_link.length > 0 && !mastodon_link.include?("http")
+          "https://#{mastodon_link}"
+        else
+          mastodon_link
+        end
+      end
+      lens_link = params[:profile][:lens]
+      if lens_link
+        talent.lens = if lens_link.length > 0 && !lens_link.include?("http")
+          "https://#{lens_link}"
+        else
+          lens_link
+        end
+      end
       if params[:profile][:linkedin]
         talent.linkedin = if params[:profile][:linkedin].length > 0 && !params[:profile][:linkedin].include?("http")
           "https://#{params[:profile][:linkedin]}"

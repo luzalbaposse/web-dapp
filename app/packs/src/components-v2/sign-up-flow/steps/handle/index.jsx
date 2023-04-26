@@ -50,7 +50,7 @@ export const HandleStep = ({ user, setUser, isNextDisabled, setIsNextDisable }) 
           Choose your username.
         </Typography>
         <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
-          Your username on Talent Protocol and you’ll be also able to claim it as your domain.
+          Your username on Talent Protocol and you'll be also able to claim it as your domain.
         </Typography>
       </TitleRow>
       <Form onSubmit={e => e.preventDefault()}>
