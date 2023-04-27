@@ -113,7 +113,7 @@ const SearchDropdown = ({ className }) => {
   }
 
   return (
-    <Dropdown className="align-items-center d-flex">
+    <Dropdown className="align-items-center d-flex" onClick={() => setShowSearchDropdown(true)}>
       <Dropdown.Toggle as="div" className={cx(className, "no-caret normal-size-button px-2")}>
         <Search color="currentColor" />
       </Dropdown.Toggle>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_19_170151) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_22_110326) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -396,6 +396,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_19_170151) do
     t.index ["talent_id"], name: "index_perks_on_talent_id"
   end
 
+  create_table "product_announcements", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.string "title", null: false
+    t.text "content", null: false
+    t.text "image_data"
+    t.string "link"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["uuid"], name: "index_product_announcements_on_uuid"
+  end
+
   create_table "profile_page_visitors", force: :cascade do |t|
     t.text "ip_ciphertext", null: false
     t.string "ip_bidx"
@@ -573,6 +584,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_19_170151) do
     t.index ["user_id"], name: "index_user_email_logs_on_user_id", unique: true
   end
 
+  create_table "user_product_announcements", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.bigint "user_id", null: false
+    t.bigint "product_announcement_id", null: false
+    t.datetime "read_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_announcement_id"], name: "index_user_product_announcements_on_product_announcement_id"
+    t.index ["user_id"], name: "index_user_product_announcements_on_user_id"
+    t.index ["uuid"], name: "index_user_product_announcements_on_uuid"
+  end
+
   create_table "user_profile_type_changes", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "who_dunnit_id", null: false
@@ -709,6 +732,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_19_170151) do
   add_foreign_key "transfers", "users"
   add_foreign_key "user_domains", "users"
   add_foreign_key "user_email_logs", "users"
+  add_foreign_key "user_product_announcements", "product_announcements"
+  add_foreign_key "user_product_announcements", "users"
   add_foreign_key "user_profile_type_changes", "users"
   add_foreign_key "user_profile_type_changes", "users", column: "who_dunnit_id"
   add_foreign_key "user_tags", "tags"
