@@ -4,7 +4,7 @@ import Button from "src/components/design_system/button";
 import ApplyToLaunchTokenModal from "src/components/design_system/modals/ApplyToLaunchTokenModal";
 import { TALENT_PROTOCOL_DISCORD } from "src/utils/constants";
 
-const TalentTokenApplicationBanner = ({ userId, userUsername }) => {
+const TalentTokenApplicationBanner = ({ userId, userUsername, walletId, railsContext }) => {
   const [showApplyToLaunchTokenModal, setShowApplyToLaunchTokenModal] = useState(false);
 
   return (
@@ -29,6 +29,8 @@ const TalentTokenApplicationBanner = ({ userId, userUsername }) => {
         hide={() => setShowApplyToLaunchTokenModal(false)}
         userId={userId}
         username={userUsername}
+        walletId={walletId}
+        railsContext={railsContext}
       />
     </>
   );
@@ -120,7 +122,7 @@ const VerifiyUserBanner = ({ username }) => (
   </div>
 );
 
-const DiscoveryBanners = ({ user }) => {
+const DiscoveryBanners = ({ user, railsContext }) => {
   const currentBanner = () => {
     if (!user?.wallet_address) {
       return <ConnectWalletBanner />;
@@ -133,7 +135,14 @@ const DiscoveryBanners = ({ user }) => {
     } else if (user.active_supporter) {
       return <JoinCommunityBanner />;
     } else if (user.wallet_address) {
-      return <TalentTokenApplicationBanner userId={user?.id} userUsername={user?.username} />;
+      return (
+        <TalentTokenApplicationBanner
+          userId={user?.id}
+          userUsername={user?.username}
+          walletId={user.wallet_address}
+          railsContext={railsContext}
+        />
+      );
     }
   };
 
