@@ -70,7 +70,8 @@ class OnChain {
       }
 
       return web3ModalInstance;
-    } catch {
+    } catch (error) {
+      console.error(error);
       return undefined;
     }
   }
