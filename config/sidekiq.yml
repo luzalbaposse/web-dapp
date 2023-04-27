@@ -9,7 +9,7 @@
   - low
 :limits:
   low: 1
-:scheduler:
+:schedule:
   send_career_need_opportunity_emails:
     cron: "0 11 * * *" # runs once every day at 11:00
     class: SendCareerNeedOpportunityEmailsJob
