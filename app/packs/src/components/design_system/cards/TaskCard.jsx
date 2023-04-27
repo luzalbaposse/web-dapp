@@ -9,7 +9,7 @@ import ApplyToLaunchTokenModal from "src/components/design_system/modals/ApplyTo
 
 import cx from "classnames";
 
-const TaskCard = ({ title, type, link, status, userId, userUsername, userProfileType }) => {
+const TaskCard = ({ title, type, link, status, userId, userUsername, walletId, userProfileType }) => {
   const railsContext = railsContextStore(state => state.railsContext);
 
   const completed = status === "done";
@@ -112,6 +112,8 @@ const TaskCard = ({ title, type, link, status, userId, userUsername, userProfile
         hide={() => setShowApplyToLaunchTokenModal(false)}
         userId={userId}
         username={userUsername}
+        walletId={walletId}
+        railsContext={railsContext}
       />
     </div>
   );

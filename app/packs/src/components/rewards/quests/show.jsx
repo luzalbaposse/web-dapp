@@ -51,6 +51,7 @@ const QuestShow = ({ quest, railsContext }) => {
                 link={task.link}
                 status={task.status}
                 userId={currentUser?.id}
+                walletId={currentUser?.wallet_id}
                 userUsername={currentUser?.username}
                 userProfileType={currentUser?.profile_type}
               />

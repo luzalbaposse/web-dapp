@@ -6,8 +6,9 @@ import { useWindowDimensionsHook } from "src/utils/window";
 import { patch } from "src/utils/requests";
 import { H5, P2 } from "src/components/design_system/typography";
 import { Alert } from "src/components/icons";
+import Web3ModalConnect from "src/components/login/Web3ModalConnect";
 
-const ApplyToLaunchTokenModal = ({ show, hide, userId, username }) => {
+const ApplyToLaunchTokenModal = ({ show, hide, userId, walletId, username, railsContext }) => {
   const [loading, setLoading] = useState(false);
   const { mobile } = useWindowDimensionsHook();
 
@@ -51,9 +52,18 @@ const ApplyToLaunchTokenModal = ({ show, hide, userId, username }) => {
         </div>
         <div className="d-flex mt-6 w-100">
           <Button className="mr-2 w-100" onClick={hide} text="Cancel" type="white-subtle" size="big" />
-          <LoadingButton className="w-100" onClick={apply} type="primary-default" size="big" loading={loading}>
-            Let's do this!
-          </LoadingButton>
+          {walletId ? (
+            <LoadingButton className="w-100" onClick={apply} type="primary-default" size="big" loading={loading}>
+              Let's do this!
+            </LoadingButton>
+          ) : (
+            <Web3ModalConnect
+              userId={userId}
+              onConnect={() => window.location.reload()}
+              railsContext={railsContext}
+              buttonClassName="talent-button primary-default-button big-size-button w-100"
+            />
+          )}
         </div>
       </Modal.Body>
     </Modal>
