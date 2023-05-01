@@ -23,7 +23,6 @@ import Notifications from "src/components/notifications";
 import Login from "src/components/login/Login";
 import ResetPassword from "src/components/login/ResetPassword";
 import ChangePassword from "src/components/login/ChangePassword";
-import BottomNav from "src/components/design_system/bottom_nav";
 import TopBar from "src/components/top_bar";
 import UserSettings from "src/components/talent/Edit/Settings";
 import NewPortfolio from "src/components/portfolio/NewPortfolio";
@@ -48,6 +47,7 @@ import SetPasswordPage from "src/components-v2/pages/set-password";
 import TalentModelsProfilePage from "src/components-v2/pages/talent-models-profile";
 import HomepagePage from "../src/components-v2/pages/homepage";
 import NetworkPage from "src/components-v2/pages/network";
+import ProductAnnouncementModal from "src/components-v2/product-announcement-modal";
 
 import "stylesheets/application.scss";
 
@@ -55,7 +55,6 @@ import "stylesheets/application.scss";
 require.context("../images", true);
 
 ReactOnRails.register({
-  BottomNav,
   ChangePassword,
   Chat,
   Discovery,
@@ -88,7 +87,8 @@ ReactOnRails.register({
   TalentModelsProfilePage,
   HomepagePage,
   NetworkPage,
-  OnboardingPage
+  OnboardingPage,
+  ProductAnnouncementModal
 });
 
 Rails.start();

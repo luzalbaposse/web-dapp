@@ -37,6 +37,7 @@ class OnboardController < ApplicationController
   end
 
   def onboard
+    @user = current_user
   end
 
   def forgot_password

@@ -11,6 +11,7 @@
     tokenLive: current_acting_user.talent&.talent_token&.contract_id.present?,
     currentTheme: current_acting_user.theme_preference,
   },
+  pendingNetworkRequest: is_user_impersonated? ? false : current_user&.pending_network_requests?,
   hasUnreadMessages: is_user_impersonated? ? false : current_user&.has_unread_messages?,
   signOutPath: sign_out_path,
   isUserImpersonated: is_user_impersonated?,

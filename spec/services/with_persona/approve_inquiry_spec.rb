@@ -56,6 +56,7 @@ RSpec.describe WithPersona::ApproveInquiry do
 
     before do
       allow(create_notification_class).to receive(:new).and_return(create_notification_instance)
+      allow(Rollbar).to receive(:warning)
     end
 
     it "does not verify the talent" do
@@ -85,6 +86,20 @@ RSpec.describe WithPersona::ApproveInquiry do
         source_id: user.id,
         type: UserNamesVerificationFailedNotification,
         extra_params: {reason: "name", with_persona_id: "123"}
+      )
+    end
+
+    it "raises an warning to Rollbar with extra data" do
+      approve_inquiry
+
+      expect(Rollbar).to have_received(:warning).with(
+        "Persona names mismatch",
+        legal_first_name: legal_first_name,
+        legal_last_name: legal_last_name,
+        inquiry_first_name: inquiry_first_name,
+        inquiry_last_name: inquiry_last_name,
+        user_id: user.id,
+        with_persona_id: "123"
       )
     end
   end

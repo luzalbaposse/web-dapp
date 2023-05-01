@@ -16,7 +16,15 @@ module Metrics
       "address" => "0xEa998Ff9c0c075cD035b25095D1833E5aF0aF873",
       "start_tracking" => Date.new(2023, 0o4, 15).to_time.to_i
     }
-    POLYGON_FACTORY_ADDRESS = "0xbbfeda7c4d8d9df752542b03cdd715f790b32d0b"
+    POLYGON_OLD_FACTORY = {
+      "address" => "0xbbfeda7c4d8d9df752542b03cdd715f790b32d0b",
+      "start_tracking" => TRANSACTIONS_KPI_START_DATE,
+      "stop_tracking" => Date.new(2023, 0o3, 23).to_time.to_i
+    }
+    POLYGON_CURRENT_FACTORY = {
+      "address" => "0xa91b75e8aa2dc62b2957333b1a1412532444fde0",
+      "start_tracking" => Date.new(2023, 0o4, 15).to_time.to_i
+    }
     POLYGON_SPONSORSHIP_ADDRESS = "0x332f92d166C52A34B464c9b63D710AC2397B0fd8"
     POLYGON_MATES_ADDRESS = "0x41033160a2351358ddc1b97edd0bc6f00cdeca92"
     POLYGON_STABLE_DECIMALS = 1e6
@@ -58,9 +66,16 @@ module Metrics
         start_timestamp: POLYGON_CURRENT_STAKING["start_tracking"]
       ).to_i
       staking_count += web3_proxy.retrieve_transactions_count(
-        address: POLYGON_FACTORY_ADDRESS,
+        address: POLYGON_OLD_FACTORY["address"],
         chain: "polygon",
-        start_timestamp: TRANSACTIONS_KPI_START_DATE
+        start_timestamp: POLYGON_OLD_FACTORY["start_tracking"],
+        end_timestamp: POLYGON_OLD_FACTORY["stop_tracking"]
+      ).to_i
+      staking_count += web3_proxy.retrieve_transactions_count(
+        address: POLYGON_CURRENT_FACTORY["address"],
+        chain: "polygon",
+        start_timestamp: POLYGON_CURRENT_FACTORY["start_tracking"],
+        end_timestamp: POLYGON_CURRENT_FACTORY["stop_tracking"]
       ).to_i
       sponsorship_count = web3_proxy.retrieve_transactions_count(
         address: POLYGON_SPONSORSHIP_ADDRESS,

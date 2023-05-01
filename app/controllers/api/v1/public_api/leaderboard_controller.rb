@@ -13,16 +13,16 @@ class API::V1::PublicAPI::LeaderboardController < API::V1::PublicAPI::APIControl
             count_hash[user.invite_id][:count] += 1
           else
             count_hash[user.invite_id] = {
-              uuid: user.uuid,
+              id: user.invite_id,
               count: 1
             }
           end
         end
       end
-    count_hash.each do |k, v|
-      parsed_count_hash[v[:uuid]] = v[:count]
-    end
     users = User.where(id: results.keys)
+    users.each do |v|
+      parsed_count_hash[v[:uuid]] = count_hash[v[:id]][:count]
+    end
     render json: {
       results: parsed_count_hash,
       users: API::UserBlueprint.render_as_json(users, view: :normal)

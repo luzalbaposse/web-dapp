@@ -24,6 +24,9 @@ module PublicAPIRoutes
             get "subscribers", to: "subscriptions#subscribers"
             get "pending_subscribers", to: "subscriptions#pending_subscribers"
             get "subscribing", to: "subscriptions#subscribing"
+            resources :product_announcements, only: [:update] do
+              get "latest_unread", on: :collection
+            end
           end
 
           # API non authenticated endpoints

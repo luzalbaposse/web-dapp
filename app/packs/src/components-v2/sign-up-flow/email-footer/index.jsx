@@ -8,7 +8,7 @@ import { ToastBody } from "src/components/design_system/toasts";
 export const EmailFooter = ({ hasCreateAccountError, createdUser }) => {
   const resendEmailCallback = useCallback(() => {
     users
-      .sendConfirmationEmail(createdUser.uuid)
+      .sendConfirmationEmail(createdUser.username)
       .then(() => {
         toast.success(<ToastBody heading="Success" />, { autoClose: 5000 });
       })

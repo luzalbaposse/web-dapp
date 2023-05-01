@@ -27,12 +27,12 @@ import SearchDropdown from "./SearchDropdown";
 //const WARNING_MESSAGE =
 ("Token minting is temporarily paused while we are upgrading our smart contracts. This is a temporary warning.");
 
-const UnreadMessagesIndicator = () => {
+const NotificationsIndicator = () => {
   return (
     <div className="position-relative">
       <span
         className="position-absolute badge border border-light rounded-circle bg-danger p-1"
-        style={{ height: 0, width: 0, left: -28, top: -12 }}
+        style={{ height: 0, width: 0, left: -23, top: -10 }}
       >
         &nbsp;
       </span>
@@ -78,6 +78,7 @@ export const TopBar = ({
   signOutPath,
   railsContext,
   hasUnreadMessages,
+  pendingNetworkRequest,
   isUserImpersonated,
   impersonatedUsername,
   stopImpersonationPath
@@ -304,6 +305,7 @@ export const TopBar = ({
           <Tab href="/talent" text="Explore" type="white" active={activeTab.includes("/talent")} className="mr-4" />
           <Tab href="/portfolio" text="Portfolio" type="white" active={activeTab === "/portfolio"} className="mr-4" />
           <Tab href="/network" text="Network" type="white" active={activeTab === "/network"} className="mr-4" />
+          {pendingNetworkRequest && <NotificationsIndicator />}
           <Tab
             href="/messages"
             text="Messages"
@@ -312,7 +314,7 @@ export const TopBar = ({
             className="mr-4"
             disabled={isUserImpersonated}
           />
-          {hasUnreadMessages && <UnreadMessagesIndicator />}
+          {hasUnreadMessages && <NotificationsIndicator />}
           <EarnMenu />
         </div>
         <div className="d-flex" style={{ height: 34 }}>

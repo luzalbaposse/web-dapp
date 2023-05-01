@@ -34,6 +34,8 @@ export const BLOG = "https://blog.talentprotocol.com/";
 
 export const BOUNTIES = "https://app.dework.xyz/talent-protocol";
 
+export const API = "https://docs.talentprotocol.com/api";
+
 export const FAQ = "https://help.talentprotocol.com/";
 
 export const TALENT_PROTOCOL_DISCORD = "https://discord.gg/talentprotocol";

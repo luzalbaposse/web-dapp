@@ -27,7 +27,7 @@ class User < ApplicationRecord
   has_many :receivers, through: :messaged
 
   # Feed
-  has_many :subscriptions
+  has_many :subscriptions, dependent: :destroy
   has_many :active_subscriptions, class_name: "ActiveSubscription"
   has_many :pending_subscriptions, class_name: "PendingSubscription"
 
@@ -176,6 +176,10 @@ class User < ApplicationRecord
 
   def pending_subscribers
     User.where(id: pending_subscriptions.pluck(:subscriber_id))
+  end
+
+  def pending_network_requests?
+    pending_subscriptions.any? || sponsors.pending.any?
   end
 
   def portfolio(including_self: true, invested_after: nil)

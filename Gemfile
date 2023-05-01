@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.1.3"
+ruby "3.1.4"
 
 gem "rails", "7.0.3.1"
 gem "pg", "~> 1.1"
@@ -62,7 +62,7 @@ gem "faker"
 gem "rollbar"
 
 # Async jobs
-gem "sidekiq"
+gem "sidekiq", "~> 6.5.8"
 gem "sidekiq-scheduler"
 gem "sidekiq-status"
 

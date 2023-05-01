@@ -97,7 +97,7 @@
       "factory": "0xA91b75E8aA2Dc62B2957333B1a1412532444FdE0",
       "staking": "0xEa998Ff9c0c075cD035b25095D1833E5aF0aF873",
       "sponsorship": "0x332f92d166C52A34B464c9b63D710AC2397B0fd8",
-      "rpcURL": "https://polygon-rpc.com/",
+      "rpcURL": "https://polygon.llamarpc.com",
       "stableAddress": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
       "stableDecimals": 6,
       "icon": "polygon",
@@ -105,7 +105,7 @@
         "chainId": "0x89",
         "chainName": "Polygon",
         "nativeCurrency": { "name": "MATIC", "symbol": "MATIC", "decimals": 18 },
-        "rpcUrls": ["https://polygon-rpc.com/"],
+        "rpcUrls": ["https://polygon.llamarpc.com"],
         "blockExplorerUrls": ["https://polygonscan.com/"],
         "iconUrls": ["future"]
       }

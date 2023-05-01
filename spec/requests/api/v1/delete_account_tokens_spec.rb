@@ -4,7 +4,7 @@ RSpec.describe "DeleteAccountTokens", type: :request do
   let(:current_user) { create :user }
 
   describe "#create" do
-    let(:user_id) { current_user.id }
+    let(:user_id) { current_user.uuid }
 
     let(:delete_account_token_creator_class) { Users::CreateDeleteAccountToken }
 
@@ -66,7 +66,7 @@ RSpec.describe "DeleteAccountTokens", type: :request do
     end
 
     context "when the user in the param is not the current user" do
-      let(:user_id) { (create :user).id }
+      let(:user_id) { (create :user).uuid }
 
       it "returns an unprocessable entity status with an unsuccess message" do
         create_delete_account_token

@@ -24,7 +24,7 @@ const Discovery = ({ discoveryRows, railsContext }) => {
 
   return (
     <div className="d-flex flex-column">
-      {!mobile && <DiscoveryBanners user={currentUser} />}
+      {!mobile && <DiscoveryBanners user={currentUser} railsContext={railsContext} />}
       <div
         className={cx(
           "w-100 d-flex flex-wrap mt-6 mb-6",

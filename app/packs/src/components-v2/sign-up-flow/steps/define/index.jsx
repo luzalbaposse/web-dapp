@@ -2,18 +2,19 @@ import { Dropdown, Input, Typography } from "@talentprotocol/design-system";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { genderOptions, nationalityOptions } from "../../../../components/talent/Edit/dropdownValues";
 import { TitleRow, Row, RowWithMargin, Form } from "./styled";
+import Select from "react-select";
 
 export const DefineStep = ({ user, setUser, setIsNextDisable }) => {
-  const [gender, setGender] = useState(user.gender || "");
-  const [nationality, setNationality] = useState(user.nationality || "");
+  const [gender, setGender] = useState({ value: user.gender || "" });
+  const [nationality, setNationality] = useState({ value: user.nationality || "" });
   const locationRef = useRef(null);
   const validateStep = useCallback(
     (genderParameter, nationalityParameter) => {
       if ((!!genderParameter || !!gender) && (!!nationalityParameter || !!nationality) && locationRef.current.value) {
         setUser({
           ...user,
-          gender: gender || genderParameter,
-          nationality: nationality || nationalityParameter,
+          gender: gender?.value || genderParameter,
+          nationality: nationality?.value || nationalityParameter,
           location: locationRef.current.value
         });
         setIsNextDisable(false);
@@ -38,7 +39,7 @@ export const DefineStep = ({ user, setUser, setIsNextDisable }) => {
           Only Location will be visible in your profile.
         </Typography>
       </TitleRow>
-      <Form>
+      <Form onSubmit={e => e.preventDefault()}>
         <Row>
           <Typography specs={{ variant: "p2", type: "bold" }} color="primary01">
             Gender
@@ -59,16 +60,24 @@ export const DefineStep = ({ user, setUser, setIsNextDisable }) => {
           <Typography specs={{ variant: "p2", type: "bold" }} color="primary01">
             Nationality
           </Typography>
-          <Dropdown
-            options={nationalityOptions.map(option => ({
-              value: option
-            }))}
-            selectOption={value => {
-              setNationality(value);
-              validateStep(undefined, value);
+          <Select
+            classNamePrefix="select"
+            value={{
+              value: nationality?.value || user.nationality || "",
+              label: nationality?.value || user.nationality || ""
             }}
-            selectedOption={nationality || user.nationality || ""}
+            isClearable={true}
+            isSearchable={true}
             placeholder="Select a nationality"
+            name="nationality"
+            options={nationalityOptions.map(option => ({
+              value: option,
+              label: option
+            }))}
+            onChange={option => {
+              setNationality(option);
+              validateStep(undefined, option);
+            }}
           />
         </RowWithMargin>
         <RowWithMargin>

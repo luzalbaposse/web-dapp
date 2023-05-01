@@ -26,7 +26,7 @@ export const HomepagePage = ({}) => {
         <CompleteProfileWidget username={currentUser?.username} />
         <QuickNavigator username={currentUser?.username} />
         <ActivityWidget />
-        <LeadderboardWidget />
+        <LeadderboardWidget username={currentUser?.username} />
       </Container>
     </TalentThemeProvider>
   );

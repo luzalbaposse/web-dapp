@@ -18,7 +18,7 @@ export const QuickNavigator = ({ username }) => {
         </Typography>
       </ButtonContainer>
       <ButtonContainer>
-        <Button hierarchy="secondary" size="medium" leftIcon="chat" iconColor="primary"  href="/messages"/>
+        <Button hierarchy="secondary" size="medium" leftIcon="chat" iconColor="primary" href="/messages" />
         <Typography specs={{ variant: "p3", type: "medium" }} color="primary01">
           Messages
         </Typography>
@@ -42,7 +42,13 @@ export const QuickNavigator = ({ username }) => {
         </Typography>
       </ButtonContainer>
       <ButtonContainer>
-        <Button hierarchy="secondary" size="medium" leftIcon="settings" iconColor="primary" href={`/u/${username}/account_settings`} />
+        <Button
+          hierarchy="secondary"
+          size="medium"
+          leftIcon="settings"
+          iconColor="primary"
+          href={`/u/${username}/account_settings`}
+        />
         <Typography specs={{ variant: "p3", type: "medium" }} color="primary01">
           Settings
         </Typography>

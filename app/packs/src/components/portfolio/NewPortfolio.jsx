@@ -412,7 +412,7 @@ const NewPortfolio = ({
         currentChain={currentChain}
       />
       <TransakDone show={transakDone} hide={() => setTransakDone(false)} />
-      <div className="d-flex flex-row justify-content-between flex-wrap w-100 card disabled p-4">
+      <div className="d-flex flex-row justify-content-between flex-wrap w-100 card p-4">
         <div className="d-flex flex-column mt-3">
           <P3 mode={theme.mode()} text={"Total Balance"} />
           {listLoaded ? (
@@ -540,7 +540,7 @@ const PortfolioWrapper = props => {
   const setupChain = useCallback(async () => {
     const newOnChain = new OnChain(props.railsContext.contractsEnv);
 
-    const walletConnected = await newOnChain.connectedAccount();
+    const walletConnected = await newOnChain.connectedAccount(true);
 
     await newOnChain.loadStaking();
     await newOnChain.loadStableToken();

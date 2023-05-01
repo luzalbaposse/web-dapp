@@ -134,4 +134,25 @@ RSpec.describe API::UpdateTalent do
       end
     end
   end
+
+  context "when there are profile params" do
+    let(:talent_params) do
+      {
+        profile: {
+          lens: "lens.xyz",
+          mastodon: "mastodon.xyz"
+        }
+      }
+    end
+    let(:user_params) { {} }
+    let(:tag_params) { {} }
+    let(:career_needs_params) { {} }
+
+    it "updates the talent profile fields" do
+      update_talent.call(talent_params, user_params, tag_params, career_needs_params)
+
+      expect(talent.mastodon).to eq "https://mastodon.xyz"
+      expect(talent.lens).to eq "https://lens.xyz"
+    end
+  end
 end

@@ -1,7 +1,7 @@
 class DiscoveryController < ApplicationController
   def index
     @discovery_rows = DiscoveryRowBlueprint.render_as_json(
-      DiscoveryRow.all.includes(:visible_tags, :partnership),
+      DiscoveryRow.all.order(created_at: :desc).includes(:visible_tags, :partnership),
       view: :normal
     )
   end

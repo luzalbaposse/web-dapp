@@ -531,10 +531,6 @@ const GoalExperience = ({
           </div>
         </div>
         <div className="w-100 mb-5">
-          <P2 className="mb-2 text-primary-01" bold text="Link" />
-          <TextInput onChange={e => changeAttribute("link", e.target.value)} value={currentJourneyItem.link} />
-        </div>
-        <div className="w-100 mb-5">
           <P2 className="mb-2 text-primary-01" bold text="Media" />
           <FileInput
             uppy={uppyBanner}

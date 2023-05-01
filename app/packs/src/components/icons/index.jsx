@@ -64,3 +64,4 @@ export { default as Celo } from "src/components/icons/Celo";
 export { default as Polygon } from "src/components/icons/Polygon";
 export { default as Bulb } from "src/components/icons/Bulb";
 export { default as Learn } from "src/components/icons/Learn";
+export { default as Lens } from "src/components/icons/Lens";

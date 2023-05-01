@@ -6,6 +6,7 @@ import { Container, TitleRow } from "./styled";
 export const ConfirmEmailStep = ({ user, goToFirstStep, setHasCreateAccountError, setCreatedUser }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const [error, setError] = useState(null);
   const createAccountCallback = useCallback(() => {
     users
       .createAccount(user)
@@ -15,15 +16,50 @@ export const ConfirmEmailStep = ({ user, goToFirstStep, setHasCreateAccountError
         setHasCreateAccountError(false);
         setCreatedUser(data);
       })
-      .catch(() => {
+      .catch(e => {
+        setError(e.response.data);
         setIsLoading(false);
         setHasError(true);
         setHasCreateAccountError(true);
       });
   }, [user, setHasCreateAccountError]);
+
   useEffect(() => {
     createAccountCallback();
   }, [createAccountCallback]);
+
+  const ErrorTitle = () => {
+    if (!hasError) {
+      return;
+    }
+
+    if (error.field === "username") {
+      return "Username Unavailable";
+    } else if (error.field === "email") {
+      return "Email Already In Use";
+    } else if (error.field === "captcha") {
+      return "Captcha Error";
+    } else {
+      return "Something went wrong";
+    }
+  };
+
+  const errorText = () => {
+    if (!hasError) {
+      return;
+    }
+
+    if (error.field === "username") {
+      return "The username you've selected is already taken. Please choose a different one to proceed.";
+    } else if (error.field === "email") {
+      return "The email address you entered is already registered in our system. Please use a different email to sign up or log in with the existing account.";
+    } else if (error.field === "captcha") {
+      return "We were unable to validate the captcha or it may have expired, please try again.";
+    } else {
+      return "An unexpected error has occurred. Please try again later or contact our support team if the issue persists.";
+    }
+  };
+
   return isLoading ? (
     <Container>
       <Spinner size={64} />
@@ -33,11 +69,10 @@ export const ConfirmEmailStep = ({ user, goToFirstStep, setHasCreateAccountError
       <Container>
         <Icon name="question" color="primary04" size={64} />
         <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
-          Something went wrong
+          {ErrorTitle()}
         </Typography>
         <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
-          Please check your registration data for errors or reach out to the team. Normally this error occurs by an
-          invalid or already in use email.
+          {errorText()}
         </Typography>
         <Button hierarchy="primary" size="medium" text="Review data" onClick={goToFirstStep} />
       </Container>

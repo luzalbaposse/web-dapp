@@ -15,7 +15,7 @@ class DailyMetricsJob < ApplicationJob
     daily_metric = collect_celo_transactions(daily_metric)
     daily_metric.save!
     # Uploads the daily metric to the google sheet
-    GoogleDrive::UploadMetrics.new(DailyMetric.last).call
+    GoogleDrive::UploadMetrics.new(daily_metric).call
   end
 
   private

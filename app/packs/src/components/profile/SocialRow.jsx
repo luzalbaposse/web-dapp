@@ -1,8 +1,9 @@
 import React from "react";
 import { faGlobeEurope } from "@fortawesome/free-solid-svg-icons";
-import { faGithub, faTwitter, faLinkedin, faDiscord, faTelegram } from "@fortawesome/free-brands-svg-icons";
+import { faGithub, faTwitter, faLinkedin, faDiscord, faTelegram, faMastodon } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "src/components/design_system/button";
+import { Lens } from "src/components/icons";
 
 import cx from "classnames";
 
@@ -73,6 +74,30 @@ const SocialRow = ({ profile, className }) => {
             className="d-flex justify-content-center align-items-center mr-2"
           >
             <FontAwesomeIcon icon={faTwitter} />
+          </Button>
+        </a>
+      )}
+      {profile.lens && (
+        <a className="button-link" href={profile.lens} target="self">
+          <Button
+            type="white-outline"
+            size="icon"
+            onClick={() => null}
+            className="d-flex justify-content-center align-items-center mr-2"
+          >
+            <Lens width="20" color="currentColor" />
+          </Button>
+        </a>
+      )}
+      {profile.mastodon && (
+        <a className="button-link" href={profile.mastodon} target="self">
+          <Button
+            type="white-outline"
+            size="icon"
+            onClick={() => null}
+            className="d-flex justify-content-center align-items-center mr-2"
+          >
+            <FontAwesomeIcon icon={faMastodon} />
           </Button>
         </a>
       )}

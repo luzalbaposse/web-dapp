@@ -149,6 +149,8 @@ class API::V1::TalentController < ApplicationController
         :linkedin,
         :twitter,
         :telegram,
+        :lens,
+        :mastodon,
         :discord,
         :github,
         :gender,

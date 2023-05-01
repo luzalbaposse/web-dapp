@@ -12,7 +12,8 @@ import {
   FAQ,
   TERMS_HREF,
   PRIVACY_HREF,
-  BOUNTIES
+  BOUNTIES,
+  API
 } from "src/utils/constants";
 import Tab from "src/components/design_system/tab";
 import Divider from "src/components/design_system/other/Divider";
@@ -37,6 +38,7 @@ const Footer = () => {
             <Tab href={ABOUT} text="About" type="white" className="mb-2" target="_blank" />
             <Tab href={BLOG} text="Blog" type="white" className="mb-2" target="_blank" />
             <Tab href={BOUNTIES} text="Bounties" type="white" className="mb-2" target="_blank" />
+            <Tab href={API} text="API" type="white" className="mb-2" target="_blank" />
           </div>
           <div className="col-lg-2 d-flex flex-column mt-5 mt-lg-0">
             <P2 className="text-black mb-2" bold text="Help" />
@@ -60,9 +62,17 @@ const Footer = () => {
               text={`Talent Protocol MTU © ${new Date().getFullYear()}`}
             />
             <P2 className="text-primary-03 mr-4 d-lg-block d-none" text="|" />
-            <a href="mailto:contact@talentprotocol.com" target="self" className="mr-4 text-primary-03">
+            <a href="mailto:contact@talentprotocol.com" target="self" className="mr-4 mb-3 mb-lg-0 text-primary-03">
               Contact us
             </a>
+            <P2 className="text-primary-03 mr-4 d-lg-block d-none" text="|" />
+            <P2 className="text-primary-03 mb-3 mb-lg-0">
+              We would love to hear from you. Let us know your challenges and goals{" "}
+              <a href="https://talentprotocol.typeform.com/productfeedback" target="_blank">
+                here
+              </a>
+              .
+            </P2>
           </div>
         </div>
       </div>
