@@ -13,9 +13,9 @@ export const Container = styled.main`
     gap: 24px;
     grid-template-areas:
       "GMContainer GMContainer"
-      "CompleteProfileWidget MyWallet"
-      "QuestsWidget RecommendedBuilders"
-      "ActivityWidget RecommendedTeams"
+      "CompleteProfileWidget RecommendedBuilders"
+      "QuestsWidget RecommendedTeams"
+      "ActivityWidget LeaderboardWidget"
       "B LeaderboardWidget";
   `)}
 `;

@@ -6,9 +6,9 @@ import { ActivityWidget } from "../../activity-widget";
 import { QuickNavigator } from "../../quick-navigator";
 import { GmHeader } from "../../gm-header";
 import { CompleteProfileWidget } from "../../complete-profile-widget";
-import { QuestsWidget } from "../../quests-widget";
-import { MyWalletWidget } from "../../my-wallet-widget";
-import { LeadderboradWidget } from "../../leadderboard-widget";
+// import { QuestsWidget } from "../../quests-widget";
+// import { MyWalletWidget } from "../../my-wallet-widget";
+import { LeadderboardWidget } from "../../leadderboard-widget";
 
 export const HomepagePage = ({}) => {
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
@@ -23,12 +23,10 @@ export const HomepagePage = ({}) => {
     <TalentThemeProvider>
       <Container>
         <GmHeader profile={currentUser} />
-        <CompleteProfileWidget />
-        <QuestsWidget />
-        <QuickNavigator />
-        <MyWalletWidget />
+        <CompleteProfileWidget username={currentUser?.username} />
+        <QuickNavigator username={currentUser?.username} />
         <ActivityWidget />
-        <LeadderboradWidget />
+        <LeadderboardWidget />
       </Container>
     </TalentThemeProvider>
   );

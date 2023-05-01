@@ -2,7 +2,7 @@ import React from "react";
 import { Container, Entry, EntryIdentification, Footer, ListContainer, TitleContainer } from "./styled";
 import { Avatar, Button, TextLink, Typography } from "@talentprotocol/design-system";
 
-export const LeadderboradWidget = () => {
+export const LeadderboardWidget = () => {
   return (
     <Container>
       <TitleContainer>
