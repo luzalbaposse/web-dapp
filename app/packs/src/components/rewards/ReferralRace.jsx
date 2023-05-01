@@ -83,10 +83,10 @@ const RaceHeader = ({ beginnerQuestCompleted, race }) => {
       <div className="race-header-row">
         <div className="d-flex flex-column col-lg-5 px-4 px-lg-0">
           <H4 className="mb-4 d-flex flex-row align-items-center" bold>
-            Talent Hunt
+            Referral Race
           </H4>
           <P1>
-            To participate in the Talent Hunt you must first complete the Beginner Quest. After that you'll be able to
+            To participate in the Referral Race you must first complete the Beginner Quest. After that you'll be able to
             join this ongoing program that rewards members for referring new talent to our community.
           </P1>
         </div>
@@ -106,18 +106,12 @@ const RaceHeader = ({ beginnerQuestCompleted, race }) => {
       <div className="race-header-row">
         <div className="d-flex flex-column col-lg-5 px-4 px-lg-0">
           <H4 className="mb-4 d-flex flex-row align-items-center" bold>
-            Talent Hunt
+            Referral Race
           </H4>
           <P1>
-            Every month the 3 users who invite the most{" "}
-            <a
-              href="https://talentprotocol.notion.site/Community-Segments-3b64f6506bdb419ebe48441e7830e97b"
-              target="_blank"
-            >
-              builders
-            </a>{" "}
-            will win a total of 1000 TAL. The 1st wins 500, the 2nd wins 300 and the 3rd 200 TAL. You will earn an
-            additional 100 TAL for every user you invite that launches their own Talent Token.
+            Every month the 3 users who invite the most friends will win a total of 5,000 TAL. The 1st wins 2,500, the
+            2nd wins 1,500 and the 3rd 1,00 TAL. You will also automatically earn an additional 100 TAL for every user
+            you invite that launches their own Talent Token.
           </P1>
         </div>
 
@@ -301,12 +295,13 @@ const RaceTable = ({ leaderboardResults, allRaces, currentRace }) => {
   }, [selectedRace]);
 
   const getRewardsForPosition = position => {
+    const annyversaryMonth = new Date(selectedRace.ends_at) == new Date("2023-05-31");
     if (position === 1) {
-      return "500 $TAL";
+      return annyversaryMonth ? "2500 $TAL" : "500 $TAL";
     } else if (position === 2) {
-      return "300 $TAL";
+      return annyversaryMonth ? "1500 $TAL" : "300 $TAL";
     } else if (position === 3) {
-      return "200 $TAL";
+      return annyversaryMonth ? "1000 $TAL" : "200 $TAL";
     } else {
       return "0 $TAL";
     }

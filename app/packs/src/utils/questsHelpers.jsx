@@ -109,7 +109,7 @@ export const taskReward = (type, disabled) => {
 export const questRewards = (type, disabled) => {
   switch (type) {
     case "Quests::User":
-      return [<ParagraphLink text="Talent Hunt" href={"/earn?tab=talent"} disabled={disabled} />];
+      return [<ParagraphLink text="Referral Race" href={"/earn?tab=talent"} disabled={disabled} />];
     case "Quests::TalentProfile":
       return [
         <P2 className={cx(disabled ? "text-primary-04" : "text-black")} text="50 TAL" />,
