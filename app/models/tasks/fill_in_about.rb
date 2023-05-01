@@ -7,7 +7,7 @@ module Tasks
     end
 
     def description
-      "Add information to your profile to be eligible to compete in the Talent Hunt"
+      "Add information to your profile to be eligible to compete in the Referral Race"
     end
 
     def link
