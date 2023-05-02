@@ -5,18 +5,18 @@ class API::V1::PublicAPI::SubscriptionsController < API::V1::PublicAPI::APIContr
   def subscribers
     return not_found unless user
 
-    pagy, subscribers = pagy_uuid_cursor(
-      user.subscribers,
+    pagy, subscriptions = pagy_uuid_cursor(
+      user.active_subscriptions,
       before: cursor,
       items: per_page,
-      order: {created_at: :desc, uuid: :desc}
+      order: {accepted_at: :desc, uuid: :desc}
     )
 
     response_body = {
-      subscribers: API::TalentBlueprint.render_as_json(subscribers.includes(talent: :talent_token), view: view),
+      subscribers: API::SubscriptionsBlueprint.render_as_json(subscriptions.includes(subscriber: :talent), view: view),
       pagination: {
-        total: user.subscribers.count,
-        cursor: pagy.has_more? ? subscribers.last.uuid : nil
+        total: user.active_subscriptions.count,
+        cursor: pagy.has_more? ? subscriptions.last.uuid : nil
       }
     }
     log_request(response_body, :ok)
@@ -59,7 +59,7 @@ class API::V1::PublicAPI::SubscriptionsController < API::V1::PublicAPI::APIContr
     )
 
     response_body = {
-      subscribing: API::TalentBlueprint.render_as_json(subscribing.includes(talent: :talent_token), view: view),
+      subscribing: API::TalentBlueprint.render_as_json(subscribing.includes(talent: :talent_token), view: :normal),
       pagination: {
         total: user.users_subscribing.count,
         cursor: pagy.has_more? ? subscribing.last.uuid : nil
@@ -129,6 +129,6 @@ class API::V1::PublicAPI::SubscriptionsController < API::V1::PublicAPI::APIContr
   end
 
   def view
-    internal_request? ? :subscriber : :normal
+    internal_request? ? :detailed : :normal
   end
 end

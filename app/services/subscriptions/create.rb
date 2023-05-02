@@ -19,6 +19,8 @@ module Subscriptions
       subscription = PendingSubscription.new(user: subscribing_user, subscriber: subscriber_user)
       raise CreationError.new(subscription.error.full_messages) unless subscription.save
 
+      Subscriptions::RefreshSubscribeBack.new(subscription: subscription).call
+
       CreateNotification.new.call(
         recipient: subscribing_user,
         type: SubscriptionRequestReceivedNotification,

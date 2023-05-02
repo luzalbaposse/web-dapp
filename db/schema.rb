@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_22_110326) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_02_114921) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -471,6 +471,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_22_110326) do
     t.bigint "user_id"
     t.bigint "subscriber_id"
     t.datetime "accepted_at", precision: nil
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.string "subscribed_back_status", default: "no_request"
     t.index ["subscriber_id"], name: "index_subscriptions_on_subscriber_id"
     t.index ["user_id", "subscriber_id"], name: "index_subscriptions_on_user_id_and_subscriber_id", unique: true
     t.index ["user_id"], name: "index_subscriptions_on_user_id"

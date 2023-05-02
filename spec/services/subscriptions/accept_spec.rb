@@ -13,8 +13,12 @@ RSpec.describe Subscriptions::Accept do
   let(:create_notification_class) { CreateNotification }
   let(:create_notification_instance) { instance_double(create_notification_class, call: true) }
 
+  let(:refresh_subscribe_back_class) { Subscriptions::RefreshSubscribeBack }
+  let(:refresh_subscribe_back_instance) { instance_double(refresh_subscribe_back_class, call: true) }
+
   before do
     allow(create_notification_class).to receive(:new).and_return(create_notification_instance)
+    allow(refresh_subscribe_back_class).to receive(:new).and_return(refresh_subscribe_back_instance)
   end
 
   it "accepts the subscription" do
@@ -64,6 +68,15 @@ RSpec.describe Subscriptions::Accept do
       type: SubscriptionAcceptedNotification,
       source_id: subscribing_user.id
     )
+  end
+
+  it "initializes and calls the refresh subscribe back service" do
+    accept_subscription
+
+    expect(refresh_subscribe_back_class).to have_received(:new).with(
+      subscription: subscription
+    )
+    expect(refresh_subscribe_back_instance).to have_received(:call)
   end
 
   context "when the subscription is already accepted" do
