@@ -2,13 +2,15 @@ import React, { useEffect } from "react";
 import { TalentThemeProvider } from "@talentprotocol/design-system";
 import { Container } from "./styled";
 import { loggedInUserStore } from "src/contexts/state";
-import { ActivityWidget } from "../../activity-widget";
+// import { ActivityWidget } from "../../activity-widget";
 import { QuickNavigator } from "../../quick-navigator";
 import { GmHeader } from "../../gm-header";
 import { CompleteProfileWidget } from "../../complete-profile-widget";
 // import { QuestsWidget } from "../../quests-widget";
 // import { MyWalletWidget } from "../../my-wallet-widget";
 import { LeadderboardWidget } from "../../leadderboard-widget";
+import { RecommendedBuildersWidget } from "../../recommended-builders-widget";
+import { RecommendedTeamsWidget } from "../../recommended-teams-widget";
 
 export const HomepagePage = ({}) => {
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
@@ -25,7 +27,8 @@ export const HomepagePage = ({}) => {
         <GmHeader profile={currentUser} />
         <CompleteProfileWidget username={currentUser?.username} />
         <QuickNavigator username={currentUser?.username} />
-        <ActivityWidget />
+        <RecommendedBuildersWidget />
+        <RecommendedTeamsWidget />
         <LeadderboardWidget username={currentUser?.username} />
       </Container>
     </TalentThemeProvider>
@@ -35,3 +38,7 @@ export const HomepagePage = ({}) => {
 export default (props, railsContext) => {
   return () => <HomepagePage {...props} railsContext={railsContext} />;
 };
+
+/*
+<ActivityWidget />
+*/

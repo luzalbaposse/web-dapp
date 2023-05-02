@@ -27,7 +27,7 @@ export const CompleteProfileWidget = ({ username }) => {
             Object.values(data.profile.profile).filter(el => typeof el === "string" && el.substring(0, 4) === "http")
               .length >= 2
         };
-        newState.progress = Math.ceil(100 / Object.values(newState).filter(el => el).length);
+        newState.progress = Math.ceil(100 / 5 * Object.values(newState).filter(el => !!el).length);
         setState(newState);
         setIsLoading(false);
       })
