@@ -166,6 +166,9 @@ RSpec.describe Talents::ChewySearch do
       create :quest, type: "Quests::TalentProfile", status: "done", user: user_6
       create :quest, type: "Quests::TalentProfile", status: "done", user: user_7
       create :quest, type: "Quests::TalentProfile", status: "done", user: user_8
+      create :quest, type: "Quests::User", status: "done", user: user_6
+      create :quest, type: "Quests::User", status: "done", user: user_7
+      create :quest, type: "Quests::User", status: "done", user: user_8
       user_6.tags << tag
       user_7.tags << tag
       user_8.tags << tag

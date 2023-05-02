@@ -8,10 +8,15 @@ RSpec.describe "API pagination" do
   let!(:user) { create :user }
   let(:id) { user.username }
 
-  let!(:user_1) { create :user, created_at: Time.current - 5.days }
-  let!(:user_2) { create :user, created_at: Time.current - 4.days }
-  let!(:user_3) { create :user, created_at: Time.current - 3.days }
-  let!(:user_4) { create :user, created_at: Time.current - 2.days }
+  let!(:user_1) { create :user }
+  let!(:user_2) { create :user }
+  let!(:user_3) { create :user }
+  let!(:user_4) { create :user }
+
+  let!(:subscription_one) { create :subscription, user: user, subscriber: user_1, accepted_at: Time.current - 5.days }
+  let!(:subscription_two) { create :subscription, user: user, subscriber: user_2, accepted_at: Time.current - 4.days }
+  let!(:subscription_three) { create :subscription, user: user, subscriber: user_3, accepted_at: Time.current - 3.days }
+  let!(:subscription_four) { create :subscription, user: user, subscriber: user_4, accepted_at: Time.current - 2.days }
 
   let(:params) { {} }
   let(:headers) do
@@ -21,11 +26,6 @@ RSpec.describe "API pagination" do
   end
 
   before do
-    create :subscription, user: user, subscriber: user_1
-    create :subscription, user: user, subscriber: user_2
-    create :subscription, user: user, subscriber: user_3
-    create :subscription, user: user, subscriber: user_4
-
     # Sets the number of returned items per page
     ENV["API_PAGINATION_PER_PAGE"] = "2"
   end
@@ -43,14 +43,14 @@ RSpec.describe "API pagination" do
       expect(json[:pagination]).to eq(
         {
           total: 4,
-          cursor: user_3.uuid
+          cursor: subscription_three.uuid
         }
       )
     end
   end
 
   context "when the cursor is passed" do
-    let(:params) { {cursor: user_3.uuid} }
+    let(:params) { {cursor: subscription_three.uuid} }
 
     it "returns the correct pagination" do
       api_request

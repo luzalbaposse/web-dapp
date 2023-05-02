@@ -17,6 +17,8 @@ module Subscriptions
 
       raise AcceptError.new(subscription.error.full_messages) unless subscription.save
 
+      Subscriptions::RefreshSubscribeBack.new(subscription: subscription).call
+
       CreateNotification.new.call(
         recipient: subscriber_user,
         type: SubscriptionAcceptedNotification,

@@ -117,6 +117,17 @@ class API::V1::PublicAPI::APIController < ActionController::Base
     end
   end
 
+  def authenticated_only
+    return if current_user.present?
+
+    response_body = {error: "Unauthorized request."}
+    response_status = :unauthorized
+
+    respond_to do |format|
+      format.json { render json: response_body, status: response_status }
+    end
+  end
+
   def current_impersonated_user
     @current_impersonated_user ||= user_from_impersonated_cookie
     @current_impersonated_user

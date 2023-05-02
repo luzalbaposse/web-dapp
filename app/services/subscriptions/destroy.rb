@@ -13,6 +13,8 @@ module Subscriptions
     def call
       raise DestroyError.new(subscription.error.full_messages) unless subscription.destroy
 
+      Subscriptions::RefreshSubscribeBack.new(subscription: subscription).call
+
       update_subscriber_connection
       update_subscribing_connection
     end

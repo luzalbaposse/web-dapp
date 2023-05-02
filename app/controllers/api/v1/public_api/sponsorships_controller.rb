@@ -1,5 +1,6 @@
 class API::V1::PublicAPI::SponsorshipsController < API::V1::PublicAPI::APIController
   before_action :internal_only, only: [:create]
+  before_action :authenticated_only, only: [:create]
 
   def create
     if sponsorship_params[:tx_hash].present? && sponsorship_params[:chain_id].present?
