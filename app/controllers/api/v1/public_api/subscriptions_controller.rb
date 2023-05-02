@@ -1,5 +1,6 @@
 class API::V1::PublicAPI::SubscriptionsController < API::V1::PublicAPI::APIController
-  before_action :internal_only, only: [:create, :destroy]
+  before_action :internal_only, only: [:create, :destroy, :accept]
+  before_action :authenticated_only, only: [:create, :destroy, :accept]
 
   def subscribers
     return not_found unless user

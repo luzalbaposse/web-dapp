@@ -1,5 +1,6 @@
 class API::V1::PublicAPI::ProductAnnouncementsController < API::V1::PublicAPI::APIController
   before_action :internal_only
+  before_action :authenticated_only
 
   def latest_unread
     if current_user && latest_product_announcement && !latest_product_announcement.read?(current_user)

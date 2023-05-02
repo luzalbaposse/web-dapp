@@ -95,12 +95,28 @@ RSpec.describe "Career updates API" do
       end
 
       response "404", "talent not found", document: false do
+        before do
+          allow_any_instance_of(API::V1::PublicAPI::APIController).to receive(:current_user).and_return(current_user)
+        end
+
         let(:id) { "invalid" }
         run_test!
       end
 
       response "401", "unauthorized request", document: false do
+        before do
+          allow_any_instance_of(API::V1::PublicAPI::APIController).to receive(:current_user).and_return(current_user)
+        end
+
         let(:"X-API-KEY") { "invalid" }
+        run_test!
+      end
+
+      response "401", "unauthorized user", document: false do
+        before do
+          allow_any_instance_of(API::V1::PublicAPI::APIController).to receive(:current_user).and_return(nil)
+        end
+
         run_test!
       end
 
@@ -147,6 +163,12 @@ RSpec.describe "Career updates API" do
       let(:wallet_id) { SecureRandom.hex }
       let(:id) { wallet_id }
 
+      let(:current_user) { talent_user }
+
+      before do
+        allow_any_instance_of(API::V1::PublicAPI::APIController).to receive(:current_user).and_return(current_user)
+      end
+
       let(:message) { "Created Update!" }
 
       let(:career_update) do
@@ -179,11 +201,6 @@ RSpec.describe "Career updates API" do
             expect(returned_career_update["message"]).to eq message
           end
         end
-      end
-
-      response "404", "talent not found", document: false do
-        let(:id) { "invalid" }
-        run_test!
       end
 
       response "400", "message not present", document: false do
