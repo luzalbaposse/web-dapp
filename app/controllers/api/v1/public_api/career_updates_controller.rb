@@ -1,5 +1,6 @@
 class API::V1::PublicAPI::CareerUpdatesController < API::V1::PublicAPI::APIController
   before_action :internal_only
+  before_action :authenticated_only
 
   def index
     unless allowed_to_see_career_updates?
@@ -28,8 +29,6 @@ class API::V1::PublicAPI::CareerUpdatesController < API::V1::PublicAPI::APIContr
   def create
     sender = User.find_by("wallet_id::text = :id OR username::text = :id", id: user_param_id) if user_param_id
     sender ||= current_user
-
-    return not_found unless sender
 
     if career_update_params[:message].blank?
       return render json: {

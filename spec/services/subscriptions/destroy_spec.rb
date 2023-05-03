@@ -10,8 +10,24 @@ RSpec.describe Subscriptions::Destroy do
   let(:subscriber_user) { create :user }
   let(:subscribing_user) { create :user }
 
+  let(:refresh_subscribe_back_class) { Subscriptions::RefreshSubscribeBack }
+  let(:refresh_subscribe_back_instance) { instance_double(refresh_subscribe_back_class, call: true) }
+
+  before do
+    allow(refresh_subscribe_back_class).to receive(:new).and_return(refresh_subscribe_back_instance)
+  end
+
   it "deletes the subscription" do
     expect { delete_subscribe }.to change(Subscription, :count).from(1).to(0)
+  end
+
+  it "initializes and calls the refresh subscribe back service" do
+    delete_subscribe
+
+    expect(refresh_subscribe_back_class).to have_received(:new).with(
+      subscription: subscription
+    )
+    expect(refresh_subscribe_back_instance).to have_received(:call)
   end
 
   context "when there are connections related with the subscription" do

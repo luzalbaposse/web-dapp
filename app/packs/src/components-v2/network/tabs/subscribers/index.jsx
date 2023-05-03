@@ -10,6 +10,8 @@ import { CareerCircleEmptyState } from "src/components-v2/network/empty-state";
 import { careerCircle } from "src/api/career-circle";
 import { useWindowDimensionsHook } from "src/utils/window";
 
+import { post } from "src/utils/requests";
+
 import {
   Container,
   NewSubscribersContainer,
@@ -137,7 +139,66 @@ export const Subscribers = ({ currentUserId }) => {
 
   const addActiveSubscriber = subscriber => {
     const newData = {
-      subscribers: [...activeSubscribers.subscribers, subscriber],
+      subscribers: [subscriber, ...activeSubscribers.subscribers],
+      pagination: activeSubscribers.pagination
+    };
+    setActiveSubscribers(newData);
+  };
+
+  const subscriberCardText = subscriber => {
+    switch (subscriber.subscribed_back_status) {
+      case "pending":
+        return "Pending";
+      case "no_request":
+        return "Subscribe Back";
+      case "accepted":
+        return "Visit profile";
+    }
+  };
+
+  const subscriberCardOnClick = (event, subscriber) => {
+    event.preventDefault();
+    switch (subscriber.subscribed_back_status) {
+      case "no_request":
+        return subscribe(subscriber);
+      case "accepted":
+        return (window.location.href = `/u/${subscriber.username}`);
+    }
+  };
+
+  const subscribe = async subscriber => {
+    const response = await post(`/api/v1/subscriptions`, {
+      talent_id: subscriber.username
+    });
+
+    if (response.success) {
+      mergeSubscriber({
+        ...subscriber,
+        subscribed_back_status: "pending"
+      });
+      toast.success(
+        <ToastBody
+          heading={"New subscription requested"}
+          body={`A subscription request was sent to ${subscriber.name}`}
+        />,
+        { autoClose: 5000 }
+      );
+    } else {
+      toast.error(<ToastBody heading="Unable to update subscription" body={response?.error} />, { autoClose: 5000 });
+    }
+  };
+
+  const mergeSubscriber = subscriber => {
+    const subscriberIndex = activeSubscribers.subscribers.findIndex(s => s.id === subscriber.id);
+
+    const newActiveSubscribers = [
+      ...activeSubscribers.subscribers.slice(0, subscriberIndex),
+      subscriber,
+      ...activeSubscribers.subscribers.slice(subscriberIndex + 1)
+    ];
+
+    const newData = {
+      subscribers: newActiveSubscribers,
       pagination: activeSubscribers.pagination
     };
     setActiveSubscribers(newData);
@@ -214,35 +275,38 @@ export const Subscribers = ({ currentUserId }) => {
         <SubscribersContainer>
           <CardsContainer>
             {activeSubscribers.subscribers.map(subscriber => (
-              <SubscriberCard key={subscriber.id}>
-                <CardBanner url={subscriber.banner_url} />
-                <AvatarContainer>
-                  <Avatar size="lg" url={subscriber.profile_picture_url} />
-                </AvatarContainer>
-                <Typography specs={{ variant: "p1", type: "bold" }} color={"primary01"}>
-                  {subscriber.name} {subscriber.verified && <Icon name="verified-2" />}
-                </Typography>
-                <SubscriberCardInfoContainer>
-                  {!!subscriber.ticker && (
-                    <Typography specs={{ variant: "p2", type: "bold" }} color={"primary03"}>
-                      ${subscriber.ticker}
-                    </Typography>
-                  )}
-                  <Typography specs={{ variant: "p2", type: "regular" }} color={"primary03"}>
-                    {subscriber.occupation?.length > 20
-                      ? `${subscriber.occupation.substring(0, 20)}...`
-                      : subscriber.occupation}
+              <a href={`/u/${subscriber.username}`} key={subscriber.id}>
+                <SubscriberCard>
+                  <CardBanner url={subscriber.banner_url} />
+                  <AvatarContainer>
+                    <Avatar size="lg" url={subscriber.profile_picture_url} />
+                  </AvatarContainer>
+                  <Typography specs={{ variant: "p1", type: "bold" }} color={"primary01"}>
+                    {subscriber.name} {subscriber.verified && <Icon name="verified-2" />}
                   </Typography>
-                </SubscriberCardInfoContainer>
-                <ButtonContainer>
-                  <Button
-                    hierarchy="primary"
-                    size="small"
-                    text="Visit profile"
-                    onClick={() => (window.location.href = `/u/${subscriber.username}`)}
-                  />
-                </ButtonContainer>
-              </SubscriberCard>
+                  <SubscriberCardInfoContainer>
+                    {!!subscriber.ticker && (
+                      <Typography specs={{ variant: "p2", type: "bold" }} color={"primary03"}>
+                        ${subscriber.ticker}
+                      </Typography>
+                    )}
+                    <Typography specs={{ variant: "p2", type: "regular" }} color={"primary03"}>
+                      {subscriber.occupation?.length > 20
+                        ? `${subscriber.occupation.substring(0, 20)}...`
+                        : subscriber.occupation}
+                    </Typography>
+                  </SubscriberCardInfoContainer>
+                  <ButtonContainer>
+                    <Button
+                      hierarchy="primary"
+                      isDisabled={subscriber.subscribed_back_status == "pending"}
+                      size="small"
+                      text={subscriberCardText(subscriber)}
+                      onClick={event => subscriberCardOnClick(event, subscriber)}
+                    />
+                  </ButtonContainer>
+                </SubscriberCard>
+              </a>
             ))}
           </CardsContainer>
           <LoadMoreContainer>

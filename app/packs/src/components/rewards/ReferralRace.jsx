@@ -110,7 +110,7 @@ const RaceHeader = ({ beginnerQuestCompleted, race }) => {
           </H4>
           <P1>
             Every month the 3 users who invite the most friends will win a total of 5,000 TAL. The 1st wins 2,500, the
-            2nd wins 1,500 and the 3rd 1,00 TAL. You will also automatically earn an additional 100 TAL for every user
+            2nd wins 1,500 and the 3rd 1,000 TAL. You will also automatically earn an additional 100 TAL for every user
             you invite that launches their own Talent Token.
           </P1>
         </div>

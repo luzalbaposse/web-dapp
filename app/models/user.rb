@@ -204,7 +204,7 @@ class User < ApplicationRecord
   end
 
   def profile_completed?
-    quests.where(type: "Quests::TalentProfile", status: "done").any?
+    quests.where(type: "Quests::TalentProfile", status: "done").any? && quests.where(type: "Quests::User", status: "done").any?
   end
 
   def profile_picture_url
