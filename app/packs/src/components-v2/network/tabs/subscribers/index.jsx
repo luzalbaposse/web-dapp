@@ -1,4 +1,4 @@
-import { Icon, Typography, Spinner } from "@talentprotocol/design-system";
+import { Typography, Spinner, TalentCard } from "@talentprotocol/design-system";
 import React, { useEffect, useState } from "react";
 import { Avatar, Button } from "@talentprotocol/design-system";
 
@@ -16,16 +16,11 @@ import {
   Container,
   NewSubscribersContainer,
   SubscribersContainer,
-  SubscriberCard,
-  AvatarContainer,
-  CardBanner,
   CardsContainer,
-  ButtonContainer,
   NewSubscribersRow,
   ActionsContainer,
   NewSubscribersList,
-  LoadMoreContainer,
-  SubscriberCardInfoContainer
+  LoadMoreContainer
 } from "./styled";
 
 export const Subscribers = ({ currentUserId }) => {
@@ -99,7 +94,7 @@ export const Subscribers = ({ currentUserId }) => {
 
   const acceptSubscription = subscriber => {
     careerCircle
-      .acceptSubscription(currentUserId, subscriber.id)
+      .acceptSubscription(currentUserId, subscriber.username)
       .then(() => {
         toast.success(<ToastBody heading="Success!" body={"Subscription accepted!"} />, { autoClose: 5000 });
         removePendingSubscriber(subscriber);
@@ -114,7 +109,7 @@ export const Subscribers = ({ currentUserId }) => {
 
   const rejectSubscription = subscriber => {
     careerCircle
-      .destroySubscription(currentUserId, subscriber.id)
+      .destroySubscription(currentUserId, subscriber.username)
       .then(() => {
         toast.success(<ToastBody heading="Success!" body={"Subscription rejected!"} />, { autoClose: 5000 });
         removePendingSubscriber(subscriber);
@@ -143,6 +138,17 @@ export const Subscribers = ({ currentUserId }) => {
       pagination: activeSubscribers.pagination
     };
     setActiveSubscribers(newData);
+  };
+
+  const subscriberCardButtonType = subscriber => {
+    switch (subscriber.subscribed_back_status) {
+      case "pending":
+        return "secondary";
+      case "no_request":
+        return "primary";
+      case "accepted":
+        return "secondary";
+    }
   };
 
   const subscriberCardText = subscriber => {
@@ -275,38 +281,24 @@ export const Subscribers = ({ currentUserId }) => {
         <SubscribersContainer>
           <CardsContainer>
             {activeSubscribers.subscribers.map(subscriber => (
-              <a href={`/u/${subscriber.username}`} key={subscriber.id}>
-                <SubscriberCard>
-                  <CardBanner url={subscriber.banner_url} />
-                  <AvatarContainer>
-                    <Avatar size="lg" url={subscriber.profile_picture_url} />
-                  </AvatarContainer>
-                  <Typography specs={{ variant: "p1", type: "bold" }} color={"primary01"}>
-                    {subscriber.name} {subscriber.verified && <Icon name="verified-2" />}
-                  </Typography>
-                  <SubscriberCardInfoContainer>
-                    {!!subscriber.ticker && (
-                      <Typography specs={{ variant: "p2", type: "bold" }} color={"primary03"}>
-                        ${subscriber.ticker}
-                      </Typography>
-                    )}
-                    <Typography specs={{ variant: "p2", type: "regular" }} color={"primary03"}>
-                      {subscriber.occupation?.length > 20
-                        ? `${subscriber.occupation.substring(0, 20)}...`
-                        : subscriber.occupation}
-                    </Typography>
-                  </SubscriberCardInfoContainer>
-                  <ButtonContainer>
-                    <Button
-                      hierarchy="primary"
-                      isDisabled={subscriber.subscribed_back_status == "pending"}
-                      size="small"
-                      text={subscriberCardText(subscriber)}
-                      onClick={event => subscriberCardOnClick(event, subscriber)}
-                    />
-                  </ButtonContainer>
-                </SubscriberCard>
-              </a>
+              <TalentCard
+                key={subscriber.id}
+                bannerImage={subscriber.banner_url}
+                isVerified={subscriber.verified}
+                name={subscriber.name}
+                occupation={subscriber.occupation}
+                profileImage={subscriber.profile_picture_url}
+                ticker={subscriber.ticker}
+                to={`/u/${subscriber.username}`}
+              >
+                <Button
+                  hierarchy={subscriberCardButtonType(subscriber)}
+                  isDisabled={subscriber.subscribed_back_status == "pending"}
+                  size="small"
+                  text={subscriberCardText(subscriber)}
+                  onClick={event => subscriberCardOnClick(event, subscriber)}
+                />
+              </TalentCard>
             ))}
           </CardsContainer>
           <LoadMoreContainer>
