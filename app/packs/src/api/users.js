@@ -9,6 +9,7 @@ const createAccount = user => {
     {
       captcha: user.captcha,
       code: user.code,
+      utm_source: user.utmSource,
       email: user.email,
       legal_first_name: user.firstName,
       legal_last_name: user.lastName,
