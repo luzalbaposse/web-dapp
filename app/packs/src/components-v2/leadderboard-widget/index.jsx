@@ -38,7 +38,7 @@ export const LeadderboardWidget = ({ username }) => {
         </TitleContainer>
         <ListContainer>
           {leaderboardData.map((user, index) => (
-            <Entry>
+            <Entry key={user.username}>
               <EntryIdentification>
                 <Typography specs={{ variant: "label2", type: "medium" }} color="primary01">
                   #{index + 1}

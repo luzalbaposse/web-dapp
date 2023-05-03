@@ -12,7 +12,7 @@ export const Container = styled.section`
   gap: 16px;
 
   ${desktopStyles(css`
-    margin-top: 0;
+    margin: 0;
   `)}
 `;
 
