@@ -27,13 +27,12 @@ export const CompleteProfileWidget = ({ username }) => {
             Object.values(data.profile.profile).filter(el => typeof el === "string" && el.substring(0, 4) === "http")
               .length >= 2
         };
-        newState.progress = Math.ceil(100 / 5 * Object.values(newState).filter(el => !!el).length);
+        newState.progress = Math.ceil((100 / 5) * Object.values(newState).filter(el => !!el).length);
         setState(newState);
         setIsLoading(false);
       })
       .catch(err => {
-        console.log(err);
-        setIsLoading(false);
+        console.error(err);
       });
   }, [username, setState]);
   const dummyEventClogger = useCallback(e => {
@@ -41,7 +40,8 @@ export const CompleteProfileWidget = ({ username }) => {
     e.stopPropagation();
   }, []);
   return (
-    !isLoading && (
+    !isLoading &&
+    state.progress < 100 && (
       <Container>
         <ProgressContainer progress={state.progress}>
           <Typography specs={{ variant: "p1", type: "bold" }}>{state.progress}%</Typography>

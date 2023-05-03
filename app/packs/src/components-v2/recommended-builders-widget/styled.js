@@ -1,4 +1,5 @@
-import styled from "styled-components";
+import { desktopStyles } from "@talentprotocol/design-system";
+import styled, { css } from "styled-components";
 
 export const Container = styled.section`
   display: flex;
@@ -13,13 +14,23 @@ export const TitleContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  ${desktopStyles(css`
+    padding-top: 0;
+  `)}
 `;
 
-export const SliderContainer = styled.div`
+export const BuildersList = styled.div`
   display: flex;
-  overflow-x: auto;
-  gap: 16px;
+  flex-direction: column;
+  width: 100%;
   padding: 0 16px;
 `;
 
-export const EntryContainer = styled.div``;
+export const BuilderEntry = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+`;

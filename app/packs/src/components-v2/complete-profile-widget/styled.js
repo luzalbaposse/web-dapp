@@ -24,7 +24,7 @@ export const ProgressContainer = styled.div`
   align-items: center;
   justify-content: center;
   margin: auto;
-  background: radial-gradient(closest-side, white 89%, transparent 80% 100%),
+  background: radial-gradient(closest-side, ${buildColor("bg01")} 89%, transparent 80% 100%),
     conic-gradient(${buildColor("primary")} ${({ progress }) => progress}%, ${buildColor("primaryDisable")} 0);
 `;
 

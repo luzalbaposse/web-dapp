@@ -2,7 +2,7 @@ import { desktopStyles } from "@talentprotocol/design-system";
 import styled, { css } from "styled-components";
 
 export const Container = styled.nav`
-  padding: 16px;
+  padding: 16px 48px;
   display: grid;
   grid-template-columns: repeat(4, auto);
   gap: 24px;
