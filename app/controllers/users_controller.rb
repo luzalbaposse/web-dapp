@@ -57,7 +57,7 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.permit(:email, :username, :password, :code, :captcha, :mode, :theme_preference, :legal_first_name, :legal_last_name, :gender, :nationality, :location, :headline, career_needs: [], tags: [])
+    params.permit(:email, :username, :password, :code, :utm_source, :captcha, :mode, :theme_preference, :legal_first_name, :legal_last_name, :gender, :nationality, :location, :headline, career_needs: [], tags: [])
   end
 
   def verify_captcha

@@ -20,8 +20,15 @@ const SignUpPage = props => {
     const inviteCode = window.location.pathname.split("/").pop();
     return inviteCode.toLowerCase() !== "join" ? inviteCode : "";
   }, []);
+
+  const utmSource = useMemo(() => {
+    const url = new URL(window.location);
+    const searchParams = new URLSearchParams(url.search);
+    return searchParams.get("utm_source");
+  }, []);
+
   const pageContent = useMemo(() => {
-    if (mobile) return <SignUpFlow {...props} code={code} />;
+    if (mobile) return <SignUpFlow {...props} code={code} utmSource={utmSource} />;
     return (
       <DesktopInnerContainer>
         <DesktopColoredContainer>
@@ -29,7 +36,7 @@ const SignUpPage = props => {
         </DesktopColoredContainer>
         <DesktopSimpleContainer>
           <DesktopSimpleInnerContainer>
-            <SignUpFlow {...props} isDesktop code={code} />
+            <SignUpFlow {...props} isDesktop code={code} utmSource={utmSource} />
           </DesktopSimpleInnerContainer>
         </DesktopSimpleContainer>
       </DesktopInnerContainer>

@@ -5,7 +5,7 @@ module Subscriptions
     end
 
     def call
-      subscription.update!(subscribed_back_status: subscription_status)
+      subscription.update!(subscribed_back_status: subscription_status) if subscription.persisted?
       opposite_subscription.update!(subscribed_back_status: opposite_subscription_status) if opposite_subscription.present?
     end
 

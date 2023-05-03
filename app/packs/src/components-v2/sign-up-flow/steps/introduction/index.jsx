@@ -35,7 +35,7 @@ export const IntroductionStep = ({ user, setUser, setIsNextDisable }) => {
           Introduce yourself in 70 characters or less.
         </Typography>
         <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
-          What’s the headline of your career? You can edit this later.
+          What's the headline of your career? You can edit this later.
         </Typography>
       </TitleRow>
       <Form onSubmit={e => e.preventDefault()}>
