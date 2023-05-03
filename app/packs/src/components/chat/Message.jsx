@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import dayjs from "dayjs";
 import Modal from "react-bootstrap/Modal";
 import { LinkIt, LinkItEmail, urlRegex } from "react-linkify-it";
+import cx from "classnames";
+import { Tag } from "@talentprotocol/design-system";
+import Divider from "src/components/design_system/other/Divider";
 
 import TalentProfilePicture from "../talent/TalentProfilePicture";
 import { P1, P2, P3 } from "src/components/design_system/typography";
@@ -53,6 +56,7 @@ const MessageLinkified = props => {
 
   return (
     <LinkIt
+      className={message.from_career_update && "ml-2"}
       component={(match, key) => (
         <a href={match} key={key} target="_blank" onClick={handleClick}>
           {match}
@@ -91,9 +95,22 @@ const Message = props => {
             <P3 text={sentDate} className="mb-0 ml-2" />
           </div>
         )}
-        <P2 className={"text-white-space-wrap"}>
+        {message.from_career_update && (
+          <div style={{ width: "144px" }}>
+            <Tag
+              backgroundColor="bg01"
+              label="Career update"
+              leftIcon="mailbox"
+              textColor="primary02"
+              size="small"
+              borderColor="surfaceHover02"
+            />
+          </div>
+        )}
+        <P2 className={cx("text-white-space-wrap", message.from_career_update && "my-3")}>
           <MessageLinkified message={message.text} mine={mine} />
         </P2>
+        {message.from_career_update && <Divider />}
       </div>
     </div>
   );

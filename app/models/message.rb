@@ -26,7 +26,8 @@ class Message < ApplicationRecord
       receiver_id: receiver.uuid,
       created_at: created_at,
       updated_at: updated_at,
-      text: text
+      text: text,
+      from_career_update: career_update.present?
     }
   end
 end
