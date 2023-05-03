@@ -2,7 +2,6 @@ import { buildColor, desktopStyles } from "@talentprotocol/design-system";
 import styled, { css } from "styled-components";
 
 export const Container = styled.section`
-  grid-area: LeaderboardWidget;
   padding: 30px 16px 48px;
   border-radius: 24px 24px 0px 0px;
   background: ${buildColor("primaryTint02")};
@@ -19,6 +18,7 @@ export const TitleContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 24px;
 
   h5 {

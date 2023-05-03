@@ -7,7 +7,7 @@ export const QuickNavigator = ({ username }) => {
     <Container>
       <ButtonContainer>
         <Button hierarchy="secondary" size="medium" leftIcon="search" iconColor="primary" isDisabled />
-        <Typography specs={{ variant: "p3", type: "medium" }} color="primary01">
+        <Typography specs={{ variant: "p3", type: "medium" }} color="primaryDisable">
           Search
         </Typography>
       </ButtonContainer>
@@ -24,8 +24,8 @@ export const QuickNavigator = ({ username }) => {
         </Typography>
       </ButtonContainer>
       <ButtonContainer>
-        <Button hierarchy="secondary" size="medium" leftIcon="wallet" iconColor="primary" isDisabled />
-        <Typography specs={{ variant: "p3", type: "medium" }} color="primary01">
+        <Button hierarchy="secondary" size="medium" leftIcon="wallet" iconColor="primaryDisable" isDisabled />
+        <Typography specs={{ variant: "p3", type: "medium" }} color="primaryDisable">
           Wallet
         </Typography>
       </ButtonContainer>
@@ -55,7 +55,7 @@ export const QuickNavigator = ({ username }) => {
       </ButtonContainer>
       <ButtonContainer>
         <Button hierarchy="secondary" size="medium" leftIcon="planet" iconColor="primary" isDisabled />
-        <Typography specs={{ variant: "p3", type: "medium" }} color="primary01">
+        <Typography specs={{ variant: "p3", type: "medium" }} color="primaryDisable">
           Activity
         </Typography>
       </ButtonContainer>

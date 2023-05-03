@@ -2,7 +2,6 @@ import { buildColor, desktopStyles } from "@talentprotocol/design-system";
 import styled, { css } from "styled-components";
 
 export const Container = styled.section`
-  grid-area: MyWallet;
   padding: 30px 0 16px;
   border-radius: 24px 24px 0px 0px;
   background: ${buildColor("primaryTint02")};

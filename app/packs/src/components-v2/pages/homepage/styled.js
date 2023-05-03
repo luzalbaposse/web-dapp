@@ -5,7 +5,7 @@ export const GMContainer = styled.div`
   max-width: 1128px;
   padding: 66px 0 0;
   margin: 0 auto;
-`
+`;
 
 export const Container = styled.main`
   max-width: 1128px;
@@ -21,7 +21,7 @@ export const Container = styled.main`
 
 export const FullRow = styled.div`
   width: 100%;
-`
+`;
 
 export const Column = styled.div`
   display: flex;
@@ -32,6 +32,6 @@ export const Column = styled.div`
   ${desktopStyles(css`
     display: flex;
     gap: 24px;
-    ${({ grows}) => grows && "flex-grow: 1;"}
+    ${({ grows }) => grows && "flex-grow: 1;"}
   `)}
 `;

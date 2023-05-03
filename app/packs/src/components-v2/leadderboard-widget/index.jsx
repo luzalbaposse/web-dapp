@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 
 export const LeadderboardWidget = ({ username }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [leaderboardData, setLeaderboardData] = useState([]);
+  const [leadderBoardData, setLeadderBoardData] = useState([]);
   useEffect(() => {
     leaderboardService
       .getLeaderboard()
@@ -20,7 +20,7 @@ export const LeadderboardWidget = ({ username }) => {
             return acc;
           }, [])
           .sort((a, b) => b.count - a.count);
-        setLeaderboardData(parsedData.length > 5 ? parsedData.slice(0, 5) : parsedData);
+        setLeadderBoardData(parsedData.length > 5 ? parsedData.slice(0, 5) : parsedData);
         setIsLoading(false);
       })
       .catch(err => {
@@ -37,7 +37,7 @@ export const LeadderboardWidget = ({ username }) => {
           <TextLink text="Go to invites" rightIcon="carret" color="primary" size="small" href="/earn?tab=talent" />
         </TitleContainer>
         <ListContainer>
-          {leaderboardData.map((user, index) => (
+          {leadderBoardData.map((user, index) => (
             <Entry key={user.username}>
               <EntryIdentification>
                 <Typography specs={{ variant: "label2", type: "medium" }} color="primary01">

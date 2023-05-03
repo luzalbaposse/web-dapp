@@ -5,7 +5,6 @@ export const Container = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  grid-area: RecommendedBuilders;
 `;
 
 export const TitleContainer = styled.div`

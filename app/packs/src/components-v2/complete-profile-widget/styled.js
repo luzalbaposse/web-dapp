@@ -2,7 +2,6 @@ import { buildColor, desktopStyles } from "@talentprotocol/design-system";
 import styled, { css } from "styled-components";
 
 export const Container = styled.section`
-  grid-area: CompleteProfileWidget;
   margin: 16px;
   display: flex;
   flex-direction: column;

@@ -2,7 +2,6 @@ import { buildColor, desktopStyles } from "@talentprotocol/design-system";
 import styled, { css } from "styled-components";
 
 export const Container = styled.section`
-  grid-area: ActivityWidget;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -56,7 +55,7 @@ export const UpdateContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-`
+`;
 
 export const ReplyArea = styled.div`
   display: flex;

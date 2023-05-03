@@ -9,6 +9,7 @@ module PublicAPIRoutes
             get "/leaderboard", to: "leaderboard#index"
             resources :talents, only: [:show, :index]
             resources :supporters, only: [:index]
+            resources :activity, only: [:index]
             resources :connections, only: [:index]
             resources :career_updates, only: [:index, :create]
             resources :sponsorships, only: [:create]
