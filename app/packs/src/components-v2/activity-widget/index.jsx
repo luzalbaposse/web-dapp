@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { createRef, useCallback, useEffect } from "react";
 import { Avatar, Button, Input, Typography } from "@talentprotocol/design-system";
 import {
   Container,
@@ -19,10 +19,11 @@ const ACTIVITY_TYPE_TO_TITLE_MAP = {
   1: "Career Update"
 }
 
+const inputRefs = [];
+
 export const ActivityWidget = ({ profile = {} }) => {
   const [isLoading, setIsLoading] = React.useState(true);
   const [activity, setActivity] = React.useState([]);
-  const inputRef = useRef(null);
 
   useEffect(() => {
     activityService
@@ -36,7 +37,8 @@ export const ActivityWidget = ({ profile = {} }) => {
       });
   }, [setActivity, setIsLoading]);
   
-  const sendMessage = useCallback(() => {
+  const sendMessage = useCallback((inputRef) => {
+    debugger;
     if (!inputRef.current.value) {
       toast.error("Please enter a message", { autoClose: 5000 });
     }
@@ -50,7 +52,7 @@ export const ActivityWidget = ({ profile = {} }) => {
         console.error(err);
         toast.error("Error sending message", { autoClose: 5000 });
       });
-  }, [inputRef, profile])
+  }, [profile])
 
   return (
     !isLoading && (
@@ -61,13 +63,14 @@ export const ActivityWidget = ({ profile = {} }) => {
           </Typography>
         </TitleRow>
         <UpdatesContainer>
-          {activity.map(update => {
+          {activity.map((update, index) => {
             const content = JSON.parse(update.content);
+            inputRefs.push(createRef(null))
             return (
               <Update key={update.id}>
                 <UpdateTitle>
                   <TitleDateWrapper>
-                    <Avatar size="sm" name={update.origin_user.username} isVerified={true} url={update.origin_user.profile_picture_url} />
+                    <Avatar size="sm" name={update.origin_user.username} isVerified={true} url={update.origin_user.profile_picture_url} profileURL={`/u/${update.origin_user.username}`}/>
                     <Typography specs={{ variant: "p2", type: "regular" }} color="primary04">
                       {new Date(update.created_at).toLocaleDateString()}
                     </Typography>
@@ -81,10 +84,10 @@ export const ActivityWidget = ({ profile = {} }) => {
                   <StyledTypography specs={{ variant: "p2", type: "regular" }} color="primary03">
                     {content.message}
                   </StyledTypography>
-                  {profile.username === update.origin_user.username && (
+                  {profile.username !== update.origin_user.username && (
                     <ReplyArea>
-                      <Input placeholder="Reply directly..." inputRef={inputRef} />
-                      <Button hierarchy="secondary" size="medium" leftIcon="send" iconColor={"primary01"} onClick={sendMessage} />
+                      <Input placeholder="Reply directly..." inputRef={inputRefs[index]} />
+                      <Button hierarchy="secondary" size="medium" leftIcon="send" iconColor={"primary01"} onClick={() => sendMessage(inputRefs[index])} />
                     </ReplyArea>
                   )}
                 </UpdateContent>
