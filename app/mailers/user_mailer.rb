@@ -78,38 +78,6 @@ class UserMailer < ApplicationMailer
     bootstrap_mail(to: @user.email, subject: "Verification failed 💔")
   end
 
-  def send_digest_email
-    @user = indifferent_access_params[:user]
-    @without_container = true
-
-    digest_email_sent_at = @user.digest_email_sent_at || 2.weeks.ago
-
-    messages = Message.where(receiver: @user).where("messages.created_at > ?", digest_email_sent_at)
-    messagees = User.where(id: messages.pluck(:sender_id))
-    @messagee_names = messagees.map { |m| m.display_name || m.username }
-
-    new_supporters = @user.supporters(including_self: false, invested_after: digest_email_sent_at)
-    @new_supporters_names = new_supporters.map { |u| u.display_name || u.username }
-
-    invested_in_users = @user.portfolio(including_self: false, invested_after: digest_email_sent_at).limit(3)
-    @invested_in_talents = Talent.where(user: invested_in_users).includes(:user)
-    set_profile_pictures_attachments(invested_in_users)
-
-    @talents = Talent.base.active.where("talent_tokens.deployed_at > ?", 2.weeks.ago).includes(:user).limit(3)
-    talent_users = User.where(id: @talents.pluck(:user_id))
-
-    set_profile_pictures_attachments(talent_users)
-
-    user_talent_supporters = TalentSupporter.where(supporter_wallet_id: @user.wallet_id)
-
-    @tal_amount = user_talent_supporters.map { |t| t.tal_amount.to_i }.sum / TalentToken::TAL_DECIMALS
-    @usd_amount = (@tal_amount * TalentToken::TAL_VALUE_IN_USD).round
-
-    @user.update!(digest_email_sent_at: Time.zone.now)
-
-    bootstrap_mail(to: @user.email, subject: "The latest on Talent Protocol")
-  end
-
   def send_application_received_email
     @user = indifferent_access_params[:recipient]
     bootstrap_mail(to: @user.email, subject: "We've received your application")
