@@ -17,7 +17,6 @@ export const RecommendedBuildersWidget = ({}) => {
         console.error(err);
       });
   }, []);
-
   return (
     !isLoading &&
     talents.length && (
@@ -29,8 +28,8 @@ export const RecommendedBuildersWidget = ({}) => {
         <BuildersList>
           {talents.map(talent => (
             <BuilderEntry key={talent.username}>
-              <Avatar size="md" name={talent.username} occupation={talent.occupation} url={talent.profile_picture_url} profileURL={`/u/${talent.username}`} />
-              <Button hierarchy="primary" size="small" text="Support" href={`/u/${"bguedes"}/support`} />
+              <Avatar size="md" isVerified={talent.verified} name={talent.username} occupation={talent.occupation} url={talent.profile_picture_url} profileURL={`/u/${talent.username}`} />
+              <Button hierarchy="primary" size="small" text="Support" href={`/u/${talent.username}/support`} />
             </BuilderEntry>
           ))}
         </BuildersList>

@@ -3,6 +3,7 @@ import { Avatar, Button, Input, Typography } from "@talentprotocol/design-system
 import {
   Container,
   ReplyArea,
+  StyledTypography,
   TitleDateWrapper,
   TitleRow,
   Update,
@@ -41,7 +42,7 @@ export const ActivityWidget = ({ profile = {} }) => {
     }
     messagesService
       .sendMessage(profile.id, inputRef.current.value)
-      .then(({ data }) => {
+      .then(() => {
         inputRef.current.value = "";
         toast.success("Message sent")
       })
@@ -77,10 +78,10 @@ export const ActivityWidget = ({ profile = {} }) => {
                   <Typography specs={{ variant: "p1", type: "medium" }} color="primary01">
                     {ACTIVITY_TYPE_TO_TITLE_MAP[update.activity_type_id]}.
                   </Typography>
-                  <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
+                  <StyledTypography specs={{ variant: "p2", type: "regular" }} color="primary03">
                     {content.message}
-                  </Typography>
-                  {profile.username !== update.origin_user.username && (
+                  </StyledTypography>
+                  {profile.username === update.origin_user.username && (
                     <ReplyArea>
                       <Input placeholder="Reply directly..." inputRef={inputRef} />
                       <Button hierarchy="secondary" size="medium" leftIcon="send" iconColor={"primary01"} onClick={sendMessage} />

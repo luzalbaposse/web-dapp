@@ -1,4 +1,4 @@
-import { buildColor, desktopStyles } from "@talentprotocol/design-system";
+import { Typography, buildColor, desktopStyles } from "@talentprotocol/design-system";
 import styled, { css } from "styled-components";
 
 export const Container = styled.section`
@@ -27,6 +27,10 @@ export const UpdatesContainer = styled.div`
   ${desktopStyles(css`
     gap: 24px;
   `)}
+`;
+
+export const StyledTypography = styled(Typography)`
+  white-space: pre-line;
 `;
 
 export const Update = styled.article`

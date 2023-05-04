@@ -50,6 +50,7 @@ export const LeadderboardWidget = ({ username }) => {
                   size="md"
                   url={user.profile_picture_url}
                   profileURL={`/u/${user.username}`}
+                  isVerified={user.verified}
                 />
               </EntryIdentification>
             </Entry>
