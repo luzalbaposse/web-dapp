@@ -30,7 +30,7 @@ export const HomepagePage = ({}) => {
         <Column grows>
           <CompleteProfileWidget username={currentUser?.username} />
           <QuickNavigator username={currentUser?.username} />
-          <ActivityWidget username={currentUser?.username} />
+          <ActivityWidget profile={currentUser} />
         </Column>
         <Column>
           <RecommendedBuildersWidget />

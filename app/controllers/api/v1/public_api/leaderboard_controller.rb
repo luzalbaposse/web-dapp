@@ -19,13 +19,13 @@ class API::V1::PublicAPI::LeaderboardController < API::V1::PublicAPI::APIControl
           end
         end
       end
-    users = User.where(id: results.keys)
-    users.each do |v|
+    talents = User.where(id: results.keys)
+    talents.each do |v|
       parsed_count_hash[v[:uuid]] = count_hash[v[:id]][:count]
     end
     render json: {
       results: parsed_count_hash,
-      users: API::UserBlueprint.render_as_json(users, view: :normal)
+      users: API::TalentBlueprint.render_as_json(talents, view: :normal)
     }, status: :ok
   end
 end
