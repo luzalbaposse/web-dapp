@@ -19,6 +19,10 @@ export const TitleContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  ${desktopStyles(css`
+    padding: 24px;
+  `)}
 `;
 
 export const TeamsList = styled.div`

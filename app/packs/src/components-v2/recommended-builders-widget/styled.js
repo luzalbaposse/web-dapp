@@ -5,6 +5,7 @@ export const Container = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding-bottom: 30px;
 
   ${desktopStyles(css`
     border: 1px solid ${buildColor("surfaceHover02")};
@@ -20,7 +21,7 @@ export const TitleContainer = styled.div`
   justify-content: space-between;
 
   ${desktopStyles(css`
-    padding-top: 0;
+    padding: 24px;
   `)}
 `;
 

@@ -19,11 +19,14 @@ export const TitleContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
 
   h5 {
     white-space: pre-line;
   }
+
+  ${desktopStyles(css`
+    padding-bottom: 24px;
+  `)}
 `;
 
 export const ListContainer = styled.div`

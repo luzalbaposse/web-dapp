@@ -14,6 +14,10 @@ export const TitleRow = styled.div`
   align-items: flex-end;
   justify-content: space-between;
   padding: 0 16px;
+
+  ${desktopStyles(css`
+    padding: 0;
+  `)}
 `;
 
 export const UpdatesContainer = styled.div`
