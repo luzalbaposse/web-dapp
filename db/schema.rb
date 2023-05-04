@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_02_114921) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_04_082240) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -685,6 +685,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_02_114921) do
     t.boolean "whitelisted_talent_mate", default: false
     t.datetime "onboarded_at"
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.string "utm_source"
     t.index ["created_at"], name: "index_users_on_created_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invite_id"], name: "index_users_on_invite_id"

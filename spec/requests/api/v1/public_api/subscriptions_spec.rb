@@ -105,14 +105,14 @@ RSpec.describe "Subscriptions", type: :request do
 
     let(:params) do
       {
-        talent_id: subscribing_user_id
+        talent_id: subscriber_user_id
       }
     end
 
-    let(:subscribing_user) { create :user }
-    let(:subscribing_user_id) { subscribing_user.uuid }
+    let(:subscriber_user) { create :user }
+    let(:subscriber_user_id) { subscriber_user.uuid }
 
-    let!(:subscription) { create :subscription, subscriber: current_user, user: subscribing_user }
+    let!(:subscription) { create :subscription, subscriber: subscriber_user, user: current_user }
 
     let(:destroy_subscription_class) { Subscriptions::Destroy }
     let(:destroy_subscription_instance) { instance_double(destroy_subscription_class, call: true) }
@@ -142,7 +142,7 @@ RSpec.describe "Subscriptions", type: :request do
     end
 
     context "when the subscribing user does not exist" do
-      let(:subscribing_user_id) { -1 }
+      let(:subscriber_user_id) { -1 }
 
       it "returns a not found response" do
         destroy_subscription_request
@@ -172,8 +172,8 @@ RSpec.describe "Subscriptions", type: :request do
           error,
           "Error destroying subscription",
           subscription_id: subscription.id,
-          subscriber_user_id: current_user.id,
-          subscribing_user_id: subscribing_user.id
+          current_user_id: current_user.id,
+          subscribing_user_id: subscriber_user.id
         )
       end
     end

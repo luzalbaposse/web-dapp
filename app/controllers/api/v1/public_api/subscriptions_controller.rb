@@ -27,20 +27,18 @@ class API::V1::PublicAPI::SubscriptionsController < API::V1::PublicAPI::APIContr
   def pending_subscribers
     return not_found unless user
 
-    pending_subscribers = user.pending_subscribers
-
-    pagy, subscribers = pagy_uuid_cursor(
-      pending_subscribers,
+    pagy, subscriptions = pagy_uuid_cursor(
+      user.pending_subscriptions,
       before: cursor,
       items: per_page,
       order: {created_at: :desc, uuid: :desc}
     )
 
     response_body = {
-      subscribers: API::TalentBlueprint.render_as_json(subscribers.includes(talent: :talent_token), view: view),
+      subscribers: API::SubscriptionsBlueprint.render_as_json(subscriptions.includes(subscriber: :talent), view: view),
       pagination: {
-        total: pending_subscribers.count,
-        cursor: pagy.has_more? ? subscribers.last.uuid : nil
+        total: user.pending_subscriptions.count,
+        cursor: pagy.has_more? ? subscriptions.last.uuid : nil
       }
     }
     log_request(response_body, :ok)
@@ -104,13 +102,13 @@ class API::V1::PublicAPI::SubscriptionsController < API::V1::PublicAPI::APIContr
     subscriber_user = user || current_user
     return not_found unless subscriber_user
 
-    subscription = Subscription.find_by!(user: subscribing_user, subscriber: subscriber_user)
+    subscription = Subscription.find_by!(user: subscriber_user, subscriber: subscribing_user)
 
     Subscriptions::Destroy.new(subscription: subscription).call
 
     render json: {success: "Subscription successfully removed."}, status: :ok
   rescue Subscriptions::Destroy::DestroyError => error
-    Rollbar.error(error, "Error destroying subscription", subscriber_user_id: subscriber_user.id, subscribing_user_id: subscribing_user.id, subscription_id: subscription.id)
+    Rollbar.error(error, "Error destroying subscription", current_user_id: current_user.id, subscribing_user_id: subscribing_user.id, subscription_id: subscription.id)
     render json: {error: "Unable to remove subscription."}, status: :bad_request
   end
 

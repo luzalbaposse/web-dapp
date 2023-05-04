@@ -58,14 +58,15 @@ export const SignUpFlow = props => {
   const userBuilderState = useUserBuilder();
 
   useEffect(() => {
-    if (userBuilderState.user.code === props.code) return;
+    if (props.code == userBuilderState.user.code && props.utmSource == userBuilderState.user.utmSource) return;
     userBuilderState.setUser({
       ...userBuilderState.user,
-      code: props.code
+      code: props.code,
+      utmSource: props.utmSource
     });
 
-    setLinkedinRedirectWithCode(`${linkedinRedirectUri}?invite_code=${props.code}`);
-  }, [props.code, userBuilderState]);
+    setLinkedinRedirectWithCode(`${linkedinRedirectUri}?invite_code=${props.code}&utm_source=${props.utmSource}`);
+  }, [props.code, props.utmSource, userBuilderState]);
   const stepsState = useStepExperience(Object.keys(STEP_TO_COMPONENT_MAP(props.isDesktop)).length);
   const StepScreen = useMemo(
     () => STEP_TO_COMPONENT_MAP(props.isDesktop)[stepsState.currentStep],
