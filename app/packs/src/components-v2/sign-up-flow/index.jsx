@@ -22,27 +22,84 @@ import { OnBoardFlow } from "../on-board-flow";
 const STEP_TO_COMPONENT_MAP = isDesktop =>
   isDesktop
     ? {
-        1: WelcomeStep,
-        2: EmailPasswordStep,
-        3: LegalNameStep,
-        4: HandleStep,
-        5: DefineStep,
-        6: OccupationStep,
-        7: LookingForStep,
-        8: IntroductionStep,
-        9: ConfirmEmailStep
+        1: {
+          component: WelcomeStep,
+          path: "welcome"
+        },
+        2: {
+          component: EmailPasswordStep,
+          path: "email_password"
+        },
+        3: {
+          component: LegalNameStep,
+          path: "legal_names"
+        },
+        4: {
+          component: HandleStep,
+          path: "handle"
+        },
+        5: {
+          component: DefineStep,
+          path: "define"
+        },
+        6: {
+          component: OccupationStep,
+          path: "occupation"
+        },
+        7: {
+          component: LookingForStep,
+          path: "looking_for"
+        },
+        8: {
+          component: IntroductionStep,
+          path: "introduction"
+        },
+        9: {
+          component: ConfirmEmailStep,
+          path: "confirm_email"
+        }
       }
     : {
-        1: OnBoardFlow,
-        2: WelcomeStep,
-        3: EmailPasswordStep,
-        4: LegalNameStep,
-        5: HandleStep,
-        6: DefineStep,
-        7: OccupationStep,
-        8: LookingForStep,
-        9: IntroductionStep,
-        10: ConfirmEmailStep
+        1: {
+          component: OnBoardFlow,
+          path: "onboard"
+        },
+        2: {
+          component: WelcomeStep,
+          path: "welcome"
+        },
+        3: {
+          component: EmailPasswordStep,
+          path: "email_password"
+        },
+        4: {
+          component: LegalNameStep,
+          path: "legal_names"
+        },
+        5: {
+          component: HandleStep,
+          path: "handle"
+        },
+        6: {
+          component: DefineStep,
+          path: "define"
+        },
+        7: {
+          component: OccupationStep,
+          path: "occupation"
+        },
+        8: {
+          component: LookingForStep,
+          path: "looking_for"
+        },
+        9: {
+          component: IntroductionStep,
+          path: "introduction"
+        },
+        10: {
+          component: ConfirmEmailStep,
+          path: "confirm_email"
+        }
       };
 
 const CAN_SKIP_STEPS_DESKTOP = [5, 6, 7];
@@ -69,7 +126,7 @@ export const SignUpFlow = props => {
   }, [props.code, props.utmSource, userBuilderState]);
   const stepsState = useStepExperience(Object.keys(STEP_TO_COMPONENT_MAP(props.isDesktop)).length);
   const StepScreen = useMemo(
-    () => STEP_TO_COMPONENT_MAP(props.isDesktop)[stepsState.currentStep],
+    () => STEP_TO_COMPONENT_MAP(props.isDesktop)[stepsState.currentStep].component,
     [stepsState.currentStep]
   );
   useEffect(() => {
@@ -78,7 +135,8 @@ export const SignUpFlow = props => {
 
   useEffect(() => {
     const url = new URL(document.location);
-    const urlWithPath = `${url.origin}/join/${StepScreen.name.toLowerCase().replace("step", "")}`;
+    const stepPath = STEP_TO_COMPONENT_MAP(props.isDesktop)[stepsState.currentStep].path;
+    const urlWithPath = `${url.origin}/join/${stepPath}`;
     window.history.pushState({}, document.title, urlWithPath);
   }, [stepsState.currentStep]);
 
