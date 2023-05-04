@@ -46,7 +46,7 @@ class API::V1::PublicAPI::CareerUpdatesController < API::V1::PublicAPI::APIContr
       career_update: API::CareerUpdateBlueprint.render_as_json(career_update, view: :normal)
     }
 
-    ActivityIngestJob.perform_later("career_update", response_body[:career_update], sender, nil)
+    ActivityIngestJob.perform_later("career_update", JSON.generate(response_body[:career_update]), sender.id, nil)
 
     log_request(response_body, :created)
 
