@@ -79,62 +79,8 @@ export const CardsContainer = styled.div`
   gap: 24px;
 `;
 
-export const SponsorCard = styled.div`
-  border: 1px solid ${buildColor("surfaceHover02")};
-  border-radius: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 264px;
-  height: 260px;
-  position: relative;
-
-  ${mobileStyles(css`
-    width: 164px;
-  `)}
-`;
-
 export const SponsoredCard = styled.div`
   display: flex;
   flex-direction: column;
   align-items: start;
-`;
-
-export const CardBanner = styled.div`
-  height: 66px;
-  width: 100%;
-  margin-bottom: 56px;
-  border-radius: 16px 16px 0 0;
-  ${({ url }) =>
-    url
-      ? css`
-          background: url(${url}) no-repeat center;
-        `
-      : css`
-          background: ${buildColor("primaryTint01")};
-        `}
-`;
-
-export const AvatarContainer = styled.div`
-  position: absolute;
-  top: 20px;
-  border-radius: 50%;
-  border: 2px solid ${buildColor("bg01")};
-`;
-
-export const SponsorCardInfoContainer = styled.div`
-  text-align: center;
-  max-width: calc(100% - 32px);
-
-  * {
-    display: inline;
-    margin-right: 4px;
-  }
-`;
-
-export const ButtonContainer = styled.div`
-  flex-grow: 1;
-  display: flex;
-  align-items: flex-end;
-  padding: 16px 0;
 `;
