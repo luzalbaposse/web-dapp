@@ -75,6 +75,13 @@ export const SignUpFlow = props => {
   useEffect(() => {
     setIsNextDisable(true);
   }, [setIsNextDisable, stepsState.currentStep]);
+
+  useEffect(() => {
+    const url = new URL(document.location);
+    const urlWithPath = `${url.origin}/join/${StepScreen.name.toLowerCase().replace("step", "")}`;
+    window.history.pushState({}, document.title, urlWithPath);
+  }, [stepsState.currentStep]);
+
   const MemoizedStep = useMemo(
     () => (
       <StepScreen
