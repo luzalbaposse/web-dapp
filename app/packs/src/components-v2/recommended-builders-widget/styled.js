@@ -5,6 +5,11 @@ export const Container = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  ${desktopStyles(css`
+    border: 1px solid ${buildColor("surfaceHover02")};
+    border-radius: 24px;
+  `)}
 `;
 
 export const TitleContainer = styled.div`
