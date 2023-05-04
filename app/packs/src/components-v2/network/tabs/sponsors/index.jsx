@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Avatar, Button, Icon, Spinner, Typography, useModal, Tag } from "@talentprotocol/design-system";
+import { Avatar, Button, Spinner, Typography, useModal, Tag, TalentCard } from "@talentprotocol/design-system";
 import { careerCircle } from "src/api/career-circle";
 import { CareerCircleEmptyState } from "src/components-v2/network/empty-state";
 import { ClaimSponsorModal } from "src/components-v2/network/claim-sponsor-modal";
@@ -11,17 +11,12 @@ import {
   Container,
   NewSponsorsContainer,
   SponsorsContainer,
-  SponsorCard,
   SponsoredCard,
-  AvatarContainer,
-  CardBanner,
   CardsContainer,
-  ButtonContainer,
   NewSponsorsRow,
   ActionsContainer,
   NewSponsorsList,
   LoadMoreContainer,
-  SponsorCardInfoContainer,
   MessageContainer
 } from "./styled";
 
@@ -215,35 +210,26 @@ export const Sponsors = ({ currentUserId, railsContext }) => {
         <SponsorsContainer>
           <CardsContainer>
             {claimedSponsors.sponsors.map(sponsorship => (
-              <SponsorCard key={`${sponsorship.sponsor_address}-${sponsorship.sponsored_address}`}>
-                <CardBanner url={sponsorship.sponsor.banner_url} />
-                <AvatarContainer>
-                  <Avatar size="lg" url={sponsorship.sponsor.profile_picture_url} />
-                </AvatarContainer>
-                <Typography specs={{ variant: "p1", type: "bold" }} color={"primary01"}>
-                  {sponsorship.sponsor.name} {sponsorship.sponsor.verified && <Icon name="verified-2" />}
-                </Typography>
-                <SponsorCardInfoContainer>
-                  {!!sponsorship.sponsor.ticker && (
-                    <Typography specs={{ variant: "p2", type: "bold" }} color={"primary03"}>
-                      ${sponsorship.sponsor.ticker}
-                    </Typography>
-                  )}
-                  <Typography specs={{ variant: "p2", type: "regular" }} color={"primary03"}>
-                    {sponsorship.sponsor.occupation?.length > 20
-                      ? `${sponsorship.sponsor.occupation.substring(0, 20)}...`
-                      : sponsorship.sponsor.occupation}
-                  </Typography>
-                </SponsorCardInfoContainer>
-                <ButtonContainer>
-                  <Button
-                    hierarchy="primary"
-                    size="small"
-                    text="Visit profile"
-                    onClick={() => (window.location.href = `/u/${sponsorship.sponsor.username}`)}
-                  />
-                </ButtonContainer>
-              </SponsorCard>
+              <TalentCard
+                key={sponsorship.id}
+                bannerImage={sponsorship.sponsor.banner_url}
+                isVerified={sponsorship.sponsor.verified}
+                name={sponsorship.sponsor.name}
+                occupation={sponsorship.sponsor.occupation}
+                profileImage={sponsorship.sponsor.profile_picture_url}
+                ticker={`${parseStableAmount(sponsorship.amount, sponsorship.token_decimals)} ${sponsorship.symbol}`}
+                to={`/u/${sponsorship.sponsor.username}`}
+              >
+                <Button
+                  hierarchy="primary"
+                  size="small"
+                  text="Send Message"
+                  onClick={event => {
+                    event.preventDefault();
+                    window.location.href = `/messages?user=${sponsorship.sponsor.id}`;
+                  }}
+                />
+              </TalentCard>
             ))}
           </CardsContainer>
           <LoadMoreContainer>
