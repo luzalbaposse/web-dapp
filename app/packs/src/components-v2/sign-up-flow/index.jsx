@@ -114,6 +114,12 @@ export const SignUpFlow = props => {
   const userBuilderState = useUserBuilder();
 
   useEffect(() => {
+    // Used for linkedin signups
+    document.cookie = `utm_source=${props.utmSource};path=/`;
+    document.cookie = `invite_code=${props.code};path=/`;
+  }, [props.code, props.utmSource]);
+
+  useEffect(() => {
     if (props.code == userBuilderState.user.code && props.utmSource == userBuilderState.user.utmSource) return;
     userBuilderState.setUser({
       ...userBuilderState.user,

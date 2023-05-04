@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState, useEffect } from "react";
 import { Input, TextLink, Typography, Button } from "@talentprotocol/design-system";
 import { session } from "../../api";
 import {
@@ -23,6 +23,14 @@ export const SignInFlow = props => {
   const signInWithLinkedinURL = useMemo(() => {
     return `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${linkedinClientId}&redirect_uri=${linkedinRedirectUri}&scope=r_liteprofile%20r_emailaddress`;
   }, [linkedinClientId, linkedinRedirectUri]);
+
+  useEffect(() => {
+    const url = new URL(window.location);
+    const searchParams = new URLSearchParams(url.search);
+    // Used for linkedin signups
+    document.cookie = `utm_source=${searchParams.get("utm_source")}`;
+  }, []);
+
   const loginCallback = useCallback(
     e => {
       e.preventDefault();
