@@ -108,7 +108,6 @@ const CAN_SKIP_STEPS_MOBILE = [6, 7, 8];
 export const SignUpFlow = props => {
   const captchaModalState = useModal();
   const { linkedinClientId, linkedinRedirectUri } = props.railsContext;
-  const [linkedinRedirectWithCode, setLinkedinRedirectWithCode] = useState(linkedinRedirectUri);
   const [isNextDisabled, setIsNextDisable] = useState(true);
   const [hasCreateAccountError, setHasCreateAccountError] = useState(false);
   const [createdUser, setCreatedUser] = useState({});
@@ -121,8 +120,6 @@ export const SignUpFlow = props => {
       code: props.code,
       utmSource: props.utmSource
     });
-
-    setLinkedinRedirectWithCode(`${linkedinRedirectUri}?invite_code=${props.code}&utm_source=${props.utmSource}`);
   }, [props.code, props.utmSource, userBuilderState]);
   const stepsState = useStepExperience(Object.keys(STEP_TO_COMPONENT_MAP(props.isDesktop)).length);
   const StepScreen = useMemo(
@@ -150,7 +147,7 @@ export const SignUpFlow = props => {
         user={userBuilderState.user}
         setUser={userBuilderState.setUser}
         linkedinClientId={linkedinClientId}
-        linkedinRedirectUri={linkedinRedirectWithCode}
+        linkedinRedirectUri={linkedinRedirectUri}
         setHasCreateAccountError={setHasCreateAccountError}
         setCreatedUser={setCreatedUser}
         inviteProps={{
@@ -168,7 +165,7 @@ export const SignUpFlow = props => {
       isNextDisabled,
       useUserBuilder,
       linkedinClientId,
-      linkedinRedirectWithCode,
+      linkedinRedirectUri,
       props.name,
       props.profilePictureUrl,
       props.inviteCode,

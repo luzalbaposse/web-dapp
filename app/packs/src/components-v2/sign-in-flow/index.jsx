@@ -21,10 +21,7 @@ export const SignInFlow = props => {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const signInWithLinkedinURL = useMemo(() => {
-    const url = new URL(window.location);
-    const searchParams = new URLSearchParams(url.search);
-    const linkedinUrl = `${linkedinRedirectUri}?utm_source=${searchParams.get("utm_source")}`;
-    return `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${linkedinClientId}&redirect_uri=${linkedinUrl}&scope=r_liteprofile%20r_emailaddress`;
+    return `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${linkedinClientId}&redirect_uri=${linkedinRedirectUri}&scope=r_liteprofile%20r_emailaddress`;
   }, [linkedinClientId, linkedinRedirectUri]);
   const loginCallback = useCallback(
     e => {
