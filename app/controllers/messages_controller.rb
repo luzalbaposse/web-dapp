@@ -79,6 +79,7 @@ class MessagesController < ApplicationController
   end
 
   def create
+    binding.pry
     if message_params[:message].blank? || current_user.id == receiver.id
       return render json: {
         error: "Unable to create message, either the message is empty or the sender is the same as the receiver."
