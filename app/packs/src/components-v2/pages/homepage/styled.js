@@ -27,7 +27,6 @@ export const Column = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
-  flex-grow: 1;
 
   ${desktopStyles(css`
     display: flex;

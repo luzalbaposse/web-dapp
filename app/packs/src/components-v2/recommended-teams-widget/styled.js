@@ -33,16 +33,29 @@ export const TeamsList = styled.div`
   gap: 16px 32px;
 `;
 
-export const EntryContainer = styled.div`
+export const EntryContainer = styled.a`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   padding: 16px 0;
   gap: 16px;
+  text-decoration: none;
+  outline: none;
+  cursor: pointer;
+  color: ${buildColor("primary01")};
+
+  :hover {
+    color: ${buildColor("primary01")};
+  }
+
+  *{
+    cursor: pointer;
+  }
 `;
 
 export const InfoColumn = styled.div`
   display: flex;
+  flex-grow: 1;
   flex-direction: column;
   justify-content: center;
   gap: 16px;
@@ -57,7 +70,7 @@ export const InfoGroup = styled.div`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 280px;
+    max-width: 232px;
   }
 `;
 
