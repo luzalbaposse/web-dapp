@@ -37,13 +37,12 @@ export const ActivityWidget = ({ profile = {} }) => {
       });
   }, [setActivity, setIsLoading]);
   
-  const sendMessage = useCallback((inputRef) => {
-    debugger;
+  const sendMessage = useCallback((to, inputRef) => {
     if (!inputRef.current.value) {
       toast.error("Please enter a message", { autoClose: 5000 });
     }
     messagesService
-      .sendMessage(profile.id, inputRef.current.value)
+      .sendMessage("867ca9ef-b71f-4bfa-8b79-2cfe2908bcf0", inputRef.current.value)
       .then(() => {
         inputRef.current.value = "";
         toast.success("Message sent")
@@ -52,7 +51,7 @@ export const ActivityWidget = ({ profile = {} }) => {
         console.error(err);
         toast.error("Error sending message", { autoClose: 5000 });
       });
-  }, [profile])
+  }, [])
 
   return (
     !isLoading && (
@@ -84,10 +83,10 @@ export const ActivityWidget = ({ profile = {} }) => {
                   <StyledTypography specs={{ variant: "p2", type: "regular" }} color="primary03">
                     {content.message}
                   </StyledTypography>
-                  {profile.username !== update.origin_user.username && (
+                  {profile.username == update.origin_user.username && (
                     <ReplyArea>
                       <Input placeholder="Reply directly..." inputRef={inputRefs[index]} />
-                      <Button hierarchy="secondary" size="medium" leftIcon="send" iconColor={"primary01"} onClick={() => sendMessage(inputRefs[index])} />
+                      <Button hierarchy="secondary" size="medium" leftIcon="send" iconColor={"primary01"} onClick={() => sendMessage(profile.id, inputRefs[index])} />
                     </ReplyArea>
                   )}
                 </UpdateContent>
