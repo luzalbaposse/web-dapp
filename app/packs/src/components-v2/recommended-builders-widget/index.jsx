@@ -18,7 +18,6 @@ export const RecommendedBuildersWidget = ({}) => {
       });
   }, []);
 
-  console.log(talents)
   return (
     !isLoading &&
     talents.length && (

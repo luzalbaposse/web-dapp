@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { Avatar, Icon, Tag, Typography, MembersList, Button } from "@talentprotocol/design-system";
 import {
   Container,
@@ -10,7 +11,9 @@ import {
   TitleContainer,
   VerifiedNameRow
 } from "./styled";
-import axios from "axios";
+import lamansinetaImg from "./assets/la-mansineta.png";
+import top100TalentsImg from "./assets/top-100-talents.jpeg";
+import talentHouseImg from "./assets/talent-house.png";
 
 export const RecommendedTeamsWidget = ({}) => {
   const [members, setMembers] = useState({
@@ -38,7 +41,7 @@ export const RecommendedTeamsWidget = ({}) => {
       </TitleContainer>
       <TeamsList>
         <EntryContainer href="/discovery/top-100-talent?page=1">
-          <Avatar size="md" profileURL="/discovery/top-100-talent?page=1"/>
+          <Avatar size="md" profileURL="/discovery/top-100-talent?page=1" url={top100TalentsImg}/>
           <InfoColumn>
             <InfoGroup>
               <VerifiedNameRow>
@@ -67,7 +70,7 @@ export const RecommendedTeamsWidget = ({}) => {
           <Button hierarchy="primary" size="small" href="/discovery/top-100-talent?page=1" text="Go to page"/>
         </EntryContainer>
         <EntryContainer href="/discovery/talent-house?page=1">
-          <Avatar size="md" />
+          <Avatar size="md" profileURL="/discovery/talent-house?page=1" url={talentHouseImg} />
           <InfoColumn>
             <InfoGroup>
               <VerifiedNameRow>
@@ -96,7 +99,7 @@ export const RecommendedTeamsWidget = ({}) => {
           <Button hierarchy="primary" size="small" href="/discovery/talent-house?page=1" text="Go to page"/>
         </EntryContainer>
         <EntryContainer href="/discovery/la-mansineta?page=1">
-          <Avatar size="md" />
+          <Avatar size="md" profileURL="/discovery/talent-house?page=1" url={lamansinetaImg} />
           <InfoColumn>
             <InfoGroup>
               <VerifiedNameRow>
