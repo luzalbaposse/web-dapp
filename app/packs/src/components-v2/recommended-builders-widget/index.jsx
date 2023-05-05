@@ -17,6 +17,8 @@ export const RecommendedBuildersWidget = ({}) => {
         console.error(err);
       });
   }, []);
+
+  console.log(talents)
   return (
     !isLoading &&
     talents.length && (
@@ -26,7 +28,7 @@ export const RecommendedBuildersWidget = ({}) => {
           <TextLink href="/talent" text="View all" rightIcon="carret" color="primary" size="medium" />
         </TitleContainer>
         <BuildersList>
-          {talents.slice(0,3).map(talent => (
+          {talents.map(talent => (
             <BuilderEntry key={talent.username}>
               <Avatar size="md" isVerified={talent.verified} name={talent.username} occupation={talent.occupation} url={talent.profile_picture_url} profileURL={`/u/${talent.username}`} />
               <Button hierarchy="primary" size="small" text="Support" href={`/u/${talent.username}/support`} />

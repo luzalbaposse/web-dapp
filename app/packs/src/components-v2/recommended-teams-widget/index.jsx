@@ -21,7 +21,6 @@ export const RecommendedTeamsWidget = ({}) => {
   useEffect(() => {
     Promise.all([axios.get("/api/v1/talent?page=1&discovery_row_id=15"), axios.get("/api/v1/talent?page=1&discovery_row_id=6"), axios.get("/api/v1/talent?page=1&discovery_row_id=12")])
       .then((res) => {
-        console.log("--------", res);
         setMembers({
           top100: res[0].data?.talents,
           talentHouse: res[1].data?.talents,

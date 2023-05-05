@@ -44,6 +44,10 @@ export const EntryContainer = styled.a`
   cursor: pointer;
   color: ${buildColor("primary01")};
 
+  a {
+    white-space: nowrap;
+  }
+
   :hover {
     color: ${buildColor("primary01")};
   }
