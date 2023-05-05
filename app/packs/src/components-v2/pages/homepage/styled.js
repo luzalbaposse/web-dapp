@@ -24,6 +24,7 @@ export const FullRow = styled.div`
 `;
 
 export const Column = styled.div`
+  min-width: 404px;
   display: flex;
   flex-direction: column;
   gap: 24px;
