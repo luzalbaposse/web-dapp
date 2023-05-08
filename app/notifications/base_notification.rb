@@ -2,7 +2,7 @@ class BaseNotification < Noticed::Base
   deliver_by :database
 
   def body
-    t(".body", name: source_name)
+    t(".body")
   end
 
   def button_label

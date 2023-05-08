@@ -3,6 +3,10 @@ class TokenAcquiredNotification < BaseNotification
   deliver_by :email, mailer: "TokenAcquiredMailer", method: :new_supporter, delay: 15.minutes, if: :new_supporter?
   deliver_by :email, mailer: "TokenAcquiredMailer", method: :existing_supporter, delay: 15.minutes, if: :existing_supporter?
 
+  def body
+    t(".body", amount: params["amount"])
+  end
+
   def url
     user_url(recipient.username, tab: "supporters")
   end
