@@ -1,6 +1,7 @@
 module Stakes
   class Create
-    def initialize(talent_token:, staking_user:)
+    def initialize(amount:, talent_token:, staking_user:)
+      @amount = amount
       @talent_token = talent_token
       @staking_user = staking_user
     end
@@ -15,10 +16,10 @@ module Stakes
 
       if !staking_own_token?
         CreateNotification.new.call(
+          extra_params:,
           recipient: talent_token.talent.user,
-          type: TokenAcquiredNotification,
           source_id: staking_user.id,
-          extra_params: extra_params
+          type: TokenAcquiredNotification
         )
         ActivityIngestJob.perform_later("stake", nil, staking_user.id, talent_token.talent.user.id)
       end
@@ -29,16 +30,14 @@ module Stakes
 
     private
 
-    attr_reader :talent_token, :staking_user
+    attr_reader :amount, :talent_token, :staking_user
 
     def staking_own_token?
       talent_token.talent.user_id == staking_user.id
     end
 
     def extra_params
-      return {} unless reinvestment?
-
-      {reinvestment: true}
+      {amount:}.tap { |params| params[:reinvestment] = true if reinvestment? }
     end
 
     def reinvestment?

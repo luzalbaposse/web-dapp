@@ -47,5 +47,5 @@ en:
       button: "Accept"
       secondary_button: "Deny"
     token_acquired_notification:
-      body: "Staked XXX USDC/cUSD to endorse you."
+      body: "Staked %{amount} USDC/cUSD to endorse you."
       button: "Say Thank You"
