@@ -36,12 +36,12 @@ export const taskDescription = type => {
           />
           <P2
             className="text-primary-03"
-            text="You'll need a profile picture, a headline, atleast one tag and filling in your 'About'."
+            text="You'll need a profile picture, a headline, at least one tag and filling in your 'About'."
           />
         </>
       );
     case "Tasks::ConnectWallet":
-      return <P2 className="text-primary-03" text="Connect your wallent in the top menu." />;
+      return <P2 className="text-primary-03" text="Connect your wallet in the top menu." />;
     case "Tasks::Watchlist":
       return (
         <P2
