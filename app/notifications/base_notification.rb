@@ -9,6 +9,10 @@ class BaseNotification < Noticed::Base
     t(".button")
   end
 
+  def secondary_button_label
+    t(".secondary_button")
+  end
+
   def emailed?
     record.emailed_at.present?
   end
