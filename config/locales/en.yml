@@ -32,6 +32,9 @@
 en:
   hello: "Hello world"
   notifications:
+    career_update_created_notification:
+      body: "Shared a new career update."
+      button: "Read"
     message_received_notification:
       body: "Sent you a message."
       button: "Reply"
