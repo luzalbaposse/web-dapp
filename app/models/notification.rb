@@ -2,6 +2,7 @@ class Notification < ApplicationRecord
   include Noticed::Model
 
   IN_APP_TYPES = %w[
+    CareerUpdateCreatedNotification
     MessageReceivedNotification
     NewSponsorNotification
     SponsorshipClaimedNotification

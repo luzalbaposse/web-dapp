@@ -19,11 +19,18 @@ class BroadcastCareerUpdateJob < ApplicationJob
     activity.save!
 
     receivers.find_each do |supporter|
+      create_notification_service.call(
+        recipient: supporter,
+        source_id: sender.id,
+        type: CareerUpdateCreatedNotification
+      )
+
       send_message_service.call(
+        career_update:,
+        create_notification: false,
         message: career_update.text,
-        sender: sender,
         receiver: supporter,
-        career_update: career_update
+        sender: sender
       )
 
       supporter.activity_feed.activities << activity
@@ -31,6 +38,10 @@ class BroadcastCareerUpdateJob < ApplicationJob
   end
 
   private
+
+  def create_notification_service
+    @create_notification_service ||= CreateNotification.new
+  end
 
   def send_message_service
     @send_message_service ||= Messages::Send.new
