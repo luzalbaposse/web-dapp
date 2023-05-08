@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, IntroContainer, ItemContainer, ListContainer, ProgressContainer } from "./styled";
 import { Button, Checkbox, Typography } from "@talentprotocol/design-system";
 import { users } from "../../api/users";
@@ -22,7 +22,7 @@ export const CompleteProfileWidget = ({ username }) => {
           profilePicture: !!data.profile.profile_picture_url,
           occupation: !!data.profile.occupation,
           headline: !!data.profile.headline,
-          journeyEntries: data.profile.milestones.length >= 2,
+          journeyEntries: [...data.profile.milestones, ...data.profile.career_goal.goals].length >= 2,
           socialLinks:
             Object.values(data.profile.profile).filter(el => typeof el === "string" && el.substring(0, 4) === "http")
               .length >= 2
@@ -35,10 +35,6 @@ export const CompleteProfileWidget = ({ username }) => {
         console.error(err);
       });
   }, [username, setState]);
-  const dummyEventClogger = useCallback(e => {
-    e.preventDefault();
-    e.stopPropagation();
-  }, []);
   return (
     !isLoading &&
     state.progress < 100 && (
@@ -58,7 +54,6 @@ export const CompleteProfileWidget = ({ username }) => {
               label="Add your profile picture"
               isChecked={state.profilePicture}
               isDisabled={state.profilePicture}
-              onCheckboxClick={dummyEventClogger}
             />
           </ItemContainer>
           <ItemContainer>
@@ -66,7 +61,7 @@ export const CompleteProfileWidget = ({ username }) => {
               label="Add your current occupation"
               isChecked={state.occupation}
               isDisabled={state.occupation}
-              onCheckboxClick={dummyEventClogger}
+              hasNoAction
             />
           </ItemContainer>
           <ItemContainer>
@@ -74,7 +69,7 @@ export const CompleteProfileWidget = ({ username }) => {
               label="Create your headline"
               isChecked={state.headline}
               isDisabled={state.headline}
-              onCheckboxClick={dummyEventClogger}
+              hasNoAction
             />
           </ItemContainer>
           <ItemContainer>
@@ -82,7 +77,7 @@ export const CompleteProfileWidget = ({ username }) => {
               label="Add at least 2 entries to your journey"
               isChecked={state.journeyEntries}
               isDisabled={state.journeyEntries}
-              onCheckboxClick={dummyEventClogger}
+              hasNoAction
             />
           </ItemContainer>
           <ItemContainer>
@@ -90,7 +85,7 @@ export const CompleteProfileWidget = ({ username }) => {
               label="Add at least 2 social links"
               isChecked={state.socialLinks}
               isDisabled={state.socialLinks}
-              onCheckboxClick={dummyEventClogger}
+              hasNoAction
             />
           </ItemContainer>
         </ListContainer>
@@ -100,7 +95,6 @@ export const CompleteProfileWidget = ({ username }) => {
           hierarchy="primary"
           isStretched
           href={`/u/${username}`}
-          onCheckboxClick={dummyEventClogger}
         />
       </Container>
     )

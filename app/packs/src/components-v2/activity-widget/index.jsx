@@ -1,4 +1,4 @@
-import React, { createRef, useCallback, useEffect } from "react";
+import React, { createRef, useCallback, useEffect, useState } from "react";
 import { Avatar, Button, Input, Typography } from "@talentprotocol/design-system";
 import {
   Container,
@@ -19,30 +19,28 @@ const ACTIVITY_TYPE_TO_TITLE_MAP = {
   1: "Career Update"
 }
 
-const inputRefs = [];
-
 export const ActivityWidget = ({ profile = {} }) => {
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [activity, setActivity] = React.useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [activity, setActivity] = useState([]);
+  const [inputsWithContent, setInputsWithContent] = useState([]);
+  const inputRefs = [];
 
   useEffect(() => {
     activityService
       .getActivity()
       .then(({ data }) => {
         setActivity(data);
+        setInputsWithContent(new Array(data.length).fill(false));
         setIsLoading(false);
       })
       .catch(error => {
         console.error(error);
       });
-  }, [setActivity, setIsLoading]);
+  }, [setActivity, setIsLoading, setInputsWithContent]);
   
   const sendMessage = useCallback((to, inputRef) => {
-    if (!inputRef.current.value) {
-      toast.error("Please enter a message", { autoClose: 5000 });
-    }
     messagesService
-      .sendMessage(to, inputRef.current.value)
+      .sendMessage(to, inputRef.current.value || "🔥")
       .then(() => {
         inputRef.current.value = "";
         toast.success("Message sent")
@@ -52,7 +50,17 @@ export const ActivityWidget = ({ profile = {} }) => {
         toast.error("Error sending message", { autoClose: 5000 });
       });
   }, [])
-
+  const onInputChange = useCallback((updatedRef, updateIndex) => {
+    if (updatedRef.current.value && !inputsWithContent[updateIndex]) {
+      const inputsWithContentCopy = [...inputsWithContent];
+      inputsWithContentCopy[updateIndex] = true;
+      setInputsWithContent(inputsWithContentCopy);
+    } else if (!updatedRef.current.value && inputsWithContent[updateIndex]) {
+      const inputsWithContentCopy = [...inputsWithContent];
+      inputsWithContentCopy[updateIndex] = false;
+      setInputsWithContent(inputsWithContentCopy);
+    }
+  }, [inputsWithContent, setInputsWithContent])
   return (
     !isLoading && (
       <Container>
@@ -64,7 +72,7 @@ export const ActivityWidget = ({ profile = {} }) => {
         <UpdatesContainer>
           {activity.map((update, index) => {
             const content = JSON.parse(update.content);
-            inputRefs.push(createRef(null))
+            inputRefs.push(createRef(null));
             return (
               <Update key={update.id}>
                 <UpdateTitle>
@@ -83,10 +91,10 @@ export const ActivityWidget = ({ profile = {} }) => {
                   <StyledTypography specs={{ variant: "p2", type: "regular" }} color="primary03">
                     {content.message}
                   </StyledTypography>
-                  {profile.username !== update.origin_user.username && (
+                  {profile.username == update.origin_user.username && (
                     <ReplyArea>
-                      <Input placeholder="Reply directly..." inputRef={inputRefs[index]} />
-                      <Button hierarchy="secondary" size="medium" leftIcon="send" iconColor={"primary01"} onClick={() => sendMessage(update.origin_user.id, inputRefs[index])} />
+                      <Input placeholder="Reply directly..." inputRef={inputRefs[index]} onChange={() => {onInputChange(inputRefs[index], index)}} />
+                      <Button hierarchy="secondary" size="medium" leftIcon={!inputsWithContent[index] ? "flame" : "send"} iconColor={"primary01"} onClick={() => sendMessage(update.origin_user.id, inputRefs[index])} />
                     </ReplyArea>
                   )}
                 </UpdateContent>
