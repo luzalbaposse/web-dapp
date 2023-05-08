@@ -37,7 +37,6 @@ export const ActivityWidget = ({ profile = {} }) => {
         console.error(error);
       });
   }, [setActivity, setIsLoading, setInputsWithContent]);
-  
   const sendMessage = useCallback((to, inputRef) => {
     messagesService
       .sendMessage(to, inputRef.current.value || "🔥")
@@ -91,9 +90,9 @@ export const ActivityWidget = ({ profile = {} }) => {
                   <StyledTypography specs={{ variant: "p2", type: "regular" }} color="primary03">
                     {content.message}
                   </StyledTypography>
-                  {profile.username == update.origin_user.username && (
+                  {profile.username !== update.origin_user.username && (
                     <ReplyArea>
-                      <Input placeholder="Reply directly..." inputRef={inputRefs[index]} onChange={() => {onInputChange(inputRefs[index], index)}} />
+                      <Input placeholder="Reply directly..." inputRef={inputRefs[index]} onChange={() => {onInputChange(inputRefs[index], index)}} onEnterCallback={() => sendMessage(update.origin_user.id, inputRefs[index])} />
                       <Button hierarchy="secondary" size="medium" leftIcon={!inputsWithContent[index] ? "flame" : "send"} iconColor={"primary01"} onClick={() => sendMessage(update.origin_user.id, inputRefs[index])} />
                     </ReplyArea>
                   )}
