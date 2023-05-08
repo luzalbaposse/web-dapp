@@ -1,58 +1,34 @@
-import React, { useState, useEffect } from "react";
-
-import { get } from "src/utils/requests";
-
 import { Dropdown } from "react-bootstrap";
-import Modal from "react-bootstrap/Modal";
-
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import dayjs from "dayjs";
+import Modal from "react-bootstrap/Modal";
+import React, { useState, useEffect } from "react";
+import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(customParseFormat);
 dayjs.extend(relativeTime);
-
+import { Bell, ArrowLeft } from "src/components/icons";
+import { get } from "src/utils/requests";
+import { P1, P2 } from "src/components/design_system/typography";
 import { put, post } from "src/utils/requests";
-
 import { useWindowDimensionsHook } from "../../utils/window";
-import NotificationTemplate from "src/components/design_system/notification";
 import Button from "src/components/design_system/button";
 import Divider from "src/components/design_system/other/Divider";
-import { P1, P2 } from "src/components/design_system/typography";
-import { Bell, ArrowLeft } from "src/components/icons";
 import Link from "src/components/design_system/link";
+import NotificationTemplate from "src/components/design_system/notification";
 
-const Notification = ({ notification, mode }) => {
-  const type = () => {
-    switch (notification.type) {
-      case "TokenAcquiredNotification":
-        return "wallet";
-      case "MessageReceivedNotification":
-        return "chat";
-      case "TalentApplicationApprovedNotification":
-      case "TalentApplicationRejectedNotification":
-      case "TalentChangedNotification":
-        return "star";
-      case "InviteUsedNotification":
-      case "QuestCompletedNotification":
-        return "rewards";
-      case "Quests::VerifiedProfileNotification":
-        return "check";
-      case "UserPersonaVerificationFailedNotification":
-      case "UserNamesVerificationFailedNotification":
-        return "help";
-      default:
-        return "globe";
-    }
-  };
-
+const Notification = ({ mode, notification, showDivider = true }) => {
   return (
     <NotificationTemplate
-      type={type()}
-      mode={mode}
-      title={notification.title}
+      buttonLabel={notification.button_label}
       description={notification.body}
+      mode={mode}
+      secondaryButtonLabel={notification.secondary_button_label}
+      showDivider={showDivider}
+      sourceName={notification.source_name}
+      sourceProfilePictureUrl={notification.source_profile_picture_url}
+      sourceVerified={notification.source_verified}
       timeInformation={dayjs(notification.created_at).fromNow()}
-      isNew={!notification.read}
+      unread={!notification.read}
     />
   );
 };
@@ -83,9 +59,7 @@ const Notifications = ({ mode }) => {
     });
   };
 
-  const showLoadMoreNotifications = () => {
-    return pagination.currentPage < pagination.lastPage;
-  };
+  const showLoadMoreNotifications = pagination.currentPage < pagination.lastPage;
 
   useEffect(() => {
     loadNotifications();
@@ -94,12 +68,8 @@ const Notifications = ({ mode }) => {
   const notificationsUnread = notifications.some(notif => notif.read === false);
 
   const notificationRead = async notification => {
-    if (!notification.read) {
-      await put(`/api/v1/notifications/${notification.id}/mark_as_read`);
-    }
-    if (notification.url) {
-      window.location.href = notification.url;
-    }
+    if (!notification.read) await put(`/api/v1/notifications/${notification.id}/mark_as_read`);
+    if (notification.url) window.location.href = notification.url;
   };
 
   const markAllAsRead = async () => {
@@ -124,50 +94,60 @@ const Notifications = ({ mode }) => {
           backdrop={false}
           className="p-0"
         >
-          <Modal.Header className="p-4 align-items-center justify-content-start">
-            <Button
-              onClick={() => setShowNotifications(false)}
-              type="white-ghost"
-              size="icon"
-              className="d-flex align-items-center mr-4"
-            >
-              <ArrowLeft color="currentColor" size={16} />
-            </Button>
-            <P2 className="text-black" bold text="Notifications" />
-            <Button
-              onClick={() => markAllAsRead()}
-              type="white-ghost"
-              className="d-flex align-items-center text-primary ml-auto"
-              disabled={notifications.length == 0}
-            >
-              Mark all as read
-            </Button>
+          <Modal.Header className="align-items-center justify-content-between">
+            <div className="align-items-center d-flex">
+              <Button
+                className="d-flex align-items-center justify-content-center mr-3"
+                onClick={() => setShowNotifications(false)}
+                size="icon"
+                type="white-ghost"
+              >
+                <ArrowLeft color="currentColor" size={16} />
+              </Button>
+              <P1 medium text="Notifications" />
+            </div>
+            <Link
+              className="p-0"
+              disabled={notifications.length === 0}
+              medium
+              onClick={markAllAsRead}
+              text="Mark all as read"
+            />
           </Modal.Header>
-          <Modal.Body className="d-flex flex-column p-0">
-            {notifications.length == 0 && <small className="w-100 text-center">No notifications</small>}
-            {notifications.map(notification => (
-              <div key={`notifications-menu-${notification.id}`}>
-                <Divider />
-                <Button
-                  onClick={() => notificationRead(notification)}
-                  type="white-ghost"
-                  mode={mode}
-                  className="text-left text-black p-0 w-100"
-                >
-                  <Notification notification={notification} mode={mode} />
-                </Button>
-              </div>
-            ))}
-            {showLoadMoreNotifications() && (
+          <Divider />
+          <Modal.Body className="notifications-menu-body">
+            {notifications.length === 0 ? (
+              <small className="w-100 text-center">No notifications</small>
+            ) : (
               <>
-                <Divider />
-                <a
-                  className="p-0 my-3 notifications-menu-dropdown-item text-center"
-                  onClick={() => loadMoreNotifications()}
-                  href="#"
-                >
-                  <P2 bold text="Load More" className="text-black" />
-                </a>
+                {notifications.map((notification, index) => (
+                  <div key={`notifications-menu-${notification.id}`}>
+                    <Button
+                      className="notifications-menu-dropdown-item text-left text-black w-100"
+                      mode={mode}
+                      onClick={() => notificationRead(notification)}
+                      type="white-ghost"
+                    >
+                      <Notification
+                        mode={mode}
+                        notification={notification}
+                        showDivider={index !== notifications.length - 1}
+                      />
+                    </Button>
+                  </div>
+                ))}
+                {showLoadMoreNotifications && (
+                  <>
+                    <Divider />
+                    <a
+                      className="p-0 my-3 notifications-menu-dropdown-item text-center"
+                      onClick={() => loadMoreNotifications()}
+                      href="#"
+                    >
+                      <P2 bold text="Load More" className="text-black" />
+                    </a>
+                  </>
+                )}
               </>
             )}
           </Modal.Body>
@@ -195,44 +175,54 @@ const Notifications = ({ mode }) => {
           {notificationsUnread && <span className="notifications-unread-icon"></span>}
         </Dropdown.Toggle>
 
-        <Dropdown.Menu className="notifications-menu" style={width < 400 ? { width: width - 50 } : {}}>
-          <div className="d-flex flex-row justify-content-between">
-            <P1 bold className="ml-3">
-              Notifications
-            </P1>
+        <Dropdown.Menu align="left" className="notifications-menu" style={width < 400 ? { width: width - 50 } : {}}>
+          <div className="notifications-menu-header">
+            <P1 medium>Notifications</P1>
             <Link
-              disabled={notifications.length == 0}
-              text="Mark all as read"
+              className="p-0"
+              disabled={notifications.length === 0}
+              medium
               onClick={markAllAsRead}
-              className="mr-3"
+              text="Mark all as read"
             />
           </div>
-          {notifications.length == 0 && (
-            <Dropdown.ItemText key="no-notifications">
-              <small className="w-100 text-center no-notifications-item">No notifications</small>
-            </Dropdown.ItemText>
-          )}
-          {notifications.map(notification => (
-            <Dropdown.Item
-              key={`${notification.id}-notification`}
-              className="p-0 notifications-menu-dropdown-item"
-              onClick={() => notificationRead(notification)}
-            >
-              <Notification notification={notification} mode={mode} />
-            </Dropdown.Item>
-          ))}
-          {showLoadMoreNotifications() && (
-            <>
-              <Divider className="mb-3" />
-              <a
-                className="p-0 mb-3 notifications-menu-dropdown-item text-center"
-                onClick={() => loadMoreNotifications()}
-                href="#"
-              >
-                <P2 bold text="Load More" className="text-black" />
-              </a>
-            </>
-          )}
+          <div className="py-2">
+            <div className="notifications-menu-body">
+              {notifications.length === 0 ? (
+                <Dropdown.ItemText className="px-2 py-3" key="no-notifications">
+                  <small className="no-notifications-item">No notifications</small>
+                </Dropdown.ItemText>
+              ) : (
+                <>
+                  {notifications.map((notification, index) => (
+                    <Dropdown.Item
+                      key={`${notification.id}-notification`}
+                      className="notifications-menu-dropdown-item"
+                      onClick={() => notificationRead(notification)}
+                    >
+                      <Notification
+                        mode={mode}
+                        notification={notification}
+                        showDivider={index !== notifications.length - 1}
+                      />
+                    </Dropdown.Item>
+                  ))}
+                  {showLoadMoreNotifications && (
+                    <>
+                      <Divider className="mb-3" />
+                      <a
+                        className="mb-3 notifications-menu-dropdown-item text-center"
+                        onClick={() => loadMoreNotifications()}
+                        href="#"
+                      >
+                        <P2 bold text="Load More" className="text-black" />
+                      </a>
+                    </>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
         </Dropdown.Menu>
       </Dropdown>
     </>
