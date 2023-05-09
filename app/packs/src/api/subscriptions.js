@@ -1,7 +1,7 @@
 import axios from "axios";
 import { defaultHeaders, appendCSRFToken } from "./utils";
 
-const updateSubscription = (username) => 
+const updateSubscription = username =>
   axios.post(`/api/v1/subscriptions`, {
     talent_id: username
   });
@@ -9,7 +9,6 @@ const updateSubscription = (username) =>
 export const subscriptionService = {
   updateSubscription
 };
-
 
 /*
 

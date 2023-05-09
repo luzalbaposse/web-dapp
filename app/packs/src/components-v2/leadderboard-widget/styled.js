@@ -49,7 +49,7 @@ export const EntryIdentification = styled.div`
 `;
 
 export const Footer = styled.div`
-  margin-top: 48px;
+  margin-top: ${({ isEmpty }) => isEmpty ? "24" : "48"};
   display: flex;
   flex-direction: column;
   text-align: center;

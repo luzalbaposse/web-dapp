@@ -49,7 +49,9 @@ export const RecommendedTeamsWidget = ({}) => {
           <InfoColumn>
             <InfoGroup>
               <VerifiedNameRow>
-                <Typography specs={{ variant: "label2", type: "medium" }} color="primary01">Top 100 Talent</Typography>
+                <Typography specs={{ variant: "label2", type: "medium" }} color="primary01">
+                  Top 100 Talent
+                </Typography>
                 {/* <Icon name="verified-2" size={22} color="primary" /> */}
               </VerifiedNameRow>
               <Typography specs={{ variant: "p3", type: "regular" }} color="primary03">
@@ -80,7 +82,9 @@ export const RecommendedTeamsWidget = ({}) => {
           <InfoColumn>
             <InfoGroup>
               <VerifiedNameRow>
-                <Typography specs={{ variant: "label2", type: "medium" }} color="primary01">Talent House</Typography>
+                <Typography specs={{ variant: "label2", type: "medium" }} color="primary01">
+                  Talent House
+                </Typography>
                 <Icon name="verified-2" size={22} color="primary" />
               </VerifiedNameRow>
               <Typography specs={{ variant: "p3", type: "regular" }} color="primary03">
@@ -110,7 +114,9 @@ export const RecommendedTeamsWidget = ({}) => {
           <InfoColumn>
             <InfoGroup>
               <VerifiedNameRow>
-                <Typography specs={{ variant: "label2", type: "medium" }} color="primary01">La Mansineta</Typography>
+                <Typography specs={{ variant: "label2", type: "medium" }} color="primary01">
+                  La Mansineta
+                </Typography>
                 <Icon name="verified-2" size={22} color="primary" />
               </VerifiedNameRow>
               <Typography specs={{ variant: "p3", type: "regular" }} color="primary03">

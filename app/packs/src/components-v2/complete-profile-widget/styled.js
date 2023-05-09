@@ -1,5 +1,12 @@
-import { buildColor, desktopStyles } from "@talentprotocol/design-system";
+import { buildColor, desktopStyles, mobileStyles } from "@talentprotocol/design-system";
 import styled, { css } from "styled-components";
+
+export const TitleContainer = styled.div`
+  margin-top: 24px;
+  ${mobileStyles(css`
+    margin: 24px 16px;
+  `)}
+`;
 
 export const Container = styled.section`
   margin: 16px;

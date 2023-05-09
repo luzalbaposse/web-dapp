@@ -30,12 +30,16 @@ export const LeadderboardWidget = ({ username }) => {
   return (
     !isLoading && (
       <Container>
-        <TitleContainer>
-          <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
-            Community Leaderboard
-          </Typography>
-          <TextLink text="Go to invites" rightIcon="carret" color="primary" size="small" href="/earn?tab=talent" />
-        </TitleContainer>
+        {
+          !!leadderBoardData.length && (
+            <TitleContainer>
+              <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
+                Community Leaderboard
+              </Typography>
+              <TextLink text="Go to invites" rightIcon="carret" color="primary" size="small" href="/earn?tab=talent" />
+            </TitleContainer>
+          )
+        }
         <ListContainer>
           {leadderBoardData.map((user, index) => (
             <Entry key={user.username}>
@@ -56,7 +60,7 @@ export const LeadderboardWidget = ({ username }) => {
             </Entry>
           ))}
         </ListContainer>
-        <Footer>
+        <Footer isEmpty={!!leadderBoardData.length}>
           <Typography specs={{ variant: "h4", type: "regular" }} color="primary01">
             <b>Help the</b> <i>community</i> <b>grow</b>
           </Typography>

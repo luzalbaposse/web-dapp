@@ -17,4 +17,10 @@ export const InnerContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  ${desktopStyles(css`
+    a {
+      display: none;
+    }
+  `)}
 `;

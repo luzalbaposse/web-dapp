@@ -10,6 +10,7 @@ export const Container = styled.section`
   ${desktopStyles(css`
     border: 1px solid ${buildColor("surfaceHover02")};
     border-radius: 24px;
+    margin-top: 76px;
   `)}
 `;
 

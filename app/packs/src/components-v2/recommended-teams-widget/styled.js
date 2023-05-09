@@ -1,11 +1,10 @@
-import { buildColor, desktopStyles } from "@talentprotocol/design-system";
+import { buildColor, desktopStyles, mobileStyles } from "@talentprotocol/design-system";
 import styled, { css } from "styled-components";
 
 export const Container = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-bottom: 24px;
 
   ${desktopStyles(css`
     border: 1px solid ${buildColor("surfaceHover02")};
@@ -74,6 +73,9 @@ export const InfoGroup = styled.div`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    ${mobileStyles(css`
+      max-width: 100px;
+    `)}
     max-width: 232px;
   }
 `;
