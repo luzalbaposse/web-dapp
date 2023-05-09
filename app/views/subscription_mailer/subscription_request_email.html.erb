@@ -1,20 +1,12 @@
-
-<div class="container mt-5 mb-10 sub-content">
-  <h3 class="main-title">Hey <%= @recipient.name || "Talented human" %>! 👋
-</div>
-
-<p class="w-full mb-6 primary-3 paragraph">
-  Exciting news! You have pending subscription requests from users on Talent Protocol who are interested in staying updated with your journey and receiving exclusive content from you.
-
-</p>
-<p class="w-full mb-3 primary-3 paragraph">
-  By accepting these subscription requests, you'll be growing your network and boosting it with supporters who are genuinely interested in your talent and expertise. Remember, more subscribers means more visibility and opportunities for collaboration.
+<p class="w-full mb-6 primary-3 paragraph"> 
+  You have pending subscription requests. 
+  People are interested in your journey and want to receive your career updates.
 </p>
 
 <% if @pending_subscribers_total_count > 0 %>
   <div class="container mb-5 sub-content">
     <p class="w-full lh-lg text-lg mb-5 sub-title">
-      Here's who's waiting to hear from you
+      Who wants to be your subscriber:
     </p>
     <% @pending_subscribers.each do |user| %>
       <%= render "shared_mailer/talent", talent: user.talent %>
@@ -25,13 +17,6 @@
       And more...
     </p>
   <% end %>
-  <div class="mb-5 border-bottom footer-border"></div>
 <% end %>
 
-<%= link_to "Manage your subscriptions", network_url, class: "btn btn-primary fw-800 text-5xl py-4 mb-5 w-full", style: "width: 90%" %>
-
-<p class="w-full primary-3 paragraph">
-  Let's do this,
-  <br/>
-  Talent Protocol
-</p>
+<%= link_to "Manage your subscribers", network_url, class: "btn btn-primary fw-800 text-5xl py-4 mb-5 w-full", style: "width: 90%" %>

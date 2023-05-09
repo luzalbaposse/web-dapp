@@ -49,10 +49,7 @@ class UserMailer < ApplicationMailer
 
     set_profile_pictures_attachments([@sender])
 
-    # we need to check if the user has unread messages
-    should_sent = @user.has_unread_messages?
-
-    bootstrap_mail(to: @user.email, subject: "You've got a new message") if should_sent
+    bootstrap_mail(to: @user.email, subject: "You have a new message from #{@sender.username}") if @user.has_unread_messages?
   end
 
   def send_complete_profile_reminder_email
@@ -78,40 +75,9 @@ class UserMailer < ApplicationMailer
     bootstrap_mail(to: @user.email, subject: "Verification failed 💔")
   end
 
-  def send_digest_email
-    @user = indifferent_access_params[:user]
-    @without_container = true
-
-    digest_email_sent_at = @user.digest_email_sent_at || 2.weeks.ago
-
-    messages = Message.where(receiver: @user).where("messages.created_at > ?", digest_email_sent_at)
-    messagees = User.where(id: messages.pluck(:sender_id))
-    @messagee_names = messagees.map { |m| m.display_name || m.username }
-
-    new_supporters = @user.supporters(including_self: false, invested_after: digest_email_sent_at)
-    @new_supporters_names = new_supporters.map { |u| u.display_name || u.username }
-
-    invested_in_users = @user.portfolio(including_self: false, invested_after: digest_email_sent_at).limit(3)
-    @invested_in_talents = Talent.where(user: invested_in_users).includes(:user)
-    set_profile_pictures_attachments(invested_in_users)
-
-    @talents = Talent.base.active.where("talent_tokens.deployed_at > ?", 2.weeks.ago).includes(:user).limit(3)
-    talent_users = User.where(id: @talents.pluck(:user_id))
-
-    set_profile_pictures_attachments(talent_users)
-
-    user_talent_supporters = TalentSupporter.where(supporter_wallet_id: @user.wallet_id)
-
-    @tal_amount = user_talent_supporters.map { |t| t.tal_amount.to_i }.sum / TalentToken::TAL_DECIMALS
-    @usd_amount = (@tal_amount * TalentToken::TAL_VALUE_IN_USD).round
-
-    @user.update!(digest_email_sent_at: Time.zone.now)
-
-    bootstrap_mail(to: @user.email, subject: "The latest on Talent Protocol")
-  end
-
   def send_application_received_email
     @user = indifferent_access_params[:recipient]
+
     bootstrap_mail(to: @user.email, subject: "We've received your application")
   end
 
@@ -125,6 +91,7 @@ class UserMailer < ApplicationMailer
 
   def send_application_approved_email
     @user = indifferent_access_params[:recipient]
+
     bootstrap_mail(to: @user.email, subject: "Hey, you can now launch your token 🚀")
   end
 
@@ -169,17 +136,5 @@ class UserMailer < ApplicationMailer
     @user = indifferent_access_params[:user]
 
     bootstrap_mail(to: @user.email, subject: "Looking to hire talent?")
-  end
-
-  def send_opportunities_role_landed_email
-    @user = indifferent_access_params[:user]
-
-    bootstrap_mail(to: @user.email, subject: "Did you just land a new role?")
-  end
-
-  def send_opportunities_talent_found_email
-    @user = indifferent_access_params[:user]
-
-    bootstrap_mail(to: @user.email, subject: "Did you meet talented builders?")
   end
 end

@@ -2,10 +2,12 @@ import { Input, Pills, Typography } from "@talentprotocol/design-system";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { validateEmail, validatePassword } from "../../utils/field-validators";
 import { EmailRow, PasswordRow, SignUpForm } from "./styled";
+import { validations } from "src/api/validations";
+import debounce from "lodash/debounce";
 
 export const EmailPasswordStep = ({ setIsNextDisable, setUser, user }) => {
   const [isShowPasswordActive, setIsShowPasswordActive] = useState(false);
-  const [isEmailCorrect, setIsEmailCorrect] = useState(true);
+  const [emailError, setEmailError] = useState("");
   const [isPasswordCorrect, setIsPasswordCorrect] = useState(true);
   const [passwordsMatch, setPasswordsMatch] = useState(true);
   const [pills, setPills] = useState([
@@ -47,19 +49,52 @@ export const EmailPasswordStep = ({ setIsNextDisable, setUser, user }) => {
   useEffect(() => {
     fillPills(user.password);
   }, [user]);
+
+  const debouncedEmailLookup = debounce(() => {
+    const email = emailRef.current?.value?.toLowerCase();
+    if (!email) {
+      return;
+    }
+
+    validations
+      .validateEmail(email)
+      .then(({ data }) => {
+        if (data.error) {
+          setEmailError(data.error);
+          setIsNextDisable(true);
+        } else {
+          setEmailError("");
+          setUser({
+            ...user,
+            email
+          });
+        }
+      })
+      .catch(() => {
+        setEmailError("Something happened");
+        setIsNextDisable(true);
+      });
+  }, 200);
+
+  const validateEmailStep = useCallback(() => {
+    if (validateEmail(emailRef?.current?.value)) {
+      debouncedEmailLookup();
+    } else {
+      setEmailError("Email is invalid.");
+    }
+  }, [emailRef, setEmailError, setUser, user]);
+
   const validateStep = useCallback(
     doPasswordsMatch => {
       if (
         (typeof doPasswordsMatch !== "boolean" ? passwordsMatch : doPasswordsMatch) &&
         confirmPasswordRef.current.value &&
-        emailRef.current.value &&
         passwordRef.current.value &&
-        validateEmail(emailRef.current.value, setIsEmailCorrect) &&
+        !emailError &&
         validatePassword(passwordRef.current.value, setIsPasswordCorrect)
       ) {
         setUser({
           ...user,
-          email: emailRef.current.value,
           password: passwordRef.current.value
         });
         setIsNextDisable(false);
@@ -67,7 +102,7 @@ export const EmailPasswordStep = ({ setIsNextDisable, setUser, user }) => {
         setIsNextDisable(true);
       }
     },
-    [setIsEmailCorrect, setIsPasswordCorrect, emailRef, passwordRef, user, setUser, passwordsMatch, confirmPasswordRef]
+    [emailError, setIsPasswordCorrect, emailRef, passwordRef, user, setUser, passwordsMatch, confirmPasswordRef]
   );
   return (
     <>
@@ -83,12 +118,10 @@ export const EmailPasswordStep = ({ setIsNextDisable, setUser, user }) => {
             placeholder="johndoe@mail.com"
             inputRef={emailRef}
             defaultValue={user.email}
-            onFocus={() => {
-              setIsEmailCorrect(true);
-            }}
-            onChange={validateStep}
-            onBlur={validateStep}
-            hasError={!isEmailCorrect}
+            onChange={validateEmailStep}
+            onBlur={validateEmailStep}
+            hasError={!!emailError}
+            shortDescription={emailError}
           />
         </EmailRow>
         <PasswordRow>

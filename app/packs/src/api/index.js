@@ -9,4 +9,5 @@ export * from "./messages";
 export * from "./product-announcements";
 export * from "./session";
 export * from "./subscriptions";
+export * from "./validations";
 export * from "./users";
