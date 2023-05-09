@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import debounce from "lodash/debounce";
 import { Input, Typography } from "@talentprotocol/design-system";
 import { Row, Form, TitleRow } from "./styled";
-import { username } from "../../../../api/username";
+import { validations } from "src/api/validations";
 
 export const HandleStep = ({ user, setUser, isNextDisabled, setIsNextDisable }) => {
   const [handleError, setHandleError] = useState("");
@@ -14,7 +14,7 @@ export const HandleStep = ({ user, setUser, isNextDisabled, setIsNextDisable }) 
       return;
     }
 
-    username
+    validations
       .validateHandle(handle)
       .then(({ data }) => {
         if (data.error) {

@@ -25,16 +25,17 @@ module PublicAPIRoutes
             resources :product_announcements, only: [:update] do
               get "latest_unread", on: :collection
             end
+
+            resource :validations, only: [] do
+              get :username, on: :collection
+              get :email, on: :collection
+            end
           end
 
           # API non authenticated endpoints
           resources :portfolio_supporters, only: [:index]
           resources :talent, only: [:show, :index]
           get "/public_talent" => "talent#public_index"
-
-          resource :username, only: [] do
-            get :valid, on: :collection
-          end
 
           resources :users, only: [:show] do
             get :domain_owner, on: :collection
