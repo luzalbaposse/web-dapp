@@ -29,7 +29,7 @@ RSpec.describe TokenAcquiredNotification do
 
         aggregate_failures do
           expect(ActionMailer::Base.deliveries.count).to eq 1
-          expect(mail.subject).to eq "You have a new supporter in Talent Protocol!"
+          expect(mail.subject).to eq "You have a new supporter on Talent Protocol"
         end
       end
     end

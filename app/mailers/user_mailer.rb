@@ -49,10 +49,7 @@ class UserMailer < ApplicationMailer
 
     set_profile_pictures_attachments([@sender])
 
-    # we need to check if the user has unread messages
-    should_sent = @user.has_unread_messages?
-
-    bootstrap_mail(to: @user.email, subject: "You've got a new message") if should_sent
+    bootstrap_mail(to: @user.email, subject: "You have a new message from #{@sender.username}") if @user.has_unread_messages?
   end
 
   def send_complete_profile_reminder_email
@@ -80,6 +77,7 @@ class UserMailer < ApplicationMailer
 
   def send_application_received_email
     @user = indifferent_access_params[:recipient]
+
     bootstrap_mail(to: @user.email, subject: "We've received your application")
   end
 
@@ -93,6 +91,7 @@ class UserMailer < ApplicationMailer
 
   def send_application_approved_email
     @user = indifferent_access_params[:recipient]
+
     bootstrap_mail(to: @user.email, subject: "Hey, you can now launch your token 🚀")
   end
 
@@ -137,17 +136,5 @@ class UserMailer < ApplicationMailer
     @user = indifferent_access_params[:user]
 
     bootstrap_mail(to: @user.email, subject: "Looking to hire talent?")
-  end
-
-  def send_opportunities_role_landed_email
-    @user = indifferent_access_params[:user]
-
-    bootstrap_mail(to: @user.email, subject: "Did you just land a new role?")
-  end
-
-  def send_opportunities_talent_found_email
-    @user = indifferent_access_params[:user]
-
-    bootstrap_mail(to: @user.email, subject: "Did you meet talented builders?")
   end
 end

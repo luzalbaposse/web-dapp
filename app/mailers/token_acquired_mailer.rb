@@ -8,9 +8,7 @@ class TokenAcquiredMailer < ApplicationMailer
 
     set_profile_picture_attachment(@staking_user)
 
-    subject = "You have a new supporter in Talent Protocol!"
-
-    bootstrap_mail(to: @user.email, subject: subject)
+    bootstrap_mail(to: @user.email, subject: "You have a new supporter on Talent Protocol")
   end
 
   def existing_supporter

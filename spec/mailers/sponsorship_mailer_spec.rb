@@ -8,7 +8,7 @@ RSpec.describe SponsorshipMailer, type: :mailer do
     let(:mail) { described_class.with(recipient: user, source_id: sender.id).new_sponsor_email }
 
     it "renders the header" do
-      expect(mail.subject).to eql("New sponsor request on Talent Protocol awaits you!")
+      expect(mail.subject).to eql("You have a new sponsor on Talent Protocol")
       expect(mail.to).to eql([user.email])
     end
   end
@@ -18,7 +18,7 @@ RSpec.describe SponsorshipMailer, type: :mailer do
     let(:mail) { described_class.with(recipient: user, source_id: sender.id).sponsorship_claimed_email }
 
     it "renders the header" do
-      expect(mail.subject).to eql("Your sponsorship was accepted!")
+      expect(mail.subject).to eql("#{sender.username} accepted your sponsorship on Talent Protocol")
       expect(mail.to).to eql([user.email])
     end
   end
