@@ -17,7 +17,7 @@ import { messagesService } from "../../api/messages";
 
 const ACTIVITY_TYPE_TO_TITLE_MAP = {
   1: "Career Update"
-}
+};
 
 export const ActivityWidget = ({ profile = {} }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -42,24 +42,27 @@ export const ActivityWidget = ({ profile = {} }) => {
       .sendMessage(to, inputRef.current.value || "🔥")
       .then(() => {
         inputRef.current.value = "";
-        toast.success("Message sent")
+        toast.success("Message sent");
       })
-      .catch((err) => {
+      .catch(err => {
         console.error(err);
         toast.error("Error sending message", { autoClose: 5000 });
       });
-  }, [])
-  const onInputChange = useCallback((updatedRef, updateIndex) => {
-    if (updatedRef.current.value && !inputsWithContent[updateIndex]) {
-      const inputsWithContentCopy = [...inputsWithContent];
-      inputsWithContentCopy[updateIndex] = true;
-      setInputsWithContent(inputsWithContentCopy);
-    } else if (!updatedRef.current.value && inputsWithContent[updateIndex]) {
-      const inputsWithContentCopy = [...inputsWithContent];
-      inputsWithContentCopy[updateIndex] = false;
-      setInputsWithContent(inputsWithContentCopy);
-    }
-  }, [inputsWithContent, setInputsWithContent])
+  }, []);
+  const onInputChange = useCallback(
+    (updatedRef, updateIndex) => {
+      if (updatedRef.current.value && !inputsWithContent[updateIndex]) {
+        const inputsWithContentCopy = [...inputsWithContent];
+        inputsWithContentCopy[updateIndex] = true;
+        setInputsWithContent(inputsWithContentCopy);
+      } else if (!updatedRef.current.value && inputsWithContent[updateIndex]) {
+        const inputsWithContentCopy = [...inputsWithContent];
+        inputsWithContentCopy[updateIndex] = false;
+        setInputsWithContent(inputsWithContentCopy);
+      }
+    },
+    [inputsWithContent, setInputsWithContent]
+  );
   return (
     !isLoading && (
       <Container>
@@ -76,12 +79,23 @@ export const ActivityWidget = ({ profile = {} }) => {
               <Update key={update.id}>
                 <UpdateTitle>
                   <TitleDateWrapper>
-                    <Avatar size="sm" name={update.origin_user.username} isVerified={true} url={update.origin_user.profile_picture_url} profileURL={`/u/${update.origin_user.username}`}/>
+                    <Avatar
+                      size="sm"
+                      name={update.origin_user.username}
+                      isVerified={true}
+                      url={update.origin_user.profile_picture_url}
+                      profileURL={`/u/${update.origin_user.username}`}
+                    />
                     <Typography specs={{ variant: "p2", type: "regular" }} color="primary04">
                       {new Date(update.created_at).toLocaleDateString()}
                     </Typography>
                   </TitleDateWrapper>
-                  <Button hierarchy="primary" size="small" text="Support" href={`/u/${update.origin_user.username}/support`} />
+                  <Button
+                    hierarchy="primary"
+                    size="small"
+                    text="Support"
+                    href={`/u/${update.origin_user.username}/support`}
+                  />
                 </UpdateTitle>
                 <UpdateContent>
                   <Typography specs={{ variant: "p1", type: "medium" }} color="primary01">
@@ -92,8 +106,21 @@ export const ActivityWidget = ({ profile = {} }) => {
                   </StyledTypography>
                   {profile.username !== update.origin_user.username && (
                     <ReplyArea>
-                      <Input placeholder="Reply directly..." inputRef={inputRefs[index]} onChange={() => {onInputChange(inputRefs[index], index)}} onEnterCallback={() => sendMessage(update.origin_user.id, inputRefs[index])} />
-                      <Button hierarchy="secondary" size="medium" leftIcon={!inputsWithContent[index] ? "flame" : "send"} iconColor={"primary01"} onClick={() => sendMessage(update.origin_user.id, inputRefs[index])} />
+                      <Input
+                        placeholder="Reply directly..."
+                        inputRef={inputRefs[index]}
+                        onChange={() => {
+                          onInputChange(inputRefs[index], index);
+                        }}
+                        onEnterCallback={() => sendMessage(update.origin_user.id, inputRefs[index])}
+                      />
+                      <Button
+                        hierarchy="secondary"
+                        size="medium"
+                        leftIcon={!inputsWithContent[index] ? "flame" : "send"}
+                        iconColor={"primary01"}
+                        onClick={() => sendMessage(update.origin_user.id, inputRefs[index])}
+                      />
                     </ReplyArea>
                   )}
                 </UpdateContent>

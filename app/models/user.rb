@@ -51,8 +51,8 @@ class User < ApplicationRecord
   has_many :erc721_tokens, dependent: :destroy
 
   # Activities
-  has_many :origin_activities, class_name: "Activity", foreign_key: "origin_user_id"
-  has_many :target_activities, class_name: "Activity", foreign_key: "target_user_id"
+  has_many :origin_activities, class_name: "Activity", foreign_key: "origin_user_id", dependent: :destroy
+  has_many :target_activities, class_name: "Activity", foreign_key: "target_user_id", dependent: :destroy
 
   # Elasticsearch index update
   update_index("talents", :talent)

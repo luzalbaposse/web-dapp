@@ -45,7 +45,7 @@ export const CareerUpdate = ({ data, profile, isCurrentUserProfile }) => {
         <Typography specs={{ variant: "label2", type: "medium" }} color="primary01">
           {profile.user.legal_first_name} {profile.user.legal_last_name}
         </Typography>
-        {profile.verified && <Icon name="verified-2" color="primary" size={16}/>}
+        {profile.verified && <Icon name="verified-2" color="primary" size={16} />}
         <Typography specs={{ variant: "p2", type: "regular" }} color="primary04">
           {dayjs(data.created_at).format("MMM D, YYYY, h:mm A")}
         </Typography>

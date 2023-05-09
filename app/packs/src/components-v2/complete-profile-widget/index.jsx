@@ -65,12 +65,7 @@ export const CompleteProfileWidget = ({ username }) => {
             />
           </ItemContainer>
           <ItemContainer>
-            <Checkbox
-              label="Create your headline"
-              isChecked={state.headline}
-              isDisabled={state.headline}
-              hasNoAction
-            />
+            <Checkbox label="Create your headline" isChecked={state.headline} isDisabled={state.headline} hasNoAction />
           </ItemContainer>
           <ItemContainer>
             <Checkbox
@@ -89,13 +84,7 @@ export const CompleteProfileWidget = ({ username }) => {
             />
           </ItemContainer>
         </ListContainer>
-        <Button
-          text="Edit my profile"
-          size="large"
-          hierarchy="primary"
-          isStretched
-          href={`/u/${username}`}
-        />
+        <Button text="Edit my profile" size="large" hierarchy="primary" isStretched href={`/u/${username}`} />
       </Container>
     )
   );

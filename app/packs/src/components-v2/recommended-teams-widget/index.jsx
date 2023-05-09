@@ -22,15 +22,19 @@ export const RecommendedTeamsWidget = ({}) => {
     laMansineta: []
   });
   useEffect(() => {
-    Promise.all([axios.get("/api/v1/talent?page=1&discovery_row_id=15"), axios.get("/api/v1/talent?page=1&discovery_row_id=6"), axios.get("/api/v1/talent?page=1&discovery_row_id=12")])
-      .then((res) => {
+    Promise.all([
+      axios.get("/api/v1/talent?page=1&discovery_row_id=15"),
+      axios.get("/api/v1/talent?page=1&discovery_row_id=6"),
+      axios.get("/api/v1/talent?page=1&discovery_row_id=12")
+    ])
+      .then(res => {
         setMembers({
           top100: res[0].data?.talents,
           talentHouse: res[1].data?.talents,
           laMansineta: res[2].data?.talents
         });
       })
-      .catch((err) => {
+      .catch(err => {
         console.error(err);
       });
   }, []);
@@ -41,15 +45,17 @@ export const RecommendedTeamsWidget = ({}) => {
       </TitleContainer>
       <TeamsList>
         <EntryContainer href="/discovery/top-100-talent?page=1">
-          <Avatar size="md" profileURL="/discovery/top-100-talent?page=1" url={top100TalentsImg}/>
+          <Avatar size="md" profileURL="/discovery/top-100-talent?page=1" url={top100TalentsImg} />
           <InfoColumn>
             <InfoGroup>
               <VerifiedNameRow>
-                <Typography specs={{ variant: "label2", type: "medium" }}>Top 100 Talent</Typography>
+                <Typography specs={{ variant: "label2", type: "medium" }} color="primary01">Top 100 Talent</Typography>
                 {/* <Icon name="verified-2" size={22} color="primary" /> */}
               </VerifiedNameRow>
-              <Typography specs={{ variant: "p3", type: "regular" }}>
-              This list of 100 people was curated by the Talent Protocol team to introduce you to the diverse talent we have in our community. All of them have an incredible potential and we highly recommend you to support them.
+              <Typography specs={{ variant: "p3", type: "regular" }} color="primary03">
+                This list of 100 people was curated by the Talent Protocol team to introduce you to the diverse talent
+                we have in our community. All of them have an incredible potential and we highly recommend you to
+                support them.
               </Typography>
             </InfoGroup>
             <Tags>
@@ -67,18 +73,19 @@ export const RecommendedTeamsWidget = ({}) => {
               />
             )}
           </InfoColumn>
-          <Button hierarchy="primary" size="small" href="/discovery/top-100-talent?page=1" text="Go to page"/>
+          <Button hierarchy="primary" size="small" href="/discovery/top-100-talent?page=1" text="Go to page" />
         </EntryContainer>
         <EntryContainer href="/discovery/talent-house?page=1">
           <Avatar size="md" profileURL="/discovery/talent-house?page=1" url={talentHouseImg} />
           <InfoColumn>
             <InfoGroup>
               <VerifiedNameRow>
-                <Typography specs={{ variant: "label2", type: "medium" }}>Talent House</Typography>
+                <Typography specs={{ variant: "label2", type: "medium" }} color="primary01">Talent House</Typography>
                 <Icon name="verified-2" size={22} color="primary" />
               </VerifiedNameRow>
-              <Typography specs={{ variant: "p3", type: "regular" }}>
-                High-potential builders and enthusiasts who are taking their first step into Web3 through Talent Protocol's initiative Talent House
+              <Typography specs={{ variant: "p3", type: "regular" }} color="primary03">
+                High-potential builders and enthusiasts who are taking their first step into Web3 through Talent
+                Protocol's initiative Talent House
               </Typography>
             </InfoGroup>
             <Tags>
@@ -96,18 +103,19 @@ export const RecommendedTeamsWidget = ({}) => {
               />
             )}
           </InfoColumn>
-          <Button hierarchy="primary" size="small" href="/discovery/talent-house?page=1" text="Go to page"/>
+          <Button hierarchy="primary" size="small" href="/discovery/talent-house?page=1" text="Go to page" />
         </EntryContainer>
         <EntryContainer href="/discovery/la-mansineta?page=1">
           <Avatar size="md" profileURL="/discovery/talent-house?page=1" url={lamansinetaImg} />
           <InfoColumn>
             <InfoGroup>
               <VerifiedNameRow>
-                <Typography specs={{ variant: "label2", type: "medium" }}>La Mansineta</Typography>
+                <Typography specs={{ variant: "label2", type: "medium" }} color="primary01">La Mansineta</Typography>
                 <Icon name="verified-2" size={22} color="primary" />
               </VerifiedNameRow>
-              <Typography specs={{ variant: "p3", type: "regular" }}>
-              Adopción, Web3 y Unión 🧶 Subite a #LaMansineta Somos tu ✈️ vuelo a crypto, constructores de la receta de comunidades y del virus de adopción 🌎 @TalentHouseWeb3 🧩
+              <Typography specs={{ variant: "p3", type: "regular" }} color="primary03">
+                Adopción, Web3 y Unión 🧶 Subite a #LaMansineta Somos tu ✈️ vuelo a crypto, constructores de la receta
+                de comunidades y del virus de adopción 🌎 @TalentHouseWeb3 🧩
               </Typography>
             </InfoGroup>
             <Tags>
@@ -126,7 +134,7 @@ export const RecommendedTeamsWidget = ({}) => {
               />
             )}
           </InfoColumn>
-          <Button hierarchy="primary" size="small" href="/discovery/la-mansineta?page=1" text="Go to page"/>
+          <Button hierarchy="primary" size="small" href="/discovery/la-mansineta?page=1" text="Go to page" />
         </EntryContainer>
       </TeamsList>
     </Container>

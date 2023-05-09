@@ -1,17 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar, TextLink, Typography, Button } from "@talentprotocol/design-system";
 import { BuilderEntry, BuildersList, Container, TitleContainer } from "./styled";
 import { talentsService } from "../../api/talents";
 
 export const RecommendedBuildersWidget = ({}) => {
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [talents, setTalents] = React.useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [talents, setTalents] = useState([]);
   useEffect(() => {
     talentsService
       .getRecommendedTalents()
       .then(({ data }) => {
         setIsLoading(false);
-        setTalents(data);
+        setTalents(data.talents);
       })
       .catch(err => {
         console.error(err);
@@ -29,7 +29,14 @@ export const RecommendedBuildersWidget = ({}) => {
         <BuildersList>
           {talents.map(talent => (
             <BuilderEntry key={talent.username}>
-              <Avatar size="md" isVerified={talent.verified} name={talent.username} occupation={talent.occupation} url={talent.profile_picture_url} profileURL={`/u/${talent.username}`} />
+              <Avatar
+                size="md"
+                isVerified={talent.verified}
+                name={talent.username}
+                occupation={talent.occupation}
+                url={talent.profile_picture_url}
+                profileURL={`/u/${talent.username}`}
+              />
               <Button hierarchy="primary" size="small" text="Support" href={`/u/${talent.username}/support`} />
             </BuilderEntry>
           ))}

@@ -52,7 +52,7 @@ export const EntryContainer = styled.a`
     color: ${buildColor("primary01")};
   }
 
-  *{
+  * {
     cursor: pointer;
   }
 `;

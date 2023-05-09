@@ -24,8 +24,8 @@ export const QuickNavigator = ({ username }) => {
         </Typography>
       </ButtonContainer>
       <ButtonContainer>
-        <Button hierarchy="secondary" size="medium" leftIcon="wallet" iconColor="primaryDisable" isDisabled />
-        <Typography specs={{ variant: "p3", type: "medium" }} color="primaryDisable">
+        <Button hierarchy="secondary" size="medium" leftIcon="wallet" iconColor="primaryDisable" href="/portfolio" />
+        <Typography specs={{ variant: "p3", type: "medium" }}>
           Wallet
         </Typography>
       </ButtonContainer>
