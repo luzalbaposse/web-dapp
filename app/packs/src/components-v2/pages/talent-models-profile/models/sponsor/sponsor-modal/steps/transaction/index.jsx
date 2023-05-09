@@ -40,7 +40,7 @@ export const TransactionStep = ({ profile, token, railsContext, amount, closeMod
   const [primaryButtonState, setPrimaryButtonState] = useState(PRIMARY_BUTTON_STATES.APPROVE);
 
   const setupOnChain = useCallback(async () => {
-    const newOnChain = new OnChain(railsContext.contractsEnv);
+    const newOnChain = new OnChain(railsContext);
 
     const _account = await newOnChain.connectedAccount();
     await newOnChain.loadSponsorship();

@@ -60,8 +60,8 @@ const Web3ModalConnect = ({ userId, onConnect, railsContext, mode, buttonClassNa
   const connectWallet = async () => {
     setRequestingWalletConnection(true);
 
-    const api = new OnChain(railsContext.contractsEnv);
-    const _account = await api.retrieveAccount();
+    const api = new OnChain(railsContext);
+    const _account = await api.connectedAccount(true);
 
     if (_account) {
       const result = await patch(`/api/v1/users/${userId}`, {
@@ -82,6 +82,7 @@ const Web3ModalConnect = ({ userId, onConnect, railsContext, mode, buttonClassNa
         setRequestingWalletConnection(false);
       }
     } else {
+      console.log(_account);
       setRequestingWalletConnection(false);
       setShowWalletConnectionError(true);
     }

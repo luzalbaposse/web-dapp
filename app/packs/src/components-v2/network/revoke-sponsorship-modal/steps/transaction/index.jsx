@@ -24,7 +24,7 @@ export const TransactionStep = ({ sponsorship, railsContext, closeModal, nextSte
   const [primaryButtonState, setPrimaryButtonState] = useState(PRIMARY_BUTTON_STATES.CANCEL_SPONSOR);
 
   const setupOnChain = useCallback(async () => {
-    const newOnChain = new OnChain(railsContext.contractsEnv);
+    const newOnChain = new OnChain(railsContext);
 
     let _account = await newOnChain.connectedAccount();
 

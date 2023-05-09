@@ -26,7 +26,7 @@ export const HowMuchStep = ({ token, setToken, railsContext, setAmount, closeMod
   ];
 
   const setupOnChain = useCallback(async () => {
-    const newOnChain = new OnChain(railsContext.contractsEnv);
+    const newOnChain = new OnChain(railsContext);
     setOnchain(newOnChain);
 
     const _account = await newOnChain.connectedAccount();

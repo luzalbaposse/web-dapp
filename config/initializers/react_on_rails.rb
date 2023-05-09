@@ -7,6 +7,7 @@ module RenderingExtension
   def self.custom_context(view_context)
     {
       contractsEnv: ENV["CONTRACTS_ENV"],
+      walletConnectProjectId: ENV["WALLET_CONNECT_PROJECT_ID"],
       transakApiKey: ENV["TRANSAK_API_KEY"],
       emailRegexWithoutAliases: ENV["EMAIL_REGEX_WITHOUT_ALIASES"],
       disableSmartContracts: ENV["DISABLE_SMART_CONTRACTS"],

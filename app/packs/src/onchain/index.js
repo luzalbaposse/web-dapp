@@ -1,7 +1,8 @@
 import { ethers } from "ethers";
 import { newKit, CeloContract } from "@celo/contractkit";
-import Web3Modal from "web3modal";
-import WalletConnectProvider from "@walletconnect/web3-provider";
+import { EthereumClient, w3mConnectors, w3mProvider } from "@web3modal/ethereum";
+import { Web3Modal } from "@web3modal/html";
+import { configureChains, createConfig } from "@wagmi/core";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
@@ -13,6 +14,7 @@ import TalentFactoryV3 from "../abis/recent/TalentFactoryV3.json";
 import StableToken from "../abis/recent/StableToken.json";
 import CommunityUser from "../abis/recent/CommunityUser.json";
 import TalentSponsorship from "../abis/TalentSponsorship.json";
+import { polygon, polygonMumbai, celo, celoAlfajores } from "@wagmi/core/chains";
 
 import Addresses from "./addresses.json";
 import { ERROR_MESSAGES } from "../utils/constants";
@@ -21,7 +23,7 @@ import { externalGet } from "src/utils/requests";
 import { CHAIN_RPC_URLS } from "src/onchain/utils";
 
 class OnChain {
-  constructor(env) {
+  constructor(envVars) {
     this.account = null;
     this.talentFactory = null;
     this.staking = null;
@@ -30,25 +32,31 @@ class OnChain {
     this.stableDecimals = null;
     this.celoKit = null;
     this.signer = null;
-    this.env = env || "development";
+    this.env = envVars.contractsEnv || "development";
+    this.projectId = envVars.walletConnectProjectId;
 
     this.web3Modal = this.initializeWeb3Modal();
   }
 
-  initializeWeb3Modal = () => {
-    const providerOptions = {
-      walletconnect: {
-        package: WalletConnectProvider, // required
-        options: {
-          rpc: CHAIN_RPC_URLS
-        }
-      }
-    };
+  envChains = () => {
+    if (this.env == "production") {
+      return [polygon, celo];
+    } else {
+      return [polygonMumbai, celoAlfajores];
+    }
+  };
 
-    return new Web3Modal({
-      cacheProvider: true,
-      providerOptions
+  initializeWeb3Modal = () => {
+    const chains = [polygon, celo, polygonMumbai, celoAlfajores];
+    const { provider } = configureChains(chains, [w3mProvider({ projectId: this.projectId })]);
+    const wagmiClient = createConfig({
+      autoConnect: false,
+      connectors: w3mConnectors({ projectId: this.projectId, version: 1, chains }),
+      provider
     });
+    const ethereumClient = new EthereumClient(wagmiClient, chains);
+
+    return new Web3Modal({ projectId: this.projectId }, ethereumClient);
   };
 
   // LOAD WEB3
@@ -56,21 +64,26 @@ class OnChain {
   async web3ModalConnect(forceConnect = false) {
     try {
       if (!this.web3Modal) {
-        this.web3Modal = await this.initializeWeb3Modal();
+        this.web3Modal = this.initializeWeb3Modal();
       }
 
       let web3ModalInstance;
       if (forceConnect) {
-        web3ModalInstance = await this.web3Modal.connect();
+        console.log("FORCE", this.web3Modal);
+        web3ModalInstance = await this.web3Modal.openModal();
+        const web3 = this.web3Modal;
+        this.web3Modal.subscribeModal(newState => console.log(newState));
+        this.web3Modal.subscribeEvents(newState => console.log(newState));
       } else if (this.web3Modal && this.web3Modal.cachedProvider) {
         this.web3Modal.resetState();
-        web3ModalInstance = await this.web3Modal.connect();
+        web3ModalInstance = await this.web3Modal.openModal();
       } else {
         return undefined;
       }
 
       return web3ModalInstance;
     } catch (error) {
+      console.log("Error");
       console.error(error);
       return undefined;
     }
@@ -84,13 +97,13 @@ class OnChain {
         const provider = new ethers.providers.Web3Provider(web3ModalInstance);
         web3ModalInstance.on("chainChanged", (/*_chainId*/) => window.location.reload());
 
-        const signer = await provider.getSigner();
-        this.signer = signer;
-        const account = await signer.getAddress();
+        this.signer = provider.getSigner();
+        const account = await this.signer.getAddress();
         this.account = account;
 
         return this.account;
       } else {
+        console.error(web3ModalInstance);
         return false;
       }
     } catch (error) {
@@ -179,7 +192,7 @@ class OnChain {
         await web3ModalInstance.enable();
 
         web3ModalInstance.on("chainChanged", (/*_chainId*/) => window.location.reload());
-        const signer = await provider.getSigner();
+        const signer = provider.getSigner();
         this.signer = signer;
         const account = await signer.getAddress();
         this.account = account;

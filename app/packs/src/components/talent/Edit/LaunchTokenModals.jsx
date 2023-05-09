@@ -214,7 +214,7 @@ const LaunchTokenModals = props => {
   const [currentChain, setCurrentChain] = useState("");
 
   const switchNetwork = async networkId => {
-    const newOnChain = new OnChain(railsContext.contractsEnv);
+    const newOnChain = new OnChain(railsContext);
 
     await newOnChain.switchChain(networkId);
 
@@ -274,7 +274,7 @@ const LaunchTokenModals = props => {
   };
 
   const setupOnChain = useCallback(async () => {
-    const newOnChain = new OnChain(railsContext.contractsEnv);
+    const newOnChain = new OnChain(railsContext);
     let result;
 
     result = await newOnChain.connectedAccount();

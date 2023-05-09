@@ -74,7 +74,7 @@ const ApprovalConfirmationModal = ({ show, hide, talent, setTalent, railsContext
   }, [isWhitelisted]);
 
   const setupChain = useCallback(async () => {
-    const newOnChain = new OnChain(railsContext.contractsEnv);
+    const newOnChain = new OnChain(railsContext);
     await newOnChain.retrieveAccount();
     await newOnChain.loadFactory();
     for await (const option of getAllChainOptions(railsContext.contractsEnv)) {

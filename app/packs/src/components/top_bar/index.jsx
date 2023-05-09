@@ -143,14 +143,14 @@ export const TopBar = ({
   };
 
   const disconnectWallet = async (/*account*/) => {
-    const onChain = new OnChain(railsContext.contractsEnv);
+    const onChain = new OnChain(railsContext);
 
     onChain.disconnect();
   };
 
   const setupChain = useCallback(
     async (forceConnect = false) => {
-      const onChain = new OnChain(railsContext.contractsEnv);
+      const onChain = new OnChain(railsContext);
 
       const account = await onChain.connectedAccount(forceConnect);
 

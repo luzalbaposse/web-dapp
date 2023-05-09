@@ -50,7 +50,7 @@ const StakeModal = ({
   const [chainName, setChainName] = useState("celo");
 
   const setupOnChain = useCallback(async () => {
-    const newOnChain = new OnChain(railsContext.contractsEnv);
+    const newOnChain = new OnChain(railsContext);
     let result, _token;
 
     result = await newOnChain.connectedAccount();

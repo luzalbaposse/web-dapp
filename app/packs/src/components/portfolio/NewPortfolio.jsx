@@ -538,7 +538,7 @@ const PortfolioWrapper = props => {
   const [localAccount, setLocalAccount] = useState("");
 
   const setupChain = useCallback(async () => {
-    const newOnChain = new OnChain(props.railsContext.contractsEnv);
+    const newOnChain = new OnChain(props.railsContext);
 
     const walletConnected = await newOnChain.connectedAccount(true);
 
