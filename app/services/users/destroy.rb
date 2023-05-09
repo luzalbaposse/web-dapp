@@ -14,9 +14,6 @@ module Users
           user.invites.update_all(user_id: 1, max_uses: 0)
         end
 
-        user.subscriptions.destroy_all
-        user.users_subscribing.destroy_all
-
         destroy_talent_relations!
 
         Transfer.where(user: user).update_all(user_id: nil)
@@ -32,6 +29,8 @@ module Users
         Connection.where(user_id: user.id).destroy_all
         Connection.where(connected_user_id: user.id).destroy_all
         UserProductAnnouncement.where(user_id: user.id).destroy_all
+        Subscription.where(user: user).destroy_all
+        Subscription.where(subscriber: user).destroy_all
 
         user.destroy!
       end

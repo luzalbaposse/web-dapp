@@ -295,7 +295,7 @@ const RaceTable = ({ leaderboardResults, allRaces, currentRace }) => {
   }, [selectedRace]);
 
   const getRewardsForPosition = position => {
-    const annyversaryMonth = new Date(selectedRace.ends_at) == new Date("2023-05-31");
+    const annyversaryMonth = new Date().getMonth() == 4;
     if (position === 1) {
       return annyversaryMonth ? "2500 $TAL" : "500 $TAL";
     } else if (position === 2) {
