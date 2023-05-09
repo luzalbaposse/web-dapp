@@ -4,7 +4,7 @@ class SponsorshipMailer < ApplicationMailer
     @sender = User.find(indifferent_access_params[:source_id])
     set_profile_picture_attachment(@sender)
 
-    bootstrap_mail(to: @recipient.email, subject: "New sponsor request on Talent Protocol awaits you!")
+    bootstrap_mail(to: @recipient.email, subject: "You have a new sponsor on Talent Protocol")
   end
 
   def sponsorship_claimed_email
@@ -12,6 +12,6 @@ class SponsorshipMailer < ApplicationMailer
     @sender = User.find(indifferent_access_params[:source_id])
     set_profile_picture_attachment(@sender)
 
-    bootstrap_mail(to: @recipient.email, subject: "Your sponsorship was accepted!")
+    bootstrap_mail(to: @recipient.email, subject: "#{@sender.username} accepted your sponsorship on Talent Protocol")
   end
 end

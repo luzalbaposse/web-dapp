@@ -38,11 +38,11 @@ class UserMailerPreview < ActionMailer::Preview
   end
 
   def send_completed_profile_email
-    UserMailer.with(user: User.first).send_completed_profile_email
+    UserMailer.with(recipient: User.first).send_completed_profile_email
   end
 
   def send_verified_profile_email
-    UserMailer.with(user: User.first).send_verified_profile_email
+    UserMailer.with(source_id: User.first.id).send_verified_profile_email
   end
 
   def send_verification_failed_email
@@ -50,15 +50,15 @@ class UserMailerPreview < ActionMailer::Preview
   end
 
   def send_application_received_email
-    UserMailer.with(user: User.last).send_application_received_email
+    UserMailer.with(recipient: User.last).send_application_received_email
   end
 
   def send_application_rejected_email
-    UserMailer.with(user: User.last).send_application_rejected_email
+    UserMailer.with(note: "Sorry", recipient: User.first, source_id: User.last.id).send_application_rejected_email
   end
 
   def send_application_approved_email
-    UserMailer.with(user: User.first).send_application_approved_email
+    UserMailer.with(recipient: User.first).send_application_approved_email
   end
 
   def send_invite_used_email
@@ -101,14 +101,6 @@ class UserMailerPreview < ActionMailer::Preview
 
   def send_opportunities_hiring_email
     UserMailer.with(user: User.first).send_opportunities_hiring_email
-  end
-
-  def send_opportunities_role_landed_email
-    UserMailer.with(user: User.first).send_opportunities_role_landed_email
-  end
-
-  def send_opportunities_talent_found_email
-    UserMailer.with(user: User.first).send_opportunities_talent_found_email
   end
 
   private

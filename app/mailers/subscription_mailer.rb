@@ -6,7 +6,7 @@ class SubscriptionMailer < ApplicationMailer
     @pending_subscribers = pending_subscribers.limit(5)
     set_profile_pictures_attachments(@pending_subscribers)
 
-    bootstrap_mail(to: @recipient.email, subject: "You have subscription requests!")
+    bootstrap_mail(to: @recipient.email, subject: "You have new subscription requests")
   end
 
   def subscription_accepted_email
@@ -15,6 +15,6 @@ class SubscriptionMailer < ApplicationMailer
 
     set_profile_picture_attachment(@sender)
 
-    bootstrap_mail(to: @recipient.email, subject: "Your subscription request was accepted!")
+    bootstrap_mail(to: @recipient.email, subject: "Your subscription request was accepted")
   end
 end

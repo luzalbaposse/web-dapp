@@ -116,7 +116,7 @@ RSpec.describe UserMailer, type: :mailer do
   end
 
   describe "send message received email" do
-    let(:sender) { create :user }
+    let(:sender) { create :user, username: "alicesmith" }
     let(:notification) { create :notification, type: "MessageReceivedNotification", recipient: user }
     let(:mail) { described_class.with(recipient: user, sender_id: sender.id, record: notification).send_message_received_email }
 
@@ -125,7 +125,7 @@ RSpec.describe UserMailer, type: :mailer do
     end
 
     it "renders the header" do
-      expect(mail.subject).to eql("You've got a new message")
+      expect(mail.subject).to eql("You have a new message from alicesmith")
       expect(mail.to).to eql([user.email])
     end
   end
@@ -201,28 +201,6 @@ RSpec.describe UserMailer, type: :mailer do
 
     it "renders the header" do
       expect(mail.subject).to eql("Looking to hire talent?")
-      expect(mail.to).to eql([user.email])
-    end
-  end
-
-  describe "send opportunities role landed email" do
-    let(:mail) do
-      described_class.with(user: user).send_opportunities_role_landed_email
-    end
-
-    it "renders the header" do
-      expect(mail.subject).to eql("Did you just land a new role?")
-      expect(mail.to).to eql([user.email])
-    end
-  end
-
-  describe "send opportunities talent found email" do
-    let(:mail) do
-      described_class.with(user: user).send_opportunities_talent_found_email
-    end
-
-    it "renders the header" do
-      expect(mail.subject).to eql("Did you meet talented builders?")
       expect(mail.to).to eql([user.email])
     end
   end

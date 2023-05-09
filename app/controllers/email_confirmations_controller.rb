@@ -6,6 +6,7 @@ class EmailConfirmationsController < ApplicationController
     user.update(email_confirmation_token: Clearance::Token.new)
 
     AddUsersToMailerliteJob.perform_later(user.id)
+    UserMailer.with(user:).send_welcome_email.deliver_later(wait: 5.seconds)
 
     sign_in user
 
