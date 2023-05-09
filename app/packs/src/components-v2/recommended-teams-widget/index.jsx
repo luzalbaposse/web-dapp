@@ -130,7 +130,7 @@ export const RecommendedTeamsWidget = ({}) => {
             </Tags>
             {!!members.laMansineta.length && (
               <MembersList
-                membersImages={[
+                membersImages={[ 
                   members.laMansineta[0].profile_picture_url,
                   members.laMansineta[1].profile_picture_url,
                   members.laMansineta[2].profile_picture_url,
