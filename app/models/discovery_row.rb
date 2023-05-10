@@ -21,7 +21,7 @@ class DiscoveryRow < ApplicationRecord
   private
 
   def public_talent_profiles
-    Talent.base
+    Talent.base.profile_complete
       .joins(:talent_token)
       .joins(user: {tags: :discovery_row})
       .where(discovery_rows: {id: id})
