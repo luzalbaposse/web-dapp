@@ -75,7 +75,7 @@ export const RecommendedTeamsWidget = ({}) => {
               />
             )}
           </InfoColumn>
-          <Button hierarchy="primary" size="small" href="/discovery/top-100-talent?page=1" text="Go to page" />
+          {/* <Button hierarchy="primary" size="small" href="/discovery/top-100-talent?page=1" text="Go to page" /> */}
         </EntryContainer>
         <EntryContainer href="/discovery/talent-house?page=1">
           <Avatar size="md" profileURL="/discovery/talent-house?page=1" url={talentHouseImg} />
@@ -107,7 +107,7 @@ export const RecommendedTeamsWidget = ({}) => {
               />
             )}
           </InfoColumn>
-          <Button hierarchy="primary" size="small" href="/discovery/talent-house?page=1" text="Go to page" />
+          {/* <Button hierarchy="primary" size="small" href="/discovery/talent-house?page=1" text="Go to page" /> */}
         </EntryContainer>
         <EntryContainer href="/discovery/la-mansineta?page=1">
           <Avatar size="md" profileURL="/discovery/talent-house?page=1" url={lamansinetaImg} />
@@ -140,7 +140,7 @@ export const RecommendedTeamsWidget = ({}) => {
               />
             )}
           </InfoColumn>
-          <Button hierarchy="primary" size="small" href="/discovery/la-mansineta?page=1" text="Go to page" />
+          {/* <Button hierarchy="primary" size="small" href="/discovery/la-mansineta?page=1" text="Go to page" /> */}
         </EntryContainer>
       </TeamsList>
     </Container>

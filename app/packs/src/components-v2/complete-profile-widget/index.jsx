@@ -24,6 +24,7 @@ export const CompleteProfileWidget = ({ username }) => {
           occupation: !!data.profile.occupation,
           headline: !!data.profile.headline,
           journeyEntries: [...data.profile.milestones, ...data.profile.career_goal.goals].length >= 2,
+          isVerified: !!data.profile.verified,
           socialLinks:
             Object.values(data.profile.profile).filter(
               el => (typeof el === "string" && (el.substring(0, 4) === "http" || el.substring(0, 3) === "www"))
@@ -93,6 +94,14 @@ export const CompleteProfileWidget = ({ username }) => {
                 label="Add at least 2 social links"
                 isChecked={state.socialLinks}
                 isDisabled={state.socialLinks}
+                hasNoAction
+              />
+            </ItemContainer>
+            <ItemContainer>
+              <Checkbox
+                label="Get verified"
+                isChecked={state.isVerified}
+                isDisabled={state.isVerified}
                 hasNoAction
               />
             </ItemContainer>
