@@ -6,35 +6,35 @@ export const QuickNavigator = ({ username }) => {
   return (
     <Container>
       <ButtonContainer>
-        <Button hierarchy="secondary" size="medium" leftIcon="search" iconColor="primary" isDisabled />
+        <Button hierarchy="secondary" size="large" leftIcon="search" iconColor="primary" isDisabled />
         <Typography specs={{ variant: "p3", type: "medium" }} color="primaryDisable">
           Search
         </Typography>
       </ButtonContainer>
       <ButtonContainer>
-        <Button hierarchy="secondary" size="medium" leftIcon="user" iconColor="primary" href={`/u/${username}`} />
+        <Button hierarchy="secondary" size="large" leftIcon="user" iconColor="primary" href={`/u/${username}`} />
         <Typography specs={{ variant: "p3", type: "medium" }} color="primary01">
           My profile
         </Typography>
       </ButtonContainer>
       <ButtonContainer>
-        <Button hierarchy="secondary" size="medium" leftIcon="chat" iconColor="primary" href="/messages" />
+        <Button hierarchy="secondary" size="large" leftIcon="chat" iconColor="primary" href="/messages" />
         <Typography specs={{ variant: "p3", type: "medium" }} color="primary01">
           Messages
         </Typography>
       </ButtonContainer>
       <ButtonContainer>
-        <Button hierarchy="secondary" size="medium" leftIcon="wallet" iconColor="primary" href="/portfolio" />
+        <Button hierarchy="secondary" size="large" leftIcon="wallet" iconColor="primary" href="/portfolio" />
         <Typography specs={{ variant: "p3", type: "medium" }}>Wallet</Typography>
       </ButtonContainer>
       <ButtonContainer>
-        <Button hierarchy="secondary" size="medium" leftIcon="flags" iconColor="primary" href="/earn?tab=quests" />
+        <Button hierarchy="secondary" size="large" leftIcon="flags" iconColor="primary" href="/earn?tab=quests" />
         <Typography specs={{ variant: "p3", type: "medium" }} color="primary01">
           Quests
         </Typography>
       </ButtonContainer>
       <ButtonContainer>
-        <Button hierarchy="secondary" size="medium" leftIcon="email" iconColor="primary" href="/earn?tab=talent" />
+        <Button hierarchy="secondary" size="large" leftIcon="email" iconColor="primary" href="/earn?tab=talent" />
         <Typography specs={{ variant: "p3", type: "medium" }} color="primary01">
           Invites
         </Typography>
@@ -42,7 +42,7 @@ export const QuickNavigator = ({ username }) => {
       <ButtonContainer>
         <Button
           hierarchy="secondary"
-          size="medium"
+          size="large"
           leftIcon="settings"
           iconColor="primary"
           href={`/u/${username}/account_settings`}
@@ -52,7 +52,7 @@ export const QuickNavigator = ({ username }) => {
         </Typography>
       </ButtonContainer>
       <ButtonContainer>
-        <Button hierarchy="secondary" size="medium" leftIcon="planet" iconColor="primary" isDisabled />
+        <Button hierarchy="secondary" size="large" leftIcon="planet" iconColor="primary" isDisabled />
         <Typography specs={{ variant: "p3", type: "medium" }} color="primaryDisable">
           Activity
         </Typography>
