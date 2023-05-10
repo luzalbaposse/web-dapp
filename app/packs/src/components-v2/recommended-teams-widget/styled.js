@@ -73,9 +73,6 @@ export const InfoGroup = styled.div`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    ${mobileStyles(css`
-      max-width: 100px;
-    `)}
     max-width: 232px;
   }
 `;
