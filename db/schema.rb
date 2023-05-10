@@ -10,26 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_04_082240) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_10_155336) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "activities", force: :cascade do |t|
-    t.bigint "activity_type_id", null: false
     t.string "content", null: false
     t.bigint "origin_user_id", null: false
     t.bigint "target_user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["activity_type_id"], name: "index_activities_on_activity_type_id"
+    t.string "type"
     t.index ["origin_user_id"], name: "index_activities_on_origin_user_id"
     t.index ["target_user_id"], name: "index_activities_on_target_user_id"
-  end
-
-  create_table "activity_types", force: :cascade do |t|
-    t.string "activity_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "api_keys", force: :cascade do |t|
@@ -716,7 +709,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_04_082240) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "activities", "activity_types"
   add_foreign_key "activities", "users", column: "origin_user_id"
   add_foreign_key "activities", "users", column: "target_user_id"
   add_foreign_key "api_log_requests", "api_keys"

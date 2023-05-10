@@ -5,6 +5,7 @@ export const Container = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding-bottom: 8px;
 
   ${mobileStyles(css`
     margin-top: 24px;

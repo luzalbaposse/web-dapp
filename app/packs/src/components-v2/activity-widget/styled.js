@@ -76,3 +76,10 @@ export const ReplyArea = styled.div`
   align-items: flex-end;
   gap: 16px;
 `;
+
+export const LoadMoreContainer = styled.div`
+    padding: 24px 16px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;

@@ -24,6 +24,7 @@ module Subscriptions
         type: SubscriptionAcceptedNotification,
         source_id: subscribing_user.id
       )
+      ActivityIngestJob.perform_later("subscribe", nil, subscribing_user.id, subscriber_user.id)
 
       update_tasks if more_than_2_subscribers?
 
