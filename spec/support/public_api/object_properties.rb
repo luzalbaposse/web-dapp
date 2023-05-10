@@ -58,5 +58,10 @@ module PublicAPI
       sponsor: {type: :object, properties: TALENT_PROPERTIES, description: "The sponsor talent", nullable: true},
       sponsored: {type: :object, properties: TALENT_PROPERTIES, description: "The sponsored talent", nullable: true}
     }
+
+    LEADERBOARD_PROPERTIES = {
+      score: {type: :integer, description: "The score of the talent in the leaderboard"},
+      talent: {type: :object, properties: TALENT_PROPERTIES, description: "The talent"}
+    }
   end
 end

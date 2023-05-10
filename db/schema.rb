@@ -319,6 +319,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_10_155336) do
   end
 
   create_table "leaderboards", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.bigint "race_id", null: false
     t.bigint "user_id", null: false
     t.integer "score", default: 0, null: false
@@ -326,6 +327,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_10_155336) do
     t.datetime "updated_at", null: false
     t.index ["race_id"], name: "index_leaderboards_on_race_id"
     t.index ["user_id"], name: "index_leaderboards_on_user_id"
+    t.index ["uuid"], name: "index_leaderboards_on_uuid"
   end
 
   create_table "marketing_articles", force: :cascade do |t|
@@ -453,6 +455,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_10_155336) do
     t.datetime "ends_at", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
   end
 
   create_table "rewards", force: :cascade do |t|

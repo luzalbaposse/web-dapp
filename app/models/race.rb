@@ -1,5 +1,6 @@
 class Race < ApplicationRecord
   has_many :users
+  has_many :leaderboards
 
   def self.active_race
     current_time = Time.current
