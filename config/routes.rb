@@ -32,7 +32,7 @@ Rails.application.routes.draw do
 
   # Business - require log-in
   constraints Clearance::Constraints::SignedIn.new { |user| user&.onboarding_complete? } do
-    root to: redirect("/home")
+    get "/" => redirect("/home")
     get "/home" => "homepage#index", as: :user_root
     # file uploads
     unless Rails.env.test?
