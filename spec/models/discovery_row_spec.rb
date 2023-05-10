@@ -45,6 +45,10 @@ RSpec.describe DiscoveryRow, type: :model do
       tag_2 = create :tag, description: "blockchain"
       tag_3 = create :tag, description: "developer"
 
+      create :quest, type: "Quests::TalentProfile", status: "done", user: user_1
+      create :quest, type: "Quests::TalentProfile", status: "done", user: user_3
+      create :quest, type: "Quests::TalentProfile", status: "done", user: user_4
+
       discovery_row.tags << [tag_1, tag_2, tag_3]
 
       user_1.tags << [tag_1, tag_3]
@@ -75,6 +79,9 @@ RSpec.describe DiscoveryRow, type: :model do
       tag_3 = create :tag, description: "developer"
 
       discovery_row.tags << [tag_1, tag_2, tag_3]
+
+      create :quest, type: "Quests::TalentProfile", status: "done", user: user_1
+      create :quest, type: "Quests::TalentProfile", status: "done", user: user_2
 
       user_1.tags << [tag_1, tag_3]
       user_2.tags << [tag_1]
