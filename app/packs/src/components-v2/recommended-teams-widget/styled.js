@@ -6,6 +6,10 @@ export const Container = styled.section`
   flex-direction: column;
   justify-content: center;
 
+  ${mobileStyles(css`
+    margin-top: 24px;
+  `)}
+
   ${desktopStyles(css`
     border: 1px solid ${buildColor("surfaceHover02")};
     border-radius: 24px;

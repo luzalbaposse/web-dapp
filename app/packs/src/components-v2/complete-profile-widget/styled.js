@@ -2,7 +2,8 @@ import { buildColor, desktopStyles, mobileStyles } from "@talentprotocol/design-
 import styled, { css } from "styled-components";
 
 export const TitleContainer = styled.div`
-  margin-top: 24px;
+  margin: 24px 0;
+  
   ${mobileStyles(css`
     margin: 24px 16px;
   `)}

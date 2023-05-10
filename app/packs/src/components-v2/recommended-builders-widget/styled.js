@@ -1,28 +1,33 @@
-import { buildColor, desktopStyles } from "@talentprotocol/design-system";
+import { buildColor, desktopStyles, mobileStyles } from "@talentprotocol/design-system";
 import styled, { css } from "styled-components";
 
 export const Container = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-bottom: 30px;
+
+  ${mobileStyles(css`
+    margin-top: 24px;
+  `)}
 
   ${desktopStyles(css`
     border: 1px solid ${buildColor("surfaceHover02")};
     border-radius: 24px;
     margin-top: 76px;
+    padding-bottom: 30px;
   `)}
 `;
 
 export const TitleContainer = styled.div`
   width: 100%;
-  padding: 16px;
+  padding: 0 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 
   ${desktopStyles(css`
     padding: 24px;
+    padding: 16px;
   `)}
 `;
 

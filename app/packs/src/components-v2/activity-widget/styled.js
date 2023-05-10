@@ -1,4 +1,4 @@
-import { Typography, buildColor, desktopStyles } from "@talentprotocol/design-system";
+import { Typography, buildColor, desktopStyles, mobileStyles } from "@talentprotocol/design-system";
 import styled, { css } from "styled-components";
 
 export const Container = styled.section`
@@ -39,6 +39,12 @@ export const Update = styled.article`
   border-bottom: 1px solid ${buildColor("surfaceHover02")};
   display: flex;
   flex-direction: column;
+
+  ${mobileStyles(css`
+    :last-child {
+      border-bottom: none;
+    }
+  `)}
 
   ${desktopStyles(css`
     border: 1px solid ${buildColor("surfaceHover02")};

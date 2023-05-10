@@ -1,4 +1,4 @@
-import { buildColor, desktopStyles } from "@talentprotocol/design-system";
+import { buildColor, desktopStyles, mobileStyles } from "@talentprotocol/design-system";
 import styled, { css } from "styled-components";
 
 export const Container = styled.section`
@@ -6,6 +6,10 @@ export const Container = styled.section`
   border-radius: 24px 24px 0px 0px;
   background: ${buildColor("primaryTint02")};
   overflow-x: hidden;
+
+  ${mobileStyles(css`
+    margin-top: 24px;
+  `)}
 
   ${desktopStyles(css`
     border: 1px solid ${buildColor("primaryTint01")};

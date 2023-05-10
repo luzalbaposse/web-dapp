@@ -41,7 +41,7 @@ export const CompleteProfileWidget = ({ username }) => {
   return (
     !isLoading &&
     state.progress < 100 && (
-      <>
+      <div>
         <TitleContainer>
           <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
             Profile progress
@@ -108,7 +108,7 @@ export const CompleteProfileWidget = ({ username }) => {
           </ListContainer>
           <Button text="Edit my profile" size="large" hierarchy="primary" isStretched href={`/u/${username}`} />
         </Container>
-      </>
+      </div>
     )
   );
 };
