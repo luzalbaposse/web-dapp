@@ -43,6 +43,10 @@ export const Entry = styled.div`
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid ${buildColor("surfaceHover02")};
+
+  &:last-child {
+    margin-bottom: 24px;
+  }
 `;
 
 export const EntryIdentification = styled.div`

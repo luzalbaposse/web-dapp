@@ -2,6 +2,7 @@ import React, { createRef, useCallback, useEffect, useState } from "react";
 import { Avatar, Button, Input, Typography } from "@talentprotocol/design-system";
 import {
   Container,
+  LoadMoreContainer,
   ReplyArea,
   StyledTypography,
   TitleDateWrapper,
@@ -24,17 +25,19 @@ const ACTIVITY_TYPE_TO_TITLE_MAP = {
   "Activities::Subscribe": "Subscribe"
 };
 
+let activityPage = 0;
+
 export const ActivityWidget = ({ profile = {} }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [activity, setActivity] = useState([]);
   const [inputsWithContent, setInputsWithContent] = useState([]);
   const inputRefs = [];
-
-  useEffect(() => {
+  const loadMore = useCallback(() => {
+    activityPage = activityPage + 1;
     activityService
-      .getActivity()
+      .getActivity(activityPage)
       .then(({ data }) => {
-        setActivity(data.activities);
+        setActivity(data);
         setInputsWithContent(new Array(data.length).fill(false));
         setIsLoading(false);
       })
@@ -42,6 +45,9 @@ export const ActivityWidget = ({ profile = {} }) => {
         console.error(error);
       });
   }, [setActivity, setIsLoading, setInputsWithContent]);
+  useEffect(() => {
+    loadMore();
+  }, [loadMore]);
   const sendMessage = useCallback((to, inputRef) => {
     messagesService
       .sendMessage(to, inputRef.current.value || "🔥")
@@ -77,8 +83,8 @@ export const ActivityWidget = ({ profile = {} }) => {
           </Typography>
         </TitleRow>
         <UpdatesContainer>
-          {activity.map((update, index) => {
-            const { content } = update;
+          {activity.activities.map((update, index) => {
+            const content = JSON.parse(update.content);
             inputRefs.push(createRef(null));
             return (
               <Update key={update.id}>
@@ -132,6 +138,18 @@ export const ActivityWidget = ({ profile = {} }) => {
               </Update>
             );
           })}
+          {
+            activity.pagination.currentPage < activity.pagination.lastPage && (
+              <LoadMoreContainer>
+                <Button
+                  hierarchy="secondary"
+                  size="medium"
+                  text="Load more"
+                  onClick={loadMore}
+                />
+              </LoadMoreContainer>
+            )
+          }
         </UpdatesContainer>
       </Container>
     )
