@@ -5,6 +5,17 @@ RSpec.describe Notification, type: :model do
     it { is_expected.to belong_to(:recipient) }
   end
 
+  describe ".in_app" do
+    let!(:notification_one) { create :notification, type: "SubscriptionRequestReceivedNotification" }
+    let!(:notification_two) { create :notification, type: "QuestCompletedNotification" }
+    let!(:notification_three) { create :notification, type: "InviteUsedNotification" }
+    let!(:notification_four) { create :notification, type: "NewSponsorNotification" }
+
+    it "returns the notifications that are in app" do
+      expect { described_class.in_app.to match_array([notification_two, notification_four]) }
+    end
+  end
+
   describe "#unread_for_more_than_a_week?" do
     let(:notification) { create :notification, created_at: created_at, recipient: create(:user) }
     let(:created_at) { Time.current }

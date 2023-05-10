@@ -12,17 +12,28 @@ class BroadcastCareerUpdateJob < ApplicationJob
 
     receivers = User.where(id: ids)
 
-    receivers.find_each do |supporter|
+    receivers.find_each do |receiver|
+      create_notification_service.call(
+        recipient: receiver,
+        source_id: sender.id,
+        type: CareerUpdateCreatedNotification
+      )
+
       send_message_service.call(
+        career_update:,
+        create_notification: false,
         message: career_update.text,
-        sender: sender,
-        receiver: supporter,
-        career_update: career_update
+        receiver:,
+        sender:
       )
     end
   end
 
   private
+
+  def create_notification_service
+    @create_notification_service ||= CreateNotification.new
+  end
 
   def send_message_service
     @send_message_service ||= Messages::Send.new

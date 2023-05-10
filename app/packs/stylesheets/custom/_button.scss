@@ -725,6 +725,31 @@
   }
 }
 
+.secondary-notification-button {
+  background-color: $dark-text-primary-01;
+  border: 1px solid $light-surface-hover-02 !important;
+  color: $light-text-primary-01 !important;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+
+  &:hover {
+    background-color: $light-surface-hover-02;
+    border: 1px solid $light-surface-hover-02 !important;
+    color: $light-text-primary-01 !important;
+  }
+}
+
+.dark-body .secondary-notification-button {
+  background-color: $dark-surface-disable;
+  border: 1px solid $dark-surface-hover-02 !important;
+  color: $dark-text-primary-01 !important;
+
+  &:hover {
+    background-color: $dark-surface-hover;
+  }
+}
+
 .all-journey-button {
   color: $light-text-primary-03;
   background-color: none !important;

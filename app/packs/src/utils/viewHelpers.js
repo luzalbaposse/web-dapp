@@ -3,7 +3,9 @@ import { parseAndCommify } from "src/onchain/utils";
 import currency from "currency.js";
 
 import verifiedDark from "images/verified-dark.png";
+import verifiedDarkDisable from "images/verified-dark-disable.png";
 import verifiedLight from "images/verified-light.png";
+import verifiedLightDisable from "images/verified-light-disable.png";
 
 export const shortenAddress = address => {
   return `${address.substring(0, 5)}...${address.substring(address.length - 4, address.length)}`;
@@ -82,7 +84,13 @@ export const getUTCDate = date => {
 
 export const formatNumberWithSymbol = value => currency(value).format();
 
-export const verifiedIcon = mode => (mode == "light" ? verifiedLight : verifiedDark);
+export const verifiedIcon = (mode, disable = false) => {
+  if (disable) {
+    return mode === "light" ? verifiedLightDisable : verifiedDarkDisable
+  } else {
+    return mode === "light" ? verifiedLight : verifiedDark
+  }
+};
 
 export const displayableAmount = amount => {
   if (!amount) {

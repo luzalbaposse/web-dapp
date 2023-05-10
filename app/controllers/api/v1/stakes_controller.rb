@@ -2,10 +2,7 @@ class API::V1::StakesController < ApplicationController
   def create
     return render json: {error: "Not found."}, status: :not_found unless talent_token
 
-    Stakes::Create.new(
-      talent_token: talent_token,
-      staking_user: current_user
-    ).call
+    Stakes::Create.new(amount: stake_params["amount"], staking_user: current_user, talent_token:).call
 
     render json: {success: "Stake created."}, status: :ok
   end
@@ -27,8 +24,6 @@ class API::V1::StakesController < ApplicationController
   end
 
   def stake_params
-    params.require(:stake).permit(
-      :token_id
-    )
+    params.require(:stake).permit(:amount, :token_id)
   end
 end
