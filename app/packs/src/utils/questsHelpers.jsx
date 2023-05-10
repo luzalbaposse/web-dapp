@@ -114,7 +114,10 @@ export const questRewards = (type, disabled) => {
       return [
         <P2 className={cx(disabled ? "text-primary-04" : "text-black")} text="50 TAL" />,
         <P2 className={cx(disabled ? "text-primary-04" : "text-black")} text="Unlock verification process" />,
-        <P2 className={cx(disabled ? "text-primary-04" : "text-black")} text="Unlock token launch process" />
+        <P2
+          className={cx(disabled ? "text-primary-04" : "text-black")}
+          text="Access to token launch after verification"
+        />
       ];
     case "Quests::TalentToken":
       return [
