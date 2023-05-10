@@ -8,7 +8,7 @@ RSpec.describe Leaderboards::RefreshUserScore do
 
   let!(:invite) { create :invite, user: user, code: "test" }
 
-  let(:race_start) { Time.current - 20.days }
+  let(:race_start) { Date.new(2023, 5, 1) }
   let(:race_end) { Time.current + 10.days }
 
   context "when the user invite was not used" do
@@ -20,8 +20,8 @@ RSpec.describe Leaderboards::RefreshUserScore do
   context "when the user invite was used" do
     context "when it was used outside the passed race" do
       before do
-        create :user, invite_id: invite.id, created_at: Time.current - 40.days
-        create :user, invite_id: invite.id, created_at: Time.current - 21.days
+        create :user, invite_id: invite.id, onboarded_at: race_start - 40.days
+        create :user, invite_id: invite.id, onboarded_at: race_start - 21.days
       end
 
       it "does not create a new leaderboard" do
@@ -31,11 +31,11 @@ RSpec.describe Leaderboards::RefreshUserScore do
 
     context "when it was used inside the passed race" do
       before do
-        create :user, :with_beginner_quest_complete, invite_id: invite.id, created_at: Time.current - 40.days
-        create :user, :with_beginner_quest_complete, invite_id: invite.id, created_at: Time.current - 19.days
-        create :user, :with_beginner_quest_complete, invite_id: invite.id, created_at: Time.current
-        create :user, :with_beginner_quest_complete, invite_id: invite.id, created_at: Time.current + 9.days
-        create :user, invite_id: invite.id, created_at: Time.current + 2
+        create :user, invite_id: invite.id, onboarded_at: race_start + 2.days
+        create :user, invite_id: invite.id, onboarded_at: race_start
+        create :user, invite_id: invite.id, onboarded_at: race_end
+        create :user, invite_id: invite.id, onboarded_at: race_start - 2.days
+        create :user, onboarded_at: nil, invite_id: invite.id
       end
 
       it "creates a new leaderboard" do
@@ -57,6 +57,14 @@ RSpec.describe Leaderboards::RefreshUserScore do
           expect { refresh_score }.not_to change(Leaderboard, :count)
         end
       end
+    end
+  end
+
+  context "when the race is before the accepted date" do
+    let(:race_start) { Date.new(2023, 4, 1) }
+
+    it "initializes and calls the refresh user score for all users with used invites" do
+      expect { refresh_score }.to raise_error(ArgumentError)
     end
   end
 end

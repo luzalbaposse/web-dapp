@@ -1,6 +1,9 @@
 module Leaderboards
   class RefreshRaceScores
     def initialize(race: Race.active_race)
+      # Since 2023/05/01 we started counting only onboarded users as valid invites
+      raise ArgumentError, "Only available for races started after 2023/05/01" if race.started_at < Date.new(2023, 5, 1)
+
       @race = race
     end
 

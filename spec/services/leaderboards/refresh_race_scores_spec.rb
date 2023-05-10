@@ -5,8 +5,8 @@ RSpec.describe Leaderboards::RefreshRaceScores do
 
   let(:race) { create :race, started_at: race_start, ends_at: race_end }
 
-  let(:race_start) { Time.current - 20.days }
-  let(:race_end) { Time.current + 10.days }
+  let(:race_start) { Date.new(2023, 5, 1) }
+  let(:race_end) { Time.current + 30.days }
 
   let(:refresh_user_score_class) { Leaderboards::RefreshUserScore }
   let(:refresh_user_score_instance) { instance_double(refresh_user_score_class, call: true) }
@@ -27,11 +27,11 @@ RSpec.describe Leaderboards::RefreshRaceScores do
     invite_five = create :invite, user: inviter_four, code: "test-5"
 
     create :user, :with_beginner_quest_complete, invite_id: invite_one.id, created_at: race_start
-    create :user, :with_beginner_quest_complete, invite_id: invite_two.id, created_at: Time.current - 10.days
+    create :user, :with_beginner_quest_complete, invite_id: invite_two.id, created_at: race_start + 2.days
     create :user, :with_beginner_quest_complete, invite_id: invite_three.id, created_at: race_end
-    create :user, invite_id: invite_four.id, created_at: Time.current - 30.days
-    create :user, invite_id: invite_four.id, created_at: Time.current + 15.days
-    create :user, invite_id: invite_five.id, created_at: Time.current
+    create :user, invite_id: invite_four.id, created_at: race_start - 30.days
+    create :user, invite_id: invite_four.id, created_at: race_start + 15.days
+    create :user, invite_id: invite_five.id, created_at: race_start
   end
 
   it "initializes and calls the refresh user score for all users with used invites" do
@@ -51,6 +51,14 @@ RSpec.describe Leaderboards::RefreshRaceScores do
         user: inviter_three
       )
       expect(refresh_user_score_instance).to have_received(:call).exactly(3).times
+    end
+  end
+
+  context "when the race is before the accepted date" do
+    let(:race_start) { Date.new(2023, 4, 1) }
+
+    it "initializes and calls the refresh user score for all users with used invites" do
+      expect { refresh_race_scores }.to raise_error(ArgumentError)
     end
   end
 end

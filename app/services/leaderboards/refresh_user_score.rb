@@ -1,6 +1,9 @@
 module Leaderboards
   class RefreshUserScore
     def initialize(user:, race: Race.active_race)
+      # Since 2023/05/01 we started counting only onboarded users as valid invites
+      raise ArgumentError, "Only available for races started after 2023/05/01" if race.started_at < Date.new(2023, 5, 1)
+
       @race = race
       @user = user
     end
@@ -8,9 +11,9 @@ module Leaderboards
     def call
       return if user.admin?
 
-      score = User.beginner_quest_completed
+      score = User
         .where(invite_id: user.invites.pluck(:id))
-        .where("users.created_at >= ? and users.created_at <= ?", race.started_at, race.ends_at)
+        .where("users.onboarded_at >= ? and users.onboarded_at <= ?", race.started_at, race.ends_at)
         .count
 
       if score.positive?
