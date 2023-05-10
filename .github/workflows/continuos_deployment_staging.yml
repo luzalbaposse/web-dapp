@@ -3,7 +3,7 @@ name: Continuos Deployment Action Staging
 on:
   push:
     branches:
-      - dev
+      - homepage
 
 jobs:
   build:

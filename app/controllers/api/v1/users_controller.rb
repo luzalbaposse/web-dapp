@@ -1,7 +1,7 @@
 class API::V1::UsersController < ApplicationController
   def index
     @users = search_params[:name].present? ? filtered_users : filtered_users.limit(20)
-
+    
     render json: {
       users: @users.includes(talent: :talent_token).map { |u|
         {

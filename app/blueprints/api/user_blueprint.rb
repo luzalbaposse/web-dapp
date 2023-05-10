@@ -38,6 +38,10 @@ class API::UserBlueprint < Blueprinter::Base
       user.talent&.talent_token&.deployed
     end
 
+    field :ticker do |user, options|
+      user.talent&.talent_token&.ticker
+    end
+
     field :beginner_quest_completed do |user, _options|
       user.beginner_quest_completed?
     end

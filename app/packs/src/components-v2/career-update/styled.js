@@ -32,6 +32,11 @@ export const StyledUpdateContent = styled(Typography)`
   white-space: pre-line;
 `;
 
+export const UpdatesContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 export const VerifiedIcon = styled.img`
   width: 12px;
   height: 12px;

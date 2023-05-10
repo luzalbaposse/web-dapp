@@ -18,6 +18,10 @@ class API::TalentBlueprint < Blueprinter::Base
       user.talent&.occupation
     end
 
+    field :verified do |user, _options|
+      user.talent&.verified?
+    end
+
     field :ticker do |user, _options|
       user.talent&.talent_token&.ticker
     end

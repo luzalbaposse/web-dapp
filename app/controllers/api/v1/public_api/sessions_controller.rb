@@ -4,7 +4,7 @@ class API::V1::PublicAPI::SessionsController < API::V1::PublicAPI::APIController
   def logged_in_user
     user = current_impersonated_user || current_user
     return not_found unless user
-
+    
     response_body = {
       user: API::UserBlueprint.render_as_json(user, view: :normal, impersonated: current_impersonated_user.present?)
     }

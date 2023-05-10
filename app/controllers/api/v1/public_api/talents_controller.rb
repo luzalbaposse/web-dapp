@@ -33,6 +33,30 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
     render json: response_body, status: :ok
   end
 
+  def recommended
+    per_page = 3
+    
+    subscribed_users = Subscription.where(user_id: current_user.id)
+    recomended_users = User.where.not(id: subscribed_users.select(:subscriber_id)).select("setseed(0.#{Date.today.jd}), *").order("RANDOM()").limit(3)
+
+    pagy, page_recomended_users = pagy_uuid_cursor(
+      recomended_users,
+      before: cursor,
+      items: per_page,
+      order: {created_at: :desc, uuid: :desc}
+    )
+
+    response_body = {
+      talents: API::TalentBlueprint.render_as_json(page_recomended_users, view: :normal),
+      pagination: {
+        total: recomended_users.length,
+        cursor: pagy.has_more? ? page_recomended_users.last.uuid : nil
+      }
+    }
+
+    render json: response_body, status: :ok
+  end
+
   private
 
   def user
