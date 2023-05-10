@@ -15,7 +15,12 @@ module Leaderboards
     attr_reader :race
 
     def users_with_used_invites
-      invite_ids = User.where.not(invite_id: nil).where("created_at >= ? and created_at <= ?", race.started_at, race.ends_at).pluck(:invite_id)
+      invite_ids = User
+        .beginner_quest_completed
+        .where.not(invite_id: nil)
+        .where("users.created_at >= ? and users.created_at <= ?", race.started_at, race.ends_at)
+        .pluck(:invite_id)
+
       user_ids = Invite.where(id: invite_ids).distinct.pluck(:user_id)
       User.where(id: user_ids)
     end

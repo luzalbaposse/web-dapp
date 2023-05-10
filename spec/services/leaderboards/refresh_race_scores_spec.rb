@@ -15,6 +15,7 @@ RSpec.describe Leaderboards::RefreshRaceScores do
   let!(:inviter_two) { create :user }
   let!(:inviter_three) { create :user }
   let!(:inviter_four) { create :user }
+  let!(:inviter_five) { create :user }
 
   before do
     allow(refresh_user_score_class).to receive(:new).and_return(refresh_user_score_instance)
@@ -23,12 +24,14 @@ RSpec.describe Leaderboards::RefreshRaceScores do
     invite_two = create :invite, user: inviter_two, code: "test-2"
     invite_three = create :invite, user: inviter_three, code: "test-3"
     invite_four = create :invite, user: inviter_four, code: "test-4"
+    invite_five = create :invite, user: inviter_four, code: "test-5"
 
-    create :user, invite_id: invite_one.id, created_at: race_start
-    create :user, invite_id: invite_two.id, created_at: Time.current - 10.days
-    create :user, invite_id: invite_three.id, created_at: race_end
+    create :user, :with_beginner_quest_complete, invite_id: invite_one.id, created_at: race_start
+    create :user, :with_beginner_quest_complete, invite_id: invite_two.id, created_at: Time.current - 10.days
+    create :user, :with_beginner_quest_complete, invite_id: invite_three.id, created_at: race_end
     create :user, invite_id: invite_four.id, created_at: Time.current - 30.days
     create :user, invite_id: invite_four.id, created_at: Time.current + 15.days
+    create :user, invite_id: invite_five.id, created_at: Time.current
   end
 
   it "initializes and calls the refresh user score for all users with used invites" do

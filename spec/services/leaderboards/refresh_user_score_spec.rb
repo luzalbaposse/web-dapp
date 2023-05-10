@@ -31,10 +31,11 @@ RSpec.describe Leaderboards::RefreshUserScore do
 
     context "when it was used inside the passed race" do
       before do
-        create :user, invite_id: invite.id, created_at: Time.current - 40.days
-        create :user, invite_id: invite.id, created_at: Time.current - 19.days
-        create :user, invite_id: invite.id, created_at: Time.current
-        create :user, invite_id: invite.id, created_at: Time.current + 9.days
+        create :user, :with_beginner_quest_complete, invite_id: invite.id, created_at: Time.current - 40.days
+        create :user, :with_beginner_quest_complete, invite_id: invite.id, created_at: Time.current - 19.days
+        create :user, :with_beginner_quest_complete, invite_id: invite.id, created_at: Time.current
+        create :user, :with_beginner_quest_complete, invite_id: invite.id, created_at: Time.current + 9.days
+        create :user, invite_id: invite.id, created_at: Time.current + 2
       end
 
       it "creates a new leaderboard" do
@@ -47,6 +48,14 @@ RSpec.describe Leaderboards::RefreshUserScore do
         expect(leaderboard.race).to eq race
         expect(leaderboard.user).to eq user
         expect(leaderboard.score).to eq 3
+      end
+
+      context "when the user is an admin" do
+        let(:user) { create :user, role: "admin" }
+
+        it "does not create a new leaderboard" do
+          expect { refresh_score }.not_to change(Leaderboard, :count)
+        end
       end
     end
   end

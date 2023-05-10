@@ -6,7 +6,12 @@ module Leaderboards
     end
 
     def call
-      score = User.where(invite_id: user.invites.pluck(:id)).where("created_at >= ? and created_at <= ?", race.started_at, race.ends_at).count
+      return if user.admin?
+
+      score = User.beginner_quest_completed
+        .where(invite_id: user.invites.pluck(:id))
+        .where("users.created_at >= ? and users.created_at <= ?", race.started_at, race.ends_at)
+        .count
 
       if score.positive?
         leaderboard = Leaderboard.find_or_create_by!(
