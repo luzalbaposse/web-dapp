@@ -19,6 +19,9 @@ export const missingFields = ({ talent, profilePictureUrl, careerGoal }) => {
   if (!careerGoal?.pitch || careerGoal.pitch == "") {
     fields.push("About");
   }
+  if (!talent?.verified) {
+    fields.push("Being verified");
+  }
 
   return fields;
 };

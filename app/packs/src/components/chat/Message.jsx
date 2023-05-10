@@ -13,7 +13,7 @@ dayjs.extend(customParseFormat);
 
 export const PhisingAwarenessModal = ({ show, hide, url }) => (
   <Modal show={show} onHide={hide} centered dialogClassName="remove-background">
-    <Modal.Body className="p-4" style={{ "word-wrap": "break-word" }}>
+    <Modal.Body className="p-4" style={{ wordWrap: "break-word" }}>
       <P1 bold text="Before you go" className="mb-4"></P1>
       <P2
         text="Always double check that the links that were sent to you are legitimate. It's a dangerous world out there."
@@ -45,7 +45,7 @@ const MessageLinkified = props => {
 
   const { message, mine } = props;
 
-  const handleClick = (e /*, url*/) => {
+  const handleClick = e => {
     if (mine) {
       return;
     }
@@ -57,11 +57,17 @@ const MessageLinkified = props => {
   return (
     <LinkIt
       className={message.from_career_update && "ml-2"}
-      component={(match, key) => (
-        <a href={match} key={key} target="_blank" onClick={handleClick}>
-          {match}
-        </a>
-      )}
+      component={(match, key) => {
+        let url = match;
+        if (!/^https?:\/\//i.test(url)) {
+          url = "https://" + url;
+        }
+        return (
+          <a href={url} key={key} target="_blank" onClick={handleClick}>
+            {match}
+          </a>
+        );
+      }}
       regex={urlRegex}
     >
       <LinkItEmail>

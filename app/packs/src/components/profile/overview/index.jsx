@@ -495,7 +495,7 @@ const Overview = ({
                             onClick={() => window.location.replace(`/u/${user.username}/support`)}
                           />
                         )}
-                        {profileSubdomain && talentToken.contract_id && (
+                        {profileSubdomain && (
                           <a
                             href={`https://beta.talentprotocol.com/join/${user.username}/support`}
                             className="button-link"
@@ -504,7 +504,9 @@ const Overview = ({
                             <Button
                               type="primary-default"
                               size="big"
-                              text={`Support $${profile.talen_token?.ticker} on Talent Protocol`}
+                              text={`Support ${
+                                talentToken.ticker ? `$${talentToken.ticker}` : user.name
+                              } on Talent Protocol`}
                               style={{ "min-width": "340px" }}
                               onClick={() => null}
                             />
@@ -683,7 +685,7 @@ const Overview = ({
                             onClick={() => window.location.replace(`/u/${user.username}/support`)}
                           />
                         )}
-                        {profileSubdomain && talentToken.contract_id && (
+                        {profileSubdomain && (
                           <a
                             href={`https://beta.talentprotocol.com/join/${user.username}/support`}
                             className="button-link"
@@ -692,8 +694,10 @@ const Overview = ({
                             <Button
                               type="primary-default"
                               size="big"
-                              style={{ "min-width": "340px" }}
-                              text={`Support $${talentToken.ticker} on Talent Protocol`}
+                              style={{ "min-width": "350px" }}
+                              text={`Support ${
+                                talentToken.ticker ? `$${talentToken.ticker}` : user.name
+                              } on Talent Protocol`}
                               onClick={() => null}
                             />
                           </a>
