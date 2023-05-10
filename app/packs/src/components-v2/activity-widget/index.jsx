@@ -16,7 +16,12 @@ import { toast } from "react-toastify";
 import { messagesService } from "../../api/messages";
 
 const ACTIVITY_TYPE_TO_TITLE_MAP = {
-  1: "Career Update"
+  "Activities::CareerUpdate": "Career Update",
+  "Activities::TokenLaunch": "Token Launch",
+  "Activities::ProfileComplete": "Profile Complete",
+  "Activities::Stake": "Stake",
+  "Activities::Sponsor": "Sponsor",
+  "Activities::Subscribe": "Subscribe"
 };
 
 export const ActivityWidget = ({ profile = {} }) => {
@@ -29,7 +34,7 @@ export const ActivityWidget = ({ profile = {} }) => {
     activityService
       .getActivity()
       .then(({ data }) => {
-        setActivity(data);
+        setActivity(data.activities);
         setInputsWithContent(new Array(data.length).fill(false));
         setIsLoading(false);
       })
@@ -73,7 +78,7 @@ export const ActivityWidget = ({ profile = {} }) => {
         </TitleRow>
         <UpdatesContainer>
           {activity.map((update, index) => {
-            const content = JSON.parse(update.content);
+            const { content } = update;
             inputRefs.push(createRef(null));
             return (
               <Update key={update.id}>
@@ -99,7 +104,7 @@ export const ActivityWidget = ({ profile = {} }) => {
                 </UpdateTitle>
                 <UpdateContent>
                   <Typography specs={{ variant: "p1", type: "medium" }} color="primary01">
-                    {ACTIVITY_TYPE_TO_TITLE_MAP[update.activity_type_id]}.
+                    {ACTIVITY_TYPE_TO_TITLE_MAP[update.type]}.
                   </Typography>
                   <StyledTypography specs={{ variant: "p2", type: "regular" }} color="primary03">
                     {content.message}

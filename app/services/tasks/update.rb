@@ -38,6 +38,7 @@ module Tasks
         WhitelistUserJob.perform_later(user_id: user.id, level: "verified")
       elsif type == "Quests::TalentProfile"
         Reward.create!(user: user, amount: 50, category: "quest", reason: "completed profile")
+        ActivityIngestJob.perform_later("profile_complete", nil, current_user.id)
       end
     end
 
