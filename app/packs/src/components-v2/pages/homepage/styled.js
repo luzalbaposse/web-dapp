@@ -29,6 +29,7 @@ export const Column = styled.div`
   gap: 24px;
 
   ${desktopStyles(css`
+    width: auto;
     display: flex;
     gap: 24px;
     ${({ grows }) => grows && "flex-grow: 1;"}
