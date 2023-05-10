@@ -10,5 +10,4 @@ class API::CareerUpdateBlueprint < Blueprinter::Base
       career_update.text
     end
   end
-
 end

@@ -17,8 +17,8 @@ module Users
         create_talent_token(user)
         create_invite_used_notification(invite, user) if invite
 
-        if invite&.talent_invite?
-          update_profile_type(user, invite)
+        if invite&.user
+          update_race_score(invite.user)
         end
 
         create_invite(user)
@@ -118,9 +118,8 @@ module Users
       CreateNotification.new.call(recipient: inviter, source_id: user.id, type: InviteUsedNotification)
     end
 
-    def update_profile_type(user, invite)
-      Users::UpdateProfileType.new.call(user: user, who_dunnit_id: invite.user_id, new_profile_type: "talent")
-      user.reload
+    def update_race_score(user)
+      Leaderboards::RefreshUserScore.new(user: user).call
     end
 
     def create_subscription(invite, user)
