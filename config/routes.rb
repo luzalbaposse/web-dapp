@@ -32,7 +32,8 @@ Rails.application.routes.draw do
 
   # Business - require log-in
   constraints Clearance::Constraints::SignedIn.new { |user| user&.onboarding_complete? } do
-    root to: "homepage#index", as: :user_root
+    root to: redirect("/home")
+    get "/home" => "homepage#index", as: :user_root
     # file uploads
     unless Rails.env.test?
       mount Shrine.uppy_s3_multipart(:cache) => "/s3/multipart"
