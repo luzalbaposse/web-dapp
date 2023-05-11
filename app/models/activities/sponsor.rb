@@ -10,5 +10,9 @@ module Activities
 
       "#{origin_user.name} just sponsored #{target_user.name}!"
     end
+
+    def self.default_global_scope
+      true
+    end
   end
 end

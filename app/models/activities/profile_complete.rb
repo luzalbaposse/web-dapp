@@ -9,5 +9,9 @@ module Activities
 
       "#{origin_user.name} just joined Talent Protocol!"
     end
+
+    def self.default_global_scope
+      true
+    end
   end
 end

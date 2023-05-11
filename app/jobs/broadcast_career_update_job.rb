@@ -12,6 +12,13 @@ class BroadcastCareerUpdateJob < ApplicationJob
 
     receivers = User.where(id: ids)
 
+    activity = Activities::CareerUpdate.new
+
+    activity.message = career_update.text
+    activity.origin_user_id = sender
+    activity.target_user_id = supporter
+    activity.save!
+
     receivers.find_each do |receiver|
       create_notification_service.call(
         recipient: receiver,
@@ -26,6 +33,8 @@ class BroadcastCareerUpdateJob < ApplicationJob
         receiver:,
         sender:
       )
+
+      receiver.activity_feed.activities << activity
     end
   end
 
