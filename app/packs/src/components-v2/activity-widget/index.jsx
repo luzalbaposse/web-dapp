@@ -29,7 +29,12 @@ let activityPage = 0;
 
 export const ActivityWidget = ({ profile = {} }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [activity, setActivity] = useState([]);
+  const [activity, setActivity] = useState({
+    activities: [],
+    pagination: {
+      lastPage: 1
+    }
+  });
   const [inputsWithContent, setInputsWithContent] = useState([]);
   const inputRefs = [];
   const loadMore = useCallback(() => {
@@ -37,7 +42,11 @@ export const ActivityWidget = ({ profile = {} }) => {
     activityService
       .getActivity(activityPage)
       .then(({ data }) => {
-        setActivity(data);
+        const recentActivities = [...data.activities];
+        setActivity({
+          ...data,
+          activities: [...recentActivities, ...activity.activities]
+        });
         setInputsWithContent(new Array(data.length).fill(false));
         setIsLoading(false);
       })
@@ -139,7 +148,7 @@ export const ActivityWidget = ({ profile = {} }) => {
             );
           })}
           {
-            activity.pagination.currentPage < activity.pagination.lastPage && (
+            activityPage < activity.pagination.lastPage && (
               <LoadMoreContainer>
                 <Button
                   hierarchy="secondary"
