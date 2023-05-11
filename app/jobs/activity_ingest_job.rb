@@ -2,32 +2,14 @@ class ActivityIngestJob < ApplicationJob
   queue_as :default
 
   def perform(activity_type, content, origin_user_id, target_user_id = nil)
-    activity_base = module_type(activity_type)
+    activity_base = ("Activities::" + "career_update".camelize).constantize
 
     activity = activity_base.new
 
     activity.message = activity_base.generate_content(origin_user_id, target_user_id) || content
     activity.origin_user_id = origin_user_id
     activity.target_user_id = target_user_id
+    activity.global = activity_base.default_global_scope
     activity.save!
-  end
-
-  private
-
-  def module_type(activity_type)
-    case activity_type
-    when "token_launch"
-      Activities::TokenLaunch
-    when "career_update"
-      Activities::CareerUpdate
-    when "profile_complete"
-      Activities::ProfileComplete
-    when "stake"
-      Activities::Stake
-    when "sponsor"
-      Activities::Sponsor
-    when "subscribe"
-      Activities::Subscribe
-    end
   end
 end

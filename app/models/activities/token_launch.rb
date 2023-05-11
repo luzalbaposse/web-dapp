@@ -9,5 +9,9 @@ module Activities
 
       "#{origin_user.name} just launched their token $#{origin_user.talent.talent_token.ticker}!"
     end
+
+    def self.default_global_scope
+      true
+    end
   end
 end

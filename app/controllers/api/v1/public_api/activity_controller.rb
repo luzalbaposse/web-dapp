@@ -2,7 +2,7 @@ class API::V1::PublicAPI::ActivityController < API::V1::PublicAPI::APIController
   PER_PAGE = 8
 
   def index
-    activities = Activity.order(created_at: :desc)
+    activities = current_user.activity_feed.all_activities.order(created_at: :desc)
 
     pagy, activities = pagy(activities, items: per_page)
 

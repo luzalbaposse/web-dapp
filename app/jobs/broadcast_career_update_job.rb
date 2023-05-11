@@ -12,6 +12,14 @@ class BroadcastCareerUpdateJob < ApplicationJob
 
     receivers = User.where(id: ids)
 
+    activity = Activities::CareerUpdate.new
+
+    activity.message = career_update.text
+    activity.origin_user_id = sender
+    activity.target_user_id = supporter
+    activity.save!
+
+    ActivityIngestJob.perform_later("career_update", response_body[:career_update][:message], sender.id)
     receivers.find_each do |supporter|
       send_message_service.call(
         message: career_update.text,

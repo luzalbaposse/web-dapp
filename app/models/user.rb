@@ -53,6 +53,7 @@ class User < ApplicationRecord
   # Activities
   has_many :origin_activities, class_name: "Activity", foreign_key: "origin_user_id", dependent: :destroy
   has_many :target_activities, class_name: "Activity", foreign_key: "target_user_id", dependent: :destroy
+  has_one :activity_feed
 
   # Elasticsearch index update
   update_index("talents", :talent)

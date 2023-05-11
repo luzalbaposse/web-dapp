@@ -10,8 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_10_155336) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_11_103940) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_stat_statements"
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "activities", force: :cascade do |t|
@@ -21,8 +23,25 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_10_155336) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "type"
+    t.boolean "global", default: false
     t.index ["origin_user_id"], name: "index_activities_on_origin_user_id"
     t.index ["target_user_id"], name: "index_activities_on_target_user_id"
+  end
+
+  create_table "activity_feed_activities", force: :cascade do |t|
+    t.bigint "activity_feed_id", null: false
+    t.bigint "activity_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_feed_id"], name: "index_activity_feed_activities_on_activity_feed_id"
+    t.index ["activity_id"], name: "index_activity_feed_activities_on_activity_id"
+  end
+
+  create_table "activity_feeds", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_activity_feeds_on_user_id"
   end
 
   create_table "api_keys", force: :cascade do |t|
@@ -724,6 +743,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_10_155336) do
 
   add_foreign_key "activities", "users", column: "origin_user_id"
   add_foreign_key "activities", "users", column: "target_user_id"
+  add_foreign_key "activity_feed_activities", "activities"
+  add_foreign_key "activity_feed_activities", "activity_feeds"
+  add_foreign_key "activity_feeds", "users"
   add_foreign_key "api_log_requests", "api_keys"
   add_foreign_key "career_goals", "talent"
   add_foreign_key "career_needs", "career_goals"
