@@ -7,6 +7,10 @@ class TokenAcquiredNotification < BaseNotification
     t(".body", amount: params["amount"])
   end
 
+  def button_url
+    messages_url(user: source&.id)
+  end
+
   def url
     user_url(recipient.username, tab: "supporters")
   end

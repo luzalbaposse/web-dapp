@@ -12,12 +12,20 @@ class NotificationBlueprint < Blueprinter::Base
       label(notification_from(record).button_label)
     end
 
+    field :button_url do |record, _options|
+      notification_from(record).button_url
+    end
+
     field :read do |record, _options|
       record.read?
     end
 
     field :secondary_button_label do |record, _options|
       label(notification_from(record).secondary_button_label)
+    end
+
+    field :secondary_button_url do |record, _options|
+      notification_from(record).secondary_button_url
     end
 
     field :source_name do |record, _options|

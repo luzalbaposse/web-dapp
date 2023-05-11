@@ -9,8 +9,16 @@ class BaseNotification < Noticed::Base
     t(".button")
   end
 
+  def button_url
+    nil
+  end
+
   def secondary_button_label
     t(".secondary_button")
+  end
+
+  def secondary_button_url
+    nil
   end
 
   def emailed?
