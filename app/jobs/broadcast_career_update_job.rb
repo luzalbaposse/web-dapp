@@ -15,8 +15,7 @@ class BroadcastCareerUpdateJob < ApplicationJob
     activity = Activities::CareerUpdate.new
 
     activity.message = career_update.text
-    activity.origin_user_id = sender
-    activity.target_user_id = supporter
+    activity.origin_user_id = sender.id
     activity.save!
 
     receivers.find_each do |receiver|
