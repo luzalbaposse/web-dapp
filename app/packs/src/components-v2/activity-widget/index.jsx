@@ -47,7 +47,7 @@ export const ActivityWidget = ({ profile = {} }) => {
           ...data,
           activities: [...recentActivities, ...activity.activities]
         });
-        setInputsWithContent(new Array(data.length).fill(false));
+        setInputsWithContent(new Array(data.activities.length).fill(false));
         setIsLoading(false);
       })
       .catch(error => {
@@ -93,7 +93,12 @@ export const ActivityWidget = ({ profile = {} }) => {
         </TitleRow>
         <UpdatesContainer>
           {activity.activities.map((update, index) => {
-            const content = JSON.parse(update.content);
+            let content = update.content.message;
+            console.log(update);
+            if (update.type === "Activities::CareerUpdate") {
+              content = update.content.message;
+            }
+            console.log(content)
             inputRefs.push(createRef(null));
             return (
               <Update key={update.id}>
@@ -122,7 +127,7 @@ export const ActivityWidget = ({ profile = {} }) => {
                     {ACTIVITY_TYPE_TO_TITLE_MAP[update.type]}.
                   </Typography>
                   <StyledTypography specs={{ variant: "p2", type: "regular" }} color="primary03">
-                    {content.message}
+                    {content}
                   </StyledTypography>
                   {profile.username !== update.origin_user.username && (
                     <ReplyArea>
