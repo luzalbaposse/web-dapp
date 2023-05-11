@@ -127,12 +127,12 @@ module Metrics
 
     # TVL in USD
     def total_polygon_tvl
-      (polygon_provider.call(polygon_staking_contract, "totalTokensStaked") * TalentToken::TAL_VALUE_IN_USD) / TalentToken::TAL_DECIMALS
+      polygon_provider.call(polygon_staking_contract, "totalTokensStaked") / TalentToken::TAL_DECIMALS
     end
 
     # TVL in USD
     def total_celo_tvl
-      (celo_provider.call(celo_staking_contract, "totalTokensStaked") * TalentToken::TAL_VALUE_IN_USD) / TalentToken::TAL_DECIMALS
+      celo_provider.call(celo_staking_contract, "totalTokensStaked") / TalentToken::TAL_DECIMALS
     end
 
     def total_stables_stored_polygon
