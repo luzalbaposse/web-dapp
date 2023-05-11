@@ -45,7 +45,7 @@ export const ActivityWidget = ({ profile = {} }) => {
         const recentActivities = [...data.activities];
         setActivity({
           ...data,
-          activities: [...recentActivities, ...activity.activities]
+          activities: [...activity.activities, ...recentActivities]
         });
         setInputsWithContent(new Array(data.activities.length).fill(false));
         setIsLoading(false);
@@ -53,10 +53,10 @@ export const ActivityWidget = ({ profile = {} }) => {
       .catch(error => {
         console.error(error);
       });
-  }, [setActivity, setIsLoading, setInputsWithContent]);
+  }, [setActivity, setIsLoading, setInputsWithContent, activity]);
   useEffect(() => {
     loadMore();
-  }, [loadMore]);
+  }, []);
   const sendMessage = useCallback((to, inputRef) => {
     messagesService
       .sendMessage(to, inputRef.current.value || "🔥")
@@ -94,11 +94,9 @@ export const ActivityWidget = ({ profile = {} }) => {
         <UpdatesContainer>
           {activity.activities.map((update, index) => {
             let content = update.content.message;
-            console.log(update);
             if (update.type === "Activities::CareerUpdate") {
               content = update.content.message;
             }
-            console.log(content)
             inputRefs.push(createRef(null));
             return (
               <Update key={update.id}>
