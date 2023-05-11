@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Avatar, Icon, Tag, Typography, MembersList, Button } from "@talentprotocol/design-system";
+import { Avatar, Icon, Tag, Typography, MembersList } from "@talentprotocol/design-system";
 import {
   Container,
   EntryContainer,
