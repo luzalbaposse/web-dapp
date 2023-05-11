@@ -79,6 +79,10 @@ export const InfoGroup = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 232px;
+
+    ${desktopStyles(css`
+      max-width: 332px;
+    `)}
   }
 `;
 
