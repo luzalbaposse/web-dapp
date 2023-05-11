@@ -4,8 +4,6 @@ import dayjs from "dayjs";
 import { AvatarHeader, Container, ReplyArea, StyledUpdateContent, VerifiedIcon } from "./styled";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { post } from "src/utils/requests";
-import { verifiedIcon } from "src/utils/viewHelpers";
-import { useTheme } from "src/contexts/ThemeContext";
 
 import { toast } from "react-toastify";
 import { ToastBody } from "src/components/design_system/toasts";
@@ -16,7 +14,6 @@ dayjs.extend(customParseFormat);
 
 export const CareerUpdate = ({ data, profile, isCurrentUserProfile }) => {
   const [message, setMessage] = useState("");
-  const { mode } = useTheme();
 
   const sendNewMessage = () => {
     let content = message;
