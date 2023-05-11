@@ -2,7 +2,7 @@ class ActivityIngestJob < ApplicationJob
   queue_as :default
 
   def perform(activity_type, content, origin_user_id, target_user_id = nil)
-    activity_base = ("Activities::" + "career_update".camelize).constantize
+    activity_base = ("Activities::" + activity_type.camelize).constantize
 
     activity = activity_base.new
 
