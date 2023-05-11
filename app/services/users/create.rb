@@ -24,6 +24,7 @@ module Users
         create_invite(user)
         create_tasks(user)
         create_subscription(invite, user)
+        create_activity_feed(user)
 
         @result[:user] = user
         @result[:success] = true
@@ -127,8 +128,6 @@ module Users
 
       invited_by_user = invite.user
       return unless invited_by_user
-
-      create_activity_feed(user)
       
       subscription = Subscription.find_by(user_id: user.id, subscriber_id: invited_by_user.id)
 
