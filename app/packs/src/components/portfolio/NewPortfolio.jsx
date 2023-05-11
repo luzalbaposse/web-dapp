@@ -361,7 +361,6 @@ const NewPortfolio = ({
           rewards={returnValues[activeContract] || "0"}
           supportedTalents={supportedTalents}
           railsContext={railsContext}
-          currentChain={currentChain}
         />
         <TransakDone show={transakDone} hide={() => setTransakDone(false)} />
         {listLoaded ? (

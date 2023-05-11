@@ -1,7 +1,6 @@
-import React, { useContext } from "react";
-import ThemeContainer, { ThemeContext } from "src/contexts/ThemeContext";
-import { LogoLight, LogoDark } from "src/components/icons";
-import { P2 } from "src/components/design_system/typography";
+import React from "react";
+import ThemeContainer from "src/contexts/ThemeContext";
+import { P2, H5 } from "src/components/design_system/typography";
 import {
   TALENT_PROTOCOL_GITHUB,
   TALENT_PROTOCOL_DISCORD,
@@ -19,18 +18,21 @@ import Tab from "src/components/design_system/tab";
 import Divider from "src/components/design_system/other/Divider";
 
 const Footer = () => {
-  const theme = useContext(ThemeContext);
-
   return (
     <div className="footer-container">
       <Divider className="my-lg-7 mb-7 mt-0" />
       <div className="footer d-flex flex-column">
         <div className="d-flex flex-lg-row flex-column mb-0 mb-lg-7">
           <div className="col-lg-3">
-            <a href="/" style={{ height: 30 }}>
-              {theme.mode() == "light" ? <LogoLight width={128} height={20} /> : <LogoDark width={128} height={20} />}
+            <a href="/" className="mr-6">
+              <H5 bold className="mb-0">
+                Talent Protocol
+              </H5>
             </a>
-            <P2 className="text-primary-03 mt-2" text="The web3 professional community for high-potential builders." />
+            <P2
+              className="text-primary-03"
+              text="Publish your goals, make meaningful connections and grow your circle of supporters."
+            />
           </div>
           <div className="col-lg-3"></div>
           <div className="col-lg-2 d-flex flex-column mt-5 mt-lg-0">

@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-
-import LogoLight from "src/components/icons/LogoLight";
-import LogoDark from "src/components/icons/LogoDark";
+import { H5 } from "src/components/design_system/typography";
 import TalentProfilePicture from "src/components/talent/TalentProfilePicture";
 import Notifications from "src/components/notifications";
 import UserMenuFullScreen from "src/components/user_menu/UserMenuFullScreen";
@@ -31,7 +29,11 @@ const MobileUserMenu = ({
   return (
     <div className="navbar-container">
       <nav className={`navbar ${mode} justify-content-between`}>
-        <a href="/">{mode == "light" ? <LogoLight width={128} height={20} /> : <LogoDark width={128} height={20} />}</a>
+        <a href="/" className="mr-6">
+          <H5 bold className="mb-0">
+            Talent Protocol
+          </H5>
+        </a>
 
         <div className="d-flex flex-row" style={{ height: 26 }}>
           <SearchDropdown className="mr-1 talent-button white-ghost-button light none-size-button" />
