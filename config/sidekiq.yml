@@ -20,9 +20,6 @@
     send_goal_halfway_reminder:
       cron: "0 12 * * *" # Runs once every day at 12:00
       class: EmailReminders::SendGoalHalfwayReminderJob
-    send_notification_digests:
-      cron: "0 10 * * *" # runs once every day at 10am
-      class: SendNotificationDigestsJob
     sync_on_chain_talent_supporters:
       cron: "0 * * * *" # Runs every hour
       class: TriggerTalentSupportersRefreshJob

@@ -50,11 +50,6 @@ class BaseNotification < Noticed::Base
       recipient.prefers_immediate_notification?(self.class)
   end
 
-  def should_deliver_digest_email?
-    unread? && !emailed? &&
-      recipient.prefers_digest_notification?(self.class)
-  end
-
   def title
     t(".title")
   end
