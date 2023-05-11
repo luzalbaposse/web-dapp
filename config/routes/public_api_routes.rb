@@ -6,7 +6,7 @@ module PublicAPIRoutes
           # API authenticated endpoints
           scope module: :public_api, as: "public" do
             get "/talents/recommended", to: "talents#recommended"
-            get "/leaderboard", to: "leaderboard#index"
+
             resources :talents, only: [:show, :index]
             resources :supporters, only: [:index]
             resources :activity, only: [:index]
@@ -28,6 +28,7 @@ module PublicAPIRoutes
             resources :product_announcements, only: [:update] do
               get "latest_unread", on: :collection
             end
+            resources :leaderboards, only: [:index]
 
             resource :validations, only: [] do
               get :username, on: :collection

@@ -18,6 +18,10 @@ class OnboardingController < ApplicationController
 
     current_user.update!(legal_first_name: params[:legal_first_name], legal_last_name: params[:legal_last_name], onboarded_at: Time.current)
 
+    if current_user.invited&.user
+      Leaderboards::RefreshUserScore.new(user: current_user.invited.user).call
+    end
+
     render json: {success: true}, status: :created
   rescue => e
     Rollbar.error(
