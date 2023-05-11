@@ -58,7 +58,14 @@ class DailyMetricsJob < ApplicationJob
       total_stables_stored_polygon: total_stables_stored_polygon,
       total_stables_stored_celo: total_stables_stored_celo,
       tal_rewards_given_polygon: tal_rewards_given_polygon,
-      tal_rewards_given_celo: tal_rewards_given_celo
+      tal_rewards_given_celo: tal_rewards_given_celo,
+      total_verified_users: total_verified_users,
+      total_app_notifications: total_app_notifications,
+      total_app_read_notifications: total_app_read_notifications,
+      total_emails_sent_by_app: total_emails_sent_by_app,
+      total_emails_delivered: total_emails_delivered,
+      total_emails_opened: total_emails_opened,
+      daily_join_pages_visitors: daily_join_pages_visitors
     )
   end
 end

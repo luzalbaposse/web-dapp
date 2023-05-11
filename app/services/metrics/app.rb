@@ -1,3 +1,5 @@
+require "sendgrid-ruby"
+
 module Metrics
   module App
     ONBOARDING_START_DATE = Date.new(2022, 10, 13)
@@ -18,6 +20,44 @@ module Metrics
 
     def total_active_users
       User.where("users.last_access_at > ? and users.last_access_at::date != users.created_at::date", one_month_ago).count
+    end
+
+    def total_verified_users
+      Talent.where(verified: true).count
+    end
+
+    def total_app_notifications
+      Notification.count
+    end
+
+    def total_app_read_notifications
+      Notification.where.not(read_at: nil).count
+    end
+
+    def total_emails_sent_by_app
+      sendgrid_global_stats.sum { |d| d["stats"][0]["metrics"]["requests"] }
+    end
+
+    def total_emails_delivered
+      sendgrid_global_stats.sum { |d| d["stats"][0]["metrics"]["delivered"] }
+    end
+
+    def total_emails_opened
+      sendgrid_global_stats.sum { |d| d["stats"][0]["metrics"]["unique_opens"] }
+    end
+
+    def sendgrid_global_stats
+      @sendgrid_global_stats ||= begin
+        response = sendgrid_api.client.stats.get(query_params: {start_date: "2022-01-01", aggregated_by: "month"})
+
+        return unless response.status_code == "200"
+
+        JSON.parse(response.body)
+      end
+    end
+
+    def sendgrid_api
+      SendGrid::API.new(api_key: ENV["SENDGRID_API_KEY"])
     end
 
     def total_dead_accounts
@@ -271,10 +311,10 @@ module Metrics
 
     def daily_conversion_rate
       registered_users = User.where("created_at BETWEEN ? AND ?", date.beginning_of_day, date.end_of_day).count
-      registered_users.to_f / join_pages_visitors
+      registered_users.to_f / daily_join_pages_visitors
     end
 
-    def join_pages_visitors
+    def daily_join_pages_visitors
       resp = Faraday.get(
         "https://simpleanalytics.com/beta.talentprotocol.com/join*.json",
         {

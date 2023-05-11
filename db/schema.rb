@@ -10,11 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_03_125939) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_11_125455) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "activities", force: :cascade do |t|
+    t.bigint "activity_type_id", null: false
+    t.jsonb "content", null: false
+    t.bigint "origin_user_id", null: false
+    t.bigint "target_user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_type_id"], name: "index_activities_on_activity_type_id"
+    t.index ["origin_user_id"], name: "index_activities_on_origin_user_id"
+    t.index ["target_user_id"], name: "index_activities_on_target_user_id"
+  end
+
+  create_table "activity_types", force: :cascade do |t|
+    t.string "activity_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "api_keys", force: :cascade do |t|
     t.text "access_key", null: false
@@ -211,6 +229,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_03_125939) do
     t.decimal "daily_conversion_rate", precision: 10, scale: 4, default: "0.0"
     t.integer "total_users_with_three_or_more_subscribers"
     t.integer "total_users_subscribing_three_or_more"
+    t.integer "total_verified_users"
+    t.integer "total_emails_sent_by_app"
+    t.integer "total_emails_delivered"
+    t.integer "total_emails_opened"
+    t.integer "total_app_notifications"
+    t.integer "total_app_read_notifications"
+    t.integer "daily_join_pages_visitors"
   end
 
   create_table "discovery_rows", force: :cascade do |t|
@@ -306,6 +331,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_03_125939) do
     t.bigint "partnership_id"
     t.index ["partnership_id"], name: "index_invites_on_partnership_id"
     t.index ["user_id"], name: "index_invites_on_user_id"
+  end
+
+  create_table "leaderboards", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.bigint "race_id", null: false
+    t.bigint "user_id", null: false
+    t.integer "score", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["race_id"], name: "index_leaderboards_on_race_id"
+    t.index ["user_id"], name: "index_leaderboards_on_user_id"
+    t.index ["uuid"], name: "index_leaderboards_on_uuid"
   end
 
   create_table "marketing_articles", force: :cascade do |t|
@@ -433,6 +470,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_03_125939) do
     t.datetime "ends_at", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
   end
 
   create_table "rewards", force: :cascade do |t|
@@ -700,6 +738,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_03_125939) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "activities", "activity_types"
+  add_foreign_key "activities", "users", column: "origin_user_id"
+  add_foreign_key "activities", "users", column: "target_user_id"
   add_foreign_key "api_log_requests", "api_keys"
   add_foreign_key "career_goals", "talent"
   add_foreign_key "career_needs", "career_goals"
@@ -717,6 +758,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_03_125939) do
   add_foreign_key "impersonations", "users", column: "impersonator_id"
   add_foreign_key "invites", "partnerships"
   add_foreign_key "invites", "users"
+  add_foreign_key "leaderboards", "races"
+  add_foreign_key "leaderboards", "users"
   add_foreign_key "marketing_articles", "users"
   add_foreign_key "messages", "career_updates"
   add_foreign_key "messages", "chats"

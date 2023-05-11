@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe DailyMetricsJob, type: :job do
   let!(:user_1) { create :user, last_access_at: 5.days.ago, created_at: 5.days.ago }
-  let!(:talent) { create :talent, user: user_1, updated_at: Date.today }
+  let!(:talent) { create :talent, user: user_1, updated_at: Date.today, verified: true }
   let!(:talent_token) { create :talent_token, talent: talent, deployed: true }
   let!(:user_2) { create :user, last_access_at: Date.yesterday, talent: talent_2 }
   let!(:talent_2) { create :talent, updated_at: Date.yesterday }
@@ -28,6 +28,10 @@ RSpec.describe DailyMetricsJob, type: :job do
   let!(:career_update_one) { create :career_update, user: user_1 }
   let!(:career_update_two) { create :career_update, user: user_2 }
   let!(:career_update_three) { create :career_update, user: user_2 }
+
+  let!(:notification_one) { create :notification, read_at: nil, recipient: user_1 }
+  let!(:notification_two) { create :notification, read_at: nil, recipient: user_1 }
+  let!(:notification_three) { create :notification, read_at: Time.current, recipient: user_2 }
 
   let(:web3_proxy_class) { Web3Api::ApiProxy }
   let(:web3_proxy) { instance_double(web3_proxy_class) }
@@ -95,9 +99,51 @@ RSpec.describe DailyMetricsJob, type: :job do
   let(:eth_contract_class) { Eth::Contract }
   let(:eth_contract) { instance_double(eth_contract_class) }
 
+  let(:sendgrid_api_class) { SendGrid::API }
+  let(:sendgrid_api) { instance_double(sendgrid_api_class, client: sendgrid_client) }
+  let(:sendgrid_client) { double(SendGrid::Client) }
+
+  let(:sendgrid_response) do
+    OpenStruct.new(
+      status_code: "200",
+      body: sendgrid_response_body.to_json
+    )
+  end
+
+  let(:sendgrid_response_body) do
+    [
+      {
+        "date" => "2022-01-01",
+        "stats" => [
+          {
+            "metrics" => {
+              "delivered" => 20,
+              "requests" => 30,
+              "unique_opens" => 10
+            }
+          }
+        ]
+      },
+      {
+        "date" => "2022-02-01",
+        "stats" => [
+          {
+            "metrics" => {
+              "delivered" => 10,
+              "requests" => 10,
+              "unique_opens" => 10
+            }
+          }
+        ]
+      }
+    ]
+  end
+
   before do
     allow(web3_proxy_class).to receive(:new).and_return(web3_proxy)
     allow(upload_metrics_class).to receive(:new).and_return(upload_metrics)
+    allow(sendgrid_api_class).to receive(:new).and_return(sendgrid_api)
+    allow(sendgrid_client).to receive_message_chain(:stats, :get).and_return(sendgrid_response)
     allow(web3_proxy).to receive(:retrieve_transactions_count).and_return(10)
     allow(web3_proxy).to receive(:retrieve_polygon_nfts_count).and_return(400)
     stub_request(:get, simple_analytics_request).to_return(body: simple_analytics_body.to_json)
@@ -132,8 +178,8 @@ RSpec.describe DailyMetricsJob, type: :job do
       expect(created_daily_metric.total_polygon_stake_transactions).to eq 40
       expect(created_daily_metric.total_celo_stake_transactions).to eq 20
       expect(created_daily_metric.total_claimed_domains).to eq 1
-      expect(created_daily_metric.total_polygon_tvl).to eq 1200
-      expect(created_daily_metric.total_celo_tvl).to eq 1200
+      expect(created_daily_metric.total_polygon_tvl).to eq 60000
+      expect(created_daily_metric.total_celo_tvl).to eq 60000
       expect(created_daily_metric.total_stables_stored_polygon).to eq "6.0e+16"
       expect(created_daily_metric.total_stables_stored_celo).to eq "60000"
       expect(created_daily_metric.tal_rewards_given_polygon).to eq "60000"
@@ -147,7 +193,13 @@ RSpec.describe DailyMetricsJob, type: :job do
       expect(created_daily_metric.total_users_with_three_or_more_subscribers).to eq 1
       expect(created_daily_metric.total_users_subscribing_three_or_more).to eq 1
       expect(created_daily_metric.total_users_with_career_updates).to eq 2
-      expect(created_daily_metric.total_career_updates).to eq 3
+      expect(created_daily_metric.total_verified_users).to eq 1
+      expect(created_daily_metric.total_app_notifications).to eq 3
+      expect(created_daily_metric.total_app_read_notifications).to eq 1
+      expect(created_daily_metric.total_emails_sent_by_app).to eq 40
+      expect(created_daily_metric.total_emails_delivered).to eq 30
+      expect(created_daily_metric.total_emails_opened).to eq 20
+      expect(created_daily_metric.daily_join_pages_visitors).to eq 200
     end
   end
 

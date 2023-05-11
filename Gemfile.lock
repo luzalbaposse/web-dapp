@@ -495,6 +495,7 @@ GEM
     ruby-vips (2.1.4)
       ffi (~> 1.12)
     ruby2_keywords (0.0.5)
+    ruby_http_client (3.5.5)
     rubyzip (2.3.2)
     rufus-scheduler (3.8.2)
       fugit (~> 1.1, >= 1.1.6)
@@ -518,6 +519,8 @@ GEM
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
     semantic_range (3.0.0)
+    sendgrid-ruby (6.6.2)
+      ruby_http_client (~> 3.4)
     shoulda-matchers (4.5.1)
       activesupport (>= 4.2.0)
     shrine (3.4.0)
@@ -662,6 +665,7 @@ DEPENDENCIES
   rswag-specs
   sass-rails (>= 6)
   schmooze
+  sendgrid-ruby
   shoulda-matchers (~> 4.5.1)
   shrine (~> 3.0)
   sidekiq (~> 6.5.8)

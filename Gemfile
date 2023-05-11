@@ -16,6 +16,7 @@ gem "mini_racer", platforms: :ruby
 
 # Email
 gem "bootstrap-email"
+gem "sendgrid-ruby"
 
 # Auth
 gem "clearance"
