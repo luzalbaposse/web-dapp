@@ -11,7 +11,7 @@ export const LeadderboardWidget = ({ username }) => {
     leaderboardService
       .getLeaderboard()
       .then(({ data }) => {
-        const parsedData = data.users
+        const parsedData = data.leaderboards
           .reduce((acc, el) => {
             acc.push({
               ...el,

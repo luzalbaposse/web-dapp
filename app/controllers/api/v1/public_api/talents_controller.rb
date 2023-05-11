@@ -35,7 +35,7 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
 
   def recommended
     per_page = 3
-    
+
     subscribed_users = Subscription.where(user_id: current_user.id)
     recomended_users = User.where.not(id: subscribed_users.select(:subscriber_id)).select("setseed(0.#{Date.today.jd}), *").order("RANDOM()").limit(3)
 

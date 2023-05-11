@@ -27,5 +27,9 @@ FactoryBot.define do
     trait :with_profile_complete do
       after(:create) { |user| create(:quest, user: user, type: "Quests::TalentProfile", status: "done") }
     end
+
+    trait :with_beginner_quest_complete do
+      after(:create) { |user| create(:quest, user: user, type: "Quests::User", status: "done") }
+    end
   end
 end

@@ -8,9 +8,7 @@ module Activities
       origin_user = User.find(origin_user_id)
       target_user = User.find(target_user_id)
 
-      message = "#{origin_user.name} just started subscribing to #{target_user.name}!"
-
-      JSON.generate(message: message)
+      "#{origin_user.name} just started subscribing to #{target_user.name}!"
     end
   end
 end
