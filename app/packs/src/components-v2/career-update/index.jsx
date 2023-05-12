@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import { Avatar, Button, Input, Typography } from "@talentprotocol/design-system";
+import { Avatar, Button, Icon, Input, Typography } from "@talentprotocol/design-system";
 import dayjs from "dayjs";
-import { AvatarHeader, Container, ReplyArea, StyledUpdateContent, VerifiedIcon } from "./styled";
+import { AvatarHeader, Container, ReplyArea, StyledUpdateContent } from "./styled";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { post } from "src/utils/requests";
-import { verifiedIcon } from "src/utils/viewHelpers";
-import { useTheme } from "src/contexts/ThemeContext";
 
 import { toast } from "react-toastify";
 import { ToastBody } from "src/components/design_system/toasts";
@@ -14,9 +12,8 @@ import debounce from "lodash/debounce";
 
 dayjs.extend(customParseFormat);
 
-export const Update = ({ data, profile, isCurrentUserProfile }) => {
+export const CareerUpdate = ({ data, profile, isCurrentUserProfile }) => {
   const [message, setMessage] = useState("");
-  const { mode } = useTheme();
 
   const sendNewMessage = () => {
     let content = message;
@@ -45,7 +42,7 @@ export const Update = ({ data, profile, isCurrentUserProfile }) => {
         <Typography specs={{ variant: "label2", type: "medium" }} color="primary01">
           {profile.user.legal_first_name} {profile.user.legal_last_name}
         </Typography>
-        {profile.verified && <VerifiedIcon src={verifiedIcon(mode())} />}
+        {profile.verified && <Icon name="verified-2" color="primary" size={16} />}
         <Typography specs={{ variant: "p2", type: "regular" }} color="primary04">
           {dayjs(data.created_at).format("MMM D, YYYY, h:mm A")}
         </Typography>

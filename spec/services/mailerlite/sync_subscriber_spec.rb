@@ -76,7 +76,7 @@ RSpec.describe Mailerlite::SyncSubscriber do
     let(:search_request_status) { 409 }
 
     it "raises an error" do
-      expect { sync_subscriber }.to raise_error
+      expect { sync_subscriber }.to raise_error("Error syncing with mailerlite. Probably exceeded rate limit")
     end
   end
 end

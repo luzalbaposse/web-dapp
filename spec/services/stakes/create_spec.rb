@@ -6,12 +6,14 @@ RSpec.describe Stakes::Create do
   subject(:create_stake) { described_class.new(talent_token: talent_token, staking_user: staking_user).call }
 
   let(:talent_token) { create :talent_token }
+  let(:talent_owner) { create :user }
   let(:staking_user) { create :user }
 
   let(:create_notification_class) { CreateNotification }
   let(:create_notification_instance) { instance_double(create_notification_class, call: true) }
 
   before do
+    talent_token.talent.update(user: talent_owner)
     allow(create_notification_class).to receive(:new).and_return(create_notification_instance)
   end
 
@@ -26,7 +28,7 @@ RSpec.describe Stakes::Create do
       Sidekiq::Testing.inline! do
         create_stake
 
-        job = enqueued_jobs[0]
+        job = enqueued_jobs.find { |j| j["job_class"] == "AddUsersToMailerliteJob" }
 
         aggregate_failures do
           expect(job["job_class"]).to eq("AddUsersToMailerliteJob")
@@ -39,7 +41,7 @@ RSpec.describe Stakes::Create do
       Sidekiq::Testing.inline! do
         create_stake
 
-        job = enqueued_jobs[1]
+        job = enqueued_jobs.find { |j| j["job_class"] == "WhitelistUserJob" }
 
         aggregate_failures do
           expect(job["job_class"]).to eq("WhitelistUserJob")
@@ -52,12 +54,25 @@ RSpec.describe Stakes::Create do
       Sidekiq::Testing.inline! do
         create_stake
 
-        job = enqueued_jobs[2]
+        job = enqueued_jobs.find { |j| j["job_class"] == "UpdateTasksJob" }
 
         aggregate_failures do
           expect(job["job_class"]).to eq("UpdateTasksJob")
           expect(job["arguments"][0]["type"]).to eq("Tasks::BuyTalentToken")
           expect(job["arguments"][0]["user_id"]).to eq(staking_user.id)
+        end
+      end
+    end
+
+    it "enqueues the job to create the activity" do
+      Sidekiq::Testing.inline! do
+        create_stake
+
+        job = enqueued_jobs.find { |j| j["job_class"] == "ActivityIngestJob" }
+
+        aggregate_failures do
+          expect(job["job_class"]).to eq("ActivityIngestJob")
+          expect(job["arguments"][0]).to eq("stake")
         end
       end
     end
@@ -114,7 +129,7 @@ RSpec.describe Stakes::Create do
       Sidekiq::Testing.inline! do
         create_stake
 
-        job = enqueued_jobs.last
+        job = enqueued_jobs.find { |j| j["job_class"] == "TalentSupportersRefreshJob" }
 
         aggregate_failures do
           expect(job["job_class"]).to eq("TalentSupportersRefreshJob")
@@ -131,8 +146,8 @@ RSpec.describe Stakes::Create do
           create_stake
 
           aggregate_failures do
-            expect(enqueued_jobs.count).to eq 1
-            expect(enqueued_jobs.pluck("job_class")).to eq(["TalentSupportersRefreshJob"])
+            expect(enqueued_jobs.count).to eq 2
+            expect(enqueued_jobs.pluck("job_class")).to match_array(["TalentSupportersRefreshJob", "ActivityIngestJob"])
           end
         end
       end
