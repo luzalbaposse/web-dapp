@@ -77,7 +77,9 @@ module GoogleDrive
         daily_metric.total_emails_opened,
         daily_metric.total_app_notifications,
         daily_metric.total_app_read_notifications,
-        daily_metric.daily_join_pages_visitors
+        daily_metric.daily_join_pages_visitors,
+        daily_metric.total_linkedin_signups,
+        daily_metric.total_email_signups
       ]]
     end
 

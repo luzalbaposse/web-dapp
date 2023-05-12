@@ -3,7 +3,6 @@ import { Avatar, Button, Spinner, Typography, useModal, Tag, TalentCard } from "
 import { careerCircle } from "src/api/career-circle";
 import { CareerCircleEmptyState } from "src/components-v2/network/empty-state";
 import { RevokeSponsorshipModal } from "src/components-v2/network/revoke-sponsorship-modal";
-import { useWindowDimensionsHook } from "src/utils/window";
 import { chainIdToName } from "src/onchain/utils";
 import { parseStableAmount } from "src/onchain/utils";
 
@@ -24,7 +23,6 @@ import {
 export const Sponsorships = ({ currentUserId, railsContext }) => {
   const modalState = useModal();
   const [isLoading, setIsLoading] = useState(true);
-  const { mobile } = useWindowDimensionsHook();
 
   const [claimedSponsorships, setClaimedSponsorships] = useState({
     sponsorships: [],
