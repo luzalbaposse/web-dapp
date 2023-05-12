@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe DailyMetricsJob, type: :job do
-  let!(:user_1) { create :user, last_access_at: 5.days.ago, created_at: 5.days.ago }
+  let!(:user_1) { create :user, last_access_at: 5.days.ago, created_at: 5.days.ago, linkedin_id: "123" }
   let!(:talent) { create :talent, user: user_1, updated_at: Date.today, verified: true }
   let!(:talent_token) { create :talent_token, talent: talent, deployed: true }
   let!(:user_2) { create :user, last_access_at: Date.yesterday, talent: talent_2 }
@@ -200,6 +200,8 @@ RSpec.describe DailyMetricsJob, type: :job do
       expect(created_daily_metric.total_emails_delivered).to eq 30
       expect(created_daily_metric.total_emails_opened).to eq 20
       expect(created_daily_metric.daily_join_pages_visitors).to eq 200
+      expect(created_daily_metric.total_linkedin_signups).to eq 1
+      expect(created_daily_metric.total_email_signups).to eq 5
     end
   end
 

@@ -65,7 +65,9 @@ class DailyMetricsJob < ApplicationJob
       total_emails_sent_by_app: total_emails_sent_by_app,
       total_emails_delivered: total_emails_delivered,
       total_emails_opened: total_emails_opened,
-      daily_join_pages_visitors: daily_join_pages_visitors
+      daily_join_pages_visitors: daily_join_pages_visitors,
+      total_linkedin_signups: total_linkedin_signups,
+      total_email_signups: total_email_signups
     )
   end
 end

@@ -70,13 +70,16 @@ module GoogleDrive
         daily_metric.total_users_with_three_or_more_subscribers,
         daily_metric.total_users_subscribing_three_or_more,
         daily_metric.total_users_with_career_updates,
+        daily_metric.total_career_updates,
         daily_metric.total_verified_users,
         daily_metric.total_emails_sent_by_app,
         daily_metric.total_emails_delivered,
         daily_metric.total_emails_opened,
         daily_metric.total_app_notifications,
         daily_metric.total_app_read_notifications,
-        daily_metric.daily_join_pages_visitors
+        daily_metric.daily_join_pages_visitors,
+        daily_metric.total_linkedin_signups,
+        daily_metric.total_email_signups
       ]]
     end
 

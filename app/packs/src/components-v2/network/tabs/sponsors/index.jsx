@@ -212,23 +212,25 @@ export const Sponsors = ({ currentUserId, railsContext }) => {
             {claimedSponsors.sponsors.map(sponsorship => (
               <TalentCard
                 key={sponsorship.id}
-                bannerImage={sponsorship.sponsor.banner_url}
-                isVerified={sponsorship.sponsor.verified}
-                name={sponsorship.sponsor.name}
-                occupation={sponsorship.sponsor.occupation}
-                profileImage={sponsorship.sponsor.profile_picture_url}
+                bannerImage={sponsorship.sponsor?.banner_url}
+                isVerified={sponsorship.sponsor?.verified}
+                name={sponsorship.sponsor?.name || sponsorship.sponsor_address}
+                occupation={"Received"}
+                profileImage={sponsorship.sponsor?.profile_picture_url}
                 ticker={`${parseStableAmount(sponsorship.amount, sponsorship.token_decimals)} ${sponsorship.symbol}`}
-                to={`/u/${sponsorship.sponsor.username}`}
+                to={sponsorship.sponsor ? `/u/${sponsorship.sponsor.username}` : undefined}
               >
-                <Button
-                  hierarchy="primary"
-                  size="small"
-                  text="Send Message"
-                  onClick={event => {
-                    event.preventDefault();
-                    window.location.href = `/messages?user=${sponsorship.sponsor.id}`;
-                  }}
-                />
+                {sponsorship.sponsor && (
+                  <Button
+                    hierarchy="primary"
+                    size="small"
+                    text="Send Message"
+                    onClick={event => {
+                      event.preventDefault();
+                      window.location.href = `/messages?user=${sponsorship.sponsor.id}`;
+                    }}
+                  />
+                )}
               </TalentCard>
             ))}
           </CardsContainer>
