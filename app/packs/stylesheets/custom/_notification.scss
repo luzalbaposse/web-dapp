@@ -16,7 +16,7 @@
   box-sizing: border-box;
   display: flex;
   gap: 16px;
-  padding: 16px 8px;
+  padding: 16px 24px;
 
   .read {
     p.light {
@@ -45,7 +45,7 @@
 }
 
 .notification-divider  {
-  padding: 0 8px;
+  padding: 0 24px;
 }
 
 .notifications-menu {
@@ -90,7 +90,7 @@
   flex-direction: column;
   max-height: 559px;
   overflow-y: auto;
-  padding: 0 8px;
+  padding: 0;
 }
 
 .notifications-unread-icon {
@@ -127,6 +127,14 @@
 }
 
 @media (max-width: 992px) {
+  .notification {
+    padding: 16px;
+  }
+
+  .notification-divider {
+    padding: 0 16px;
+  }
+
   .notification-description {
     max-width: 85vw;
   }
