@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useTalentCareerUpdatesFetcher } from "../../../../hooks/use-talent-career-updates-fetcher";
 import { CareerUpdateEmptyState } from "./empty-state";
 import { Container, InputContainer, TitleContainer } from "./styled";
-import { Update } from "./update";
+import { CareerUpdate } from "../../../career-update";
 import { CareerUpdateLockedState } from "./locked-state";
 import SendCareerUpdateModal from "../../../../components/profile/SendCareerUpdateModal";
 import TextInput from "src/components/design_system/fields/textinput";
@@ -62,7 +62,12 @@ export const CareerUpdates = ({ profile, isCurrentUserProfile, railsContext, set
           )}
         </InputContainer>
         {careerUpdates.map(update => (
-          <Update key={update.created_at} data={update} profile={profile} isCurrentUserProfile={isCurrentUserProfile} />
+          <CareerUpdate
+            key={update.created_at}
+            data={update}
+            profile={profile}
+            isCurrentUserProfile={isCurrentUserProfile}
+          />
         ))}
       </>
     );

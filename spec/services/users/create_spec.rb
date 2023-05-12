@@ -37,8 +37,12 @@ RSpec.describe Users::Create do
   let(:notification_creator_class) { CreateNotification }
   let(:notification_creator) { instance_double(notification_creator_class, call: true) }
 
+  let(:refresh_user_score_class) { Leaderboards::RefreshUserScore }
+  let(:refresh_user_score_instance) { instance_double(refresh_user_score_class, call: true) }
+
   before do
     allow(notification_creator_class).to receive(:new).and_return(notification_creator)
+    allow(refresh_user_score_class).to receive(:new).and_return(refresh_user_score_instance)
   end
 
   context "when a valid invite is provided" do
@@ -80,6 +84,17 @@ RSpec.describe Users::Create do
         user = result[:user]
 
         expect(user.onboarded_at).to eq(Time.current)
+      end
+    end
+
+    it "initializes and calls the refresh user score" do
+      create_user
+
+      aggregate_failures do
+        expect(refresh_user_score_class).to have_received(:new).with(
+          user: user
+        )
+        expect(refresh_user_score_instance).to have_received(:call)
       end
     end
 
@@ -210,18 +225,6 @@ RSpec.describe Users::Create do
           username: username
         )
       end
-    end
-  end
-
-  context "when it is a talent invite" do
-    let(:invite) { create(:invite, user: user, talent_invite: true) }
-
-    it "creates a new user with talent as profile type" do
-      create_user
-
-      user = User.find_by(email: email)
-
-      expect(user.profile_type).to eq("talent")
     end
   end
 

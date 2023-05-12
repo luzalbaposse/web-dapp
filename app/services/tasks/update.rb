@@ -34,10 +34,6 @@ module Tasks
         user.invites.where(talent_invite: false).update_all(max_uses: nil)
       elsif type == "Tasks::Verified"
         WhitelistUserJob.perform_later(user_id: user.id, level: "verified")
-      elsif type == "Quests::VerifiedProfile"
-        WhitelistUserJob.perform_later(user_id: user.id, level: "verified")
-      elsif type == "Quests::TalentProfile"
-        Reward.create!(user: user, amount: 50, category: "quest", reason: "completed profile")
       end
     end
 
@@ -45,6 +41,8 @@ module Tasks
       return unless model.done?
 
       if model.type == "Quests::TalentProfile"
+        Reward.create!(user: user, amount: 50, category: "quest", reason: "completed profile")
+        ActivityIngestJob.perform_later("profile_complete", nil, user.id)
         user.talent.update!(public: true)
       end
     end
