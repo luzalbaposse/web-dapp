@@ -144,24 +144,21 @@ export const Sponsorships = ({ currentUserId, railsContext }) => {
                 <React.Fragment key={`${sponsorship.sponsor_address}-${sponsorship.sponsored_address}`}>
                   <NewSponsorsRow>
                     <SponsoredCard>
-                      <a href={`/u/${sponsorship.sponsored.username}`}>
+                      <a href={`/u/${sponsorship.sponsored?.username}`}>
                         <Avatar
                           size="md"
-                          url={sponsorship.sponsored.profile_picture_url}
-                          name={sponsorship.sponsored.name}
-                          ticker={sponsorship.sponsored.ticker || ""}
-                          occupation={
-                            mobile && sponsorship.sponsored.occupation?.length > 20
-                              ? `${sponsorship.sponsored.occupation.substring(0, 20)}...`
-                              : sponsorship.sponsored.occupation
-                          }
-                          isVerified={sponsorship.sponsored.verified}
+                          url={sponsorship.sponsored?.profile_picture_url}
+                          name={sponsorship.sponsored?.name || sponsorship.sponsored_address}
+                          ticker={sponsorship.sponsored?.ticker || ""}
+                          occupation={sponsorship.sponsored?.occupation}
+                          isVerified={sponsorship.sponsored?.verified}
                         />
                       </a>
                       <MessageContainer>
                         <Typography specs={{ variant: "p2", type: "regular" }} color={"primary03"}>
-                          You can cancel your sponsorship anytime before {sponsorship.sponsored.name} claims it. If you
-                          do, all funds will be returned to your wallet.
+                          You can cancel your sponsorship anytime before{" "}
+                          {sponsorship.sponsored?.name || sponsorship.sponsored_address} claims it. If you do, all funds
+                          will be returned to your wallet.
                         </Typography>
                       </MessageContainer>
                       <TagsContainer>
@@ -211,23 +208,25 @@ export const Sponsorships = ({ currentUserId, railsContext }) => {
             {claimedSponsorships.sponsorships.map(sponsorship => (
               <TalentCard
                 key={sponsorship.id}
-                bannerImage={sponsorship.sponsored.banner_url}
-                isVerified={sponsorship.sponsored.verified}
-                name={sponsorship.sponsored.name}
-                occupation={sponsorship.sponsored.occupation}
-                profileImage={sponsorship.sponsored.profile_picture_url}
+                bannerImage={sponsorship.sponsored?.banner_url}
+                isVerified={sponsorship.sponsored?.verified}
+                name={sponsorship.sponsored?.name || sponsorship.sponsored_address}
+                occupation={"Sent"}
+                profileImage={sponsorship.sponsored?.profile_picture_url}
                 ticker={`${parseStableAmount(sponsorship.amount, sponsorship.token_decimals)} ${sponsorship.symbol}`}
-                to={`/u/${sponsorship.sponsored.username}`}
+                to={`/u/${sponsorship.sponsored?.username}`}
               >
-                <Button
-                  hierarchy="primary"
-                  size="small"
-                  text="Send Message"
-                  onClick={event => {
-                    event.preventDefault();
-                    window.location.href = `/messages?user=${sponsorship.sponsored.id}`;
-                  }}
-                />
+                {sponsorship.sponsored && (
+                  <Button
+                    hierarchy="primary"
+                    size="small"
+                    text="Send Message"
+                    onClick={event => {
+                      event.preventDefault();
+                      window.location.href = `/messages?user=${sponsorship.sponsored.id}`;
+                    }}
+                  />
+                )}
               </TalentCard>
             ))}
           </CardsContainer>
