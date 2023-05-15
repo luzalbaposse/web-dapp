@@ -102,7 +102,7 @@ class API::V1::PublicAPI::SubscriptionsController < API::V1::PublicAPI::APIContr
     subscriber_user = user || current_user
     return not_found unless subscriber_user
 
-    subscription = Subscription.find_by!(user: subscriber_user, subscriber: subscribing_user)
+    subscription = Subscription.find_by!(user: subscribing_user, subscriber: subscriber_user)
 
     Subscriptions::Destroy.new(subscription: subscription).call
 
