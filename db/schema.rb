@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_12_115344) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_15_153340) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "activities", force: :cascade do |t|
-    t.string "content", null: false
+    t.jsonb "content", null: false
     t.bigint "origin_user_id", null: false
     t.bigint "target_user_id"
     t.datetime "created_at", null: false
@@ -657,6 +657,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_12_115344) do
     t.index ["user_id"], name: "index_user_tags_on_user_id"
   end
 
+  create_table "user_v2_quests", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "v2_quest_id", null: false
+    t.datetime "completed_at", precision: nil, null: false
+    t.integer "credited_amount", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "v2_quest_id"], name: "index_user_v2_quests_on_user_id_and_v2_quest_id", unique: true
+    t.index ["user_id"], name: "index_user_v2_quests_on_user_id"
+    t.index ["v2_quest_id"], name: "index_user_v2_quests_on_v2_quest_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "username", null: false
     t.string "email"
@@ -715,6 +727,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_12_115344) do
     t.index ["username"], name: "index_users_on_username", unique: true
     t.index ["uuid"], name: "index_users_on_uuid", unique: true
     t.index ["wallet_id"], name: "index_users_on_wallet_id", unique: true
+  end
+
+  create_table "v2_quests", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.integer "participation_points_amount", null: false
+    t.string "title", null: false
+    t.string "description", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["uuid"], name: "index_v2_quests_on_uuid"
   end
 
   create_table "versions", force: :cascade do |t|
@@ -783,4 +805,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_12_115344) do
   add_foreign_key "user_profile_type_changes", "users", column: "who_dunnit_id"
   add_foreign_key "user_tags", "tags"
   add_foreign_key "user_tags", "users"
+  add_foreign_key "user_v2_quests", "users"
+  add_foreign_key "user_v2_quests", "v2_quests"
 end
