@@ -71,7 +71,7 @@ export const RecommendedTeamsWidget = ({}) => {
                   members.top100[2].profile_picture_url,
                   members.top100[3].profile_picture_url
                 ]}
-                totalMembers={100}
+                totalMembers={members.top100.length}
               />
             )}
           </InfoColumn>
@@ -103,7 +103,7 @@ export const RecommendedTeamsWidget = ({}) => {
                   members.talentHouse[2].profile_picture_url,
                   members.talentHouse[3].profile_picture_url
                 ]}
-                totalMembers={100}
+                totalMembers={members.talentHouse.length}
               />
             )}
           </InfoColumn>
@@ -136,7 +136,7 @@ export const RecommendedTeamsWidget = ({}) => {
                   members.laMansineta[2].profile_picture_url,
                   members.laMansineta[3].profile_picture_url
                 ]}
-                totalMembers={100}
+                totalMembers={members.laMansineta.length}
               />
             )}
           </InfoColumn>

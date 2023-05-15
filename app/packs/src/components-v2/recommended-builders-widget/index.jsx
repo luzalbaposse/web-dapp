@@ -17,7 +17,7 @@ export const RecommendedBuildersWidget = ({}) => {
         console.error(err);
       });
   }, []);
-
+  
   return (
     !isLoading &&
     talents.length && (
@@ -32,7 +32,7 @@ export const RecommendedBuildersWidget = ({}) => {
               <Avatar
                 size="md"
                 isVerified={talent.verified}
-                name={talent.username}
+                name={talent.name}
                 occupation={talent.occupation}
                 url={talent.profile_picture_url}
                 profileURL={`/u/${talent.username}`}
