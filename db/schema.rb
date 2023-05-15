@@ -419,6 +419,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_15_153340) do
     t.index ["recipient_type", "recipient_id"], name: "index_notifications_on_recipient"
   end
 
+  create_table "participation_points", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.datetime "credited_at", precision: nil, null: false
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.integer "amount", null: false
+    t.string "description", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_participation_points_on_user_id"
+    t.index ["uuid"], name: "index_participation_points_on_uuid"
+  end
+
   create_table "partnerships", force: :cascade do |t|
     t.string "name", null: false
     t.text "logo_data"
@@ -799,6 +811,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_15_153340) do
   add_foreign_key "messages", "chats"
   add_foreign_key "milestone_images", "milestones"
   add_foreign_key "milestones", "talent"
+  add_foreign_key "participation_points", "users"
   add_foreign_key "partnerships", "invites"
   add_foreign_key "perks", "talent"
   add_foreign_key "profile_page_visitors", "users"
