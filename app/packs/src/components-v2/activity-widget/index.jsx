@@ -104,7 +104,7 @@ export const ActivityWidget = ({ profile = {} }) => {
                   <TitleDateWrapper>
                     <Avatar
                       size="sm"
-                      name={update.origin_user.username}
+                      name={update.origin_user.name}
                       isVerified={true}
                       url={update.origin_user.profile_picture_url}
                       profileURL={`/u/${update.origin_user.username}`}

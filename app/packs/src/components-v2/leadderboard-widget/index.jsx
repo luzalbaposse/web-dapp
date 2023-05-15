@@ -6,21 +6,12 @@ import { toast } from "react-toastify";
 
 export const LeadderboardWidget = ({ username }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [leadderBoardData, setLeadderBoardData] = useState([]);
+  const [leadderboardData, setLeadderboardData] = useState([]);
   useEffect(() => {
     leaderboardService
       .getLeaderboard()
       .then(({ data }) => {
-        const parsedData = data.leaderboards
-          .reduce((acc, el) => {
-            acc.push({
-              ...el,
-              count: data.results[el.id]
-            });
-            return acc;
-          }, [])
-          .sort((a, b) => b.count - a.count);
-        setLeadderBoardData(parsedData.length > 5 ? parsedData.slice(0, 5) : parsedData);
+        setLeadderboardData(data.leaderboards);
         setIsLoading(false);
       })
       .catch(err => {
@@ -31,7 +22,7 @@ export const LeadderboardWidget = ({ username }) => {
     !isLoading && (
       <Container>
         {
-          !!leadderBoardData.length && (
+          !!leadderboardData.length && (
             <TitleContainer>
               <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
                 Community Leaderboard
@@ -41,26 +32,26 @@ export const LeadderboardWidget = ({ username }) => {
           )
         }
         <ListContainer>
-          {leadderBoardData.map((user, index) => (
-            <Entry key={user.username}>
+          {leadderboardData.map((entry, index) => (
+            <Entry key={entry.user.name}>
               <EntryIdentification>
                 <Typography specs={{ variant: "label2", type: "medium" }} color="primary01">
                   #{index + 1}
                 </Typography>
                 <Avatar
                   userId={1}
-                  occupation={`${user.count} invites`}
-                  name={user.username}
+                  occupation={`${entry.score} invites`}
+                  name={entry.user.name}
                   size="md"
-                  url={user.profile_picture_url}
-                  profileURL={`/u/${user.username}`}
-                  isVerified={user.verified}
+                  url={entry.user.profile_picture_url}
+                  profileURL={`/u/${entry.user.username}`}
+                  isVerified={entry.user.verified}
                 />
               </EntryIdentification>
             </Entry>
           ))}
         </ListContainer>
-        <Footer isEmpty={!!leadderBoardData.length}>
+        <Footer isEmpty={!!leadderboardData.length}>
           <Typography specs={{ variant: "h4", type: "regular" }} color="primary01">
             <b>Help the</b> <i>community</i> <b>grow</b>
           </Typography>

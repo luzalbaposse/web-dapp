@@ -10,13 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_12_115344) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_15_153340) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "activities", force: :cascade do |t|
-    t.string "content", null: false
+    t.jsonb "content", null: false
     t.bigint "origin_user_id", null: false
     t.bigint "target_user_id"
     t.datetime "created_at", null: false
@@ -344,6 +343,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_12_115344) do
     t.index ["user_id"], name: "index_invites_on_user_id"
   end
 
+  create_table "leaderboards", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.bigint "race_id", null: false
+    t.bigint "user_id", null: false
+    t.integer "score", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["race_id"], name: "index_leaderboards_on_race_id"
+    t.index ["user_id"], name: "index_leaderboards_on_user_id"
+    t.index ["uuid"], name: "index_leaderboards_on_uuid"
+  end
+
   create_table "marketing_articles", force: :cascade do |t|
     t.string "link", null: false
     t.string "title", null: false
@@ -408,6 +419,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_12_115344) do
     t.index ["recipient_type", "recipient_id"], name: "index_notifications_on_recipient"
   end
 
+  create_table "participation_points", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.datetime "credited_at", precision: nil, null: false
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.integer "amount", null: false
+    t.string "description", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_participation_points_on_user_id"
+    t.index ["uuid"], name: "index_participation_points_on_uuid"
+  end
+
   create_table "partnerships", force: :cascade do |t|
     t.string "name", null: false
     t.text "logo_data"
@@ -469,6 +492,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_12_115344) do
     t.datetime "ends_at", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
   end
 
   create_table "rewards", force: :cascade do |t|
@@ -657,6 +681,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_12_115344) do
     t.index ["user_id"], name: "index_user_tags_on_user_id"
   end
 
+  create_table "user_v2_quests", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "v2_quest_id", null: false
+    t.datetime "completed_at", precision: nil, null: false
+    t.integer "credited_amount", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "v2_quest_id"], name: "index_user_v2_quests_on_user_id_and_v2_quest_id", unique: true
+    t.index ["user_id"], name: "index_user_v2_quests_on_user_id"
+    t.index ["v2_quest_id"], name: "index_user_v2_quests_on_v2_quest_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "username", null: false
     t.string "email"
@@ -676,8 +712,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_12_115344) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.string "theme_preference", default: "light"
     t.boolean "disabled", default: false
+    t.string "theme_preference", default: "light"
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"
@@ -715,6 +751,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_12_115344) do
     t.index ["username"], name: "index_users_on_username", unique: true
     t.index ["uuid"], name: "index_users_on_uuid", unique: true
     t.index ["wallet_id"], name: "index_users_on_wallet_id", unique: true
+  end
+
+  create_table "v2_quests", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.integer "participation_points_amount", null: false
+    t.string "title", null: false
+    t.string "description", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["uuid"], name: "index_v2_quests_on_uuid"
   end
 
   create_table "versions", force: :cascade do |t|
@@ -758,11 +804,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_12_115344) do
   add_foreign_key "impersonations", "users", column: "impersonator_id"
   add_foreign_key "invites", "partnerships"
   add_foreign_key "invites", "users"
+  add_foreign_key "leaderboards", "races"
+  add_foreign_key "leaderboards", "users"
   add_foreign_key "marketing_articles", "users"
   add_foreign_key "messages", "career_updates"
   add_foreign_key "messages", "chats"
   add_foreign_key "milestone_images", "milestones"
   add_foreign_key "milestones", "talent"
+  add_foreign_key "participation_points", "users"
   add_foreign_key "partnerships", "invites"
   add_foreign_key "perks", "talent"
   add_foreign_key "profile_page_visitors", "users"
@@ -783,4 +832,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_12_115344) do
   add_foreign_key "user_profile_type_changes", "users", column: "who_dunnit_id"
   add_foreign_key "user_tags", "tags"
   add_foreign_key "user_tags", "users"
+  add_foreign_key "user_v2_quests", "users"
+  add_foreign_key "user_v2_quests", "v2_quests"
 end

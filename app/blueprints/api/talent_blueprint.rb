@@ -6,6 +6,10 @@ class API::TalentBlueprint < Blueprinter::Base
       user.uuid
     end
 
+    field :name do |user, _options|
+      user.name
+    end
+
     field :wallet_address do |user, _options|
       user.wallet_id
     end

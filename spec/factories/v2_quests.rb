@@ -1,0 +1,9 @@
+FactoryBot.define do
+  factory :v2_quest do
+    sequence :title do |n|
+      "Quest ##{n}"
+    end
+    description { "You need to do x to get y" }
+    participation_points_amount { 30 }
+  end
+end
