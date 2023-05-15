@@ -10,9 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_11_125455) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_12_115344) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
@@ -246,6 +245,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_11_125455) do
     t.integer "total_app_notifications"
     t.integer "total_app_read_notifications"
     t.integer "daily_join_pages_visitors"
+    t.integer "total_linkedin_signups"
+    t.integer "total_email_signups"
   end
 
   create_table "discovery_rows", force: :cascade do |t|
@@ -341,18 +342,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_11_125455) do
     t.bigint "partnership_id"
     t.index ["partnership_id"], name: "index_invites_on_partnership_id"
     t.index ["user_id"], name: "index_invites_on_user_id"
-  end
-
-  create_table "leaderboards", force: :cascade do |t|
-    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
-    t.bigint "race_id", null: false
-    t.bigint "user_id", null: false
-    t.integer "score", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["race_id"], name: "index_leaderboards_on_race_id"
-    t.index ["user_id"], name: "index_leaderboards_on_user_id"
-    t.index ["uuid"], name: "index_leaderboards_on_uuid"
   end
 
   create_table "marketing_articles", force: :cascade do |t|
@@ -480,7 +469,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_11_125455) do
     t.datetime "ends_at", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
   end
 
   create_table "rewards", force: :cascade do |t|
@@ -688,8 +676,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_11_125455) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.boolean "disabled", default: false
     t.string "theme_preference", default: "light"
+    t.boolean "disabled", default: false
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"
@@ -770,8 +758,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_11_125455) do
   add_foreign_key "impersonations", "users", column: "impersonator_id"
   add_foreign_key "invites", "partnerships"
   add_foreign_key "invites", "users"
-  add_foreign_key "leaderboards", "races"
-  add_foreign_key "leaderboards", "users"
   add_foreign_key "marketing_articles", "users"
   add_foreign_key "messages", "career_updates"
   add_foreign_key "messages", "chats"

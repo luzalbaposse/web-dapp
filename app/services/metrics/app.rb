@@ -26,6 +26,14 @@ module Metrics
       Talent.where(verified: true).count
     end
 
+    def total_linkedin_signups
+      User.where.not(linkedin_id: nil).count
+    end
+
+    def total_email_signups
+      User.where(linkedin_id: nil).count
+    end
+
     def total_app_notifications
       Notification.count
     end
