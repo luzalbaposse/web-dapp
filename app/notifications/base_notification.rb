@@ -1,24 +1,16 @@
 class BaseNotification < Noticed::Base
   deliver_by :database
 
+  def actionable?
+    actions.present?
+  end
+
+  def actions
+    []
+  end
+
   def body
     t(".body")
-  end
-
-  def button_label
-    t(".button")
-  end
-
-  def button_url
-    nil
-  end
-
-  def secondary_button_label
-    t(".secondary_button")
-  end
-
-  def secondary_button_url
-    nil
   end
 
   def emailed?
@@ -46,8 +38,7 @@ class BaseNotification < Noticed::Base
   end
 
   def should_deliver_immediate_email?
-    unread? && !emailed? &&
-      recipient.prefers_immediate_notification?(self.class)
+    unread? && !emailed? && recipient.prefers_immediate_notification?(self.class)
   end
 
   def title

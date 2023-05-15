@@ -6,13 +6,12 @@ import Divider from "src/components/design_system/other/Divider";
 import TalentProfilePicture from "src/components/talent/TalentProfilePicture";
 
 const Notification = ({
-  buttonLabel,
-  buttonUrl,
+  actionable,
+  actions,
   description,
+  id,
   mode,
   onClick,
-  secondaryButtonLabel,
-  secondaryButtonUrl,
   showDivider = true,
   sourceName,
   sourceProfilePictureUrl,
@@ -29,13 +28,13 @@ const Notification = ({
         <div className={cx("w-100", !unread && "read")}>
           <div className="align-items-center d-flex justify-content-between">
             <div className="align-items-center d-flex">
-              <Typography color="primary01" specs={{ variant: "p2", type: "bold" }}>
+              <Typography color={unread ? "primary01" : "primaryDisable"} specs={{ variant: "p2", type: "bold" }}>
                 {sourceName}
               </Typography>
               {sourceVerified && <img className="ml-1" height={16} src={verifiedIcon(mode, !unread)} width={16} />}
             </div>
             {timeInformation && (
-              <Typography color="primary02" specs={{ variant: "p3", type: "regular" }}>
+              <Typography color={unread ? "primary02" : "primaryDisable"} specs={{ variant: "p3", type: "regular" }}>
                 {timeInformation}
               </Typography>
             )}
@@ -43,36 +42,26 @@ const Notification = ({
           {description && (
             <Typography
               className="notification-description text-truncate"
-              color="primary02"
+              color={unread ? "primary02" : "primaryDisable"}
               specs={{ variant: "p3", type: "regular" }}
             >
               {description}
             </Typography>
           )}
-          {unread && (buttonLabel || secondaryButtonLabel) && (
+          {actionable && actions.length > 0 && unread && (
             <div className="notification-buttons">
-              {secondaryButtonLabel && (
+              {actions.map((action, index) => (
                 <Button
-                  hierarchy="secondary"
+                  hierarchy={action.hierarchy}
+                  key={`notification-${id}-action-${index}`}
                   onClick={e => {
                     e.stopPropagation();
-                    onClick(secondaryButtonUrl);
+                    onClick(action);
                   }}
                   size="small"
-                  text={secondaryButtonLabel}
+                  text={action.label}
                 />
-              )}
-              {buttonLabel && (
-                <Button
-                  hierarchy="primary"
-                  onClick={e => {
-                    e.stopPropagation();
-                    onClick(buttonUrl);
-                  }}
-                  size="small"
-                  text={buttonLabel}
-                />
-              )}
+              ))}
             </div>
           )}
         </div>

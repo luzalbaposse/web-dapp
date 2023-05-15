@@ -1,8 +1,19 @@
 class SponsorshipClaimedNotification < BaseNotification
-  deliver_by :email, mailer: "SponsorshipMailer", method: :sponsorship_claimed_email, delay: 15.minutes, if: :should_deliver_immediate_email?
+  deliver_by :email,
+    mailer: "SponsorshipMailer",
+    method: :sponsorship_claimed_email,
+    delay: 15.minutes,
+    if: :should_deliver_immediate_email?
 
-  def button_url
-    messages_url(user: source&.id)
+  def actions
+    [
+      {
+        hierarchy: "primary",
+        label: t(".button"),
+        request_type: "GET",
+        url: messages_url(user: source&.id)
+      }
+    ]
   end
 
   def url

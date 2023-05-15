@@ -4,28 +4,20 @@ class NotificationBlueprint < Blueprinter::Base
   view :normal do
     fields :created_at, :type
 
+    field :actionable do |record, _options|
+      notification_from(record).actionable?
+    end
+
+    field :actions do |record, _options|
+      notification_from(record).actions
+    end
+
     field :body do |record, _options|
       notification_from(record).body
     end
 
-    field :button_label do |record, _options|
-      label(notification_from(record).button_label)
-    end
-
-    field :button_url do |record, _options|
-      notification_from(record).button_url
-    end
-
     field :read do |record, _options|
       record.read?
-    end
-
-    field :secondary_button_label do |record, _options|
-      label(notification_from(record).secondary_button_label)
-    end
-
-    field :secondary_button_url do |record, _options|
-      notification_from(record).secondary_button_url
     end
 
     field :source_name do |record, _options|
@@ -47,10 +39,6 @@ class NotificationBlueprint < Blueprinter::Base
     field :url do |record, _options|
       notification_from(record).url
     end
-  end
-
-  def self.label(label)
-    label.starts_with?("translation missing:") ? nil : label
   end
 
   # Cache the .to_notification transformation

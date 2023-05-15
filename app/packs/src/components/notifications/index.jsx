@@ -1,5 +1,7 @@
 import { Dropdown } from "react-bootstrap";
+import { toast } from "react-toastify";
 import { Typography } from "@talentprotocol/design-system";
+import axios from "axios";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import dayjs from "dayjs";
 import Modal from "react-bootstrap/Modal";
@@ -8,8 +10,10 @@ import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(customParseFormat);
 dayjs.extend(relativeTime);
 import { Bell, ArrowLeft } from "src/components/icons";
+import { defaultHeaders, appendCSRFToken } from "src/api/utils";
 import { get } from "src/utils/requests";
 import { put, post } from "src/utils/requests";
+import { ToastBody } from "src/components/design_system/toasts";
 import { useWindowDimensionsHook } from "../../utils/window";
 import Button from "src/components/design_system/button";
 import Divider from "src/components/design_system/other/Divider";
@@ -19,13 +23,12 @@ import NotificationTemplate from "src/components/design_system/notification";
 const Notification = ({ mode, notification, onClick, showDivider = true }) => {
   return (
     <NotificationTemplate
-      buttonLabel={notification.button_label}
-      buttonUrl={notification.button_url}
+      actionable={notification.actionable}
+      actions={notification.actions}
       description={notification.body}
+      id={notification.id}
       mode={mode}
-      onClick={url => onClick(notification, url)}
-      secondaryButtonLabel={notification.secondary_button_label}
-      secondaryButtonUrl={notification.secondary_button_url}
+      onClick={action => onClick(notification, action)}
       showDivider={showDivider}
       sourceName={notification.source_name}
       sourceProfilePictureUrl={notification.source_profile_picture_url}
@@ -70,9 +73,50 @@ const Notifications = ({ mode }) => {
 
   const notificationsUnread = notifications.some(notif => notif.read === false);
 
-  const onNotificationClick = async (notification, url) => {
+  const makeActionRequest = action => {
+    const baseHeaders = defaultHeaders();
+    const headers = appendCSRFToken(baseHeaders);
+
+    switch (action.request_type) {
+      case "DELETE":
+        return axios.delete(action.url, action.request_data, { headers: { ...headers } });
+      case "PUT":
+        return axios.put(action.url, action.request_data, { headers: { ...headers } });
+    }
+  };
+
+  const updateNotifications = (previousNotifications, notification) => {
+    const index = notifications.findIndex(n => n.id === notification.id);
+
+    const newNotifications = [
+      ...previousNotifications.slice(0, index),
+      { ...notification, actionable: false, read: true },
+      ...previousNotifications.slice(index + 1)
+    ];
+
+    return newNotifications;
+  };
+
+  const onNotificationClick = async (notification, action) => {
     if (!notification.read) await put(`/api/v1/notifications/${notification.id}/mark_as_read`);
-    if (url || notification.url) window.location.href = url || notification.url;
+
+    if (action) {
+      if (action.request_type === "GET") {
+        window.location.href = action.url;
+      } else {
+        makeActionRequest(action)
+          .then(() => {
+            setNotifications(previousNotifications => updateNotifications(previousNotifications, notification));
+          })
+          .catch(() => {
+            toast.error(<ToastBody heading="Error!" body={"Something went wrong. Ping us on Discord."} />, {
+              autoClose: 1500
+            });
+          });
+      }
+    } else if (notification.url) {
+      window.location.href = notification.url;
+    }
   };
 
   const markAllAsRead = async () => {

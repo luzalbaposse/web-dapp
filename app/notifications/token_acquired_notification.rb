@@ -3,12 +3,19 @@ class TokenAcquiredNotification < BaseNotification
   deliver_by :email, mailer: "TokenAcquiredMailer", method: :new_supporter, delay: 15.minutes, if: :new_supporter?
   deliver_by :email, mailer: "TokenAcquiredMailer", method: :existing_supporter, delay: 15.minutes, if: :existing_supporter?
 
-  def body
-    t(".body", amount: params["amount"])
+  def actions
+    [
+      {
+        hierarchy: "primary",
+        label: t(".button"),
+        request_type: "GET",
+        url: messages_url(user: source&.id)
+      }
+    ]
   end
 
-  def button_url
-    messages_url(user: source&.id)
+  def body
+    t(".body", amount: params["amount"])
   end
 
   def url
