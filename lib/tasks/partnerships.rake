@@ -4,13 +4,13 @@ namespace :partnerships do
   task :create_from_json, [:json_path, :max_uses] => :environment do |_t, args|
     json_path = args.json_path
     unless json_path.match?(/.?.json/)
-      puts "Invalid JSON file"
+      puts "Invalid JSON file" unless Rails.env.test?
       next
     end
 
     max_uses = args.max_uses.to_i
     if max_uses.zero?
-      puts "Invalid max uses"
+      puts "Invalid max uses" unless Rails.env.test?
       next
     end
 
@@ -19,7 +19,7 @@ namespace :partnerships do
     params = data.slice(*Partnerships::Create::ATTRIBUTES + %w[banner_url logo_url])
     partnership = Partnerships::Create.new(max_uses: max_uses, params: params).call
 
-    puts "Successfully created partnership - #{partnership.name}"
+    puts "Successfully created partnership - #{partnership.name}" unless Rails.env.test?
   rescue Partnerships::Create::Error => error
     puts "Could not create partnership: #{error.message}"
   end

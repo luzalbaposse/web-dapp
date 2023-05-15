@@ -1,4 +1,5 @@
 class API::V1::RacesController < ApplicationController
+  # TODO: Move to public api and start using leaderboards
   def show
     if race
       service = Races::PrepareRaceResults.new(race: race, user: current_user)

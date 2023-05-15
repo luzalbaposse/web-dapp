@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Web3::SponsorshipSync do
+  include ActiveJob::TestHelper
+
   subject(:sponsorship_sync) { described_class.new(tx_hash, chain_id, with_notifications) }
   let(:tx_hash) { "0x9edaf3a5e15695457319969406024b59fd156a0b5433c4a5bbfe0444572b3561" }
   let(:chain_id) { 44787 }
@@ -71,6 +73,21 @@ RSpec.describe Web3::SponsorshipSync do
           type: NewSponsorNotification,
           source_id: sponsor_user.id
         )
+      end
+
+      it "enqueues the ActivityIngestJob to add it to the activity feed" do
+        Sidekiq::Testing.inline! do
+          sponsorship_sync.call
+
+          job = enqueued_jobs.find { |j| j["job_class"] == "ActivityIngestJob" }
+
+          aggregate_failures do
+            expect(job["job_class"]).to eq("ActivityIngestJob")
+            expect(job["arguments"][0]).to eq("sponsor")
+            expect(job["arguments"][2]).to eq(sponsor_user.id)
+            expect(job["arguments"][3]).to eq(talent_user.id)
+          end
+        end
       end
     end
   end

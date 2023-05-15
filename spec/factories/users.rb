@@ -12,6 +12,8 @@ FactoryBot.define do
     onboarded_at { Time.current }
     uuid { SecureRandom.uuid }
 
+    association :activity_feed, factory: :activity_feed, strategy: :build
+
     trait :with_talent do
       association :talent
     end
@@ -26,6 +28,10 @@ FactoryBot.define do
 
     trait :with_profile_complete do
       after(:create) { |user| create(:quest, user: user, type: "Quests::TalentProfile", status: "done") }
+    end
+
+    trait :with_beginner_quest_complete do
+      after(:create) { |user| create(:quest, user: user, type: "Quests::User", status: "done") }
     end
   end
 end

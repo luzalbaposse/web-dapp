@@ -17,13 +17,14 @@ module Users
         create_talent_token(user)
         create_invite_used_notification(invite, user) if invite
 
-        if invite&.talent_invite?
-          update_profile_type(user, invite)
+        if invite&.user
+          update_race_score(invite.user)
         end
 
         create_invite(user)
         create_tasks(user)
         create_subscription(invite, user)
+        create_activity_feed(user)
 
         @result[:user] = user
         @result[:success] = true
@@ -118,9 +119,8 @@ module Users
       CreateNotification.new.call(recipient: inviter, source_id: user.id, type: InviteUsedNotification)
     end
 
-    def update_profile_type(user, invite)
-      Users::UpdateProfileType.new.call(user: user, who_dunnit_id: invite.user_id, new_profile_type: "talent")
-      user.reload
+    def update_race_score(user)
+      Leaderboards::RefreshUserScore.new(user: user).call
     end
 
     def create_subscription(invite, user)
@@ -135,6 +135,10 @@ module Users
         Subscription.create!(user_id: user.id, subscriber_id: invited_by_user.id, accepted_at: Time.current)
         UpdateTasksJob.perform_later(type: "Tasks::Watchlist", user_id: invited_by_user.id)
       end
+    end
+
+    def create_activity_feed(user)
+      ActivityFeed.find_or_create_by(user: user)
     end
   end
 end

@@ -62,6 +62,9 @@ class API::V1::PublicAPI::APIController < ActionController::Base
     response_body = {error: "Something went wrong. Reach out to us."}
     response_status = :internal_server_error
 
+    if Rails.env.development?
+      raise error
+    end
     log_request(response_body, response_status)
 
     Rollbar.error(
