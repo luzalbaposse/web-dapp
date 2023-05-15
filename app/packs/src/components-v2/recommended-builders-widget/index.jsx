@@ -36,6 +36,7 @@ export const RecommendedBuildersWidget = ({}) => {
                 occupation={talent.occupation}
                 url={talent.profile_picture_url}
                 profileURL={`/u/${talent.username}`}
+                ellipsisAt={200}
               />
               <Button hierarchy="primary" size="small" text="Support" href={`/u/${talent.username}/support`} />
             </BuilderEntry>
