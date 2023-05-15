@@ -29,7 +29,7 @@ const MobileUserMenu = ({
   return (
     <div className="navbar-container">
       <nav className={`navbar ${mode} justify-content-between`}>
-        <a href="/" className="mr-6">
+        <a href="/">
           <H5 bold className="mb-0">
             Talent Protocol
           </H5>
