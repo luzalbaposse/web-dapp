@@ -11,7 +11,7 @@ class SponsorshipClaimedNotification < BaseNotification
         hierarchy: "primary",
         label: t(".button"),
         request_type: "GET",
-        url: messages_url(user: source&.id)
+        url: messages_url(user: source&.username)
       }
     ]
   end

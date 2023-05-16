@@ -5,12 +5,12 @@ class CareerUpdateCreatedNotification < BaseNotification
         hierarchy: "primary",
         label: t(".button"),
         request_type: "GET",
-        url: messages_url(user: source&.id)
+        url: messages_url(user: source&.username)
       }
     ]
   end
 
   def url
-    messages_url(user: source&.id)
+    messages_url(user: source&.username)
   end
 end

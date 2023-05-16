@@ -21,6 +21,6 @@ class MessageReceivedNotification < BaseNotification
   end
 
   def url
-    messages_url(user: source&.id)
+    messages_url(user: source&.username)
   end
 end
