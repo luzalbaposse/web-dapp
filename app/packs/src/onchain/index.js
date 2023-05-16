@@ -100,7 +100,7 @@ class OnChain {
   }
 
   async disconnect() {
-    const web3Modal = await this.initializeWeb3Modal();
+    const web3Modal = this.initializeWeb3Modal();
 
     if (web3Modal.cachedProvider) {
       web3Modal.clearCachedProvider();
@@ -254,6 +254,37 @@ class OnChain {
     }
   }
 
+  sponsorshipTokenOptions() {
+    return Addresses[this.env]["sponsorshipTokens"];
+  }
+
+  async getTokenBalanceERC20(address, decimals) {
+    try {
+      const web3ModalInstance = await this.web3ModalConnect();
+      let provider;
+      // to change to polygon and mumbai
+      if (web3ModalInstance !== undefined) {
+        provider = new ethers.providers.Web3Provider(web3ModalInstance);
+      } else {
+        provider = new ethers.providers.JsonRpcProvider(Addresses[this.env][chainId]["rpcURL"]);
+      }
+      const chainId = await this.getChainID();
+
+      if (await this.recognizedChain()) {
+        const token = new ethers.Contract(address, StableToken.abi, provider);
+        const balance = await token.balanceOf(this.account);
+        const balanceFormatted = ethers.utils.formatUnits(balance, decimals);
+
+        return balanceFormatted;
+      } else {
+        return "0.0";
+      }
+    } catch (error) {
+      console.log(error);
+      return "0.0";
+    }
+  }
+
   async getStableBalanceERC20() {
     try {
       const web3ModalInstance = await this.web3ModalConnect();
@@ -283,6 +314,23 @@ class OnChain {
     } catch (error) {
       console.log(error);
       return "0.0";
+    }
+  }
+
+  async getToken(address) {
+    const web3ModalInstance = await this.web3ModalConnect();
+    let provider;
+
+    if (web3ModalInstance !== undefined) {
+      provider = new ethers.providers.Web3Provider(web3ModalInstance);
+    } else {
+      const chainId = await this.getChainID();
+      provider = new ethers.providers.JsonRpcProvider(Addresses[this.env][chainId]["rpcURL"]);
+    }
+    if (await this.recognizedChain()) {
+      return new ethers.Contract(address, TalentToken.abi, provider);
+    } else {
+      return false;
     }
   }
 
@@ -396,23 +444,6 @@ class OnChain {
     return result;
   }
 
-  async getToken(address) {
-    const web3ModalInstance = await this.web3ModalConnect();
-    let provider;
-
-    if (web3ModalInstance !== undefined) {
-      provider = new ethers.providers.Web3Provider(web3ModalInstance);
-    } else {
-      const chainId = await this.getChainID();
-      provider = new ethers.providers.JsonRpcProvider(Addresses[this.env][chainId]["rpcURL"]);
-    }
-    if (await this.recognizedChain()) {
-      return new ethers.Contract(address, TalentToken.abi, provider);
-    } else {
-      return false;
-    }
-  }
-
   async createStake(token, _amount) {
     if (!this.staking) {
       return;
@@ -475,58 +506,49 @@ class OnChain {
     }
   }
 
-  async createSponsorship(talent, _amount) {
+  async createSponsorship(talentAddress, tokenAddress, tokenDecimals, _amount) {
     if (!this.sponsorship) {
       return;
     }
 
-    const amount = ethers.utils.parseUnits(_amount, this.stableDecimals);
-    const tx = await this.sponsorship.connect(this.signer).sponsor(talent, amount, this.stabletoken.address);
+    const amount = ethers.utils.parseUnits(_amount, tokenDecimals);
+    const tx = await this.sponsorship.connect(this.signer).sponsor(talentAddress, amount, tokenAddress);
     const receipt = await tx.wait();
 
     return receipt;
   }
 
-  async claimSponsorship(sponsor, stableAddress) {
+  async claimSponsorship(sponsor, tokenAddress) {
     if (!this.sponsorship) {
       return;
     }
 
-    console.log("sponsorship", this.sponsorship);
-    console.log("sponsor", sponsor);
-    console.log("stableAddress", stableAddress);
-    console.log("signer", this.signer);
-
-    const tx = await this.sponsorship.connect(this.signer).withdrawToken(sponsor, stableAddress);
+    const tx = await this.sponsorship.connect(this.signer).withdrawToken(sponsor, tokenAddress);
     const receipt = await tx.wait();
 
     return receipt;
   }
 
-  async revokeSponsorship(talentAddress, stableAddress) {
+  async revokeSponsorship(talentAddress, tokenAddress) {
     if (!this.sponsorship) {
       return;
     }
 
-    console.log("sponsorship", this.sponsorship);
-    console.log("talentAddress", talentAddress);
-    console.log("stableAddress", stableAddress);
-    console.log("signer", this.signer);
-
-    const tx = await this.sponsorship.connect(this.signer).revokeSponsor(talentAddress, stableAddress);
+    const tx = await this.sponsorship.connect(this.signer).revokeSponsor(talentAddress, tokenAddress);
     const receipt = await tx.wait();
 
     return receipt;
   }
 
-  async approveStableSponsorship(_amount) {
-    if (!this.sponsorship || !this.stabletoken) {
+  async approveSponsorship(address, decimals, _amount) {
+    if (!this.sponsorship) {
       return;
     }
 
-    return await this.stabletoken
+    const token = await this.getToken(address);
+    return await token
       .connect(this.signer)
-      .approve(this.sponsorship.address, ethers.utils.parseUnits(_amount, this.stableDecimals));
+      .approve(this.sponsorship.address, ethers.utils.parseUnits(_amount, decimals));
   }
 
   async getStableBalance(formatted = false) {

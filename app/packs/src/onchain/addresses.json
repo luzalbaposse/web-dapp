@@ -34,7 +34,30 @@
         "blockExplorerUrls": ["https://mumbai.polygonscan.com/"],
         "iconUrls": ["future"]
       }
-    }
+    },
+    "sponsorshipTokens": [
+      {
+        "value": "cUSD",
+        "iconName": "celo",
+        "chain": "Celo",
+        "address": "0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1",
+        "decimals": 18
+      },
+      {
+        "value": "cEUR",
+        "iconName": "celo",
+        "chain": "Celo",
+        "address": "0x10c892A6EC43a53E45D0B916B4b7D383B1b78C0F",
+        "decimals": 18
+      },
+      {
+        "value": "USDC",
+        "iconName": "polygon",
+        "chain": "Polygon",
+        "address": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
+        "decimals": 18
+      }
+    ]
   },
   "staging": {
     "44787": {
@@ -71,7 +94,30 @@
         "blockExplorerUrls": ["https://mumbai.polygonscan.com/"],
         "iconUrls": ["future"]
       }
-    }
+    },
+    "sponsorshipTokens": [
+      {
+        "value": "cUSD",
+        "iconName": "celo",
+        "chain": "Celo",
+        "address": "0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1",
+        "decimals": 18
+      },
+      {
+        "value": "cEUR",
+        "iconName": "celo",
+        "chain": "Celo",
+        "address": "0x10c892A6EC43a53E45D0B916B4b7D383B1b78C0F",
+        "decimals": 18
+      },
+      {
+        "value": "USDC",
+        "iconName": "polygon",
+        "chain": "Polygon",
+        "address": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
+        "decimals": 18
+      }
+    ]
   },
   "production": {
     "42220": {
@@ -109,6 +155,29 @@
         "blockExplorerUrls": ["https://polygonscan.com/"],
         "iconUrls": ["future"]
       }
-    }
+    },
+    "sponsorshipTokens": [
+      {
+        "value": "cUSD",
+        "iconName": "celo",
+        "chain": "Celo",
+        "address": "0x765DE816845861e75A25fCA122bb6898B8B1282a",
+        "decimals": 18
+      },
+      {
+        "value": "G$",
+        "iconName": "celo",
+        "chain": "Celo",
+        "address": "0x62B8B11039FcfE5aB0C56E502b1C372A3d2a9c7A",
+        "decimals": 18
+      },
+      {
+        "value": "USDC",
+        "iconName": "polygon",
+        "chain": "Polygon",
+        "address": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+        "decimals": 6
+      }
+    ]
   }
 }
