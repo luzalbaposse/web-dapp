@@ -1,9 +1,9 @@
+import React, { useEffect, useState, useCallback } from "react";
 import { debounce } from "lodash";
 import { Dropdown } from "react-bootstrap";
 import { H5, P2 } from "src/components/design_system/typography";
 import cx from "classnames";
 import Modal from "react-bootstrap/Modal";
-import React, { useEffect, useState } from "react";
 import { camelCaseObject } from "src/utils/transformObjects";
 import { get } from "src/utils/requests";
 import { ArrowLeft, Search } from "src/components/icons";
@@ -11,34 +11,29 @@ import { useWindowDimensionsHook } from "../../utils/window";
 import Button from "src/components/design_system/button";
 import Divider from "src/components/design_system/other/Divider";
 import TalentProfilePicture from "../talent/TalentProfilePicture";
-import TextInput from "src/components/design_system/fields/textinput";
+import { Input, Spinner } from "@talentprotocol/design-system";
 
 const SearchDropdown = ({ className }) => {
   const { width } = useWindowDimensionsHook();
 
   const [keyword, setKeyword] = useState("");
+  const [loading, setLoading] = useState(false);
   const [pagination, setPagination] = useState({});
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
   const [talents, setTalents] = useState([]);
 
-  useEffect(() => {
-    // do not fetch talents if search dropdown is not visible
-    if (!showSearchDropdown) {
-      return;
-    }
-
-    if (keyword.length === 0) {
-      fetchTalents("page=1&per_page=10&status=Verified");
-    } else {
-      debouncedSearch();
-    }
-  }, [showSearchDropdown, keyword]);
-
   const fetchTalents = params => {
-    get(`/api/v1/talent?${params}`).then(response => {
-      setPagination(response.pagination);
-      setTalents(responseTalents(response));
-    });
+    setLoading(true);
+    if (params) {
+      get(`/api/v1/talent?${params}`).then(response => {
+        setTalents(responseTalents(response));
+        setPagination(response.pagination);
+        setLoading(false);
+      });
+    } else {
+      setTalents([]);
+      setLoading(false);
+    }
   };
 
   const fetchMoreTalents = () => {
@@ -56,11 +51,30 @@ const SearchDropdown = ({ className }) => {
 
   const showLoadMoreTalents = pagination.currentPage < pagination.lastPage;
 
-  const searchTalents = () => {
-    keyword.length > 2 ? fetchTalents(`keyword=${keyword}`) : setTalents([]);
+  const searchTalents = e => {
+    setKeyword(e.target.value);
+    if (e.target.value.length > 2) {
+      fetchTalents(`keyword=${e.target.value}`);
+    } else if (e.target.value.length === 0) {
+      fetchTalents("page=1&per_page=10&status=Verified");
+    } else {
+      fetchTalents();
+    }
   };
 
-  const debouncedSearch = debounce(searchTalents, 400);
+  const debouncedSearch = useCallback(debounce(searchTalents, 300), []);
+
+  useEffect(() => {
+    if (!showSearchDropdown) {
+      return;
+    }
+
+    fetchTalents("page=1&per_page=10&status=Verified");
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [showSearchDropdown]);
 
   if (width < 992) {
     return (
@@ -85,27 +99,28 @@ const SearchDropdown = ({ className }) => {
             >
               <ArrowLeft color="currentColor" size={16} />
             </Button>
-            <TextInput
-              className="w-100"
-              onChange={e => setKeyword(e.target.value)}
-              placeholder="Search"
-              value={keyword}
-            />
+            <Input placeholder="Search" className="w-100" onChange={debouncedSearch} />
           </Modal.Header>
           <Modal.Body className="d-flex flex-column p-0 menu-divider search-dropdown-modal-body">
-            <div className="m-4 search-dropdown-results-mobile">
-              {talents.length > 0 && (
-                <>
-                  <div className="mb-4">
-                    {talents.map(talent => (
-                      <TalentDropdownItem talent={talent} key={talent.id} />
-                    ))}
-                  </div>
-                  {showLoadMoreTalents && <LoadMore onClick={fetchMoreTalents} />}
-                </>
-              )}
-              {keyword.length > 2 && talents.length === 0 && <NoResults keyword={keyword} />}
-            </div>
+            {loading ? (
+              <div className="d-flex justify-content-center h-100">
+                <Spinner />
+              </div>
+            ) : (
+              <div className="m-4 search-dropdown-results-mobile">
+                {talents.length > 0 && (
+                  <>
+                    <div className="mb-4">
+                      {talents.map(talent => (
+                        <TalentDropdownItem talent={talent} key={talent.id} />
+                      ))}
+                    </div>
+                    {showLoadMoreTalents && <LoadMore onClick={fetchMoreTalents} />}
+                  </>
+                )}
+                {keyword.length > 2 && talents.length === 0 && <NoResults keyword={keyword} />}
+              </div>
+            )}
           </Modal.Body>
         </Modal>
       </>
@@ -118,18 +133,26 @@ const SearchDropdown = ({ className }) => {
         <Search color="currentColor" />
       </Dropdown.Toggle>
       <Dropdown.Menu className="search-dropdown-menu">
-        <TextInput className="w-100" onChange={e => setKeyword(e.target.value)} placeholder="Search" value={keyword} />
-        {talents.length > 0 && (
+        <Input placeholder="Search" className="w-100" onChange={debouncedSearch} />
+        {loading ? (
+          <div className="d-flex justify-content-center h-100">
+            <Spinner />
+          </div>
+        ) : (
           <>
-            <div className="search-dropdown-results">
-              {talents.map(talent => (
-                <TalentDropdownItem talent={talent} key={talent.id} />
-              ))}
-            </div>
-            {showLoadMoreTalents && <LoadMore onClick={fetchMoreTalents} />}
+            {talents.length > 0 && (
+              <>
+                <div className="search-dropdown-results">
+                  {talents.map(talent => (
+                    <TalentDropdownItem talent={talent} key={talent.id} />
+                  ))}
+                </div>
+                {showLoadMoreTalents && <LoadMore onClick={fetchMoreTalents} />}
+              </>
+            )}
+            {keyword.length > 2 && talents.length === 0 && <NoResults keyword={keyword} />}
           </>
         )}
-        {keyword.length > 2 && talents.length === 0 && <NoResults keyword={keyword} />}
       </Dropdown.Menu>
     </Dropdown>
   );
@@ -168,7 +191,7 @@ const TalentDropdownItem = ({ talent }) => {
       key={talent.id}
     >
       <TalentProfilePicture className="mr-2" height={32} src={talent.profilePictureUrl} />
-      <P2 bold className="mb-0 text-primary-01" medium>
+      <P2 className="mb-0 text-primary-01" medium>
         {talent.user.name}
       </P2>
     </Dropdown.Item>
