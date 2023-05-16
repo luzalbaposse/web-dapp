@@ -20,10 +20,6 @@ export const HowMuchStep = ({ token, setToken, railsContext, setAmount, closeMod
   const [onchain, setOnchain] = useState(null);
   const [availableAmount, setAvailableAmount] = useState(0);
   const [chainId, setChainId] = useState(0);
-  const tokenOptions = [
-    { value: "cUSD", iconName: "celo", chain: "Celo" },
-    { value: "USDC", iconName: "polygon", chain: "Polygon" }
-  ];
 
   const setupOnChain = useCallback(async () => {
     const newOnChain = new OnChain(railsContext.contractsEnv);
@@ -46,11 +42,11 @@ export const HowMuchStep = ({ token, setToken, railsContext, setAmount, closeMod
     setChainId(chainId);
     const chainName = chainIdToName(chainId, railsContext.contractsEnv);
 
-    const chainToken = tokenOptions.find(option => option.chain == chainName);
+    const chainToken = newOnChain.sponsorshipTokenOptions().find(option => option.chain == chainName);
     setToken(chainToken);
 
     // load stable token
-    const _availableAmount = await newOnChain.getStableBalanceERC20();
+    const _availableAmount = await newOnChain.getTokenBalanceERC20(chainToken.address, chainToken.decimals);
 
     if (_availableAmount === undefined) {
       toast.error(<ToastBody heading="We couldn't find your wallet" />, { autoClose: 5000 });
@@ -69,7 +65,10 @@ export const HowMuchStep = ({ token, setToken, railsContext, setAmount, closeMod
     if (chainId != tokenChainID) {
       await onchain.switchChain(tokenChainID);
     }
+    const _availableAmount = await onchain.getTokenBalanceERC20(token.address, token.decimals);
+
     setToken(token);
+    setAvailableAmount(_availableAmount);
   };
 
   return (
@@ -90,7 +89,7 @@ export const HowMuchStep = ({ token, setToken, railsContext, setAmount, closeMod
           <Dropdown
             value={token.value}
             selectedOption={token}
-            options={tokenOptions}
+            options={onchain?.sponsorshipTokenOptions()}
             placeholder="USDC"
             selectOption={token => changeToken(token)}
           />

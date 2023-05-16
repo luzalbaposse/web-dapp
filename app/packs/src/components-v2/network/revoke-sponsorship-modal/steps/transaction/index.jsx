@@ -42,7 +42,6 @@ export const TransactionStep = ({ sponsorship, railsContext, closeModal, nextSte
     }
 
     await newOnChain.loadSponsorship();
-    await newOnChain.loadStableToken();
 
     setOnchain(newOnChain);
     setAccount(_account);

@@ -44,7 +44,6 @@ export const TransactionStep = ({ profile, token, railsContext, amount, closeMod
 
     const _account = await newOnChain.connectedAccount();
     await newOnChain.loadSponsorship();
-    await newOnChain.loadStableToken();
 
     setOnchain(newOnChain);
     setAccount(_account);
@@ -56,21 +55,23 @@ export const TransactionStep = ({ profile, token, railsContext, amount, closeMod
 
   const approveTransactionCallback = useCallback(async () => {
     setPrimaryButtonState(PRIMARY_BUTTON_STATES.CONFIRMING_TRANSACTION);
-    const tx = await onchain.approveStableSponsorship(amount);
+    const tx = await onchain.approveSponsorship(token.address, token.decimals, amount);
     await tx.wait();
     setPrimaryButtonState(PRIMARY_BUTTON_STATES.SPONSOR);
   }, [onchain, setPrimaryButtonState]);
 
   const sponsorCallback = useCallback(async () => {
     setPrimaryButtonState(PRIMARY_BUTTON_STATES.LOADING_SPONSOR);
-    const result = await onchain.createSponsorship(profile.user.wallet_id, amount).catch(error => {
-      console.error(error);
-      toast.warning(<ToastBody title="Warning" body="We were not able to perform the action in your metamask" />, {
-        autoClose: 5000
+    const result = await onchain
+      .createSponsorship(profile.user.wallet_id, token.address, token.decimals, amount)
+      .catch(error => {
+        console.error(error);
+        toast.warning(<ToastBody title="Warning" body="We were not able to perform the action in your metamask" />, {
+          autoClose: 5000
+        });
+        setPrimaryButtonState(PRIMARY_BUTTON_STATES.SPONSOR);
+        return;
       });
-      setPrimaryButtonState(PRIMARY_BUTTON_STATES.SPONSOR);
-      return;
-    });
     if (result) {
       const _chainId = await onchain.getChainID();
       await post(`/api/v1/sponsorships`, {
