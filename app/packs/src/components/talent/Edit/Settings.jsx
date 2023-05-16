@@ -404,7 +404,7 @@ const Settings = props => {
           <P2
             className="w-100 text-left"
             mode={mode}
-            text="For each type of notification you can select to receive an immediate email notification, a daily email digest or to not receive any email."
+            text="For each type of notification you can select to receive an immediate email notification or to not receive any email."
           />
 
           {NotificationInputs.map(input => (
@@ -423,7 +423,6 @@ const Settings = props => {
                 >
                   <option value="0">Disabled</option>
                   <option value="1">Immediate</option>
-                  <option value="2">Digest</option>
                 </Form.Control>
               </div>
             </div>

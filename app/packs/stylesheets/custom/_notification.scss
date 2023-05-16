@@ -14,39 +14,83 @@
 
 .notification {
   box-sizing: border-box;
-  padding: 12px;
+  display: flex;
+  gap: 16px;
+  padding: 16px 24px;
+
+  .read {
+    p.light {
+      color: $light-text-primary-disable !important;
+    }
+
+    p.dark {
+      color: $dark-text-primary-disable !important;
+    }
+  }
 }
 
 .notification-icon {
   margin: 2px;
 }
 
-.notification-right-area {
-  margin-left: 10px;
-  margin-top: 2px;
+.notification-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
 }
 
 .notification-description {
-  max-width: 300px;
   margin-top: 4px;
+  max-width: 300px;
+}
+
+.notification-divider  {
+  padding: 0 24px;
 }
 
 .notifications-menu {
-  width: 365px;
-  max-height: 425px;
-  overflow-y: auto;
-  padding: 12px 0px !important;
-  overflow-y: overlay;
+  max-height: 650px;
+  padding: 0 !important;
+  top: 14px !important;
+  width: 400px;
 }
 
 .light-body .notifications-menu {
   background-color: $dark-text-primary-01 !important;
+  border: 1px solid $light-surface-hover-02 !important;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.04) !important;
   color: $light-text-primary-01 !important;
 }
 
 .dark-body .notifications-menu {
   background-color: $dark-surface-disable !important;
+  border: 1px solid $dark-surface-hover-02 !important;
+  box-shadow: 0px 8px 24px #000000 !important;
   color: $dark-text-primary-01 !important;
+}
+
+.notifications-menu-header {
+  border-bottom: 1px solid $light-surface-hover-02;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 24px;
+}
+
+.light-body .notifications-menu-header {
+  border-bottom: 1px solid $light-surface-hover-02;
+}
+
+.dark-body .notifications-menu-header {
+  border-bottom: 1px solid $dark-surface-hover-02;
+}
+
+.notifications-menu-body {
+  display: flex;
+  flex-direction: column;
+  max-height: 559px;
+  overflow-y: auto;
+  padding: 0;
 }
 
 .notifications-unread-icon {
@@ -78,23 +122,24 @@
 }
 
 .notifications-menu-dropdown-item {
-  color: $light-text-primary-01 !important;
-
-  &:hover {
-    border-radius: 0;
-  }
-}
-
-.dark-body .notifications-menu-dropdown-item {
-  color: $dark-text-primary-01 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
 }
 
 @media (max-width: 992px) {
   .notification {
-    padding: 16px 24px;
+    padding: 16px;
+  }
+
+  .notification-divider {
+    padding: 0 16px;
   }
 
   .notification-description {
     max-width: 85vw;
+  }
+
+  .notifications-menu-body {
+    max-height: calc(100vh - 66px);
   }
 }

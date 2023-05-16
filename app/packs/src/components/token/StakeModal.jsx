@@ -142,9 +142,7 @@ const StakeModal = ({
       const _tokenAvailability = await chainData.getTokenAvailability(targetToken, true);
       setMaxMinting(_tokenAvailability);
 
-      await post(`/api/v1/stakes`, {
-        stake: { token_id: tokenId }
-      }).catch(e => console.log(e));
+      await post(`/api/v1/stakes`, { stake: { amount: amount * 10, token_id: tokenId } }).catch(e => console.log(e));
 
       setStage("Verified");
 

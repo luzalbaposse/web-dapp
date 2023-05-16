@@ -43,10 +43,12 @@ export const chainNameToId = (chainName, env) => {
 };
 
 export const getAllChainOptions = env => {
-  return Object.keys(Addresses[env]).map(chain => ({
-    name: Addresses[env][chain].chainName,
-    id: Addresses[env][chain].chainId
-  }));
+  return Object.keys(Addresses[env])
+    .filter(item => item != "sponsorshipTokens")
+    .map(chain => ({
+      name: Addresses[env][chain].chainName,
+      id: Addresses[env][chain].chainId
+    }));
 };
 
 const XDAI_PARAMS = {

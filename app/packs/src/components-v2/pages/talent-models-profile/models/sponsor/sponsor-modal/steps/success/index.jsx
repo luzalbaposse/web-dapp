@@ -11,7 +11,7 @@ export const SuccessStep = ({ closeModal, profile }) => {
           Transaction submitted
         </Typography>
         <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
-          Congratulations! Your officially a {profile.user.name} Sponsor!
+          Congratulations! You're officially a {profile.user.name} Sponsor!
         </Typography>
       </InfoContainer>
       <InfoContainer>

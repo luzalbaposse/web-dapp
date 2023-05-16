@@ -1,11 +1,18 @@
 module Messages
   class Send
-    def call(sender:, receiver:, message:, sent_to_supporters: false, career_update: nil)
+    def call(
+      message:,
+      receiver:,
+      sender:,
+      career_update: nil,
+      create_notification: true,
+      sent_to_supporters: false
+    )
       return if sender.id == receiver.id
 
       chat = upsert_chat(sender, receiver, message)
       message = create_message(chat, sender, receiver, message, sent_to_supporters, career_update)
-      create_notification_for(receiver, sender)
+      create_notification_for(receiver, sender) if create_notification
       broadcast(chat, message)
 
       message

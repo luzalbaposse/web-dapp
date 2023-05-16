@@ -8,8 +8,4 @@ FactoryBot.define do
 
   factory :message do
   end
-
-  factory :notification do
-    type { MessageReceivedNotification.name }
-  end
 end

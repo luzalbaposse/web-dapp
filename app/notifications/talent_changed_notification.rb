@@ -6,10 +6,6 @@ class TalentChangedNotification < BaseNotification
     false
   end
 
-  def should_deliver_digest_email?
-    false
-  end
-
   def url
     user_url(source.username) if source.present?
   end
