@@ -3,8 +3,9 @@ require "rails_helper"
 RSpec.describe Stakes::Create do
   include ActiveJob::TestHelper
 
-  subject(:create_stake) { described_class.new(talent_token: talent_token, staking_user: staking_user).call }
+  subject(:create_stake) { described_class.new(amount:, talent_token:, staking_user:).call }
 
+  let(:amount) { "1000" }
   let(:talent_token) { create :talent_token }
   let(:talent_owner) { create :user }
   let(:staking_user) { create :user }
@@ -84,11 +85,12 @@ RSpec.describe Stakes::Create do
 
       aggregate_failures do
         expect(create_notification_class).to have_received(:new)
+
         expect(create_notification_instance).to have_received(:call).with(
+          extra_params: {amount:},
           recipient: talent_token.talent.user,
-          type: TokenAcquiredNotification,
           source_id: staking_user.id,
-          extra_params: {}
+          type: TokenAcquiredNotification
         )
       end
     end
@@ -107,7 +109,7 @@ RSpec.describe Stakes::Create do
             recipient: talent_token.talent.user,
             type: TokenAcquiredNotification,
             source_id: staking_user.id,
-            extra_params: {reinvestment: true}
+            extra_params: {amount:, reinvestment: true}
           )
         end
       end

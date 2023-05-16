@@ -32,51 +32,23 @@
 en:
   hello: "Hello world"
   notifications:
-    invite_used_notification:
-      title: "Invite"
-      body: "Your invite has been used by %{name}!"
+    career_update_created_notification:
+      body: "Shared a new career update."
+      button: "Read"
     message_received_notification:
-      title: "New messages"
-      body: "You have new messages"
-      button: "Check your inbox"
-    subscription_request_received_notification:
-      title: "Subscription requests"
-      body: "You have new subscription requests to manage"
-    subscription_accepted_notification:
-      title: "Subscription accepted"
-      body: "You are now subscribing %{name}"
-    sponsorship_claimed_notification:
-      title: "Sponsorship claimed"
-      body: "%{name} has claimed your sponsorship"
+      body: "Sent you a message."
+      button: "Reply"
     new_sponsor_notification:
-      title: "New Sponsor"
-      body: "%{name} wants to sponsor you"
-    talent_changed_notification:
-      title: "Talent info updated"
-      body: "%{name} profile has been updated"
+      body: "Wants to sponsor you."
+    sponsorship_claimed_notification:
+      body: "Claimed your sponsorship."
+      button: "Send Message"
+    subscription_accepted_notification:
+      body: "Accepted your subscription request."
+    subscription_request_received_notification:
+      body: "Wants to be your subscriber."
+      button: "Accept"
+      secondary_button: "Deny"
     token_acquired_notification:
-      title: "Supporter"
-      body: "You have a new investment by %{name}"
-      button: "Check your supporters"
-    quest_completed_notification:
-      title: "Quest"
-      body: "You just completed a quest! Check your rewards"
-    quests:
-      verified_profile_notification:
-        title: "You're now verified"
-        body: "Your account has been upgraded!"
-      completed_talent_profile_notification:
-        title: "You've completed your profile"
-        body: "You can now apply to launch a talent token"
-    talent_application_approved_notification:
-      title: "Talent application Approved"
-      body: "You have been approved by %{name}"
-    talent_application_rejected_notification:
-      title: "Talent application rejected"
-      body: "Your talent application has been rejected by %{name}"
-    user_names_verification_failed_notification:
-      title: "Verification names don't match 🤔"
-      body: "Added names don't match. Please check again!"
-    user_persona_verification_failed_notification:
-      title: "Verification failed 😭"
-      body: "Make sure documents are legible to submit them"
+      body: "Staked %{amount} USDC/cUSD to endorse you."
+      button: "Say Thank You"

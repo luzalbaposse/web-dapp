@@ -4,7 +4,7 @@ class API::V1::NotificationsController < ApplicationController
   PER_PAGE = 10
 
   def index
-    notifications = is_user_impersonated? ? [] : current_user.notifications.newest_first
+    notifications = is_user_impersonated? ? [] : current_user.notifications.in_app.newest_first
 
     pagy, notifications = pagy(notifications, items: per_page)
     notifications = NotificationBlueprint.render_as_json(notifications, view: :normal)
@@ -31,8 +31,7 @@ class API::V1::NotificationsController < ApplicationController
     notification = current_user.notifications.find(params[:notification_id])
     notification.mark_as_read! if notification.read_at.nil?
 
-    render json: {success: "Notification successfully updated."},
-      status: :ok
+    render json: {success: "Notification successfully updated."}, status: :ok
   end
 
   private

@@ -8,6 +8,8 @@ RSpec.describe "Stakes", type: :request do
     let!(:talent_token) { create :talent_token, talent: talent }
     let(:talent_token_id) { talent_token.id }
 
+    let(:amount) { "1000" }
+
     let(:stakes_create_class) { Stakes::Create }
     let(:stakes_create) { instance_double(stakes_create_class, call: true) }
 
@@ -16,6 +18,7 @@ RSpec.describe "Stakes", type: :request do
     let(:params) do
       {
         stake: {
+          amount:,
           token_id: talent_token_id
         }
       }
@@ -46,9 +49,11 @@ RSpec.describe "Stakes", type: :request do
 
       aggregate_failures do
         expect(stakes_create_class).to have_received(:new).with(
-          talent_token: talent_token,
+          amount:,
+          talent_token:,
           staking_user: current_user
         )
+
         expect(stakes_create).to have_received(:call)
       end
     end

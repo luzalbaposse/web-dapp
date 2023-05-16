@@ -1,11 +1,14 @@
 require "rails_helper"
 
 RSpec.describe Messages::Send do
-  subject(:send_message) { described_class.new.call(sender: sender, receiver: receiver, message: message) }
+  subject(:send_message) do
+    described_class.new.call(create_notification:, message:, receiver:, sender:)
+  end
 
+  let(:create_notification) { true }
   let(:message) { "Thanks for you support!" }
-  let(:sender) { create :user }
   let(:receiver) { create :user }
+  let(:sender) { create :user }
 
   let(:create_notification_class) { CreateNotification }
   let(:create_notification_instance) { instance_double(create_notification_class, call: true) }
@@ -103,6 +106,17 @@ RSpec.describe Messages::Send do
           expect(chat.sender_unread_messages_count).to eq 1
         end
       end
+    end
+  end
+
+  context "when create_notification is false" do
+    let(:create_notification) { false }
+
+    it "does not initialize and call the create notification service" do
+      send_message
+
+      expect(create_notification_class).not_to have_received(:new)
+      expect(create_notification_instance).not_to have_received(:call)
     end
   end
 end
