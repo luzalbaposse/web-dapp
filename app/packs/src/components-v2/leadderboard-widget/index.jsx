@@ -21,16 +21,14 @@ export const LeadderboardWidget = ({ username }) => {
   return (
     !isLoading && (
       <Container>
-        {
-          !!leadderboardData.length && (
-            <TitleContainer>
-              <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
-                Community Leaderboard
-              </Typography>
-              <TextLink text="Go to invites" rightIcon="carret" color="primary" size="small" href="/earn?tab=talent" />
-            </TitleContainer>
-          )
-        }
+        {!!leadderboardData.length && (
+          <TitleContainer>
+            <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
+              Community Leaderboard
+            </Typography>
+            <TextLink text="Go to invites" rightIcon="carret" color="primary" size="small" href="/earn?tab=talent" />
+          </TitleContainer>
+        )}
         <ListContainer>
           {leadderboardData.map((entry, index) => (
             <Entry key={entry.user.name}>
@@ -65,7 +63,7 @@ export const LeadderboardWidget = ({ username }) => {
             isStretched
             rightIcon="copy"
             onClick={() => {
-              navigator.clipboard.writeText(`https://beta.talentprotocol.com/u/${username}`);
+              navigator.clipboard.writeText(`https://beta.talentprotocol.com/join/${username}`);
               toast.success("Copied to clipboard!", {
                 autoClose: 3000
               });
