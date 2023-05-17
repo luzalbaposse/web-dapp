@@ -1,5 +1,6 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
+import { get } from "src/utils/requests";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -13,7 +14,7 @@ import ThemedButton from "src/components/design_system/button";
 import { P2, P3 } from "src/components/design_system/typography";
 import TextInput from "src/components/design_system/fields/textinput";
 import { NewChat, Search } from "src/components/icons";
-import { buildColor } from "@talentprotocol/design-system";
+import { buildColor, Tabs, useTabs } from "@talentprotocol/design-system";
 
 const lastMessageText = lastMessage => {
   if (lastMessage) {
@@ -77,9 +78,22 @@ const EmptyChats = ({ mode }) => (
   </div>
 );
 
+const tabs = ["All", "Unread"];
+
+const TAB_NAME_TO_INDEX = {
+  false: 0,
+  true: 1
+};
+
+const TAB_INDEX_TO_NAME = {
+  0: "false",
+  1: "true"
+};
+
 const MessageUserList = ({
   chats,
   setChats,
+  setPagination,
   activeUserUsername,
   onClick,
   mode,
@@ -90,6 +104,8 @@ const MessageUserList = ({
   searchChats,
   searchValue
 }) => {
+  const tabState = useTabs();
+
   const [showNewMessageModal, setShowNewMessageModal] = useState(false);
   const [showNewMessageToAllSupporters, setShowNewMessageToAllSupporters] = useState(false);
 
@@ -120,6 +136,28 @@ const MessageUserList = ({
     return chats.sort((a, b) => (Date.parse(a.last_message_at) < Date.parse(b.last_message_at) ? 1 : -1));
   }, [chats, activeUserUsername]);
 
+  const changeTab = index => {
+    const url = new URL(document.location);
+    const unread = TAB_INDEX_TO_NAME[index].toLowerCase();
+    url.searchParams.set("unread", unread);
+    history.pushState({}, "", url);
+    tabState.selectElement(TAB_NAME_TO_INDEX[unread]);
+    const q = url.searchParams.get("q") || "";
+
+    get(`messages?unread=${unread}&q=${q}`).then(response => {
+      setChats(response.chats);
+      setPagination(response.pagination);
+    });
+  };
+
+  useEffect(() => {
+    const url = new URL(document.location);
+    const unread = url.searchParams.get("unread") || "";
+    if (unread) {
+      tabState.selectElement(TAB_NAME_TO_INDEX[unread]);
+    }
+  }, []);
+
   return (
     <>
       <NewMessageModal
@@ -137,7 +175,7 @@ const MessageUserList = ({
         mobile={mobile}
       />
       <div className="d-flex flex-column align-items-stretch lg-overflow-y-scroll" style={{ paddingBottom: "32px" }}>
-        <div className="w-100 d-flex flex-row themed-border-bottom align-items-center py-4 pl-6 pr-6">
+        <div className="w-100 d-flex flex-row align-items-center py-4 pl-6 pr-6">
           <div className="position-relative w-100">
             <TextInput
               disabled={chats.length == 0 && searchValue.length == 0}
@@ -145,6 +183,7 @@ const MessageUserList = ({
               placeholder="Search in messages..."
               inputClassName="pl-5"
               className="w-100"
+              defaultValue={searchValue}
             />
             <Search color="currentColor" className="position-absolute chat-search-icon" />
           </div>
@@ -157,6 +196,14 @@ const MessageUserList = ({
           >
             <NewChat color="currentColor" />
           </ThemedButton>
+        </div>
+        <div className="themed-border-bottom pb-2">
+          <Tabs
+            selectedIndex={tabState.selectedIndex}
+            onClick={changeTab}
+            tabList={tabs}
+            disabledList={[false, false]}
+          />
         </div>
         {chats.length == 0 && searchValue.length == 0 && <EmptyChats mode={mode} />}
         <div className="w-100 d-flex flex-column lg-overflow-y-scroll lg-h-50">
