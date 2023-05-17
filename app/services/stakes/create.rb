@@ -22,7 +22,7 @@ module Stakes
           source_id: staking_user.id,
           type: TokenAcquiredNotification
         )
-        ActivityIngestJob.perform_later("stake", nil, staking_user.id, talent_token.talent.user.id)
+        ActivityIngestJob.perform_later("stake", nil, staking_user.id, talent_token.talent.user_id)
       end
 
       # Wait for blockchain transaction to settle

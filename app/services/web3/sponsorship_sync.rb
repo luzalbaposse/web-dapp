@@ -50,7 +50,6 @@ module Web3
             type: NewSponsorNotification,
             source_id: sponsorship.sponsor_user.id
           )
-          ActivityIngestJob.perform_later("sponsor", nil, sponsorship.sponsor_user.id, sponsorship.talent_user.id)
         end
       when "SponsorshipRevoked"
         sponsorship.update!(
@@ -64,6 +63,7 @@ module Web3
         )
 
         if sponsorship.talent_user && sponsorship.sponsor_user
+          ActivityIngestJob.perform_later("sponsor", nil, sponsorship.sponsor_user.id, sponsorship.talent_user.id)
           if with_notifications
             CreateNotification.new.call(
               recipient: sponsorship.sponsor_user,
