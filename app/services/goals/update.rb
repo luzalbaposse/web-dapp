@@ -14,12 +14,22 @@ module Goals
 
       goal.save!
 
+      ActivityIngestJob.perform_later("goal_update", goal_update_message(goal), goal.career_goal.talent.user_id)
+
       goal
     end
 
     private
 
     attr_reader :goal, :params
+
+    def goal_update_message(goal)
+      if goal.title.present? && goal.title.length > 0
+        "@origin has just made progress on their journey by updating their goal \"#{goal.title}\"."
+      else
+        "@origin has just made progress on their journey by updating their goals."
+      end
+    end
 
     def update_goal_images
       existing_ids = params[:images].map { |img| img[:id] }.compact

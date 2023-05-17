@@ -109,7 +109,7 @@ export const ActivityWidget = ({ profile = {} }) => {
                     <Avatar
                       size="sm"
                       name={update.origin_user.name}
-                      isVerified={true}
+                      isVerified={update.origin_user.verified}
                       url={update.origin_user.profile_picture_url}
                       profileURL={`/u/${update.origin_user.username}`}
                     />
@@ -126,7 +126,7 @@ export const ActivityWidget = ({ profile = {} }) => {
                 </UpdateTitle>
                 <UpdateContent>
                   <Typography specs={{ variant: "p1", type: "medium" }} color="primary01">
-                    {ACTIVITY_TYPE_TO_TITLE_MAP[update.type]}.
+                    {ACTIVITY_TYPE_TO_TITLE_MAP[update.type]}
                   </Typography>
                   <ActivityContainer>
                     <Activity content={content} originUser={update.origin_user} targetUser={update.target_user} />

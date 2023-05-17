@@ -109,7 +109,7 @@ Rails.application.routes.draw do
 
   # Public routes
 
-  resources :discovery, only: [:show], param: :slug
+  resources :discovery, only: [:index, :show], param: :slug
 
   # Auth - Clearance generated routes
   resources :passwords, controller: "passwords", only: [:create]

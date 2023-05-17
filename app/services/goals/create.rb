@@ -18,9 +18,14 @@ module Goals
 
       goal.save!
 
+      ActivityIngestJob.perform_later("goal_create", goal_create_message(goal), current_user.id)
+
       if career_goal.goals.length >= 1
+        # TODO - remove after quests cleanup @quests
         UpdateTasksJob.perform_later(type: "Tasks::Goals", user_id: current_user.id)
       end
+
+      refresh_quests
 
       goal
     end
@@ -29,11 +34,23 @@ module Goals
 
     attr_reader :career_goal, :current_user, :params
 
+    def goal_create_message(goal)
+      if goal.title.present? && goal.title.length > 0
+        "@origin has just made progress on their journey by adding a new goal: '#{goal.title}'."
+      else
+        "@origin has just made progress on their journey by adding a new goal."
+      end
+    end
+
     def create_goal_images(goal:)
       params[:images].each do |image|
         goal_image = goal.goal_images.build(image: image[:image_data].as_json)
         goal_image.image_derivatives!
       end
+    end
+
+    def refresh_quests
+      Quests::RefreshUserQuestsJob.perform_later(career_goal.talent.user.id)
     end
   end
 end

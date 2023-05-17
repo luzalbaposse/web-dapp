@@ -28,6 +28,8 @@ module Subscriptions
 
       update_tasks if more_than_2_subscribers?
 
+      refresh_quests
+
       update_subscriber_connection
       update_subscribing_connection
 
@@ -51,6 +53,7 @@ module Subscriptions
     end
 
     def update_tasks
+      # TODO - remove after quests cleanup @quests
       UpdateTasksJob.perform_later(type: "Tasks::Watchlist", user_id: subscriber_user.id)
     end
 
@@ -70,6 +73,11 @@ module Subscriptions
       )
 
       connection.refresh_connection!
+    end
+
+    def refresh_quests
+      Quests::RefreshUserQuestsJob.perform_later(subscriber_user.id)
+      Quests::RefreshUserQuestsJob.perform_later(subscribing_user.id)
     end
   end
 end

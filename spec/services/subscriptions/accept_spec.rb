@@ -79,6 +79,33 @@ RSpec.describe Subscriptions::Accept do
     expect(refresh_subscribe_back_instance).to have_received(:call)
   end
 
+  it "enqueues two jobs to refresh user quests" do
+    Sidekiq::Testing.inline! do
+      accept_subscription
+
+      jobs = enqueued_jobs.select { |j| j["job_class"] == "Quests::RefreshUserQuestsJob" }
+
+      aggregate_failures do
+        expect([jobs[0]["arguments"][0], jobs[1]["arguments"][0]]).to match_array([subscriber_user.id, subscribing_user.id])
+      end
+    end
+  end
+
+  it "enqueues the job to update the homepage activity" do
+    Sidekiq::Testing.inline! do
+      accept_subscription
+
+      job = enqueued_jobs.find { |j| j["job_class"] == "ActivityIngestJob" }
+
+      aggregate_failures do
+        expect(job["job_class"]).to eq("ActivityIngestJob")
+        expect(job["arguments"][0]).to eq("subscribe")
+        expect(job["arguments"][2]).to eq(subscriber_user.id)
+        expect(job["arguments"][3]).to eq(subscribing_user.id)
+      end
+    end
+  end
+
   context "when the subscription is already accepted" do
     let(:accepted_at) { Date.yesterday }
 
@@ -132,21 +159,6 @@ RSpec.describe Subscriptions::Accept do
           expect(job["job_class"]).to eq("UpdateTasksJob")
           expect(job["arguments"][0]["type"]).to eq("Tasks::Watchlist")
           expect(job["arguments"][0]["user_id"]).to eq(subscriber_user.id)
-        end
-      end
-    end
-
-    it "enqueues the job to update the watchlist task" do
-      Sidekiq::Testing.inline! do
-        accept_subscription
-
-        job = enqueued_jobs.find { |j| j["job_class"] == "ActivityIngestJob" }
-
-        aggregate_failures do
-          expect(job["job_class"]).to eq("ActivityIngestJob")
-          expect(job["arguments"][0]).to eq("subscribe")
-          expect(job["arguments"][2]).to eq(subscriber_user.id)
-          expect(job["arguments"][3]).to eq(subscribing_user.id)
         end
       end
     end

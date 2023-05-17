@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Avatar, Icon, Tag, Typography, MembersList } from "@talentprotocol/design-system";
+import { Avatar, Icon, Tag, Typography, MembersList, TextLink } from "@talentprotocol/design-system";
 import {
   Container,
   EntryContainer,
@@ -41,7 +41,8 @@ export const RecommendedTeamsWidget = ({}) => {
   return (
     <Container>
       <TitleContainer>
-        <Typography specs={{ variant: "h5", type: "bold" }}>Recent Collections</Typography>
+        <Typography specs={{ variant: "h5", type: "bold" }}>Recommended Collections</Typography>
+        <TextLink href="/discovery" text="View all" rightIcon="carret" color="primary" size="medium" />
       </TitleContainer>
       <TeamsList>
         <EntryContainer href="/discovery/top-100-talent?page=1">

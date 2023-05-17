@@ -1,14 +1,33 @@
 require "rails_helper"
 
 RSpec.describe API::UpdateTalent do
+  include ActiveJob::TestHelper
+
   let(:talent) { create :talent, :full_profile, :with_career_goal, public: false }
   let(:user) { create :user, talent: talent }
   let(:quest) { create :quest, user: user }
 
   subject(:update_talent) { described_class.new(user.talent, user) }
 
+  let(:user_params) { {} }
+  let(:talent_params) { {} }
+  let(:tag_params) { {} }
+  let(:career_needs_params) { {} }
+
   before do
     create :task, quest: quest, type: "Tasks::ApplyTokenLaunch"
+  end
+
+  it "enqueues a job to refresh user quests" do
+    Sidekiq::Testing.inline! do
+      update_talent.call(talent_params, user_params, tag_params, career_needs_params)
+
+      job = enqueued_jobs.find { |j| j["job_class"] == "Quests::RefreshUserQuestsJob" }
+
+      aggregate_failures do
+        expect(job["arguments"][0]).to eq(user.id)
+      end
+    end
   end
 
   context "when the user is approved" do

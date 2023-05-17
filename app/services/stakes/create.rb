@@ -11,6 +11,7 @@ module Stakes
         staking_user.update!(tokens_purchased: true)
         AddUsersToMailerliteJob.perform_later(staking_user.id)
         WhitelistUserJob.perform_later(user_id: staking_user.id, level: "token_holder")
+        # TODO - remove after quests cleanup @quests
         UpdateTasksJob.perform_later(type: "Tasks::BuyTalentToken", user_id: staking_user.id)
       end
 
@@ -21,7 +22,7 @@ module Stakes
           source_id: staking_user.id,
           type: TokenAcquiredNotification
         )
-        ActivityIngestJob.perform_later("stake", nil, staking_user.id, talent_token.talent.user.id)
+        ActivityIngestJob.perform_later("stake", nil, staking_user.id, talent_token.talent.user_id)
       end
 
       # Wait for blockchain transaction to settle

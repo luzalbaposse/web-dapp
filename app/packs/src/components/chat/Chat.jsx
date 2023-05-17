@@ -12,16 +12,16 @@ import MessageExchange from "./MessageExchange";
 import { useWindowDimensionsHook } from "../../utils/window";
 
 const Chat = ({ chats, pagination }) => {
-  const url = new URL(document.location);
-  const [activeUserUsername, setActiveUserUsername] = useState(url.searchParams.get("user") || "");
+  const baseUrl = new URL(document.location);
+  const [activeUserUsername, setActiveUserUsername] = useState(baseUrl.searchParams.get("user") || "");
   const [localChats, setLocalChats] = useState(chats);
   const [localPagination, setLocalPagination] = useState(pagination);
-  const [perkId] = useState(url.searchParams.get("perk") || 0);
+  const [perkId] = useState(baseUrl.searchParams.get("perk") || 0);
   const [activeChannel, setActiveChannel] = useState(null); // @TODO: Refactor chat
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [lastMessageId, setLastMessageId] = useState(0);
-  const [searchValue, setSearchValue] = useState(url.searchParams.get("q") || "");
+  const [searchValue, setSearchValue] = useState(baseUrl.searchParams.get("q") || "");
   const [chatId, setChatId] = useState("");
   const [sendingMessage, setSendingMessage] = useState(false);
   const [gettingMessages, setGettingMessages] = useState(false);
@@ -158,6 +158,7 @@ const Chat = ({ chats, pagination }) => {
   };
 
   const setActiveUser = userUsername => {
+    const url = new URL(document.location);
     setLocalChats(previousChats => {
       const index = previousChats.findIndex(chat => chat.receiver_username === userUsername);
       if (index > -1) {
@@ -175,7 +176,9 @@ const Chat = ({ chats, pagination }) => {
       }
     });
     setActiveUserUsername(userUsername);
-    window.history.pushState({}, document.title, `/messages?user=${userUsername}`);
+
+    url.searchParams.set("user", userUsername);
+    window.history.pushState({}, "", url);
   };
 
   window.addEventListener("popstate", () => {
@@ -189,9 +192,11 @@ const Chat = ({ chats, pagination }) => {
   };
 
   const loadMoreChats = () => {
+    const url = new URL(document.location);
     const nextPage = localPagination.currentPage + 1;
+    const unread = url.searchParams.get("unread") || "";
 
-    get(`messages?page=${nextPage}&q=${searchValue}`).then(response => {
+    get(`messages?page=${nextPage}&q=${searchValue}&unread=${unread}`).then(response => {
       const newChats = [...localChats, ...response.chats];
       setLocalChats(newChats);
       setLocalPagination(response.pagination);
@@ -203,8 +208,13 @@ const Chat = ({ chats, pagination }) => {
   };
 
   const searchChats = value => {
+    const url = new URL(document.location);
+    url.searchParams.set("q", value);
+    history.pushState({}, "", url);
     setSearchValue(value);
-    get(`messages?page=1&q=${value}`).then(response => {
+    const unread = url.searchParams.get("unread") || "";
+
+    get(`messages?page=1&q=${value}&unread=${unread}`).then(response => {
       setLocalChats(response.chats);
       setLocalPagination(response.pagination);
     });
@@ -223,6 +233,7 @@ const Chat = ({ chats, pagination }) => {
                 activeUserUsername={activeUserUsername}
                 chats={localChats}
                 setChats={setLocalChats}
+                setPagination={setLocalPagination}
                 mode={theme.mode()}
                 mobile={mobile}
                 supportersCount={currentUser?.supporters_count}

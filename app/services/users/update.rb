@@ -51,6 +51,8 @@ module Users
         end
       end
 
+      refresh_quests(user)
+
       {success: true, user: user}
     rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid => e
       error_message = e.message.downcase
@@ -72,6 +74,7 @@ module Users
       user.update!(wallet_id: wallet_id&.downcase)
 
       AddUsersToMailerliteJob.perform_later(user.id)
+      # TODO - remove after quests cleanup @quests
       UpdateTasksJob.perform_later(type: "Tasks::ConnectWallet", user_id: user.id)
       Web3::RefreshDomains.new(user: user).call
     end
@@ -97,6 +100,10 @@ module Users
         chain_id: domain_chain_id
       )
       user_domain.update!(domain: tal_domain, wallet: user.wallet_id, theme: tal_domain_params[:tal_domain_theme])
+    end
+
+    def refresh_quests(user)
+      Quests::RefreshUserQuestsJob.perform_later(user.id)
     end
 
     def ens_domain_owner

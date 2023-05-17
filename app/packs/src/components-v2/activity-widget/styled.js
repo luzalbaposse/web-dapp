@@ -31,7 +31,8 @@ export const UpdatesContainer = styled.div`
 
 export const StyledTypography = styled(Typography)`
   white-space: pre-line;
-  display: inline-flex;
+  display: inline;
+  direction: ltr;
   gap: 4px;
   ${({ shouldShowMore }) =>
     !shouldShowMore &&
@@ -41,6 +42,13 @@ export const StyledTypography = styled(Typography)`
       -webkit-line-clamp: 4;
       -webkit-box-orient: vertical;
     `}
+`;
+
+export const StyledTypographyLink = styled.a`
+  color: ${buildColor("primary01")} !important;
+  font-weight: 700;
+  text-decoration: underline;
+  outline: none;
 `;
 
 export const Update = styled.article`

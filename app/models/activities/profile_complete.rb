@@ -6,7 +6,7 @@ module Activities
 
     def self.generate_content(_, _)
       # @origin is replaced with the name of the user on the frontend
-      "@origin joined Talent Protocol."
+      "@origin has joined Talent Protocol."
     end
 
     def self.default_global_scope

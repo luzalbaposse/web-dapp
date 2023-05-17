@@ -74,21 +74,6 @@ RSpec.describe Web3::SponsorshipSync do
           source_id: sponsor_user.id
         )
       end
-
-      it "enqueues the ActivityIngestJob to add it to the activity feed" do
-        Sidekiq::Testing.inline! do
-          sponsorship_sync.call
-
-          job = enqueued_jobs.find { |j| j["job_class"] == "ActivityIngestJob" }
-
-          aggregate_failures do
-            expect(job["job_class"]).to eq("ActivityIngestJob")
-            expect(job["arguments"][0]).to eq("sponsor")
-            expect(job["arguments"][2]).to eq(sponsor_user.id)
-            expect(job["arguments"][3]).to eq(talent_user.id)
-          end
-        end
-      end
     end
   end
 
@@ -197,6 +182,21 @@ RSpec.describe Web3::SponsorshipSync do
               type: SponsorshipClaimedNotification,
               source_id: talent_user.id
             )
+          end
+
+          it "enqueues the ActivityIngestJob to add it to the activity feed" do
+            Sidekiq::Testing.inline! do
+              sponsorship_sync.call
+
+              job = enqueued_jobs.find { |j| j["job_class"] == "ActivityIngestJob" }
+
+              aggregate_failures do
+                expect(job["job_class"]).to eq("ActivityIngestJob")
+                expect(job["arguments"][0]).to eq("sponsor")
+                expect(job["arguments"][2]).to eq(sponsor_user.id)
+                expect(job["arguments"][3]).to eq(talent_user.id)
+              end
+            end
           end
         end
       end
