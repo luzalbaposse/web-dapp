@@ -1,4 +1,15 @@
 class V2Quest < ApplicationRecord
-  validates :title, uniqueness: true
-  validates :participation_points_amount, :title, :description, presence: true
+  VALID_QUEST_TYPES = %w[
+    profile_picture
+    three_journey_entries
+    send_career_update
+    three_talent_subscribe
+    verify_identity
+    five_subscribers
+    supporting_three
+  ]
+
+  validates :title, :quest_type, uniqueness: true
+  validates :participation_points_amount, :title, :description, :quest_type, presence: true
+  validates_inclusion_of :quest_type, in: VALID_QUEST_TYPES
 end

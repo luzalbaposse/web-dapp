@@ -681,4 +681,32 @@ RSpec.describe User, type: :model do
       expect(user.sponsorships).to match_array([sponsorship_one, sponsorship_three])
     end
   end
+
+  describe "#tal_amount_invested" do
+    let(:user) { create :user, wallet_id: wallet_id }
+    let(:wallet_id) { SecureRandom.hex }
+
+    before do
+      create :talent_supporter, supporter_wallet_id: wallet_id, talent_contract_id: SecureRandom.hex, tal_amount: "1000000000"
+      create :talent_supporter, supporter_wallet_id: wallet_id, talent_contract_id: SecureRandom.hex, tal_amount: "2000000000"
+    end
+
+    it "returns the sum of tal amount invested" do
+      expect(user.tal_amount_invested).to eq 3000000000
+    end
+  end
+
+  describe "#usd_amount_invested" do
+    let(:user) { create :user, wallet_id: wallet_id }
+    let(:wallet_id) { SecureRandom.hex }
+
+    before do
+      create :talent_supporter, supporter_wallet_id: wallet_id, talent_contract_id: SecureRandom.hex, tal_amount: "10000000000000"
+      create :talent_supporter, supporter_wallet_id: wallet_id, talent_contract_id: SecureRandom.hex, tal_amount: "20000000000000"
+    end
+
+    it "returns the sum of usd amount invested" do
+      expect(user.usd_amount_invested).to eq((30000000000000 * TalentToken::TAL_VALUE_IN_USD / TalentToken::TAL_DECIMALS))
+    end
+  end
 end

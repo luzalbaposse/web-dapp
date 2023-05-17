@@ -196,6 +196,17 @@ class User < ApplicationRecord
     including_self ? supporting_users : supporting_users.where.not(id: id)
   end
 
+  def tal_amount_invested
+    return 0 unless wallet_id
+
+    talent_supporters = TalentSupporter.where(supporter_wallet_id: wallet_id)
+    talent_supporters.sum { |tp| tp.tal_amount.to_i }
+  end
+
+  def usd_amount_invested
+    (tal_amount_invested * TalentToken::TAL_VALUE_IN_USD) / TalentToken::TAL_DECIMALS
+  end
+
   def prefers_digest_notification?(type)
     notification_preferences[type.name] == Delivery::DIGEST
   end
