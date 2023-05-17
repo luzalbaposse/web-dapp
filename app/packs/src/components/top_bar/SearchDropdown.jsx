@@ -65,6 +65,9 @@ const SearchDropdown = ({ className }) => {
   const debouncedSearch = useCallback(debounce(searchTalents, 300), []);
 
   useEffect(() => {
+    window.openSearch = () => {
+      setShowSearchDropdown(true);
+    };
     if (!showSearchDropdown) {
       return;
     }

@@ -28,11 +28,11 @@ export const BUY_TALENT_TOKENS =
 export const PROMOTE_YOUR_TOKENS =
   "https://www.notion.so/talentprotocol/Promote-Your-Token-on-Social-Media-e629939ed41c48a99c4b28006b64bd94";
 
-export const ABOUT = "https://talentprotocol.notion.site/Talent-Protocol-101-26a6c4b9f8284e5e8f55603a38629e76";
+export const ABOUT = "https://talentprotocol.notion.site/Talent-Protocol-2b10dc798a3941d5814bc10dfd102c25";
 
 export const BLOG = "https://blog.talentprotocol.com/";
 
-export const BOUNTIES = "https://app.dework.xyz/talent-protocol";
+export const BOUNTIES = "https://talentprotocol.notion.site/Bounties-74c27972ac554ce0b9702e8a9131cfa7";
 
 export const API = "https://docs.talentprotocol.com/api";
 

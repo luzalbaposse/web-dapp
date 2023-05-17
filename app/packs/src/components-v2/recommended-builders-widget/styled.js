@@ -20,7 +20,7 @@ export const Container = styled.section`
 
 export const TitleContainer = styled.div`
   width: 100%;
-  padding: 0 16px;
+  padding: 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;

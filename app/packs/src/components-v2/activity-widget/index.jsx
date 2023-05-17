@@ -1,10 +1,10 @@
 import React, { createRef, useCallback, useEffect, useState } from "react";
 import { Avatar, Button, Input, Typography } from "@talentprotocol/design-system";
 import {
+  ActivityContainer,
   Container,
   LoadMoreContainer,
   ReplyArea,
-  StyledTypography,
   TitleDateWrapper,
   TitleRow,
   Update,
@@ -15,6 +15,8 @@ import {
 import { activityService } from "../../api/activity";
 import { toast } from "react-toastify";
 import { messagesService } from "../../api/messages";
+import dayjs from "dayjs";
+import { Activity } from "./activity";
 
 const ACTIVITY_TYPE_TO_TITLE_MAP = {
   "Activities::CareerUpdate": "Career Update",
@@ -26,6 +28,7 @@ const ACTIVITY_TYPE_TO_TITLE_MAP = {
 };
 
 let activityPage = 0;
+let inputRefs = [];
 
 export const ActivityWidget = ({ profile = {} }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -36,7 +39,6 @@ export const ActivityWidget = ({ profile = {} }) => {
     }
   });
   const [inputsWithContent, setInputsWithContent] = useState([]);
-  const inputRefs = [];
   const loadMore = useCallback(() => {
     activityPage = activityPage + 1;
     activityService
@@ -55,6 +57,8 @@ export const ActivityWidget = ({ profile = {} }) => {
       });
   }, [setActivity, setIsLoading, setInputsWithContent, activity]);
   useEffect(() => {
+    activityPage = 0;
+    inputRefs = [];
     loadMore();
   }, []);
   const sendMessage = useCallback((to, inputRef) => {
@@ -85,7 +89,7 @@ export const ActivityWidget = ({ profile = {} }) => {
   );
   return (
     !isLoading && (
-      <Container>
+      <Container id="activity-widget">
         <TitleRow>
           <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
             Activity
@@ -110,7 +114,7 @@ export const ActivityWidget = ({ profile = {} }) => {
                       profileURL={`/u/${update.origin_user.username}`}
                     />
                     <Typography specs={{ variant: "p2", type: "regular" }} color="primary04">
-                      {new Date(update.created_at).toLocaleDateString()}
+                      {dayjs(update.created_at).fromNow()}
                     </Typography>
                   </TitleDateWrapper>
                   <Button
@@ -124,9 +128,9 @@ export const ActivityWidget = ({ profile = {} }) => {
                   <Typography specs={{ variant: "p1", type: "medium" }} color="primary01">
                     {ACTIVITY_TYPE_TO_TITLE_MAP[update.type]}.
                   </Typography>
-                  <StyledTypography specs={{ variant: "p2", type: "regular" }} color="primary03">
-                    {content}
-                  </StyledTypography>
+                  <ActivityContainer>
+                    <Activity content={content} originUser={update.origin_user} targetUser={update.target_user} />
+                  </ActivityContainer>
                   {profile.username !== update.origin_user.username && (
                     <ReplyArea>
                       <Input
@@ -150,18 +154,11 @@ export const ActivityWidget = ({ profile = {} }) => {
               </Update>
             );
           })}
-          {
-            activityPage < activity.pagination.lastPage && (
-              <LoadMoreContainer>
-                <Button
-                  hierarchy="secondary"
-                  size="medium"
-                  text="Load more"
-                  onClick={loadMore}
-                />
-              </LoadMoreContainer>
-            )
-          }
+          {activityPage < activity.pagination.lastPage && (
+            <LoadMoreContainer>
+              <Button hierarchy="secondary" size="medium" text="Load more" onClick={loadMore} />
+            </LoadMoreContainer>
+          )}
         </UpdatesContainer>
       </Container>
     )

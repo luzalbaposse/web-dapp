@@ -6,8 +6,8 @@ export const QuickNavigator = ({ username }) => {
   return (
     <Container>
       <ButtonContainer>
-        <Button hierarchy="secondary" size="large" leftIcon="search" iconColor="primary" isDisabled />
-        <Typography specs={{ variant: "p3", type: "medium" }} color="primaryDisable">
+        <Button hierarchy="secondary" size="large" leftIcon="search" iconColor="primary" onClick={window.openSearch} />
+        <Typography specs={{ variant: "p3", type: "medium" }} color="primary01">
           Search
         </Typography>
       </ButtonContainer>
@@ -52,8 +52,18 @@ export const QuickNavigator = ({ username }) => {
         </Typography>
       </ButtonContainer>
       <ButtonContainer>
-        <Button hierarchy="secondary" size="large" leftIcon="planet" iconColor="primary" isDisabled />
-        <Typography specs={{ variant: "p3", type: "medium" }} color="primaryDisable">
+        <Button
+          hierarchy="secondary"
+          size="large"
+          leftIcon="planet"
+          iconColor="primary"
+          onClick={() => {
+            document
+              .getElementById("activity-widget")
+              ?.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+          }}
+        />
+        <Typography specs={{ variant: "p3", type: "medium" }} color="primary01">
           Activity
         </Typography>
       </ButtonContainer>

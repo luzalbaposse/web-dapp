@@ -81,6 +81,7 @@ class User < ApplicationRecord
   end
 
   scope :beginner_quest_completed, -> { joins(:quests).where(quests: {type: "Quests::User", status: "done"}) }
+  scope :profile_quest_completed, -> { joins(:quests).where(quests: {type: "Quests::TalentProfile", status: "done"}) }
   scope :onboarded, -> { where.not(onboarded_at: nil) }
 
   # [CLEARANCE] override email writing to allow nil but not two emails ""
@@ -194,6 +195,17 @@ class User < ApplicationRecord
     supporting_users = User.joins(talent: :talent_token).where(talent_tokens: {contract_id: token_contract_ids})
 
     including_self ? supporting_users : supporting_users.where.not(id: id)
+  end
+
+  def tal_amount_invested
+    return 0 unless wallet_id
+
+    talent_supporters = TalentSupporter.where(supporter_wallet_id: wallet_id)
+    talent_supporters.sum { |tp| tp.tal_amount.to_i }
+  end
+
+  def usd_amount_invested
+    (tal_amount_invested * TalentToken::TAL_VALUE_IN_USD) / TalentToken::TAL_DECIMALS
   end
 
   def prefers_digest_notification?(type)

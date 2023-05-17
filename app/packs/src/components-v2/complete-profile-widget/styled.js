@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 
 export const TitleContainer = styled.div`
   margin: 24px 0;
-  
+
   ${mobileStyles(css`
     margin: 24px 16px;
   `)}

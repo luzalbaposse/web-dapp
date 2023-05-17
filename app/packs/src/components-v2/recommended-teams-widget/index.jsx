@@ -23,15 +23,15 @@ export const RecommendedTeamsWidget = ({}) => {
   });
   useEffect(() => {
     Promise.all([
-      axios.get("/api/v1/talent?page=1&discovery_row_id=15"),
-      axios.get("/api/v1/talent?page=1&discovery_row_id=6"),
-      axios.get("/api/v1/talent?page=1&discovery_row_id=12")
+      axios.get("/api/v1/talent?page=1&discovery_row_id=15&per_page=4"),
+      axios.get("/api/v1/talent?page=1&discovery_row_id=6&per_page=4"),
+      axios.get("/api/v1/talent?page=1&discovery_row_id=12&per_page=4")
     ])
       .then(res => {
         setMembers({
-          top100: res[0].data?.talents,
-          talentHouse: res[1].data?.talents,
-          laMansineta: res[2].data?.talents
+          top100: res[0].data,
+          talentHouse: res[1].data,
+          laMansineta: res[2].data
         });
       })
       .catch(err => {
@@ -66,12 +66,12 @@ export const RecommendedTeamsWidget = ({}) => {
             {!!members.top100.length && (
               <MembersList
                 membersImages={[
-                  members.top100[0].profile_picture_url,
-                  members.top100[1].profile_picture_url,
-                  members.top100[2].profile_picture_url,
-                  members.top100[3].profile_picture_url
+                  members.top100.talents[0].profile_picture_url,
+                  members.top100.talents[1].profile_picture_url,
+                  members.top100.talents[2].profile_picture_url,
+                  members.top100.talents[3].profile_picture_url
                 ]}
-                totalMembers={members.top100.length}
+                totalMembers={members.top100.pagination.total}
               />
             )}
           </InfoColumn>
@@ -98,12 +98,12 @@ export const RecommendedTeamsWidget = ({}) => {
             {!!members.talentHouse.length && (
               <MembersList
                 membersImages={[
-                  members.talentHouse[0].profile_picture_url,
-                  members.talentHouse[1].profile_picture_url,
-                  members.talentHouse[2].profile_picture_url,
-                  members.talentHouse[3].profile_picture_url
+                  members.talentHouse.talents[0].profile_picture_url,
+                  members.talentHouse.talents[1].profile_picture_url,
+                  members.talentHouse.talents[2].profile_picture_url,
+                  members.talentHouse.talents[3].profile_picture_url
                 ]}
-                totalMembers={members.talentHouse.length}
+                totalMembers={members.talentHouse.pagination.total}
               />
             )}
           </InfoColumn>
@@ -130,13 +130,13 @@ export const RecommendedTeamsWidget = ({}) => {
             </Tags>
             {!!members.laMansineta.length && (
               <MembersList
-                membersImages={[ 
-                  members.laMansineta[0].profile_picture_url,
-                  members.laMansineta[1].profile_picture_url,
-                  members.laMansineta[2].profile_picture_url,
-                  members.laMansineta[3].profile_picture_url
+                membersImages={[
+                  members.laMansineta.talents[0].profile_picture_url,
+                  members.laMansineta.talents[1].profile_picture_url,
+                  members.laMansineta.talents[2].profile_picture_url,
+                  members.laMansineta.talents[3].profile_picture_url
                 ]}
-                totalMembers={members.laMansineta.length}
+                totalMembers={members.laMansineta.pagination.total}
               />
             )}
           </InfoColumn>
