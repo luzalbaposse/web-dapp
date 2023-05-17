@@ -166,7 +166,7 @@ const Notifications = ({ mode }) => {
           <Divider />
           <Modal.Body className="notifications-menu-body">
             {notifications.length === 0 ? (
-              <small className="w-100 text-center">No notifications</small>
+              <small className="py-3 w-100 text-center">No notifications</small>
             ) : (
               <>
                 {notifications.map((notification, index) => (
@@ -242,7 +242,7 @@ const Notifications = ({ mode }) => {
           </div>
           <div className="notifications-menu-body">
             {notifications.length === 0 ? (
-              <Dropdown.ItemText className="px-2 py-3" key="no-notifications">
+              <Dropdown.ItemText className="px-4 py-3" key="no-notifications">
                 <small className="no-notifications-item">No notifications</small>
               </Dropdown.ItemText>
             ) : (
