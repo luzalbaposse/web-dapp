@@ -16,7 +16,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_16_092017) do
   enable_extension "plpgsql"
 
   create_table "activities", force: :cascade do |t|
-    t.jsonb "content", null: false
+    t.string "content", null: false
     t.bigint "origin_user_id", null: false
     t.bigint "target_user_id"
     t.datetime "created_at", null: false

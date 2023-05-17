@@ -11,5 +11,9 @@ module Activities
     def self.default_global_scope
       false
     end
+
+    def message_with_names
+      message
+    end
   end
 end

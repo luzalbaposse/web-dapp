@@ -16,7 +16,8 @@ class API::V1::TalentController < ApplicationController
       talents: talents,
       pagination: {
         currentPage: paging[:current_page],
-        lastPage: paging[:last_page]
+        lastPage: paging[:last_page],
+        total: paging[:total_count]
       }
     }, status: :ok
   end

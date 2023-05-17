@@ -31,6 +31,16 @@ export const UpdatesContainer = styled.div`
 
 export const StyledTypography = styled(Typography)`
   white-space: pre-line;
+  display: inline-flex;
+  gap: 4px;
+  ${({ shouldShowMore }) =>
+    !shouldShowMore &&
+    css`
+      overflow: hidden;
+      text-overflow: ellipsis;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+    `}
 `;
 
 export const Update = styled.article`
@@ -69,6 +79,7 @@ export const UpdateContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+  position: relative;
 `;
 
 export const ReplyArea = styled.div`
@@ -78,8 +89,20 @@ export const ReplyArea = styled.div`
 `;
 
 export const LoadMoreContainer = styled.div`
-    padding: 24px 16px 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  padding: 24px 16px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const ActivityContainer = styled.div`
+  position: relative;
+`;
+
+export const ShowMoreContainer = styled.div`
+  position: absolute;
+  bottom: -2px;
+  right: 0;
+  background: red;
+  background-color: ${buildColor("bg01")};
 `;

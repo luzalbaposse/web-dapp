@@ -29,7 +29,7 @@ export const HomepagePage = ({}) => {
         <GmHeader profile={currentUser} />
       </GMContainer>
       <Container>
-        { mobile ? (
+        {mobile ? (
           <Column>
             <CompleteProfileWidget username={currentUser?.username} />
             <QuickNavigator username={currentUser?.username} />

@@ -35,7 +35,8 @@ module Talents
       talents = talents.limit(size).offset(from)
       [{
         current_page: ((from + PAGE_NEUTRALIZER) / size.to_f).ceil,
-        last_page: (total_count / size.to_f).ceil
+        last_page: (total_count / size.to_f).ceil,
+        total_count: total_count
       }, talents.entries.map do |talent|
         attributes = talent.attributes.deep_stringify_keys
         attributes["profile_picture_url"] = Talent.find_by!(id: talent.id).profile_picture_url

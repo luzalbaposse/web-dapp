@@ -27,7 +27,7 @@ export const CompleteProfileWidget = ({ username }) => {
           isVerified: !!data.profile.verified,
           socialLinks:
             Object.values(data.profile.profile).filter(
-              el => (typeof el === "string" && (el.substring(0, 4) === "http" || el.substring(0, 3) === "www"))
+              el => typeof el === "string" && (el.substring(0, 4) === "http" || el.substring(0, 3) === "www")
             ).length >= 2
         };
         newState.progress = Math.ceil((100 / 5) * Object.values(newState).filter(el => !!el).length);
@@ -98,12 +98,7 @@ export const CompleteProfileWidget = ({ username }) => {
               />
             </ItemContainer>
             <ItemContainer>
-              <Checkbox
-                label="Get verified"
-                isChecked={state.isVerified}
-                isDisabled={state.isVerified}
-                hasNoAction
-              />
+              <Checkbox label="Get verified" isChecked={state.isVerified} isDisabled={state.isVerified} hasNoAction />
             </ItemContainer>
           </ListContainer>
           <Button text="Edit my profile" size="large" hierarchy="primary" isStretched href={`/u/${username}`} />

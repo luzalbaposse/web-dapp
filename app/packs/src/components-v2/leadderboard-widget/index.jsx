@@ -30,7 +30,7 @@ export const LeadderboardWidget = ({ username }) => {
           </TitleContainer>
         )}
         <ListContainer>
-          {leadderboardData.map((entry, index) => (
+          {leadderboardData.slice(0, 5).map((entry, index) => (
             <Entry key={entry.user.name}>
               <EntryIdentification>
                 <Typography specs={{ variant: "label2", type: "medium" }} color="primary01">

@@ -34,10 +34,14 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
   end
 
   def recommended
-    per_page = 3
-
     subscribed_users = Subscription.where(user_id: current_user.id)
-    recomended_users = User.where.not(id: subscribed_users.select(:subscriber_id)).select("setseed(0.#{Date.today.jd}), *").order("RANDOM()").limit(3)
+    supporters = current_user.supporters.select(:id)
+    recomended_users = User.profile_quest_completed
+      .where.not(id: subscribed_users.select(:subscriber_id))
+      .where.not(id: supporters.select(:id))
+      .where.not(id: current_user.id)
+      .select("setseed(0.#{Date.today.jd}), *")
+      .order("RANDOM()")
 
     pagy, page_recomended_users = pagy_uuid_cursor(
       recomended_users,

@@ -81,6 +81,7 @@ class User < ApplicationRecord
   end
 
   scope :beginner_quest_completed, -> { joins(:quests).where(quests: {type: "Quests::User", status: "done"}) }
+  scope :profile_quest_completed, -> { joins(:quests).where(quests: {type: "Quests::TalentProfile", status: "done"}) }
   scope :onboarded, -> { where.not(onboarded_at: nil) }
 
   # [CLEARANCE] override email writing to allow nil but not two emails ""

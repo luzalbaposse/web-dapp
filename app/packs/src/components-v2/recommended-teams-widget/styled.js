@@ -7,9 +7,7 @@ export const Container = styled.section`
   justify-content: center;
   padding-bottom: 8px;
 
-  ${mobileStyles(css`
-    margin-top: 24px;
-  `)}
+  ${mobileStyles(css``)}
 
   ${desktopStyles(css`
     border: 1px solid ${buildColor("surfaceHover02")};

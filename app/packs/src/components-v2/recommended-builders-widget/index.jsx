@@ -17,7 +17,7 @@ export const RecommendedBuildersWidget = ({}) => {
         console.error(err);
       });
   }, []);
-  
+
   return (
     !isLoading &&
     talents.length && (
