@@ -12,7 +12,6 @@
 
 ActiveRecord::Schema[7.0].define(version: 2023_05_16_092017) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "activities", force: :cascade do |t|
@@ -713,8 +712,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_16_092017) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.string "theme_preference", default: "light"
     t.boolean "disabled", default: false
+    t.string "theme_preference", default: "light"
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"

@@ -13,12 +13,14 @@ export const Activity = ({ content, originUser, targetUser }) => {
     const contentArray = content.split("@origin");
     if (contentArray.length > 1) {
       if (contentArray[1].includes("@target") && !!targetUser) {
+        const targetContentArray = contentArray[1].split("@target");
         return (
           <>
             <span>{contentArray[0]}</span>
-            <TextLink href={`/u/${originUser.username}`} text={`@${originUser.name}`} color="primary01" size="small" />
-            <span>{contentArray[1]}</span>
-            <TextLink href={`/u/${targetUser.username}`} text={`@${targetUser.name}`} color="primary01" size="small" />
+            <span>{originUser.name}</span>
+            <span>{targetContentArray[0]}</span>
+            <TextLink href={`/u/${originUser.username}`} text={targetUser.name} color="primary01" size="small" />
+            <span>{targetContentArray[1]}</span>
             <span>{contentArray[2]}</span>
           </>
         );
@@ -26,7 +28,7 @@ export const Activity = ({ content, originUser, targetUser }) => {
         return (
           <>
             <span>{contentArray[0]}</span>
-            <TextLink href={`/u/${originUser.username}`} text={`@${originUser.name}`} color="primary01" size="small" />
+            <TextLink href={`/u/${originUser.username}`} text={originUser.name} color="primary01" size="small" />
             <span>{contentArray[1]}</span>
           </>
         );
