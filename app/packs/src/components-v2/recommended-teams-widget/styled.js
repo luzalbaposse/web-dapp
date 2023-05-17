@@ -35,7 +35,7 @@ export const TeamsList = styled.div`
   gap: 16px 32px;
 `;
 
-export const EntryContainer = styled.a`
+export const EntryContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;

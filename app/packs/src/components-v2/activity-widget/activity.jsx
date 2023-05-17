@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { ShowMoreContainer, StyledTypography } from "./styled";
-import { TextLink } from "@talentprotocol/design-system";
+import { ShowMoreContainer, StyledTypography, StyledTypographyLink } from "./styled";
 
 export const Activity = ({ content, originUser, targetUser }) => {
   const [didRender, setDidRender] = useState(false);
@@ -16,20 +15,20 @@ export const Activity = ({ content, originUser, targetUser }) => {
         const targetContentArray = contentArray[1].split("@target");
         return (
           <>
-            <span>{contentArray[0]}</span>
-            <span>{originUser.name}</span>
-            <span>{targetContentArray[0]}</span>
-            <TextLink href={`/u/${originUser.username}`} text={targetUser.name} color="primary01" size="small" />
-            <span>{targetContentArray[1]}</span>
-            <span>{contentArray[2]}</span>
+            {contentArray[0]}
+            {originUser.name}
+            {targetContentArray[0]}
+            <StyledTypographyLink href={`/u/${targetUser.username}`}>{targetUser.name}</StyledTypographyLink>
+            {targetContentArray[1]}
+            {contentArray[2]}
           </>
         );
       } else {
         return (
           <>
-            <span>{contentArray[0]}</span>
-            <TextLink href={`/u/${originUser.username}`} text={originUser.name} color="primary01" size="small" />
-            <span>{contentArray[1]}</span>
+            {contentArray[0]}
+            {originUser.name}
+            {contentArray[1]}
           </>
         );
       }
@@ -46,7 +45,7 @@ export const Activity = ({ content, originUser, targetUser }) => {
       >
         {renderedContent}
       </StyledTypography>
-      {didRender && !showMore && ref.current.scrollHeight > ref.current.clientHeight && (
+      {didRender && !showMore && ref.current && ref.current.scrollHeight > ref.current.clientHeight && (
         <ShowMoreContainer onClick={() => setShowMore(true)}>
           <TextLink color="primary01" text="...Show more" size="small" />
         </ShowMoreContainer>
