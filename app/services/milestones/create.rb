@@ -28,8 +28,11 @@ module Milestones
       milestone.save!
 
       if talent.milestones.length >= 1
+        # TODO - remove after quests cleanup @quests
         UpdateTasksJob.perform_later(type: "Tasks::Highlights", user_id: current_user.id)
       end
+
+      refresh_quests
 
       milestone
     end
@@ -49,6 +52,10 @@ module Milestones
         milestone_image = milestone.milestone_images.build(image: image[:image_data].as_json)
         milestone_image.image_derivatives!
       end
+    end
+
+    def refresh_quests
+      Quests::RefreshUserQuestsJob.perform_later(talent.user.id)
     end
   end
 end

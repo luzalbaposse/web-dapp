@@ -19,8 +19,11 @@ module Goals
       goal.save!
 
       if career_goal.goals.length >= 1
+        # TODO - remove after quests cleanup @quests
         UpdateTasksJob.perform_later(type: "Tasks::Goals", user_id: current_user.id)
       end
+
+      refresh_quests
 
       goal
     end
@@ -34,6 +37,10 @@ module Goals
         goal_image = goal.goal_images.build(image: image[:image_data].as_json)
         goal_image.image_derivatives!
       end
+    end
+
+    def refresh_quests
+      Quests::RefreshUserQuestsJob.perform_later(career_goal.talent.user.id)
     end
   end
 end

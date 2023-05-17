@@ -15,6 +15,7 @@ class API::V1::Talent::PerksController < ApplicationController
     @perk.talent = talent
 
     if @perk.save
+      # TODO - remove after quests cleanup @quests
       UpdateTasksJob.perform_later(type: "Tasks::Perks", user_id: current_user.id) if talent.perks.length == 1
       render json: @perk, status: :created
     else

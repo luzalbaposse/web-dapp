@@ -1,3 +1,4 @@
+# TODO - remove after quests cleanup @quests
 class UpdateTasksJob < ApplicationJob
   queue_as :default
 

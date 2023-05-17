@@ -14,6 +14,9 @@ RSpec.describe BroadcastCareerUpdateJob, type: :job do
   let(:send_message_class) { Messages::Send }
   let(:send_message_instance) { instance_double(send_message_class, call: true) }
 
+  let(:refresh_user_quests_class) { Quests::RefreshUserQuests }
+  let(:refresh_user_quests_instance) { instance_double(refresh_user_quests_class, call: true) }
+
   let(:investor_user_one) { create :user }
   let(:investor_user_two) { create :user }
 
@@ -29,22 +32,16 @@ RSpec.describe BroadcastCareerUpdateJob, type: :job do
 
     allow(create_notification_class).to receive(:new).and_return(create_notification_instance)
     allow(send_message_class).to receive(:new).and_return(send_message_instance)
+    allow(refresh_user_quests_class).to receive(:new).and_return(refresh_user_quests_instance)
   end
 
-  it "initializes and calls the create notification to all supporters" do
+  it "initializes and calls the refresh user quests" do
     broadcast_update
 
-    expect(create_notification_class).to have_received(:new)
-    expect(create_notification_instance).to have_received(:call).with(
-      recipient: investor_user_one,
-      source_id: sender.id,
-      type: CareerUpdateCreatedNotification
+    expect(refresh_user_quests_class).to have_received(:new).with(
+      user: sender
     )
-    expect(create_notification_instance).to have_received(:call).with(
-      recipient: investor_user_two,
-      source_id: sender.id,
-      type: CareerUpdateCreatedNotification
-    )
+    expect(refresh_user_quests_instance).to have_received(:call)
   end
 
   it "initializes and calls the send message to all supporters" do
@@ -64,6 +61,22 @@ RSpec.describe BroadcastCareerUpdateJob, type: :job do
       receiver: investor_user_two,
       career_update: career_update,
       create_notification: false
+    )
+  end
+
+  it "initializes and calls the create notification to all supporters" do
+    broadcast_update
+
+    expect(create_notification_class).to have_received(:new)
+    expect(create_notification_instance).to have_received(:call).with(
+      recipient: investor_user_one,
+      source_id: sender.id,
+      type: CareerUpdateCreatedNotification
+    )
+    expect(create_notification_instance).to have_received(:call).with(
+      recipient: investor_user_two,
+      source_id: sender.id,
+      type: CareerUpdateCreatedNotification
     )
   end
 

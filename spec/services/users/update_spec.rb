@@ -86,14 +86,26 @@ RSpec.describe Users::Update do
       expect(refresh_domains).to have_received(:call)
     end
 
-    it "enqueues two jobs related with wallet changes" do
+    it "enqueues three jobs related with wallet changes" do
       Sidekiq::Testing.inline! do
         update_user
 
         job_classes = enqueued_jobs.pluck("job_class")
 
         aggregate_failures do
-          expect(job_classes).to match_array(["AddUsersToMailerliteJob", "UpdateTasksJob"])
+          expect(job_classes).to match_array(["AddUsersToMailerliteJob", "UpdateTasksJob", "Quests::RefreshUserQuestsJob"])
+        end
+      end
+    end
+
+    it "enqueues a job to refresh user quests" do
+      Sidekiq::Testing.inline! do
+        update_user
+
+        job = enqueued_jobs.find { |j| j["job_class"] == "Quests::RefreshUserQuestsJob" }
+
+        aggregate_failures do
+          expect(job["arguments"][0]).to eq(user.id)
         end
       end
     end

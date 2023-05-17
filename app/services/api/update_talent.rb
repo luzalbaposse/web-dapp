@@ -12,6 +12,7 @@ class API::UpdateTalent
     update_user(user_params)
     update_tags(tag_params[:tags]) if tag_params[:tags]
     update_career_needs(career_need_params[:career_needs]) if career_need_params[:career_needs]
+    refresh_quests
 
     @success = true
   end
@@ -79,6 +80,7 @@ class API::UpdateTalent
         talent.highlighted_headline_words_index = params[:profile][:highlighted_headline_words_index]
 
         if params[:profile][:occupation]
+          # TODO - remove after quests cleanup @quests
           UpdateTasksJob.perform_later(type: "Tasks::FillInAbout", user_id: talent_user.id)
         end
       end
@@ -183,5 +185,9 @@ class API::UpdateTalent
 
   def update_career_needs(career_needs)
     CareerNeeds::Upsert.new(career_goal: talent.career_goal, titles: career_needs).call
+  end
+
+  def refresh_quests
+    Quests::RefreshUserQuestsJob.perform_later(talent_user.id)
   end
 end

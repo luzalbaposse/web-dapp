@@ -18,6 +18,8 @@ class BroadcastCareerUpdateJob < ApplicationJob
     activity.origin_user_id = sender.id
     activity.save!
 
+    Quests::RefreshUserQuests.new(user: sender).call
+
     receivers.find_each do |supporter|
       create_notification_service.call(
         recipient: supporter,
