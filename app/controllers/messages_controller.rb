@@ -16,7 +16,11 @@ class MessagesController < ApplicationController
         .where("users.username ILIKE :query", query: "#{search_query}%")
     end
 
-    chats = chats.where(receiver: current_user).where("receiver_unread_messages_count > ?", 0) if unread == "true"
+    if unread == "true"
+      chats = chats.where(receiver: current_user).where("receiver_unread_messages_count > ?", 0).or(
+        chats.where(sender: current_user).where("sender_unread_messages_count > ?", 0)
+      )
+    end
 
     chats = chats.includes(
       sender: [
