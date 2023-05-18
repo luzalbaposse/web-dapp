@@ -10,9 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_18_091257) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_18_140105) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
@@ -430,6 +429,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_18_091257) do
     t.string "description", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "source_type", null: false
+    t.bigint "source_id", null: false
+    t.index ["source_type", "source_id"], name: "index_participation_points_on_source"
     t.index ["user_id"], name: "index_participation_points_on_user_id"
     t.index ["uuid"], name: "index_participation_points_on_uuid"
   end
@@ -715,8 +717,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_18_091257) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.boolean "disabled", default: false
     t.string "theme_preference", default: "light"
+    t.boolean "disabled", default: false
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"
@@ -764,6 +766,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_18_091257) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "quest_type", null: false
+    t.index ["quest_type"], name: "index_v2_quests_on_quest_type", unique: true
     t.index ["uuid"], name: "index_v2_quests_on_uuid"
   end
 

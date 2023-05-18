@@ -23,6 +23,7 @@ module Quests
         ParticipationPoint.create!(
           user: user,
           amount: quest.participation_points_amount,
+          source: quest,
           credited_at: completed_at,
           description: "Completed #{quest.title}"
         )
