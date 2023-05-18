@@ -10,8 +10,20 @@ RSpec.describe "Messages", type: :request do
     let(:user_2) { create :user }
     let(:user_3) { create :user, username: "dinis" }
 
-    let!(:chat_1) { create :chat, sender: current_user, receiver: user_1, last_message_at: 7.days.ago }
-    let!(:chat_2) { create :chat, sender: user_2, receiver: current_user, last_message_at: 3.days.ago }
+    let!(:chat_1) do
+      create :chat,
+        sender: current_user,
+        receiver: user_1,
+        last_message_at: 7.days.ago,
+        sender_unread_messages_count: 1
+    end
+    let!(:chat_2) do
+      create :chat,
+        sender: user_2,
+        receiver: current_user,
+        last_message_at: 3.days.ago,
+        receiver_unread_messages_count: 1
+    end
     let!(:chat_3) { create :chat, sender: current_user, receiver: user_3, last_message_at: 10.days.ago }
 
     subject(:get_messages) { get messages_path(params: params, as: current_user) }
@@ -37,7 +49,7 @@ RSpec.describe "Messages", type: :request do
           "receiver_ticker" => user_2.talent&.talent_token&.ticker,
           "receiver_username" => user_2.username,
           "receiver_with_talent" => user_2.talent.present?,
-          "unread_messages_count" => chat_2.sender_unread_messages_count
+          "unread_messages_count" => chat_2.receiver_unread_messages_count
         },
         {
           "id" => chat_1.id,
@@ -126,7 +138,7 @@ RSpec.describe "Messages", type: :request do
             "receiver_ticker" => user_2.talent&.talent_token&.ticker,
             "receiver_username" => user_2.username,
             "receiver_with_talent" => user_2.talent.present?,
-            "unread_messages_count" => chat_2.sender_unread_messages_count
+            "unread_messages_count" => chat_2.receiver_unread_messages_count
           },
           {
             "id" => chat_1.id,
@@ -194,6 +206,43 @@ RSpec.describe "Messages", type: :request do
             "receiver_username" => user_3.username,
             "receiver_with_talent" => user_3.talent.present?,
             "unread_messages_count" => chat_3.sender_unread_messages_count
+          }
+        ]
+      end
+    end
+
+    context "when unread in passed in the params" do
+      let(:params) { {unread: "true"} }
+
+      it "returns a list of chats that are unread" do
+        get_messages
+
+        expect(assigns(:chats)).to eq [
+          {
+            "id" => chat_2.id,
+            "last_message_at" => chat_2.last_message_at.iso8601,
+            "last_message_text" => chat_2.last_message_text,
+            "receiver_id" => user_2.uuid,
+            "receiver_last_online" => user_2.last_access_at&.iso8601,
+            "receiver_messaging_disabled" => user_2.messaging_disabled,
+            "receiver_profile_picture_url" => user_2.profile_picture_url,
+            "receiver_ticker" => user_2.talent&.talent_token&.ticker,
+            "receiver_username" => user_2.username,
+            "receiver_with_talent" => user_2.talent.present?,
+            "unread_messages_count" => chat_2.receiver_unread_messages_count
+          },
+          {
+            "id" => chat_1.id,
+            "last_message_at" => chat_1.last_message_at.iso8601,
+            "last_message_text" => chat_1.last_message_text,
+            "receiver_id" => user_1.uuid,
+            "receiver_last_online" => user_1.last_access_at&.iso8601,
+            "receiver_messaging_disabled" => user_1.messaging_disabled,
+            "receiver_profile_picture_url" => user_1.profile_picture_url,
+            "receiver_ticker" => user_1.talent&.talent_token&.ticker,
+            "receiver_username" => user_1.username,
+            "receiver_with_talent" => user_1.talent.present?,
+            "unread_messages_count" => chat_1.sender_unread_messages_count
           }
         ]
       end
