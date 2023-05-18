@@ -53,7 +53,7 @@ const UpcomingTalents = Wrapper("UpcomingTalents");
 const Notifications = Wrapper("Notifications");
 
 // eslint-disable-next-line no-undef
-require.context("../images", true);
+require.context("../images", true); 
 
 ReactOnRails.register({
   ChangePassword,
