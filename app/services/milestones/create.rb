@@ -57,7 +57,7 @@ module Milestones
     end
 
     def add_title(title)
-      if title.present && title.length > 0
+      if title.present? && title.length > 0
         ": \"#{title}\"."
       else
         "."

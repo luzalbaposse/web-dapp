@@ -367,7 +367,7 @@ const MilestoneExperience = ({
         {editType === "Add" ? (
           <Button type="primary-outline" text="Back" onClick={goToPreviousStep} />
         ) : (
-          <Button type="danger-outline" text="Delete experience" onClick={deleteMilestone} />
+          <Button type="danger-outline" text={`Delete ${currentJourneyItem.category}`} onClick={deleteMilestone} />
         )}
         <div>
           <Button className="mr-2" type="white-ghost" text="Cancel" onClick={hide} />
@@ -572,7 +572,7 @@ const GoalExperience = ({
         {editType === "Add" ? (
           <Button type="primary-outline" text="Back" onClick={goToPreviousStep} />
         ) : (
-          <Button type="danger-outline" text="Delete experience" onClick={deleteGoal} />
+          <Button type="danger-outline" text={`Delete ${currentJourneyItem.category}`} onClick={deleteGoal} />
         )}
         <div>
           <Button className="mr-2" type="white-ghost" text="Cancel" onClick={hide} />

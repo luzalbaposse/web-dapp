@@ -63,5 +63,20 @@ module PublicAPI
       score: {type: :integer, description: "The score of the talent in the leaderboard"},
       talent: {type: :object, properties: TALENT_PROPERTIES, description: "The talent"}
     }
+
+    QUEST_PROPERTIES = {
+      participation_points_amount: {type: :integer, description: "The points credited by the quest"},
+      title: {type: :string, description: "The title of the quest"},
+      description: {type: :string, description: "The description of the quest"},
+      completed_at: {type: :string, format: :datetime, description: "The timestamp of the quest completion", nullable: true}
+    }
+
+    ACTIVITY_PROPERTIES = {
+      content: {type: :object, description: "The activity content"},
+      created_at: {type: :string, format: :datetime, description: "The timestamp of the activity creation"},
+      target_user: {type: :object, properties: TALENT_PROPERTIES, description: "The target talent of the activity", nullable: true},
+      origin_user: {type: :object, properties: TALENT_PROPERTIES, description: "The origin talent of the activity"},
+      type: {type: :string, description: "The type of the activity", nullable: true}
+    }
   end
 end

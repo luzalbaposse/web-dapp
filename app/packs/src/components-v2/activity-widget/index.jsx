@@ -27,22 +27,22 @@ const ACTIVITY_TYPE_TO_TITLE_MAP = {
   "Activities::Subscribe": "Subscribe"
 };
 
-let activityPage = 0;
 let inputRefs = [];
+const perPage = 8;
 
 export const ActivityWidget = ({ profile = {} }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [activity, setActivity] = useState({
     activities: [],
     pagination: {
-      lastPage: 1
+      total: 0,
+      cursor: undefined
     }
   });
   const [inputsWithContent, setInputsWithContent] = useState([]);
   const loadMore = useCallback(() => {
-    activityPage = activityPage + 1;
     activityService
-      .getActivity(activityPage)
+      .getActivity(perPage, activity.pagination.cursor)
       .then(({ data }) => {
         const recentActivities = [...data.activities];
         setActivity({
@@ -57,7 +57,6 @@ export const ActivityWidget = ({ profile = {} }) => {
       });
   }, [setActivity, setIsLoading, setInputsWithContent, activity]);
   useEffect(() => {
-    activityPage = 0;
     inputRefs = [];
     loadMore();
   }, []);
@@ -154,7 +153,7 @@ export const ActivityWidget = ({ profile = {} }) => {
               </Update>
             );
           })}
-          {activityPage < activity.pagination.lastPage && (
+          {activity.pagination.cursor && (
             <LoadMoreContainer>
               <Button hierarchy="secondary" size="medium" text="Load more" onClick={loadMore} />
             </LoadMoreContainer>

@@ -4,4 +4,6 @@ class Activity < ApplicationRecord
 
   has_many :activity_feed_activities
   has_many :activity_feeds, through: :activity_feed_activities
+
+  validates :type, presence: true
 end

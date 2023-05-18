@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe ParticipationPoint, type: :model do
   describe "associations" do
     it { is_expected.to belong_to(:user) }
+    it { is_expected.to belong_to(:source) }
   end
 
   describe "validations" do

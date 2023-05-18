@@ -10,18 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_16_092017) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_18_140105) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "activities", force: :cascade do |t|
-    t.string "content", null: false
+    t.jsonb "content", null: false
     t.bigint "origin_user_id", null: false
     t.bigint "target_user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "type"
     t.boolean "global", default: false
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.index ["origin_user_id"], name: "index_activities_on_origin_user_id"
     t.index ["target_user_id"], name: "index_activities_on_target_user_id"
   end
@@ -427,6 +429,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_16_092017) do
     t.string "description", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "source_type", null: false
+    t.bigint "source_id", null: false
+    t.index ["source_type", "source_id"], name: "index_participation_points_on_source"
     t.index ["user_id"], name: "index_participation_points_on_user_id"
     t.index ["uuid"], name: "index_participation_points_on_uuid"
   end
@@ -712,8 +717,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_16_092017) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.boolean "disabled", default: false
     t.string "theme_preference", default: "light"
+    t.boolean "disabled", default: false
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"

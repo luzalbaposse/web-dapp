@@ -32,6 +32,7 @@ RSpec.shared_examples "a refresh user quest that creates new records" do
         expect(user_quest.completed_at).to eq Time.current
         expect(user_quest.credited_amount).to eq quest.participation_points_amount
 
+        expect(participation_point.source).to eq quest
         expect(participation_point.amount).to eq quest.participation_points_amount
         expect(participation_point.credited_at).to eq Time.current
         expect(participation_point.description).to eq "Completed #{quest.title}"
