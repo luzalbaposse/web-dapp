@@ -1,6 +1,8 @@
 // config/webpack/base.js
 const { webpackConfig, merge } = require("@rails/webpacker");
 const webpack = require("webpack");
+// const TerserPlugin = require("terser-webpack-plugin");
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const customConfig = {
   resolve: {
@@ -23,18 +25,8 @@ const customConfig = {
       Buffer: ["buffer", "Buffer"],
       process: "process/browser.js"
     })
-  ],
-  optimization: {
-    splitChunks: {
-      cacheGroups: {
-        commons: {
-          test: /[\\/]node_modules[\\/]/,
-          name: "vendor",
-          chunks: "all"
-        }
-      }
-    }
-  }
+    // new TerserPlugin()
+  ]
 };
 
 module.exports = merge(webpackConfig, customConfig);

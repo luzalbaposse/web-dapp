@@ -33,10 +33,10 @@ const SignInPage = props => {
     <TalentThemeProvider>
       <style>
         {`
-          #helpkit-launcherButton--talentprotocol {
-            display: none;
-          }
-        `}
+            #helpkit-launcherButton--talentprotocol {
+              display: none;
+            }
+          `}
       </style>
       <Container>{pageContent}</Container>
     </TalentThemeProvider>

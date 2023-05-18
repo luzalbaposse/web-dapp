@@ -209,23 +209,22 @@ const Notifications = ({ mode }) => {
   }
 
   return (
-    <>
-      <Dropdown className="ml-2">
-        <Dropdown.Toggle
-          className="talent-button white-subtle-button normal-size-button no-caret"
-          id="notifications-dropdown"
-          as="div"
-          style={{ height: 34 }}
-        >
-          <Bell
-            color="currentColor"
-            style={{
-              marginRight: notificationsUnread ? -12 : -3,
-              marginTop: -2
-            }}
-          />
-          {notificationsUnread && <span className="notifications-unread-icon"></span>}
-        </Dropdown.Toggle>
+    <Dropdown className="ml-2">
+      <Dropdown.Toggle
+        className="talent-button white-subtle-button normal-size-button no-caret"
+        id="notifications-dropdown"
+        as="div"
+        style={{ height: 34 }}
+      >
+        <Bell
+          color="currentColor"
+          style={{
+            marginRight: notificationsUnread ? -12 : -3,
+            marginTop: -2
+          }}
+        />
+        {notificationsUnread && <span className="notifications-unread-icon"></span>}
+      </Dropdown.Toggle>
 
         <Dropdown.Menu align="left" className="notifications-menu" style={width < 400 ? { width: width - 50 } : {}}>
           <div className="notifications-menu-header">
@@ -280,7 +279,6 @@ const Notifications = ({ mode }) => {
           </div>
         </Dropdown.Menu>
       </Dropdown>
-    </>
   );
 };
 
