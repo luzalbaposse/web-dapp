@@ -116,103 +116,105 @@ const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
   }
 
   return (
-    <div className="d-flex flex-column lg-h-100 p-0">
-      <Overview
-        className="mb-2"
-        profile={profile}
-        setProfile={setProfile}
-        currentUserId={currentUser?.id}
-        currentUserAdmin={currentUser?.admin}
-        currentUserModerator={currentUser?.moderator}
-        railsContext={railsContext}
-        changeSection={changeSection}
-        talentTokenPrice={talentTokenPrice}
-        canUpdate={canUpdate}
-        previewMode={previewMode}
-        setPreviewMode={setPreviewMode}
-        isCurrentUserImpersonated={currentUser?.impersonated}
-        withPersonaRequest={withPersonaRequest}
-        profileSubdomain={profileSubdomain}
-      />
-      <Divider className="my-6" />
-      <div className="d-flex justify-content-lg-center overflow-x-scroll mx-4">
-        <Button className="mr-2" type={buttonType("#about")} text="About" onClick={() => changeSection("#about")} />
-        <Button
-          className="mr-2"
-          type={buttonType("#journey")}
-          text="Journey"
-          onClick={() => changeSection("#journey")}
+    <>
+      <div className="d-flex flex-column lg-h-100 p-0">
+        <Overview
+          className="mb-2"
+          profile={profile}
+          setProfile={setProfile}
+          currentUserId={currentUser?.id}
+          currentUserAdmin={currentUser?.admin}
+          currentUserModerator={currentUser?.moderator}
+          railsContext={railsContext}
+          changeSection={changeSection}
+          talentTokenPrice={talentTokenPrice}
+          canUpdate={canUpdate}
+          previewMode={previewMode}
+          setPreviewMode={setPreviewMode}
+          isCurrentUserImpersonated={currentUser?.impersonated}
+          withPersonaRequest={withPersonaRequest}
+          profileSubdomain={profileSubdomain}
         />
-        {(talentToken.contract_id || canUpdate) && (
+        <Divider className="my-6" />
+        <div className="d-flex justify-content-lg-center overflow-x-scroll mx-4">
+          <Button className="mr-2" type={buttonType("#about")} text="About" onClick={() => changeSection("#about")} />
           <Button
             className="mr-2"
-            type={buttonType("#token")}
-            text={talentToken.ticker ? `$${talentToken.ticker}` : "Token"}
-            onClick={() => changeSection("#token")}
+            type={buttonType("#journey")}
+            text="Journey"
+            onClick={() => changeSection("#journey")}
           />
-        )}
-        <Button
-          className="mr-2"
-          type={buttonType("#network")}
-          text="Network"
-          onClick={() => changeSection("#network")}
-        />
-        {((user.wallet_id && user.visible_digital_collectibles) || canUpdate) && (
+          {(talentToken.contract_id || canUpdate) && (
+            <Button
+              className="mr-2"
+              type={buttonType("#token")}
+              text={talentToken.ticker ? `$${talentToken.ticker}` : "Token"}
+              onClick={() => changeSection("#token")}
+            />
+          )}
           <Button
-            type={buttonType("#digital-collectibles")}
-            text={"Digital Collectibles"}
-            onClick={() => changeSection("#digital-collectibles")}
+            className="mr-2"
+            type={buttonType("#network")}
+            text="Network"
+            onClick={() => changeSection("#network")}
           />
-        )}
+          {((user.wallet_id && user.visible_digital_collectibles) || canUpdate) && (
+            <Button
+              type={buttonType("#digital-collectibles")}
+              text={"Digital Collectibles"}
+              onClick={() => changeSection("#digital-collectibles")}
+            />
+          )}
+        </div>
+        <div className="my-7 w-100 col-12" id="#about">
+          <About profile={profile} setProfile={setProfile} canUpdate={canUpdate} previewMode={previewMode} />
+        </div>
+        {mobile && <Divider />}
+        <div className="my-7 w-100 col-12" id="#journey">
+          <Journey talent={profile} setTalent={setProfile} canUpdate={canUpdate} />
+        </div>
+        <div className="my-7 w-100" id={"#token"}>
+          {talentToken.contract_id && <Perks talent={profile} canUpdate={canUpdate} />}
+          <CurrentTokenSection
+            profile={profile}
+            talentTokenPrice={talentTokenPrice}
+            setProfile={setProfile}
+            railsContext={railsContext}
+            canUpdate={canUpdate}
+          />
+        </div>
+        <div className="my-7 w-100 col-12" id="#network">
+          <Network userId={user.uuid} talent={profile} canUpdate={canUpdate} />
+        </div>
+        {(showLastDivider || canUpdate) && <Divider className="my-6" />}
+        <div className="mt-7 w-100" id="#digital-collectibles">
+          <Poaps
+            user={user}
+            canUpdate={canUpdate}
+            setShowLastDivider={setShowLastDivider}
+            setTalent={setProfile}
+            railsContext={railsContext}
+            onWalletConnect={onWalletConnect}
+          />
+          <Nfts
+            user={user}
+            canUpdate={canUpdate}
+            setShowLastDivider={setShowLastDivider}
+            setTalent={setProfile}
+            railsContext={railsContext}
+            onWalletConnect={onWalletConnect}
+          />
+          <Tokens
+            user={user}
+            canUpdate={canUpdate}
+            setShowLastDivider={setShowLastDivider}
+            setTalent={setProfile}
+            railsContext={railsContext}
+            onWalletConnect={onWalletConnect}
+          />
+        </div>
       </div>
-      <div className="my-7 w-100 col-12" id="#about">
-        <About profile={profile} setProfile={setProfile} canUpdate={canUpdate} previewMode={previewMode} />
-      </div>
-      {mobile && <Divider />}
-      <div className="my-7 w-100 col-12" id="#journey">
-        <Journey talent={profile} setTalent={setProfile} canUpdate={canUpdate} />
-      </div>
-      <div className="my-7 w-100" id={"#token"}>
-        {talentToken.contract_id && <Perks talent={profile} canUpdate={canUpdate} />}
-        <CurrentTokenSection
-          profile={profile}
-          talentTokenPrice={talentTokenPrice}
-          setProfile={setProfile}
-          railsContext={railsContext}
-          canUpdate={canUpdate}
-        />
-      </div>
-      <div className="my-7 w-100 col-12" id="#network">
-        <Network userId={user.uuid} talent={profile} canUpdate={canUpdate} />
-      </div>
-      {(showLastDivider || canUpdate) && <Divider className="my-6" />}
-      <div className="mt-7 w-100" id="#digital-collectibles">
-        <Poaps
-          user={user}
-          canUpdate={canUpdate}
-          setShowLastDivider={setShowLastDivider}
-          setTalent={setProfile}
-          railsContext={railsContext}
-          onWalletConnect={onWalletConnect}
-        />
-        <Nfts
-          user={user}
-          canUpdate={canUpdate}
-          setShowLastDivider={setShowLastDivider}
-          setTalent={setProfile}
-          railsContext={railsContext}
-          onWalletConnect={onWalletConnect}
-        />
-        <Tokens
-          user={user}
-          canUpdate={canUpdate}
-          setShowLastDivider={setShowLastDivider}
-          setTalent={setProfile}
-          railsContext={railsContext}
-          onWalletConnect={onWalletConnect}
-        />
-      </div>
-    </div>
+    </>
   );
 };
 
