@@ -125,6 +125,6 @@ const Rewards = ({
 };
 
 // eslint-disable-next-line no-unused-vars
-export default (props, _railsContext) => {
-  return () => <Rewards {...props} />;
+export default props => {
+  return <Rewards {...props} />;
 };

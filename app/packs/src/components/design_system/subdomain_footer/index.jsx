@@ -30,8 +30,8 @@ const SubdomainFooter = props => {
 };
 
 // eslint-disable-next-line no-unused-vars
-export default (props, _railsContext) => {
-  return () => (
+export default props => {
+  return (
     <ThemeContainer {...props}>
       <SubdomainFooter {...props} />
     </ThemeContainer>

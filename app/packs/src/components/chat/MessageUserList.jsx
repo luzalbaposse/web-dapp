@@ -14,7 +14,7 @@ import ThemedButton from "src/components/design_system/button";
 import { P2, P3 } from "src/components/design_system/typography";
 import TextInput from "src/components/design_system/fields/textinput";
 import { NewChat, Search } from "src/components/icons";
-import { buildColor, Tabs, useTabs } from "@talentprotocol/design-system";
+import { buildColor, Tabs, TalentThemeProvider, useTabs } from "@talentprotocol/design-system";
 
 const lastMessageText = lastMessage => {
   if (lastMessage) {
@@ -159,7 +159,7 @@ const MessageUserList = ({
   }, []);
 
   return (
-    <>
+    <TalentThemeProvider>
       <NewMessageModal
         show={showNewMessageModal}
         setShow={setShowNewMessageModal}
@@ -232,7 +232,7 @@ const MessageUserList = ({
           )}
         </div>
       </div>
-    </>
+    </TalentThemeProvider>
   );
 };
 

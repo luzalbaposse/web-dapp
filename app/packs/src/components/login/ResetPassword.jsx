@@ -94,8 +94,8 @@ const ResetPassword = () => {
 };
 
 // eslint-disable-next-line no-unused-vars
-export default (props, _railsContext) => {
-  return () => (
+export default (props) => {
+  return (
     <RegistrationContainer {...props}>
       <ResetPassword {...props} />
     </RegistrationContainer>

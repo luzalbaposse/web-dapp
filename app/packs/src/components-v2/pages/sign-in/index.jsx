@@ -43,10 +43,10 @@ const SignInPage = props => {
   );
 };
 
-export default (props, railsContext) => {
-  return () => (
+export default props => {
+  return (
     <ThemeContainer>
-      <SignInPage {...props} railsContext={railsContext} />
+      <SignInPage {...props} />
     </ThemeContainer>
   );
 };

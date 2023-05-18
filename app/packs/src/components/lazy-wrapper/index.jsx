@@ -4,8 +4,6 @@ const Discovery = lazy(() => import("src/components/discovery"));
 const Chat = lazy(() => import("src/components/chat/Chat"));
 const FirstQuestPopup = lazy(() => import("src/components/one_time_popups/FirstQuestPopup"));
 const FlashMessages = lazy(() => import("src/components/FlashMessages"));
-const Login = lazy(() => import("src/components/login/Login"));
-const ResetPassword = lazy(() => import("src/components/login/ResetPassword"));
 const ChangePassword = lazy(() => import("src/components/login/ChangePassword"));
 const TopBar = lazy(() => import("src/components/top_bar"));
 const UserSettings = lazy(() => import("src/components/talent/Edit/Settings"));
@@ -62,8 +60,6 @@ const COMPONENT_MAP = {
   TalentModelsProfilePage,
   NetworkPage,
   ProductAnnouncementModal,
-  Login,
-  ResetPassword,
   MessageUserList,
   TalentKeywordSearch,
   Web3ModalConnect,
@@ -74,11 +70,12 @@ const COMPONENT_MAP = {
 
 const Wrapper = componentName => {
   const Component = COMPONENT_MAP[componentName];
-  return (props, railsContext) => (
-    <Suspense fallback={<></>}>
-      <Component {...props} railsContext={railsContext} />
-    </Suspense>
-  );
+  return (props, railsContext) => () =>
+    (
+      <Suspense fallback={<></>}>
+        <Component {...props} railsContext={railsContext} />
+      </Suspense>
+    );
 };
 
 export default Wrapper;

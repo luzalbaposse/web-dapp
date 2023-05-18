@@ -614,4 +614,4 @@ const PortfolioWrapper = props => {
   );
 };
 
-export default (props, railsContext) => () => <PortfolioWrapper {...props} railsContext={railsContext} />;
+export default props => <PortfolioWrapper {...props} />;

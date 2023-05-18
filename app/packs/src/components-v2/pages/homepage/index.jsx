@@ -57,6 +57,6 @@ export const HomepagePage = ({}) => {
   );
 };
 
-export default (props, railsContext) => {
-  return () => <HomepagePage {...props} railsContext={railsContext} />;
+export default props => {
+  return <HomepagePage {...props} />;
 };

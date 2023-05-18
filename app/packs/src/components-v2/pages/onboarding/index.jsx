@@ -49,10 +49,10 @@ const OnboardingPage = props => {
   );
 };
 
-export default (props, railsContext) => {
-  return () => (
+export default props => {
+  return (
     <ThemeContainer>
-      <OnboardingPage {...props} railsContext={railsContext} />
+      <OnboardingPage {...props} />
     </ThemeContainer>
   );
 };

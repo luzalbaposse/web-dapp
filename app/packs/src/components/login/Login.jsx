@@ -89,7 +89,7 @@ const Login = props => {
 };
 
 // eslint-disable-next-line no-unused-vars
-export default (props, _railsContext) => {
+export default props => {
   return () => (
     <RegistrationContainer {...props}>
       <Login {...props} />

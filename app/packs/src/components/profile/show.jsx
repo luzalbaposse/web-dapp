@@ -218,10 +218,10 @@ const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
   );
 };
 
-export default (props, railsContext) => {
-  return () => (
+export default props => {
+  return (
     <ThemeContainer>
-      <Show {...props} railsContext={railsContext} />
+      <Show {...props} />
     </ThemeContainer>
   );
 };

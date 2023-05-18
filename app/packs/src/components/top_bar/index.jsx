@@ -21,7 +21,7 @@ import EarnMenu from "src/components/menus/EarnMenu";
 
 import { H5 } from "src/components/design_system/typography";
 import { Container, IconContainer, InnerContainer } from "./styled";
-import { Icon, Typography } from "@talentprotocol/design-system";
+import { Icon, TalentThemeProvider, Typography } from "@talentprotocol/design-system";
 import SearchDropdown from "./SearchDropdown";
 
 //const WARNING_MESSAGE =
@@ -363,10 +363,12 @@ export const TopBar = ({
   );
 };
 
-export default (props, railsContext) => {
-  return () => (
-    <ThemeContainer {...props}>
-      <TopBar {...props} railsContext={railsContext} />
-    </ThemeContainer>
+export default props => {
+  return (
+    <TalentThemeProvider>
+      <ThemeContainer {...props}>
+        <TopBar {...props} />
+      </ThemeContainer>
+    </TalentThemeProvider>
   );
 };

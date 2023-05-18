@@ -34,10 +34,10 @@ export const LoggedOutTopBar = ({}) => {
   );
 };
 
-export default (props, railsContext) => {
-  return () => (
+export default props => {
+  return (
     <ThemeContainer {...props}>
-      <LoggedOutTopBar {...props} railsContext={railsContext} />
+      <LoggedOutTopBar {...props} />
     </ThemeContainer>
   );
 };

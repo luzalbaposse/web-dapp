@@ -1,6 +1,6 @@
 import { Dropdown } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { Typography } from "@talentprotocol/design-system";
+import { TalentThemeProvider, Typography } from "@talentprotocol/design-system";
 import axios from "axios";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import dayjs from "dayjs";
@@ -129,7 +129,7 @@ const Notifications = ({ mode }) => {
 
   if (width < 992) {
     return (
-      <>
+      <TalentThemeProvider>
         <Button onClick={() => setShowNotifications(true)} type="white-ghost" mode={mode} className="ml-2" size="none">
           <Bell color="currentColor" size={20} />
         </Button>
@@ -204,27 +204,28 @@ const Notifications = ({ mode }) => {
             )}
           </Modal.Body>
         </Modal>
-      </>
+      </TalentThemeProvider>
     );
   }
 
   return (
-    <Dropdown className="ml-2">
-      <Dropdown.Toggle
-        className="talent-button white-subtle-button normal-size-button no-caret"
-        id="notifications-dropdown"
-        as="div"
-        style={{ height: 34 }}
-      >
-        <Bell
-          color="currentColor"
-          style={{
-            marginRight: notificationsUnread ? -12 : -3,
-            marginTop: -2
-          }}
-        />
-        {notificationsUnread && <span className="notifications-unread-icon"></span>}
-      </Dropdown.Toggle>
+    <TalentThemeProvider>
+      <Dropdown className="ml-2">
+        <Dropdown.Toggle
+          className="talent-button white-subtle-button normal-size-button no-caret"
+          id="notifications-dropdown"
+          as="div"
+          style={{ height: 34 }}
+        >
+          <Bell
+            color="currentColor"
+            style={{
+              marginRight: notificationsUnread ? -12 : -3,
+              marginTop: -2
+            }}
+          />
+          {notificationsUnread && <span className="notifications-unread-icon"></span>}
+        </Dropdown.Toggle>
 
         <Dropdown.Menu align="left" className="notifications-menu" style={width < 400 ? { width: width - 50 } : {}}>
           <div className="notifications-menu-header">
@@ -279,6 +280,7 @@ const Notifications = ({ mode }) => {
           </div>
         </Dropdown.Menu>
       </Dropdown>
+    </TalentThemeProvider>
   );
 };
 

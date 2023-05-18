@@ -1,4 +1,4 @@
-import { Button, Modal, useModal, Typography, TextLink } from "@talentprotocol/design-system";
+import { Button, Modal, useModal, Typography, TextLink, TalentThemeProvider } from "@talentprotocol/design-system";
 import React, { useEffect, useState } from "react";
 import { Container, Image, LinkContainer, StyledUpdateContent } from "./styled";
 import { productAnnouncements } from "src/api/product-announcements";
@@ -33,7 +33,7 @@ const ProductAnnouncementModal = () => {
   };
 
   return (
-    <>
+    <TalentThemeProvider>
       {productAnnouncement && (
         <Modal
           closeModal={closeModal}
@@ -82,10 +82,10 @@ const ProductAnnouncementModal = () => {
           </Container>
         </Modal>
       )}
-    </>
+    </TalentThemeProvider>
   );
 };
 
-export default (props, railsContext) => {
-  return () => <ProductAnnouncementModal {...props} railsContext={railsContext} />;
+export default props => {
+  return <ProductAnnouncementModal {...props} />;
 };

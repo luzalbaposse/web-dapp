@@ -65,6 +65,6 @@ export const TalentModelsProfilePage = props => {
   );
 };
 
-export default (props, railsContext) => {
-  return () => <TalentModelsProfilePage {...props} railsContext={railsContext} />;
+export default props => {
+  return <TalentModelsProfilePage {...props} />;
 };

@@ -24,6 +24,6 @@ export const NetworkPage = ({ railsContext }) => {
   );
 };
 
-export default (props, railsContext) => {
-  return () => <NetworkPage {...props} railsContext={railsContext} />;
+export default props => {
+  return <NetworkPage {...props} />;
 };

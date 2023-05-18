@@ -57,7 +57,7 @@ const SignUpPage = props => {
 };
 
 export default (props, railsContext) => {
-  return () => (
+  return (
     <ThemeContainer>
       <SignUpPage {...props} railsContext={railsContext} />
     </ThemeContainer>

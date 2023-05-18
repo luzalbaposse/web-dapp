@@ -10,6 +10,7 @@ import ThemeContainer, { ThemeContext } from "src/contexts/ThemeContext";
 import MessageUserList from "./MessageUserList";
 import MessageExchange from "./MessageExchange";
 import { useWindowDimensionsHook } from "../../utils/window";
+import { TalentThemeProvider } from "@talentprotocol/design-system";
 
 const Chat = ({ chats, pagination }) => {
   const baseUrl = new URL(document.location);
@@ -271,10 +272,12 @@ const Chat = ({ chats, pagination }) => {
   );
 };
 
-export default (props, railsContext) => {
-  return () => (
-    <ThemeContainer>
-      <Chat {...props} railsContext={railsContext} />
-    </ThemeContainer>
+export default props => {
+  return (
+    <TalentThemeProvider>
+      <ThemeContainer>
+        <Chat {...props} />
+      </ThemeContainer>
+    </TalentThemeProvider>
   );
 };

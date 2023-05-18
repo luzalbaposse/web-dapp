@@ -177,10 +177,10 @@ const TalentPage = ({ env }) => {
   );
 };
 
-export default (props, railsContext) => {
-  return () => (
+export default props => {
+  return (
     <ThemeContainer {...props}>
-      <TalentPage {...props} env={railsContext.contractsEnv} />
+      <TalentPage {...props} env={props.railsContext.contractsEnv} />
     </ThemeContainer>
   );
 };

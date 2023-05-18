@@ -93,8 +93,8 @@ const UpcomingTalents = ({ talents }) => {
 };
 
 // eslint-disable-next-line no-unused-vars
-export default (props, railsContext) => {
-  return () => (
+export default props => {
+  return (
     <ThemeContainer {...props}>
       <UpcomingTalents {...props} />
     </ThemeContainer>

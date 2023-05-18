@@ -42,6 +42,6 @@ const Discovery = ({ discoveryRows, railsContext }) => {
   );
 };
 
-export default (props, railsContext) => {
-  return () => <Discovery {...props} railsContext={railsContext} />;
+export default (props) => {
+  return <Discovery {...props} />;
 };

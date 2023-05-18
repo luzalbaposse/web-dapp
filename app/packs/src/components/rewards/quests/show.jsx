@@ -63,6 +63,6 @@ const QuestShow = ({ quest, railsContext }) => {
   );
 };
 
-export default (props, railsContext) => {
-  return () => <QuestShow {...props} railsContext={railsContext} />;
+export default props => {
+  return <QuestShow {...props} />;
 };
