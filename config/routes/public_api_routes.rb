@@ -9,7 +9,7 @@ module PublicAPIRoutes
 
             resources :talents, only: [:show, :index]
             resources :supporters, only: [:index]
-            resources :activity, only: [:index]
+            resources :activities, only: [:index]
             resources :connections, only: [:index]
             resources :career_updates, only: [:index, :create]
             resources :sponsorships, only: [:create]
@@ -29,6 +29,7 @@ module PublicAPIRoutes
               get "latest_unread", on: :collection
             end
             resources :leaderboards, only: [:index]
+            resources :quests, only: [:index]
 
             resource :validations, only: [] do
               get :username, on: :collection

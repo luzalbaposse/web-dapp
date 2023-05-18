@@ -51,46 +51,46 @@ paths:
             application/json:
               example:
                 connections:
-                - connected_at: '2023-05-10T18:06:27.000Z'
+                - connected_at: '2023-05-18T11:58:29.000Z'
                   connected_user_invested_amount: '0'
                   connection_type: mutual_stake
-                  id: adda8547-9490-4e07-acf5-a93d6e6c2e7e
-                  name: user105
+                  id: 6a1168b5-be0a-4de8-9417-6031302a9c38
+                  name: user109
                   profile_picture_url:
                   ticker:
                   user_invested_amount: '0'
-                  username: user105
-                  wallet_address: fd6d2867d9416b5199eba643433a7585
-                - connected_at: '2023-05-10T18:06:27.000Z'
+                  username: user109
+                  wallet_address: 31df4285cfc6465246603140fa9d9056
+                - connected_at: '2023-05-18T11:58:29.000Z'
                   connected_user_invested_amount: '0'
                   connection_type: staker
-                  id: de538899-9d4d-4c57-93dd-80d61459841e
-                  name: user106
+                  id: b672a7ba-db73-442b-8403-3e6005860c07
+                  name: user110
                   profile_picture_url:
                   ticker:
                   user_invested_amount: '0'
-                  username: user106
-                  wallet_address: 47842c439ced67c97664f4a5af4f3ba0
-                - connected_at: '2023-05-10T18:06:27.000Z'
+                  username: user110
+                  wallet_address: 1d3532075dbe64bd1e30a4a9bcf75f5e
+                - connected_at: '2023-05-18T11:58:29.000Z'
                   connected_user_invested_amount: '0'
                   connection_type: staking
-                  id: 0ac3f564-3d78-412a-b4c1-9ff78d546a92
-                  name: user107
+                  id: 2a3b48c2-dec9-4861-b856-0a411d1cea7f
+                  name: user111
                   profile_picture_url:
                   ticker:
                   user_invested_amount: '0'
-                  username: user107
-                  wallet_address: cac6e1555224742232b01d7d4b980a60
-                - connected_at: '2023-05-10T18:06:27.000Z'
+                  username: user111
+                  wallet_address: 3e0f921ddd543bb571888a3f71efbd81
+                - connected_at: '2023-05-18T11:58:29.000Z'
                   connected_user_invested_amount: '0'
                   connection_type: subscriber
-                  id: b85905c9-4957-446c-98ca-85373a2b56e4
-                  name: user108
+                  id: 7cd1f064-f623-4445-af05-0f97a0039098
+                  name: user112
                   profile_picture_url:
                   ticker:
                   user_invested_amount: '0'
-                  username: user108
-                  wallet_address: 790ff93541d1e51f15ba51738a3de7c3
+                  username: user112
+                  wallet_address: bfc30c2dd5c1bbbc0b7cf416f5de93f1
                 pagination:
                   total: 4
                   cursor:
@@ -186,52 +186,52 @@ paths:
                 leaderboards:
                 - score: 20
                   user:
-                    email: user_139@talentprotocol.com
+                    email: user_143@talentprotocol.com
                     headline:
-                    id: 3ff0bce3-867d-4914-a12b-87908fce1e83
-                    name: user139
+                    id: 877f4e5a-bede-429b-83c0-616590ffd6f0
+                    name: user143
                     occupation:
                     profile_picture_url:
                     ticker:
-                    username: user139
+                    username: user143
                     verified:
-                    wallet_address: 84f672a72645fb399202cafdd06a30ba
+                    wallet_address: a4faa5fbe1e71b34d6d9524d0c818d8a
                 - score: 15
                   user:
-                    email: user_140@talentprotocol.com
+                    email: user_144@talentprotocol.com
                     headline:
-                    id: b2b9e405-0f73-4bdb-afb2-3cb284fa25ad
-                    name: user140
+                    id: 7590bebf-391e-4e9d-99b9-287a0e82eb0a
+                    name: user144
                     occupation:
                     profile_picture_url:
                     ticker:
-                    username: user140
+                    username: user144
                     verified:
-                    wallet_address: ea9883c74aabe455813f599d48fd9792
+                    wallet_address: d96f20631316684ec9d2977bb545b359
                 - score: 10
                   user:
-                    email: user_141@talentprotocol.com
+                    email: user_145@talentprotocol.com
                     headline:
-                    id: 14ba3fe3-487e-4f3e-903c-0549a39837b2
-                    name: user141
+                    id: 68d08e93-3126-4538-8019-27d22172f967
+                    name: user145
                     occupation:
                     profile_picture_url:
                     ticker:
-                    username: user141
+                    username: user145
                     verified:
-                    wallet_address: 16748d454af0efb9c09a3fac017ac38b
+                    wallet_address: 29efe1f0e2dd54574b3a2ecac707d44f
                 - score: 2
                   user:
-                    email: user_142@talentprotocol.com
+                    email: user_146@talentprotocol.com
                     headline:
-                    id: e666980a-05e1-443f-a503-27a7b9bea967
-                    name: user142
+                    id: 80c48630-59a9-42e1-989e-2490ad933518
+                    name: user146
                     occupation:
                     profile_picture_url:
                     ticker:
-                    username: user142
+                    username: user146
                     verified:
-                    wallet_address: 736c435644f19c2f52ac0df31c523ac4
+                    wallet_address: 348d6d2358fc9530746949bb7b205c78
                 pagination:
                   total: 4
                   cursor:
@@ -265,6 +265,83 @@ paths:
                               type: string
                               nullable: true
                           description: The talent
+                  pagination:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        description: The total amount of records
+                      cursor:
+                        type: string
+                        description: The cursor to fetch the next page of records
+                        nullable: true
+        '401':
+          description: unauthorized request
+  "/quests":
+    get:
+      summary: Retrieves the invite leaderboards
+      tags:
+      - Leaderboards
+      parameters:
+      - name: id
+        in: query
+        description: Wallet address or username
+        schema:
+          type: string
+      - name: cursor
+        in: query
+        description: The cursor to fetch the next page
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        description: Your Talent Protocol API key
+        schema:
+          type: string
+      responses:
+        '200':
+          description: race found
+          content:
+            application/json:
+              example:
+                quests:
+                - completed_at:
+                  description: You need to do x to get y
+                  participation_points_amount: 10
+                  title: 'Quest #1'
+                - completed_at:
+                  description: You need to do x to get y
+                  participation_points_amount: 20
+                  title: 'Quest #2'
+                - completed_at: '2023-10-10T23:00:00.000Z'
+                  description: You need to do x to get y
+                  participation_points_amount: 30
+                  title: 'Quest #3'
+                pagination:
+                  total: 3
+                  cursor:
+              schema:
+                type: object
+                properties:
+                  quests:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        participation_points_amount:
+                          type: integer
+                          description: The points credited by the quest
+                        title:
+                          type: string
+                          description: The title of the quest
+                        description:
+                          type: string
+                          description: The description of the quest
+                        completed_at:
+                          type: string
+                          format: datetime
+                          description: The timestamp of the quest completion
+                          nullable: true
                   pagination:
                     type: object
                     properties:
@@ -320,67 +397,67 @@ paths:
                   revoked_at:
                   sponsor:
                     banner_url:
-                    email: user_159@talentprotocol.com
+                    email: user_165@talentprotocol.com
                     headline:
-                    id: ec6a0b57-0a8e-49ed-912f-42c38f9116c0
-                    name: user159
+                    id: 9a519f06-7350-46c2-87a8-14585418eb75
+                    name: user165
                     occupation:
                     profile_picture_url:
                     ticker:
-                    username: user159
+                    username: user165
                     verified:
-                    wallet_address: 5d56ac03a74ce1cefda3b12f712d12fd
-                  sponsor_address: 5d56ac03a74ce1cefda3b12f712d12fd
+                    wallet_address: 38b9a269876ec91d34546daf5d58cc20
+                  sponsor_address: 38b9a269876ec91d34546daf5d58cc20
                   sponsored:
                     banner_url:
-                    email: user_157@talentprotocol.com
+                    email: user_163@talentprotocol.com
                     headline:
-                    id: 77167865-e4b2-40d9-8b8a-aba45be145f4
+                    id: e41d405f-6029-4571-a63f-855ec514a9cb
                     name: API user
                     occupation:
                     profile_picture_url:
                     ticker:
-                    username: user157
+                    username: user163
                     verified: false
-                    wallet_address: c119959095dd27e73ed6c3625c3fea8e
-                  sponsored_address: c119959095dd27e73ed6c3625c3fea8e
+                    wallet_address: 6b20d0c2efc8511cf0c075173f97c7a2
+                  sponsored_address: 6b20d0c2efc8511cf0c075173f97c7a2
                   status: pending
                   symbol: USDC
-                  token: bcc6f690d2017a7d54813c9ecf02f61d
+                  token: 80b87602d1777f6da033e4ca2dd7f4bf
                   token_decimals: 18
                 - amount: '20000'
                   chain_id: 137
-                  claimed_at: '2023-05-10T18:06:27.000Z'
+                  claimed_at: '2023-05-18T11:58:29.000Z'
                   revoked_at:
                   sponsor:
                     banner_url:
-                    email: user_158@talentprotocol.com
+                    email: user_164@talentprotocol.com
                     headline:
-                    id: 6528cd7f-98c8-4acf-9814-f80035441b7e
-                    name: user158
+                    id: 63a71a81-5c25-4fe3-af4a-e70c5c51ab92
+                    name: user164
                     occupation:
                     profile_picture_url:
                     ticker:
-                    username: user158
+                    username: user164
                     verified:
-                    wallet_address: fad7aaf55785afd88a2e7e4c8b8c8b53
-                  sponsor_address: fad7aaf55785afd88a2e7e4c8b8c8b53
+                    wallet_address: 9d85c38091033e94db9602d4191f3d3e
+                  sponsor_address: 9d85c38091033e94db9602d4191f3d3e
                   sponsored:
                     banner_url:
-                    email: user_157@talentprotocol.com
+                    email: user_163@talentprotocol.com
                     headline:
-                    id: 77167865-e4b2-40d9-8b8a-aba45be145f4
+                    id: e41d405f-6029-4571-a63f-855ec514a9cb
                     name: API user
                     occupation:
                     profile_picture_url:
                     ticker:
-                    username: user157
+                    username: user163
                     verified: false
-                    wallet_address: c119959095dd27e73ed6c3625c3fea8e
-                  sponsored_address: c119959095dd27e73ed6c3625c3fea8e
+                    wallet_address: 6b20d0c2efc8511cf0c075173f97c7a2
+                  sponsored_address: 6b20d0c2efc8511cf0c075173f97c7a2
                   status: claimed
                   symbol: USDC
-                  token: 2363395e6c70957274ae76128fde8465
+                  token: e472fc2936931bc9c5d01900589fa3f6
                   token_decimals: 18
                 pagination:
                   total: 2
@@ -522,70 +599,70 @@ paths:
                 - amount: '20000'
                   chain_id: 137
                   claimed_at:
-                  revoked_at: '2023-05-10T18:06:27.000Z'
+                  revoked_at:
                   sponsor:
                     banner_url:
-                    email: user_169@talentprotocol.com
+                    email: user_175@talentprotocol.com
                     headline:
-                    id: 891ab4f9-42c0-43a0-8a74-ff6df34444bc
+                    id: 7edc5f4d-7ca5-4b04-8017-a7f98286c132
                     name: API user
                     occupation:
                     profile_picture_url:
                     ticker:
-                    username: user169
+                    username: user175
                     verified: false
-                    wallet_address: 7d8061544044ae2a75a3483c7703bfa5
-                  sponsor_address: 7d8061544044ae2a75a3483c7703bfa5
+                    wallet_address: 8a1a3cc3834b643ae6d3671ceba84f45
+                  sponsor_address: 8a1a3cc3834b643ae6d3671ceba84f45
                   sponsored:
                     banner_url:
-                    email: user_170@talentprotocol.com
+                    email: user_177@talentprotocol.com
                     headline:
-                    id: 6f5253dd-7942-4fc2-a814-092d9fbc0d79
-                    name: user170
+                    id: e48f629c-c10a-480c-9964-031b25279e38
+                    name: user177
                     occupation:
                     profile_picture_url:
                     ticker:
-                    username: user170
+                    username: user177
                     verified:
-                    wallet_address: d3bf36339cccd4e8d5f97bb1deda59cd
-                  sponsored_address: d3bf36339cccd4e8d5f97bb1deda59cd
-                  status: revoked
+                    wallet_address: 122728bb0214317d6bed78a9b9397881
+                  sponsored_address: 122728bb0214317d6bed78a9b9397881
+                  status: pending
                   symbol: USDC
-                  token: 7c0d31f089bdf28188730edbcbba1b51
+                  token: 219f811bd5669df7ae429df93e06fc89
                   token_decimals: 18
                 - amount: '20000'
                   chain_id: 137
                   claimed_at:
-                  revoked_at:
+                  revoked_at: '2023-05-18T11:58:29.000Z'
                   sponsor:
                     banner_url:
-                    email: user_169@talentprotocol.com
+                    email: user_175@talentprotocol.com
                     headline:
-                    id: 891ab4f9-42c0-43a0-8a74-ff6df34444bc
+                    id: 7edc5f4d-7ca5-4b04-8017-a7f98286c132
                     name: API user
                     occupation:
                     profile_picture_url:
                     ticker:
-                    username: user169
+                    username: user175
                     verified: false
-                    wallet_address: 7d8061544044ae2a75a3483c7703bfa5
-                  sponsor_address: 7d8061544044ae2a75a3483c7703bfa5
+                    wallet_address: 8a1a3cc3834b643ae6d3671ceba84f45
+                  sponsor_address: 8a1a3cc3834b643ae6d3671ceba84f45
                   sponsored:
                     banner_url:
-                    email: user_171@talentprotocol.com
+                    email: user_176@talentprotocol.com
                     headline:
-                    id: 58c3ff6a-04d1-46c7-b718-b9151e305185
-                    name: user171
+                    id: 4ad53c14-59ea-4177-833e-b82fe5c83088
+                    name: user176
                     occupation:
                     profile_picture_url:
                     ticker:
-                    username: user171
+                    username: user176
                     verified:
-                    wallet_address: 8819ce6386abb74ed217f78a66d8d7c4
-                  sponsored_address: 8819ce6386abb74ed217f78a66d8d7c4
-                  status: pending
+                    wallet_address: 35593594a0e1bf964c05c775990b5104
+                  sponsored_address: 35593594a0e1bf964c05c775990b5104
+                  status: revoked
                   symbol: USDC
-                  token: '059d8a4a478cf258ce890f5da3faae37'
+                  token: b5e2cd9e081e8bb9c59f7bdbf2084c38
                   token_decimals: 18
                 pagination:
                   total: 2
@@ -715,26 +792,26 @@ paths:
             application/json:
               example:
                 subscribers:
-                - email: user_187@talentprotocol.com
+                - email: user_193@talentprotocol.com
                   headline:
-                  id: e2c824bd-6746-4cbe-88cd-d71de862b090
-                  name: user187
+                  id: ff15136e-21ce-49c4-948f-45cfbb3208c2
+                  name: user193
                   occupation:
                   profile_picture_url:
                   subscribed_back_status: no_request
                   ticker:
-                  username: user187
-                  wallet_address: 25c197dbec45d6136402d9f42c7f0206
-                - email: user_186@talentprotocol.com
+                  username: user193
+                  wallet_address: 687637d95bd03445400396898a012056
+                - email: user_192@talentprotocol.com
                   headline:
-                  id: b1acb213-d492-4192-98e4-c315d6720f88
-                  name: user186
+                  id: b7148d01-c30e-4d7b-9114-a68ce6f9cb03
+                  name: user192
                   occupation:
                   profile_picture_url:
                   subscribed_back_status: no_request
                   ticker:
-                  username: user186
-                  wallet_address: 248b071f685777d6693197468f947ef1
+                  username: user192
+                  wallet_address: a2acbf8e6a49ad11a0b8cfa8e6a7488f
                 pagination:
                   total: 2
                   cursor:
@@ -803,26 +880,26 @@ paths:
             application/json:
               example:
                 subscribers:
-                - email: user_195@talentprotocol.com
+                - email: user_202@talentprotocol.com
                   headline:
-                  id: 63fcc3e4-cfd0-4035-9e80-7b89b51407a5
-                  name: user195
+                  id: e3ee8838-fa7d-46b9-bead-b7b55c232307
+                  name: user202
                   occupation:
                   profile_picture_url:
                   subscribed_back_status: no_request
                   ticker:
-                  username: user195
-                  wallet_address: 7de3fcd2aba60ec0f59414334fd15598
-                - email: user_196@talentprotocol.com
+                  username: user202
+                  wallet_address: 0672adcfe643c8ba0d7ca3760b067b35
+                - email: user_201@talentprotocol.com
                   headline:
-                  id: 04e90652-7c06-4476-9c91-342a75cfc672
-                  name: user196
+                  id: 2deebf5c-c8d6-40f9-b4f3-afaabe65f91e
+                  name: user201
                   occupation:
                   profile_picture_url:
                   subscribed_back_status: no_request
                   ticker:
-                  username: user196
-                  wallet_address: 29bece9128f6a579097069edefa60cb2
+                  username: user201
+                  wallet_address: 8f7330fb39a8274497ac2663d9efbafb
                 pagination:
                   total: 2
                   cursor:
@@ -891,26 +968,26 @@ paths:
             application/json:
               example:
                 subscribing:
-                - email: user_205@talentprotocol.com
+                - email: user_210@talentprotocol.com
                   headline:
-                  id: c63a7391-88f9-482e-8457-d38203e1953e
-                  name: user205
+                  id: a40e476d-b969-436b-a3d7-fcc335253d24
+                  name: user210
                   occupation:
                   profile_picture_url:
                   ticker:
-                  username: user205
+                  username: user210
                   verified:
-                  wallet_address: 3369ace8b599b815d4ffb309e53b2229
-                - email: user_204@talentprotocol.com
+                  wallet_address: 34ca3afdacc1bc3eb12d6b37f0d8dc28
+                - email: user_211@talentprotocol.com
                   headline:
-                  id: 31603210-53b4-4411-9368-9c0364f064e3
-                  name: user204
+                  id: '092a95eb-aeff-4b5b-a7bf-202022e83a3d'
+                  name: user211
                   occupation:
                   profile_picture_url:
                   ticker:
-                  username: user204
+                  username: user211
                   verified:
-                  wallet_address: b9751dd5f67f0465a46b36ba7023d936
+                  wallet_address: 73cbaa5ef00b5e611893857a9ba04a1b
                 pagination:
                   total: 2
                   cursor:
@@ -979,26 +1056,26 @@ paths:
             application/json:
               example:
                 supporters:
-                - email: user_248@talentprotocol.com
+                - email: user_254@talentprotocol.com
                   headline:
-                  id: f9a9142f-e6f0-443b-80ec-b451ae93891f
-                  name: user248
+                  id: c753d05e-6d66-436e-a1ca-015ca536b5c1
+                  name: user254
                   occupation:
                   profile_picture_url:
                   ticker:
-                  username: user248
+                  username: user254
                   verified:
-                  wallet_address: ecf361d7191fde55c711cd99e430a238
-                - email: user_249@talentprotocol.com
+                  wallet_address: cf73d3fc996decffc3439b1236e6861a
+                - email: user_255@talentprotocol.com
                   headline:
-                  id: e227925d-fe7d-4259-b037-73b25f2253db
-                  name: user249
+                  id: 218433eb-b157-447b-bae9-c7a2bcbf8596
+                  name: user255
                   occupation:
                   profile_picture_url:
                   ticker:
-                  username: user249
+                  username: user255
                   verified:
-                  wallet_address: eb7af4ce3b27750217d83496d7ea041e
+                  wallet_address: fe4c8c0374985b79da4848b81caf1ddb
                 pagination:
                   total: 2
                   cursor:
@@ -1069,46 +1146,46 @@ paths:
             application/json:
               example:
                 talents:
-                - email: user_259@talentprotocol.com
+                - email: user_263@talentprotocol.com
                   headline:
-                  id: dad0b42f-7355-45cc-8f12-54b0c1e248e3
-                  name: user259
+                  id: 8e12b6f4-75c2-4c1c-83af-48449b55ccca
+                  name: user263
                   occupation:
                   profile_picture_url:
                   ticker:
-                  username: user259
+                  username: user263
                   verified: false
-                  wallet_address: 6f2611630543719ad9f930c52c0a4923
-                - email: user_258@talentprotocol.com
+                  wallet_address: 71edbe3a4264e9ea7a11f9f905760114
+                - email: user_264@talentprotocol.com
                   headline:
-                  id: acdad0de-aa02-43ed-8d28-7f41ffdd2ab5
-                  name: user258
+                  id: 5730e86d-032e-4fbc-9ab0-e3e964820dda
+                  name: user264
                   occupation:
                   profile_picture_url:
                   ticker:
-                  username: user258
+                  username: user264
                   verified: false
-                  wallet_address: 968cec83276e7ba5f4731f1463321a7c
-                - email: user_257@talentprotocol.com
+                  wallet_address: a538e72088958627fe82d88f1735e655
+                - email: user_265@talentprotocol.com
                   headline:
-                  id: 18c421b0-4941-488f-91ab-b938da162d1d
-                  name: user257
+                  id: 4d763649-8b14-4e92-bf22-a7c6b73a22ad
+                  name: user265
                   occupation:
                   profile_picture_url:
                   ticker:
-                  username: user257
+                  username: user265
                   verified: false
-                  wallet_address: e66b4d6cabb09c9a0aa8d5c4c9f7d057
-                - email: user_256@talentprotocol.com
+                  wallet_address: bf8e1ce9e0f8c0f6b791f05739a66522
+                - email: user_262@talentprotocol.com
                   headline:
-                  id: 1611abcc-7bc8-49b8-89ab-afb4a0beee4d
-                  name: user256
+                  id: 2dcf3d5f-87d2-4e5e-bff9-a70cfbfe92f9
+                  name: user262
                   occupation:
                   profile_picture_url:
                   ticker:
-                  username: user256
+                  username: user262
                   verified: false
-                  wallet_address: 67fd67e55eccee061cf9420e5737d681
+                  wallet_address: 6cc200099dcce3f5ab1d44be5c569570
                 pagination:
                   total: 4
                   cursor:
@@ -1171,9 +1248,9 @@ paths:
             application/json:
               example:
                 talent:
-                  email: user_268@talentprotocol.com
+                  email: user_274@talentprotocol.com
                   headline:
-                  id: c7d61336-5a6f-4101-84ea-c58a40380dd3
+                  id: 9be1324b-d463-4fc1-8034-b1f561810e31
                   name: API user
                   occupation:
                   profile_picture_url:
@@ -1182,9 +1259,9 @@ paths:
                   supporters_count: 1
                   supporting_count: 1
                   ticker:
-                  username: user268
+                  username: user274
                   verified: false
-                  wallet_address: aa2be468bdb26c53faefb30531932663
+                  wallet_address: e9e999933b4fd159b4a40a708cc9f52e
               schema:
                 type: object
                 properties:

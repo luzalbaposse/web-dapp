@@ -51,7 +51,7 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
     )
 
     response_body = {
-      talents: API::TalentBlueprint.render_as_json(page_recomended_users, view: :normal),
+      talents: API::TalentBlueprint.render_as_json(page_recomended_users.includes(:talent), view: :normal),
       pagination: {
         total: recomended_users.length,
         cursor: pagy.has_more? ? page_recomended_users.last.uuid : nil
