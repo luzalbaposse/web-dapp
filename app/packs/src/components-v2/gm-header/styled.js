@@ -9,6 +9,7 @@ export const Container = styled.section`
 
   ${desktopStyles(css`
     padding: 16px 0;
+    max-width: 660px;
   `)}
 `;
 
