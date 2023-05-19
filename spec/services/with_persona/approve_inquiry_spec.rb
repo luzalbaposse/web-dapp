@@ -11,14 +11,19 @@ RSpec.describe WithPersona::ApproveInquiry do
 
   let(:inquiry_first_name) { "ruben" }
   let(:inquiry_last_name) { "dinis" }
-  let(:user) { create :user, legal_first_name: legal_first_name, legal_last_name: legal_last_name }
+  let(:user) { create :user, legal_first_name: legal_first_name, legal_last_name: legal_last_name, invited: invite }
   let!(:talent) { create :talent, user: user, verified: false, with_persona_id: "123" }
+  let(:invite) { create :invite }
 
   let(:task_update_class) { Tasks::Update }
   let(:task_update_instance) { instance_double(task_update_class, call: true) }
 
+  let(:credit_points_class) { ParticipationPoints::CreditInvitePoints }
+  let(:credit_points_instance) { instance_double(credit_points_class, call: true) }
+
   before do
     allow(task_update_class).to receive(:new).and_return(task_update_instance)
+    allow(credit_points_class).to receive(:new).and_return(credit_points_instance)
   end
 
   context "when the inquiry names match the user names" do
@@ -37,6 +42,15 @@ RSpec.describe WithPersona::ApproveInquiry do
       expect(talent.reload.with_persona_id).to eq "123"
     end
 
+    it "initializes and calls the credit points service" do
+      approve_inquiry
+
+      expect(credit_points_class).to have_received(:new).with(
+        invite: invite
+      )
+      expect(credit_points_instance).to have_received(:call)
+    end
+
     it "initializes and calls the tasks update service" do
       approve_inquiry
 
@@ -45,6 +59,16 @@ RSpec.describe WithPersona::ApproveInquiry do
         type: "Tasks::Verified",
         user: user
       )
+    end
+
+    context "when the user was not invited" do
+      let(:invite) { nil }
+
+      it "does not initialize the credit points service" do
+        approve_inquiry
+
+        expect(credit_points_class).not_to have_received(:new)
+      end
     end
   end
 
