@@ -6,7 +6,7 @@ class ActivityIngestJob < ApplicationJob
 
     activity = activity_base.new
 
-    activity.message = activity_base.generate_content(origin_user_id, target_user_id) || content
+    activity.message = content || activity_base.generate_content(origin_user_id, target_user_id)
     activity.origin_user_id = origin_user_id
     activity.target_user_id = target_user_id
     activity.global = activity_base.default_global_scope
