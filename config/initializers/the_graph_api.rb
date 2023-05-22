@@ -17,9 +17,17 @@ module TheGraphAPI
       end
     end
 
-    Schema = GraphQL::Client.load_schema(HTTP)
+    begin
+      Schema = GraphQL::Client.load_schema(HTTP)
 
-    Client = GraphQL::Client.new(schema: Schema, execute: HTTP)
+      Client = GraphQL::Client.new(schema: Schema, execute: HTTP)
+    rescue KeyError, Net::ReadTimeout => error
+      # This is a hack to get around the fact that the Celo subgraph is not available
+      puts "Error loading Celo subgraph schema"
+      Rollbar.error(
+        error, "Error loading Celo subgraph schema"
+      )
+    end
   end
 
   module Alfajores
@@ -29,9 +37,17 @@ module TheGraphAPI
       end
     end
 
-    Schema = GraphQL::Client.load_schema(HTTP)
+    begin
+      Schema = GraphQL::Client.load_schema(HTTP)
 
-    Client = GraphQL::Client.new(schema: Schema, execute: HTTP)
+      Client = GraphQL::Client.new(schema: Schema, execute: HTTP)
+    rescue KeyError, Net::ReadTimeout => error
+      # This is a hack to get around the fact that the Alfajores subgraph is not available
+      puts "Error loading Alfajores subgraph schema"
+      Rollbar.error(
+        error, "Error loading Alfajores subgraph schema"
+      )
+    end
   end
 
   module Mumbai
@@ -41,9 +57,17 @@ module TheGraphAPI
       end
     end
 
-    Schema = GraphQL::Client.load_schema(HTTP)
+    begin
+      Schema = GraphQL::Client.load_schema(HTTP)
 
-    Client = GraphQL::Client.new(schema: Schema, execute: HTTP)
+      Client = GraphQL::Client.new(schema: Schema, execute: HTTP)
+    rescue KeyError, Net::ReadTimeout => error
+      # This is a hack to get around the fact that the Mumbai subgraph is not available
+      puts "Error loading Mumbai subgraph schema"
+      Rollbar.error(
+        error, "Error loading Mumbai subgraph schema"
+      )
+    end
   end
 
   module Polygon
@@ -53,8 +77,16 @@ module TheGraphAPI
       end
     end
 
-    Schema = GraphQL::Client.load_schema(HTTP)
+    begin
+      Schema = GraphQL::Client.load_schema(HTTP)
 
-    Client = GraphQL::Client.new(schema: Schema, execute: HTTP)
+      Client = GraphQL::Client.new(schema: Schema, execute: HTTP)
+    rescue KeyError, Net::ReadTimeout => error
+      # This is a hack to get around the fact that the Polygon subgraph is not available
+      puts "Error loading Polygon subgraph schema"
+      Rollbar.error(
+        error, "Error loading Polygon subgraph schema"
+      )
+    end
   end
 end

@@ -2,6 +2,7 @@ class DiscoveryRow < ApplicationRecord
   extend FriendlyId
 
   belongs_to :partnership, optional: true
+  belongs_to :user, optional: true
 
   has_many :tags
   has_many :visible_tags, -> { visible }, class_name: "Tag"
