@@ -4,7 +4,11 @@ module TheGraph
   module Polygon
     MAX_RECORDS = 100
 
-    TALENT_SUPPORTERS = ::TheGraphAPI::Polygon::Client.parse TheGraph::Queries::TALENT_SUPPORTERS_QUERY
+    begin
+      TALENT_SUPPORTERS = ::TheGraphAPI::Polygon::Client.parse TheGraph::Queries::TALENT_SUPPORTERS_QUERY
+    rescue NameError => error
+      Rollbar.error(error, "TheGraph client for Polygon is down")
+    end
 
     class Client
       class Error < StandardError; end

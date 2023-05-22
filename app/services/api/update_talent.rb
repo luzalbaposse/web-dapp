@@ -13,6 +13,7 @@ class API::UpdateTalent
     update_tags(tag_params[:tags]) if tag_params[:tags]
     update_career_needs(career_need_params[:career_needs]) if career_need_params[:career_needs]
     refresh_quests
+    refresh_inviter_points
 
     @success = true
   end
@@ -189,5 +190,9 @@ class API::UpdateTalent
 
   def refresh_quests
     Quests::RefreshUserQuestsJob.perform_later(talent_user.id)
+  end
+
+  def refresh_inviter_points
+    ParticipationPoints::CreditInvitePointsJob.perform_later(talent_user.invited.id) if talent_user.invited
   end
 end

@@ -13,6 +13,9 @@ module Talents
       fetched_supporters_count = 0
 
       talent_supporters_response = talent_supporters(offset: fetched_supporters_count)
+
+      return if talent_supporters_response.blank?
+
       supporters_count = talent_supporters_response.talent_token.supporter_counter.to_i
       total_supply = talent_supporters_response.talent_token.total_supply
       token_day_data = talent_supporters_response.talent_token.token_day_data
@@ -42,6 +45,9 @@ module Talents
         offset: offset,
         variance_start_date: variance_start_date
       )
+    rescue NameError => error
+      Rollbar.error(error, "Unable to find TheGraph client for chain_id: #{talent_token.chain_id}")
+      {}
     end
 
     def variance_start_date

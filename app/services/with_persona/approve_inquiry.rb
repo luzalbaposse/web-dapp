@@ -11,6 +11,8 @@ module WithPersona
     def call
       if names_match?
         talent.update(verified: true)
+        credit_inviter_points if user.invited
+        # TODO - remove after quests cleanup @quests
         Tasks::Update.new.call(type: "Tasks::Verified", user: user)
       else
         with_persona_id = talent.with_persona_id
@@ -57,6 +59,10 @@ module WithPersona
 
     def last_name_match?
       inquiry_last_name.include?(user.legal_last_name&.downcase) || inquiry_last_name.include?(user.legal_first_name&.downcase)
+    end
+
+    def credit_inviter_points
+      ParticipationPoints::CreditInvitePoints.new(invite: user.invited).call
     end
   end
 end

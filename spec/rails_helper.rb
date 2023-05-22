@@ -2,7 +2,7 @@ if ENV["GITHUB_ARTIFACTS"]
   require "simplecov"
   require "codecov"
 
-  SimpleCov.add_filter ["db/migrate", "lib/tasks"]
+  SimpleCov.add_filter ["db/migrate", "lib/tasks", "lib/rack"]
   SimpleCov.command_name "#{SimpleCov::CommandGuesser.guess} #{(ENV["CI_NODE_INDEX"].to_i + 1) || "1"}"
 
   SimpleCov.formatter = SimpleCov::Formatter::Codecov

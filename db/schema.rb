@@ -10,8 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_18_140105) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_22_100835) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
@@ -259,7 +260,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_18_140105) do
     t.string "slug"
     t.text "description"
     t.bigint "partnership_id"
+    t.bigint "user_id"
     t.index ["partnership_id"], name: "index_discovery_rows_on_partnership_id"
+    t.index ["user_id"], name: "index_discovery_rows_on_user_id"
   end
 
   create_table "erc20_tokens", force: :cascade do |t|
@@ -717,8 +720,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_18_140105) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.string "theme_preference", default: "light"
     t.boolean "disabled", default: false
+    t.string "theme_preference", default: "light"
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"
@@ -747,6 +750,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_18_140105) do
     t.datetime "onboarded_at"
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.string "utm_source"
+    t.boolean "is_organization", default: false
     t.index ["created_at"], name: "index_users_on_created_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invite_id"], name: "index_users_on_invite_id"
@@ -803,6 +807,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_18_140105) do
   add_foreign_key "connections", "users"
   add_foreign_key "connections", "users", column: "connected_user_id"
   add_foreign_key "discovery_rows", "partnerships"
+  add_foreign_key "discovery_rows", "users"
   add_foreign_key "erc20_tokens", "users"
   add_foreign_key "erc721_tokens", "users"
   add_foreign_key "goal_images", "goals"

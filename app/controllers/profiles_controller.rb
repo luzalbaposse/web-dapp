@@ -1,5 +1,10 @@
 class ProfilesController < ApplicationController
   def show
+    if user.is_organization && user.discovery_row.present?
+      redirect_to discovery_path(user.discovery_row.slug)
+      return
+    end
+
     # Done this way so we can eager load all the images
     talent =
       Talent
