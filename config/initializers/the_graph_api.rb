@@ -22,8 +22,12 @@ module TheGraphAPI
 
       Client = GraphQL::Client.new(schema: Schema, execute: HTTP)
     rescue KeyError => error
+      Schema = GraphQL::Schema.from_definition("lib/the_graph/schema.graphql")
+
+      Client = GraphQL::Client.new(schema: Schema, execute: HTTP)
+
       # This is a hack to get around the fact that the Celo subgraph is not available
-      puts "Error loading Celo subgraph schema"
+      puts "Error loading Celo subgraph schema, used default from project"
       Rollbar.error(
         error, "Error loading Celo subgraph schema"
       )
@@ -42,8 +46,12 @@ module TheGraphAPI
 
       Client = GraphQL::Client.new(schema: Schema, execute: HTTP)
     rescue KeyError => error
+      Schema = GraphQL::Schema.from_definition("lib/the_graph/schema.graphql")
+
+      Client = GraphQL::Client.new(schema: Schema, execute: HTTP)
+
       # This is a hack to get around the fact that the Alfajores subgraph is not available
-      puts "Error loading Alfajores subgraph schema"
+      puts "Error loading Alfajores subgraph schema, used default from project"
       Rollbar.error(
         error, "Error loading Alfajores subgraph schema"
       )
@@ -62,8 +70,12 @@ module TheGraphAPI
 
       Client = GraphQL::Client.new(schema: Schema, execute: HTTP)
     rescue KeyError => error
+      Schema = GraphQL::Schema.from_definition("lib/the_graph/schema.graphql")
+
+      Client = GraphQL::Client.new(schema: Schema, execute: HTTP)
+
       # This is a hack to get around the fact that the Mumbai subgraph is not available
-      puts "Error loading Mumbai subgraph schema"
+      puts "Error loading Mumbai subgraph schema, used default from project"
       Rollbar.error(
         error, "Error loading Mumbai subgraph schema"
       )
@@ -82,8 +94,12 @@ module TheGraphAPI
 
       Client = GraphQL::Client.new(schema: Schema, execute: HTTP)
     rescue KeyError => error
+      Schema = GraphQL::Schema.from_definition("lib/the_graph/schema.graphql")
+
+      Client = GraphQL::Client.new(schema: Schema, execute: HTTP)
+
       # This is a hack to get around the fact that the Polygon subgraph is not available
-      puts "Error loading Polygon subgraph schema"
+      puts "Error loading Polygon subgraph schema, used default from project"
       Rollbar.error(
         error, "Error loading Polygon subgraph schema"
       )

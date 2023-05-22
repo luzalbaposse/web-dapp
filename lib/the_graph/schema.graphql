@@ -1,0 +1,75 @@
+type TalentFactory {
+  # factory address
+  id: ID!
+  # amount of talent tokens created
+  talentCount: Int!
+  # current owner of the factory
+  owner: ID!
+}
+
+type Supporter {
+  id: ID!
+  totalAmount: Float!
+  rewardsClaimed: Float!
+  talents: [SupporterTalentToken!]!
+}
+
+type SupporterTalentToken {
+  id: ID!
+  talent: TalentToken!
+  supporter: Supporter!
+  amount: Float!
+  talAmount: Float!
+  firstTimeBoughtAt: Int!
+  lastTimeBoughtAt: Int!
+}
+
+type TalentToken {
+  # token address
+  id: ID!
+  # talent address
+  owner: ID!
+  # token symbol
+  symbol: String!
+  # token name
+  name: String!
+  # token Floats
+  decimals: Int!
+  # token max supply
+  maxSupply: Int!
+  # token total supply
+  totalSupply: Int!
+  # market cap
+  marketCap: Int!
+  # rewards that are ready to be claimed
+  rewardsReady: Float!
+  # rewards that have already been claimed
+  rewardsClaimed: Float!
+  # creation
+  createdAtTimestamp: Int!
+  # block stake was created at
+  createdAtBlockNumber: Int!
+  # all transactions for this token
+  txCount: Int!
+  # all holders of this talent token
+  supporterCounter: Int!
+  # total value locked
+  totalValueLocked: Int!
+  supporters: [SupporterTalentToken!]!
+  # daily price for this token
+  tokenDayData: [TalentTokenDayData!]!
+}
+
+type TalentTokenDayData {
+  id: ID!
+  date: Int!
+  talent: TalentToken!
+  # volume stats
+  dailySupply: Int!
+}
+
+type Query { 
+  talentSupporters(id: ID!, skip: Int!, first: Int!, variance_start_date: Int!): [TalentToken!],
+  talentToken(id: ID!): [TalentToken!],
+  tokenDayData(where: { date_lte: Int! }): [TalentTokenDayData!],
+}
