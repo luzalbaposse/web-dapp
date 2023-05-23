@@ -10,8 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_23_094559) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_23_112135) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
@@ -248,6 +249,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_094559) do
     t.integer "daily_join_pages_visitors"
     t.integer "total_linkedin_signups"
     t.integer "total_email_signups"
+    t.integer "total_celo_sponsorship_volume_cusd"
+    t.integer "total_celo_sponsorship_volume_gdollar"
+    t.integer "total_polygon_sponsorship_volume_usdc"
+    t.integer "total_unique_sponsors"
+    t.integer "total_unique_sponsoring"
   end
 
   create_table "discovery_rows", force: :cascade do |t|
@@ -719,8 +725,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_094559) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.string "theme_preference", default: "light"
     t.boolean "disabled", default: false
+    t.string "theme_preference", default: "light"
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"

@@ -343,5 +343,13 @@ module Metrics
     def one_month_ago
       @one_month_ago ||= 31.days.ago.beginning_of_day
     end
+
+    def total_unique_sponsors
+      Sponsorship.all.distinct.pluck(:sponsor).count
+    end
+
+    def total_unique_sponsoring
+      Sponsorship.all.distinct.pluck(:talent).count
+    end
   end
 end

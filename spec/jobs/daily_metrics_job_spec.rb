@@ -139,6 +139,10 @@ RSpec.describe DailyMetricsJob, type: :job do
     ]
   end
 
+  let!(:sponsorship_one) { create :sponsorship, symbol: "USDC", chain_id: 137, amount: "100000000", sponsor: "1", talent: "2" }
+  let!(:sponsorship_two) { create :sponsorship, symbol: "cUSD", chain_id: 42220, amount: "200000000000000000000", sponsor: "1", talent: "3" }
+  let!(:sponsorship_three) { create :sponsorship, symbol: "G$", chain_id: 42220, amount: "300000000000000000000", sponsor: "2", talent: "4" }
+
   before do
     allow(web3_proxy_class).to receive(:new).and_return(web3_proxy)
     allow(upload_metrics_class).to receive(:new).and_return(upload_metrics)
@@ -202,6 +206,11 @@ RSpec.describe DailyMetricsJob, type: :job do
       expect(created_daily_metric.daily_join_pages_visitors).to eq 200
       expect(created_daily_metric.total_linkedin_signups).to eq 1
       expect(created_daily_metric.total_email_signups).to eq 5
+      expect(created_daily_metric.total_polygon_sponsorship_volume_usdc_was).to eq 100
+      expect(created_daily_metric.total_celo_sponsorship_volume_cusd).to eq 200
+      expect(created_daily_metric.total_celo_sponsorship_volume_gdollar).to eq 300
+      expect(created_daily_metric.total_unique_sponsors).to eq 2
+      expect(created_daily_metric.total_unique_sponsoring).to eq 3
     end
   end
 
