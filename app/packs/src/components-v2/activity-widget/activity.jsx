@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { ShowMoreContainer, StyledTypography, StyledTypographyLink } from "./styled";
+import { TextLink } from "@talentprotocol/design-system";
 
 export const Activity = ({ content, originUser, targetUser }) => {
   const [didRender, setDidRender] = useState(false);
