@@ -20,13 +20,13 @@ module Quests
           completed_at: completed_at,
           credited_experience_points_amount: quest.experience_points_amount
         )
-        ExperiencePoint.create!(
+        ExperiencePoints::Create.new(
           user: user,
           amount: quest.experience_points_amount,
           source: quest,
           credited_at: completed_at,
           description: "Completed #{quest.title}"
-        )
+        ).call
       end
     end
 

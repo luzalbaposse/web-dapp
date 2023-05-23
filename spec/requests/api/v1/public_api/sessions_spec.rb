@@ -36,6 +36,7 @@ RSpec.describe "Sessions" do
             expect(returned_user[:admin]).to eq(current_user.admin?)
             expect(returned_user[:moderator]).to eq(current_user.moderator?)
             expect(returned_user[:verified]).to eq(current_user.talent.verified)
+            expect(returned_user[:experience_points_amount]).to eq(current_user.experience_points_amount)
           end
         end
       end

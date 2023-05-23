@@ -1,6 +1,6 @@
 class API::UserBlueprint < Blueprinter::Base
   view :normal do
-    fields :username, :name, :email, :profile_picture_url, :messaging_disabled, :profile_type
+    fields :username, :name, :email, :profile_picture_url, :messaging_disabled, :profile_type, :experience_points_amount
 
     field :id do |user, _options|
       user.uuid

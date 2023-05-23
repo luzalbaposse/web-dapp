@@ -14,13 +14,15 @@ module ExperiencePoints
       description = "Invite #{invite.code} used."
 
       (verified_users_count - invite_current_experience_points_count).times do
-        ExperiencePoint.create!(
-          user: inviter,
-          source: invite,
-          amount: AMOUNT,
-          credited_at: credited_at,
-          description: description
-        )
+        ActiveRecord::Base.transaction do
+          ExperiencePoints::Create.new(
+            user: inviter,
+            source: invite,
+            amount: AMOUNT,
+            credited_at: credited_at,
+            description: description
+          ).call
+        end
       end
     end
 
