@@ -30,6 +30,7 @@ module PublicAPIRoutes
             end
             resources :leaderboards, only: [:index]
             resources :quests, only: [:index]
+            resources :invited_talents, only: [:index]
 
             resource :validations, only: [] do
               get :username, on: :collection
