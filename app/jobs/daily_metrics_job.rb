@@ -67,7 +67,12 @@ class DailyMetricsJob < ApplicationJob
       total_emails_opened: total_emails_opened,
       daily_join_pages_visitors: daily_join_pages_visitors,
       total_linkedin_signups: total_linkedin_signups,
-      total_email_signups: total_email_signups
+      total_email_signups: total_email_signups,
+      total_celo_sponsorship_volume_cusd: total_sponsorship_volume_celo_cusd,
+      total_celo_sponsorship_volume_gdollar: total_sponsorship_volume_celo_gdollar,
+      total_polygon_sponsorship_volume_usdc: total_sponsorship_volume_polygon_usdc,
+      total_unique_sponsors: total_unique_sponsors,
+      total_unique_sponsoring: total_unique_sponsoring
     )
   end
 end

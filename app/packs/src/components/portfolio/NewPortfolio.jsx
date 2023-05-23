@@ -505,7 +505,6 @@ const NewPortfolio = ({
           mode={theme.mode()}
           tokenAddress={tokenAddress}
           ticker={ticker}
-          onClaim={onClaim}
           chainAPI={chainAPI}
           currentUserId={currentUser?.id}
           messagingDisabled={currentUser?.messaging_disabled}

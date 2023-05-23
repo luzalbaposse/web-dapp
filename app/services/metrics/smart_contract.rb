@@ -32,6 +32,7 @@ module Metrics
     CELO_STAKING_ADDRESS = "0x5a6eF881E3707AAf7201dDb7c198fc94B4b12636"
     CELO_SPONSORSHIP_ADDRESS = "0x5b89a39b381138E02C32691a22B30f833D1Cd834"
     CELO_FACTORY_ADDRESS = "0xa902DA7a40a671B84bA3Dd0BdBA6FD9d2D888246"
+    CELO_STABLE_DECIMALS = 1e18
 
     ETH_TAL_SUBDOMAIN_ADDRESS = "0xe86C5ea96eA47D3A9D835672C1428329bD0bb7Af"
 
@@ -51,6 +52,33 @@ module Metrics
     def total_polygon_supporters
       polygon_contracts = TalentToken.where(chain_id: 137, deployed: true).pluck(:contract_id)
       TalentSupporter.where(talent_contract_id: polygon_contracts).distinct.count(:supporter_wallet_id)
+    end
+
+    def total_sponsorship_volume_polygon_usdc
+      total = 0
+      Sponsorship.where(chain_id: 137, symbol: "USDC").find_each do |sponsorship|
+        total += sponsorship.amount.to_i
+      end
+
+      total / POLYGON_STABLE_DECIMALS
+    end
+
+    def total_sponsorship_volume_celo_cusd
+      total = 0
+      Sponsorship.where(chain_id: 42220, symbol: "cUSD").find_each do |sponsorship|
+        total += sponsorship.amount.to_i
+      end
+
+      total / TalentToken::TAL_DECIMALS
+    end
+
+    def total_sponsorship_volume_celo_gdollar
+      total = 0
+      Sponsorship.where(chain_id: 42220, symbol: "G$").find_each do |sponsorship|
+        total += sponsorship.amount.to_i
+      end
+
+      total / TalentToken::TAL_DECIMALS
     end
 
     def collect_polygon_transactions(daily_metric)
@@ -83,6 +111,7 @@ module Metrics
         start_timestamp: TRANSACTIONS_KPI_START_DATE
       ).to_i
 
+      daily_metric.total_polygon_sponsorship_volume_usdc = total_sponsorship_volume_polygon_usdc
       daily_metric.total_polygon_stake_transactions = staking_count.to_i
       daily_metric.total_polygon_sponsorship_transactions = sponsorship_count.to_i
       daily_metric.total_mates_nfts = total_mates_nfts.to_i
@@ -112,6 +141,8 @@ module Metrics
         start_timestamp: TRANSACTIONS_KPI_START_DATE
       ).to_i
 
+      daily_metric.total_celo_sponsorship_volume_cusd = total_sponsorship_volume_celo_cusd
+      daily_metric.total_celo_sponsorship_volume_gdollar = total_sponsorship_volume_celo_gdollar
       daily_metric.total_celo_stake_transactions = staking_count.to_i
       daily_metric.total_celo_sponsorship_transactions = sponsorship_count.to_i
       daily_metric

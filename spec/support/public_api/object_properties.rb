@@ -65,7 +65,7 @@ module PublicAPI
     }
 
     QUEST_PROPERTIES = {
-      participation_points_amount: {type: :integer, description: "The points credited by the quest"},
+      experience_points_amount: {type: :integer, description: "The points credited by the quest"},
       title: {type: :string, description: "The title of the quest"},
       description: {type: :string, description: "The description of the quest"},
       completed_at: {type: :string, format: :datetime, description: "The timestamp of the quest completion", nullable: true}

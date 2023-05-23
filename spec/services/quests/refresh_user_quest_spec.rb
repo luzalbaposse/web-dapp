@@ -6,7 +6,7 @@ RSpec.shared_examples "a refresh user quest without creating new records" do
   end
 
   it "does not create a new participation point record" do
-    expect { subject }.not_to change(ParticipationPoint, :count)
+    expect { subject }.not_to change(ExperiencePoint, :count)
   end
 end
 
@@ -16,7 +16,7 @@ RSpec.shared_examples "a refresh user quest that creates new records" do
   end
 
   it "creates a new participation point record" do
-    expect { subject }.to change(ParticipationPoint, :count).from(0).to(1)
+    expect { subject }.to change(ExperiencePoint, :count).from(0).to(1)
   end
 
   it "creates the records with the correct arguments" do
@@ -24,16 +24,16 @@ RSpec.shared_examples "a refresh user quest that creates new records" do
       subject
 
       user_quest = UserV2Quest.last
-      participation_point = ParticipationPoint.last
+      participation_point = ExperiencePoint.last
 
       aggregate_failures do
         expect(user_quest.v2_quest).to eq quest
         expect(user_quest.user).to eq user
         expect(user_quest.completed_at).to eq Time.current
-        expect(user_quest.credited_amount).to eq quest.participation_points_amount
+        expect(user_quest.credited_experience_points_amount).to eq quest.experience_points_amount
 
         expect(participation_point.source).to eq quest
-        expect(participation_point.amount).to eq quest.participation_points_amount
+        expect(participation_point.amount).to eq quest.experience_points_amount
         expect(participation_point.credited_at).to eq Time.current
         expect(participation_point.description).to eq "Completed #{quest.title}"
       end

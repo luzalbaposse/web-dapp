@@ -18,7 +18,7 @@ RSpec.describe WithPersona::ApproveInquiry do
   let(:task_update_class) { Tasks::Update }
   let(:task_update_instance) { instance_double(task_update_class, call: true) }
 
-  let(:credit_points_class) { ParticipationPoints::CreditInvitePoints }
+  let(:credit_points_class) { ExperiencePoints::CreditInvitePoints }
   let(:credit_points_instance) { instance_double(credit_points_class, call: true) }
 
   before do

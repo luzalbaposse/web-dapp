@@ -1,8 +1,8 @@
 # Credited points for a specific invite
-module ParticipationPoints
+module ExperiencePoints
   class CreditInvitePoints
     START_DATE = Date.new(2023, 6, 1)
-    AMOUNT = 250
+    AMOUNT = 100
 
     def initialize(invite:)
       raise ArgumentError, "Invite is required" unless invite
@@ -13,14 +13,16 @@ module ParticipationPoints
       credited_at = Time.current
       description = "Invite #{invite.code} used."
 
-      (verified_users_count - invite_current_participation_points_count).times do
-        ParticipationPoint.create!(
-          user: inviter,
-          source: invite,
-          amount: AMOUNT,
-          credited_at: credited_at,
-          description: description
-        )
+      (verified_users_count - invite_current_experience_points_count).times do
+        ActiveRecord::Base.transaction do
+          ExperiencePoints::Create.new(
+            user: inviter,
+            source: invite,
+            amount: AMOUNT,
+            credited_at: credited_at,
+            description: description
+          ).call
+        end
       end
     end
 
@@ -40,8 +42,8 @@ module ParticipationPoints
         .count
     end
 
-    def invite_current_participation_points_count
-      ParticipationPoint.where(
+    def invite_current_experience_points_count
+      ExperiencePoint.where(
         user: inviter,
         source: invite
       ).count

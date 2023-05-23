@@ -79,7 +79,12 @@ module GoogleDrive
         daily_metric.total_app_read_notifications,
         daily_metric.daily_join_pages_visitors,
         daily_metric.total_linkedin_signups,
-        daily_metric.total_email_signups
+        daily_metric.total_email_signups,
+        daily_metric.total_celo_sponsorship_volume_cusd,
+        daily_metric.total_celo_sponsorship_volume_gdollar,
+        daily_metric.total_polygon_sponsorship_volume_usdc,
+        daily_metric.total_unique_sponsors,
+        daily_metric.total_unique_sponsoring
       ]]
     end
 

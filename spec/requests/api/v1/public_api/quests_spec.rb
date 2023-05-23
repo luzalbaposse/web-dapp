@@ -22,9 +22,9 @@ RSpec.describe "Quests API" do
       let(:cursor) { nil }
 
       before do
-        create :v2_quest, quest_type: "profile_picture", participation_points_amount: 10
-        create :v2_quest, quest_type: "three_journey_entries", participation_points_amount: 20
-        career_update_quest = create :v2_quest, quest_type: "send_career_update", participation_points_amount: 30
+        create :v2_quest, quest_type: "profile_picture", experience_points_amount: 10
+        create :v2_quest, quest_type: "three_journey_entries", experience_points_amount: 20
+        career_update_quest = create :v2_quest, quest_type: "send_career_update", experience_points_amount: 30
 
         create :user_v2_quest, user: talent_user, v2_quest: career_update_quest, completed_at: Time.new(2023, 10, 11)
       end
@@ -49,7 +49,7 @@ RSpec.describe "Quests API" do
           data = JSON.parse(response.body)
 
           returned_quests = data["quests"]
-          returned_points = returned_quests.map { |f| f["participation_points_amount"] }
+          returned_points = returned_quests.map { |f| f["experience_points_amount"] }
           returned_completed_at = returned_quests.map { |f| f["completed_at"] }
           returned_pagination = data["pagination"]
           aggregate_failures do

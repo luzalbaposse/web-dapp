@@ -5,43 +5,43 @@ namespace :quests do
         title: "Profile Picture",
         description: "Upload a picture of you to your profile.",
         quest_type: "profile_picture",
-        participation_points_amount: 100
+        experience_points_amount: 100
       },
       {
         title: "Subscribe to 3+ Talent",
         description: "Subscribe to receive career updates from 3+ talent.",
         quest_type: "three_talent_subscribe",
-        participation_points_amount: 300
+        experience_points_amount: 300
       },
       {
         title: "Add 3+ Journey Entries",
         description: "Add at least 3 goals, positions, or education to your profile.",
         quest_type: "three_journey_entries",
-        participation_points_amount: 400
+        experience_points_amount: 400
       },
       {
         title: "Verify Your Identity",
         description: "Complete the KYC process and receive a verified checkmark.",
         quest_type: "verify_identity",
-        participation_points_amount: 1000
+        experience_points_amount: 1000
       },
       {
         title: "Get 5+ Subscribers",
         description: "Accept at least 5 subscription requests.",
         quest_type: "five_subscribers",
-        participation_points_amount: 1250
+        experience_points_amount: 1250
       },
       {
         title: "Send a Career Update",
         description: "Write your first Career Update and share it with your supporters.",
         quest_type: "send_career_update",
-        participation_points_amount: 1000
+        experience_points_amount: 1000
       },
       {
         title: "Stake on 3+ Talent",
         description: "Buy $10 worth of Talent Tokens from 3 different users.",
         quest_type: "supporting_three",
-        participation_points_amount: 3000
+        experience_points_amount: 3000
       }
     ]
 
