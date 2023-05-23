@@ -66,6 +66,7 @@ const Supporting = ({
   loading,
   isCurrentUserImpersonated
 }) => {
+  const maxSupply = 1000000;
   const [talentProfilePictures, setTalentProfilePictures] = useState({});
   const [talentProfileUsernames, setTalentProfileUsernames] = useState({});
   const [selectedSort, setSelectedSort] = useState("Alphabetical Order");
@@ -378,13 +379,30 @@ const Supporting = ({
               </Table.Td>
               <Table.Td>
                 <div className="d-flex flex-column justify-content-center align-items-start">
-                  <P2 bold text={`$${returnsUSD(talent.contract_id)}`} className="text-black" />
-                  <P2 text={`${returns(talent.contract_id)} TAL`} />
+                  {talent.totalSupply == maxSupply ? (
+                    <>
+                      <P2 bold text="$0.0" className="text-black" />
+                      <P2 text="0.0 TAL" />
+                    </>
+                  ) : (
+                    <>
+                      <P2 bold text={`$${returnsUSD(talent.contract_id)}`} className="text-black" />
+                      <P2 text={`${returns(talent.contract_id)} TAL`} />
+                    </>
+                  )}
                 </div>
               </Table.Td>
               <Table.Td className="pr-3">
-                <button onClick={() => onClaim(talent.contract_id)} className="mr-2 button-link remove-background">
-                  <Link text="Claim rewards" bold disabled={isCurrentUserImpersonated} />
+                <button
+                  disabled={isCurrentUserImpersonated || talent.totalSupply == maxSupply}
+                  onClick={() => onClaim(talent.contract_id)}
+                  className="mr-2 button-link remove-background"
+                >
+                  <Link
+                    text="Claim rewards"
+                    bold
+                    disabled={isCurrentUserImpersonated || talent.totalSupply == maxSupply}
+                  />
                 </button>
               </Table.Td>
             </Table.Tr>
