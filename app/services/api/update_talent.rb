@@ -193,6 +193,6 @@ class API::UpdateTalent
   end
 
   def refresh_inviter_points
-    ParticipationPoints::CreditInvitePointsJob.perform_later(talent_user.invited.id) if talent_user.invited
+    ExperiencePoints::CreditInvitePointsJob.perform_later(talent_user.invited.id) if talent_user.invited
   end
 end

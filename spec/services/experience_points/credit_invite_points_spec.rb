@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ParticipationPoints::CreditInvitePoints do
+RSpec.describe ExperiencePoints::CreditInvitePoints do
   subject(:credit_invite_points) { described_class.new(invite: invite).call }
 
   let(:inviter) { create :user }
@@ -19,14 +19,14 @@ RSpec.describe ParticipationPoints::CreditInvitePoints do
   let(:talent_four) { create :talent, verified: false }
 
   it "creates two participation points for the inviter" do
-    expect { credit_invite_points }.to change(ParticipationPoint, :count).from(0).to(2)
+    expect { credit_invite_points }.to change(ExperiencePoint, :count).from(0).to(2)
   end
 
   it "creates the participation points with the expected data" do
     freeze_time do
       credit_invite_points
 
-      points = ParticipationPoint.where(user: inviter, source: invite)
+      points = ExperiencePoint.where(user: inviter, source: invite)
 
       aggregate_failures do
         expect(points.pluck(:amount).uniq).to eq([described_class::AMOUNT])
@@ -38,11 +38,11 @@ RSpec.describe ParticipationPoints::CreditInvitePoints do
 
   context "when one of the points is already credited" do
     before do
-      create :participation_point, source: invite, user: inviter, amount: 250, credited_at: described_class::START_DATE + 2.days, description: "test"
+      create :experience_point, source: invite, user: inviter, amount: 250, credited_at: described_class::START_DATE + 2.days, description: "test"
     end
 
     it "only creates the missing participation point for the inviter" do
-      expect { credit_invite_points }.to change(ParticipationPoint, :count).from(1).to(2)
+      expect { credit_invite_points }.to change(ExperiencePoint, :count).from(1).to(2)
     end
   end
 end

@@ -1,11 +1,11 @@
 require "rails_helper"
 
-RSpec.describe ParticipationPoints::CreditInvitePointsJob, type: :job do
+RSpec.describe ExperiencePoints::CreditInvitePointsJob, type: :job do
   let(:invite) { create :invite }
 
-  subject(:credit_invite_points) { ParticipationPoints::CreditInvitePointsJob.perform_now(invite.id) }
+  subject(:credit_invite_points) { ExperiencePoints::CreditInvitePointsJob.perform_now(invite.id) }
 
-  let(:credit_invite_points_class) { ParticipationPoints::CreditInvitePoints }
+  let(:credit_invite_points_class) { ExperiencePoints::CreditInvitePoints }
   let(:credit_invite_points_service) { instance_double(credit_invite_points_class, call: true) }
 
   before do

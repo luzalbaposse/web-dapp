@@ -12,7 +12,7 @@ class API::V1::PublicAPI::QuestsController < API::V1::PublicAPI::APIController
       total_quests,
       before: cursor,
       items: per_page,
-      order: {participation_points_amount: :asc, uuid: :desc}
+      order: {experience_points_amount: :asc, uuid: :desc}
     )
 
     response_body = {

@@ -10,7 +10,7 @@ RSpec.describe UserV2Quest, type: :model do
 
   describe "validations" do
     it { is_expected.to validate_presence_of(:completed_at) }
-    it { is_expected.to validate_presence_of(:credited_amount) }
+    it { is_expected.to validate_presence_of(:credited_experience_points_amount) }
     it { is_expected.to validate_uniqueness_of(:user_id).scoped_to(:v2_quest_id) }
   end
 end

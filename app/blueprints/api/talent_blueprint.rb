@@ -82,14 +82,14 @@ class API::TalentBlueprint < Blueprinter::Base
       user.created_at.to_s
     end
 
-    field :participation_points_amount do |user, _options|
-      (user.talent&.verified? && user.created_at >= ParticipationPoints::CreditInvitePoints::START_DATE) ? ParticipationPoints::CreditInvitePoints::AMOUNT : 0
+    field :experience_points_amount do |user, _options|
+      (user.talent&.verified? && user.created_at >= ExperiencePoints::CreditInvitePoints::START_DATE) ? ExperiencePoints::CreditInvitePoints::AMOUNT : 0
     end
 
     field :tal_amount do |user, _options|
-      if user.created_at < ParticipationPoints::CreditInvitePoints::START_DATE
+      if user.created_at < ExperiencePoints::CreditInvitePoints::START_DATE
         token_deployed_at = user.talent&.talent_token&.deployed_at
-        (token_deployed_at && token_deployed_at < ParticipationPoints::CreditInvitePoints::START_DATE) ? 100 : 0
+        (token_deployed_at && token_deployed_at < ExperiencePoints::CreditInvitePoints::START_DATE) ? 100 : 0
       else
         0
       end
@@ -98,9 +98,9 @@ class API::TalentBlueprint < Blueprinter::Base
     field :status do |user, _options|
       verified = user&.talent&.verified
       token_deployed_at = user.talent&.talent_token&.deployed_at
-      if user.created_at >= ParticipationPoints::CreditInvitePoints::START_DATE
+      if user.created_at >= ExperiencePoints::CreditInvitePoints::START_DATE
         verified ? "Verified" : "Pending Verification"
-      elsif token_deployed_at && token_deployed_at < ParticipationPoints::CreditInvitePoints::START_DATE
+      elsif token_deployed_at && token_deployed_at < ExperiencePoints::CreditInvitePoints::START_DATE
         "Token Launched"
       else
         "Pending Token Launch"

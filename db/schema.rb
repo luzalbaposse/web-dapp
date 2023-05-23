@@ -10,9 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_22_100835) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_23_083446) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
@@ -303,6 +302,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_22_100835) do
     t.index ["user_id"], name: "index_erc721_tokens_on_user_id"
   end
 
+  create_table "experience_points", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.datetime "credited_at", precision: nil, null: false
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.integer "amount", null: false
+    t.string "description", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "source_type", null: false
+    t.bigint "source_id", null: false
+    t.index ["source_type", "source_id"], name: "index_participation_points_on_source"
+    t.index ["user_id"], name: "index_experience_points_on_user_id"
+    t.index ["uuid"], name: "index_experience_points_on_uuid"
+  end
+
   create_table "goal_images", force: :cascade do |t|
     t.bigint "goal_id", null: false
     t.text "image_data"
@@ -422,21 +436,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_22_100835) do
     t.datetime "emailed_at", precision: nil
     t.index ["read_at"], name: "index_notifications_on_read_at"
     t.index ["recipient_type", "recipient_id"], name: "index_notifications_on_recipient"
-  end
-
-  create_table "participation_points", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.datetime "credited_at", precision: nil, null: false
-    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
-    t.integer "amount", null: false
-    t.string "description", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "source_type", null: false
-    t.bigint "source_id", null: false
-    t.index ["source_type", "source_id"], name: "index_participation_points_on_source"
-    t.index ["user_id"], name: "index_participation_points_on_user_id"
-    t.index ["uuid"], name: "index_participation_points_on_uuid"
   end
 
   create_table "partnerships", force: :cascade do |t|
@@ -693,7 +692,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_22_100835) do
     t.bigint "user_id", null: false
     t.bigint "v2_quest_id", null: false
     t.datetime "completed_at", precision: nil, null: false
-    t.integer "credited_amount", null: false
+    t.integer "credited_experience_points_amount", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id", "v2_quest_id"], name: "index_user_v2_quests_on_user_id_and_v2_quest_id", unique: true
@@ -720,8 +719,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_22_100835) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.boolean "disabled", default: false
     t.string "theme_preference", default: "light"
+    t.boolean "disabled", default: false
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"
@@ -764,7 +763,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_22_100835) do
 
   create_table "v2_quests", force: :cascade do |t|
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
-    t.integer "participation_points_amount", null: false
+    t.integer "experience_points_amount", null: false
     t.string "title", null: false
     t.string "description", null: false
     t.datetime "created_at", null: false
@@ -810,6 +809,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_22_100835) do
   add_foreign_key "discovery_rows", "users"
   add_foreign_key "erc20_tokens", "users"
   add_foreign_key "erc721_tokens", "users"
+  add_foreign_key "experience_points", "users"
   add_foreign_key "goal_images", "goals"
   add_foreign_key "goals", "career_goals"
   add_foreign_key "impersonations", "users", column: "impersonated_id"
@@ -823,7 +823,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_22_100835) do
   add_foreign_key "messages", "chats"
   add_foreign_key "milestone_images", "milestones"
   add_foreign_key "milestones", "talent"
-  add_foreign_key "participation_points", "users"
   add_foreign_key "partnerships", "invites"
   add_foreign_key "perks", "talent"
   add_foreign_key "profile_page_visitors", "users"

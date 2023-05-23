@@ -4,6 +4,6 @@ FactoryBot.define do
       "Quest ##{n}"
     end
     description { "You need to do x to get y" }
-    participation_points_amount { 30 }
+    experience_points_amount { 30 }
   end
 end

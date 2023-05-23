@@ -62,7 +62,7 @@ module WithPersona
     end
 
     def credit_inviter_points
-      ParticipationPoints::CreditInvitePoints.new(invite: user.invited).call
+      ExperiencePoints::CreditInvitePoints.new(invite: user.invited).call
     end
   end
 end

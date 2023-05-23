@@ -36,7 +36,7 @@ RSpec.describe API::UpdateTalent do
       Sidekiq::Testing.inline! do
         update_talent.call(talent_params, user_params, tag_params, career_needs_params)
 
-        job = enqueued_jobs.find { |j| j["job_class"] == "ParticipationPoints::CreditInvitePointsJob" }
+        job = enqueued_jobs.find { |j| j["job_class"] == "ExperiencePoints::CreditInvitePointsJob" }
 
         aggregate_failures do
           expect(job["arguments"][0]).to eq(invite.id)
@@ -52,7 +52,7 @@ RSpec.describe API::UpdateTalent do
       Sidekiq::Testing.inline! do
         update_talent.call(talent_params, user_params, tag_params, career_needs_params)
 
-        job = enqueued_jobs.find { |j| j["job_class"] == "ParticipationPoints::CreditInvitePointsJob" }
+        job = enqueued_jobs.find { |j| j["job_class"] == "ExperiencePoints::CreditInvitePointsJob" }
 
         aggregate_failures do
           expect(job).to be_nil

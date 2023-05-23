@@ -18,11 +18,11 @@ module Quests
           user: user,
           v2_quest: quest,
           completed_at: completed_at,
-          credited_amount: quest.participation_points_amount
+          credited_experience_points_amount: quest.experience_points_amount
         )
-        ParticipationPoint.create!(
+        ExperiencePoint.create!(
           user: user,
-          amount: quest.participation_points_amount,
+          amount: quest.experience_points_amount,
           source: quest,
           credited_at: completed_at,
           description: "Completed #{quest.title}"

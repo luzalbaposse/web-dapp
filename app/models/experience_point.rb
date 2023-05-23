@@ -1,4 +1,4 @@
-class ParticipationPoint < ApplicationRecord
+class ExperiencePoint < ApplicationRecord
   belongs_to :user
   belongs_to :source, polymorphic: true
 

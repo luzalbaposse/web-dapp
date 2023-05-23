@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :participation_point do
+  factory :experience_point do
     association :user
   end
 end

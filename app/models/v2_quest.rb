@@ -10,7 +10,7 @@ class V2Quest < ApplicationRecord
   ]
 
   validates :title, :quest_type, uniqueness: true
-  validates :participation_points_amount, :title, :description, :quest_type, presence: true
+  validates :experience_points_amount, :title, :description, :quest_type, presence: true
   validates_inclusion_of :quest_type, in: VALID_QUEST_TYPES
 
   has_many :user_v2_quests
