@@ -1,13 +1,13 @@
 require "rails_helper"
 
-RSpec.describe "Network", type: :request do
+RSpec.describe "Connections", type: :request do
   describe "#show" do
-    subject(:get_network) { get network_path(as: current_user) }
+    subject(:get_connection) { get connection_path(as: current_user) }
 
     let(:current_user) { create :user }
 
     it "returns a successful response" do
-      get_network
+      get_connection
 
       expect(response).to have_http_status(:ok)
     end

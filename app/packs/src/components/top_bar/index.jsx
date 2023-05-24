@@ -304,7 +304,13 @@ export const TopBar = ({
         <div className="d-flex align-items-center">
           <Tab href="/talent" text="Explore" type="white" active={activeTab.includes("/talent")} className="mr-4" />
           <Tab href="/portfolio" text="Portfolio" type="white" active={activeTab === "/portfolio"} className="mr-4" />
-          <Tab href="/network" text="Network" type="white" active={activeTab === "/network"} className="mr-4" />
+          <Tab
+            href="/connection"
+            text="Connections"
+            type="white"
+            active={activeTab === "/connection"}
+            className="mr-4"
+          />
           {pendingNetworkRequest && <NotificationsIndicator />}
           <Tab
             href="/messages"

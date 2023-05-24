@@ -25,7 +25,7 @@ const TAB_INDEX_TO_NAME = {
   2: "sponsorships"
 };
 
-export const Network = ({ currentUserId, railsContext }) => {
+export const Connections = ({ currentUserId, railsContext }) => {
   const tabState = useTabs();
 
   useEffect(() => {
