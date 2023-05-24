@@ -84,7 +84,11 @@ module GoogleDrive
         daily_metric.total_celo_sponsorship_volume_gdollar,
         daily_metric.total_polygon_sponsorship_volume_usdc,
         daily_metric.total_unique_sponsors,
-        daily_metric.total_unique_sponsoring
+        daily_metric.total_unique_sponsoring,
+        daily_metric.total_messages,
+        daily_metric.total_messages_read,
+        daily_metric.total_users_that_sent_messages,
+        daily_metric.total_users_that_received_messages
       ]]
     end
 

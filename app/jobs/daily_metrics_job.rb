@@ -72,7 +72,11 @@ class DailyMetricsJob < ApplicationJob
       total_celo_sponsorship_volume_gdollar: total_sponsorship_volume_celo_gdollar,
       total_polygon_sponsorship_volume_usdc: total_sponsorship_volume_polygon_usdc,
       total_unique_sponsors: total_unique_sponsors,
-      total_unique_sponsoring: total_unique_sponsoring
+      total_unique_sponsoring: total_unique_sponsoring,
+      total_messages: total_messages,
+      total_messages_read: total_messages_read,
+      total_users_that_sent_messages: total_users_that_sent_messages,
+      total_users_that_received_messages: total_users_that_received_messages
     )
   end
 end

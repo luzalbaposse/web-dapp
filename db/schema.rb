@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_23_112135) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_24_153828) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "activities", force: :cascade do |t|
-    t.jsonb "content", null: false
+    t.string "content", null: false
     t.bigint "origin_user_id", null: false
     t.bigint "target_user_id"
     t.datetime "created_at", null: false
@@ -254,6 +254,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_112135) do
     t.integer "total_polygon_sponsorship_volume_usdc"
     t.integer "total_unique_sponsors"
     t.integer "total_unique_sponsoring"
+    t.integer "total_users_that_received_messages"
+    t.integer "total_users_that_sent_messages"
+    t.integer "total_messages_read"
+    t.integer "total_messages"
   end
 
   create_table "discovery_rows", force: :cascade do |t|
@@ -791,6 +795,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_112135) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  create_table "wallet_activities", force: :cascade do |t|
+    t.string "wallet", null: false
+    t.datetime "tx_date", precision: nil, null: false
+    t.string "symbol", null: false
+    t.string "tx_hash", null: false
+    t.integer "chain_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.string "event_type"
+    t.string "token"
+    t.index ["user_id"], name: "index_wallet_activities_on_user_id"
+  end
+
   create_table "with_persona_requests", force: :cascade do |t|
     t.integer "requests_counter", default: 0, null: false
     t.integer "month", null: false
@@ -852,4 +870,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_112135) do
   add_foreign_key "user_tags", "users"
   add_foreign_key "user_v2_quests", "users"
   add_foreign_key "user_v2_quests", "v2_quests"
+  add_foreign_key "wallet_activities", "users"
 end
