@@ -35,7 +35,7 @@ class SubscriptionRequestReceivedNotification < BaseNotification
   end
 
   def url
-    network_url
+    connection_url
   end
 
   private

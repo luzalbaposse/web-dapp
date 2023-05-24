@@ -41,7 +41,7 @@ export const SupportedBy = ({ profile }) => {
               {profile.user.legal_first_name} is supported by {totalSupporters} people
             </Typography>
             <TextLink
-              href={`/u/${profile.user.username}#network`}
+              href={`/u/${profile.user.username}#connections`}
               text="View all"
               rightIcon="carret"
               color="primary"

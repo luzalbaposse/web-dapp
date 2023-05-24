@@ -6,6 +6,6 @@ class NewSponsorNotification < BaseNotification
     if: :should_deliver_immediate_email?
 
   def url
-    network_url(tab: "sponsors")
+    connection_url(tab: "sponsors")
   end
 end
