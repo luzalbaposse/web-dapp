@@ -3,8 +3,8 @@ require "rails_helper"
 
 RSpec.describe "Quests API" do
   path "/quests" do
-    get "Retrieves the invite leaderboards" do
-      tags "Leaderboards"
+    get "Retrieves the quests" do
+      tags "Quests"
       consumes "application/json"
       produces "application/json"
       parameter name: :id, in: :query, type: :string, description: "Wallet address or username"
