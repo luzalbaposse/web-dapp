@@ -2,16 +2,18 @@ import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import currency from "currency.js";
 
-import { parseAndCommify } from "src/onchain/utils";
-
 import { get } from "src/utils/requests";
+
+import { parseAndCommify } from "src/onchain/utils";
 
 import { H4, H5, P2, P3, Caption } from "src/components/design_system/typography";
 import Button from "src/components/design_system/button";
 import TalentProfilePicture from "src/components/talent/TalentProfilePicture";
 import Table from "src/components/design_system/table";
 import Link from "src/components/design_system/link";
-import { OrderBy } from "src/components/icons";
+import Tooltip from "src/components/design_system/tooltip";
+import { OrderBy, Help } from "src/components/icons";
+import { lightTextPrimary03 } from "src/utils/colors";
 
 import { parsedVariance } from "src/utils/viewHelpers";
 
@@ -392,7 +394,7 @@ const Supporting = ({
                   )}
                 </div>
               </Table.Td>
-              <Table.Td className="pr-3">
+              <Table.Td className="d-flex pr-3">
                 <button
                   disabled={isCurrentUserImpersonated || talent.totalSupply == maxSupply}
                   onClick={() => onClaim(talent.contract_id)}
@@ -404,6 +406,19 @@ const Supporting = ({
                     disabled={isCurrentUserImpersonated || talent.totalSupply == maxSupply}
                   />
                 </button>
+                {talent.totalSupply == maxSupply && (
+                  <Tooltip
+                    body="Maximum Token Supply Reached: This talented individual has reached their token limit!
+                    While you can't currently claim rewards from supporting them, your support continues to
+                    empower their journey."
+                    popOverAccessibilityId={"max_supply_reached"}
+                    placement="top"
+                  >
+                    <div className="cursor-pointer">
+                      <Help color={lightTextPrimary03} />
+                    </div>
+                  </Tooltip>
+                )}
               </Table.Td>
             </Table.Tr>
           ))}
