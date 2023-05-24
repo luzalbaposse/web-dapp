@@ -63,8 +63,9 @@ Rails.application.routes.draw do
     # Quests
     resources :quests, only: [:show]
 
-    # Network
-    resource :network, only: [:show]
+    # Connections
+    resource :connection, only: [:show]
+    get "/network", to: redirect("/connection")
 
     namespace :api, defaults: {format: :json} do
       namespace :v1 do

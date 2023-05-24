@@ -351,5 +351,21 @@ module Metrics
     def total_unique_sponsoring
       Sponsorship.all.distinct.pluck(:talent).count
     end
+
+    def total_messages
+      Message.where(sent_to_supporters: false, career_update_id: nil).count
+    end
+
+    def total_messages_read
+      Message.where(sent_to_supporters: false, career_update_id: nil, is_read: true).count
+    end
+
+    def total_users_that_sent_messages
+      Message.where(sent_to_supporters: false, career_update_id: nil).distinct.pluck(:sender_id).count
+    end
+
+    def total_users_that_received_messages
+      Message.where(sent_to_supporters: false, career_update_id: nil).distinct.pluck(:receiver_id).count
+    end
   end
 end

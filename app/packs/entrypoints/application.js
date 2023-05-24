@@ -46,7 +46,7 @@ import ForgotPasswordPage from "src/components-v2/pages/forgot-password";
 import SetPasswordPage from "src/components-v2/pages/set-password";
 import TalentModelsProfilePage from "src/components-v2/pages/talent-models-profile";
 import HomepagePage from "../src/components-v2/pages/homepage";
-import NetworkPage from "src/components-v2/pages/network";
+import ConnectionsPage from "src/components-v2/pages/connections";
 import ProductAnnouncementModal from "src/components-v2/product-announcement-modal";
 
 import "stylesheets/application.scss";
@@ -86,7 +86,7 @@ ReactOnRails.register({
   SetPasswordPage,
   TalentModelsProfilePage,
   HomepagePage,
-  NetworkPage,
+  ConnectionsPage,
   OnboardingPage,
   ProductAnnouncementModal
 });

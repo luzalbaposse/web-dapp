@@ -31,6 +31,7 @@ module PublicAPIRoutes
             resources :leaderboards, only: [:index]
             resources :quests, only: [:index]
             resources :invited_talents, only: [:index]
+            resources :experience_points_leaderboards, only: [:index]
 
             resource :validations, only: [] do
               get :username, on: :collection

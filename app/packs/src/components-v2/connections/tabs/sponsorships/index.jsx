@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Avatar, Button, Spinner, Typography, useModal, Tag, TalentCard } from "@talentprotocol/design-system";
 import { careerCircle } from "src/api/career-circle";
-import { CareerCircleEmptyState } from "src/components-v2/network/empty-state";
-import { RevokeSponsorshipModal } from "src/components-v2/network/revoke-sponsorship-modal";
+import { CareerCircleEmptyState } from "src/components-v2/connections/empty-state";
+import { RevokeSponsorshipModal } from "src/components-v2/connections/revoke-sponsorship-modal";
 import { chainIdToName } from "src/onchain/utils";
 import { parseStableAmount } from "src/onchain/utils";
 

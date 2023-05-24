@@ -24,7 +24,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 
 import cx from "classnames";
 
-const NetworkTable = ({ connections, mode, ticker, mobile }) => {
+const ConnectionTable = ({ connections, mode, ticker, mobile }) => {
   const displayableAmount = amount => {
     return `${parseAndCommify(ethers.utils.formatUnits(amount || 0))}`;
   };
@@ -158,7 +158,7 @@ const SearchForm = ({ options, changeOptions, connectionType, keyword, mobile })
   );
 };
 
-const Network = ({ userId, talent, canUpdate }) => {
+const Connections = ({ userId, talent, canUpdate }) => {
   const { mobile } = useWindowDimensionsHook();
   const [connections, setConnections] = useState([]);
   const [pagination, setPagination] = useState({});
@@ -276,7 +276,7 @@ const Network = ({ userId, talent, canUpdate }) => {
 
   return (
     <section className="d-flex flex-column mx-4">
-      <H4 className="text-center mb-3" text="Network" />
+      <H4 className="text-center mb-3" text="Connections" />
       <div className="mb-5 row justify-content-center ">
         <div className="col-6 col-lg-2 d-flex">
           <P2 className={cx("text-primary-01 mr-1", mobile && "ml-5")} bold text={talent?.supporters_count || "0"} />
@@ -304,16 +304,21 @@ const Network = ({ userId, talent, canUpdate }) => {
             keyword={keyword}
             mobile={mobile}
           />
-          <NetworkTable connections={connections} mode={mode()} ticker={talent?.talent_token.ticker} mobile={mobile} />
+          <ConnectionTable
+            connections={connections}
+            mode={mode()}
+            ticker={talent?.talent_token.ticker}
+            mobile={mobile}
+          />
         </>
       )}
 
       {talent?.connections_count == 0 && canUpdate && (
         <>
-          <H5 bold text={"You don't have any Network members"} className="text-primary-01 text-center mt-7 mb-2" />
+          <H5 bold text={"You don't have any Connections members"} className="text-primary-01 text-center mt-7 mb-2" />
           <P2
             bold
-            text={"Network is compound by people that support your career and people you are supporting!"}
+            text={"Connections are compound by people that support your career and people you are supporting!"}
             className="text-primary-03 text-center"
           />
           <div className="d-flex flex-column justify-content-center my-5">
@@ -334,4 +339,4 @@ const Network = ({ userId, talent, canUpdate }) => {
   );
 };
 
-export default Network;
+export default Connections;

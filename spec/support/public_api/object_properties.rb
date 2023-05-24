@@ -78,5 +78,22 @@ module PublicAPI
       origin_user: {type: :object, properties: TALENT_PROPERTIES, description: "The origin talent of the activity"},
       type: {type: :string, description: "The type of the activity", nullable: true}
     }
+
+    EXPERIENCE_POINTS_LEADERBOARD_PROPERTIES = {
+      results: {
+        type: :array,
+        items: {
+          type: :object,
+          properties: TALENT_PROPERTIES
+        }
+      },
+      talent_result: {
+        type: :object,
+        properties: {
+          score: {type: :integer, description: "The score of the talent in the leaderboard"},
+          position: {type: :integer, description: "The position of the talent in the leaderboard", nullable: true}
+        }
+      }
+    }
   end
 end

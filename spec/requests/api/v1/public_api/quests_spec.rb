@@ -3,8 +3,8 @@ require "rails_helper"
 
 RSpec.describe "Quests API" do
   path "/quests" do
-    get "Retrieves the invite leaderboards" do
-      tags "Leaderboards"
+    get "Retrieves the quests" do
+      tags "Quests"
       consumes "application/json"
       produces "application/json"
       parameter name: :id, in: :query, type: :string, description: "Wallet address or username"
@@ -17,8 +17,7 @@ RSpec.describe "Quests API" do
 
       let!(:talent_user) { create(:user, :with_talent_token, wallet_id: wallet_id, display_name: "API user") }
       let(:wallet_id) { SecureRandom.hex }
-      let(:race) { create :race }
-      let(:id) { race.uuid }
+      let(:id) { wallet_id }
       let(:cursor) { nil }
 
       before do
@@ -29,7 +28,7 @@ RSpec.describe "Quests API" do
         create :user_v2_quest, user: talent_user, v2_quest: career_update_quest, completed_at: Time.new(2023, 10, 11)
       end
 
-      response "200", "race found", save_example: true do
+      response "200", "with a talent", save_example: true do
         schema type: :object,
           properties: {
             quests: {
@@ -56,6 +55,41 @@ RSpec.describe "Quests API" do
             expect(data["quests"].count).to eq 3
             expect(returned_points).to match_array([10, 20, 30])
             expect(returned_completed_at).to match_array([nil, nil, Time.new(2023, 10, 11)])
+
+            expect(returned_pagination["total"]).to eq 3
+          end
+        end
+      end
+
+      response "200", "without a talent", save_example: true do
+        let(:id) { nil }
+
+        schema type: :object,
+          properties: {
+            quests: {
+              type: :array,
+              items: {
+                type: :object,
+                properties: PublicAPI::ObjectProperties::QUEST_PROPERTIES
+              }
+            },
+            pagination: {
+              type: :object,
+              properties: PublicAPI::ObjectProperties::PAGINATION_PROPERTIES
+            }
+          }
+
+        run_test! do |response|
+          data = JSON.parse(response.body)
+
+          returned_quests = data["quests"]
+          returned_points = returned_quests.map { |f| f["experience_points_amount"] }
+          returned_completed_at = returned_quests.map { |f| f["completed_at"] }
+          returned_pagination = data["pagination"]
+          aggregate_failures do
+            expect(data["quests"].count).to eq 3
+            expect(returned_points).to match_array([10, 20, 30])
+            expect(returned_completed_at).to match_array([nil, nil, nil])
 
             expect(returned_pagination["total"]).to eq 3
           end

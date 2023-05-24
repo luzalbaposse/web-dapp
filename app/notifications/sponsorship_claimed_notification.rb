@@ -17,6 +17,6 @@ class SponsorshipClaimedNotification < BaseNotification
   end
 
   def url
-    network_url(tab: "sponsorships")
+    connection_url(tab: "sponsorships")
   end
 end

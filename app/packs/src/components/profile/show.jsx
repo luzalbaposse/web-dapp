@@ -14,7 +14,7 @@ import Tokens from "./web3/tokens";
 import Overview from "./overview";
 import About from "./About";
 import Journey from "./Journey";
-import Network from "./Network";
+import Connections from "./Connections";
 import Token from "./Token";
 import LaunchToken from "./LaunchToken";
 import ApplyToLaunchToken from "./ApplyToLaunchToken";
@@ -153,9 +153,9 @@ const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
         )}
         <Button
           className="mr-2"
-          type={buttonType("#network")}
-          text="Network"
-          onClick={() => changeSection("#network")}
+          type={buttonType("#connections")}
+          text="Connections"
+          onClick={() => changeSection("#connections")}
         />
         {((user.wallet_id && user.visible_digital_collectibles) || canUpdate) && (
           <Button
@@ -182,8 +182,8 @@ const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
           canUpdate={canUpdate}
         />
       </div>
-      <div className="my-7 w-100 col-12" id="#network">
-        <Network userId={user.uuid} talent={profile} canUpdate={canUpdate} />
+      <div className="my-7 w-100 col-12" id="#connections">
+        <Connections userId={user.uuid} talent={profile} canUpdate={canUpdate} />
       </div>
       {(showLastDivider || canUpdate) && <Divider className="my-6" />}
       <div className="mt-7 w-100" id="#digital-collectibles">

@@ -143,6 +143,13 @@ RSpec.describe DailyMetricsJob, type: :job do
   let!(:sponsorship_two) { create :sponsorship, symbol: "cUSD", chain_id: 42220, amount: "200000000000000000000", sponsor: "1", talent: "3" }
   let!(:sponsorship_three) { create :sponsorship, symbol: "G$", chain_id: 42220, amount: "300000000000000000000", sponsor: "2", talent: "4" }
 
+  let!(:message_one) { create(:message, sender: user_1, receiver: user_2, text: "Hello!") }
+  let!(:message_two) { create(:message, sender: user_2, receiver: user_1, text: "Bye!") }
+  let!(:message_three) { create(:message, sender: user_3, receiver: user_2, text: "Hello!") }
+  let!(:message_four) { create(:message, sender: user_4, receiver: user_2, text: "Bye!") }
+  let!(:message_five) { create(:message, sender: user_5, receiver: user_2, text: "Hello!") }
+  let!(:message_six) { create(:message, sender: user_1, receiver: user_2, text: "Bye!", is_read: true) }
+
   before do
     allow(web3_proxy_class).to receive(:new).and_return(web3_proxy)
     allow(upload_metrics_class).to receive(:new).and_return(upload_metrics)
@@ -211,6 +218,10 @@ RSpec.describe DailyMetricsJob, type: :job do
       expect(created_daily_metric.total_celo_sponsorship_volume_gdollar).to eq 300
       expect(created_daily_metric.total_unique_sponsors).to eq 2
       expect(created_daily_metric.total_unique_sponsoring).to eq 3
+      expect(created_daily_metric.total_messages).to eq 7
+      expect(created_daily_metric.total_messages_read).to eq 1
+      expect(created_daily_metric.total_users_that_sent_messages).to eq 5
+      expect(created_daily_metric.total_users_that_received_messages).to eq 2
     end
   end
 

@@ -5,7 +5,7 @@ import { Avatar, Button } from "@talentprotocol/design-system";
 import { toast } from "react-toastify";
 import { ToastBody } from "src/components/design_system/toasts";
 
-import { CareerCircleEmptyState } from "src/components-v2/network/empty-state";
+import { CareerCircleEmptyState } from "src/components-v2/connections/empty-state";
 
 import { careerCircle } from "src/api/career-circle";
 import { useWindowDimensionsHook } from "src/utils/window";

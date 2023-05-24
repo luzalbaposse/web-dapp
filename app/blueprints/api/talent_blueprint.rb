@@ -107,4 +107,13 @@ class API::TalentBlueprint < Blueprinter::Base
       end
     end
   end
+
+  view :leaderboard do
+    include_view :normal
+
+    # Although score is not part of the user model this works since we're selecting the field in the controller
+    field :score do |user, _options|
+      user.score
+    end
+  end
 end
