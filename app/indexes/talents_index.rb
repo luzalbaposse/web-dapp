@@ -14,7 +14,7 @@ class TalentsIndex < Chewy::Index
   field :created_at, type: "date"
   field :id, type: "integer"
   field :profile_complete, value: ->(talent) do
-    talent.user.profile_completed?
+    talent.user.profile_completed_at.present?
   end
   field :supply_progress, value: ->(talent) do
     (talent.total_supply.to_f / Talent.max_supply) * 100

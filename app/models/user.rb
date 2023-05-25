@@ -219,7 +219,20 @@ class User < ApplicationRecord
   end
 
   def profile_completed?
-    quests.where(type: "Quests::TalentProfile", status: "done").any? && quests.where(type: "Quests::User", status: "done").any?
+    missing_profile_fields.empty?
+  end
+
+  def missing_profile_fields
+    fields = []
+    fields << "display_name" unless display_name
+    fields << "profile_picture" unless profile_picture_url
+    fields << "occupation" unless talent.occupation
+    fields << "headline" unless talent.headline
+    fields << "about" unless talent.career_goal&.pitch
+    fields << "career_goal" unless talent.career_goal&.goals&.any?
+    fields << "milestone" unless talent.milestones.any?
+    fields << "tag" unless tags.visible.any?
+    fields
   end
 
   def profile_picture_url
@@ -243,6 +256,12 @@ class User < ApplicationRecord
     return Sponsorship.none unless wallet_id
 
     Sponsorship.where(talent: wallet_id)
+  end
+
+  def claimed_sponsors
+    return Sponsorship.none unless wallet_id
+
+    sponsors.where.not(claimed_at: nil)
   end
 
   # user acted as sponsor
@@ -317,6 +336,20 @@ class User < ApplicationRecord
     return unless profile_type_change
 
     profile_type_change.who_dunnit
+  end
+
+  def aggregate_supporters_count
+    Connection.where(
+      user_id: id,
+      connection_type: ["sponsored", "staker", "subscriber", "mutual_stake", "mutual_subscription"]
+    ).count
+  end
+
+  def aggregate_supporting_count
+    Connection.where(
+      user_id: id,
+      connection_type: ["sponsor", "staking", "mutual_stake", "mutual_subscription", "subscribing"]
+    ).count
   end
 
   private

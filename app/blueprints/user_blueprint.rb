@@ -52,7 +52,7 @@ class UserBlueprint < Blueprinter::Base
     end
 
     field :profile_completed do |user, _options|
-      user.profile_completed?
+      user.profile_completed_at.present?
     end
   end
 

@@ -10,14 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_24_153828) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_25_112352) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "activities", force: :cascade do |t|
-    t.string "content", null: false
+    t.jsonb "content", null: false
     t.bigint "origin_user_id", null: false
     t.bigint "target_user_id"
     t.datetime "created_at", null: false
@@ -729,8 +728,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_24_153828) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.boolean "disabled", default: false
     t.string "theme_preference", default: "light"
+    t.boolean "disabled", default: false
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"
@@ -761,6 +760,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_24_153828) do
     t.string "utm_source"
     t.boolean "is_organization", default: false
     t.integer "experience_points_amount", default: 0, null: false
+    t.datetime "profile_completed_at", precision: nil
     t.index ["created_at"], name: "index_users_on_created_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invite_id"], name: "index_users_on_invite_id"
@@ -793,20 +793,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_24_153828) do
     t.datetime "created_at", precision: nil
     t.text "object_changes"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
-  end
-
-  create_table "wallet_activities", force: :cascade do |t|
-    t.string "wallet", null: false
-    t.datetime "tx_date", precision: nil, null: false
-    t.string "symbol", null: false
-    t.string "tx_hash", null: false
-    t.integer "chain_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "user_id"
-    t.string "event_type"
-    t.string "token"
-    t.index ["user_id"], name: "index_wallet_activities_on_user_id"
   end
 
   create_table "with_persona_requests", force: :cascade do |t|
@@ -870,5 +856,4 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_24_153828) do
   add_foreign_key "user_tags", "users"
   add_foreign_key "user_v2_quests", "users"
   add_foreign_key "user_v2_quests", "v2_quests"
-  add_foreign_key "wallet_activities", "users"
 end

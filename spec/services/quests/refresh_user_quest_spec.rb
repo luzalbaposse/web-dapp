@@ -44,8 +44,9 @@ end
 RSpec.describe Quests::RefreshUserQuest do
   subject(:refresh_user_quest) { described_class.new(quest: quest, user: user).call }
 
-  let(:user) { create :user, :with_talent }
+  let(:user) { create :user, :with_talent, wallet_id: wallet_id }
   let(:talent) { user.talent }
+  let(:wallet_id) { SecureRandom.hex }
 
   let!(:quest) { create :v2_quest, quest_type: quest_type }
   let(:quest_type) { "profile_picture" }
@@ -209,6 +210,50 @@ RSpec.describe Quests::RefreshUserQuest do
         end
 
         it_behaves_like "a refresh user quest without creating new records"
+      end
+
+      context "when the quest type is connect_wallet" do
+        let(:quest_type) { "connect_wallet" }
+
+        context "when the quest was completed" do
+          let(:wallet_id) { SecureRandom.hex }
+
+          it_behaves_like "a refresh user quest that creates new records"
+        end
+
+        context "when the quest was not completed" do
+          let(:wallet_id) { nil }
+
+          it_behaves_like "a refresh user quest without creating new records"
+        end
+      end
+
+      context "when the quest type is complete_profile" do
+        let(:quest_type) { "complete_profile" }
+
+        context "when the quest was completed" do
+          let(:update_completed_at_class) { Users::UpdateProfileCompletedAt }
+          let(:update_completed_at) { instance_double(update_completed_at_class, call: true) }
+
+          before do
+            allow_any_instance_of(User).to receive(:profile_completed?).and_return(true)
+
+            allow(update_completed_at_class).to receive(:new).and_return(update_completed_at)
+          end
+
+          it_behaves_like "a refresh user quest that creates new records"
+
+          it "initializes and calls the update profile completed at service" do
+            refresh_user_quest
+
+            expect(update_completed_at_class).to have_received(:new).with(user: user)
+            expect(update_completed_at).to have_received(:call)
+          end
+        end
+
+        context "when the quest was not completed" do
+          it_behaves_like "a refresh user quest without creating new records"
+        end
       end
     end
   end

@@ -46,14 +46,24 @@ class TalentBlueprint < Blueprinter::Base
     field :supporting_count do |talent, _options|
       TalentSupporter.where(supporter_wallet_id: talent.user.wallet_id).count
     end
+    field :aggregate_supporters_count do |talent, _options|
+      talent.user.aggregate_supporters_count
+    end
+    field :aggregate_supporting_count do |talent, _options|
+      talent.user.aggregate_supporting_count
+    end
     field :banner_data do |talent, _options|
       talent.banner_data ? JSON.parse(talent.banner_data) : nil
     end
     field :tal_domain do |talent, options|
       talent.user.tal_domain&.domain
     end
+
     association :milestones, blueprint: MilestoneBlueprint, view: :normal
     association :career_goal, blueprint: CareerGoalBlueprint, view: :normal
+    association :sponsorships, blueprint: API::SponsorshipBlueprint, view: :normal do |talent, options|
+      talent.user.claimed_sponsors
+    end
   end
 
   view :short_meta do

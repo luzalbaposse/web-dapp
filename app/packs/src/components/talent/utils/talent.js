@@ -26,17 +26,7 @@ export const missingFields = ({ talent, profilePictureUrl, careerGoal }) => {
   return fields;
 };
 
-export const profileProgress = ({
-  talent,
-  profilePictureUrl,
-  token,
-  career_goal,
-  milestones,
-  goals,
-  perks,
-  tags,
-  user
-}) => {
+export const profileProgress = ({ talent, profilePictureUrl, token, career_goal, milestones, goals, tags, user }) => {
   let total = 100;
   const fields = missingFields({
     talent,
@@ -50,10 +40,6 @@ export const profileProgress = ({
   }
 
   if (goals.length == 0) {
-    total -= 10;
-  }
-
-  if (perks.length == 0 && user.profile_type == "talent") {
     total -= 10;
   }
 

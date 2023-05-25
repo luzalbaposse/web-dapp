@@ -38,7 +38,6 @@ module Tasks
       service.call(type: "Tasks::ApplyTokenLaunch", user: user) unless user.profile_type == "supporter"
 
       Tasks::LaunchToken.find_or_create_by!(quest: launch_token_quest)
-      Tasks::Perks.find_or_create_by!(quest: launch_token_quest)
 
       # ---------------------------------------------------
 

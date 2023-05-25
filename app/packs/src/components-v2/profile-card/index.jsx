@@ -5,6 +5,7 @@ import SocialRow from "src/components/profile/SocialRow";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import TalentProfilePicture from "src/components/talent/TalentProfilePicture";
 import { formatNumberWithSymbol, verifiedIcon } from "src/utils/viewHelpers";
+import { parseStableAmount } from "src/onchain/utils.js";
 import { Globe, Calendar } from "src/components/icons";
 import { P2 } from "src/components/design_system/typography";
 import { useTheme } from "src/contexts/ThemeContext";
@@ -66,6 +67,22 @@ export const ProfileCard = ({
       );
     return <HeadlinePiece className="text-primary-01" text={`--E ${userProfile.headline}`} />;
   }, [userProfile.headline]);
+  const sponsorshipsAmount = useMemo(() => {
+    if (profile.sponsorships.length == 0) {
+      return "0";
+    } else {
+      let amount = 0;
+      profile.sponsorships.map(sponsorship => {
+        if (sponsorship.symbol === "USDC" || sponsorship.symbol === "cUSD") {
+          const parsedAmount = parseStableAmount(sponsorship.amount, sponsorship.token_decimals);
+
+          amount += parseInt(parsedAmount);
+        }
+      });
+
+      return `$${amount}`;
+    }
+  }, [profile.sponsorships]);
 
   return (
     <Container>
@@ -108,19 +125,19 @@ export const ProfileCard = ({
                     : "-"
                 }
               />
-              <P2 className="text-primary-04" text="Market Value" />
+              <P2 className="text-primary-04" text="Staked" />
             </Button>
             <Button className="d-flex mr-2 mt-2 button-link p-0" onClick={() => changeSection("#connections")}>
-              <P2 className="text-primary-01 mr-1" bold text={profile.supporters_count || "0"} />
+              <P2 className="text-primary-01 mr-1" bold text={sponsorshipsAmount || "0"} />
+              <P2 className="text-primary-04" text="in Sponsorships" />
+            </Button>
+            <Button className="d-flex mr-2 mt-2 button-link p-0" onClick={() => changeSection("#connections")}>
+              <P2 className="text-primary-01 mr-1" bold text={profile.aggregate_supporters_count || "0"} />
               <P2 className="text-primary-04" text="Supporters" />
             </Button>
             <Button className="d-flex mr-2 mt-2 button-link p-0" onClick={() => changeSection("#connections")}>
-              <P2 className="text-primary-01 mr-1" bold text={profile.supporting_count || "0"} />
+              <P2 className="text-primary-01 mr-1" bold text={profile.aggregate_supporting_count || "0"} />
               <P2 className="text-primary-04" text="Supporting" />
-            </Button>
-            <Button className="d-flex mr-2 mt-2 button-link p-0" onClick={() => changeSection("#connections")}>
-              <P2 className="text-primary-01 mr-1" bold text={profile.subscribers_count || "0"} />
-              <P2 className="text-primary-04" text="Subscribers" />
             </Button>
           </TalentDetails>
         )}

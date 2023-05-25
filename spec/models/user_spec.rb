@@ -656,6 +656,47 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe "#profile_completeness" do
+    let(:user) { create :user, display_name: display_name }
+    let!(:talent) { create :talent, user: user }
+    let(:display_name) { "Test Talent" }
+
+    context "when all fields are present" do
+      before do
+        talent.occupation = "Tester"
+        talent.headline = "Great tester with lots of experience"
+        talent.save!
+
+        create :milestone, talent: talent
+        career_goal = create :career_goal, pitch: "I'm a great tester", talent: talent
+        create :goal, career_goal: career_goal, due_date: Date.tomorrow
+
+        tag = create :tag, description: "web3", hidden: false
+        user.tags << tag
+
+        allow_any_instance_of(User).to receive(:profile_picture_url).and_return("https://path_to_image")
+      end
+
+      it "returns an empty array" do
+        expect(user.missing_profile_fields).to eq []
+      end
+
+      it "returns true for profile completeness" do
+        expect(user.profile_completed?).to eq true
+      end
+    end
+
+    context "when some fields are missing" do
+      it "returns the missing fields" do
+        expect(user.missing_profile_fields).to eq ["profile_picture", "occupation", "headline", "about", "career_goal", "milestone", "tag"]
+      end
+
+      it "returns false for profile completeness" do
+        expect(user.profile_completed?).to eq false
+      end
+    end
+  end
+
   describe "#sponsors" do
     let(:user) { create :user, wallet_id: wallet_id }
     let(:wallet_id) { SecureRandom.hex }
@@ -666,6 +707,19 @@ RSpec.describe User, type: :model do
 
     it "returns sponsorships where the user acted as a receiver" do
       expect(user.sponsors).to match_array([sponsorship_one, sponsorship_three])
+    end
+  end
+
+  describe "#claimed_sponsors" do
+    let(:user) { create :user, wallet_id: wallet_id }
+    let(:wallet_id) { SecureRandom.hex }
+
+    let!(:sponsorship_one) { create :sponsorship, talent: wallet_id, claimed_at: Date.today }
+    let!(:sponsorship_two) { create :sponsorship, sponsor: wallet_id }
+    let!(:sponsorship_three) { create :sponsorship, talent: wallet_id }
+
+    it "returns sponsorships where the user acted as a receiver and it's already clamied" do
+      expect(user.claimed_sponsors).to match_array([sponsorship_one])
     end
   end
 
@@ -707,6 +761,33 @@ RSpec.describe User, type: :model do
 
     it "returns the sum of usd amount invested" do
       expect(user.usd_amount_invested).to eq((30000000000000 * TalentToken::TAL_VALUE_IN_USD / TalentToken::TAL_DECIMALS))
+    end
+  end
+
+  describe "#aggregate_*_count" do
+    let(:user) { create :user, wallet_id: SecureRandom.hex }
+    let(:connected_user1) { create :user, wallet_id: SecureRandom.hex }
+    let(:connected_user2) { create :user, wallet_id: SecureRandom.hex }
+    let(:connected_user3) { create :user, wallet_id: SecureRandom.hex }
+    let(:connected_user4) { create :user, wallet_id: SecureRandom.hex }
+
+    before do
+      create :connection, user: user, connected_user: connected_user1, connection_type: "staker"
+      create :connection, user: user, connected_user: connected_user2, connection_type: "subscribing"
+      create :connection, user: user, connected_user: connected_user3, connection_type: "sponsored"
+      create :connection, user: user, connected_user: connected_user4, connection_type: "subscriber"
+    end
+
+    context "aggregate_supporters_count" do
+      it "returns the count of all the supporters" do
+        expect(user.aggregate_supporters_count).to eq(3)
+      end
+    end
+
+    context "aggregate_supporting_count" do
+      it "returns the count of all the supporting" do
+        expect(user.aggregate_supporting_count).to eq(1)
+      end
     end
   end
 end

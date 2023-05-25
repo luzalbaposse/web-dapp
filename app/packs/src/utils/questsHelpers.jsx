@@ -64,17 +64,13 @@ export const taskDescription = type => {
       return <P2 className="text-primary-03" text="Add career goals to your profile." />;
     case "Tasks::ApplyTokenLaunch":
       return <P2 className="text-primary-03" text="Apply to launch your Talent Token" />;
-    case "Tasks::Perks":
-      return <P2 className="text-primary-03" text="Add perks to your profile." />;
     case "Tasks::Verified":
       return (
         <div className="d-flex align-items-center">
           <P2 className="text-primary-03">
             Click on the Verify button in your profile and get verified.
             <Tooltip
-              body={
-                "In order to verify your account your profile must be complete and we must match the legal name you provided with the ID provided"
-              }
+              body={"In order to verify your account we must match the legal name you provided with the ID provided"}
               popOverAccessibilityId={"verify_tooltip"}
               placement="top"
             >

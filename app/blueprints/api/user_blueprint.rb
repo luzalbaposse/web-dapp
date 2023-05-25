@@ -53,5 +53,13 @@ class API::UserBlueprint < Blueprinter::Base
     field :tal_domain_theme do |user, options|
       user.tal_domain&.theme
     end
+
+    field :profile_completed do |user, _options|
+      user.profile_completed_at.present?
+    end
+
+    field :missing_profile_fields do |user, _options|
+      user.missing_profile_fields
+    end
   end
 end

@@ -92,14 +92,11 @@ module Metrics
             from talent
             left join talent_tokens on talent.id = talent_tokens.talent_id
             left join career_goals on talent.id = career_goals.talent_id
-            left join perks on talent.id = perks.talent_id
             left join milestones on talent.id = milestones.talent_id
             left join goals on career_goals.id = goals.career_goal_id
             where talent.updated_at > :one_month_ago
             OR talent_tokens.updated_at > :one_month_ago
             OR career_goals.updated_at > :one_month_ago
-            OR perks.updated_at > :one_month_ago
-            OR perks.created_at > :one_month_ago
             OR milestones.updated_at > :one_month_ago
             OR milestones.created_at > :one_month_ago
             OR goals.updated_at > :one_month_ago
