@@ -72,9 +72,7 @@ export const taskDescription = type => {
           <P2 className="text-primary-03">
             Click on the Verify button in your profile and get verified.
             <Tooltip
-              body={
-                "In order to verify your account your profile must be complete and we must match the legal name you provided with the ID provided"
-              }
+              body={"In order to verify your account we must match the legal name you provided with the ID provided"}
               popOverAccessibilityId={"verify_tooltip"}
               placement="top"
             >

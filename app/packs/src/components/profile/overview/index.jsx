@@ -276,7 +276,7 @@ const Overview = ({
     } else if (withPersonaRequest.requests_counter > railsContext.withPersonaVerificationsLimit) {
       return "The number of verifications we can do is limited. Please check back later to verify your account";
     } else {
-      return "In order to verify your account your profile must be complete and we must match the legal name you provided with the ID provided";
+      return "In order to verify your account we must match the legal name you provided with the ID provided";
     }
   };
 
@@ -436,7 +436,6 @@ const Overview = ({
                             type="primary-default"
                             onClick={() => setShowPersonaVerificationConfirmationModal(true)}
                             disabled={
-                              !user.profile_completed ||
                               profile.with_persona_id ||
                               withPersonaRequest.requests_counter > railsContext.withPersonaVerificationsLimit
                             }
@@ -618,7 +617,6 @@ const Overview = ({
                             size="big"
                             onClick={() => setShowPersonaVerificationConfirmationModal(true)}
                             disabled={
-                              !user.profile_completed ||
                               profile.with_persona_id ||
                               withPersonaRequest.requests_counter > railsContext.withPersonaVerificationsLimit
                             }
