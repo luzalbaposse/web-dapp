@@ -245,6 +245,12 @@ class User < ApplicationRecord
     Sponsorship.where(talent: wallet_id)
   end
 
+  def claimed_sponsors
+    return Sponsorship.none unless wallet_id
+
+    sponsors.where.not(claimed_at: nil)
+  end
+
   # user acted as sponsor
   def sponsorships
     return Sponsorship.none unless wallet_id
@@ -317,6 +323,20 @@ class User < ApplicationRecord
     return unless profile_type_change
 
     profile_type_change.who_dunnit
+  end
+
+  def aggregate_supporters_count
+    Connection.where(
+      user_id: id,
+      connection_type: ["sponsored", "staker", "subscriber", "mutual_stake", "mutual_subscription"]
+    ).count
+  end
+
+  def aggregate_supporting_count
+    Connection.where(
+      user_id: id,
+      connection_type: ["sponsor", "staking", "mutual_stake", "mutual_subscription", "subscribing"]
+    ).count
   end
 
   private
