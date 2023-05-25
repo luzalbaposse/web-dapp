@@ -27,6 +27,8 @@ module Quests
           credited_at: completed_at,
           description: "Completed #{quest.title}"
         ).call
+
+        Users::UpdateProfileCompletedAt.new(user: user).call if quest.quest_type == "complete_profile"
       end
     end
 
@@ -54,6 +56,10 @@ module Quests
         supporting_three_quest_completed?
       when "five_subscribers"
         five_subscriptions_quest_completed?
+      when "connect_wallet"
+        connect_wallet_quest_completed?
+      when "complete_profile"
+        profile_complete_quest_completed?
       else
         false
       end
@@ -88,6 +94,14 @@ module Quests
 
     def five_subscriptions_quest_completed?
       user.active_subscriptions.count >= 5
+    end
+
+    def connect_wallet_quest_completed?
+      user.wallet_id.present?
+    end
+
+    def profile_complete_quest_completed?
+      user.profile_completed?
     end
   end
 end

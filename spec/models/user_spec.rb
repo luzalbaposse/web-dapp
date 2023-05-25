@@ -656,6 +656,47 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe "#profile_completeness" do
+    let(:user) { create :user, display_name: display_name }
+    let!(:talent) { create :talent, user: user }
+    let(:display_name) { "Test Talent" }
+
+    context "when all fields are present" do
+      before do
+        talent.occupation = "Tester"
+        talent.headline = "Great tester with lots of experience"
+        talent.save!
+
+        create :milestone, talent: talent
+        career_goal = create :career_goal, pitch: "I'm a great tester", talent: talent
+        create :goal, career_goal: career_goal, due_date: Date.tomorrow
+
+        tag = create :tag, description: "web3", hidden: false
+        user.tags << tag
+
+        allow_any_instance_of(User).to receive(:profile_picture_url).and_return("https://path_to_image")
+      end
+
+      it "returns an empty array" do
+        expect(user.missing_profile_fields).to eq []
+      end
+
+      it "returns true for profile completeness" do
+        expect(user.profile_completed?).to eq true
+      end
+    end
+
+    context "when some fields are missing" do
+      it "returns the missing fields" do
+        expect(user.missing_profile_fields).to eq ["profile_picture", "occupation", "headline", "about", "career_goal", "milestone", "tag"]
+      end
+
+      it "returns false for profile completeness" do
+        expect(user.profile_completed?).to eq false
+      end
+    end
+  end
+
   describe "#sponsors" do
     let(:user) { create :user, wallet_id: wallet_id }
     let(:wallet_id) { SecureRandom.hex }

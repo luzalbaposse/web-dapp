@@ -219,7 +219,20 @@ class User < ApplicationRecord
   end
 
   def profile_completed?
-    quests.where(type: "Quests::TalentProfile", status: "done").any? && quests.where(type: "Quests::User", status: "done").any?
+    missing_profile_fields.empty?
+  end
+
+  def missing_profile_fields
+    fields = []
+    fields << "display_name" unless display_name
+    fields << "profile_picture" unless profile_picture_url
+    fields << "occupation" unless talent.occupation
+    fields << "headline" unless talent.headline
+    fields << "about" unless talent.career_goal&.pitch
+    fields << "career_goal" unless talent.career_goal&.goals&.any?
+    fields << "milestone" unless talent.milestones.any?
+    fields << "tag" unless tags.visible.any?
+    fields
   end
 
   def profile_picture_url

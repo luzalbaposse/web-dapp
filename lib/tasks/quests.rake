@@ -8,6 +8,12 @@ namespace :quests do
         experience_points_amount: 100
       },
       {
+        title: "Connect wallet",
+        description: "Link your wallet to your profile.",
+        quest_type: "connect_wallet",
+        experience_points_amount: 200
+      },
+      {
         title: "Subscribe to 3+ Talent",
         description: "Subscribe to receive career updates from 3+ talent.",
         quest_type: "three_talent_subscribe",
@@ -18,6 +24,12 @@ namespace :quests do
         description: "Add at least 3 goals, positions, or education to your profile.",
         quest_type: "three_journey_entries",
         experience_points_amount: 400
+      },
+      {
+        title: "Complete Your Profile",
+        description: "Complete your profile by adding: a profile picture, your occupation, an headline that best describes you, a display name, your about section, at least one career goal and at least one milestone.",
+        quest_type: "complete_profile",
+        experience_points_amount: 1500
       },
       {
         title: "Verify Your Identity",
@@ -46,7 +58,7 @@ namespace :quests do
     ]
 
     quests.each do |quest_data|
-      V2Quest.create!(quest_data)
+      V2Quest.find_or_create_by!(quest_data)
     end
   end
 

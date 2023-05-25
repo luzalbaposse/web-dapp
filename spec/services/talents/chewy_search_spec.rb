@@ -154,21 +154,15 @@ RSpec.describe Talents::ChewySearch do
     let!(:discovery_row) { create :discovery_row }
     let!(:tag) { create :tag, hidden: true, discovery_row_id: discovery_row.id }
 
-    let!(:user_6) { create :user, talent: talent_6, username: "discover1", profile_type: "approved" }
+    let!(:user_6) { create :user, talent: talent_6, username: "discover1", profile_type: "approved", profile_completed_at: Date.yesterday }
     let(:talent_6) { create :talent, :with_token, public: true }
-    let!(:user_7) { create :user, talent: talent_7, username: "discover2", profile_type: "talent" }
+    let!(:user_7) { create :user, talent: talent_7, username: "discover2", profile_type: "talent", profile_completed_at: Date.yesterday }
     let(:talent_7) { create :talent, :with_token, public: true }
-    let!(:user_8) { create :user, talent: talent_8, username: "discover3", profile_type: "applying" }
+    let!(:user_8) { create :user, talent: talent_8, username: "discover3", profile_type: "applying", profile_completed_at: Date.today }
     let(:talent_8) { create :talent, :with_token, public: true }
 
     before do
       discovery_row.tags << tag
-      create :quest, type: "Quests::TalentProfile", status: "done", user: user_6
-      create :quest, type: "Quests::TalentProfile", status: "done", user: user_7
-      create :quest, type: "Quests::TalentProfile", status: "done", user: user_8
-      create :quest, type: "Quests::User", status: "done", user: user_6
-      create :quest, type: "Quests::User", status: "done", user: user_7
-      create :quest, type: "Quests::User", status: "done", user: user_8
       user_6.tags << tag
       user_7.tags << tag
       user_8.tags << tag

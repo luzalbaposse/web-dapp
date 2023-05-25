@@ -37,6 +37,19 @@ RSpec.describe "Sessions" do
             expect(returned_user[:moderator]).to eq(current_user.moderator?)
             expect(returned_user[:verified]).to eq(current_user.talent.verified)
             expect(returned_user[:experience_points_amount]).to eq(current_user.experience_points_amount)
+            expect(returned_user[:profile_completed]).to eq(false)
+            expect(returned_user[:missing_profile_fields]).to match_array(
+              %w[
+                display_name
+                profile_picture
+                occupation
+                headline
+                about
+                career_goal
+                milestone
+                tag
+              ]
+            )
           end
         end
       end
