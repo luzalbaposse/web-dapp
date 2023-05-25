@@ -64,8 +64,6 @@ export const taskDescription = type => {
       return <P2 className="text-primary-03" text="Add career goals to your profile." />;
     case "Tasks::ApplyTokenLaunch":
       return <P2 className="text-primary-03" text="Apply to launch your Talent Token" />;
-    case "Tasks::Perks":
-      return <P2 className="text-primary-03" text="Add perks to your profile." />;
     case "Tasks::Verified":
       return (
         <div className="d-flex align-items-center">

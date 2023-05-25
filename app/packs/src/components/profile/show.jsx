@@ -18,7 +18,7 @@ import Connections from "./Connections";
 import Token from "./Token";
 import LaunchToken from "./LaunchToken";
 import ApplyToLaunchToken from "./ApplyToLaunchToken";
-import Perks from "./Perks";
+// import Perks from "./Perks";
 
 const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
   const [selectedSection, setSelectedSection] = useState("");
@@ -173,7 +173,8 @@ const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
         <Journey talent={profile} setTalent={setProfile} canUpdate={canUpdate} />
       </div>
       <div className="my-7 w-100" id={"#token"}>
-        {talentToken.contract_id && <Perks talent={profile} canUpdate={canUpdate} />}
+        {/* Hiding Perks as an experiment to see if they're valuable */}
+        {/* {talentToken.contract_id && <Perks talent={profile} canUpdate={canUpdate} />} */}
         <CurrentTokenSection
           profile={profile}
           talentTokenPrice={talentTokenPrice}
