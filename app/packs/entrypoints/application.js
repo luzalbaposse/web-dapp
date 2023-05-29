@@ -45,7 +45,8 @@ import OnboardingPage from "src/components-v2/pages/onboarding";
 import ForgotPasswordPage from "src/components-v2/pages/forgot-password";
 import SetPasswordPage from "src/components-v2/pages/set-password";
 import TalentModelsProfilePage from "src/components-v2/pages/talent-models-profile";
-import HomepagePage from "../src/components-v2/pages/homepage";
+import HomepagePage from "src/components-v2/pages/homepage";
+import EarnPage from "src/components-v2/pages/earn-page";
 import ConnectionsPage from "src/components-v2/pages/connections";
 import ProductAnnouncementModal from "src/components-v2/product-announcement-modal";
 
@@ -88,7 +89,8 @@ ReactOnRails.register({
   HomepagePage,
   ConnectionsPage,
   OnboardingPage,
-  ProductAnnouncementModal
+  ProductAnnouncementModal,
+  EarnPage
 });
 
 Rails.start();

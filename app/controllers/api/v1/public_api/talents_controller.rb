@@ -40,7 +40,7 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
       .where.not(id: subscribed_users.select(:subscriber_id))
       .where.not(id: supporters.select(:id))
       .where.not(id: current_user.id)
-      .select("setseed(0.#{Date.today.jd}), *")
+      .select("setseed(0.#{Date.today.jd}), users.*")
       .order("RANDOM()")
 
     pagy, page_recomended_users = pagy_uuid_cursor(
@@ -51,7 +51,7 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
     )
 
     response_body = {
-      talents: API::TalentBlueprint.render_as_json(page_recomended_users.includes(:talent), view: :normal),
+      talents: API::TalentBlueprint.render_as_json(page_recomended_users.includes(:talent), view: :subscriber),
       pagination: {
         total: recomended_users.length,
         cursor: pagy.has_more? ? page_recomended_users.last.uuid : nil

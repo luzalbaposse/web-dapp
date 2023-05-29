@@ -10,3 +10,5 @@ export * from "./session";
 export * from "./subscriptions";
 export * from "./validations";
 export * from "./users";
+export * from "./quests";
+export * from "./invited_talents";

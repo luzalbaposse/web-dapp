@@ -1,0 +1,2 @@
+class EarnController < ApplicationController
+end
