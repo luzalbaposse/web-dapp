@@ -42,7 +42,7 @@ RSpec.shared_examples "a refresh user quest that creates new records" do
 end
 
 RSpec.describe Quests::RefreshUserQuest do
-  subject(:refresh_user_quest) { described_class.new(quest: quest, user: user).call }
+  subject(:refresh_user_quest) { described_class.new(quest: quest, user: user, notify: notify).call }
 
   let(:user) { create :user, :with_talent, wallet_id: wallet_id }
   let(:talent) { user.talent }
@@ -50,6 +50,7 @@ RSpec.describe Quests::RefreshUserQuest do
 
   let!(:quest) { create :v2_quest, quest_type: quest_type }
   let(:quest_type) { "profile_picture" }
+  let(:notify) { true }
 
   context "when the quest was not credited yet" do
     context "when the quest type is profile_picture" do
@@ -143,16 +144,50 @@ RSpec.describe Quests::RefreshUserQuest do
     context "when the quest type is verify_identity" do
       let(:quest_type) { "verify_identity" }
 
+      let(:create_notification_class) { CreateNotification }
+      let(:create_notification_instance) { instance_double(create_notification_class, call: true) }
+
+      before do
+        allow(create_notification_class).to receive(:new).and_return(create_notification_instance)
+      end
+
       context "when the quest was completed" do
         before do
           talent.update!(verified: true)
         end
 
         it_behaves_like "a refresh user quest that creates new records"
+
+        it "initializes and calls the create notification service" do
+          refresh_user_quest
+
+          expect(create_notification_class).to have_received(:new)
+          expect(create_notification_instance).to have_received(:call).with(
+            recipient: user,
+            source_id: user.id,
+            type: VerifiedProfileNotification
+          )
+        end
+
+        context "when the notify flag is set to false" do
+          let(:notify) { false }
+
+          it "does not initializes the create notification service" do
+            refresh_user_quest
+
+            expect(create_notification_class).not_to have_received(:new)
+          end
+        end
       end
 
       context "when the quest was not completed" do
         it_behaves_like "a refresh user quest without creating new records"
+
+        it "does not initializes the create notification service" do
+          refresh_user_quest
+
+          expect(create_notification_class).not_to have_received(:new)
+        end
       end
     end
 

@@ -23,7 +23,7 @@ RSpec.describe Tasks::Update do
       created_notification = Notification.last
 
       aggregate_failures do
-        expect(created_notification.type).to eq "Quests::CompletedTalentProfileNotification"
+        expect(created_notification.type).to eq "CompletedProfileNotification"
         expect(created_notification.params).to eq(
           {
             "type" => quest.short_type,

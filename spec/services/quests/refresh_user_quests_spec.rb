@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.describe Quests::RefreshUserQuests do
-  subject(:refresh_user_quests) { described_class.new(user: user).call }
+  subject(:refresh_user_quests) { described_class.new(user: user, notify: notify).call }
 
   let(:user) { create :user }
+  let(:notify) { true }
 
   let(:refresh_user_quest_class) { Quests::RefreshUserQuest }
   let(:refresh_user_quest_instance) { instance_double(refresh_user_quest_class, call: true) }
@@ -22,15 +23,18 @@ RSpec.describe Quests::RefreshUserQuests do
     aggregate_failures do
       expect(refresh_user_quest_class).to have_received(:new).with(
         user: user,
-        quest: quest_one
+        quest: quest_one,
+        notify: notify
       )
       expect(refresh_user_quest_class).to have_received(:new).with(
         user: user,
-        quest: quest_two
+        quest: quest_two,
+        notify: notify
       )
       expect(refresh_user_quest_class).to have_received(:new).with(
         user: user,
-        quest: quest_three
+        quest: quest_three,
+        notify: notify
       )
       expect(refresh_user_quest_instance).to have_received(:call).exactly(3).times
     end

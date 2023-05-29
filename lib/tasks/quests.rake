@@ -64,7 +64,7 @@ namespace :quests do
 
   task refresh_users_quests: :environment do
     User.find_each do |user|
-      Quests::RefreshUserQuestsJob.perform_later(user.id)
+      Quests::RefreshUserQuestsJob.perform_later(user.id, false)
     end
   end
 end

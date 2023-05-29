@@ -665,10 +665,11 @@ RSpec.describe User, type: :model do
       before do
         talent.occupation = "Tester"
         talent.headline = "Great tester with lots of experience"
+        talent.website = "my_website.com"
         talent.save!
 
         create :milestone, talent: talent
-        career_goal = create :career_goal, pitch: "I'm a great tester", talent: talent
+        career_goal = create :career_goal, talent: talent
         create :goal, career_goal: career_goal, due_date: Date.tomorrow
 
         tag = create :tag, description: "web3", hidden: false
@@ -688,7 +689,7 @@ RSpec.describe User, type: :model do
 
     context "when some fields are missing" do
       it "returns the missing fields" do
-        expect(user.missing_profile_fields).to eq ["profile_picture", "occupation", "headline", "about", "career_goal", "milestone", "tag"]
+        expect(user.missing_profile_fields).to eq ["profile_picture", "occupation", "headline", "social_link", "career_goal", "milestone", "tag"]
       end
 
       it "returns false for profile completeness" do
