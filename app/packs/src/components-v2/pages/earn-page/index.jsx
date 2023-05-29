@@ -23,7 +23,7 @@ const EarnPage = () => {
   const tabsState = useTabs();
   useEffect(() => {
     const url = new URL(window.location.href);
-    if (url.searchParams.get("tab")?.toLocaleLowerCase() === TAB_MAP[1].tabName.toLocaleLowerCase()) {
+    if (url.searchParams.get("tab").toLocaleLowerCase() === TAB_MAP[1].tabName.toLocaleLowerCase()) {
       tabsState.selectElement(1);
     }
     if (!currentUser) {
