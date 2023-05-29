@@ -1,8 +1,8 @@
 module Tasks
   class Update
     NOTIFICATION_MAP = {
-      "Quests::VerifiedProfile" => Quests::VerifiedProfileNotification,
-      "Quests::TalentProfile" => Quests::CompletedTalentProfileNotification
+      "Quests::VerifiedProfile" => VerifiedProfileNotification,
+      "Quests::TalentProfile" => CompletedProfileNotification
     }
 
     def call(type:, user:, normal_update: true)

@@ -82,6 +82,10 @@ class Talent < ApplicationRecord
     profile_picture(:default)&.url || super
   end
 
+  def social_links
+    [website, github, linkedin, twitter, lens, mastodon, telegram, discord].compact
+  end
+
   private
 
   def public_key_is_valid

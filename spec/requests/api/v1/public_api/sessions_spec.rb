@@ -44,7 +44,7 @@ RSpec.describe "Sessions" do
                 profile_picture
                 occupation
                 headline
-                about
+                social_link
                 career_goal
                 milestone
                 tag

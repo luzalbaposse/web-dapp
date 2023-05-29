@@ -9,6 +9,7 @@ module Users
 
       if profile_completed && !user.profile_completed_at
         user.update!(profile_completed_at: Time.current)
+        notify_user
       elsif !profile_completed
         user.update!(profile_completed_at: nil)
       end
@@ -17,5 +18,13 @@ module Users
     private
 
     attr_reader :user
+
+    def notify_user
+      CreateNotification.new.call(
+        recipient: user,
+        type: CompletedProfileNotification,
+        source_id: user.id
+      )
+    end
   end
 end

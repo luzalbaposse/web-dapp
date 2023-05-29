@@ -1,9 +1,10 @@
 # Refresh a specific quest for a specific user
 module Quests
   class RefreshUserQuest
-    def initialize(user:, quest:)
+    def initialize(user:, quest:, notify: true)
       @user = user
       @quest = quest
+      @notify = notify
     end
 
     def call
@@ -28,13 +29,15 @@ module Quests
           description: "Completed #{quest.title}"
         ).call
 
-        Users::UpdateProfileCompletedAt.new(user: user).call if quest.quest_type == "complete_profile"
+        update_profile_completed_at if quest.quest_type == "complete_profile"
+
+        notify_verified_profile if notify && quest.quest_type == "verify_identity"
       end
     end
 
     private
 
-    attr_reader :user, :quest
+    attr_reader :user, :quest, :notify
 
     def already_credited?
       UserV2Quest.where(user: user, v2_quest: quest).any?
@@ -102,6 +105,18 @@ module Quests
 
     def profile_complete_quest_completed?
       user.profile_completed?
+    end
+
+    def update_profile_completed_at
+      Users::UpdateProfileCompletedAt.new(user: user).call
+    end
+
+    def notify_verified_profile
+      CreateNotification.new.call(
+        recipient: user,
+        type: VerifiedProfileNotification,
+        source_id: user.id
+      )
     end
   end
 end
