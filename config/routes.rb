@@ -53,7 +53,7 @@ Rails.application.routes.draw do
     mount ActionCable.server => "/cable"
 
     # Rewards
-    get "earn", to: "earn#index"
+    get "earn", to: "rewards#index"
 
     resources :profiles, only: [:show], param: :username
 

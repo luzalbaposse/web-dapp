@@ -5,23 +5,19 @@ import { Container, BottomContainer, StyledQRCode, OutterContainer } from "./sty
 import { ToastBody } from "src/components/design_system/toasts";
 
 export const QRCodeModal = ({ modalState, profile }) => {
-  const inviteUrl = `https://beta.talentprotocol.com/join/${profile.username || profile.user.username}`;
   return (
     <Modal title="Share this profile" isOpen={modalState.isOpen} closeModal={modalState.closeModal}>
       <OutterContainer>
         <Container>
-          <Avatar size="md" url={profile.profile_picture_url} />
-          <StyledQRCode value={inviteUrl} />
+          <Avatar size="lg" url={profile.profile_picture_url} />
+          <StyledQRCode value={window.location.href} />
           <Typography specs={{ type: "medium", variant: "p2" }} color="primary01">
             {profile.tal_domain && `@${profile.tal_domain}`}
-          </Typography>
-          <Typography specs={{ type: "medium", variant: "p2" }} color="primary01">
-            Share this QRcode or link to invite others to Talent Protocol
           </Typography>
         </Container>
         <BottomContainer>
           <Typography specs={{ type: "regular", variant: "p2" }} color="primary03">
-            {inviteUrl}
+            {window.location.href}
           </Typography>
           <Button
             size="large"
@@ -31,7 +27,7 @@ export const QRCodeModal = ({ modalState, profile }) => {
             rightIcon="copy"
             onClick={() => {
               toast.success(<ToastBody heading="Success" body="Copied to clipboard" />, { autoClose: 5000 });
-              navigator.clipboard.writeText(inviteUrl);
+              navigator.clipboard.writeText(window.location.href);
             }}
           />
         </BottomContainer>

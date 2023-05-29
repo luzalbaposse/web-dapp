@@ -17,6 +17,7 @@ import Tab from "src/components/design_system/tab";
 import Button from "src/components/design_system/button";
 import MobileTopBar from "src/components/top_bar/MobileTopBar";
 import { Polygon, Celo } from "src/components/icons";
+import EarnMenu from "src/components/menus/EarnMenu";
 
 import { H5 } from "src/components/design_system/typography";
 import { Container, IconContainer, InnerContainer } from "./styled";
@@ -24,7 +25,7 @@ import { Icon, Typography } from "@talentprotocol/design-system";
 import SearchDropdown from "./SearchDropdown";
 
 //const WARNING_MESSAGE =
-//("Token minting is temporarily paused while we are upgrading our smart contracts. This is a temporary warning.");
+("Token minting is temporarily paused while we are upgrading our smart contracts. This is a temporary warning.");
 
 const NotificationsIndicator = () => {
   return (
@@ -320,7 +321,7 @@ export const TopBar = ({
             disabled={isUserImpersonated}
           />
           {hasUnreadMessages && <NotificationsIndicator />}
-          <Tab href="/earn" text="Earn" type="white" active={activeTab === "/earn"} className="mr-4" />
+          <EarnMenu />
         </div>
         <div className="d-flex" style={{ height: 34 }}>
           {isUserImpersonated && (

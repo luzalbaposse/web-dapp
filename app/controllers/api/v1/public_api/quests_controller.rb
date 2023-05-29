@@ -1,6 +1,7 @@
 class API::V1::PublicAPI::QuestsController < API::V1::PublicAPI::APIController
   def index
     total_quests = V2Quest.all
+
     if user
       total_quests = total_quests.joins(
         "

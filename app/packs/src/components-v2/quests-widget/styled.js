@@ -30,8 +30,8 @@ export const RewardTag = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 8px;
+  padding: 6px 8px;
   border: 1px solid ${buildColor("surfaceHover02")};
   border-radius: 4px;
-  gap: 8px;
+  gap: 10px;
 `;
