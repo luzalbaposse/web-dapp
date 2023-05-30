@@ -14,6 +14,10 @@ const TAB_MAP = {
   1: {
     component: Invites,
     tabName: "Invites"
+  },
+  2: {
+    component: React.Fragment,
+    tabName: "Rewards"
   }
 };
 
@@ -38,7 +42,7 @@ const EarnPage = () => {
     <TalentThemeProvider>
       <Container>
         <ScoreBoard points={currentUser?.experience_points_amount}>
-          <Tabs tabList={tabNames} selectedIndex={tabsState.selectedIndex} onClick={tabsState.selectElement} />
+          <Tabs tabList={tabNames} selectedIndex={tabsState.selectedIndex} onClick={tabsState.selectElement} disabledList={[false, false, true]} />
         </ScoreBoard>
         {memoedComponent}
       </Container>
