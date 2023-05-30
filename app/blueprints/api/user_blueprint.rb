@@ -58,6 +58,10 @@ class API::UserBlueprint < Blueprinter::Base
       user.profile_completed_at.present?
     end
 
+    field :required_profile_fields do |user, _options|
+      User::REQUIRED_PROFILE_FIELDS
+    end
+
     field :missing_profile_fields do |user, _options|
       user.missing_profile_fields
     end

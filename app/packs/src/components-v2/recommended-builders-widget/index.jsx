@@ -3,20 +3,22 @@ import { Avatar, TextLink, Typography, Button } from "@talentprotocol/design-sys
 import { BuilderEntry, BuildersList, Container, TitleContainer } from "./styled";
 import { talentsService } from "../../api/talents";
 
-export const RecommendedBuildersWidget = ({}) => {
+export const RecommendedBuildersWidget = ({ username }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [talents, setTalents] = useState([]);
   useEffect(() => {
-    talentsService
-      .getRecommendedTalents()
-      .then(({ data }) => {
-        setIsLoading(false);
-        setTalents(data.talents);
-      })
-      .catch(err => {
-        console.error(err);
-      });
-  }, []);
+    if (username) {
+      talentsService
+        .getRecommendedTalents(username)
+        .then(({ data }) => {
+          setIsLoading(false);
+          setTalents(data.talents);
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    }
+  }, [username]);
 
   return (
     !isLoading &&

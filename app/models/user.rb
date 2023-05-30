@@ -62,6 +62,32 @@ class User < ApplicationRecord
   after_save :touch_talent
 
   VALID_ROLES = ["admin", "basic", "moderator"].freeze
+  REQUIRED_PROFILE_FIELDS = [
+    {
+      name: "display_name",
+      description: "Add your display name"
+    },
+    {
+      name: "profile_picture",
+      description: "Add your profile picture"
+    },
+    {
+      name: "occupation",
+      description: "Add your current occupation"
+    },
+    {
+      name: "headline",
+      description: "Add your headline"
+    },
+    {
+      name: "career_goal",
+      description: "Add at least one career goal"
+    },
+    {
+      name: "milestone",
+      description: "Add at least one milestone to your journey"
+    }
+  ].freeze
 
   enum profile_type: {
     supporter: "supporter",
@@ -228,10 +254,8 @@ class User < ApplicationRecord
     fields << "profile_picture" unless profile_picture_url
     fields << "occupation" unless talent.occupation
     fields << "headline" unless talent.headline
-    fields << "social_link" unless talent.social_links.any?
     fields << "career_goal" unless talent.career_goal&.goals&.any?
     fields << "milestone" unless talent.milestones.any?
-    fields << "tag" unless tags.visible.any?
     fields
   end
 

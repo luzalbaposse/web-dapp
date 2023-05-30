@@ -157,4 +157,80 @@ RSpec.describe "Talents API" do
       end
     end
   end
+
+  path "/talents/recommended" do
+    get "Retrieves a list of recommended talents" do
+      tags "Talents"
+      consumes "application/json"
+      produces "application/json"
+      parameter name: :id, in: :query, type: :string, description: "Wallet address or username"
+      parameter name: :cursor, in: :query, type: :string, description: "The cursor to fetch the next page"
+      parameter name: "X-API-KEY", in: :header, type: :string, description: "Your Talent Protocol API key"
+
+      let(:cursor) { nil }
+      let(:wallet_id) { SecureRandom.hex }
+      let(:id) { wallet_id }
+
+      let!(:top_100_talent_discovery_row) { create :discovery_row, slug: "top-100-talent", title: "Top 100 Talent" }
+      let!(:top_100_talent_tag) do
+        create :tag, description: "top-100-talent", hidden: true, discovery_row: top_100_talent_discovery_row
+      end
+
+      let!(:talent_user) { create(:user, :with_talent_token, wallet_id: wallet_id, display_name: "API user") }
+      let!(:user_1) { create :user, :with_talent_token }
+      let!(:user_2) { create :user, :with_talent_token }
+      let!(:user_3) { create :user, :with_talent_token }
+      let!(:user_4) { create :user, :with_talent_token }
+
+      before do
+        talent_user.tags << top_100_talent_tag
+        user_1.tags << top_100_talent_tag
+        user_2.tags << top_100_talent_tag
+        user_3.tags << top_100_talent_tag
+        user_4.tags << top_100_talent_tag
+
+        talent_user.save!
+        user_1.save!
+        user_2.save!
+        user_3.save!
+        user_4.save!
+      end
+
+      response "200", "get all recommended talents", save_example: true do
+        schema type: :object,
+          properties: {
+            talents: {
+              type: :array,
+              items: {
+                type: :object,
+                properties: PublicAPI::ObjectProperties::TALENT_PROPERTIES
+              }
+            },
+            pagination: {
+              type: :object,
+              properties: PublicAPI::ObjectProperties::PAGINATION_PROPERTIES
+            }
+          }
+
+        run_test! do |response|
+          data = JSON.parse(response.body)
+          puts response.body
+          returned_talents = data["talents"]
+          returned_usernames = returned_talents.map { |f| f["username"] }
+          returned_pagination = data["pagination"]
+          aggregate_failures do
+            expect(data["talents"].count).to eq 4
+            expect(returned_usernames).to match_array([user_1.username, user_2.username, user_3.username, user_4.username])
+
+            expect(returned_pagination["total"]).to eq 4
+          end
+        end
+      end
+
+      response "401", "unauthorized request" do
+        let(:"X-API-KEY") { "invalid" }
+        run_test!
+      end
+    end
+  end
 end

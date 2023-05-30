@@ -48,9 +48,12 @@ module Tasks
     end
 
     def create_notification(user:, quest:)
+      notification_type = notification_from(quest.type)
+      return unless notification_type
+
       CreateNotification.new.call(
         recipient: user,
-        type: notification_from(quest.type),
+        type: notification_type,
         source_id: user.id,
         model_id: quest.id,
         extra_params: {type: quest.short_type}
@@ -58,7 +61,7 @@ module Tasks
     end
 
     def notification_from(type)
-      NOTIFICATION_MAP[type] || QuestCompletedNotification
+      NOTIFICATION_MAP[type]
     end
   end
 end

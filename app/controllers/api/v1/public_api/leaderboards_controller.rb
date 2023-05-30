@@ -8,7 +8,7 @@ class API::V1::PublicAPI::LeaderboardsController < API::V1::PublicAPI::APIContro
     )
 
     response_body = {
-      leaderboards: API::LeaderboardBlueprint.render_as_json(leaderboards, view: :normal),
+      leaderboards: API::LeaderboardBlueprint.render_as_json(leaderboards.includes(user: {talent: :talent_token}), view: :normal),
       pagination: {
         total: race.leaderboards.count,
         cursor: pagy.has_more? ? leaderboards.last.uuid : nil

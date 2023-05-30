@@ -1,4 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { ToastBody } from "src/components/design_system/toasts";
+import { Button } from "@talentprotocol/design-system";
 
 import { useWindowDimensionsHook } from "src/utils/window";
 
@@ -8,19 +11,39 @@ import HighlightsCard from "src/components/design_system/highlights_card";
 import DiscoveryBanners from "src/components/design_system/banners/DiscoveryBanners";
 
 import DiscoveryRow from "./discovery_row";
+import { discoveryRowsService } from "src/api/discovery-rows";
 
 import cx from "classnames";
 
-const Discovery = ({ discoveryRows, railsContext }) => {
+const Discovery = ({ railsContext }) => {
   const { mobile } = useWindowDimensionsHook();
 
+  const [discoveryRows, setDiscoveryRows] = useState([]);
+  const [pagination, setPagination] = useState({});
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
+  const perPage = 10;
 
   useEffect(() => {
     if (!currentUser) {
       fetchCurrentUser();
     }
+    loadDiscoveryRows(1);
   }, []);
+
+  const loadDiscoveryRows = page => {
+    discoveryRowsService.getDiscoveryRows(page, perPage).then(response => {
+      if (response.error) {
+        toast.error(<ToastBody heading="Error!" body={response.error} />);
+      } else {
+        setPagination(response.data.pagination);
+        setDiscoveryRows([...discoveryRows, ...response.data.discovery_rows]);
+      }
+    });
+  };
+
+  const showLoadMore = () => {
+    return pagination.currentPage < pagination.lastPage;
+  };
 
   return (
     <div className="d-flex flex-column">
@@ -36,8 +59,18 @@ const Discovery = ({ discoveryRows, railsContext }) => {
         <HighlightsCard className="mt-2" title="Launching Soon" link="/talent?status=Launching+soon" />
       </div>
       {discoveryRows.map(discoveryRow => (
-        <DiscoveryRow discoveryRow={discoveryRow} env={railsContext.contractsEnv} />
+        <DiscoveryRow discoveryRow={discoveryRow} env={railsContext.contractsEnv} key={discoveryRow.id} />
       ))}
+      {showLoadMore() && (
+        <div className="d-flex align-items-center justify-content-center">
+          <Button
+            hierarchy="secondary"
+            size="medium"
+            text="Load more"
+            onClick={() => loadDiscoveryRows(pagination.currentPage + 1)}
+          />
+        </div>
+      )}
     </div>
   );
 };

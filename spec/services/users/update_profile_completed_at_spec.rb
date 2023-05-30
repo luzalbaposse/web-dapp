@@ -20,15 +20,11 @@ RSpec.describe Users::UpdateProfileCompletedAt do
       before do
         talent.occupation = "Tester"
         talent.headline = "Great tester with lots of experience"
-        talent.website = "mywebsite.com"
         talent.save!
 
         create :milestone, talent: talent
         career_goal = create :career_goal, talent: talent
         create :goal, career_goal: career_goal, due_date: Date.tomorrow
-
-        tag = create :tag, description: "web3", hidden: false
-        user.tags << tag
 
         allow_any_instance_of(User).to receive(:profile_picture_url).and_return("https://path_to_image")
       end

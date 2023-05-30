@@ -161,7 +161,7 @@ class API::V1::PublicAPI::APIController < ActionController::Base
       collection = collection.where(sql_comparation)
     end
 
-    collection.reorder(pagy.order).limit(pagy.items)
+    pagy.vars[:no_order] ? collection.limit(pagy.items) : collection.reorder(pagy.order).limit(pagy.items)
   end
 
   def downcase_id

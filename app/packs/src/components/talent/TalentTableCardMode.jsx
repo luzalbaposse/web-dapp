@@ -1,43 +1,40 @@
 import React from "react";
-import NewTalentCard from "src/components/design_system/cards/NewTalentCard";
-import { useWindowDimensionsHook } from "src/utils/window";
+import styled, { css } from "styled-components";
+import { Button, TalentCard, mobileStyles } from "@talentprotocol/design-system";
 
-import { displayableAmount } from "src/utils/viewHelpers";
+const TableContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
 
-import cx from "classnames";
+  ${mobileStyles(css`
+    grid-template-columns: 1fr;
+  `)}
+`;
 
-const TalentTableCardMode = ({ talents, publicPageViewer = false, env }) => {
-  const { mobile } = useWindowDimensionsHook();
+export const EntryContainer = styled.div`
+  margin: auto;
+`;
 
+const TalentTableCardMode = ({ talents }) => {
   return (
-    <div
-      className={cx(
-        "w-100 d-flex flex-wrap talents-cards-container",
-        mobile ? "justify-content-center" : "justify-start"
-      )}
-    >
+    <TableContainer>
       {talents.map(talent => (
-        <div key={talent.id} className={cx("mb-3", !mobile && "pr-4")}>
-          <NewTalentCard
+        <EntryContainer key={talent.id}>
+          <TalentCard 
             name={talent.user.name}
+            profileImage={talent.profilePictureUrl}
+            bannerImage={talent.bannerUrl}
             ticker={talent.talentToken.ticker}
-            contractId={talent.talentToken.contractId}
             occupation={talent.occupation}
-            profilePictureUrl={talent.profilePictureUrl}
-            headline={talent.headline}
-            talentLink={`/u/${talent.user.username}`}
-            marketCap={displayableAmount(talent.marketCap)}
-            supporterCount={talent.supportersCount?.toString()}
-            publicPageViewer={publicPageViewer}
-            isVerified={talent.isVerified}
-            profileType={talent.user.profileType}
-            chainId={talent.talentToken.chainId}
-            userId={talent.user.id}
-            env={env}
-          />
-        </div>
+            isVerified={talent.verified}
+            to={`/u/${talent.user.username}`}
+          >
+            <Button size="small" hierarchy="primary" text="Support" href={`/u/${talent.user.username}/support`}/>
+          </TalentCard>
+        </EntryContainer>
       ))}
-    </div>
+    </TableContainer>
   );
 };
 

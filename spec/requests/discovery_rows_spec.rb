@@ -45,4 +45,39 @@ RSpec.describe "Discovery rows", type: :request do
       it_behaves_like "a discovery row get endpoint request"
     end
   end
+
+  describe "#index" do
+    subject(:get_discovery_rows) { get(discovery_index_path(partnerships_only: partnerships_only), headers: {Accept: "application/json"}) }
+
+    let!(:discovery_one) { create :discovery_row }
+    let!(:partnership_one) { create :partnership, discovery_row: discovery_one }
+
+    let!(:discovery_two) { create :discovery_row }
+    let!(:partnership_two) { create :partnership, discovery_row: discovery_two }
+
+    let!(:discovery_three) { create :discovery_row }
+
+    context "when partnerships_only is true" do
+      let(:partnerships_only) { true }
+
+      it "only returns rows with partnerships" do
+        get_discovery_rows
+        ids = json[:discovery_rows].map { |r| r[:id] }
+
+        expect(ids).to match_array([discovery_one.id, discovery_two.id])
+      end
+    end
+
+    context "when partnerships_only is false" do
+      let(:partnerships_only) { false }
+
+      it "only all rows" do
+        get_discovery_rows
+
+        ids = json[:discovery_rows].map { |r| r[:id] }
+
+        expect(ids).to match_array([discovery_one.id, discovery_two.id, discovery_three.id])
+      end
+    end
+  end
 end
