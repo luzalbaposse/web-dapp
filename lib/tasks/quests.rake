@@ -27,7 +27,7 @@ namespace :quests do
       },
       {
         title: "Complete Your Profile",
-        description: "Complete your profile by adding: a profile picture, your occupation, an headline that best describes you, a display name, your about section, at least one career goal and at least one milestone.",
+        description: "Complete your profile by adding: a profile picture, your occupation, an headline that best describes you, a display name, at least one social link, at least one career goal and at least one milestone.",
         quest_type: "complete_profile",
         experience_points_amount: 1500
       },
