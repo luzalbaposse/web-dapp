@@ -11,7 +11,7 @@ export const Quests = ({ profile }) => {
     questsService
       .getQuests(profile.id, 20, 1)
       .then(({ data }) => {
-        setQuests(data.quests);
+        setQuests(data.quests.sort((a, b) => a.completed_at ? -1 : 1));
       })
       .catch(() => {});
   }, [profile]);

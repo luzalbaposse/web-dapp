@@ -10,6 +10,8 @@ const QUEST_TYPE_MAP = {
   "verify_identity": "/u/__username__",
   "five_subscribers": "/earn?tab=invites",
   "supporting_three": "/talent",
+  "connect_wallet": "/home",
+  "complete_profile": "/u/__username__",
 };
 
 export const Quest = ({quest, username }) => {

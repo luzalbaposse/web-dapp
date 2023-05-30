@@ -27,7 +27,7 @@ export const QuestEntry = styled.a`
       : `
     cursor: pointer;
     
-    :visited, :hover, :active {
+    :hover, :active {
       color: ${buildColor("primary01")};
       border: 1px solid ${buildColor("primary04")};
     }
