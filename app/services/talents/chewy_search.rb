@@ -38,8 +38,10 @@ module Talents
         last_page: (total_count / size.to_f).ceil,
         total_count: total_count
       }, talents.entries.map do |talent|
+        talent_record = Talent.find_by!(id: talent.id)
         attributes = talent.attributes.deep_stringify_keys
-        attributes["profile_picture_url"] = Talent.find_by!(id: talent.id).profile_picture_url
+        attributes["profile_picture_url"] = talent_record.profile_picture_url
+        attributes["banner_url"] = talent_record.banner_url
         attributes
       end]
     end

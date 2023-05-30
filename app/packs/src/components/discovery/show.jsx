@@ -26,6 +26,7 @@ import TalentTableCardMode from "src/components/talent/TalentTableCardMode";
 import TalentTableListMode from "src/components/talent/TalentTableListMode";
 import ThemeContainer, { ThemeContext } from "src/contexts/ThemeContext";
 import Tooltip from "src/components/design_system/tooltip";
+import { TalentThemeProvider } from "@talentprotocol/design-system";
 
 const DiscoveryShow = ({ discoveryRow, env }) => {
   const theme = useContext(ThemeContext);
@@ -291,8 +292,10 @@ const DiscoveryShow = ({ discoveryRow, env }) => {
 
 export default (props, railsContext) => {
   return () => (
-    <ThemeContainer {...props}>
-      <DiscoveryShow {...props} env={railsContext.contractsEnv} />
-    </ThemeContainer>
+    <TalentThemeProvider>
+      <ThemeContainer {...props}>
+        <DiscoveryShow {...props} env={railsContext.contractsEnv} />
+      </ThemeContainer>
+    </TalentThemeProvider>
   );
 };
