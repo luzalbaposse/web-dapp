@@ -31,7 +31,7 @@ export const HomepagePage = ({}) => {
       <Container>
         {mobile ? (
           <Column>
-            <CompleteProfileWidget username={currentUser?.username} />
+            <CompleteProfileWidget user={currentUser} />
             <QuickNavigator username={currentUser?.username} />
             <RecommendedBuildersWidget />
             <RecommendedTeamsWidget />
@@ -41,7 +41,7 @@ export const HomepagePage = ({}) => {
         ) : (
           <>
             <Column grows>
-              <CompleteProfileWidget username={currentUser?.username} />
+              <CompleteProfileWidget user={currentUser} />
               <QuickNavigator username={currentUser?.username} />
               <ActivityWidget profile={currentUser} />
             </Column>

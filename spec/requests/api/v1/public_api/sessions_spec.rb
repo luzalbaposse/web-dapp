@@ -44,12 +44,11 @@ RSpec.describe "Sessions" do
                 profile_picture
                 occupation
                 headline
-                social_link
                 career_goal
                 milestone
-                tag
               ]
             )
+            expect(returned_user[:required_profile_fields]).to match_array(User::REQUIRED_PROFILE_FIELDS)
           end
         end
       end
