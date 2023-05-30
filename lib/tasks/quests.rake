@@ -21,7 +21,7 @@ namespace :quests do
       },
       {
         title: "Add 3+ Journey Entries",
-        description: "Add at least 3 goals, positions, or education to your profile.",
+        description: "Add at least 3 entries between goals, positions and/or education",
         quest_type: "three_journey_entries",
         experience_points_amount: 400
       },
