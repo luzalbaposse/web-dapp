@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback, useContext } from "react";
 import Modal from "react-bootstrap/Modal";
 import transakSDK from "@transak/transak-sdk";
-
 import Web3ModalConnect from "../login/Web3ModalConnect";
 import { destroy } from "../../utils/requests";
 
