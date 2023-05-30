@@ -34,27 +34,29 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
   end
 
   def recommended
-    subscribed_users = Subscription.where(user_id: current_user.id)
-    supporters = current_user.supporters.select(:id)
-    recomended_users = User.profile_quest_completed
-      .where.not(id: subscribed_users.select(:subscriber_id))
-      .where.not(id: supporters.select(:id))
-      .where.not(id: current_user.id)
-      .select("setseed(0.#{Date.today.jd}), *")
-      .order("RANDOM()")
+    recommended_users = User
+      .joins(:tags).where(tags: {discovery_row: DiscoveryRow.find_by(slug: "top-100-talent")})
+      .joins(
+        "LEFT JOIN subscriptions ON subscriptions.subscriber_id = users.id AND
+        subscriptions.subscriber_id != users.id"
+      )
+      .where.not(id: user.id)
+      .distinct
 
-    pagy, page_recomended_users = pagy_uuid_cursor(
-      recomended_users,
+    random_recommended_users = recommended_users.shuffle(random: Random.new(Date.today.jd))
+
+    pagy, page_recommended_users = pagy_uuid_cursor(
+      User.in_order_of(:id, random_recommended_users.map(&:id)),
       before: cursor,
       items: per_page,
-      order: {created_at: :desc, uuid: :desc}
+      no_order: true
     )
 
     response_body = {
-      talents: API::TalentBlueprint.render_as_json(page_recomended_users.includes(:talent), view: :normal),
+      talents: API::TalentBlueprint.render_as_json(page_recommended_users.includes(talent: :talent_token), view: :normal),
       pagination: {
-        total: recomended_users.length,
-        cursor: pagy.has_more? ? page_recomended_users.last.uuid : nil
+        total: recommended_users.length,
+        cursor: pagy.has_more? ? page_recommended_users.last.uuid : nil
       }
     }
 

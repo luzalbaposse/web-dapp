@@ -33,7 +33,7 @@ export const HomepagePage = ({}) => {
           <Column>
             <CompleteProfileWidget user={currentUser} />
             <QuickNavigator username={currentUser?.username} />
-            <RecommendedBuildersWidget />
+            <RecommendedBuildersWidget username={currentUser?.username} />
             <RecommendedTeamsWidget />
             <LeadderboardWidget username={currentUser?.username} />
             <ActivityWidget profile={currentUser} />
@@ -46,7 +46,7 @@ export const HomepagePage = ({}) => {
               <ActivityWidget profile={currentUser} />
             </Column>
             <Column>
-              <RecommendedBuildersWidget />
+              <RecommendedBuildersWidget username={currentUser?.username} />
               <RecommendedTeamsWidget />
               <LeadderboardWidget username={currentUser?.username} />
             </Column>

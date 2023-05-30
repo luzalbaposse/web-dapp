@@ -13,7 +13,7 @@ class API::V1::PublicAPI::ActivitiesController < API::V1::PublicAPI::APIControll
     )
 
     response_body = {
-      activities: API::ActivityBlueprint.render_as_json(activities.includes([:origin_user, :target_user]), view: :normal),
+      activities: API::ActivityBlueprint.render_as_json(activities.includes([origin_user: {talent: :talent_token}, target_user: {talent: :talent_token}]), view: :normal),
       pagination: {
         total: total_activities.count,
         cursor: pagy.has_more? ? activities.last.uuid : nil

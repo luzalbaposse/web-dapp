@@ -5,9 +5,9 @@ module PublicAPIRoutes
         namespace :v1 do
           # API authenticated endpoints
           scope module: :public_api, as: "public" do
-            get "/talents/recommended", to: "talents#recommended"
-
-            resources :talents, only: [:show, :index]
+            resources :talents, only: [:show, :index] do
+              get "recommended", on: :collection
+            end
             resources :supporters, only: [:index]
             resources :activities, only: [:index]
             resources :connections, only: [:index]
