@@ -13,7 +13,7 @@ export const CompleteProfileWidget = ({ user }) => {
     setProgress(Math.ceil((100 / user.required_profile_fields.length) * completedCount));
   }, [user]);
 
-  if (progress == 100 && !user) {
+  if (progress == 100 || !user) {
     return <></>;
   }
   return (
