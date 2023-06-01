@@ -6,7 +6,7 @@ class QuestCompletedNotification < BaseNotification
   end
 
   def source
-    @source ||= V2Quest.find_by(id: params["source_id"])
+    @source ||= Quest.find_by(id: params["source_id"])
   end
 
   def url

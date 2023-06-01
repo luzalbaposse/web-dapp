@@ -131,7 +131,7 @@ module Quests
         recipient: user,
         type: QuestCompletedNotification,
         source_id: quest.id,
-        extra_params: {source_type: "V2Quest", experience_points: quest.experience_points_amount}
+        extra_params: {source_type: "Quest", experience_points: quest.experience_points_amount}
       )
     end
 
