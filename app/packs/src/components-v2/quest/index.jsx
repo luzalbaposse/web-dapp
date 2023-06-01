@@ -42,7 +42,7 @@ export const Quest = ({ quest, username }) => {
             specs={{ variant: "label3", type: "medium" }}
             color={!!quest.completed_at ? "primary" : "primary02"}
           >
-            + {quest.experience_points_amount}
+            + {quest.experience_points_amount.toLocaleString()}
           </Typography>
         </RewardTag>
       </QuestReward>

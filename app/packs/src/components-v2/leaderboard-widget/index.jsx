@@ -38,7 +38,7 @@ export const LeaderboardWidget = ({ user }) => {
                 </Typography>
                 <Avatar
                   userId={1}
-                  occupation={`${entry.score} experience points`}
+                  occupation={`${entry.score.toLocaleString()} experience points`}
                   name={entry.name}
                   size="md"
                   url={entry.profile_picture_url}
