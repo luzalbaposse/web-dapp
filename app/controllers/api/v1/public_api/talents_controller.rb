@@ -35,11 +35,12 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
 
   def recommended
     recommended_users = User
-      .joins(:tags).where(tags: {discovery_row: DiscoveryRow.find_by(slug: "top-100-talent")})
+      .joins(:tags)
       .joins(
         "LEFT JOIN subscriptions ON subscriptions.subscriber_id = users.id AND
         subscriptions.subscriber_id != users.id"
       )
+      .where(tags: {discovery_row: DiscoveryRow.find_by(slug: "top-100-talent")})
       .where.not(id: user.id)
       .distinct
 

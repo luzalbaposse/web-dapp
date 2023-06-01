@@ -93,7 +93,7 @@ RSpec.describe Users::Update do
         job_classes = enqueued_jobs.pluck("job_class")
 
         aggregate_failures do
-          expect(job_classes).to match_array(["AddUsersToMailerliteJob", "UpdateTasksJob", "Quests::RefreshUserQuestsJob"])
+          expect(job_classes).to match_array(["AddUsersToMailerliteJob", "Quests::RefreshUserQuestsJob"])
         end
       end
     end

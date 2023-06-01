@@ -86,9 +86,9 @@ export const formatNumberWithSymbol = value => currency(value).format();
 
 export const verifiedIcon = (mode, disable = false) => {
   if (disable) {
-    return mode === "light" ? verifiedLightDisable : verifiedDarkDisable
+    return mode === "light" ? verifiedLightDisable : verifiedDarkDisable;
   } else {
-    return mode === "light" ? verifiedLight : verifiedDark
+    return mode === "light" ? verifiedLight : verifiedDark;
   }
 };
 

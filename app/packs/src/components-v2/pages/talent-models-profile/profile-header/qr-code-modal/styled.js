@@ -16,6 +16,8 @@ export const Container = styled.section`
   justify-content: center;
   align-items: center;
   gap: 8px;
+  text-align: center;
+  flex-grow: 1;
 `;
 
 export const StyledQRCode = styled(QRCodeSVG)`

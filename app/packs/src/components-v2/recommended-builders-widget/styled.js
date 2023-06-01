@@ -26,7 +26,6 @@ export const TitleContainer = styled.div`
   justify-content: space-between;
 
   ${desktopStyles(css`
-    padding: 24px;
     padding: 16px;
   `)}
 `;

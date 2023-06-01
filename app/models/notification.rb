@@ -5,6 +5,7 @@ class Notification < ApplicationRecord
     CareerUpdateCreatedNotification
     MessageReceivedNotification
     NewSponsorNotification
+    QuestCompletedNotification
     SponsorshipClaimedNotification
     SubscriptionAcceptedNotification
     SubscriptionRequestReceivedNotification

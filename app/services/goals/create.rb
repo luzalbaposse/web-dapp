@@ -20,11 +20,6 @@ module Goals
 
       ActivityIngestJob.perform_later("goal_create", goal_create_message(goal), current_user.id)
 
-      if career_goal.goals.length >= 1
-        # TODO - remove after quests cleanup @quests
-        UpdateTasksJob.perform_later(type: "Tasks::Goals", user_id: current_user.id)
-      end
-
       refresh_quests
 
       goal

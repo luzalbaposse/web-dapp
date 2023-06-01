@@ -62,24 +62,4 @@ class UserBlueprint < Blueprinter::Base
       user.profile_picture_url
     end
   end
-
-  view :rewards do
-    include_view :with_pictures
-
-    fields :created_at
-
-    field :ticker do |user, _options|
-      user.talent&.talent_token&.ticker
-    end
-
-    field :status do |user, _options|
-      if user&.talent&.talent_token&.deployed?
-        "Token Launched"
-      elsif user.beginner_quest_completed?
-        "Profile Complete"
-      else
-        "Registered"
-      end
-    end
-  end
 end

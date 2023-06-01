@@ -17,17 +17,17 @@ RSpec.describe "Experience Points Leaderboards API" do
       let(:access_key) { SecureRandom.hex }
       let(:"X-API-KEY") { access_key }
 
-      let!(:talent_user) { create(:user, :with_talent_token, wallet_id: wallet_id, display_name: "API user") }
+      let!(:talent_user) { create(:user, :with_talent_token, wallet_id: wallet_id, display_name: "API user", role: "basic") }
       let(:wallet_id) { SecureRandom.hex }
       let(:id) { wallet_id }
       let(:cursor) { nil }
       let(:start_date) { Date.current - 20.days }
       let(:end_date) { Date.current + 10.days }
 
-      let(:user_1) { create :user }
-      let(:user_2) { create :user }
-      let(:user_3) { create :user }
-      let(:user_4) { create :user }
+      let(:user_1) { create :user, role: "basic" }
+      let(:user_2) { create :user, role: "basic" }
+      let(:user_3) { create :user, role: "basic" }
+      let(:user_4) { create :user, role: "basic" }
 
       before do
         source = create :invite

@@ -53,15 +53,12 @@ Rails.application.routes.draw do
     mount ActionCable.server => "/cable"
 
     # Rewards
-    get "earn", to: "rewards#index"
+    get "earn", to: "earn#index"
 
     resources :profiles, only: [:show], param: :username
 
     # Edit profile
     get "/u/:username/edit_profile", to: redirect("/u/%{username}/account_settings")
-
-    # Quests
-    resources :quests, only: [:show]
 
     # Connections
     resource :connection, only: [:show]

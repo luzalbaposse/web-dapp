@@ -9,7 +9,6 @@ if Rails.env.development?
         role: "admin",
         email_confirmed_at: Time.zone.now
       )
-      Tasks::PopulateForUser.new.call(user: admin)
 
       investor_invite = Invites::Create.new(user: admin).call
       talent_invite = Invites::Create.new(user: admin, talent_invite: true).call

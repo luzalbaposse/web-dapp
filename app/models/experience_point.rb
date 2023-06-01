@@ -19,6 +19,6 @@ class ExperiencePoint < ApplicationRecord
       ) results on results.user_id = users.id
     SQL
 
-    User.joins(join).where("results.user_id IS NOT NULL AND results.score > 0").order("results.score desc")
+    User.joins(join).where("users.role = 'basic' AND results.user_id IS NOT NULL AND results.score > 0").order("results.score desc")
   end
 end

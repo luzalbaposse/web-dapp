@@ -51,7 +51,7 @@ namespace :quests do
       },
       {
         title: "Stake on 3+ Talent",
-        description: "Buy $10 worth of Talent Tokens from 3 different users.",
+        description: "Buy $10 in Talent Tokens, distributed among a minimum of three users.",
         quest_type: "supporting_three",
         experience_points_amount: 3000
       }
@@ -66,5 +66,10 @@ namespace :quests do
     User.find_each do |user|
       Quests::RefreshUserQuestsJob.perform_later(user.id, false)
     end
+  end
+
+  task delete_old_quests: :environment do
+    Task.delete_all
+    Quest.delete_all
   end
 end

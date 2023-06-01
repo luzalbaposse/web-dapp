@@ -39,9 +39,6 @@
     daily_metrics:
       cron: "1 0 * * *" # runs once every day at 8am
       class: DailyMetricsJob
-    setup_next_race:
-      cron: "1 0 1 * *" # Runs every month at 00:01
-      class: SetupNextRaceJob
     sync_with_persona_job:
       cron: "0 * * * *" # Runs every hour
       class: SyncWithPersonaJob

@@ -15,15 +15,11 @@ RSpec.describe WithPersona::ApproveInquiry do
   let!(:talent) { create :talent, user: user, verified: false, with_persona_id: "123" }
   let(:invite) { create :invite }
 
-  let(:task_update_class) { Tasks::Update }
-  let(:task_update_instance) { instance_double(task_update_class, call: true) }
-
-  let(:credit_points_class) { ExperiencePoints::CreditInvitePoints }
-  let(:credit_points_instance) { instance_double(credit_points_class, call: true) }
+  let(:refresh_user_quests_class) { Quests::RefreshUserQuests }
+  let(:refresh_user_quests_instance) { instance_double(refresh_user_quests_class, call: true) }
 
   before do
-    allow(task_update_class).to receive(:new).and_return(task_update_instance)
-    allow(credit_points_class).to receive(:new).and_return(credit_points_instance)
+    allow(refresh_user_quests_class).to receive(:new).and_return(refresh_user_quests_instance)
   end
 
   context "when the inquiry names match the user names" do
@@ -45,30 +41,10 @@ RSpec.describe WithPersona::ApproveInquiry do
     it "initializes and calls the credit points service" do
       approve_inquiry
 
-      expect(credit_points_class).to have_received(:new).with(
-        invite: invite
-      )
-      expect(credit_points_instance).to have_received(:call)
-    end
-
-    it "initializes and calls the tasks update service" do
-      approve_inquiry
-
-      expect(task_update_class).to have_received(:new)
-      expect(task_update_instance).to have_received(:call).with(
-        type: "Tasks::Verified",
+      expect(refresh_user_quests_class).to have_received(:new).with(
         user: user
       )
-    end
-
-    context "when the user was not invited" do
-      let(:invite) { nil }
-
-      it "does not initialize the credit points service" do
-        approve_inquiry
-
-        expect(credit_points_class).not_to have_received(:new)
-      end
+      expect(refresh_user_quests_instance).to have_received(:call)
     end
   end
 
@@ -93,12 +69,6 @@ RSpec.describe WithPersona::ApproveInquiry do
       approve_inquiry
 
       expect(talent.reload.with_persona_id).to eq nil
-    end
-
-    it "does not initialize the tasks update service" do
-      approve_inquiry
-
-      expect(task_update_class).not_to have_received(:new)
     end
 
     it "initializes and calls the notification service" do

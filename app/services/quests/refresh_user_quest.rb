@@ -30,8 +30,15 @@ module Quests
         ).call
 
         update_profile_completed_at if quest.quest_type == "complete_profile"
+        if quest.quest_type == "verify_identity"
+          whitelist_user
+          credit_invite_points if user.invited
+        end
 
-        notify_verified_profile if notify && quest.quest_type == "verify_identity"
+        if notify
+          notify_verified_profile if quest.quest_type == "verify_identity"
+          create_quest_completed_notification
+        end
       end
     end
 
@@ -117,6 +124,23 @@ module Quests
         type: VerifiedProfileNotification,
         source_id: user.id
       )
+    end
+
+    def create_quest_completed_notification
+      CreateNotification.new.call(
+        recipient: user,
+        type: QuestCompletedNotification,
+        source_id: quest.id,
+        extra_params: {source_type: "V2Quest", experience_points: quest.experience_points_amount}
+      )
+    end
+
+    def whitelist_user
+      WhitelistUserJob.perform_later(user_id: user.id, level: "verified")
+    end
+
+    def credit_invite_points
+      ExperiencePoints::CreditInvitePoints.new(invite: user.invited).call
     end
   end
 end

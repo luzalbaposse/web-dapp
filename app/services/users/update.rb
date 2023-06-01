@@ -74,8 +74,6 @@ module Users
       user.update!(wallet_id: wallet_id&.downcase)
 
       AddUsersToMailerliteJob.perform_later(user.id)
-      # TODO - remove after quests cleanup @quests
-      UpdateTasksJob.perform_later(type: "Tasks::ConnectWallet", user_id: user.id)
       Web3::RefreshDomains.new(user: user).call
     end
 

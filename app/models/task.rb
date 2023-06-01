@@ -1,3 +1,4 @@
+# TODO - remove @quests
 class Task < ApplicationRecord
   belongs_to :quest
 

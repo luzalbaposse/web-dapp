@@ -1,37 +1,25 @@
-import { buildColor } from "@talentprotocol/design-system";
-import styled from "styled-components";
+import { desktopStyles, mobileStyles } from "@talentprotocol/design-system";
+import styled, { css } from "styled-components";
 
 export const Container = styled.section`
   display: flex;
   flex-direction: column;
-  padding: 16px;
+  padding: 16px 0;
   gap: 8px;
+
+  ${mobileStyles(css`
+    padding: 16px;
+  `)}
 `;
 
-export const QuestEntry = styled.div`
-  padding: 8px;
+export const TitleContainer = styled.div`
+  width: 100%;
+  padding: 16px 0;
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  border: 1px solid ${buildColor("surfaceHover02")};
-  border-radius: 8px;
-`;
 
-export const QuestData = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-export const QuestReward = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-export const RewardTag = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px 8px;
-  border: 1px solid ${buildColor("surfaceHover02")};
-  border-radius: 4px;
-  gap: 10px;
+  ${desktopStyles(css`
+    padding: 16px 0 8px;
+  `)}
 `;

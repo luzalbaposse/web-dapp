@@ -5,7 +5,7 @@ class TalentsIndex < Chewy::Index
       :talent_token,
       :milestones,
       career_goal: [:goals, :career_needs],
-      user: [{tags: :discovery_row}, :quests]
+      user: [{tags: :discovery_row}]
     )
   field :market_cap, :user_id, :supporters_count, :activity_count
   field :verified, type: "boolean"

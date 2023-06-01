@@ -25,11 +25,15 @@ class NotificationBlueprint < Blueprinter::Base
     end
 
     field :source_profile_picture_url do |record, _options|
-      notification_from(record).source&.profile_picture_url
+      source = notification_from(record).source
+
+      source&.is_a?(User) ? source&.profile_picture_url : notification_from(record).recipient.profile_picture_url
     end
 
     field :source_verified do |record, _options|
-      notification_from(record).source&.talent&.verified?
+      source = notification_from(record).source
+
+      source&.talent&.verified? if source&.is_a?(User)
     end
 
     field :title do |record, _options|

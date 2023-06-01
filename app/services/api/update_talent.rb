@@ -33,10 +33,6 @@ class API::UpdateTalent
         note: params[:note]
       )
 
-      if params[:profile_type] == "waiting_for_approval"
-        Tasks::Update.new.call(type: "Tasks::ApplyTokenLaunch", user: talent_user)
-      end
-
       if params[:profile_type] == "approved"
         talent.update!(public: true)
       end
@@ -79,11 +75,6 @@ class API::UpdateTalent
         talent.ethnicity = params[:profile][:ethnicity]
         talent.based_in = params[:profile][:based_in]
         talent.highlighted_headline_words_index = params[:profile][:highlighted_headline_words_index]
-
-        if params[:profile][:occupation]
-          # TODO - remove after quests cleanup @quests
-          UpdateTasksJob.perform_later(type: "Tasks::FillInAbout", user_id: talent_user.id)
-        end
       end
 
       if params[:profile][:website]
@@ -152,7 +143,6 @@ class API::UpdateTalent
 
     if params.key?(:verified)
       talent.verified = params[:verified]
-      Tasks::Update.new.call(type: "Tasks::Verified", user: talent_user) if talent.verified?
     end
 
     if params.key?(:with_persona_id)
