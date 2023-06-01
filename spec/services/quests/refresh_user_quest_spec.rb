@@ -57,7 +57,7 @@ RSpec.shared_examples "a refresh user quest that creates new records" do
         recipient: user,
         source_id: quest.id,
         type: QuestCompletedNotification,
-        extra_params: {source_type: "V2Quest", experience_points: quest.experience_points_amount}
+        extra_params: {source_type: "Quest", experience_points: quest.experience_points_amount}
       )
     end
   end
@@ -197,7 +197,7 @@ RSpec.describe Quests::RefreshUserQuest do
             recipient: user,
             source_id: quest.id,
             type: QuestCompletedNotification,
-            extra_params: {source_type: "V2Quest", experience_points: quest.experience_points_amount}
+            extra_params: {source_type: "Quest", experience_points: quest.experience_points_amount}
           )
         end
 
