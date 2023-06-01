@@ -10,8 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_25_112352) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_01_152928) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
@@ -495,12 +496,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_25_112352) do
   end
 
   create_table "quests", force: :cascade do |t|
-    t.string "status", default: "pending"
-    t.bigint "user_id"
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.integer "experience_points_amount", null: false
+    t.string "title", null: false
+    t.string "description", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "type"
-    t.index ["user_id"], name: "index_quests_on_user_id"
+    t.string "quest_type", null: false
+    t.index ["quest_type"], name: "index_quests_on_quest_type", unique: true
+    t.index ["uuid"], name: "index_quests_on_uuid"
   end
 
   create_table "races", force: :cascade do |t|
@@ -621,15 +625,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_25_112352) do
     t.index ["ticker"], name: "index_talent_tokens_on_ticker", unique: true
   end
 
-  create_table "tasks", force: :cascade do |t|
-    t.string "status", default: "pending"
-    t.string "type"
-    t.bigint "quest_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["quest_id"], name: "index_tasks_on_quest_id"
-  end
-
   create_table "transfers", force: :cascade do |t|
     t.bigint "amount"
     t.string "tx_hash"
@@ -688,6 +683,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_25_112352) do
     t.check_constraint "previous_profile_type::text <> new_profile_type::text", name: "profile_types_check_constraint"
   end
 
+  create_table "user_quests", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "quest_id", null: false
+    t.datetime "completed_at", precision: nil, null: false
+    t.integer "credited_experience_points_amount", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["quest_id"], name: "index_user_quests_on_quest_id"
+    t.index ["user_id", "quest_id"], name: "index_user_quests_on_user_id_and_quest_id", unique: true
+    t.index ["user_id"], name: "index_user_quests_on_user_id"
+  end
+
   create_table "user_tags", force: :cascade do |t|
     t.bigint "tag_id"
     t.datetime "created_at", null: false
@@ -695,18 +702,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_25_112352) do
     t.bigint "user_id"
     t.index ["tag_id"], name: "index_user_tags_on_tag_id"
     t.index ["user_id"], name: "index_user_tags_on_user_id"
-  end
-
-  create_table "user_v2_quests", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "v2_quest_id", null: false
-    t.datetime "completed_at", precision: nil, null: false
-    t.integer "credited_experience_points_amount", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id", "v2_quest_id"], name: "index_user_v2_quests_on_user_id_and_v2_quest_id", unique: true
-    t.index ["user_id"], name: "index_user_v2_quests_on_user_id"
-    t.index ["v2_quest_id"], name: "index_user_v2_quests_on_v2_quest_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -728,8 +723,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_25_112352) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.string "theme_preference", default: "light"
     t.boolean "disabled", default: false
+    t.string "theme_preference", default: "light"
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"
@@ -770,18 +765,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_25_112352) do
     t.index ["username"], name: "index_users_on_username", unique: true
     t.index ["uuid"], name: "index_users_on_uuid", unique: true
     t.index ["wallet_id"], name: "index_users_on_wallet_id", unique: true
-  end
-
-  create_table "v2_quests", force: :cascade do |t|
-    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
-    t.integer "experience_points_amount", null: false
-    t.string "title", null: false
-    t.string "description", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "quest_type", null: false
-    t.index ["quest_type"], name: "index_v2_quests_on_quest_type", unique: true
-    t.index ["uuid"], name: "index_v2_quests_on_uuid"
   end
 
   create_table "versions", force: :cascade do |t|
@@ -837,14 +820,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_25_112352) do
   add_foreign_key "partnerships", "invites"
   add_foreign_key "perks", "talent"
   add_foreign_key "profile_page_visitors", "users"
-  add_foreign_key "quests", "users"
   add_foreign_key "rewards", "users"
   add_foreign_key "rewards", "users", column: "creator_id"
   add_foreign_key "subscriptions", "users"
   add_foreign_key "subscriptions", "users", column: "subscriber_id"
   add_foreign_key "tags", "discovery_rows"
   add_foreign_key "talent_tokens", "talent"
-  add_foreign_key "tasks", "quests"
   add_foreign_key "transfers", "users"
   add_foreign_key "user_domains", "users"
   add_foreign_key "user_email_logs", "users"
@@ -852,8 +833,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_25_112352) do
   add_foreign_key "user_product_announcements", "users"
   add_foreign_key "user_profile_type_changes", "users"
   add_foreign_key "user_profile_type_changes", "users", column: "who_dunnit_id"
+  add_foreign_key "user_quests", "quests"
+  add_foreign_key "user_quests", "users"
   add_foreign_key "user_tags", "tags"
   add_foreign_key "user_tags", "users"
-  add_foreign_key "user_v2_quests", "users"
-  add_foreign_key "user_v2_quests", "v2_quests"
 end

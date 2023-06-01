@@ -1,10 +1,9 @@
 FactoryBot.define do
   factory :quest do
-    trait :with_talent_profile_quest do
-      type { "Quests::TalentProfile" }
-      status { "pending" }
-      association :task, :highlights
-      association :user
+    sequence :title do |n|
+      "Quest ##{n}"
     end
+    description { "You need to do x to get y" }
+    experience_points_amount { 30 }
   end
 end

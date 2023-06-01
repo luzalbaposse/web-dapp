@@ -158,18 +158,6 @@ module Metrics
       ActiveRecord::Base.connection.execute(sanitized_sql).first["count"]
     end
 
-    def total_beginner_quests_completed
-      Quest.where(type: "Quests::User", status: "done").count
-    end
-
-    def total_complete_profile_quests_completed
-      Quest.where(type: "Quests::TalentProfile", status: "done").count
-    end
-
-    def total_supporter_quests_completed
-      Quest.where(type: "Quests::Supporter", status: "done").count
-    end
-
     def total_onboarded_users
       User.where.not(onboarded_at: nil).count
     end

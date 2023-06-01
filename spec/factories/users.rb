@@ -27,11 +27,7 @@ FactoryBot.define do
     end
 
     trait :with_profile_complete do
-      after(:create) { |user| create(:quest, user: user, type: "Quests::TalentProfile", status: "done") }
-    end
-
-    trait :with_beginner_quest_complete do
-      after(:create) { |user| create(:quest, user: user, type: "Quests::User", status: "done") }
+      profile_completed_at { Time.current }
     end
   end
 end

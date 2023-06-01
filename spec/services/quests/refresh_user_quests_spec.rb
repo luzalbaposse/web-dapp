@@ -9,9 +9,9 @@ RSpec.describe Quests::RefreshUserQuests do
   let(:refresh_user_quest_class) { Quests::RefreshUserQuest }
   let(:refresh_user_quest_instance) { instance_double(refresh_user_quest_class, call: true) }
 
-  let!(:quest_one) { create :v2_quest, quest_type: "profile_picture" }
-  let!(:quest_two) { create :v2_quest, quest_type: "three_journey_entries" }
-  let!(:quest_three) { create :v2_quest, quest_type: "send_career_update" }
+  let!(:quest_one) { create :quest, quest_type: "profile_picture" }
+  let!(:quest_two) { create :quest, quest_type: "three_journey_entries" }
+  let!(:quest_three) { create :quest, quest_type: "send_career_update" }
 
   before do
     allow(refresh_user_quest_class).to receive(:new).and_return(refresh_user_quest_instance)
