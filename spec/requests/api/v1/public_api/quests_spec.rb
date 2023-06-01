@@ -21,11 +21,11 @@ RSpec.describe "Quests API" do
       let(:cursor) { nil }
 
       before do
-        create :v2_quest, quest_type: "profile_picture", experience_points_amount: 10
-        create :v2_quest, quest_type: "three_journey_entries", experience_points_amount: 20
-        career_update_quest = create :v2_quest, quest_type: "send_career_update", experience_points_amount: 30
+        create :quest, quest_type: "profile_picture", experience_points_amount: 10
+        create :quest, quest_type: "three_journey_entries", experience_points_amount: 20
+        career_update_quest = create :quest, quest_type: "send_career_update", experience_points_amount: 30
 
-        create :user_v2_quest, user: talent_user, v2_quest: career_update_quest, completed_at: Time.new(2023, 10, 11)
+        create :user_quest, user: talent_user, quest: career_update_quest, completed_at: Time.new(2023, 10, 11)
       end
 
       response "200", "with a talent", save_example: true do

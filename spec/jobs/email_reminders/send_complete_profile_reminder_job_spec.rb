@@ -5,11 +5,9 @@ RSpec.describe EmailReminders::SendCompleteProfileReminderJob, type: :job do
 
   let!(:user_1) { create :user, talent: talent_1 }
   let(:talent_1) { create :talent, created_at: 10.days.ago }
-  let!(:quest_1) { create :quest, type: "Quests::TalentProfile", status: "pending", user: user_1 }
 
-  let!(:user_2) { create :user, talent: talent_2 }
+  let!(:user_2) { create :user, talent: talent_2, profile_completed_at: Time.current }
   let(:talent_2) { create :talent, created_at: 10.days.ago }
-  let!(:quest_2) { create :quest, type: "Quests::TalentProfile", status: "done", user: user_2 }
 
   let!(:user_3) { create :user }
 

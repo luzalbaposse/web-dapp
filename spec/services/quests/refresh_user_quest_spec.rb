@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.shared_examples "a refresh user quest without creating new records" do
   it "does not create a new user quest record" do
-    expect { subject }.not_to change(UserV2Quest, :count)
+    expect { subject }.not_to change(UserQuest, :count)
   end
 
   it "does not create a new participation point record" do
@@ -12,7 +12,7 @@ end
 
 RSpec.shared_examples "a refresh user quest that creates new records" do
   it "creates a new user quest record" do
-    expect { subject }.to change(UserV2Quest, :count).from(0).to(1)
+    expect { subject }.to change(UserQuest, :count).from(0).to(1)
   end
 
   it "creates a new participation point record" do
@@ -23,11 +23,11 @@ RSpec.shared_examples "a refresh user quest that creates new records" do
     freeze_time do
       subject
 
-      user_quest = UserV2Quest.last
+      user_quest = UserQuest.last
       participation_point = ExperiencePoint.last
 
       aggregate_failures do
-        expect(user_quest.v2_quest).to eq quest
+        expect(user_quest.quest).to eq quest
         expect(user_quest.user).to eq user
         expect(user_quest.completed_at).to eq Time.current
         expect(user_quest.credited_experience_points_amount).to eq quest.experience_points_amount
@@ -72,7 +72,7 @@ RSpec.describe Quests::RefreshUserQuest do
   let(:talent) { user.talent }
   let(:wallet_id) { SecureRandom.hex }
 
-  let!(:quest) { create :v2_quest, quest_type: quest_type }
+  let!(:quest) { create :quest, quest_type: quest_type }
   let(:quest_type) { "profile_picture" }
   let(:notify) { false }
 
@@ -361,7 +361,7 @@ RSpec.describe Quests::RefreshUserQuest do
 
   context "when the quest was already credited for the user" do
     before do
-      create :user_v2_quest, v2_quest: quest, user: user
+      create :user_quest, quest: quest, user: user
     end
 
     it_behaves_like "a refresh user quest without creating new records"

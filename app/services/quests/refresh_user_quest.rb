@@ -15,9 +15,9 @@ module Quests
       completed_at = Time.current
 
       ActiveRecord::Base.transaction do
-        UserV2Quest.create!(
+        UserQuest.create!(
           user: user,
-          v2_quest: quest,
+          quest: quest,
           completed_at: completed_at,
           credited_experience_points_amount: quest.experience_points_amount
         )
@@ -47,7 +47,7 @@ module Quests
     attr_reader :user, :quest, :notify
 
     def already_credited?
-      UserV2Quest.where(user: user, v2_quest: quest).any?
+      UserQuest.where(user: user, quest: quest).any?
     end
 
     def quest_completed?

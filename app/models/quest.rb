@@ -1,13 +1,23 @@
-# TODO - remove @quests
 class Quest < ApplicationRecord
-  belongs_to :user
-  has_many :tasks, dependent: :destroy
+  VALID_QUEST_TYPES = %w[
+    profile_picture
+    three_journey_entries
+    connect_wallet
+    send_career_update
+    three_talent_subscribe
+    verify_identity
+    five_subscribers
+    complete_profile
+    supporting_three
+  ]
 
-  validates :user, uniqueness: {scope: :type, message: "Quest for this user already exists"}
+  validates :title, :quest_type, uniqueness: true
+  validates :experience_points_amount, :title, :description, :quest_type, presence: true
+  validates_inclusion_of :quest_type, in: VALID_QUEST_TYPES
 
-  enum status: {pending: "pending", doing: "doing", claim_rewards: "claim_rewards", done: "done"}
+  has_many :user_quests
 
-  def short_type
-    type.gsub("Quests::", "").downcase
+  def name
+    "Quest: #{title}"
   end
 end

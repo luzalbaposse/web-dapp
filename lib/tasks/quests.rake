@@ -21,7 +21,7 @@ namespace :quests do
       },
       {
         title: "Add 3+ Journey Entries",
-        description: "Add at least 3 entries between goals, positions and/or education",
+        description: "Add at least 3 goals, positions, or education to your profile.",
         quest_type: "three_journey_entries",
         experience_points_amount: 400
       },
@@ -58,7 +58,7 @@ namespace :quests do
     ]
 
     quests.each do |quest_data|
-      V2Quest.find_or_create_by!(quest_data)
+      Quest.find_or_create_by!(quest_data)
     end
   end
 
@@ -66,10 +66,5 @@ namespace :quests do
     User.find_each do |user|
       Quests::RefreshUserQuestsJob.perform_later(user.id, false)
     end
-  end
-
-  task delete_old_quests: :environment do
-    Task.delete_all
-    Quest.delete_all
   end
 end
