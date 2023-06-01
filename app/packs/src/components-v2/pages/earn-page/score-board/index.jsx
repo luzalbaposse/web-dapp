@@ -8,7 +8,7 @@ export const ScoreBoard = ({ children, points }) => {
       <ScoreRow>
         <Icon name="flash" color="primary" size={24} />
         <Typography specs={{ variant: "h3", type: "bold" }} color="primary01">
-          {points} XP
+          {points?.toLocaleString()} XP
         </Typography>
       </ScoreRow>
       {children}
