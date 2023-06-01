@@ -6,6 +6,6 @@ class InviteUsedNotification < BaseNotification
     if: :should_deliver_immediate_email?
 
   def url
-    earn_url(tab: "talent")
+    earn_url(tab: "invites")
   end
 end

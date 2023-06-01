@@ -107,9 +107,8 @@ class User < ApplicationRecord
     METHODS = [DISABLED = 0, IMMEDIATE = 1, DIGEST = 2]
   end
 
-  scope :beginner_quest_completed, -> { joins(:quests).where(quests: {type: "Quests::User", status: "done"}) }
-  scope :profile_quest_completed, -> { joins(:quests).where(quests: {type: "Quests::TalentProfile", status: "done"}) }
   scope :onboarded, -> { where.not(onboarded_at: nil) }
+  scope :profile_completed, -> { where.not(profile_completed_at: nil) }
 
   # [CLEARANCE] override email writing to allow nil but not two emails ""
   def self.normalize_email(email)
@@ -162,10 +161,6 @@ class User < ApplicationRecord
   def as_json(options = {})
     options[:except] ||= [:remember_token, :encrypted_password, :confirmation_token, :last_sign_in_at, :nounce, :email_confirmation_token]
     super(options)
-  end
-
-  def beginner_quest_completed?
-    quests.where(type: "Quests::User", status: "done").any?
   end
 
   def confirm_email

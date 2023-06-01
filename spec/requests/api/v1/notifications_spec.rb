@@ -4,7 +4,7 @@ RSpec.describe "Notifications", type: :request do
   let(:current_user) { create :user }
 
   let!(:notification_one) { create :notification, recipient: current_user, type: "MessageReceivedNotification" }
-  let!(:notification_two) { create :notification, recipient: current_user, type: "QuestCompletedNotification" }
+  let!(:notification_two) { create :notification, recipient: current_user, type: "UserNamesVerificationFailedNotification" }
   let!(:notification_three) { create :notification, type: "TokenAcquiredNotification" }
   let!(:notification_four) { create :notification, recipient: current_user, type: "TokenAcquiredNotification" }
 

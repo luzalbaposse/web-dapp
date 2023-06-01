@@ -59,7 +59,7 @@ export const RecommendedTeamsWidget = ({}) => {
       </TitleContainer>
       <TeamsList>
         {discoveryRows.map(row => (
-          <EntryContainer href={`/discovery/${row.discoveryRow.slug}?page=1`}>
+          <EntryContainer href={`/discovery/${row.discoveryRow.slug}?page=1`} key={row.discoveryRow.slug}>
             <Avatar
               size="md"
               profileURL={`/discovery/${row.discoveryRow.slug}?page=1`}

@@ -26,16 +26,16 @@ RSpec.describe DiscoveryRow, type: :model do
   end
 
   describe "#talents_count" do
-    let!(:user_1) { create :user, talent: talent_1, username: "jonas" }
+    let!(:user_1) { create :user, talent: talent_1, username: "jonas", profile_completed_at: Time.current }
     let(:talent_1) { create :talent, :with_token, public: true }
-    let!(:user_2) { create :user, talent: talent_2, display_name: "Alexander" }
+    let!(:user_2) { create :user, talent: talent_2, display_name: "Alexander", profile_completed_at: Time.current }
     let(:talent_2) { create :talent, :with_token, public: true }
-    let!(:user_3) { create :user, talent: talent_3, username: "jonathan" }
+    let!(:user_3) { create :user, talent: talent_3, username: "jonathan", profile_completed_at: Time.current }
     let(:talent_3) { create :talent, :with_token, public: true }
-    let!(:user_4) { create :user, talent: talent_4, display_name: "Alex" }
+    let!(:user_4) { create :user, talent: talent_4, display_name: "Alex", profile_completed_at: Time.current }
     let(:talent_4) { create :talent, :with_token, public: true }
 
-    let!(:private_user) { create :user, talent: private_talent, display_name: "Alexandrina" }
+    let!(:private_user) { create :user, talent: private_talent, display_name: "Alexandrina", profile_completed_at: Time.current }
     let(:private_talent) { create :talent, :with_token, public: false }
 
     let(:discovery_row) { create :discovery_row, title: "web3" }
@@ -44,10 +44,6 @@ RSpec.describe DiscoveryRow, type: :model do
       tag_1 = create :tag, description: "crypto"
       tag_2 = create :tag, description: "blockchain"
       tag_3 = create :tag, description: "developer"
-
-      create :quest, type: "Quests::TalentProfile", status: "done", user: user_1
-      create :quest, type: "Quests::TalentProfile", status: "done", user: user_3
-      create :quest, type: "Quests::TalentProfile", status: "done", user: user_4
 
       discovery_row.tags << [tag_1, tag_2, tag_3]
 
@@ -63,9 +59,9 @@ RSpec.describe DiscoveryRow, type: :model do
   end
 
   describe "#talents_total_supply" do
-    let!(:user_1) { create :user, talent: talent_1, username: "jonas" }
+    let!(:user_1) { create :user, talent: talent_1, username: "jonas", profile_completed_at: Time.current }
     let(:talent_1) { create :talent, :with_token, public: true, total_supply: "100000000000000000000" }
-    let!(:user_2) { create :user, talent: talent_2, display_name: "Alexander" }
+    let!(:user_2) { create :user, talent: talent_2, display_name: "Alexander", profile_completed_at: Time.current }
     let(:talent_2) { create :talent, :with_token, public: true, total_supply: "200000000000000000000" }
 
     let!(:private_user) { create :user, talent: private_talent, display_name: "Alexandrina" }
@@ -79,9 +75,6 @@ RSpec.describe DiscoveryRow, type: :model do
       tag_3 = create :tag, description: "developer"
 
       discovery_row.tags << [tag_1, tag_2, tag_3]
-
-      create :quest, type: "Quests::TalentProfile", status: "done", user: user_1
-      create :quest, type: "Quests::TalentProfile", status: "done", user: user_2
 
       user_1.tags << [tag_1, tag_3]
       user_2.tags << [tag_1]

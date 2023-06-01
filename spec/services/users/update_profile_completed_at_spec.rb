@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Users::UpdateProfileCompletedAt do
+  include ActiveJob::TestHelper
+
   describe "#call" do
     subject(:update_profile_completed_at) { described_class.new(user: user).call }
 
@@ -44,6 +46,18 @@ RSpec.describe Users::UpdateProfileCompletedAt do
           source_id: user.id,
           type: CompletedProfileNotification
         )
+      end
+
+      it "enqueues a job to create the user activity" do
+        Sidekiq::Testing.inline! do
+          update_profile_completed_at
+
+          job = enqueued_jobs.find { |j| j["job_class"] == "ActivityIngestJob" }
+
+          aggregate_failures do
+            expect(job["arguments"]).to match_array(["profile_complete", nil, user.id])
+          end
+        end
       end
 
       context "when the user already has the timestamp populated" do

@@ -15,10 +15,6 @@ RSpec.describe API::UpdateTalent do
   let(:tag_params) { {} }
   let(:career_needs_params) { {} }
 
-  before do
-    create :task, quest: quest, type: "Tasks::ApplyTokenLaunch"
-  end
-
   it "enqueues a job to refresh user quests" do
     Sidekiq::Testing.inline! do
       update_talent.call(talent_params, user_params, tag_params, career_needs_params)

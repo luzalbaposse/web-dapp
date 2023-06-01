@@ -13,11 +13,8 @@ class API::V1::Talent::TokensController < ApplicationController
         talent_token.update!(deployed_at: Time.current)
         talent.update!(public: true, supporters_count: 0, total_supply: Talent.base_supply)
         Users::UpdateProfileType.new.call(user: current_user, new_profile_type: "talent")
-        AddRewardToInviterJob.perform_later(talent_token.id)
         AddUsersToMailerliteJob.perform_later(current_user.id)
         WhitelistUserJob.perform_later(user_id: current_user.id, level: "talent_token")
-        # TODO - remove after quests cleanup @quests
-        UpdateTasksJob.perform_later(type: "Tasks::LaunchToken", user_id: current_user.id)
         SendTokenNotificationToDiscordJob.perform_later(talent_token.id)
         UserMailer.with(user: current_user).send_token_launched_email.deliver_later(wait: 5.seconds)
         ActivityIngestJob.perform_later("token_launch", nil, current_user.id)

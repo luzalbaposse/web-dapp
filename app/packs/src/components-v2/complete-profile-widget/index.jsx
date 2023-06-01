@@ -10,7 +10,8 @@ export const CompleteProfileWidget = ({ user }) => {
     if (!user) return;
 
     const completedCount = user.required_profile_fields.length - user.missing_profile_fields.length;
-    setProgress(Math.ceil((100 / user.required_profile_fields.length) * completedCount));
+    const progress = Math.ceil((100 / user.required_profile_fields.length) * completedCount);
+    setProgress(progress);
   }, [user]);
 
   if (progress == 100 || !user) {

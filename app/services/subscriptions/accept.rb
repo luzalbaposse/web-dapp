@@ -26,8 +26,6 @@ module Subscriptions
       )
       ActivityIngestJob.perform_later("subscribe", nil, subscriber_user.id, subscribing_user.id)
 
-      update_tasks if more_than_2_subscribers?
-
       refresh_quests
 
       update_subscriber_connection
@@ -46,15 +44,6 @@ module Subscriptions
 
     def subscribing_user
       @subscribing_user ||= subscription.user
-    end
-
-    def more_than_2_subscribers?
-      Subscription.where(subscriber: subscriber_user).count > 2
-    end
-
-    def update_tasks
-      # TODO - remove after quests cleanup @quests
-      UpdateTasksJob.perform_later(type: "Tasks::Watchlist", user_id: subscriber_user.id)
     end
 
     def update_subscriber_connection

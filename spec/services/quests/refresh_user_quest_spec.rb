@@ -39,9 +39,33 @@ RSpec.shared_examples "a refresh user quest that creates new records" do
       end
     end
   end
+
+  context "when notify is true" do
+    let(:notify) { true }
+
+    let(:create_notification_class) { CreateNotification }
+    let(:create_notification_instance) { instance_double(create_notification_class, call: true) }
+
+    before do
+      allow(create_notification_class).to receive(:new).and_return(create_notification_instance)
+    end
+
+    it "calls the create notification service" do
+      subject
+
+      expect(create_notification_instance).to have_received(:call).with(
+        recipient: user,
+        source_id: quest.id,
+        type: QuestCompletedNotification,
+        extra_params: {source_type: "V2Quest", experience_points: quest.experience_points_amount}
+      )
+    end
+  end
 end
 
 RSpec.describe Quests::RefreshUserQuest do
+  include ActiveJob::TestHelper
+
   subject(:refresh_user_quest) { described_class.new(quest: quest, user: user, notify: notify).call }
 
   let(:user) { create :user, :with_talent, wallet_id: wallet_id }
@@ -50,7 +74,7 @@ RSpec.describe Quests::RefreshUserQuest do
 
   let!(:quest) { create :v2_quest, quest_type: quest_type }
   let(:quest_type) { "profile_picture" }
-  let(:notify) { true }
+  let(:notify) { false }
 
   context "when the quest was not credited yet" do
     context "when the quest type is profile_picture" do
@@ -151,7 +175,9 @@ RSpec.describe Quests::RefreshUserQuest do
         allow(create_notification_class).to receive(:new).and_return(create_notification_instance)
       end
 
-      context "when the quest was completed" do
+      context "when the quest was completed and notify is true" do
+        let(:notify) { true }
+
         before do
           talent.update!(verified: true)
         end
@@ -161,12 +187,31 @@ RSpec.describe Quests::RefreshUserQuest do
         it "initializes and calls the create notification service" do
           refresh_user_quest
 
-          expect(create_notification_class).to have_received(:new)
+          expect(create_notification_class).to have_received(:new).twice
           expect(create_notification_instance).to have_received(:call).with(
             recipient: user,
             source_id: user.id,
             type: VerifiedProfileNotification
           )
+          expect(create_notification_instance).to have_received(:call).with(
+            recipient: user,
+            source_id: quest.id,
+            type: QuestCompletedNotification,
+            extra_params: {source_type: "V2Quest", experience_points: quest.experience_points_amount}
+          )
+        end
+
+        it "enqueues a job to whitelist the user" do
+          Sidekiq::Testing.inline! do
+            refresh_user_quest
+
+            job = enqueued_jobs.find { |j| j["job_class"] == "WhitelistUserJob" }
+
+            aggregate_failures do
+              expect(job["arguments"][0]["level"]).to eq("verified")
+              expect(job["arguments"][0]["user_id"]).to eq(user.id)
+            end
+          end
         end
 
         context "when the notify flag is set to false" do
@@ -176,6 +221,27 @@ RSpec.describe Quests::RefreshUserQuest do
             refresh_user_quest
 
             expect(create_notification_class).not_to have_received(:new)
+          end
+        end
+
+        context "when the user was invited" do
+          let(:invite) { create :invite }
+
+          let(:credit_points_class) { ExperiencePoints::CreditInvitePoints }
+          let(:credit_points_instance) { instance_double(credit_points_class, call: true) }
+
+          before do
+            user.update(invite_id: invite.id)
+            allow(credit_points_class).to receive(:new).and_return(credit_points_instance)
+          end
+
+          it "initializes and calls the credit points service" do
+            refresh_user_quest
+
+            expect(credit_points_class).to have_received(:new).with(
+              invite: invite
+            )
+            expect(credit_points_instance).to have_received(:call)
           end
         end
       end

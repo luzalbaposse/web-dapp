@@ -142,25 +142,4 @@ RSpec.describe Subscriptions::Accept do
       end
     end
   end
-
-  context "when the user has more than 2 accepted subscriptions" do
-    before do
-      create :subscription, user: create(:user), subscriber: subscriber_user
-      create :subscription, user: create(:user), subscriber: subscriber_user
-    end
-
-    it "enqueues the job to update the watchlist task" do
-      Sidekiq::Testing.inline! do
-        accept_subscription
-
-        job = enqueued_jobs.find { |j| j["job_class"] == "UpdateTasksJob" }
-
-        aggregate_failures do
-          expect(job["job_class"]).to eq("UpdateTasksJob")
-          expect(job["arguments"][0]["type"]).to eq("Tasks::Watchlist")
-          expect(job["arguments"][0]["user_id"]).to eq(subscriber_user.id)
-        end
-      end
-    end
-  end
 end

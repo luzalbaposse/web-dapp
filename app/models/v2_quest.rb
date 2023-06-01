@@ -16,4 +16,8 @@ class V2Quest < ApplicationRecord
   validates_inclusion_of :quest_type, in: VALID_QUEST_TYPES
 
   has_many :user_v2_quests
+
+  def name
+    "Quest: #{title}"
+  end
 end

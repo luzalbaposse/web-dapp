@@ -6,17 +6,18 @@ import { ActivityWidget } from "../../activity-widget";
 import { QuickNavigator } from "../../quick-navigator";
 import { GmHeader } from "../../gm-header";
 import { CompleteProfileWidget } from "../../complete-profile-widget";
-import { LeadderboardWidget } from "../../leadderboard-widget";
+import { LeaderboardWidget } from "../../leaderboard-widget";
 import { RecommendedBuildersWidget } from "../../recommended-builders-widget";
 import { RecommendedTeamsWidget } from "../../recommended-teams-widget";
 import { useWindowDimensionsHook } from "src/utils/window";
-// import { QuestsWidget } from "../../quests-widget";
+import { QuestsWidget } from "../../quests-widget";
 // import { MyWalletWidget } from "../../my-wallet-widget";
 
 export const HomepagePage = ({}) => {
   const { mobile } = useWindowDimensionsHook();
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
 
+  console.log(currentUser);
   useEffect(() => {
     if (!currentUser) {
       fetchCurrentUser();
@@ -32,10 +33,11 @@ export const HomepagePage = ({}) => {
         {mobile ? (
           <Column>
             <CompleteProfileWidget user={currentUser} />
+            {currentUser?.profile_completed && <QuestsWidget profile={currentUser} />}
             <QuickNavigator username={currentUser?.username} />
             <RecommendedBuildersWidget username={currentUser?.username} />
             <RecommendedTeamsWidget />
-            <LeadderboardWidget username={currentUser?.username} />
+            <LeaderboardWidget user={currentUser} />
             <ActivityWidget profile={currentUser} />
           </Column>
         ) : (
@@ -43,12 +45,13 @@ export const HomepagePage = ({}) => {
             <Column grows>
               <CompleteProfileWidget user={currentUser} />
               <QuickNavigator username={currentUser?.username} />
+              {currentUser?.profile_completed && <QuestsWidget profile={currentUser} />}
               <ActivityWidget profile={currentUser} />
             </Column>
             <Column>
               <RecommendedBuildersWidget username={currentUser?.username} />
               <RecommendedTeamsWidget />
-              <LeadderboardWidget username={currentUser?.username} />
+              <LeaderboardWidget user={currentUser} />
             </Column>
           </>
         )}

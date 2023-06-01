@@ -51,20 +51,6 @@ RSpec.describe Stakes::Create do
       end
     end
 
-    it "enqueues the job to update the user tasks" do
-      Sidekiq::Testing.inline! do
-        create_stake
-
-        job = enqueued_jobs.find { |j| j["job_class"] == "UpdateTasksJob" }
-
-        aggregate_failures do
-          expect(job["job_class"]).to eq("UpdateTasksJob")
-          expect(job["arguments"][0]["type"]).to eq("Tasks::BuyTalentToken")
-          expect(job["arguments"][0]["user_id"]).to eq(staking_user.id)
-        end
-      end
-    end
-
     it "enqueues the job to create the activity" do
       Sidekiq::Testing.inline! do
         create_stake

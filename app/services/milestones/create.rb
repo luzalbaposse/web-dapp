@@ -31,11 +31,6 @@ module Milestones
         ActivityIngestJob.perform_later("milestone_create", milestone_update_message(milestone), current_user.id)
       end
 
-      if talent.milestones.length >= 1
-        # TODO - remove after quests cleanup @quests
-        UpdateTasksJob.perform_later(type: "Tasks::Highlights", user_id: current_user.id)
-      end
-
       refresh_quests
 
       milestone

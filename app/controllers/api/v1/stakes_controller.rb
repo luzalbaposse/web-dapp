@@ -12,7 +12,7 @@ class API::V1::StakesController < ApplicationController
 
     return render json: {error: "Not found."}, status: :not_found unless claimed_token
 
-    Stakes::RewardClaim.new(token: claimed_token).call
+    TalentSupportersRefreshJob.perform_later(claimed_token.contract_id)
 
     render json: {success: "Rewards claimed successfuly."}, status: :ok
   end

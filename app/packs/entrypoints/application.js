@@ -30,13 +30,10 @@ import Discovery from "src/components/discovery";
 import DiscoveryShow from "src/components/discovery/show";
 import TalentPage from "src/components/talent/TalentPage";
 import LoggedOutTopBar from "src/components/top_bar/LoggedOutTopBar";
-import Rewards from "src/components/rewards";
 import Support from "src/components-v2/support";
 import UserSupportPage from "src/components-v2/user-support-page";
-import QuestShow from "src/components/rewards/quests/show";
 import Footer from "src/components/design_system/footer";
 import SubdomainFooter from "src/components/design_system/subdomain_footer";
-import FirstQuestPopup from "src/components/one_time_popups/FirstQuestPopup";
 import FlashMessages from "src/components/FlashMessages";
 import ProfileShow from "src/components/profile/show";
 import SignInPage from "src/components-v2/pages/sign-in";
@@ -45,7 +42,8 @@ import OnboardingPage from "src/components-v2/pages/onboarding";
 import ForgotPasswordPage from "src/components-v2/pages/forgot-password";
 import SetPasswordPage from "src/components-v2/pages/set-password";
 import TalentModelsProfilePage from "src/components-v2/pages/talent-models-profile";
-import HomepagePage from "../src/components-v2/pages/homepage";
+import HomepagePage from "src/components-v2/pages/homepage";
+import EarnPage from "src/components-v2/pages/earn-page";
 import ConnectionsPage from "src/components-v2/pages/connections";
 import ProductAnnouncementModal from "src/components-v2/product-announcement-modal";
 
@@ -60,7 +58,6 @@ ReactOnRails.register({
   Discovery,
   DiscoveryShow,
   UserSettings,
-  FirstQuestPopup,
   FlashMessages,
   Footer,
   SubdomainFooter,
@@ -70,9 +67,7 @@ ReactOnRails.register({
   NewPortfolio,
   Notifications,
   ProfileShow,
-  QuestShow,
   ResetPassword,
-  Rewards,
   TalentKeywordSearch,
   TalentPage,
   TopBar,
@@ -88,7 +83,8 @@ ReactOnRails.register({
   HomepagePage,
   ConnectionsPage,
   OnboardingPage,
-  ProductAnnouncementModal
+  ProductAnnouncementModal,
+  EarnPage
 });
 
 Rails.start();
