@@ -211,7 +211,7 @@ RSpec.describe Users::Create do
       let(:error) { StandardError.new }
 
       before do
-        allow(notification_creator_class).to receive(:new).and_raise(error)
+        allow(refresh_user_score_class).to receive(:new).and_raise(error)
         allow(Rollbar).to receive(:error)
       end
 

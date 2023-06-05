@@ -6,7 +6,7 @@ class API::V1::PortfolioSupportersController < ApplicationController
       {
         id: u.uuid,
         wallet_id: u.wallet_id,
-        profile_picture_url: u&.profile_picture_url,
+        profile_picture_url: u.profile_picture_url,
         username: u.username,
         messaging_disabled: u.messaging_disabled
       }
