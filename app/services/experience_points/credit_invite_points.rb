@@ -2,7 +2,7 @@
 module ExperiencePoints
   class CreditInvitePoints
     START_DATE = Date.new(2023, 6, 1)
-    AMOUNT = 100
+    AMOUNT = 500
 
     def initialize(invite:)
       raise ArgumentError, "Invite is required" unless invite
