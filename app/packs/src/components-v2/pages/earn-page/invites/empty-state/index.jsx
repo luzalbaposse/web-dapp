@@ -20,7 +20,7 @@ export const EmptyState = ({ openQRCodeModal, username }) => {
           </Typography>
           <Icon name="flash" size={12} color="primary" />
           <Typography specs={{ variant: "p2", type: "regular" }} color="primary04">
-            100 XP
+            500 XP
           </Typography>
         </InvitesTextRow>
       </TitleContainer>

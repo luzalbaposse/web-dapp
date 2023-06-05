@@ -29,7 +29,7 @@ export const InviteList = ({ list, openQRCodeModal, username, loadMore, totalInv
           </Typography>
           <StyledTypography specs={{ variant: "p2", type: "regular" }} color="primary04">
             Get your friends on board. For each friend who signs up and verifies their account, you will win{" "}
-            <Icon name="flash" size={12} color="primary" /> 100 XP
+            <Icon name="flash" size={12} color="primary" /> 500 XP
           </StyledTypography>
         </TitleContainer>
         <DesktopCopyInviteLinkContainer>
