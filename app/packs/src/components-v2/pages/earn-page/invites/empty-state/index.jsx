@@ -23,6 +23,9 @@ export const EmptyState = ({ openQRCodeModal, username }) => {
             500 XP
           </Typography>
         </InvitesTextRow>
+        <Typography specs={{ variant: "p3", type: "regular" }} color="primary04">
+          Invites prior to June 1st were rewarded with 100 TAL and are shown below only has history.
+        </Typography>
       </TitleContainer>
       <InviteLinkArea>
         <Typography specs={{ variant: "p2", type: "regular" }} color="primary04">
