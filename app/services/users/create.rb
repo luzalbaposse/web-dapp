@@ -7,15 +7,14 @@ module Users
     end
 
     def call(params)
-      ActiveRecord::Base.transaction do
-        invite = Invite.find_by(code: params[:code])
+      invite = invite_from(params[:code])
+      result = ActiveRecord::Base.transaction do
         invite&.update(uses: invite.uses + 1)
         params[:invite] = invite if invite
         user = create_user(params)
 
         create_talent(user, params)
         create_talent_token(user)
-        create_invite_used_notification(invite, user) if invite
 
         if invite&.user
           update_race_score(invite.user)
@@ -53,9 +52,16 @@ module Users
 
         raise e
       end
+
+      create_invite_used_notification(invite, result[:user]) if result[:success] && invite
+      result
     end
 
     private
+
+    def invite_from(code)
+      Invite.find_by(code: code)
+    end
 
     def create_user(params)
       user = User.new(attributes(params))

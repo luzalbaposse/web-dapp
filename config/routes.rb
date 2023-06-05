@@ -92,7 +92,7 @@ Rails.application.routes.draw do
           resources :milestones, only: [:create, :update, :destroy], module: "talent"
           resources :perks, only: [:create, :update, :destroy], module: "talent"
           resources :tokens, only: [:update], module: "talent"
-          resources :career_goals, only: [:update, :create], module: "talent"
+          resources :career_goals, only: [:update], module: "talent"
         end
         resources :stakes, only: [:create]
         post "reward_claiming", to: "stakes#reward_claiming"

@@ -17,17 +17,6 @@ class API::V1::Talent::CareerGoalsController < ApplicationController
     end
   end
 
-  def create
-    @career_goal = CareerGoal.new(career_goal_params)
-    @career_goal.talent = talent
-
-    if @career_goal.save
-      render json: @career_goal, status: :created
-    else
-      render json: {error: "Unable to create career goal"}, status: :unprocessable_entity
-    end
-  end
-
   private
 
   def notify_of_change
