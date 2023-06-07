@@ -24,10 +24,10 @@ RSpec.describe "Connections API" do
       let(:keyword) { nil }
       let(:connection_type) { nil }
 
-      let(:user_1) { create :user, username: "user111" }
-      let(:user_2) { create :user, username: "user222" }
-      let(:user_3) { create :user, username: "user333" }
-      let(:user_4) { create :user, username: "user444" }
+      let(:user_1) { create :user, username: "111111111" }
+      let(:user_2) { create :user, username: "222222222" }
+      let(:user_3) { create :user, username: "333333333" }
+      let(:user_4) { create :user, username: "444444444" }
 
       before do
         create :connection, user: talent_user, connected_user: user_1, connection_type: "mutual_stake", connection_types: ["staking", "staker"]
@@ -67,7 +67,7 @@ RSpec.describe "Connections API" do
         end
       end
 
-      response "200", "passing a connection type", save_example: true do
+      response "200", "passing supporting as connection type", save_example: true do
         let(:connection_type) { "supporting" }
 
         schema type: :object,
@@ -100,8 +100,74 @@ RSpec.describe "Connections API" do
         end
       end
 
+      response "200", "passing supporters as connection type", save_example: true do
+        let(:connection_type) { "supporters" }
+
+        schema type: :object,
+          properties: {
+            connections: {
+              type: :array,
+              items: {
+                type: :object,
+                properties: PublicAPI::ObjectProperties::CONNECTION_PROPERTIES
+              }
+            },
+            pagination: {
+              type: :object,
+              properties: PublicAPI::ObjectProperties::PAGINATION_PROPERTIES
+            }
+          }
+
+        run_test! do |response|
+          data = JSON.parse(response.body)
+
+          returned_connections = data["connections"]
+          returned_usernames = returned_connections.map { |f| f["username"] }
+          returned_pagination = data["pagination"]
+          aggregate_failures do
+            expect(data["connections"].count).to eq 3
+            expect(returned_usernames).to match_array([user_1.username, user_2.username, user_4.username])
+
+            expect(returned_pagination["total"]).to eq 3
+          end
+        end
+      end
+
+      response "200", "passing gibberish as connection type", save_example: true do
+        let(:connection_type) { "gibberish" }
+
+        schema type: :object,
+          properties: {
+            connections: {
+              type: :array,
+              items: {
+                type: :object,
+                properties: PublicAPI::ObjectProperties::CONNECTION_PROPERTIES
+              }
+            },
+            pagination: {
+              type: :object,
+              properties: PublicAPI::ObjectProperties::PAGINATION_PROPERTIES
+            }
+          }
+
+        run_test! do |response|
+          data = JSON.parse(response.body)
+
+          returned_connections = data["connections"]
+          returned_usernames = returned_connections.map { |f| f["username"] }
+          returned_pagination = data["pagination"]
+          aggregate_failures do
+            expect(data["connections"].count).to eq 0
+            expect(returned_usernames).to match_array([])
+
+            expect(returned_pagination["total"]).to eq 0
+          end
+        end
+      end
+
       response "200", "passing a keyword", save_example: true do
-        let(:keyword) { "user1" }
+        let(:keyword) { "11111" }
 
         schema type: :object,
           properties: {

@@ -52,7 +52,7 @@ class API::V1::PublicAPI::ConnectionsController < API::V1::PublicAPI::APIControl
     elsif search_params[:connection_type] == "supporting"
       Connection::SUPPORTING.join(",")
     else
-      []
+      ""
     end
   end
 end
