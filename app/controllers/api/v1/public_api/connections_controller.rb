@@ -2,7 +2,7 @@ class API::V1::PublicAPI::ConnectionsController < API::V1::PublicAPI::APIControl
   def index
     connections = user.connections
 
-    connections = connections.where(connection_type: search_params[:connection_type]) if search_by_connection_type?
+    connections = connections.where("connection_types &&  ?", "{#{connection_type}}") if search_by_connection_type?
 
     if search_by_keyword?
       connections = connections.joins(:connected_user)
@@ -39,10 +39,20 @@ class API::V1::PublicAPI::ConnectionsController < API::V1::PublicAPI::APIControl
   end
 
   def search_by_connection_type?
-    search_params[:connection_type].present?
+    search_params[:connection_type].present? && search_params[:connection_type] != "all"
   end
 
   def search_by_keyword?
     search_params[:keyword].present?
+  end
+
+  def connection_type
+    if search_params[:connection_type] == "supporters"
+      Connection::SUPPORTERS.join(",")
+    elsif search_params[:connection_type] == "supporting"
+      Connection::SUPPORTING.join(",")
+    else
+      []
+    end
   end
 end

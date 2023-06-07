@@ -11,7 +11,6 @@ dayjs.extend(customParseFormat);
 import debounce from "lodash/debounce";
 
 import { H4, H5, P2, P3, Caption } from "src/components/design_system/typography";
-import Tag from "src/components/design_system/tag";
 import ThemedButton from "src/components/design_system/button";
 import { useWindowDimensionsHook } from "src/utils/window";
 import { useTheme } from "src/contexts/ThemeContext";
@@ -20,7 +19,7 @@ import Table from "src/components/design_system/table";
 import { lightTextPrimary03, darkTextPrimary03 } from "src/utils/colors.js";
 import TextInput from "src/components/design_system/fields/textinput";
 import { Search, OrderBy } from "src/components/icons";
-import Dropdown from "react-bootstrap/Dropdown";
+import { Tabs, useTabs, Tag } from "@talentprotocol/design-system";
 
 import cx from "classnames";
 
@@ -32,11 +31,9 @@ const ConnectionTable = ({ connections, mode, ticker, mobile }) => {
   const formattedConnectionType = connection_type => {
     return {
       sponsor: "Sponsor",
-      sponsored: "Sponsored",
-      mutual_stake: "Mutual Stake",
+      sponsoring: "Sponsoring",
       staker: "Staker",
       staking: "Staking",
-      mutual_subscription: "Mutual Subscription",
       subscriber: "Subscriber",
       subscribing: "Subscribing"
     }[connection_type];
@@ -49,10 +46,7 @@ const ConnectionTable = ({ connections, mode, ticker, mobile }) => {
           <Caption bold text="Talent" />
         </Table.Th>
         <Table.Th className={cx(mobile ? "text-right" : "")}>
-          <Caption bold text="Connection" />
-        </Table.Th>
-        <Table.Th className="hide-content-in-mobile">
-          <Caption bold text="Connection Strength" />
+          <Caption bold text="Relationship" />
         </Table.Th>
         <Table.Th className="hide-content-in-mobile">
           <Caption bold text="Since" />
@@ -80,30 +74,19 @@ const ConnectionTable = ({ connections, mode, ticker, mobile }) => {
               </div>
             </Table.Td>
             <Table.Td>
-              <Tag className={cx("connection", `connection__${connection.connection_type}`, mobile ? "ml-auto" : "")}>
-                <div className="d-flex align-items-center">
-                  <P2 mode={mode} text={formattedConnectionType(connection.connection_type)} bold role="button" />
-                </div>
-              </Tag>
-            </Table.Td>
-            <Table.Td className="hide-content-in-mobile">
-              <P2>
-                {connection.user_invested_amount > 0 && (
-                  <>
-                    <span className="bold">{displayableAmount(connection.user_invested_amount)}</span>
-                    <span className="ml-1">{`$${connection.ticker}`}</span>
-                  </>
-                )}
-                {connection.user_invested_amount > 0 && connection.connected_user_invested_amount > 0 && (
-                  <span className="ml-2 mr-2">+</span>
-                )}
-                {connection.connected_user_invested_amount > 0 && (
-                  <>
-                    <span className="bold">{displayableAmount(connection.connected_user_invested_amount)}</span>
-                    <span className="ml-1">{`$${ticker}`}</span>
-                  </>
-                )}
-              </P2>
+              <div className="d-flex">
+                {connection.connection_types.map(connectionType => (
+                  <div className="mr-2">
+                    <Tag
+                      backgroundColor={connectionType.endsWith("ing") ? "primaryTint02" : "primary"}
+                      textColor={connectionType.endsWith("ing") ? "primaryText" : "bg01"}
+                      label={formattedConnectionType(connectionType)}
+                      borderColor="surfaceHover02"
+                      size="small"
+                    />
+                  </div>
+                ))}
+              </div>
             </Table.Td>
             <Table.Td className="hide-content-in-mobile">
               <P2 text={dayjs(connection.connected_at, "YYYY-MM-DD").format("MMM DD, YYYY")} />
@@ -115,45 +98,45 @@ const ConnectionTable = ({ connections, mode, ticker, mobile }) => {
   );
 };
 
-const SearchForm = ({ options, changeOptions, connectionType, keyword, mobile }) => {
-  const selectedClass = option => (option.name == connectionType.name ? " text-primary" : "text-black");
+const SearchForm = ({ supportersCount, supportingCount, changeOptions, keyword, mobile }) => {
+  const tabsState = useTabs();
+  const allCount = supportersCount + supportingCount;
+  const tabs = [`All (${allCount})`, `Supporters (${supportersCount})`, `Supporting (${supportingCount})`];
+  const TAB_INDEX_TO_NAME = {
+    0: "all",
+    1: "supporters",
+    2: "supporting"
+  };
+
+  const onChange = (e, field, value) => {
+    e.preventDefault();
+
+    changeOptions(field, value);
+  };
+
+  const changeTab = index => {
+    tabsState.selectElement(index);
+    changeOptions("connectionType", TAB_INDEX_TO_NAME[index]);
+  };
 
   return (
     <div className="d-flex justify-content-between my-4">
+      <Tabs
+        tabList={tabs}
+        selectedIndex={tabsState.selectedIndex}
+        onClick={changeTab}
+        disabledList={[false, false, false]}
+      />
       <div className="position-relative">
         <TextInput
           value={keyword}
-          onChange={e => changeOptions(e, "keyword", e.target.value)}
+          onChange={e => onChange(e, "keyword", e.target.value)}
           placeholder="Search"
           inputClassName={cx("pl-5", mobile ? "w-75" : "w-100")}
           className="w-100"
         />
         <Search color="currentColor" className="position-absolute chat-search-icon" />
       </div>
-      <Dropdown>
-        <Dropdown.Toggle
-          className="talent-button white-subtle-button normal-size-button no-caret d-flex justify-content-between align-items-center"
-          id="talent-filters-dropdown"
-          bsPrefix=""
-          as="div"
-          style={{ height: 34, width: 150 }}
-        >
-          <P2 bold text={connectionType.name} className="mr-2 align-middle text-black text-ellipsis" />
-          <OrderBy black />
-        </Dropdown.Toggle>
-
-        <Dropdown.Menu>
-          {options.map(option => (
-            <Dropdown.Item
-              key={`tab-dropdown-${option.name}`}
-              className="d-flex flex-row justify-content-between"
-              onClick={e => changeOptions(e, "connectionType", option)}
-            >
-              <P3 bold text={option.name} className={selectedClass(option)} />
-            </Dropdown.Item>
-          ))}
-        </Dropdown.Menu>
-      </Dropdown>
     </div>
   );
 };
@@ -191,10 +174,7 @@ const Connections = ({ userId, talent, canUpdate }) => {
     return null;
   };
   const [connectionType, setConnectionType] = useState(
-    connectionTypeOption(url.searchParams.get("connection_type")) || {
-      name: "All",
-      value: null
-    }
+    connectionTypeOption(url.searchParams.get("connection_type")) || "All"
   );
   const [keyword, setKeyword] = useState(url.searchParams.get("keyword") || "");
 
@@ -218,10 +198,9 @@ const Connections = ({ userId, talent, canUpdate }) => {
 
   const loadMoreConnections = () => {
     const params = new URLSearchParams(document.location.search);
-    params.set("cursor", pagination.cursor);
     params.set("id", userId);
 
-    get(`/api/v1/connections?${params.toString()}`).then(response => {
+    get(`/api/v1/connections?${params.toString()}&cursor=${pagination.cursor}`).then(response => {
       setConnections(prev => [...prev, ...response.connections]);
       setPagination(response.pagination);
       window.history.replaceState({}, document.title, `${url.pathname}?${params.toString()}`);
@@ -243,17 +222,17 @@ const Connections = ({ userId, talent, canUpdate }) => {
     params.set("id", userId);
 
     if (field === "connectionType") {
-      if (option.name == "All") {
+      if (option == "All") {
         params.delete("connection_type");
       } else {
-        params.set("connection_type", option.value);
+        params.set("connection_type", option);
       }
       params.set("keyword", keyword);
     }
 
     if (field === "keyword") {
-      if (connectionType.name != "All") {
-        params.set("connection_type", connectionType.value);
+      if (connectionType != "all") {
+        params.set("connection_type", connectionType);
       }
 
       params.set("keyword", option);
@@ -262,9 +241,7 @@ const Connections = ({ userId, talent, canUpdate }) => {
     search(params);
   };
 
-  const changeOptions = (e, field, option) => {
-    e.preventDefault();
-
+  const changeOptions = (field, option) => {
     if (field === "connectionType") {
       setConnectionType(option);
     }
@@ -277,30 +254,12 @@ const Connections = ({ userId, talent, canUpdate }) => {
   return (
     <section className="d-flex flex-column mx-4">
       <H4 className="text-center mb-3" text="Connections" />
-      <div className="mb-5 row justify-content-center ">
-        <div className="col-6 col-lg-2 d-flex">
-          <P2 className={cx("text-primary-01 mr-1", mobile && "ml-5")} bold text={talent?.supporters_count || "0"} />
-          <P2 className="text-primary-04" text="Stakers" />
-        </div>
-        <div className="col-6 col-lg-2 d-flex">
-          <P2 className="text-primary-01 mr-1" bold text={talent?.supporting_count || "0"} />
-          <P2 className="text-primary-04" text="Staking" />
-        </div>
-        <div className="col-6 col-lg-2 d-flex">
-          <P2 className={cx("text-primary-01 mr-1", mobile && "ml-5")} bold text={talent?.subscribers_count || "0"} />
-          <P2 className="text-primary-04" text="Subscribers" />
-        </div>
-        <div className="col-6 col-lg-2 d-flex">
-          <P2 className="text-primary-01 mr-1" bold text={talent?.subscribing_count || "0"} />
-          <P2 className="text-primary-04" text="Subscribing" />
-        </div>
-      </div>
       {talent?.connections_count > 0 && (
         <>
           <SearchForm
-            options={options}
+            supportersCount={talent?.aggregate_supporters_count}
+            supportingCount={talent?.aggregate_supporting_count}
             changeOptions={changeOptions}
-            connectionType={connectionType}
             keyword={keyword}
             mobile={mobile}
           />

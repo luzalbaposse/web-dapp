@@ -21,6 +21,9 @@ class Connection < ApplicationRecord
   SUBSCRIBER = "subscriber".freeze
   SUBSCRIBING = "subscribing".freeze
 
+  SUPPORTERS = [SPONSOR, STAKER, SUBSCRIBER]
+  SUPPORTING = [SPONSORING, STAKING, SUBSCRIBING]
+
   enum connection_type: {
     sponsor: 8,
     sponsored: 7,
