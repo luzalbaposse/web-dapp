@@ -33,6 +33,7 @@ RSpec.describe Connection, type: :model do
         updated_connection = connection.refresh_connection!
 
         expect(updated_connection.connection_type).to eq "subscribing"
+        expect(updated_connection.connection_types).to eq ["subscribing"]
       end
     end
 
@@ -45,6 +46,7 @@ RSpec.describe Connection, type: :model do
         updated_connection = connection.refresh_connection!
 
         expect(updated_connection.connection_type).to eq "subscriber"
+        expect(updated_connection.connection_types).to eq ["subscriber"]
       end
     end
 
@@ -59,6 +61,7 @@ RSpec.describe Connection, type: :model do
         updated_connection = connection.refresh_connection!
 
         expect(updated_connection.connection_type).to eq "staking"
+        expect(updated_connection.connection_types).to eq ["staking"]
       end
     end
 
@@ -73,6 +76,7 @@ RSpec.describe Connection, type: :model do
         updated_connection = connection.refresh_connection!
 
         expect(updated_connection.connection_type).to eq "staker"
+        expect(updated_connection.connection_types).to eq ["staker"]
       end
     end
 
@@ -92,6 +96,7 @@ RSpec.describe Connection, type: :model do
         updated_connection = connection.refresh_connection!
 
         expect(updated_connection.connection_type).to eq "mutual_stake"
+        expect(updated_connection.connection_types).to match_array ["staker", "staking"]
       end
     end
 
@@ -105,6 +110,7 @@ RSpec.describe Connection, type: :model do
         updated_connection = connection.refresh_connection!
 
         expect(updated_connection.connection_type).to eq "mutual_subscription"
+        expect(updated_connection.connection_types).to match_array ["subscriber", "subscribing"]
       end
     end
 
@@ -117,6 +123,7 @@ RSpec.describe Connection, type: :model do
         updated_connection = connection.refresh_connection!
 
         expect(updated_connection.connection_type).to eq "sponsor"
+        expect(updated_connection.connection_types).to match_array ["sponsoring"]
       end
     end
 
@@ -129,6 +136,33 @@ RSpec.describe Connection, type: :model do
         updated_connection = connection.refresh_connection!
 
         expect(updated_connection.connection_type).to eq "sponsored"
+        expect(updated_connection.connection_types).to match_array ["sponsor"]
+      end
+    end
+
+    context "when the users subscribe, stake and sponsor each other" do
+      before do
+        create :subscription, user: user, subscriber: connected_user
+        create :subscription, user: connected_user, subscriber: user
+
+        talent_one = create :talent, user: user
+        token_one = create :talent_token, talent: talent_one, deployed: true
+
+        talent_two = create :talent, user: connected_user
+        token_two = create :talent_token, talent: talent_two, deployed: true
+
+        create :talent_supporter, supporter_wallet_id: connected_user.wallet_id, talent_contract_id: token_one.contract_id, amount: "1000000", first_time_bought_at: Date.yesterday
+        create :talent_supporter, supporter_wallet_id: user.wallet_id, talent_contract_id: token_two.contract_id, amount: "1000000", first_time_bought_at: Date.yesterday
+
+        create :sponsorship, sponsor: user.wallet_id, talent: connected_user.wallet_id, claimed_at: Time.current
+        create :sponsorship, sponsor: connected_user.wallet_id, talent: user.wallet_id, claimed_at: Time.current
+      end
+
+      it "updates the connection type to sponsor" do
+        updated_connection = connection.refresh_connection!
+
+        expect(updated_connection.connection_type).to eq "sponsor"
+        expect(updated_connection.connection_types).to match_array ["sponsor", "staker", "subscriber", "sponsoring", "staking", "subscribing"]
       end
     end
   end

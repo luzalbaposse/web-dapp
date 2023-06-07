@@ -14,6 +14,13 @@ class Connection < ApplicationRecord
   # user is subscribing and is a being subscribed by the connected_user
   # user is a subscriber of connected_user
   # user is subscribing the connected_user
+  SPONSOR = "sponsor".freeze
+  SPONSORING = "sponsoring".freeze
+  STAKER = "staker".freeze
+  STAKING = "staking".freeze
+  SUBSCRIBER = "subscriber".freeze
+  SUBSCRIBING = "subscribing".freeze
+
   enum connection_type: {
     sponsor: 8,
     sponsored: 7,
@@ -32,6 +39,7 @@ class Connection < ApplicationRecord
     user_invested_amount = user.amount_invested_in(connected_user)
     connected_user_invested_amount = connected_user.amount_invested_in(user)
     connection_type = calculate_connection_type(user_invested_amount, connected_user_invested_amount)
+    connection_types = calculate_connection_types(user_invested_amount, connected_user_invested_amount)
 
     return destroy! unless connection_type
 
@@ -39,6 +47,7 @@ class Connection < ApplicationRecord
       user_invested_amount: user_invested_amount,
       connected_user_invested_amount: connected_user_invested_amount,
       connection_type: connection_type,
+      connection_types: connection_types,
       connected_at: connected_at
     )
 
@@ -56,6 +65,18 @@ class Connection < ApplicationRecord
     return 3 if user.subscribing.find_by(user_id: connected_user_id).present? && connected_user.subscribing.find_by(user_id: user_id).present?
     return 2 if connected_user.subscribing.find_by(user_id: user_id).present?
     return 1 if user.subscribing.find_by(user_id: connected_user_id).present?
+  end
+
+  def calculate_connection_types(user_invested_amount, connected_user_invested_amount)
+    connection_types << SPONSOR if users_with_wallets_connected? && connected_user_sponsorsing_user?
+    connection_types << STAKER if connected_user_invested_amount.to_i.positive?
+    connection_types << SUBSCRIBER if connected_user.subscribing.find_by(user_id: user_id).present?
+
+    connection_types << SPONSORING if users_with_wallets_connected? && user_sponsoring_connected_user?
+    connection_types << STAKING if user_invested_amount.to_i.positive?
+    connection_types << SUBSCRIBING if user.subscribing.find_by(user_id: connected_user_id).present?
+
+    connection_types.uniq
   end
 
   def users_with_wallets_connected?
