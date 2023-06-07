@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_01_152928) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_06_103845) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -182,6 +182,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_01_152928) do
     t.bigint "user_id"
     t.bigint "connected_user_id"
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.string "connection_types", default: [], array: true
     t.index ["connected_user_id"], name: "index_connections_on_connected_user_id"
     t.index ["connection_type"], name: "index_connections_on_connection_type"
     t.index ["created_at"], name: "index_connections_on_created_at"

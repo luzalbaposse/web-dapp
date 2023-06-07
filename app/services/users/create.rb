@@ -16,10 +16,6 @@ module Users
         create_talent(user, params)
         create_talent_token(user)
 
-        if invite&.user
-          update_race_score(invite.user)
-        end
-
         create_invite(user)
         create_subscription(invite, user)
         create_activity_feed(user)
@@ -117,10 +113,6 @@ module Users
       return unless inviter
 
       CreateNotification.new.call(recipient: inviter, source_id: user.id, type: InviteUsedNotification)
-    end
-
-    def update_race_score(user)
-      Leaderboards::RefreshUserScore.new(user: user).call
     end
 
     def create_subscription(invite, user)
