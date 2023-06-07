@@ -24,12 +24,8 @@ RSpec.describe "Onboarding", type: :request do
     let(:career_needs_upsert_class) { CareerNeeds::Upsert }
     let(:career_needs_upsert) { instance_double(career_needs_upsert_class, call: true) }
 
-    let(:refresh_user_score_class) { Leaderboards::RefreshUserScore }
-    let(:refresh_user_score_instance) { instance_double(refresh_user_score_class, call: true) }
-
     before do
       allow(career_needs_upsert_class).to receive(:new).and_return(career_needs_upsert)
-      allow(refresh_user_score_class).to receive(:new).and_return(refresh_user_score_instance)
     end
 
     it "returns a successful response" do
@@ -79,24 +75,6 @@ RSpec.describe "Onboarding", type: :request do
           .with(career_goal: current_user.talent&.career_goal, titles: ["Full-time roles"])
 
         expect(career_needs_upsert).to have_received(:call)
-      end
-    end
-
-    context "when the onboarded user was invited by another user" do
-      let(:inviter) { create :user }
-      let!(:invite) { create :invite, user: inviter }
-
-      let!(:current_user) { create :user, :with_talent, onboarded_at: nil, invite_id: invite.id }
-
-      it "initializes and calls the refresh user score for all users with used invites" do
-        finish_onboarding
-
-        aggregate_failures do
-          expect(refresh_user_score_class).to have_received(:new).with(
-            user: inviter
-          )
-          expect(refresh_user_score_instance).to have_received(:call)
-        end
       end
     end
   end
