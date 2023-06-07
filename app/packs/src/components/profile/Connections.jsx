@@ -3,14 +3,12 @@ import { toast } from "react-toastify";
 import { ToastBody } from "src/components/design_system/toasts";
 
 import { get } from "src/utils/requests";
-import { ethers } from "ethers";
-import { parseAndCommify } from "src/onchain/utils";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 import debounce from "lodash/debounce";
 
-import { H4, H5, P2, P3, Caption } from "src/components/design_system/typography";
+import { H4, H5, P2, Caption } from "src/components/design_system/typography";
 import ThemedButton from "src/components/design_system/button";
 import { useWindowDimensionsHook } from "src/utils/window";
 import { useTheme } from "src/contexts/ThemeContext";
@@ -18,16 +16,12 @@ import TalentProfilePicture from "src/components/talent/TalentProfilePicture";
 import Table from "src/components/design_system/table";
 import { lightTextPrimary03, darkTextPrimary03 } from "src/utils/colors.js";
 import TextInput from "src/components/design_system/fields/textinput";
-import { Search, OrderBy } from "src/components/icons";
+import { Search } from "src/components/icons";
 import { Tabs, useTabs, Tag } from "@talentprotocol/design-system";
 
 import cx from "classnames";
 
-const ConnectionTable = ({ connections, mode, ticker, mobile }) => {
-  const displayableAmount = amount => {
-    return `${parseAndCommify(ethers.utils.formatUnits(amount || 0))}`;
-  };
-
+const ConnectionTable = ({ connections, mode, mobile }) => {
   const formattedConnectionType = connection_type => {
     return {
       sponsor: "Sponsor",
