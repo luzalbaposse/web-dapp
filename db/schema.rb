@@ -12,12 +12,10 @@
 
 ActiveRecord::Schema[7.0].define(version: 2023_06_06_103845) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_stat_statements"
-  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "activities", force: :cascade do |t|
-    t.jsonb "content", null: false
+    t.string "content", null: false
     t.bigint "origin_user_id", null: false
     t.bigint "target_user_id"
     t.datetime "created_at", null: false
