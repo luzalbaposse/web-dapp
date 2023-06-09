@@ -10,8 +10,10 @@ const signIn = (email, password) => {
   return axios.post(
     "/session",
     {
-      email,
-      password
+      session: {
+        email,
+        password
+      }
     },
     {
       headers: {
