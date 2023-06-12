@@ -10,4 +10,12 @@ class ActivityFeed < ApplicationRecord
     # Merge global and user-specific activities using UNION
     Activity.from("(#{global_activities} UNION #{user_activities}) AS activities")
   end
+
+  def activities_of_type(type)
+    global_activities = Activity.where(global: true).where(type: type).to_sql
+    user_activities = activities.where(type: type).to_sql
+
+    # Merge global and user-specific activities using UNION
+    Activity.from("(#{global_activities} UNION #{user_activities}) AS activities")
+  end
 end

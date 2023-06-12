@@ -1,8 +1,9 @@
 import React, { createRef, useCallback, useEffect, useState } from "react";
-import { Avatar, Button, Input, Typography } from "@talentprotocol/design-system";
+import { Avatar, Button, Dropdown, Input, Typography } from "@talentprotocol/design-system";
 import {
   ActivityContainer,
   Container,
+  FilterContainer,
   LoadMoreContainer,
   ReplyArea,
   TitleDateWrapper,
@@ -30,6 +31,17 @@ const ACTIVITY_TYPE_TO_TITLE_MAP = {
 let inputRefs = [];
 const perPage = 8;
 
+const DROPDOWN_OPTIONS = [
+  { type: undefined, value: "All"},
+  { type: "Activities::CareerUpdate", value: "Updates"},
+  { type: "Activities::TokenLaunch", value: "Token Launches"},
+  { type: "Activities::ProfileComplete", value: "Complete Profiles"},
+  { type: "Activities::Stake", value: "Staking"},
+  { type: "Activities::Sponsor", value: "Sponsors"},
+  { type: "Activities::Subscribe", value: "Subscribes"},
+
+]
+
 export const ActivityWidget = ({ profile = {} }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [activity, setActivity] = useState({
@@ -39,15 +51,16 @@ export const ActivityWidget = ({ profile = {} }) => {
       cursor: undefined
     }
   });
+  const [filter, setFilter] = useState(DROPDOWN_OPTIONS[0]);
   const [inputsWithContent, setInputsWithContent] = useState([]);
-  const loadMore = useCallback(() => {
+  const loadMore = useCallback((tempFilterType) => {
     activityService
-      .getActivity(perPage, activity.pagination.cursor)
+      .getActivity(perPage, activity.pagination.cursor, tempFilterType)
       .then(({ data }) => {
         const recentActivities = [...data.activities];
         setActivity({
           ...data,
-          activities: [...activity.activities, ...recentActivities]
+          activities: tempFilterType ? [...recentActivities] : [...activity.activities, ...recentActivities]
         });
         setInputsWithContent(new Array(data.activities.length).fill(false));
         setIsLoading(false);
@@ -55,7 +68,7 @@ export const ActivityWidget = ({ profile = {} }) => {
       .catch(error => {
         console.error(error);
       });
-  }, [setActivity, setIsLoading, setInputsWithContent, activity]);
+  }, [setActivity, setIsLoading, setInputsWithContent, activity, filter]);
   useEffect(() => {
     inputRefs = [];
     loadMore();
@@ -93,6 +106,21 @@ export const ActivityWidget = ({ profile = {} }) => {
           <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
             Activity
           </Typography>
+          <FilterContainer>
+            <Typography specs={{ variant: "label2", type: "regular" }} color="primary03">
+              Filter by:
+            </Typography>
+            <Dropdown 
+              options={DROPDOWN_OPTIONS}
+              selectedOption={filter}
+              selectOption={(option) => {
+                if (option.type !== filter.type) {
+                  setFilter(option);
+                  loadMore(option.type);
+                }
+              }}
+            />
+          </FilterContainer>
         </TitleRow>
         <UpdatesContainer>
           {activity.activities.map((update, index) => {

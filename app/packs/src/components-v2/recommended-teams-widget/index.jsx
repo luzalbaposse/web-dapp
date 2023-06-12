@@ -25,14 +25,14 @@ export const RecommendedTeamsWidget = ({}) => {
 
     let discoveryRows = [];
     const rows = rowsResponse.data.discovery_rows;
-    let talentsResponse = await axios.get(`/api/v1/talent?page=1&discovery_row_id=${rows[0].id}&per_page=4`);
+    let talentsResponse = await axios.get(`/api/v1/talent?page=1&discovery_row_id=${rows[0]?.id}&per_page=4`);
     discoveryRows = [
       {
         discoveryRow: rows[0],
         talentsData: talentsResponse.data
       }
     ];
-    talentsResponse = await axios.get(`/api/v1/talent?page=1&discovery_row_id=${rows[1].id}&per_page=4`);
+    talentsResponse = await axios.get(`/api/v1/talent?page=1&discovery_row_id=${rows[1]?.id}&per_page=4`);
     discoveryRows = [
       ...discoveryRows,
       {
@@ -40,7 +40,7 @@ export const RecommendedTeamsWidget = ({}) => {
         talentsData: talentsResponse.data
       }
     ];
-    talentsResponse = await axios.get(`/api/v1/talent?page=1&discovery_row_id=${rows[2].id}&per_page=4`);
+    talentsResponse = await axios.get(`/api/v1/talent?page=1&discovery_row_id=${rows[2]?.id}&per_page=4`);
     discoveryRows = [
       ...discoveryRows,
       {
@@ -58,23 +58,23 @@ export const RecommendedTeamsWidget = ({}) => {
         <TextLink href="/discovery" text="View all" rightIcon="carret" color="primary" size="medium" />
       </TitleContainer>
       <TeamsList>
-        {discoveryRows.map(row => (
-          <EntryContainer href={`/discovery/${row.discoveryRow.slug}?page=1`} key={row.discoveryRow.slug}>
+        {discoveryRows.map((row, index) => (
+          <EntryContainer href={`/discovery/${row.discoveryRow?.slug}?page=1`} key={row.discoveryRow?.slug || index}>
             <Avatar
               size="md"
-              profileURL={`/discovery/${row.discoveryRow.slug}?page=1`}
-              url={row.discoveryRow.partnership.logo_url}
+              profileURL={`/discovery/${row.discoveryRow?.slug}?page=1`}
+              url={row.discoveryRow?.partnership.logo_url}
             />
             <InfoColumn>
               <InfoGroup>
                 <VerifiedNameRow>
                   <Typography specs={{ variant: "label2", type: "medium" }} color="primary01">
-                    {row.discoveryRow.title}
+                    {row.discoveryRow?.title}
                   </Typography>
                   {/* <Icon name="verified-2" size={22} color="primary" /> */}
                 </VerifiedNameRow>
                 <Typography specs={{ variant: "p3", type: "regular" }} color="primary03">
-                  {row.discoveryRow.description}
+                  {row.discoveryRow?.description}
                 </Typography>
               </InfoGroup>
               <Tags>
@@ -82,7 +82,7 @@ export const RecommendedTeamsWidget = ({}) => {
                   backgroundColor="primaryTint02"
                   textColor="primaryText"
                   size="small"
-                  label={`@${row.discoveryRow.slug.toUpperCase()}`}
+                  label={`@${row.discoveryRow?.slug.toUpperCase()}`}
                 />
               </Tags>
               {!!row.talentsData.length && (
