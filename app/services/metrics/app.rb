@@ -218,7 +218,11 @@ module Metrics
 
       return 0 if body["errors"]&.any?
 
-      body["data"]["public_metrics"]["followers_count"]
+      if body["data"]&.any? && body["data"]["public_metrics"]&.any?
+        body["data"]["public_metrics"]["followers_count"]
+      else
+        0
+      end
     end
 
     def total_discord_members
