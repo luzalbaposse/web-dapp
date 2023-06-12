@@ -28,8 +28,10 @@ class API::V1::NotificationsController < ApplicationController
   end
 
   def mark_as_read
-    notification = current_user.notifications.find(params[:notification_id])
-    notification.mark_as_read! if notification.read_at.nil?
+    if current_user
+      notification = current_user.notifications.find(params[:notification_id])
+      notification.mark_as_read! if notification.read_at.nil?
+    end
 
     render json: {success: "Notification successfully updated."}, status: :ok
   end

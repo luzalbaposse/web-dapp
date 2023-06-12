@@ -32,6 +32,7 @@ module Users
         UserProductAnnouncement.where(user_id: user.id).destroy_all
         Subscription.where(user: user).destroy_all
         Subscription.where(subscriber: user).destroy_all
+        Reward.where(user: user).destroy_all
 
         user.destroy!
       end
