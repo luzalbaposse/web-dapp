@@ -62,6 +62,7 @@ export const EmailPasswordStep = ({ setIsNextDisable, setUser, user }) => {
         if (data.error) {
           setEmailError(data.error);
           setIsNextDisable(true);
+          validateStep();
         } else {
           setEmailError("");
           setUser({
@@ -79,8 +80,10 @@ export const EmailPasswordStep = ({ setIsNextDisable, setUser, user }) => {
   const validateEmailStep = useCallback(() => {
     if (validateEmail(emailRef?.current?.value)) {
       debouncedEmailLookup();
+      return true;
     } else {
       setEmailError("Email is invalid.");
+      return false;
     }
   }, [emailRef, setEmailError, setUser, user]);
 
@@ -102,7 +105,7 @@ export const EmailPasswordStep = ({ setIsNextDisable, setUser, user }) => {
         setIsNextDisable(true);
       }
     },
-    [emailError, setIsPasswordCorrect, emailRef, passwordRef, user, setUser, passwordsMatch, confirmPasswordRef]
+    [emailError, setIsPasswordCorrect, emailRef, passwordRef, user, setUser, passwordsMatch, confirmPasswordRef, validateEmailStep]
   );
   return (
     <>

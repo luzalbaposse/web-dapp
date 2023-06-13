@@ -18,7 +18,7 @@ export const WelcomeStep = ({ linkedinRedirectUri, linkedinClientId, inviteProps
   useEffect(() => {
     if (typeof window !== "undefined") {
       const username = window.location.href.split("/join/")[1];
-      if (username) {
+      if (username !== "welcome") {
         setState("invite");
         return;
       }

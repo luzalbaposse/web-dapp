@@ -141,28 +141,29 @@ export const OccupationStep = ({ user, setUser, setIsNextDisable }) => {
       return parsedValue;
     })
   );
+  const [activeTags, setActiveTags] = useState([]);
   const updatePills = useCallback(
     index => {
       const parsedTags = [...tags];
+      const tempActiveTags = parsedTags.filter(tag => tag.isSelected);
+      if (tempActiveTags.length === 5 && !parsedTags[index].isSelected) return;
       parsedTags[index].isSelected = !parsedTags[index].isSelected;
+      const localActiveTags = parsedTags.filter(tag => tag.isSelected);
       setTags(parsedTags);
+      setActiveTags(localActiveTags);
       setUser({
         ...user,
-        tags: parsedTags.reduce((acc, el) => {
-          if (el.isSelected) {
-            acc.push(el.content);
-          }
-          return acc;
-        }, [])
+        tags: localActiveTags
       });
     },
-    [tags, setTags, user, setUser]
+    [tags, setTags, user, setUser, setActiveTags]
   );
   useEffect(() => {
     requestAnimationFrame(() => {
       setIsNextDisable(false);
     });
   }, [setIsNextDisable]);
+  
   return (
     <>
       <TitleRow>
@@ -170,10 +171,10 @@ export const OccupationStep = ({ user, setUser, setIsNextDisable }) => {
           What best describes your occupation?
         </Typography>
         <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
-          Choose one or more tags. You can add more later.
+          Choose up to five tags. You can edit this later.
         </Typography>
       </TitleRow>
-      <PillsContainer>
+      <PillsContainer activeTagsSize={activeTags.length === 5} tags={tags}>
         <Pills onClick={updatePills} pillList={tags} />
       </PillsContainer>
     </>

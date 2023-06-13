@@ -73,22 +73,22 @@ export const LookingForStep = ({ user, setUser, setIsNextDisable }) => {
       return parsedValue;
     })
   );
+  const [activeTags, setActiveTags] = useState([]);
   const updateTags = useCallback(
     index => {
       const parsedTags = [...tags];
+      const tempActiveTags = parsedTags.filter(tag => tag.isSelected);
+      if (tempActiveTags.length === 5 && !parsedTags[index].isSelected) return;
       parsedTags[index].isSelected = !parsedTags[index].isSelected;
+      const localActiveTags = parsedTags.filter(tag => tag.isSelected);
       setTags(parsedTags);
+      setActiveTags(localActiveTags);
       setUser({
         ...user,
-        careerNeeds: parsedTags.reduce((acc, el) => {
-          if (el.isSelected) {
-            acc.push(el.content);
-          }
-          return acc;
-        }, [])
+        tags: localActiveTags
       });
     },
-    [tags, setTags, user, setUser]
+    [tags, setTags, user, setUser, setActiveTags]
   );
   useEffect(() => {
     requestAnimationFrame(() => {
@@ -105,7 +105,7 @@ export const LookingForStep = ({ user, setUser, setIsNextDisable }) => {
           Choose one or more. You can add more later.
         </Typography>
       </TitleRow>
-      <PillsContainer>
+      <PillsContainer activeTagsSize={activeTags.length === 5} tags={tags}>
         <Pills pillList={tags} onClick={updateTags} />
       </PillsContainer>
     </>
