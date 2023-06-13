@@ -43,7 +43,17 @@ RSpec.describe "validations", type: :request do
       it "renders an invalid response" do
         valid_username
 
-        expect(json).to eq({error: "Username only allows lower case letters and numbers."})
+        expect(json).to eq({error: "Username only allows lower case letters and numbers with a maximum of 50 characters."})
+      end
+    end
+
+    context "when the username is invalid exceeding the number of charcters" do
+      let(:username) { "abcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcde" }
+
+      it "renders an invalid response" do
+        valid_username
+
+        expect(json).to eq({error: "Username only allows lower case letters and numbers with a maximum of 50 characters."})
       end
     end
   end

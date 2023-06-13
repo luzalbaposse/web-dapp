@@ -1,8 +1,9 @@
 module CareerUpdates
   class Create
-    def initialize(sender:, message:)
+    def initialize(sender:, message:, goals:)
       @sender = sender
       @message = message
+      @goals = goals
     end
 
     def call
@@ -13,13 +14,22 @@ module CareerUpdates
 
     private
 
-    attr_reader :sender, :message
+    attr_reader :sender, :message, :goals
 
     def create_career_update
-      CareerUpdate.create!(
-        text: message,
-        user: sender
-      )
+      ActiveRecord::Base.transaction do
+        career_update = CareerUpdate.create!(
+          text: message,
+          user: sender
+        )
+
+        goals&.each do |goal|
+          goal = Goal.find(goal[:id])
+          career_update.goals << goal
+        end
+
+        career_update
+      end
     end
   end
 end

@@ -3,9 +3,11 @@ require "rails_helper"
 RSpec.describe CareerUpdates::Create do
   let(:sender) { create :user }
   let(:message) { "Career update!" }
+  let(:goal) { create :goal }
+  let(:milestone) { create :milestone }
 
   subject(:create_career_update) do
-    described_class.new(sender: sender, message: message).call
+    described_class.new(sender: sender, message: message, goals: [{id: goal.id}]).call
   end
 
   describe "#call" do
@@ -22,6 +24,12 @@ RSpec.describe CareerUpdates::Create do
 
     it "enqueues a job to broadcast the update" do
       expect { create_career_update }.to have_enqueued_job(BroadcastCareerUpdateJob)
+    end
+
+    it "associates the goals" do
+      career_update = create_career_update
+
+      expect(career_update.goals.first.id).to eq(goal.id)
     end
   end
 end

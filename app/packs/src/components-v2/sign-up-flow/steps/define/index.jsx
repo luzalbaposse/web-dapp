@@ -7,10 +7,17 @@ import Select from "react-select";
 export const DefineStep = ({ user, setUser, setIsNextDisable }) => {
   const [gender, setGender] = useState({ value: user.gender || "" });
   const [nationality, setNationality] = useState({ value: user.nationality || "" });
+  const [locationError, setLocationError] = useState("");
   const locationRef = useRef(null);
   const validateStep = useCallback(
     (genderParameter, nationalityParameter) => {
-      if ((!!genderParameter || !!gender) && (!!nationalityParameter || !!nationality) && locationRef.current.value) {
+      if (locationRef.current.value?.match(/[^a-zA-Z\s]/)) {
+        setLocationError("Please enter a valid location");
+        return;
+      } else {
+        setLocationError("");
+      }
+      if ((!!genderParameter || !!gender) && (!!nationalityParameter || !!nationality)) {
         setUser({
           ...user,
           gender: gender?.value || genderParameter,
@@ -22,7 +29,7 @@ export const DefineStep = ({ user, setUser, setIsNextDisable }) => {
         setIsNextDisable(true);
       }
     },
-    [gender, nationality, locationRef, user, setUser]
+    [gender, nationality, locationRef, user, setUser, setLocationError]
   );
   useEffect(() => {
     requestAnimationFrame(() => {
@@ -82,7 +89,7 @@ export const DefineStep = ({ user, setUser, setIsNextDisable }) => {
         </RowWithMargin>
         <RowWithMargin>
           <Typography specs={{ variant: "p2", type: "bold" }} color="primary01">
-            Location
+            City you currently live in
           </Typography>
           <Input
             placeholder="Porto, Portugal"
@@ -90,6 +97,8 @@ export const DefineStep = ({ user, setUser, setIsNextDisable }) => {
             onBlur={validateStep}
             inputRef={locationRef}
             defaultValue={user.location}
+            hasError={!!locationError}
+            shortDescription={locationError}
           />
         </RowWithMargin>
       </Form>

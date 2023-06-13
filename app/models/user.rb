@@ -120,8 +120,10 @@ class User < ApplicationRecord
   end
   # [CLEARANCE] end
 
+  # usernames were restricted to 50 characters to avoid UI issues
+  # checkout the notion page: https://www.notion.so/talentprotocol/Onboarding-Improvements-f79a65c37309419b9de8e05d794bc170?pvs=4
   def self.valid_username?(new_username)
-    new_username && new_username.length > 0 && new_username.match?(/^[a-z0-9]*$/)
+    new_username && new_username.length > 0 && new_username.length <= 50 && new_username.match?(/^[a-z0-9]*$/)
   end
 
   def self.valid_email?(new_email)

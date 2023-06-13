@@ -3,8 +3,6 @@ class API::V1::PublicAPI::ActivitiesController < API::V1::PublicAPI::APIControll
   before_action :authenticated_only
 
   def index
-    total_activities = current_user.activity_feed.all_activities
-
     pagy, activities = pagy_uuid_cursor(
       total_activities,
       before: cursor,
@@ -22,5 +20,15 @@ class API::V1::PublicAPI::ActivitiesController < API::V1::PublicAPI::APIControll
     log_request(response_body, :ok)
 
     render json: response_body, status: :ok
+  end
+
+  private
+
+  def activity_params
+    params.permit(:type)
+  end
+
+  def total_activities
+    @total_activities ||= activity_params[:type].present? ? current_user.activity_feed.activities_of_type(params[:type]) : current_user.activity_feed.all_activities
   end
 end

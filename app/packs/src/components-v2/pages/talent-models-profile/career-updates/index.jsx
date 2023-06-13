@@ -1,20 +1,21 @@
-import { Spinner, Typography } from "@talentprotocol/design-system";
+import { Spinner, Typography, useModal } from "@talentprotocol/design-system";
 import React, { useEffect, useMemo, useState } from "react";
 import { useTalentCareerUpdatesFetcher } from "../../../../hooks/use-talent-career-updates-fetcher";
 import { CareerUpdateEmptyState } from "./empty-state";
 import { Container, InputContainer, TitleContainer } from "./styled";
 import { CareerUpdate } from "../../../career-update";
 import { CareerUpdateLockedState } from "./locked-state";
-import SendCareerUpdateModal from "../../../../components/profile/SendCareerUpdateModal";
 import TextInput from "src/components/design_system/fields/textinput";
+import { SendCareerUpdateModalV2 } from "../../../send-career-update-modal";
 
-export const CareerUpdates = ({ profile, isCurrentUserProfile, railsContext, setProfile }) => {
+export const CareerUpdates = ({ profile, currentUserProfile, isCurrentUserProfile, railsContext, setProfile }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLocked, setIsLocked] = useState(false);
-  const [isSendCareerUpdateModalOpen, setShowCareerUpdateModal] = useState(false);
   const { careerUpdates, fetchCareerUpdates } = useTalentCareerUpdatesFetcher();
+
+  const sendCareerUpdateModalState = useModal();
   useEffect(() => {
-    fetchCareerUpdates(profile.user.username)
+    fetchCareerUpdates(currentUserProfile.username)
       .then(() => {
         setIsLoading(false);
       })
@@ -30,9 +31,9 @@ export const CareerUpdates = ({ profile, isCurrentUserProfile, railsContext, set
     if (!careerUpdates.length) {
       return (
         <CareerUpdateEmptyState
-          profile={profile}
           isCurrentUserProfile={isCurrentUserProfile}
           contractsEnv={railsContext}
+          currentUserProfile={currentUserProfile}
         />
       );
     }
@@ -40,23 +41,22 @@ export const CareerUpdates = ({ profile, isCurrentUserProfile, railsContext, set
       <>
         <TitleContainer>
           <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
-            {profile.user.legal_first_name}'s career updates
+            {currentUserProfile.name}'s career updates
           </Typography>
         </TitleContainer>
 
         {isCurrentUserProfile && (
-          <SendCareerUpdateModal
-            show={isSendCareerUpdateModalOpen}
-            hide={() => setShowCareerUpdateModal(false)}
-            placeholder={`What's new in your career ${profile.user.name}?`}
-            contractsEnv={railsContext.contractsEnv}
+          <SendCareerUpdateModalV2
+            isOpen={sendCareerUpdateModalState.isOpen}
+            closeModal={sendCareerUpdateModalState.closeModal}
+            profile={currentUserProfile}
           />
         )}
         <InputContainer>
           {isCurrentUserProfile && (
             <TextInput
               placeholder={`What's new in your career ${profile.user.name}?`}
-              onClick={() => setShowCareerUpdateModal(true)}
+              onClick={sendCareerUpdateModalState.openModal}
               className="w-100"
             />
           )}
@@ -75,11 +75,11 @@ export const CareerUpdates = ({ profile, isCurrentUserProfile, railsContext, set
     careerUpdates,
     profile,
     isLocked,
-    isSendCareerUpdateModalOpen,
-    setShowCareerUpdateModal,
+    sendCareerUpdateModalState,
     railsContext,
     isCurrentUserProfile,
-    setProfile
+    setProfile,
+    currentUserProfile
   ]);
   return <Container>{isLoading ? <Spinner /> : RenderedContent}</Container>;
 };

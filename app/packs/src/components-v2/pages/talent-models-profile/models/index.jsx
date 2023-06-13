@@ -9,7 +9,7 @@ export const Models = ({ profile, setProfile, isCurrentUserProfile, currentUserI
   <Container>
     <TitleContainer>
       <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
-        Support {profile.user.name}'s career
+        Support {profile.user.display_name}'s career
       </Typography>
     </TitleContainer>
     <SupportModelsContainer>

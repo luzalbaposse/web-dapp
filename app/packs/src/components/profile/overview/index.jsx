@@ -18,10 +18,11 @@ import RejectTalentModal from "../RejectTalentModal";
 import ApprovalConfirmationModal from "../ApprovalConfirmationModal";
 import AdminVerificationConfirmationModal from "../AdminVerificationConfirmationModal";
 import PersonaVerificationConfirmationModal from "../PersonaVerificationConfirmationModal";
-import SendCareerUpdateModal from "../SendCareerUpdateModal";
 import { Banner } from "src/components-v2/banner";
 import { darkBg01, lightBg01 } from "src/utils/colors";
 import { ProfileCard } from "src/components-v2/profile-card";
+import { useModal } from "@talentprotocol/design-system";
+import { SendCareerUpdateModalV2 } from "../../../components-v2/send-career-update-modal";
 
 const Overview = ({
   className,
@@ -38,7 +39,8 @@ const Overview = ({
   setPreviewMode,
   isCurrentUserImpersonated,
   withPersonaRequest,
-  profileSubdomain
+  profileSubdomain,
+  currentUserProfile
 }) => {
   const { mobile } = useWindowDimensionsHook();
   const { mode } = useTheme();
@@ -46,12 +48,13 @@ const Overview = ({
   const [showApprovalConfirmationModal, setShowApprovalConfirmationModal] = useState(false);
   const [showAdminVerificationConfirmationModal, setShowAdminVerificationConfirmationModal] = useState(false);
   const [showPersonaVerificationConfirmationModal, setShowPersonaVerificationConfirmationModal] = useState(false);
-  const [showCareerUpdateModal, setShowCareerUpdateModal] = useState(false);
   const [isUploadingProfile, setIsUploadingProfile] = useState(false);
   const [isUploadingBanner, setIsUploadingBanner] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [overviewProfileFileInput, setOverviewProfileFileInput] = useState(null);
   const [overviewBannerFileInput, setOverviewBannerFileInput] = useState(null);
+
+  const sendCareerUpdateModalState = useModal();
 
   const user = profile.user;
   const talentToken = profile.talent_token;
@@ -418,7 +421,7 @@ const Overview = ({
         mobile={mobile}
         talentTokenPrice={talentTokenPrice}
         canUpdate={canUpdate}
-        setShowCareerUpdateModal={setShowCareerUpdateModal}
+        setShowCareerUpdateModal={sendCareerUpdateModalState.openModal}
       >
         {mobile ? (
           <>
@@ -740,14 +743,11 @@ const Overview = ({
         talent={profile}
         setProfile={setProfile}
       />
-      {showCareerUpdateModal && canUpdate && (
-        <SendCareerUpdateModal
-          show={showCareerUpdateModal}
-          hide={() => setShowCareerUpdateModal(false)}
-          placeholder={`What's new in your career ${user.name}?`}
-          contractsEnv={railsContext.contractsEnv}
-        />
-      )}
+      <SendCareerUpdateModalV2
+        isOpen={sendCareerUpdateModalState.isOpen}
+        closeModal={sendCareerUpdateModalState.closeModal}
+        profile={currentUserProfile}
+      />
       {editMode && (
         <EditOverviewModal show={editMode} hide={() => setEditMode(false)} profile={profile} setProfile={setProfile} />
       )}

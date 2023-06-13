@@ -38,7 +38,8 @@ class API::V1::PublicAPI::CareerUpdatesController < API::V1::PublicAPI::APIContr
 
     service = CareerUpdates::Create.new(
       sender: sender,
-      message: career_update_params[:message]
+      message: career_update_params[:message],
+      goals: career_update_params[:goals]
     )
     career_update = service.call
 
@@ -62,9 +63,11 @@ class API::V1::PublicAPI::CareerUpdatesController < API::V1::PublicAPI::APIContr
   end
 
   def career_update_params
-    params.require(:career_update).permit(
-      :message
-    )
+    params.require(:career_update)
+      .permit(
+        :message,
+        goals: [:id]
+      )
   end
 
   def user_param_id

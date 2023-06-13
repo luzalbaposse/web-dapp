@@ -17,93 +17,47 @@ import { DefaultFooter } from "./default-footer";
 import { ActionContainer, Container, StepContainer, StepCounterContainer } from "./styled";
 import { EmailFooter } from "./email-footer";
 import { Captcha } from "./steps/captcha";
-import { OnBoardFlow } from "../on-board-flow";
 
-const STEP_TO_COMPONENT_MAP = isDesktop =>
-  isDesktop
-    ? {
-        1: {
-          component: WelcomeStep,
-          path: "welcome"
-        },
-        2: {
-          component: EmailPasswordStep,
-          path: "email_password"
-        },
-        3: {
-          component: LegalNameStep,
-          path: "legal_names"
-        },
-        4: {
-          component: HandleStep,
-          path: "handle"
-        },
-        5: {
-          component: DefineStep,
-          path: "define"
-        },
-        6: {
-          component: OccupationStep,
-          path: "occupation"
-        },
-        7: {
-          component: LookingForStep,
-          path: "looking_for"
-        },
-        8: {
-          component: IntroductionStep,
-          path: "introduction"
-        },
-        9: {
-          component: ConfirmEmailStep,
-          path: "confirm_email"
-        }
-      }
-    : {
-        1: {
-          component: OnBoardFlow,
-          path: "onboard"
-        },
-        2: {
-          component: WelcomeStep,
-          path: "welcome"
-        },
-        3: {
-          component: EmailPasswordStep,
-          path: "email_password"
-        },
-        4: {
-          component: LegalNameStep,
-          path: "legal_names"
-        },
-        5: {
-          component: HandleStep,
-          path: "handle"
-        },
-        6: {
-          component: DefineStep,
-          path: "define"
-        },
-        7: {
-          component: OccupationStep,
-          path: "occupation"
-        },
-        8: {
-          component: LookingForStep,
-          path: "looking_for"
-        },
-        9: {
-          component: IntroductionStep,
-          path: "introduction"
-        },
-        10: {
-          component: ConfirmEmailStep,
-          path: "confirm_email"
-        }
-      };
+const STEP_TO_COMPONENT_MAP = {
+  1: {
+    component: WelcomeStep,
+    path: "welcome"
+  },
+  2: {
+    component: EmailPasswordStep,
+    path: "email_password"
+  },
+  3: {
+    component: LegalNameStep,
+    path: "legal_names"
+  },
+  4: {
+    component: HandleStep,
+    path: "handle"
+  },
+  5: {
+    component: DefineStep,
+    path: "define"
+  },
+  6: {
+    component: OccupationStep,
+    path: "occupation"
+  },
+  7: {
+    component: LookingForStep,
+    path: "looking_for"
+  },
+  8: {
+    component: IntroductionStep,
+    path: "introduction"
+  },
+  9: {
+    component: ConfirmEmailStep,
+    path: "confirm_email"
+  }
+};
 
-const CAN_SKIP_STEPS_DESKTOP = [5, 6, 7];
-const CAN_SKIP_STEPS_MOBILE = [6, 7, 8];
+const CAN_SKIP_STEPS = [5, 6, 7];
 
 export const SignUpFlow = props => {
   const captchaModalState = useModal();
@@ -127,18 +81,15 @@ export const SignUpFlow = props => {
       utmSource: props.utmSource
     });
   }, [props.code, props.utmSource, userBuilderState]);
-  const stepsState = useStepExperience(Object.keys(STEP_TO_COMPONENT_MAP(props.isDesktop)).length);
-  const StepScreen = useMemo(
-    () => STEP_TO_COMPONENT_MAP(props.isDesktop)[stepsState.currentStep].component,
-    [stepsState.currentStep]
-  );
+  const stepsState = useStepExperience(Object.keys(STEP_TO_COMPONENT_MAP).length);
+  const StepScreen = useMemo(() => STEP_TO_COMPONENT_MAP[stepsState.currentStep].component, [stepsState.currentStep]);
   useEffect(() => {
     setIsNextDisable(true);
   }, [setIsNextDisable, stepsState.currentStep]);
 
   useEffect(() => {
     const url = new URL(document.location);
-    const stepPath = STEP_TO_COMPONENT_MAP(props.isDesktop)[stepsState.currentStep].path;
+    const stepPath = STEP_TO_COMPONENT_MAP[stepsState.currentStep].path;
     const urlWithPath = `${url.origin}/join/${stepPath}`;
     window.history.pushState({}, document.title, urlWithPath);
   }, [stepsState.currentStep]);
@@ -181,11 +132,7 @@ export const SignUpFlow = props => {
   const MemoizedDefaultFooter = useMemo(
     () => (
       <DefaultFooter
-        showSkipButton={
-          props.isDesktop
-            ? CAN_SKIP_STEPS_DESKTOP.includes(stepsState.currentStep)
-            : CAN_SKIP_STEPS_MOBILE.includes(stepsState.currentStep)
-        }
+        showSkipButton={CAN_SKIP_STEPS.includes(stepsState.currentStep)}
         previousStep={stepsState.previousStep}
         nextStep={stepsState.nextStep}
         isNextDisabled={isNextDisabled}
@@ -196,13 +143,11 @@ export const SignUpFlow = props => {
   const MemoizedActionArea = useMemo(() => {
     switch (stepsState.currentStep) {
       case 1:
-        return !props.isDesktop ? <></> : <WelcomeFooter />;
+        return <WelcomeFooter />
       case 2:
-        return !props.isDesktop ? <WelcomeFooter /> : MemoizedDefaultFooter;
+        return MemoizedDefaultFooter;
       case 8:
-        return !props.isDesktop ? (
-          MemoizedDefaultFooter
-        ) : (
+        return (
           <CreateAccountFooter
             previousStep={stepsState.previousStep}
             openCaptchaModal={captchaModalState.openModal}
@@ -210,16 +155,6 @@ export const SignUpFlow = props => {
           />
         );
       case 9:
-        return !props.isDesktop ? (
-          <CreateAccountFooter
-            previousStep={stepsState.previousStep}
-            openCaptchaModal={captchaModalState.openModal}
-            isNextDisabled={isNextDisabled}
-          />
-        ) : (
-          <EmailFooter hasCreateAccountError={hasCreateAccountError} createdUser={createdUser} />
-        );
-      case 10:
         return <EmailFooter hasCreateAccountError={hasCreateAccountError} createdUser={createdUser} />;
       default:
         return MemoizedDefaultFooter;
@@ -237,14 +172,12 @@ export const SignUpFlow = props => {
         />
       </ModalDialog>
       <Container>
-        {(!props.isDesktop && stepsState.currentStep === 1) ||
-        stepsState.currentStep === 10 ||
-        (props.isDesktop && stepsState.currentStep === 9) ? (
+        {stepsState.currentStep === 10 || stepsState.currentStep === 9 ? (
           <></>
         ) : (
           <StepCounterContainer>
             <Typography specs={{ variant: "p2", type: "medium" }} color="primary01">
-              Step {!props.isDesktop ? stepsState.currentStep - 1 : stepsState.currentStep}
+              Step {stepsState.currentStep}
             </Typography>
             <Typography specs={{ variant: "p2", type: "medium" }} color="primary03">
               /
@@ -254,11 +187,7 @@ export const SignUpFlow = props => {
             </Typography>
           </StepCounterContainer>
         )}
-        {stepsState.currentStep === 1 || stepsState.currentStep === 10 ? (
-          MemoizedStep
-        ) : (
-          <StepContainer>{MemoizedStep}</StepContainer>
-        )}
+        <StepContainer>{MemoizedStep}</StepContainer>
       </Container>
       <ActionContainer>{MemoizedActionArea}</ActionContainer>
     </>

@@ -17,6 +17,7 @@ export const CompleteProfileWidget = ({ user }) => {
   if (progress == 100 || !user) {
     return <></>;
   }
+
   return (
     <div>
       <TitleContainer>
@@ -38,7 +39,7 @@ export const CompleteProfileWidget = ({ user }) => {
           {user.required_profile_fields.map(field => {
             const completed = !user.missing_profile_fields.includes(field.name);
             return (
-              <ItemContainer>
+              <ItemContainer key={field.name}>
                 <Checkbox label={field["description"]} isChecked={completed} isDisabled={completed} hasNoAction />
               </ItemContainer>
             );

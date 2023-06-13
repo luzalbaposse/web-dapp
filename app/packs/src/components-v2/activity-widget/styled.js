@@ -5,13 +5,13 @@ export const Container = styled.section`
   display: flex;
   flex-direction: column;
   gap: 24px;
-  margin: 24px 0;
+  margin: 15px 0 24px;
 `;
 
 export const TitleRow = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   padding: 0 16px;
 
@@ -20,9 +20,22 @@ export const TitleRow = styled.div`
   `)}
 `;
 
+export const FilterContainer = styled.div`
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-width: 224px;
+`;
+
 export const UpdatesContainer = styled.div`
   display: flex;
   flex-direction: column;
+
+  > :nth-child(1) {
+    margin-top: -9px;
+  }
 
   ${desktopStyles(css`
     gap: 24px;

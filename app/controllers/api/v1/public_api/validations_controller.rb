@@ -4,7 +4,7 @@ class API::V1::PublicAPI::ValidationsController < API::V1::PublicAPI::APIControl
   EMAIL_TAKEN_ERROR_MESSAGE = "Email already taken.".freeze
   EMAIL_INVALID_ERROR_MESSAGE = "Email is not valid.".freeze
   USERNAME_TAKEN_ERROR_MESSAGE = "Username already taken.".freeze
-  USERNAME_INVALID_ERROR_MESSAGE = "Username only allows lower case letters and numbers.".freeze
+  USERNAME_INVALID_ERROR_MESSAGE = "Username only allows lower case letters and numbers with a maximum of 50 characters.".freeze
 
   def email
     render json: {error: email_error_message}, status: :ok
