@@ -1,22 +1,22 @@
-import { Icon, Typography, Button } from "@talentprotocol/design-system";
-import React, { useState } from "react";
+import { Icon, Typography, Button, useModal } from "@talentprotocol/design-system";
+import React from "react";
 import { Container, TextColumn } from "./styled";
-import SendCareerUpdateModal from "../../../../../components/profile/SendCareerUpdateModal";
 import TextInput from "src/components/design_system/fields/textinput";
+import { SendCareerUpdateModalV2 } from "../../../../send-career-update-modal";
 
-export const CareerUpdateEmptyState = ({ profile, isCurrentUserProfile, railsContext }) => {
-  const [isSendCareerUpdateModalOpen, setShowCareerUpdateModal] = useState(false);
+export const CareerUpdateEmptyState = ({ isCurrentUserProfile, currentUserProfile }) => {
+  const sendCareerUpdateModalState = useModal();
   return (
     <Container>
       <Icon name="mailbox" size={48} color="primary04" />
       <TextColumn>
         <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
-          {profile.user.name} doesn't have career updates
+          {currentUserProfile.name} doesn't have career updates
         </Typography>
         {isCurrentUserProfile ? (
           <TextInput
-            placeholder={`What's new in your career ${profile.user.name}?`}
-            onClick={() => setShowCareerUpdateModal(true)}
+            placeholder={`What's new in your career ${currentUserProfile.name}?`}
+            onClick={sendCareerUpdateModalState.openModal}
             className="w-100 mt-3"
           />
         ) : (
@@ -26,11 +26,10 @@ export const CareerUpdateEmptyState = ({ profile, isCurrentUserProfile, railsCon
         )}
       </TextColumn>
       {isCurrentUserProfile ? (
-        <SendCareerUpdateModal
-          show={isSendCareerUpdateModalOpen}
-          hide={() => setShowCareerUpdateModal(false)}
-          placeholder={`What's new in your career ${profile.user.name}?`}
-          contractsEnv={railsContext}
+        <SendCareerUpdateModalV2
+          isOpen={sendCareerUpdateModalState.isOpen}
+          closeModal={sendCareerUpdateModalState.closeModal}
+          profile={currentUserProfile}
         />
       ) : (
         <Button
@@ -38,7 +37,7 @@ export const CareerUpdateEmptyState = ({ profile, isCurrentUserProfile, railsCon
           variant=""
           size="medium"
           text="Send message"
-          href={`/messages?user=${profile.user.username}`}
+          href={`/messages?user=${currentUserProfile.username}`}
         />
       )}
     </Container>

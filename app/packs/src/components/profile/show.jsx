@@ -133,6 +133,7 @@ const Show = ({ railsContext, withPersonaRequest, profileSubdomain }) => {
         isCurrentUserImpersonated={currentUser?.impersonated}
         withPersonaRequest={withPersonaRequest}
         profileSubdomain={profileSubdomain}
+        currentUserProfile={currentUser}
       />
       <Divider className="my-6" />
       <div className="d-flex justify-content-lg-center overflow-x-scroll mx-4">

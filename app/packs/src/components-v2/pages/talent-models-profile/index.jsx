@@ -32,7 +32,7 @@ export const TalentModelsProfilePage = props => {
   return (
     <TalentThemeProvider>
       <Container isLoading={isLoading}>
-        {isLoading ? (
+        {isLoading || !currentUser ? (
           <Spinner />
         ) : (
           <>
@@ -51,6 +51,7 @@ export const TalentModelsProfilePage = props => {
                 setProfile={setProfile}
                 isCurrentUserProfile={isCurrentUserProfile}
                 railsContext={props.railsContext}
+                currentUserProfile={currentUser}
               />
             </ContentDesktopRow>
             <FinalHero

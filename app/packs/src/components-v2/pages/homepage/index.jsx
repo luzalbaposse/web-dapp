@@ -16,14 +16,11 @@ import { QuestsWidget } from "../../quests-widget";
 export const HomepagePage = ({}) => {
   const { mobile } = useWindowDimensionsHook();
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
-
-  console.log(currentUser);
   useEffect(() => {
     if (!currentUser) {
       fetchCurrentUser();
     }
   }, []);
-
   return (
     <TalentThemeProvider>
       <GMContainer>

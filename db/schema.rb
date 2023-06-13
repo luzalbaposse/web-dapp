@@ -146,6 +146,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_06_103845) do
     t.index ["career_goal_id"], name: "index_career_needs_on_career_goal_id"
   end
 
+  create_table "career_update_associations", force: :cascade do |t|
+    t.bigint "career_update_id", null: false
+    t.string "associable_entity_type", null: false
+    t.bigint "associable_entity_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["associable_entity_type", "associable_entity_id"], name: "index_career_update_associations_on_associable_entity"
+    t.index ["career_update_id"], name: "index_career_update_associations_on_career_update_id"
+  end
+
   create_table "career_updates", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
@@ -793,6 +803,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_06_103845) do
   add_foreign_key "api_log_requests", "api_keys"
   add_foreign_key "career_goals", "talent"
   add_foreign_key "career_needs", "career_goals"
+  add_foreign_key "career_update_associations", "career_updates"
   add_foreign_key "career_updates", "users"
   add_foreign_key "chats", "users", column: "receiver_id"
   add_foreign_key "chats", "users", column: "sender_id"

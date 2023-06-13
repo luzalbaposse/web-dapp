@@ -1,26 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
 import { Container, InnerContainer } from "./styled";
-import { Avatar } from "@talentprotocol/design-system";
+import { Avatar, useModal } from "@talentprotocol/design-system";
 import TextInput from "src/components/design_system/fields/textinput";
-import SendCareerUpdateModal from "src/components/profile/SendCareerUpdateModal";
+import { SendCareerUpdateModalV2 } from "../send-career-update-modal";
 
 export const GmHeader = ({ profile }) => {
-  const [showCareerUpdateModal, setShowCareerUpdateModal] = useState(false);
+  const modalState = useModal();
 
   return profile ? (
     <Container>
       <Avatar size="md" url={profile.profile_picture_url} userId={profile.id} profileURL={`/u/${profile.username}`} />
       <InnerContainer>
         <TextInput
-          placeholder={`What's new in your career ${profile.username}?`}
-          onClick={() => setShowCareerUpdateModal(true)}
+          placeholder={`What's new in your career ${profile.name}?`}
+          onClick={() => modalState.openModal()}
           className="w-100"
         />
-        <SendCareerUpdateModal
-          show={showCareerUpdateModal}
-          hide={() => setShowCareerUpdateModal(false)}
-          placeholder={`What's new in your career ${profile.username}?`}
-        />
+        <SendCareerUpdateModalV2 isOpen={modalState.isOpen} closeModal={modalState.closeModal} profile={profile} />
       </InnerContainer>
     </Container>
   ) : (

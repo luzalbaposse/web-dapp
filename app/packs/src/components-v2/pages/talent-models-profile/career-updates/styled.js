@@ -24,6 +24,7 @@ export const TitleContainer = styled.div`
 
   ${desktopStyles(css`
     text-align: left;
+    max-width: 100%;
     margin: 0 0 24px 0;
   `)}
 `;

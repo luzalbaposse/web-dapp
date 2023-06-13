@@ -3,6 +3,9 @@ class Goal < ApplicationRecord
 
   belongs_to :career_goal
 
+  has_many :career_update_associations, as: :associable_entity
+  has_many :career_updates, through: :career_update_associations
+
   has_many :goal_images, dependent: :destroy
   accepts_nested_attributes_for :goal_images, allow_destroy: true
   validates_associated :goal_images
