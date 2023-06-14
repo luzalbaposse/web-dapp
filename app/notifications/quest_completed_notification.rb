@@ -10,6 +10,6 @@ class QuestCompletedNotification < BaseNotification
   end
 
   def url
-    earn_url
+    quests_url
   end
 end
