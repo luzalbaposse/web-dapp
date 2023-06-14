@@ -61,6 +61,11 @@ class Rack::Attack
   #   end
   # end
 
+  # Throttle POST requests to /passwords
+  throttle("passwords/ip", limit: 5, period: 30.minutes) do |req|
+    req.ip if req.path == "/passwords" && req.post?
+  end
+
   ### Custom Throttle Response ###
 
   # By default, Rack::Attack returns an HTTP 429 for throttled responses,
@@ -69,9 +74,9 @@ class Rack::Attack
   # If you want to return 503 so that the attacker might be fooled into
   # believing that they've successfully broken your app (or you just want to
   # customize the response), then uncomment these lines.
-  # self.throttled_response = lambda do |env|
-  #  [ 503,  # status
-  #    {},   # headers
-  #    ['']] # body
-  # end
+  self.throttled_responder = lambda do |env|
+    [503,  # status
+      {},   # headers
+      ["Retry later"]] # body
+  end
 end
