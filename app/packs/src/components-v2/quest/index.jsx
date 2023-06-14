@@ -8,7 +8,7 @@ const QUEST_TYPE_MAP = {
   three_journey_entries: "/u/__username__#journey",
   send_career_update: "/home",
   verify_identity: "/u/__username__",
-  five_subscribers: "/earn?tab=invites",
+  five_subscribers: "/quests?tab=invites",
   supporting_three: "/talent",
   connect_wallet: "",
   complete_profile: "/u/__username__"

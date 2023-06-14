@@ -54,13 +54,14 @@ export const ActivityWidget = ({ profile = {} }) => {
   const [filter, setFilter] = useState(DROPDOWN_OPTIONS[0]);
   const [inputsWithContent, setInputsWithContent] = useState([]);
   const loadMore = useCallback((tempFilterType) => {
+    const filter = typeof tempFilterType === "string" ? tempFilterType : undefined;
     activityService
-      .getActivity(perPage, activity.pagination.cursor, tempFilterType)
+      .getActivity(perPage, activity.pagination.cursor, filter)
       .then(({ data }) => {
         const recentActivities = [...data.activities];
         setActivity({
           ...data,
-          activities: tempFilterType ? [...recentActivities] : [...activity.activities, ...recentActivities]
+          activities: filter ? [...recentActivities] : [...activity.activities, ...recentActivities]
         });
         setInputsWithContent(new Array(data.activities.length).fill(false));
         setIsLoading(false);

@@ -319,7 +319,7 @@ export const TopBar = ({
             disabled={isUserImpersonated}
           />
           {hasUnreadMessages && <NotificationsIndicator />}
-          <Tab href="/earn" text="Earn" type="white" active={activeTab === "/earn"} className="mr-4" />
+          <Tab href="/quests" text="Quests" type="white" active={activeTab === "/quests"} className="mr-4" />
         </div>
         <div className="d-flex" style={{ height: 34 }}>
           {isUserImpersonated && (

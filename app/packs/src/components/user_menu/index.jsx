@@ -8,7 +8,7 @@ import { User, Settings, SignOut, Sun, Moon } from "src/components/icons";
 
 const UserMenu = ({ user, toggleTheme, mode, onClickTransak, signOut }) => {
   const onClickInvites = () => {
-    window.location.href = "/earn?tab=talent";
+    window.location.href = "/quests?tab=talent";
   };
 
   return (
