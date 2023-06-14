@@ -26,7 +26,7 @@ export const LeaderboardWidget = ({ user }) => {
             <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
               Community Leaderboard
             </Typography>
-            <TextLink text="Go to invites" rightIcon="carret" color="primary" size="small" href="/earn?tab=talent" />
+            <TextLink text="Go to invites" rightIcon="carret" color="primary" size="small" href="/quests?tab=talent" />
           </TitleContainer>
         )}
         <ListContainer>

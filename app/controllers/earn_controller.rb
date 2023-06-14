@@ -1,2 +1,0 @@
-class EarnController < ApplicationController
-end

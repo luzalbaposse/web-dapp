@@ -96,7 +96,7 @@ const InviteTalentBanner = () => (
           text="Invite your high-potential friends to join Talent Protocol and earn TAL."
           bold
         />
-        <a className="button-link" href="/earn?tab=talent">
+        <a className="button-link" href="/quests?tab=talent">
           <Button type="primary-default" size="extra-big" onClick={() => null} text="Invite Talent" />
         </a>
       </div>

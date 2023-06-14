@@ -10,12 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_06_103845) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_08_103338) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "activities", force: :cascade do |t|
-    t.string "content", null: false
+    t.jsonb "content", null: false
     t.bigint "origin_user_id", null: false
     t.bigint "target_user_id"
     t.datetime "created_at", null: false
@@ -732,8 +733,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_06_103845) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.boolean "disabled", default: false
     t.string "theme_preference", default: "light"
+    t.boolean "disabled", default: false
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"

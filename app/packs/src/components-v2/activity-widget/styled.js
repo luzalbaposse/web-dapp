@@ -52,6 +52,7 @@ export const StyledTypography = styled(Typography)`
     css`
       overflow: hidden;
       text-overflow: ellipsis;
+      display: -webkit-box;
       -webkit-line-clamp: 4;
       -webkit-box-orient: vertical;
     `}
@@ -118,6 +119,7 @@ export const LoadMoreContainer = styled.div`
 
 export const ActivityContainer = styled.div`
   position: relative;
+  word-break: break-word;
 `;
 
 export const ShowMoreContainer = styled.div`
