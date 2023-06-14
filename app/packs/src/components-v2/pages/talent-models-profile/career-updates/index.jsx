@@ -15,7 +15,7 @@ export const CareerUpdates = ({ profile, currentUserProfile, isCurrentUserProfil
 
   const sendCareerUpdateModalState = useModal();
   useEffect(() => {
-    fetchCareerUpdates(currentUserProfile.username)
+    fetchCareerUpdates(profile.user.username)
       .then(() => {
         setIsLoading(false);
       })
@@ -34,6 +34,7 @@ export const CareerUpdates = ({ profile, currentUserProfile, isCurrentUserProfil
           isCurrentUserProfile={isCurrentUserProfile}
           contractsEnv={railsContext}
           currentUserProfile={currentUserProfile}
+          profile={profile}
         />
       );
     }
@@ -41,7 +42,7 @@ export const CareerUpdates = ({ profile, currentUserProfile, isCurrentUserProfil
       <>
         <TitleContainer>
           <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
-            {currentUserProfile.name}'s career updates
+            {profile.user.name}'s career updates
           </Typography>
         </TitleContainer>
 
