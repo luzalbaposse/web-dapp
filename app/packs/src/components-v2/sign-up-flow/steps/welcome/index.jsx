@@ -17,14 +17,13 @@ export const WelcomeStep = ({ linkedinRedirectUri, linkedinClientId, inviteProps
   );
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const username = window.location.href.split("/join/")[1];
-      if (username !== "welcome") {
+      if (inviteProps.inviteCode) {
         setState("invite");
         return;
       }
       setState("no-invite");
     }
-  }, [inviteProps]);
+  }, [inviteProps.inviteCode]);
   const InviterArea = useMemo(() => {
     if (state === "no-invite") {
       return (
