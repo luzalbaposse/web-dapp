@@ -4,14 +4,14 @@ import { Container, TextColumn } from "./styled";
 import TextInput from "src/components/design_system/fields/textinput";
 import { SendCareerUpdateModalV2 } from "../../../../send-career-update-modal";
 
-export const CareerUpdateEmptyState = ({ isCurrentUserProfile, currentUserProfile }) => {
+export const CareerUpdateEmptyState = ({ isCurrentUserProfile, currentUserProfile, profile }) => {
   const sendCareerUpdateModalState = useModal();
   return (
     <Container>
       <Icon name="mailbox" size={48} color="primary04" />
       <TextColumn>
         <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
-          {currentUserProfile.name} doesn't have career updates
+          {profile.user.name} doesn't have career updates
         </Typography>
         {isCurrentUserProfile ? (
           <TextInput
@@ -37,7 +37,7 @@ export const CareerUpdateEmptyState = ({ isCurrentUserProfile, currentUserProfil
           variant=""
           size="medium"
           text="Send message"
-          href={`/messages?user=${currentUserProfile.username}`}
+          href={`/messages?user=${profile.user.username}`}
         />
       )}
     </Container>
