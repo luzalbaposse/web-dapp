@@ -18,7 +18,9 @@ class Goal < ApplicationRecord
     executing: "executing",
     accomplished: "accomplished",
     not_accomplished: "not_accomplished",
-    abandoned: "abandoned"
+    abandoned: "abandoned",
+    doing: "doing",
+    paused: "paused"
   }
 
   def to_s
