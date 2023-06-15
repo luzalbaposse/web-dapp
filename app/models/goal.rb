@@ -15,11 +15,9 @@ class Goal < ApplicationRecord
 
   enum progress: {
     planned: "planned",
-    executing: "executing",
-    accomplished: "accomplished",
-    not_accomplished: "not_accomplished",
-    abandoned: "abandoned",
     doing: "doing",
+    accomplished: "accomplished",
+    abandoned: "abandoned",
     paused: "paused"
   }
 

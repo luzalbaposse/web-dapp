@@ -157,6 +157,8 @@ const MilestoneExperience = ({
   useEffect(() => {
     if (startMonth != "" && startYear != "") {
       changeAttribute("start_date", dayjs(`${startMonth}-${startYear}`, "MMMM-YYYY").format("DD-MM-YYYY"));
+    } else {
+      changeAttribute("start_date", "");
     }
   }, [startMonth, startYear]);
 
@@ -259,7 +261,7 @@ const MilestoneExperience = ({
               onChange={e => setStartMonth(e.target.value)}
               value={startMonth}
               placeholder="Month"
-              className="height-auto mr-2"
+              className={cx("height-auto", "mr-2", validationErrors?.startDate && "border-danger")}
             >
               <option value=""></option>
               {monthOptions.map(month => (
@@ -273,7 +275,7 @@ const MilestoneExperience = ({
               onChange={e => setStartYear(e.target.value)}
               value={startYear}
               placeholder="Year"
-              className="height-auto ml-2"
+              className={cx("height-auto", "ml-2", validationErrors?.startDate && "border-danger")}
             >
               <option value=""></option>
               {yearOptions.map(year => (
@@ -398,10 +400,10 @@ const GoalExperience = ({
 
   const progressOptions = [
     { value: "planned", title: "Planned" },
-    { value: "executing", title: "Executing" },
+    { value: "doing", title: "Doing" },
     { value: "accomplished", title: "Accomplished" },
-    { value: "not_accomplished", title: "Not Accomplished" },
-    { value: "abandoned", title: "Abandoned" }
+    { value: "abandoned", title: "Abandoned" },
+    { value: "paused", title: "Paused" }
   ];
 
   const monthOptions = [
@@ -433,6 +435,8 @@ const GoalExperience = ({
   useEffect(() => {
     if (dueMonth != "" && dueYear != "") {
       changeAttribute("due_date", dayjs(`${dueMonth}-${dueYear}`, "MMMM-YYYY").format("DD-MM-YYYY"));
+    } else {
+      changeAttribute("due_date", "");
     }
   }, [dueMonth, dueYear]);
 
@@ -466,6 +470,7 @@ const GoalExperience = ({
           <label htmlFor="inputProgress">
             <P2 className="mb-2 text-primary-01" bold>
               Career Goal Status
+              <span className="ml-1 text-danger">*</span>
             </P2>
           </label>
           <Form.Control
@@ -473,7 +478,7 @@ const GoalExperience = ({
             onChange={e => changeAttribute("progress", e.target.value)}
             value={currentJourneyItem.progress}
             placeholder="Please Select"
-            className="height-auto mr-2"
+            className={cx("height-auto", "mr-2", validationErrors?.progress && "border-danger")}
           >
             <option value=""></option>
             {progressOptions.map(item => (
@@ -489,8 +494,6 @@ const GoalExperience = ({
             onChange={e => changeAttribute("description", e.target.value)}
             value={currentJourneyItem.description}
             rows={3}
-            required={true}
-            error={validationErrors?.description}
           />
         </div>
         <div className="w-100 mb-5">
@@ -505,7 +508,7 @@ const GoalExperience = ({
               onChange={e => setDueMonth(e.target.value)}
               value={dueMonth}
               placeholder="Month"
-              className="height-auto mr-2"
+              className={cx("height-auto", "mr-2", validationErrors?.dueDate && "border-danger")}
             >
               <option value=""></option>
               {monthOptions.map(month => (
@@ -519,7 +522,7 @@ const GoalExperience = ({
               onChange={e => setDueYear(e.target.value)}
               value={dueYear}
               placeholder="Year"
-              className="height-auto ml-2"
+              className={cx("height-auto", "ml-2", validationErrors?.dueDate && "border-danger")}
             >
               <option value=""></option>
               {yearOptions.map(year => (
@@ -608,7 +611,8 @@ const EditJourneyModal = ({ show, hide, talent, setTalent, editType, setJourneyI
     dueDate: false,
     progress: false,
     description: false,
-    institution: false
+    institution: false,
+    status: false
   });
 
   const milestoneErrors = () => {
@@ -617,7 +621,7 @@ const EditJourneyModal = ({ show, hide, talent, setTalent, editType, setJourneyI
       errors.title = true;
     }
     if (currentJourneyItem.start_date == "") {
-      errors.start_date = true;
+      errors.startDate = true;
     }
     if (currentJourneyItem.description == "") {
       errors.description = true;
@@ -635,10 +639,10 @@ const EditJourneyModal = ({ show, hide, talent, setTalent, editType, setJourneyI
       errors.title = true;
     }
     if (currentJourneyItem.due_date == "") {
-      errors.due_date = true;
+      errors.dueDate = true;
     }
-    if (currentJourneyItem.description == "") {
-      errors.description = true;
+    if (currentJourneyItem.progress == "") {
+      errors.progress = true;
     }
 
     return errors;
