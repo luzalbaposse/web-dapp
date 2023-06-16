@@ -170,15 +170,41 @@ RSpec.describe UserMailer, type: :mailer do
     end
   end
 
-  describe "send goal half-way reminder email" do
+  describe "send goal due in one month reminder email" do
     let(:mail) do
-      described_class.with(goal: goal, user: user).send_goal_halfway_reminder_email
+      described_class.with(goal: goal, user: user).send_goal_due_in_one_month_reminder_email
     end
 
-    let(:goal) { create :goal, due_date: Date.tomorrow }
+    let(:goal) { create :goal, due_date: 30.days.after }
 
     it "renders the header" do
-      expect(mail.subject).to eql("Your goal's half-way there!")
+      expect(mail.subject).to eql("Your goal's deadline is in one month!")
+      expect(mail.to).to eql([user.email])
+    end
+  end
+
+  describe "send goal 15 days past due date reminder email" do
+    let(:mail) do
+      described_class.with(goal: goal, user: user).send_goal_15_days_past_due_date_reminder_email
+    end
+
+    let(:goal) { create :goal, due_date: 15.days.ago }
+
+    it "renders the header" do
+      expect(mail.subject).to eql("Your goal's deadline was 15 days ago!")
+      expect(mail.to).to eql([user.email])
+    end
+  end
+
+  describe "send goal 30 days past due date reminder email" do
+    let(:mail) do
+      described_class.with(goal: goal, user: user).send_goal_30_days_past_due_date_reminder_email
+    end
+
+    let(:goal) { create :goal, due_date: 30.days.ago }
+
+    it "renders the header" do
+      expect(mail.subject).to eql("Your Goal's Journey: Past Its Due Date, What's Next?")
       expect(mail.to).to eql([user.email])
     end
   end

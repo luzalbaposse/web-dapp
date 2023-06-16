@@ -10,15 +10,23 @@ class Goal < ApplicationRecord
   accepts_nested_attributes_for :goal_images, allow_destroy: true
   validates_associated :goal_images
 
-  scope :due_halfway, -> { where("(created_at::DATE + CAST(ROUND((due_date - created_at::DATE)/2.0) AS INT)) = ?", Date.current) }
   scope :due_today, -> { where(due_date: Date.current) }
+  scope :due_in_one_month, -> { where(due_date: 30.days.after) }
+  scope :due_date_passed_15_days_ago, -> { where(progress: [PLANNED, DOING], due_date: 15.days.ago) }
+  scope :due_date_passed_30_days_ago, -> { where(progress: [PLANNED, DOING], due_date: 30.days.ago) }
+
+  PLANNED = "planned".freeze
+  DOING = "doing".freeze
+  ACCOMPLISHED = "accomplished".freeze
+  ABANDONED = "abandoned".freeze
+  PAUSED = "paused".freeze
 
   enum progress: {
-    planned: "planned",
-    doing: "doing",
-    accomplished: "accomplished",
-    abandoned: "abandoned",
-    paused: "paused"
+    planned: PLANNED,
+    doing: DOING,
+    accomplished: ACCOMPLISHED,
+    abandoned: ABANDONED,
+    paused: PAUSED
   }
 
   def to_s

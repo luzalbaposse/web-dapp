@@ -89,10 +89,22 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.with(goal: goal(user), user: user).send_goal_deadline_reminder_email
   end
 
-  def send_goal_halfway_reminder_email
+  def send_goal_due_in_one_month_reminder_job
     user = User.first
 
-    UserMailer.with(goal: goal(user), user: user).send_goal_halfway_reminder_email
+    UserMailer.with(goal: goal(user), user: user).send_goal_due_in_one_month_reminder_email
+  end
+
+  def send_goal_15_days_past_due_date_reminder_job
+    user = User.first
+
+    UserMailer.with(goal: goal(user), user: user).send_goal_15_days_past_due_date_reminder_email
+  end
+
+  def send_goal_30_days_past_due_date_reminder_job
+    user = User.first
+
+    UserMailer.with(goal: goal(user), user: user).send_goal_30_days_past_due_date_reminder_email
   end
 
   def send_opportunities_open_roles_email

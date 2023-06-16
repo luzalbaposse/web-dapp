@@ -17,9 +17,15 @@
     send_goal_deadline_reminder:
       cron: "0 12 L * *" # Runs on the last day of the month at 12:00
       class: EmailReminders::SendGoalDeadlineReminderJob
-    send_goal_halfway_reminder:
+    send_goal_due_in_one_month_reminder_job:
       cron: "0 12 * * *" # Runs once every day at 12:00
-      class: EmailReminders::SendGoalHalfwayReminderJob
+      class: EmailReminders::SendGoalDueInOneMonthReminderJob
+    send_goal_15_days_past_due_date_reminder_job:
+      cron: "0 12 * * *" # Runs once every day at 12:00
+      class: EmailReminders::SendGoal15DaysPastDueDateReminderJob
+    send_goal_30_days_past_due_date_reminder_job:
+      cron: "0 12 * * *" # Runs once every day at 12:00
+      class: EmailReminders::SendGoal30DaysPastDueDateReminderJob
     sync_on_chain_talent_supporters:
       cron: "0 * * * *" # Runs every hour
       class: TriggerTalentSupportersRefreshJob
