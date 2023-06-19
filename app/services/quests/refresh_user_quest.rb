@@ -117,7 +117,7 @@ module Quests
     end
 
     def verify_humanity_quest_completed?
-      user.humanity_verified_at?
+      user.humanity_verified_at.present?
     end
 
     def update_profile_completed_at

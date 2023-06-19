@@ -29,7 +29,7 @@ module Quests
     attr_reader :user, :quest, :params
 
     def already_verified?
-      user.humanity_verified_at?
+      user.humanity_verified_at.present?
     end
 
     def verify_proof!
