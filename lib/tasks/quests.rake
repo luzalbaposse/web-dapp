@@ -21,7 +21,7 @@ namespace :quests do
       },
       {
         title: "Add 3+ Journey Entries",
-        description: "Add at least 3 goals, positions, or education to your profile.",
+        description: "Add at least 3 entries between goals, positions and/or education",
         quest_type: "three_journey_entries",
         experience_points_amount: 400
       },
@@ -51,9 +51,16 @@ namespace :quests do
       },
       {
         title: "Stake on 3+ Talent",
-        description: "Buy $10 in Talent Tokens, distributed among a minimum of three users.",
+        description: "Buy $10 worth of Talent Tokens from 3 different users.",
         quest_type: "supporting_three",
         experience_points_amount: 3000
+      },
+      {
+        title: "Verify you are a human",
+        description: "Validate you are a human using Worldcoin.",
+        quest_type: "verify_humanity",
+        experience_points_amount: 1000,
+        sponsored: true
       }
     ]
 

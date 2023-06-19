@@ -13,9 +13,11 @@ import { useWindowDimensionsHook } from "src/utils/window";
 import { QuestsWidget } from "../../quests-widget";
 // import { MyWalletWidget } from "../../my-wallet-widget";
 
-export const HomepagePage = ({}) => {
+export const HomepagePage = props => {
   const { mobile } = useWindowDimensionsHook();
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
+  const railsContext = props.railsContext;
+
   useEffect(() => {
     if (!currentUser) {
       fetchCurrentUser();
@@ -30,7 +32,7 @@ export const HomepagePage = ({}) => {
         {mobile ? (
           <Column>
             <CompleteProfileWidget user={currentUser} />
-            {currentUser?.profile_completed && <QuestsWidget profile={currentUser} />}
+            {currentUser?.profile_completed && <QuestsWidget profile={currentUser} railsContext={railsContext} />}
             <QuickNavigator username={currentUser?.username} />
             <RecommendedBuildersWidget username={currentUser?.username} />
             <RecommendedTeamsWidget />
@@ -42,7 +44,7 @@ export const HomepagePage = ({}) => {
             <Column grows>
               <CompleteProfileWidget user={currentUser} />
               <QuickNavigator username={currentUser?.username} />
-              {currentUser?.profile_completed && <QuestsWidget profile={currentUser} />}
+              {currentUser?.profile_completed && <QuestsWidget profile={currentUser} railsContext={railsContext} />}
               <ActivityWidget profile={currentUser} />
             </Column>
             <Column>

@@ -1,6 +1,6 @@
 class API::QuestBlueprint < Blueprinter::Base
   view :normal do
-    fields :experience_points_amount, :title, :description, :completed_at, :quest_type
+    fields :experience_points_amount, :title, :description, :completed_at, :quest_type, :sponsored
 
     # Although completed_at is not part of the quests model this works since we're selecting the field in the controller
     field :completed_at do |quest, _options|

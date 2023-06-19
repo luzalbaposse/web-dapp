@@ -17,7 +17,9 @@ module RenderingExtension
       talBaseDomain: ENV["TAL_BASE_DOMAIN"],
       linkedinClientId: ENV["LINKEDIN_CLIENT_ID"],
       linkedinRedirectUri: ENV["LINKEDIN_REDIRECT_URI"],
-      captchaKey: ENV["RECAPTCHA_SITE_KEY"]
+      captchaKey: ENV["RECAPTCHA_SITE_KEY"],
+      worldcoinAppId: ENV["WORLDCOIN_APP_ID"],
+      worldcoinQuestAction: ENV["WORLDCOIN_QUEST_ACTION"]
     }
   end
 end

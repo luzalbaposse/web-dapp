@@ -4,7 +4,7 @@ import { Typography } from "@talentprotocol/design-system";
 import { Quest } from "../../../quest";
 import { questsService } from "../../../../api";
 
-export const Quests = ({ profile }) => {
+export const Quests = ({ profile, railsContext }) => {
   const [quests, setQuests] = useState([]);
   useEffect(() => {
     if (!profile) return;
@@ -17,7 +17,10 @@ export const Quests = ({ profile }) => {
   }, [profile]);
 
   const memoizedQuests = useMemo(
-    () => quests.map(quest => <Quest key={quest.title} quest={quest} username={profile.username} />),
+    () =>
+      quests.map(quest => (
+        <Quest key={quest.title} quest={quest} username={profile.username} railsContext={railsContext} />
+      )),
     [quests]
   );
   return (

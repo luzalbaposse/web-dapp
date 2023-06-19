@@ -43,6 +43,10 @@ export const QuestDataRow = styled.div`
   display: flex;
   gap: 8px;
   align-items: center;
+
+  >:last-child {
+    margin-left: -4px;
+  }
 `;
 
 export const QuestReward = styled.div`

@@ -356,6 +356,22 @@ RSpec.describe Quests::RefreshUserQuest do
           it_behaves_like "a refresh user quest without creating new records"
         end
       end
+
+      context "when the quest type is verify_humanity" do
+        let(:quest_type) { "verify_humanity" }
+
+        context "when the quest was completed" do
+          before do
+            user.update(humanity_verified_at: Time.current)
+          end
+
+          it_behaves_like "a refresh user quest that creates new records"
+        end
+
+        context "when the quest was not completed" do
+          it_behaves_like "a refresh user quest without creating new records"
+        end
+      end
     end
   end
 

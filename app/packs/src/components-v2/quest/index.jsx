@@ -1,6 +1,7 @@
 import React from "react";
 import { QuestData, QuestDataRow, QuestEntry, QuestReward, RewardTag } from "./styled";
 import { Icon, Typography } from "@talentprotocol/design-system";
+import { VerifyHumanityQuest } from "./verifyHumanityQuest";
 
 const QUEST_TYPE_MAP = {
   profile_picture: "/u/__username__",
@@ -11,10 +12,14 @@ const QUEST_TYPE_MAP = {
   five_subscribers: "/quests?tab=invites",
   supporting_three: "/talent",
   connect_wallet: "",
-  complete_profile: "/u/__username__"
+  complete_profile: "/u/__username__",
+  verify_humanity: ""
 };
 
-export const Quest = ({ quest, username }) => {
+export const Quest = ({ quest, username, railsContext }) => {
+  if (quest.quest_type == "verify_humanity") {
+    return <VerifyHumanityQuest quest={quest} username={username} railsContext={railsContext} />;
+  }
   return (
     <QuestEntry
       isCompleted={!!quest.completed_at}

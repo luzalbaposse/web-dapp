@@ -29,7 +29,9 @@ module PublicAPIRoutes
               get "latest_unread", on: :collection
             end
             resources :leaderboards, only: [:index]
-            resources :quests, only: [:index]
+            resources :quests, only: [:index], param: :type do
+              put "complete"
+            end
             resources :invited_talents, only: [:index]
             resources :experience_points_leaderboards, only: [:index]
 
