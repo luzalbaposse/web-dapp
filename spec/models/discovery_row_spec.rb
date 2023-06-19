@@ -85,4 +85,28 @@ RSpec.describe DiscoveryRow, type: :model do
       expect(discovery_row.talents_total_supply).to eq "300000000000000000000"
     end
   end
+
+  describe "#with_completed_talents" do
+    let!(:discovery_one) { create :discovery_row }
+    let!(:partnership_one) { create :partnership, discovery_row: discovery_one }
+
+    let!(:discovery_two) { create :discovery_row }
+
+    let!(:discovery_three) { create :discovery_row }
+    let!(:partnership_three) { create :partnership, discovery_row: discovery_three }
+
+    let(:user) { create :user, profile_completed_at: Time.current }
+    let!(:talent) { create :talent, user: user, public: true, hide_profile: false }
+
+    let(:tag_one) { create :tag, discovery_row: discovery_one }
+    let(:tag_two) { create :tag, discovery_row: discovery_two }
+
+    before do
+      create :user_tag, user: user, tag: tag_one
+      create :user_tag, user: user, tag: tag_two
+    end
+    it "returns only discovery rows with talents with a complete profile" do
+      expect(described_class.with_completed_talents).to match_array([discovery_one, discovery_two])
+    end
+  end
 end
