@@ -76,7 +76,7 @@ export const SendCareerUpdateModalV2 = ({ isOpen, closeModal, profile }) => {
         </EntryContainer>
         <PillsContainer>
           <Typography specs={{ variant: "p2", type: "bold" }} color="primary01">
-            Tag your journey
+            Tag your goals
           </Typography>
           {pills.length > 1 ? (
             <Pills pillList={pills} onClick={handlePillClick} />
