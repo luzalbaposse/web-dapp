@@ -11,7 +11,7 @@ export const QuestsWidget = ({ profile, railsContext }) => {
     questsService
       .getQuests(profile.id, 20)
       .then(({ data }) => {
-        setQuests(data.quests.sort(a => (a.completed_at ? -1 : 1)));
+        setQuests(data.quests.filter(quest => !quest.completed_at).slice(0, 3));
       })
       .catch(() => {});
   }, [profile]);
@@ -32,7 +32,7 @@ export const QuestsWidget = ({ profile, railsContext }) => {
     <Container>
       <TitleContainer>
         <Typography specs={{ variant: "h5", type: "bold" }}>Quests</Typography>
-        <TextLink href="/earn" text="View all" rightIcon="carret" color="primary" size="medium" />
+        <TextLink href="/quests" text="View all" rightIcon="carret" color="primary" size="medium" />
       </TitleContainer>
       {memoizedQuests}
     </Container>
