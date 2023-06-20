@@ -119,11 +119,25 @@ class UserMailer < ApplicationMailer
     bootstrap_mail(to: @user.email, subject: "Your goal's deadline is today!")
   end
 
-  def send_goal_halfway_reminder_email
+  def send_goal_due_in_one_month_reminder_email
     @goal = indifferent_access_params[:goal]
     @user = indifferent_access_params[:user]
 
-    bootstrap_mail(to: @user.email, subject: "Your goal's half-way there!")
+    bootstrap_mail(to: @user.email, subject: "Your goal's deadline is in one month!")
+  end
+
+  def send_goal_15_days_past_due_date_reminder_email
+    @goal = indifferent_access_params[:goal]
+    @user = indifferent_access_params[:user]
+
+    bootstrap_mail(to: @user.email, subject: "Your goal's deadline was 15 days ago!")
+  end
+
+  def send_goal_30_days_past_due_date_reminder_email
+    @goal = indifferent_access_params[:goal]
+    @user = indifferent_access_params[:user]
+
+    bootstrap_mail(to: @user.email, subject: "Your Goal's Journey: Past Its Due Date, What's Next?")
   end
 
   def send_opportunities_open_roles_email

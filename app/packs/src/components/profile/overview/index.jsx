@@ -743,11 +743,13 @@ const Overview = ({
         talent={profile}
         setProfile={setProfile}
       />
-      <SendCareerUpdateModalV2
-        isOpen={sendCareerUpdateModalState.isOpen}
-        closeModal={sendCareerUpdateModalState.closeModal}
-        profile={currentUserProfile}
-      />
+      {!!currentUserProfile && (
+        <SendCareerUpdateModalV2
+          isOpen={sendCareerUpdateModalState.isOpen}
+          closeModal={sendCareerUpdateModalState.closeModal}
+          profile={currentUserProfile}
+        />
+      )}
       {editMode && (
         <EditOverviewModal show={editMode} hide={() => setEditMode(false)} profile={profile} setProfile={setProfile} />
       )}

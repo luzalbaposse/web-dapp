@@ -3,7 +3,7 @@ class DiscoveryController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        discovery_rows = DiscoveryRow.all.order(created_at: :desc)
+        discovery_rows = DiscoveryRow.with_completed_talents.order(created_at: :desc)
 
         if partnerships_only?
           discovery_rows = discovery_rows.joins(:partnership)

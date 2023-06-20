@@ -31,10 +31,10 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
 
   const progressMap = {
     planned: "Planned",
-    executing: "Executing",
+    doing: "Doing",
     accomplished: "Accomplished",
-    not_accomplished: "Not Accomplished",
-    abandoned: "Abandoned"
+    abandoned: "Abandoned",
+    paused: "Paused"
   };
 
   useEffect(() => {

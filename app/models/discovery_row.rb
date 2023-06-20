@@ -11,6 +11,13 @@ class DiscoveryRow < ApplicationRecord
 
   friendly_id :title, use: :slugged
 
+  scope :with_completed_talents, -> do
+    joins(tags: [user_tags: [user: :talent]])
+      .where.not(user: {profile_completed_at: nil})
+      .where(talent: {public: true, hide_profile: false})
+      .distinct
+  end
+
   def talents_count
     public_talent_profiles.count
   end

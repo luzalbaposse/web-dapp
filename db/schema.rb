@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_08_103338) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_09_093545) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -513,6 +513,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_08_103338) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "quest_type", null: false
+    t.boolean "sponsored", default: false
     t.index ["quest_type"], name: "index_quests_on_quest_type", unique: true
     t.index ["uuid"], name: "index_quests_on_uuid"
   end
@@ -766,6 +767,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_08_103338) do
     t.boolean "is_organization", default: false
     t.integer "experience_points_amount", default: 0, null: false
     t.datetime "profile_completed_at", precision: nil
+    t.datetime "humanity_verified_at"
+    t.jsonb "humanity_proof"
     t.index ["created_at"], name: "index_users_on_created_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invite_id"], name: "index_users_on_invite_id"

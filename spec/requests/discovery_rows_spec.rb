@@ -53,9 +53,20 @@ RSpec.describe "Discovery rows", type: :request do
     let!(:partnership_one) { create :partnership, discovery_row: discovery_one }
 
     let!(:discovery_two) { create :discovery_row }
-    let!(:partnership_two) { create :partnership, discovery_row: discovery_two }
 
     let!(:discovery_three) { create :discovery_row }
+    let!(:partnership_three) { create :partnership, discovery_row: discovery_three }
+
+    let(:user) { create :user, profile_completed_at: Time.current }
+    let!(:talent) { create :talent, user: user, public: true, hide_profile: false }
+
+    let(:tag_one) { create :tag, discovery_row: discovery_one }
+    let(:tag_two) { create :tag, discovery_row: discovery_two }
+
+    before do
+      create :user_tag, user: user, tag: tag_one
+      create :user_tag, user: user, tag: tag_two
+    end
 
     context "when partnerships_only is true" do
       let(:partnerships_only) { true }
@@ -64,7 +75,7 @@ RSpec.describe "Discovery rows", type: :request do
         get_discovery_rows
         ids = json[:discovery_rows].map { |r| r[:id] }
 
-        expect(ids).to match_array([discovery_one.id, discovery_two.id])
+        expect(ids).to match_array([discovery_one.id])
       end
     end
 
@@ -76,7 +87,7 @@ RSpec.describe "Discovery rows", type: :request do
 
         ids = json[:discovery_rows].map { |r| r[:id] }
 
-        expect(ids).to match_array([discovery_one.id, discovery_two.id, discovery_three.id])
+        expect(ids).to match_array([discovery_one.id, discovery_two.id])
       end
     end
   end

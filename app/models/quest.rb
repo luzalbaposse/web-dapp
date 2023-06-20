@@ -6,6 +6,7 @@ class Quest < ApplicationRecord
     send_career_update
     three_talent_subscribe
     verify_identity
+    verify_humanity
     five_subscribers
     complete_profile
     supporting_three

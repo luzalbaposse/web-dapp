@@ -21,10 +21,11 @@ const TAB_MAP = {
   }
 };
 
-const EarnPage = () => {
+export const EarnPage = props => {
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
   const tabNames = useMemo(() => Object.values(TAB_MAP).map(({ tabName }) => tabName), []);
   const tabsState = useTabs();
+  const railsContext = props.railsContext;
   useEffect(() => {
     const url = new URL(window.location.href);
     if (url.searchParams.get("tab")?.toLocaleLowerCase() === TAB_MAP[1].tabName.toLocaleLowerCase()) {
@@ -36,7 +37,7 @@ const EarnPage = () => {
   }, []);
   const memoedComponent = useMemo(() => {
     const Component = TAB_MAP[tabsState.selectedIndex].component;
-    return <Component profile={currentUser} />;
+    return <Component profile={currentUser} railsContext={railsContext} />;
   }, [tabsState.selectedIndex, currentUser]);
   return (
     <TalentThemeProvider>
@@ -55,4 +56,6 @@ const EarnPage = () => {
   );
 };
 
-export default EarnPage;
+export default (props, railsContext) => {
+  return () => <EarnPage {...props} railsContext={railsContext} />;
+};

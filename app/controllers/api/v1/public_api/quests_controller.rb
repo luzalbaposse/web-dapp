@@ -1,4 +1,7 @@
 class API::V1::PublicAPI::QuestsController < API::V1::PublicAPI::APIController
+  before_action :internal_only, only: [:complete]
+  before_action :authenticated_only, only: [:complete]
+
   def index
     total_quests = Quest.all
     if user
@@ -31,9 +34,36 @@ class API::V1::PublicAPI::QuestsController < API::V1::PublicAPI::APIController
     render json: response_body, status: :ok
   end
 
+  def complete
+    Quests::CompleteVerifyHumanityQuest.new(quest: quest, user: current_user, params: required_params.to_h).call
+
+    response_body = {quest: API::QuestBlueprint.render_as_json(quest, view: :normal)}
+    log_request(response_body, :ok)
+
+    render json: response_body, status: :ok
+  rescue Quests::CompleteVerifyHumanityQuest::VerificationError => error
+    response_body = {error: error.message}
+    log_request(response_body, :bad_request)
+    render json: response_body, status: :bad_request
+  end
+
   private
 
   def user
     @user ||= User.find_by("uuid::text = :id OR wallet_id = :id OR username = :id", id: downcase_id)
+  end
+
+  def quest
+    @quest ||= Quest.find_by!(quest_type: params[:quest_type])
+  end
+
+  def required_params
+    params.require(:worldcoin_proof).permit(
+      :merkle_root,
+      :credential_type,
+      :nullifier_hash,
+      :proof,
+      :chain
+    )
   end
 end

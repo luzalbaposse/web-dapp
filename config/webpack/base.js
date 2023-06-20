@@ -24,6 +24,9 @@ const customConfig = {
       process: "process/browser.js"
     })
   ],
+  module: {
+    strictExportPresence: false
+  },
   optimization: {
     splitChunks: {
       cacheGroups: {
