@@ -21,6 +21,7 @@ export const Container = styled.section`
 
   ${desktopStyles(css`
     width: 100%;
+    min-width: 456px;
     max-height: 560px;
     overflow: hidden;
     max-width: 456px;

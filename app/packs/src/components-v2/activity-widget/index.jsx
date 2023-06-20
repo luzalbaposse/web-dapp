@@ -22,7 +22,6 @@ import { Activity } from "./activity";
 const ACTIVITY_TYPE_TO_TITLE_MAP = {
   "Activities::CareerUpdate": "Career Update",
   "Activities::TokenLaunch": "Token Launch",
-  "Activities::ProfileComplete": "Profile Complete",
   "Activities::Stake": "Stake",
   "Activities::Sponsor": "Sponsor",
   "Activities::Subscribe": "Subscribe"
@@ -35,7 +34,6 @@ const DROPDOWN_OPTIONS = [
   { type: undefined, value: "All"},
   { type: "Activities::CareerUpdate", value: "Updates"},
   { type: "Activities::TokenLaunch", value: "Token Launches"},
-  { type: "Activities::ProfileComplete", value: "Complete Profiles"},
   { type: "Activities::Stake", value: "Staking"},
   { type: "Activities::Sponsor", value: "Sponsors"},
   { type: "Activities::Subscribe", value: "Subscribes"},
