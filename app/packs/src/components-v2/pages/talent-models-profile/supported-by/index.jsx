@@ -38,7 +38,7 @@ export const SupportedBy = ({ profile }) => {
         <>
           <TitleContainer>
             <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
-              {profile.user.legal_first_name} is supported by {totalSupporters} people
+              {profile.user.name} is supported by {totalSupporters} people
             </Typography>
             <TextLink
               href={`/u/${profile.user.username}#connections`}

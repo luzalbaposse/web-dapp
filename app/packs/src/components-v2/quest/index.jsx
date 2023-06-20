@@ -1,7 +1,7 @@
 import React from "react";
 import { QuestData, QuestDataRow, QuestEntry, QuestReward, RewardTag } from "./styled";
 import { Icon, Typography } from "@talentprotocol/design-system";
-import { VerifyHumanityQuest } from "./verifyHumanityQuest";
+import { VerifyHumanityQuest } from "./verify-humanity-quest";
 
 const QUEST_TYPE_MAP = {
   profile_picture: "/u/__username__",

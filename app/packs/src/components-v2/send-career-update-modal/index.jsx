@@ -63,27 +63,27 @@ export const SendCareerUpdateModalV2 = ({ isOpen, closeModal, profile }) => {
   return (
     <Modal title="Career update" isOpen={isOpen} closeModal={closeModal} footer={modalFooter}>
       <Container>
-        <Typography specs={{ variant: "p1", type: "regular" }} color="primary03">
-          Link this update to specific goals for a richer story. This helps your supporters understand
-          the progress and context behind your journey.
-        </Typography>
+        <InLineTextWithComponents specs={{ variant: "p2", type: "regular" }} color="primary03">
+        Think of this updates more as an intimate career log, and less like posting on social media or broadcasting to an audience. Need help to write it? Check some tips
+        <TextLink color="primary" text="here." size="small" href="https://blog.talentprotocol.com/supporter-updates-guide/" newPage />
+        </InLineTextWithComponents>
         <EntryContainer>
           <TextArea placeholder={`What's new in your career, ${profile?.name}?`} textAreaRef={textAreaRef} />
           <InLineTextWithComponents specs={{ variant: "p2", type: "regular" }} color="primary04">
-            Do you need help writing your career update? Ask our community on discord for help
-            <TextLink color="primary" text="on Discord." size="small" href="https://discord.gg/talentprotocol" />
+            Do you need help writing your career update? Ask our community on
+            <TextLink color="primary" text="Discord." size="small" href="https://discord.gg/talentprotocol" />
           </InLineTextWithComponents>
         </EntryContainer>
         <PillsContainer>
           <Typography specs={{ variant: "p2", type: "bold" }} color="primary01">
             Tag your goals
           </Typography>
-          {pills.length > 1 ? (
+          {!!pills.length ? (
             <Pills pillList={pills} onClick={handlePillClick} />
           ) : (
             <EntryContainer>
               <InLineTextWithComponents specs={{ variant: "p2", type: "regular" }} color="primary04">
-                Give your updates more depth with through your journey. Add your first goal to get started
+                Updates are even more useful if associated with goals. Create your first goal
                 <TextLink color="primary" text="here." size="small" href={`/u/${profile.username}`} />
               </InLineTextWithComponents>
             </EntryContainer>

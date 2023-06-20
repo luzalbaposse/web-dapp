@@ -21,7 +21,7 @@ export const Quests = ({ profile, railsContext }) => {
       quests.map(quest => (
         <Quest key={quest.title} quest={quest} username={profile.username} railsContext={railsContext} />
       )),
-    [quests]
+    [quests, railsContext]
   );
   return (
     <Container>

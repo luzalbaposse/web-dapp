@@ -4,7 +4,10 @@ class ActivityFeed < ApplicationRecord
   has_many :activities, through: :activity_feed_activities
 
   def all_activities
-    global_activities = Activity.where(global: true).to_sql
+    global_activities = Activity
+      .where.not(type: "Activities::ProfileComplete")
+      .where(global: true)
+      .to_sql
     user_activities = activities.to_sql
 
     # Merge global and user-specific activities using UNION
