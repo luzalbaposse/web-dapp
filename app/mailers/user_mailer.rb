@@ -140,10 +140,4 @@ class UserMailer < ApplicationMailer
 
     bootstrap_mail(to: @user.email, subject: "We have open roles for you!")
   end
-
-  def send_opportunities_hiring_email
-    @user = indifferent_access_params[:user]
-
-    bootstrap_mail(to: @user.email, subject: "Looking to hire talent?")
-  end
 end

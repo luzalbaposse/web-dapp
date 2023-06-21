@@ -17,6 +17,5 @@ namespace :notifications do
     UserMailer.with(recipient: user).send_application_received_email.deliver_later
     UserMailer.with(recipient: user).send_application_approved_email.deliver_later
     UserMailer.with(user:).send_opportunities_open_roles_email.deliver_later
-    UserMailer.with(user:).send_opportunities_hiring_email.deliver_later
   end
 end

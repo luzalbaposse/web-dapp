@@ -107,10 +107,6 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.with(user: User.first).send_opportunities_open_roles_email
   end
 
-  def send_opportunities_hiring_email
-    UserMailer.with(user: User.first).send_opportunities_hiring_email
-  end
-
   private
 
   def goal(user)

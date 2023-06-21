@@ -88,41 +88,5 @@ RSpec.describe SendCareerNeedOpportunityEmailsJob, type: :job do
         it_behaves_like "a job that does not send the opportunity email"
       end
     end
-
-    describe "opportunities_hiring" do
-      let(:email_name) { "opportunities_hiring" }
-      let(:email_subject) { "Looking to hire talent?" }
-
-      context "when the user has a hiring career need" do
-        before do
-          create :career_need, career_goal: talent.career_goal, title: hiring_career_need
-        end
-
-        context "when the user has a user email log" do
-          let!(:user_email_log) { create :user_email_log, sent_at_data: sent_at_data, user: user }
-
-          context "when an opportunities hiring email has been sent within three months" do
-            let(:sent_at_data) { {email_name => Time.current - 1.months} }
-
-            it_behaves_like "a job that does not send the opportunity email"
-          end
-
-          context "when an opportunities hiring email has been sent more than three months ago" do
-            let(:sent_at_data) { {email_name => Time.current - 3.months - 1.day} }
-
-            it_behaves_like "a job that sends the opportunity email"
-          end
-        end
-
-        context "when the user does not have a user email log" do
-          it_behaves_like "a job that sends the opportunity email"
-          it_behaves_like "a job that creates a user email log and persists sent at data"
-        end
-      end
-
-      context "when the user does not have any hiring career needs" do
-        it_behaves_like "a job that does not send the opportunity email"
-      end
-    end
   end
 end
