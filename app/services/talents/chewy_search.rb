@@ -57,9 +57,12 @@ module Talents
         TalentsIndex.query({
           bool: {
             must: [
-              {term: {public: true}},
               {term: {hide_profile: false}},
-              {term: {profile_complete: true}}
+              {range: {
+                "user.profile_completeness": {
+                  gte: 0.5
+                }
+              }}
             ]
           }
         })
@@ -90,43 +93,63 @@ module Talents
 
     def query_for_status(talents)
       if filter_params[:status] == "Launching soon"
-        talents.query.not({exists: {field: "talent_token.contract_id"}})
+        talents
+          .query.not({exists: {field: "talent_token.contract_id"}})
+          .order({"user.profile_completeness": {order: :desc}})
       elsif filter_params[:status] == "Latest added" || filter_params[:status] == "Trending"
-        talents.query([{
-          exists: {field: "talent_token.contract_id"}
-        }, {
-          range: {
-            "talent_token.deployed_at": {
-              gte: 1.month.ago
+        talents
+          .query([{
+            exists: {field: "talent_token.contract_id"}
+          }, {
+            range: {
+              "talent_token.deployed_at": {
+                gte: 1.month.ago
+              }
             }
-          }
-        }])
+          }])
+          .order({"user.profile_completeness": {order: :desc}})
       elsif filter_params[:status] == "Pending approval" && admin_or_moderator
-        talents.query({match: {"user.profile_type": "waiting_for_approval"}})
+        talents
+          .query({match: {"user.profile_type": "waiting_for_approval"}})
+          .order({"user.profile_completeness": {order: :desc}})
       elsif filter_params[:status] == "Verified"
-        talents.query({term: {verified: true}})
+        talents
+          .query({term: {verified: true}})
+          .order({"user.profile_completeness": {order: :desc}})
       elsif filter_params[:status] == "By Celo Network"
-        talents.query([{
-          exists: {field: "talent_token.contract_id"}
-        }, {
-          match: {"talent_token.chain_id": chain_id("celo")}
-        }])
+        talents
+          .query([{
+            exists: {field: "talent_token.contract_id"}
+          }, {
+            match: {"talent_token.chain_id": chain_id("celo")}
+          }])
+          .order({"user.profile_completeness": {order: :desc}})
       elsif filter_params[:status] == "By Polygon Network"
-        talents.query([{
-          exists: {field: "talent_token.contract_id"}
-        }, {
-          match: {"talent_token.chain_id": chain_id("polygon")}
-        }])
+        talents
+          .query([{
+            exists: {field: "talent_token.contract_id"}
+          }, {
+            match: {"talent_token.chain_id": chain_id("polygon")}
+          }])
+          .order({"user.profile_completeness": {order: :desc}})
       elsif filter_params[:status] == "Looking for a mentor"
-        talents.query({match: {"career_goal.career_needs.title": CareerNeed::LOOKING_MENTORSHIP}})
+        talents
+          .query({match: {"career_goal.career_needs.title": CareerNeed::LOOKING_MENTORSHIP}})
+          .order({"user.profile_completeness": {order: :desc}})
       elsif filter_params[:status] == "Looking to mentor others"
-        talents.query({match: {"career_goal.career_needs.title": CareerNeed::MENTORING_OTHERS}})
+        talents
+          .query({match: {"career_goal.career_needs.title": CareerNeed::MENTORING_OTHERS}})
+          .order({"user.profile_completeness": {order: :desc}})
       elsif filter_params[:status] == "Looking to hire"
         hiring_needs = CareerNeed::HIRING_NEEDS.join("")
-        talents.query({query_string: {query: hiring_needs, fields: ["career_goal.career_needs.*"]}})
+        talents
+          .query({query_string: {query: hiring_needs, fields: ["career_goal.career_needs.*"]}})
+          .order({"user.profile_completeness": {order: :desc}})
       elsif filter_params[:status] == "Looking for new opportunities"
         role_needs = CareerNeed::ROLE_NEEDS.map { |r| "(#{r})" }.join(" OR ")
-        talents.query({query_string: {query: role_needs, fields: ["career_goal.career_needs.*"]}})
+        talents
+          .query({query_string: {query: role_needs, fields: ["career_goal.career_needs.*"]}})
+          .order({"user.profile_completeness": {order: :desc}})
       else
         talents.query({
           function_score: {

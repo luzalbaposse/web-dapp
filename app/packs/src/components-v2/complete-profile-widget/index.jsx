@@ -30,9 +30,9 @@ export const CompleteProfileWidget = ({ user }) => {
           <Typography specs={{ variant: "p1", type: "bold" }}>{progress}%</Typography>
         </ProgressContainer>
         <IntroContainer>
-          <Typography specs={{ variant: "h5", type: "bold" }}>Complete your profile</Typography>
+          <Typography specs={{ variant: "h5", type: "bold" }}>Improve your profile</Typography>
           <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
-            Completing your profile unlocks quests and allows you to start earning TAL!
+            The more information your profile has, the more features you’ll be able to unlock.
           </Typography>
         </IntroContainer>
         <ListContainer>

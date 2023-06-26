@@ -22,6 +22,7 @@ class TalentsIndex < Chewy::Index
 
   field :user do
     field :id, :username, :display_name, :profile_type, :legal_first_name, :legal_last_name
+    field :profile_completeness, type: "float"
     field :tags, value: ->(user, talent) { user.tags.map(&:description) }
     field :name, value: ->(user, talent) { user.name }
     field :discovery_row_ids, value: ->(user, talent) do

@@ -17,7 +17,7 @@ RSpec.describe "notifications:send_emails_to_admin" do
       emails = ActionMailer::Base.deliveries
 
       aggregate_failures do
-        expect(emails.count).to eq(14)
+        expect(emails.count).to eq(12)
 
         expect(emails.map(&:subject)).to match_array(
           [
@@ -28,13 +28,11 @@ RSpec.describe "notifications:send_emails_to_admin" do
             "Congrats, your Talent Token is now live!",
             "You're missing out on $TAL rewards!",
             "Complete your profile and earn your NFT today! 🚀",
-            "You can now apply to launch a Talent Token! 👏",
             "You're verified! ✅",
             "Verification failed 💔",
             "We've received your application",
             "Hey, you can now launch your token 🚀",
-            "We have open roles for you!",
-            "Looking to hire talent?"
+            "We have open roles for you!"
           ]
         )
       end

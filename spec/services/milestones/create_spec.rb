@@ -18,6 +18,13 @@ RSpec.describe Milestones::Create do
     }
   end
 
+  let(:profile_completeness_class) { Users::UpdateProfileCompleteness }
+  let(:profile_completeness_instance) { instance_double(profile_completeness_class, call: true) }
+
+  before do
+    allow(profile_completeness_class).to receive(:new).and_return(profile_completeness_instance)
+  end
+
   it "enqueues a job to refresh user quests" do
     Sidekiq::Testing.inline! do
       create_milestone
@@ -28,5 +35,14 @@ RSpec.describe Milestones::Create do
         expect(job["arguments"][0]).to eq(user.id)
       end
     end
+  end
+
+  it "initializes and calls the update profile completeness" do
+    create_milestone
+
+    expect(profile_completeness_class).to have_received(:new).with(
+      user: user
+    )
+    expect(profile_completeness_instance).to have_received(:call)
   end
 end

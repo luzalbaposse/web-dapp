@@ -1,11 +1,12 @@
 module Users
-  class UpdateProfileCompletedAt
+  class UpdateProfileCompleteness
     def initialize(user:)
       @user = user
     end
 
     def call
       profile_completed = user.profile_completed?
+      user.upsert_profile_completeness!
 
       if profile_completed && !user.profile_completed_at
         user.update!(profile_completed_at: Time.current)

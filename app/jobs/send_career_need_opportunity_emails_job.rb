@@ -3,7 +3,6 @@ class SendCareerNeedOpportunityEmailsJob < ApplicationJob
 
   def perform
     send_opportunities_open_roles_emails
-    send_opportunities_hiring_emails
   end
 
   private
@@ -18,19 +17,6 @@ class SendCareerNeedOpportunityEmailsJob < ApplicationJob
       .find_each do |user|
         UserMailer.with(user: user).send_opportunities_open_roles_email.deliver_later
         persist_sent_at(email: "opportunities_open_roles", user: user)
-      end
-  end
-
-  def send_opportunities_hiring_emails
-    User
-      .joins(talent: {career_goal: :career_needs})
-      .left_outer_joins(:user_email_log)
-      .where(career_needs: {title: CareerNeed::HIRING_NEEDS})
-      .where("sent_at_data ->> 'opportunities_hiring' IS ? OR sent_at_data ->> 'opportunities_hiring' < ?", nil, three_months_ago)
-      .distinct
-      .find_each do |user|
-        UserMailer.with(user: user).send_opportunities_hiring_email.deliver_later
-        persist_sent_at(email: "opportunities_hiring", user: user)
       end
   end
 

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Users::UpdateProfileCompletedAt do
+RSpec.describe Users::UpdateProfileCompleteness do
   include ActiveJob::TestHelper
 
   describe "#call" do
@@ -22,11 +22,16 @@ RSpec.describe Users::UpdateProfileCompletedAt do
       before do
         talent.occupation = "Tester"
         talent.headline = "Great tester with lots of experience"
+        talent.website = "my_website.com"
+        talent.verified = true
         talent.save!
 
         create :milestone, talent: talent
         career_goal = create :career_goal, talent: talent
         create :goal, career_goal: career_goal, due_date: Date.tomorrow
+
+        tag = create :tag, description: "web3", hidden: false
+        user.tags << tag
 
         allow_any_instance_of(User).to receive(:profile_picture_url).and_return("https://path_to_image")
       end
@@ -35,6 +40,12 @@ RSpec.describe Users::UpdateProfileCompletedAt do
         freeze_time do
           expect { update_profile_completed_at }.to change(user.reload, :profile_completed_at).from(nil).to(Time.current)
         end
+      end
+
+      it "updates the user profile completeness amount" do
+        update_profile_completed_at
+
+        expect(user.reload.profile_completeness).to eq 1
       end
 
       it "initializes and calls the create notification to all supporters" do
@@ -69,6 +80,12 @@ RSpec.describe Users::UpdateProfileCompletedAt do
           expect(user.reload.profile_completed_at).to eq profile_completed_at
         end
 
+        it "updates the user profile completeness amount" do
+          update_profile_completed_at
+
+          expect(user.reload.profile_completeness).to eq 1
+        end
+
         it "does not initialize the create notification" do
           update_profile_completed_at
 
@@ -78,6 +95,14 @@ RSpec.describe Users::UpdateProfileCompletedAt do
     end
 
     context "when some profile fields are missing" do
+      it "updates the user profile completeness amount" do
+        update_profile_completed_at
+
+        required_fields_count = User::REQUIRED_PROFILE_FIELDS.count + 1
+
+        expect(user.reload.profile_completeness).to eq(2.to_f / required_fields_count)
+      end
+
       context "when the user already has the timestamp populated" do
         let(:profile_completed_at) { Time.new(2022, 10, 5) }
 

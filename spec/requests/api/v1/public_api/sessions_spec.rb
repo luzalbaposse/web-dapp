@@ -46,6 +46,9 @@ RSpec.describe "Sessions" do
                 headline
                 career_goal
                 milestone
+                tag
+                social_link
+                verified
               ]
             )
             expect(returned_user[:required_profile_fields]).to match_array(User::REQUIRED_PROFILE_FIELDS)

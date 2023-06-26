@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_09_093545) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_15_124155) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -769,6 +769,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_09_093545) do
     t.datetime "profile_completed_at", precision: nil
     t.datetime "humanity_verified_at"
     t.jsonb "humanity_proof"
+    t.decimal "profile_completeness", default: "0.0"
     t.index ["created_at"], name: "index_users_on_created_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invite_id"], name: "index_users_on_invite_id"

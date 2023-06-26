@@ -32,6 +32,7 @@ module Milestones
       end
 
       refresh_quests
+      update_profile_completeness
 
       milestone
     end
@@ -74,6 +75,10 @@ module Milestones
 
     def refresh_quests
       Quests::RefreshUserQuestsJob.perform_later(talent.user.id)
+    end
+
+    def update_profile_completeness
+      Users::UpdateProfileCompleteness.new(user: talent.user).call
     end
   end
 end

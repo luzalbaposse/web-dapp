@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Users", type: :request do
-  let(:current_user) { create :user }
+  let(:current_user) { create :user, :with_talent }
 
   describe "#index" do
     subject(:get_users) { get api_v1_users_path(params: params, as: current_user) }
@@ -141,7 +141,7 @@ RSpec.describe "Users", type: :request do
     end
 
     context "when the password is correct" do
-      let(:current_user) { create :user, password: "Password1" }
+      let(:current_user) { create :user, :with_talent, password: "Password1" }
 
       let(:params) do
         {

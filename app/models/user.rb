@@ -9,6 +9,7 @@ class User < ApplicationRecord
   validate :username_is_valid
   validates :username, :email, uniqueness: true
   validates :wallet_id, uniqueness: true, if: -> { wallet_id.present? }
+  validates_numericality_of :profile_completeness, less_than_or_equal_to: 1
 
   belongs_to :invited, class_name: "Invite", foreign_key: "invite_id", optional: true
   belongs_to :race, optional: true
@@ -85,7 +86,19 @@ class User < ApplicationRecord
     },
     {
       name: "milestone",
-      description: "Add at least one milestone to your journey"
+      description: "Add at least one item to your journey"
+    },
+    {
+      name: "tag",
+      description: "Add at least one tag"
+    },
+    {
+      name: "social_link",
+      description: "Add at least 1 social link"
+    },
+    {
+      name: "verified",
+      description: "Verify your identity"
     }
   ].freeze
 
@@ -245,6 +258,18 @@ class User < ApplicationRecord
     missing_profile_fields.empty?
   end
 
+  def profile_complete_quest_completed?
+    fields = []
+    fields << "display_name" unless display_name
+    fields << "profile_picture" unless profile_picture_url
+    fields << "occupation" unless talent.occupation
+    fields << "headline" unless talent.headline
+    fields << "career_goal" unless talent.career_goal&.goals&.any?
+    fields << "milestone" unless talent.milestones.any?
+
+    fields.empty?
+  end
+
   def missing_profile_fields
     fields = []
     fields << "display_name" unless display_name
@@ -253,7 +278,17 @@ class User < ApplicationRecord
     fields << "headline" unless talent.headline
     fields << "career_goal" unless talent.career_goal&.goals&.any?
     fields << "milestone" unless talent.milestones.any?
+    fields << "tag" unless tags.visible.any?
+    fields << "social_link" unless talent.social_links.any?
+    fields << "verified" unless talent.verified?
     fields
+  end
+
+  def upsert_profile_completeness!
+    required_fields_count = REQUIRED_PROFILE_FIELDS.count + 1
+    completed_fields_count = (required_fields_count - missing_profile_fields.count)
+
+    update!(profile_completeness: completed_fields_count.to_f / required_fields_count)
   end
 
   def profile_picture_url

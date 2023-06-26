@@ -25,7 +25,8 @@ class API::UpdateTalent
   end
 
   def update_user(params)
-    if params[:profile_type]
+    if params[:profile_type] &&
+        (params[:profile_type] != "approved" || (params[:profile_type] == "approved" && user.admin?))
       Users::UpdateProfileType.new.call(
         user: talent_user,
         who_dunnit_id: user.id,
@@ -33,9 +34,7 @@ class API::UpdateTalent
         note: params[:note]
       )
 
-      if params[:profile_type] == "approved"
-        talent.update!(public: true)
-      end
+      talent.update!(public: true) if params[:profile_type] == "approved"
     end
 
     if params.key?(:legal_first_name) && !talent.with_persona_id
@@ -141,7 +140,7 @@ class API::UpdateTalent
       talent.open_to_job_offers = params[:open_to_job_offers]
     end
 
-    if params.key?(:verified)
+    if params.key?(:verified) && user.admin?
       talent.verified = params[:verified]
     end
 

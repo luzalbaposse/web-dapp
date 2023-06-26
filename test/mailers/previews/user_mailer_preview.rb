@@ -37,10 +37,6 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.with(user: User.first).send_complete_profile_reminder_email
   end
 
-  def send_completed_profile_email
-    UserMailer.with(recipient: User.first).send_completed_profile_email
-  end
-
   def send_verified_profile_email
     UserMailer.with(source_id: User.first.id).send_verified_profile_email
   end
@@ -109,10 +105,6 @@ class UserMailerPreview < ActionMailer::Preview
 
   def send_opportunities_open_roles_email
     UserMailer.with(user: User.first).send_opportunities_open_roles_email
-  end
-
-  def send_opportunities_hiring_email
-    UserMailer.with(user: User.first).send_opportunities_hiring_email
   end
 
   private

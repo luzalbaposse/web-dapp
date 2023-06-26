@@ -333,23 +333,11 @@ RSpec.describe Quests::RefreshUserQuest do
         let(:quest_type) { "complete_profile" }
 
         context "when the quest was completed" do
-          let(:update_completed_at_class) { Users::UpdateProfileCompletedAt }
-          let(:update_completed_at) { instance_double(update_completed_at_class, call: true) }
-
           before do
-            allow_any_instance_of(User).to receive(:profile_completed?).and_return(true)
-
-            allow(update_completed_at_class).to receive(:new).and_return(update_completed_at)
+            allow_any_instance_of(User).to receive(:profile_complete_quest_completed?).and_return(true)
           end
 
           it_behaves_like "a refresh user quest that creates new records"
-
-          it "initializes and calls the update profile completed at service" do
-            refresh_user_quest
-
-            expect(update_completed_at_class).to have_received(:new).with(user: user)
-            expect(update_completed_at).to have_received(:call)
-          end
         end
 
         context "when the quest was not completed" do

@@ -21,6 +21,13 @@ RSpec.describe Users::Update do
   let(:wallet_id) { nil }
   let(:first_quest_popup) { nil }
 
+  let(:profile_completeness_class) { Users::UpdateProfileCompleteness }
+  let(:profile_completeness_instance) { instance_double(profile_completeness_class, call: true) }
+
+  before do
+    allow(profile_completeness_class).to receive(:new).and_return(profile_completeness_instance)
+  end
+
   context "when a user with the same username already exists" do
     let(:username) { "dinis" }
     let(:user_params) { {username: username} }
@@ -108,6 +115,15 @@ RSpec.describe Users::Update do
           expect(job["arguments"][0]).to eq(user.id)
         end
       end
+    end
+
+    it "initializes and calls the update profile completeness" do
+      update_user
+
+      expect(profile_completeness_class).to have_received(:new).with(
+        user: user
+      )
+      expect(profile_completeness_instance).to have_received(:call)
     end
 
     it "returns a successful result" do
