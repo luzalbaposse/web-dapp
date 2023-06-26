@@ -28,6 +28,7 @@ FactoryBot.define do
 
     trait :with_profile_complete do
       profile_completed_at { Time.current }
+      profile_completeness { 1 }
     end
   end
 end

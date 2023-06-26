@@ -50,6 +50,7 @@ module Users
       end
 
       create_invite_used_notification(invite, result[:user]) if result[:success] && invite
+      update_profile_completeness(result[:user])
       result
     end
 
@@ -130,6 +131,10 @@ module Users
 
     def create_activity_feed(user)
       ActivityFeed.find_or_create_by(user: user)
+    end
+
+    def update_profile_completeness(user)
+      Users::UpdateProfileCompleteness.new(user: user).call
     end
   end
 end

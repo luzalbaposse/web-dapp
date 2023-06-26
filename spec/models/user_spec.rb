@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe User, type: :model do
+  subject(:user) { build :user }
+
   describe "associations" do
     it { is_expected.to have_one(:talent) }
     it { is_expected.to have_one(:user_email_log) }
@@ -18,6 +20,10 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_many(:users_subscribing) }
     it { is_expected.to have_many(:pending_subscriptions) }
     it { is_expected.to have_many(:connections) }
+  end
+
+  describe "validations" do
+    it { is_expected.to validate_numericality_of(:profile_completeness).is_less_than_or_equal_to(1) }
   end
 
   describe "email_and_credentials validation" do
@@ -626,6 +632,7 @@ RSpec.describe User, type: :model do
         talent.occupation = "Tester"
         talent.headline = "Great tester with lots of experience"
         talent.website = "my_website.com"
+        talent.verified = true
         talent.save!
 
         create :milestone, talent: talent
@@ -645,15 +652,37 @@ RSpec.describe User, type: :model do
       it "returns true for profile completeness" do
         expect(user.profile_completed?).to eq true
       end
+
+      it "returns true for profile completed quest" do
+        expect(user.profile_complete_quest_completed?).to eq true
+      end
+
+      it "returns the correct completeness" do
+        user.upsert_profile_completeness!
+
+        expect(user.reload.profile_completeness).to eq 1
+      end
     end
 
     context "when some fields are missing" do
       it "returns the missing fields" do
-        expect(user.missing_profile_fields).to eq ["profile_picture", "occupation", "headline", "career_goal", "milestone"]
+        expect(user.missing_profile_fields).to eq ["profile_picture", "occupation", "headline", "career_goal", "milestone", "tag", "social_link", "verified"]
       end
 
       it "returns false for profile completeness" do
         expect(user.profile_completed?).to eq false
+      end
+
+      it "returns false for profile completed quest" do
+        expect(user.profile_complete_quest_completed?).to eq false
+      end
+
+      it "returns the correct completeness" do
+        user.upsert_profile_completeness!
+
+        required_fields_count = User::REQUIRED_PROFILE_FIELDS.count + 1
+
+        expect(user.reload.profile_completeness).to eq(2.to_f / required_fields_count)
       end
     end
   end

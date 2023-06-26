@@ -52,6 +52,7 @@ module Users
       end
 
       refresh_quests(user)
+      update_profile_completeness(user)
 
       {success: true, user: user}
     rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid => e
@@ -102,6 +103,10 @@ module Users
 
     def refresh_quests(user)
       Quests::RefreshUserQuestsJob.perform_later(user.id)
+    end
+
+    def update_profile_completeness(user)
+      Users::UpdateProfileCompleteness.new(user: user).call
     end
 
     def ens_domain_owner

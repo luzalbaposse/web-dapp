@@ -21,6 +21,7 @@ module Goals
       ActivityIngestJob.perform_later("goal_create", goal_create_message(goal), current_user.id)
 
       refresh_quests
+      update_profile_completeness
 
       goal
     end
@@ -46,6 +47,10 @@ module Goals
 
     def refresh_quests
       Quests::RefreshUserQuestsJob.perform_later(career_goal.talent.user.id)
+    end
+
+    def update_profile_completeness
+      Users::UpdateProfileCompleteness.new(user: career_goal.talent.user).call
     end
   end
 end

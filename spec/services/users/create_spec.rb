@@ -37,8 +37,12 @@ RSpec.describe Users::Create do
   let(:notification_creator_class) { CreateNotification }
   let(:notification_creator) { instance_double(notification_creator_class, call: true) }
 
+  let(:profile_completeness_class) { Users::UpdateProfileCompleteness }
+  let(:profile_completeness_instance) { instance_double(profile_completeness_class, call: true) }
+
   before do
     allow(notification_creator_class).to receive(:new).and_return(notification_creator)
+    allow(profile_completeness_class).to receive(:new).and_return(profile_completeness_instance)
   end
 
   context "when a valid invite is provided" do
@@ -190,6 +194,15 @@ RSpec.describe Users::Create do
             type: InviteUsedNotification
           )
       end
+    end
+
+    it "initializes and calls the update profile completeness" do
+      result = create_user
+
+      expect(profile_completeness_class).to have_received(:new).with(
+        user: result[:user]
+      )
+      expect(profile_completeness_instance).to have_received(:call)
     end
 
     context "when there is an unexpected error" do

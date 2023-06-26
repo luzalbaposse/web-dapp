@@ -29,7 +29,6 @@ module Quests
           description: "Completed #{quest.title}"
         ).call
 
-        update_profile_completed_at if quest.quest_type == "complete_profile"
         if quest.quest_type == "verify_identity"
           whitelist_user
           credit_invite_points if user.invited
@@ -113,15 +112,11 @@ module Quests
     end
 
     def profile_complete_quest_completed?
-      user.profile_completed?
+      user.profile_complete_quest_completed?
     end
 
     def verify_humanity_quest_completed?
       user.humanity_verified_at.present?
-    end
-
-    def update_profile_completed_at
-      Users::UpdateProfileCompletedAt.new(user: user).call
     end
 
     def notify_verified_profile
