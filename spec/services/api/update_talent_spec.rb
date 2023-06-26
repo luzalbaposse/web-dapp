@@ -58,6 +58,7 @@ RSpec.describe API::UpdateTalent do
   end
 
   context "when the user is approved" do
+    let(:user) { create :user, talent: talent, invited: invite, role: "admin" }
     let(:user_params) { {profile_type: "approved"} }
     let(:talent_params) { {} }
     let(:tag_params) { {} }

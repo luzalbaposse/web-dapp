@@ -10,7 +10,7 @@ import Divider from "src/components/design_system/other/Divider";
 import Button from "src/components/design_system/button";
 import { useWindowDimensionsHook } from "src/utils/window";
 
-const AdminVerificationConfirmationModal = ({ show, hide, talent, setTalent }) => {
+const AdminVerificationConfirmationModal = ({ show, hide, talent, setProfile }) => {
   const { mobile } = useWindowDimensionsHook();
   const user = talent?.user;
 
@@ -29,7 +29,7 @@ const AdminVerificationConfirmationModal = ({ show, hide, talent, setTalent }) =
     });
 
     if (response && !response.error) {
-      setTalent(prev => ({
+      setProfile(prev => ({
         ...prev,
         verified: true
       }));
