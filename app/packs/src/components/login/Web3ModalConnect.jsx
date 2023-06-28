@@ -1,13 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import Modal from "react-bootstrap/Modal";
-import { OnChain } from "src/onchain";
-
 import MetamaskFox from "images/metamask-fox.svg";
-import { patch } from "src/utils/requests";
+import { Web3Button } from "@web3modal/react";
 import { TALENT_PROTOCOL_DISCORD } from "src/utils/constants";
-import { shortenAddress } from "src/utils/viewHelpers";
-
-import Button from "src/components/design_system/button";
+import { Container } from "./styled";
 
 export const WalletConnectionError = ({ show, hide, mode }) => (
   <Modal show={show} onHide={hide} centered dialogClassName="remove-background">
@@ -51,62 +47,11 @@ export const UnableToConnect = ({ show, hide }) => (
   </Modal>
 );
 
-const Web3ModalConnect = ({ userId, onConnect, railsContext, mode, buttonClassName }) => {
-  const [requestingWalletConnection, setRequestingWalletConnection] = useState(false);
-  const [account, setAccount] = useState("");
-  const [showWalletConnectionError, setShowWalletConnectionError] = useState(false);
-  const [error, setError] = useState(false);
-
-  const connectWallet = async () => {
-    setRequestingWalletConnection(true);
-
-    const api = new OnChain(railsContext.contractsEnv);
-    const _account = await api.retrieveAccount();
-
-    if (_account) {
-      const result = await patch(`/api/v1/users/${userId}`, {
-        wallet_id: _account.toLowerCase()
-      }).catch(error => {
-        console.log(error);
-        setError(true);
-      });
-
-      if (result.errors || result.error) {
-        setError(true);
-        setRequestingWalletConnection(false);
-      } else {
-        if (result) {
-          setAccount(_account);
-        }
-        onConnect(_account);
-        setRequestingWalletConnection(false);
-      }
-    } else {
-      setRequestingWalletConnection(false);
-      setShowWalletConnectionError(true);
-    }
-  };
-
-  const allowConnect = () => requestingWalletConnection == false;
-
+const Web3ModalConnect = ({}) => {
   return (
-    <>
-      <WalletConnectionError
-        show={showWalletConnectionError}
-        hide={() => setShowWalletConnectionError(false)}
-        mode={mode}
-      />
-      <UnableToConnect show={error} hide={() => setError(false)} />
-      <Button
-        onClick={connectWallet}
-        type={buttonClassName ? "" : "white-subtle"}
-        mode={mode}
-        className={`${buttonClassName || "mr-2"} medium`}
-        disabled={!allowConnect()}
-      >
-        {account == "" ? "Connect Wallet" : `${shortenAddress(account)}`}{" "}
-      </Button>
-    </>
+    <Container>
+      <Web3Button balance="show" />
+    </Container>
   );
 };
 

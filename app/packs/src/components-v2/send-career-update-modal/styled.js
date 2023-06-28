@@ -44,7 +44,7 @@ export const EntryContainer = styled.div`
     margin-bottom: 10px;
 
     textarea {
-    height: 180px;
+      height: 180px;
     }
   }
 `;

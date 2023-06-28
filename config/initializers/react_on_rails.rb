@@ -19,7 +19,8 @@ module RenderingExtension
       linkedinRedirectUri: ENV["LINKEDIN_REDIRECT_URI"],
       captchaKey: ENV["RECAPTCHA_SITE_KEY"],
       worldcoinAppId: ENV["WORLDCOIN_APP_ID"],
-      worldcoinQuestAction: ENV["WORLDCOIN_QUEST_ACTION"]
+      worldcoinQuestAction: ENV["WORLDCOIN_QUEST_ACTION"],
+      walletConnectProjectId: ENV["WALLET_CONNECT_PROJECT_ID"]
     }
   end
 end

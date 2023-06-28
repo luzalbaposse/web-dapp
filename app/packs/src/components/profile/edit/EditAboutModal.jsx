@@ -271,7 +271,7 @@ const EditAboutModal = ({ show, hide, profile, setProfile }) => {
             required={true}
             error={validationErrors?.pitch}
           />
-          <P2 className="text-primary-04" text="Short caption" />
+          <P2 className="text-primary-04" text="Let people know more about you and what you are looking for" />
         </div>
         <div className="w-100 mb-5">
           <P2 className="text-primary-01 mb-2" bold text="I'm open to" />

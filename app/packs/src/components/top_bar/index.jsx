@@ -133,43 +133,32 @@ export const TopBar = ({
   };
 
   const signOut = async () => {
-    await disconnectWallet();
-
+    window.web3Interactor.disconnect();
     destroy(signOutPath).then(() => {
       window.location.replace("/");
     });
   };
 
-  const disconnectWallet = async (/*account*/) => {
+  const setupChain = useCallback(async () => {
     const onChain = new OnChain(railsContext.contractsEnv);
 
-    onChain.disconnect();
-  };
+    const account = onChain.connectedAccount();
 
-  const setupChain = useCallback(
-    async (forceConnect = false) => {
-      const onChain = new OnChain(railsContext.contractsEnv);
+    if (account) {
+      setAccount(account.toLowerCase());
+      setWalletConnected(true);
 
-      const account = await onChain.connectedAccount(forceConnect);
+      const balance = await onChain.getStableBalance(true);
 
-      if (account) {
-        setAccount(account.toLowerCase());
-        setWalletConnected(true);
-
-        await onChain.loadStableToken();
-        const balance = await onChain.getStableBalance(true);
-
-        if (balance) {
-          setStableBalance(balance);
-        }
-
-        const chainId = await onChain.getChainID();
-        const chainName = chainIdToName(chainId, railsContext.contractsEnv);
-        setChainName(chainName);
+      if (balance) {
+        setStableBalance(balance);
       }
-    },
-    [walletConnected]
-  );
+
+      const chainId = await onChain.getChainID();
+      const chainName = chainIdToName(chainId, railsContext.contractsEnv);
+      setChainName(chainName);
+    }
+  }, [walletConnected]);
 
   const onWalletConnect = async account => {
     await setupChain(true);

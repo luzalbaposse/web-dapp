@@ -76,7 +76,14 @@ const ApprovalConfirmationModal = ({ show, hide, talent, setTalent, railsContext
   const setupChain = useCallback(async () => {
     const newOnChain = new OnChain(railsContext.contractsEnv);
     await newOnChain.retrieveAccount();
-    await newOnChain.loadFactory();
+    const correctChain = await newOnChain.recognizedChain();
+
+    if (!correctChain) {
+      toast.error(<ToastBody heading="Wrong Network" body={"Change your network to Polygon."} />, { autoClose: 1500 });
+      setFirstLoading(false);
+      hide();
+      return;
+    }
     for await (const option of getAllChainOptions(railsContext.contractsEnv)) {
       if (option.name == "Polygon") {
         const isWhitelisted = await newOnChain.isAddressWhitelisted(user?.wallet_id, option.id);

@@ -7,9 +7,9 @@ export const LegalNameStep = ({ setIsNextDisable, setUser, user, isNextDisabled 
   const lastNameRef = useRef(null);
   const [errorDescritpion, setErrorDescription] = useState({ firstName: "", lastName: "" });
   const validateStep = useCallback(() => {
-    if (firstNameRef.current.value.length > 46) { 
+    if (firstNameRef.current.value.length > 46) {
       setErrorDescription({ ...errorDescritpion, firstName: "First name is too long" });
-    } 
+    }
     if (lastNameRef.current.value.length > 46) {
       setErrorDescription({ ...errorDescritpion, lastName: "Last name is too long" });
       return;

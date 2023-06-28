@@ -24,9 +24,8 @@ const Token = ({ profile, talentTokenPrice, railsContext }) => {
   const addTokenToMetamask = async () => {
     const onChainAPI = new OnChain(railsContext.contractsEnv);
 
-    const chainId = await onChainAPI.getChainID();
-
-    if (chainId != talentToken.chainId) {
+    const chainId = window.web3Interactor.getChainId();
+    if (chainId != talentToken.chain_id) {
       await onChainAPI.switchChain(talentToken.chain_id);
     }
 

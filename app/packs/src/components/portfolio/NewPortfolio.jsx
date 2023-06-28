@@ -274,8 +274,8 @@ const NewPortfolio = ({
     if (chainAPI && contractAddress) {
       const value = await chainAPI.calculateEstimatedReturns(contractAddress, null);
 
-      if (value?.stakerRewards) {
-        return ethers.utils.formatUnits(value.stakerRewards);
+      if (value.length > 0 && value[0]) {
+        return ethers.utils.formatUnits(value[0]);
       } else {
         return "0";
       }
@@ -535,43 +535,55 @@ const PortfolioWrapper = props => {
   const [walletConnected, setWalletConnected] = useState(false);
   const [localAccount, setLocalAccount] = useState("");
 
-  const setupChain = useCallback(async () => {
-    const newOnChain = new OnChain(props.railsContext.contractsEnv);
+  const setupChain = useCallback(async errorCallback => {
+    try {
+      const newOnChain = new OnChain(props.railsContext.contractsEnv);
 
-    const walletConnected = await newOnChain.connectedAccount(true);
+      const walletConnected = newOnChain.connectedAccount();
 
-    await newOnChain.loadStaking();
-    await newOnChain.loadStableToken();
-    const balance = await newOnChain.getStableBalance(true);
+      const balance = await newOnChain.getStableBalance(true);
 
-    if (balance) {
-      setStableBalance(balance);
-    }
+      if (balance) {
+        setStableBalance(balance);
+      }
 
-    if (newOnChain.account) {
-      setLocalAccount(newOnChain.account);
-    } else {
-      setLocalLoading(false);
-    }
-
-    if (newOnChain) {
-      const chainAvailable = await newOnChain.recognizedChain();
-      const chainId = await newOnChain.getChainID();
-
-      setWrongChain(!chainAvailable);
-      setWalletConnected(!!walletConnected);
-      setChainAPI(newOnChain);
-      setCurrentChain(chainIdToName(chainId, props.railsContext.contractsEnv));
-      setChainId(chainId);
-
-      if (!chainAvailable) {
+      if (newOnChain.account) {
+        setLocalAccount(newOnChain.account);
+      } else {
         setLocalLoading(false);
       }
+
+      if (newOnChain) {
+        const chainAvailable = await newOnChain.recognizedChain();
+        const chainId = await newOnChain.getChainID();
+
+        setWrongChain(!chainAvailable);
+        setWalletConnected(!!walletConnected);
+        setChainAPI(newOnChain);
+        setCurrentChain(chainIdToName(chainId, props.railsContext.contractsEnv));
+        setChainId(chainId);
+
+        if (!chainAvailable) {
+          setLocalLoading(false);
+        }
+      }
+    } catch (e) {
+      errorCallback();
     }
   });
 
   useEffect(() => {
-    setupChain();
+    let maxTries = 5;
+    const errorCallback = () => {
+      setTimeout(() => {
+        if (!!maxTries) {
+          setupChain(errorCallback);
+          maxTries--;
+        }
+        return;
+      }, 500);
+    };
+    setupChain(errorCallback);
   }, []);
 
   const networkChange = async chainId => {

@@ -143,7 +143,7 @@ export const SignUpFlow = props => {
   const MemoizedActionArea = useMemo(() => {
     switch (stepsState.currentStep) {
       case 1:
-        return <WelcomeFooter />
+        return <WelcomeFooter />;
       case 2:
         return MemoizedDefaultFooter;
       case 8:

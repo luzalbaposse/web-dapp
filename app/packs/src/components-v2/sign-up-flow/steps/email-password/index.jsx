@@ -105,7 +105,17 @@ export const EmailPasswordStep = ({ setIsNextDisable, setUser, user }) => {
         setIsNextDisable(true);
       }
     },
-    [emailError, setIsPasswordCorrect, emailRef, passwordRef, user, setUser, passwordsMatch, confirmPasswordRef, validateEmailStep]
+    [
+      emailError,
+      setIsPasswordCorrect,
+      emailRef,
+      passwordRef,
+      user,
+      setUser,
+      passwordsMatch,
+      confirmPasswordRef,
+      validateEmailStep
+    ]
   );
   return (
     <>
