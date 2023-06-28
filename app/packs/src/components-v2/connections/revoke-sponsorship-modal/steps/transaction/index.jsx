@@ -23,30 +23,48 @@ export const TransactionStep = ({ sponsorship, railsContext, closeModal, nextSte
   const [account, setAccount] = useState(null);
   const [primaryButtonState, setPrimaryButtonState] = useState(PRIMARY_BUTTON_STATES.CANCEL_SPONSOR);
 
-  const setupOnChain = useCallback(async () => {
-    const newOnChain = new OnChain(railsContext.contractsEnv);
+  const setupOnChain = useCallback(
+    async errorCallback => {
+      try {
+        const newOnChain = new OnChain(railsContext.contractsEnv);
 
-    let _account = newOnChain.connectedAccount();
+        let _account = newOnChain.connectedAccount();
 
-    // Open metamask connect modal
-    if (!_account) {
-      closeModal();
-      // Force connection
-      _account = newOnChain.connectedAccount();
-    }
+        // Open metamask connect modal
+        if (!_account) {
+          closeModal();
+          // Force connection
+          _account = newOnChain.connectedAccount();
+        }
 
-    const chainId = await newOnChain.getChainID();
+        const chainId = await newOnChain.getChainID();
 
-    if (chainId != sponsorship.chain_id) {
-      await newOnChain.switchChain(sponsorship.chain_id);
-    }
+        if (chainId != sponsorship.chain_id) {
+          await newOnChain.switchChain(sponsorship.chain_id);
+        }
 
-    setOnchain(newOnChain);
-    setAccount(_account);
-  }, [setOnchain, setAccount]);
+        setOnchain(newOnChain);
+        setAccount(_account);
+      } catch (error) {
+        console.error(error);
+        errorCallback();
+      }
+    },
+    [setOnchain, setAccount]
+  );
 
   useEffect(() => {
-    setupOnChain();
+    let maxTries = 5;
+    const errorCallback = () => {
+      setTimeout(() => {
+        if (!!maxTries) {
+          setupOnChain(errorCallback);
+          maxTries--;
+        }
+        return;
+      }, 500);
+    };
+    setupOnChain(errorCallback);
   }, []);
 
   const rejectSponsorshipCallback = useCallback(async () => {

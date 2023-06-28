@@ -21,43 +21,61 @@ export const HowMuchStep = ({ token, setToken, railsContext, setAmount, closeMod
   const [availableAmount, setAvailableAmount] = useState(0);
   const [chainId, setChainId] = useState(0);
 
-  const setupOnChain = useCallback(async () => {
-    const newOnChain = new OnChain(railsContext.contractsEnv);
-    setOnchain(newOnChain);
+  const setupOnChain = useCallback(
+    async errorCallback => {
+      try {
+        const newOnChain = new OnChain(railsContext.contractsEnv);
+        setOnchain(newOnChain);
 
-    const _account = newOnChain.connectedAccount();
+        const _account = newOnChain.connectedAccount();
 
-    // Open metamask connect modal
-    if (!_account) {
-      closeModal();
-      newOnChain.connectedAccount(true);
-    }
+        // Open metamask connect modal
+        if (!_account) {
+          closeModal();
+          newOnChain.connectedAccount(true);
+        }
 
-    if (!(await newOnChain.recognizedChain())) {
-      const tokenChainID = chainNameToId(token.chain, railsContext.contractsEnv);
-      await newOnChain.switchChain(tokenChainID);
-    }
+        if (!(await newOnChain.recognizedChain())) {
+          const tokenChainID = chainNameToId(token.chain, railsContext.contractsEnv);
+          await newOnChain.switchChain(tokenChainID);
+        }
 
-    const chainId = await newOnChain.getChainID();
-    setChainId(chainId);
-    const chainName = chainIdToName(chainId, railsContext.contractsEnv);
+        const chainId = await newOnChain.getChainID();
+        setChainId(chainId);
+        const chainName = chainIdToName(chainId, railsContext.contractsEnv);
 
-    const chainToken = newOnChain.sponsorshipTokenOptions().find(option => option.chain == chainName);
-    setToken(chainToken);
+        const chainToken = newOnChain.sponsorshipTokenOptions().find(option => option.chain == chainName);
+        setToken(chainToken);
 
-    // load stable token
-    const _availableAmount = await newOnChain.getTokenBalanceERC20(chainToken.address, chainToken.decimals);
+        // load stable token
+        const _availableAmount = await newOnChain.getTokenBalanceERC20(chainToken.address, chainToken.decimals);
 
-    if (_availableAmount === undefined) {
-      toast.error(<ToastBody heading="We couldn't find your wallet" />, { autoClose: 5000 });
-      closeModal();
-      return;
-    }
-    setAvailableAmount(_availableAmount);
-  }, [setAvailableAmount, closeModal]);
+        if (_availableAmount === undefined) {
+          toast.error(<ToastBody heading="We couldn't find your wallet" />, { autoClose: 5000 });
+          closeModal();
+          return;
+        }
+        setAvailableAmount(_availableAmount);
+      } catch (error) {
+        console.error(error);
+        errorCallback();
+      }
+    },
+    [setAvailableAmount, closeModal]
+  );
 
   useEffect(() => {
-    setupOnChain();
+    let maxTries = 5;
+    const errorCallback = () => {
+      setTimeout(() => {
+        if (!!maxTries) {
+          setupOnChain(errorCallback);
+          maxTries--;
+        }
+        return;
+      }, 500);
+    };
+    setupOnChain(errorCallback);
   }, []);
 
   const changeToken = async token => {

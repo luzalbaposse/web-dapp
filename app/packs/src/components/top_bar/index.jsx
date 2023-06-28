@@ -139,29 +139,37 @@ export const TopBar = ({
     });
   };
 
-  const setupChain = useCallback(async () => {
-    const onChain = new OnChain(railsContext.contractsEnv);
+  const setupChain = useCallback(
+    async (errorCallback = () => null) => {
+      try {
+        const onChain = new OnChain(railsContext.contractsEnv);
 
-    const account = onChain.connectedAccount();
+        const account = onChain.connectedAccount();
 
-    if (account) {
-      setAccount(account.toLowerCase());
-      setWalletConnected(true);
+        if (account) {
+          setAccount(account.toLowerCase());
+          setWalletConnected(true);
 
-      const balance = await onChain.getStableBalance(true);
+          const balance = await onChain.getStableBalance(true);
 
-      if (balance) {
-        setStableBalance(balance);
+          if (balance) {
+            setStableBalance(balance);
+          }
+
+          const chainId = await onChain.getChainID();
+          const chainName = chainIdToName(chainId, railsContext.contractsEnv);
+          setChainName(chainName);
+        }
+      } catch (e) {
+        console.log(e);
+        errorCallback();
       }
-
-      const chainId = await onChain.getChainID();
-      const chainName = chainIdToName(chainId, railsContext.contractsEnv);
-      setChainName(chainName);
-    }
-  }, [walletConnected]);
+    },
+    [walletConnected]
+  );
 
   const onWalletConnect = async account => {
-    await setupChain(true);
+    await setupChain();
 
     if (account) {
       setAccount(account.toLowerCase());
@@ -169,7 +177,17 @@ export const TopBar = ({
   };
 
   useEffect(() => {
-    setupChain();
+    let maxTries = 5;
+    const errorCallback = () => {
+      setTimeout(() => {
+        if (!!maxTries) {
+          setupChain(errorCallback);
+          maxTries--;
+        }
+        return;
+      }, 500);
+    };
+    setupChain(errorCallback);
   }, []);
 
   useEffect(() => {

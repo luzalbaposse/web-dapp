@@ -51,43 +51,41 @@ const StakeModal = ({
   const [showNewMessageModal, setShowNewMessageModal] = useState(false);
   const [chainName, setChainName] = useState("celo");
 
-  const setupOnChain = useCallback(async () => {
-    const newOnChain = new OnChain(railsContext.contractsEnv);
-    let result;
+  const setupOnChain = useCallback(async errorCallback => {
+    try {
+      const newOnChain = new OnChain(railsContext.contractsEnv);
 
-    result = newOnChain.connectedAccount();
+      newOnChain.connectedAccount();
 
-    const validChain = await newOnChain.recognizedChain();
-    const chainId = await newOnChain.getChainID();
-    setValidChain(validChain && chainId == tokenChainId);
+      const validChain = await newOnChain.recognizedChain();
+      const chainId = await newOnChain.getChainID();
 
-    if (!result) {
+      setValidChain(validChain && chainId == tokenChainId);
+
+      if (newOnChain.account) {
+        setCurrentAccount(newOnChain.account);
+      }
+
+      if (tokenAddress) {
+        setTargetToken(tokenAddress);
+      }
+
+      const _availableAmount = await newOnChain.getStableBalance(true);
+      setAvailableAmount(_availableAmount);
+
+      const chainName = chainIdToName(tokenChainId, railsContext.contractsEnv);
+      setChainName(chainName);
+
+      if (tokenAddress) {
+        const _tokenAvailability = await newOnChain.getTokenAvailability(tokenAddress, chainId, true);
+        setMaxMinting(parseAndCommify(_tokenAvailability));
+      }
+
       setChainData(newOnChain);
-      return;
+    } catch (e) {
+      console.error(e);
+      errorCallback();
     }
-
-    if (newOnChain.account) {
-      setCurrentAccount(newOnChain.account);
-    }
-
-    if (tokenAddress) {
-      setTargetToken(tokenAddress);
-    }
-
-    setChainData(newOnChain);
-
-    const _availableAmount = await newOnChain.getStableBalance(true);
-    setAvailableAmount(_availableAmount);
-
-    const chainName = chainIdToName(tokenChainId, railsContext.contractsEnv);
-    setChainName(chainName);
-
-    if (tokenAddress) {
-      const _tokenAvailability = await newOnChain.getTokenAvailability(tokenAddress, chainId, true);
-      setMaxMinting(parseAndCommify(_tokenAvailability));
-    }
-
-    setChainData(newOnChain);
   }, []);
 
   const getWalletBalance = useCallback(async () => {
@@ -99,7 +97,17 @@ const StakeModal = ({
   }, [currentAccount]);
 
   useEffect(() => {
-    setupOnChain();
+    let maxTries = 5;
+    const errorCallback = () => {
+      setTimeout(() => {
+        if (!!maxTries) {
+          setupOnChain(errorCallback);
+          maxTries--;
+        }
+        return;
+      }, 500);
+    };
+    setupOnChain(errorCallback);
   }, []);
 
   useEffect(() => {

@@ -273,38 +273,53 @@ const LaunchTokenModals = props => {
     }
   };
 
-  const setupOnChain = useCallback(async () => {
-    const newOnChain = new OnChain(railsContext.contractsEnv);
-    let result;
+  const setupOnChain = useCallback(async errorCallback => {
+    try {
+      const newOnChain = new OnChain(railsContext.contractsEnv);
+      let result;
 
-    result = newOnChain.connectedAccount();
+      result = newOnChain.connectedAccount();
 
-    if (!result) {
-      setWalletConnected(false);
-      return;
-    }
-
-    const chainId = await newOnChain.getChainID();
-    setCurrentChain(chainId);
-
-    const validChain = await newOnChain.recognizedChain();
-    setValidChain(validChain);
-
-    if (validChain) {
-      setFactory(newOnChain);
-    } else {
-      try {
-        // eslint-disable-next-line no-undef
-        setDeploy("Unable to deploy token");
-      } catch {
-        toast.error(<ToastBody heading="Error!" body={"Unable to deploy token"} mode={mode} />, { autoClose: 5000 });
+      if (!result) {
+        setWalletConnected(false);
+        return;
       }
-      return;
+
+      const chainId = await newOnChain.getChainID();
+      setCurrentChain(chainId);
+
+      const validChain = await newOnChain.recognizedChain();
+      setValidChain(validChain);
+
+      if (validChain) {
+        setFactory(newOnChain);
+      } else {
+        try {
+          // eslint-disable-next-line no-undef
+          setDeploy("Unable to deploy token");
+        } catch {
+          toast.error(<ToastBody heading="Error!" body={"Unable to deploy token"} mode={mode} />, { autoClose: 5000 });
+        }
+        return;
+      }
+    } catch (e) {
+      console.log(e);
+      errorCallback();
     }
   }, []);
 
   useEffect(() => {
-    setupOnChain();
+    let maxTries = 5;
+    const errorCallback = () => {
+      setTimeout(() => {
+        if (!!maxTries) {
+          setupOnChain(errorCallback);
+          maxTries--;
+        }
+        return;
+      }, 500);
+    };
+    setupOnChain(errorCallback);
   }, []);
 
   const saveTicker = async () => {

@@ -73,34 +73,51 @@ const ApprovalConfirmationModal = ({ show, hide, talent, setTalent, railsContext
     return disable;
   }, [isWhitelisted]);
 
-  const setupChain = useCallback(async () => {
-    const newOnChain = new OnChain(railsContext.contractsEnv);
-    await newOnChain.retrieveAccount();
-    const correctChain = await newOnChain.recognizedChain();
+  const setupChain = useCallback(async errorCallback => {
+    try {
+      const newOnChain = new OnChain(railsContext.contractsEnv);
+      await newOnChain.retrieveAccount();
+      const correctChain = await newOnChain.recognizedChain();
 
-    if (!correctChain) {
-      toast.error(<ToastBody heading="Wrong Network" body={"Change your network to Polygon."} />, { autoClose: 1500 });
-      setFirstLoading(false);
-      hide();
-      return;
-    }
-    for await (const option of getAllChainOptions(railsContext.contractsEnv)) {
-      if (option.name == "Polygon") {
-        const isWhitelisted = await newOnChain.isAddressWhitelisted(user?.wallet_id, option.id);
-        setIsWhitelisted(prev => ({ ...prev, [option.id]: isWhitelisted }));
+      if (!correctChain) {
+        toast.error(<ToastBody heading="Wrong Network" body={"Change your network to Polygon."} />, {
+          autoClose: 1500
+        });
+        setFirstLoading(false);
+        hide();
+        return;
       }
-    }
+      for await (const option of getAllChainOptions(railsContext.contractsEnv)) {
+        if (option.name == "Polygon") {
+          const isWhitelisted = await newOnChain.isAddressWhitelisted(user?.wallet_id, option.id);
+          setIsWhitelisted(prev => ({ ...prev, [option.id]: isWhitelisted }));
+        }
+      }
 
-    if (newOnChain) {
-      setChainAPI(newOnChain);
-    }
+      if (newOnChain) {
+        setChainAPI(newOnChain);
+      }
 
-    setFirstLoading(false);
+      setFirstLoading(false);
+    } catch (e) {
+      console.log(e);
+      errorCallback();
+    }
   });
 
   useEffect(() => {
     if (show) {
-      setupChain();
+      let maxTries = 5;
+      const errorCallback = () => {
+        setTimeout(() => {
+          if (!!maxTries) {
+            setupChain(errorCallback);
+            maxTries--;
+          }
+          return;
+        }, 500);
+      };
+      setupChain(errorCallback);
     }
   }, [show]);
 
