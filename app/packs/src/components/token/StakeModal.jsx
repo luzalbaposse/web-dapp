@@ -16,6 +16,8 @@ import TextInput from "src/components/design_system/fields/textinput";
 import Button from "src/components/design_system/button";
 import { useWindowDimensionsHook } from "src/utils/window";
 import { darkTextPrimary01, black } from "src/utils/colors";
+import { toast } from "react-toastify";
+import { ToastBody } from "src/components/design_system/toasts";
 
 const StakeModal = ({
   show,
@@ -51,9 +53,9 @@ const StakeModal = ({
 
   const setupOnChain = useCallback(async () => {
     const newOnChain = new OnChain(railsContext.contractsEnv);
-    let result, _token;
+    let result;
 
-    result = await newOnChain.connectedAccount();
+    result = newOnChain.connectedAccount();
 
     const validChain = await newOnChain.recognizedChain();
     const chainId = await newOnChain.getChainID();
@@ -69,30 +71,20 @@ const StakeModal = ({
     }
 
     if (tokenAddress) {
-      _token = await newOnChain.getToken(tokenAddress);
-      if (_token) {
-        setTargetToken(_token);
-      }
+      setTargetToken(tokenAddress);
     }
 
-    result = await newOnChain.loadStableToken();
-
-    if (!result) {
-      setChainData(newOnChain);
-      return;
-    }
+    setChainData(newOnChain);
 
     const _availableAmount = await newOnChain.getStableBalance(true);
     setAvailableAmount(_availableAmount);
 
-    newOnChain.loadStaking();
-
     const chainName = chainIdToName(tokenChainId, railsContext.contractsEnv);
     setChainName(chainName);
 
-    if (_token) {
-      const _tokenAvailability = await newOnChain.getTokenAvailability(_token, true);
-      setMaxMinting(_tokenAvailability);
+    if (tokenAddress) {
+      const _tokenAvailability = await newOnChain.getTokenAvailability(tokenAddress, chainId, true);
+      setMaxMinting(parseAndCommify(_tokenAvailability));
     }
 
     setChainData(newOnChain);
@@ -100,7 +92,6 @@ const StakeModal = ({
 
   const getWalletBalance = useCallback(async () => {
     if (chainData) {
-      await chainData.loadStableToken();
       const _availableAmount = await chainData.getStableBalance(true);
 
       setAvailableAmount(_availableAmount);
@@ -120,17 +111,29 @@ const StakeModal = ({
 
     if (!currentAccount) {
       // No current account
+      toast.error(
+        <ToastBody
+          heading="No wallet connected"
+          body="You must connect your wallet before you're able to buy tokens."
+        />
+      );
       return;
     }
 
     if (parseFloat(amount) > parseFloat(availableAmount)) {
       // AMOUNT IS TOO HIGH
+      toast.error(
+        <ToastBody
+          heading="Amount is too high"
+          body="Your balance is too low for the amount of tokens you want to buy."
+        />
+      );
       return;
     }
 
     setStage("Confirm");
 
-    const result = await chainData.createStake(targetToken.address, amount).catch(error => {
+    const result = await chainData.createStake(targetToken, amount).catch(error => {
       console.error(error);
       setStage("Error");
     });
@@ -139,7 +142,9 @@ const StakeModal = ({
       const _availableAmount = await chainData.getStableBalance(true);
       setAvailableAmount(_availableAmount);
 
-      const _tokenAvailability = await chainData.getTokenAvailability(targetToken, true);
+      const chainId = await chainData.getChainID();
+
+      const _tokenAvailability = await chainData.getTokenAvailability(targetToken, chainId, true);
       setMaxMinting(_tokenAvailability);
 
       await post(`/api/v1/stakes`, { stake: { amount: amount * 10, token_id: tokenId } }).catch(e => console.log(e));
@@ -310,7 +315,9 @@ const StakeModal = ({
                     <div className={`divider ${mode} my-3`}></div>
                     <div className="d-flex flex-row justify-content-between w-100">
                       <P2>{ticker} tokens still available</P2>
-                      <P2>{maxMinting}</P2>
+                      <P2>
+                        <>{maxMinting}</>
+                      </P2>
                     </div>
                     <div className="d-flex flex-row justify-content-between w-100 mt-2">
                       <P2>{ticker} Price</P2>

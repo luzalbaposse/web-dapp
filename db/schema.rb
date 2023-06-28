@@ -12,11 +12,10 @@
 
 ActiveRecord::Schema[7.0].define(version: 2023_06_15_124155) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "activities", force: :cascade do |t|
-    t.jsonb "content", null: false
+    t.string "content", null: false
     t.bigint "origin_user_id", null: false
     t.bigint "target_user_id"
     t.datetime "created_at", null: false
@@ -378,6 +377,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_15_124155) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "partnership_id"
+    t.bigint "organization_id"
+    t.index ["organization_id"], name: "index_invites_on_organization_id"
     t.index ["partnership_id"], name: "index_invites_on_partnership_id"
     t.index ["user_id"], name: "index_invites_on_user_id"
   end
@@ -404,6 +405,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_15_124155) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_marketing_articles_on_user_id"
+  end
+
+  create_table "memberships", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "organization_id", null: false
+    t.boolean "active", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_memberships_on_organization_id"
+    t.index ["user_id"], name: "index_memberships_on_user_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -456,6 +467,34 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_15_124155) do
     t.datetime "emailed_at", precision: nil
     t.index ["read_at"], name: "index_notifications_on_read_at"
     t.index ["recipient_type", "recipient_id"], name: "index_notifications_on_recipient"
+  end
+
+  create_table "organization_tags", force: :cascade do |t|
+    t.bigint "organization_id", null: false
+    t.bigint "tag_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_organization_tags_on_organization_id"
+    t.index ["tag_id"], name: "index_organization_tags_on_tag_id"
+  end
+
+  create_table "organizations", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "website"
+    t.text "description"
+    t.text "logo_data"
+    t.boolean "verified", default: false
+    t.string "type", null: false
+    t.text "banner_data"
+    t.string "location"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "slug", null: false
+    t.string "discord"
+    t.string "github"
+    t.string "linkedin"
+    t.string "telegram"
+    t.string "twitter"
   end
 
   create_table "partnerships", force: :cascade do |t|
@@ -734,8 +773,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_15_124155) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.string "theme_preference", default: "light"
     t.boolean "disabled", default: false
+    t.string "theme_preference", default: "light"
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"
@@ -767,8 +806,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_15_124155) do
     t.boolean "is_organization", default: false
     t.integer "experience_points_amount", default: 0, null: false
     t.datetime "profile_completed_at", precision: nil
-    t.datetime "humanity_verified_at"
-    t.jsonb "humanity_proof"
+    t.boolean "humanity_verified", default: false
     t.decimal "profile_completeness", default: "0.0"
     t.index ["created_at"], name: "index_users_on_created_at"
     t.index ["email"], name: "index_users_on_email", unique: true
@@ -823,15 +861,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_15_124155) do
   add_foreign_key "goals", "career_goals"
   add_foreign_key "impersonations", "users", column: "impersonated_id"
   add_foreign_key "impersonations", "users", column: "impersonator_id"
+  add_foreign_key "invites", "organizations"
   add_foreign_key "invites", "partnerships"
   add_foreign_key "invites", "users"
   add_foreign_key "leaderboards", "races"
   add_foreign_key "leaderboards", "users"
   add_foreign_key "marketing_articles", "users"
+  add_foreign_key "memberships", "organizations"
+  add_foreign_key "memberships", "users"
   add_foreign_key "messages", "career_updates"
   add_foreign_key "messages", "chats"
   add_foreign_key "milestone_images", "milestones"
   add_foreign_key "milestones", "talent"
+  add_foreign_key "organization_tags", "organizations"
+  add_foreign_key "organization_tags", "tags"
   add_foreign_key "partnerships", "invites"
   add_foreign_key "perks", "talent"
   add_foreign_key "profile_page_visitors", "users"

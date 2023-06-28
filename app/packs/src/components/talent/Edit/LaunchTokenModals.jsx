@@ -277,7 +277,7 @@ const LaunchTokenModals = props => {
     const newOnChain = new OnChain(railsContext.contractsEnv);
     let result;
 
-    result = await newOnChain.connectedAccount();
+    result = newOnChain.connectedAccount();
 
     if (!result) {
       setWalletConnected(false);
@@ -290,9 +290,7 @@ const LaunchTokenModals = props => {
     const validChain = await newOnChain.recognizedChain();
     setValidChain(validChain);
 
-    result = newOnChain.loadFactory();
-
-    if (result) {
+    if (validChain) {
       setFactory(newOnChain);
     } else {
       try {

@@ -27,4 +27,3 @@ export const RightActionZone = styled.div`
   align-items: center;
   gap: 8px;
 `;
-

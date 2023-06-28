@@ -53,7 +53,7 @@ export const VerifyHumanityQuest = ({ quest, username, railsContext }) => {
           <Typography specs={{ variant: "p2", type: "medium" }} color={!!quest.completed_at ? "primary" : "primary01"}>
             {quest.title}
           </Typography>
-          <Tag color="primary-text" backgroundColor="primaryTint02" size="small" label="Partner" /> 
+          <Tag color="primary-text" backgroundColor="primaryTint02" size="small" label="Partner" />
         </QuestDataRow>
         <Typography specs={{ variant: "p3", type: "regular" }} color={!!quest.completed_at ? "primary" : "primary04"}>
           {quest.description}

@@ -163,7 +163,7 @@ export const OccupationStep = ({ user, setUser, setIsNextDisable }) => {
       setIsNextDisable(false);
     });
   }, [setIsNextDisable]);
-  
+
   return (
     <>
       <TitleRow>

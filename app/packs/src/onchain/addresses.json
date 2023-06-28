@@ -8,6 +8,7 @@
       "sponsorship": "0x767e0a2FC8974Eb63bff822aCc43F202E571BdbC",
       "rpcURL": "https://alfajores-forno.celo-testnet.org",
       "icon": "celo",
+      "stableDecimals": 18,
       "paramsForMetamask": {
         "chainId": "0xaef3",
         "chainName": "Alfajores Testnet",
@@ -20,11 +21,12 @@
     "80001": {
       "chainId": 80001,
       "chainName": "Polygon",
-      "factory": "0x228D74bCf10b9ad89600E70DE265653C9Da1B514",
+      "factory": "0x6633d99c035AFb90b073A57EE06F9E46e06D3f88",
       "staking": "0x3678cE749b0ffa5C62dd9b300148259d2DFAE572",
       "sponsorship": "0x9167aee363971b6bFcE3D62A3e727A740a8D6152",
       "rpcURL": "https://matic-mumbai.chainstacklabs.com",
       "stableAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
+      "stableDecimals": 18,
       "icon": "polygon",
       "paramsForMetamask": {
         "chainId": "0x13881",
@@ -68,6 +70,7 @@
       "sponsorship": "0x767e0a2FC8974Eb63bff822aCc43F202E571BdbC",
       "rpcURL": "https://alfajores-forno.celo-testnet.org",
       "icon": "celo",
+      "stableDecimals": 18,
       "paramsForMetamask": {
         "chainId": "0xaef3",
         "chainName": "Alfajores Testnet",
@@ -80,12 +83,13 @@
     "80001": {
       "chainId": 80001,
       "chainName": "Polygon",
-      "factory": "0x228D74bCf10b9ad89600E70DE265653C9Da1B514",
+      "factory": "0x6633d99c035AFb90b073A57EE06F9E46e06D3f88",
       "staking": "0x3678cE749b0ffa5C62dd9b300148259d2DFAE572",
       "sponsorship": "0x9167aee363971b6bFcE3D62A3e727A740a8D6152",
       "rpcURL": "https://matic-mumbai.chainstacklabs.com",
       "stableAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
       "icon": "polygon",
+      "stableDecimals": 18,
       "paramsForMetamask": {
         "chainId": "0x13881",
         "chainName": "MATIC (Mumbai)",
@@ -128,6 +132,7 @@
       "sponsorship": "0x5b89a39b381138E02C32691a22B30f833D1Cd834",
       "rpcURL": "https://forno.celo.org",
       "icon": "celo",
+      "stableDecimals": 18,
       "paramsForMetamask": {
         "chainId": "0xa4ec",
         "chainName": "Celo",

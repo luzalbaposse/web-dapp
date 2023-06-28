@@ -42,8 +42,7 @@ export const TransactionStep = ({ profile, token, railsContext, amount, closeMod
   const setupOnChain = useCallback(async () => {
     const newOnChain = new OnChain(railsContext.contractsEnv);
 
-    const _account = await newOnChain.connectedAccount();
-    await newOnChain.loadSponsorship();
+    const _account = newOnChain.connectedAccount();
 
     setOnchain(newOnChain);
     setAccount(_account);
@@ -55,8 +54,7 @@ export const TransactionStep = ({ profile, token, railsContext, amount, closeMod
 
   const approveTransactionCallback = useCallback(async () => {
     setPrimaryButtonState(PRIMARY_BUTTON_STATES.CONFIRMING_TRANSACTION);
-    const tx = await onchain.approveSponsorship(token.address, token.decimals, amount);
-    await tx.wait();
+    await onchain.approveSponsorship(token.address, token.decimals, amount);
     setPrimaryButtonState(PRIMARY_BUTTON_STATES.SPONSOR);
   }, [onchain, setPrimaryButtonState]);
 

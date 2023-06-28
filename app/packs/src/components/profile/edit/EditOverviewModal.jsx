@@ -495,7 +495,7 @@ const EditOverviewModal = ({ show, hide, profile, setProfile, mode }) => {
               className="mb-2"
               title="Display Name"
               onChange={e => changeUserAttribute("display_name", e.target.value)}
-              value={editedTalent.user.display_name}
+              value={editedTalent.user.display_name || ""}
               required={true}
               error={validationErrors?.display_name}
             />

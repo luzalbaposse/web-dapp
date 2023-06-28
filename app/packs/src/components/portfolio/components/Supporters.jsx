@@ -218,7 +218,9 @@ const Supporters = ({ mode, ticker, tokenAddress, chainAPI, mobile, currentUserI
     if (chainAPI && accountId) {
       const value = await chainAPI.calculateEstimatedReturns(tokenAddress, accountId);
 
-      return ethers.utils.formatUnits(value.talentRewards);
+      if (value.length > 1 && value[1]) {
+        return ethers.utils.formatUnits(value[1]);
+      }
     }
 
     return "0";

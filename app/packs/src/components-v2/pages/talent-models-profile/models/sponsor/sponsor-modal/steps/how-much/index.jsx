@@ -25,12 +25,12 @@ export const HowMuchStep = ({ token, setToken, railsContext, setAmount, closeMod
     const newOnChain = new OnChain(railsContext.contractsEnv);
     setOnchain(newOnChain);
 
-    const _account = await newOnChain.connectedAccount();
+    const _account = newOnChain.connectedAccount();
 
     // Open metamask connect modal
     if (!_account) {
       closeModal();
-      await newOnChain.connectedAccount(true);
+      newOnChain.connectedAccount(true);
     }
 
     if (!(await newOnChain.recognizedChain())) {

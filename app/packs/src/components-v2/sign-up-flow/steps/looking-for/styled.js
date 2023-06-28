@@ -12,17 +12,18 @@ export const PillsContainer = styled.div`
   flex-direction: column;
   gap: 8px;
 
-  ${({ activeTagsSize, tags }) => activeTagsSize && 
-    [css`
-    * {
-      cursor: not-allowed;
+  ${({ activeTagsSize, tags }) =>
+    activeTagsSize && [
+      css`
+        * {
+          cursor: not-allowed;
 
-      label {
-        cursor: not-allowed;
-      }
-    }
-  `, ...tags
-      .reduce((acc, tag, index) => {
+          label {
+            cursor: not-allowed;
+          }
+        }
+      `,
+      ...tags.reduce((acc, tag, index) => {
         if (tag.isSelected) {
           acc.push(css`
             *:nth-child(${index + 1}) {
@@ -31,8 +32,10 @@ export const PillsContainer = styled.div`
               label {
                 cursor: pointer;
               }
-            }`);
+            }
+          `);
         }
         return acc;
-      }, [])]}
+      }, [])
+    ]}
 `;

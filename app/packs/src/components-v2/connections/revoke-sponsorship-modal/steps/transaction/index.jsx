@@ -26,13 +26,13 @@ export const TransactionStep = ({ sponsorship, railsContext, closeModal, nextSte
   const setupOnChain = useCallback(async () => {
     const newOnChain = new OnChain(railsContext.contractsEnv);
 
-    let _account = await newOnChain.connectedAccount();
+    let _account = newOnChain.connectedAccount();
 
     // Open metamask connect modal
     if (!_account) {
       closeModal();
       // Force connection
-      _account = await newOnChain.connectedAccount(true);
+      _account = newOnChain.connectedAccount();
     }
 
     const chainId = await newOnChain.getChainID();
@@ -40,8 +40,6 @@ export const TransactionStep = ({ sponsorship, railsContext, closeModal, nextSte
     if (chainId != sponsorship.chain_id) {
       await newOnChain.switchChain(sponsorship.chain_id);
     }
-
-    await newOnChain.loadSponsorship();
 
     setOnchain(newOnChain);
     setAccount(_account);

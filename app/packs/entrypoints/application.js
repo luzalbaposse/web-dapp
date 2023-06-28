@@ -23,7 +23,7 @@ import Notifications from "src/components/notifications";
 import Login from "src/components/login/Login";
 import ResetPassword from "src/components/login/ResetPassword";
 import ChangePassword from "src/components/login/ChangePassword";
-import TopBar from "src/components/top_bar";
+import TopBar from "src/components-v2/navbar-proxy";
 import UserSettings from "src/components/talent/Edit/Settings";
 import NewPortfolio from "src/components/portfolio/NewPortfolio";
 import Discovery from "src/components/discovery";

@@ -7,13 +7,7 @@ export const CreateAccountFooter = ({ previousStep, openCaptchaModal, isNextDisa
     <Button size="medium" hierarchy="secondary" text="Skip" onClick={openCaptchaModal} />
     <RightActionZone>
       <Button size="medium" hierarchy="tertiary" text="Back" onClick={previousStep} />
-      <Button
-        size="medium"
-        hierarchy="primary"
-        text="Next"
-        onClick={openCaptchaModal}
-        isDisabled={isNextDisabled}
-      />
+      <Button size="medium" hierarchy="primary" text="Next" onClick={openCaptchaModal} isDisabled={isNextDisabled} />
     </RightActionZone>
   </ActionArea>
 );
