@@ -13,7 +13,7 @@ const SUPPORTED_CHAINS_PER_ENV = {
 export const useWalletConnectConfigBootstrap = ({ railsContext, userId, walletId }) => {
   const walletConnectConfig = useMemo(() => {
     if (!railsContext) return { ethereumClient: null, projectId: null };
-    const chains = SUPPORTED_CHAINS_PER_ENV[railsContext.railsEnv];
+    const chains = SUPPORTED_CHAINS_PER_ENV[railsContext.contractsEnv];
     const projectId = railsContext.walletConnectProjectId;
     const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
     const wagmiConfig = createConfig({
