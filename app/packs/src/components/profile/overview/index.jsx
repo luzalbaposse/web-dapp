@@ -250,11 +250,11 @@ const Overview = ({
     let new_status;
 
     if (profile.subscribing_status === "subscribed") {
-      response = await destroy(`/api/v1/subscriptions?talent_id=${user.username}`);
+      response = await destroy(`/api/v1/subscriptions?user_id=${user.username}`);
       new_status = "unsubscribed";
     } else {
       response = await post(`/api/v1/subscriptions`, {
-        talent_id: user.username
+        user_id: user.username
       });
       new_status = "pending";
     }

@@ -13,7 +13,7 @@ export const CareerUpdateLockedState = ({ profile, setProfile }) => {
     let new_status;
 
     response = await post(`/api/v1/subscriptions`, {
-      talent_id: profile.user.username
+      user_id: profile.user.username
     });
     successHeader = "New subscription requested";
     successMessage = `A subscription request was sent to ${profile.user.name}`;

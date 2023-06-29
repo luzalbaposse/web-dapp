@@ -8,7 +8,7 @@ RSpec.describe "Subscriptions", type: :request do
 
     let(:params) do
       {
-        talent_id: subscribing_user_id
+        user_id: subscribing_user_id
       }
     end
 
@@ -105,7 +105,7 @@ RSpec.describe "Subscriptions", type: :request do
 
     let(:params) do
       {
-        talent_id: subscribing_user_id
+        user_id: subscribing_user_id
       }
     end
 
@@ -184,7 +184,7 @@ RSpec.describe "Subscriptions", type: :request do
 
     let(:params) do
       {
-        talent_id: subscribing_user_id
+        user_id: subscribing_user_id
       }
     end
 

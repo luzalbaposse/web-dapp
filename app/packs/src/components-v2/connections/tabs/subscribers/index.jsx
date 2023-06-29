@@ -174,7 +174,7 @@ export const Subscribers = ({ currentUserId }) => {
 
   const subscribe = async subscriber => {
     const response = await post(`/api/v1/subscriptions`, {
-      talent_id: subscriber.username
+      user_id: subscriber.username
     });
 
     if (response.success) {
