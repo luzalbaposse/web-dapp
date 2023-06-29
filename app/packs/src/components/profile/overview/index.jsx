@@ -264,6 +264,7 @@ const Overview = ({
         ...prev,
         subscribing_status: new_status
       }));
+      toast.success(<ToastBody heading="Success!" body={`Subscription ${new_status}!`} />, { autoClose: 5000 });
     } else {
       toast.error(<ToastBody heading="Unable to update subscription" body={response?.error} />);
     }

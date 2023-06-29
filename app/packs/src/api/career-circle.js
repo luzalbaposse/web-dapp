@@ -7,15 +7,15 @@ const getActiveSubscribers = (userUUID, perPage, cursor) =>
 const getPendingSubscribers = (userUUID, perPage, cursor) =>
   axios.get(`/api/v1/pending_subscribers?id=${userUUID}&per_page=${perPage}&${cursor ? `cursor=${cursor}` : ""}`);
 
-const acceptSubscription = (userUUID, subscribingUserId) => {
+const acceptSubscription = (subscribing, subscriber) => {
   const baseHeaders = defaultHeaders();
   const headers = appendCSRFToken(baseHeaders);
 
   return axios.put(
     `/api/v1/subscriptions/accept`,
     {
-      id: userUUID,
-      talent_id: subscribingUserId
+      id: subscriber,
+      talent_id: subscribing
     },
     {
       headers: {
@@ -25,7 +25,7 @@ const acceptSubscription = (userUUID, subscribingUserId) => {
   );
 };
 
-const destroySubscription = (userUUID, subscribingUserId) => {
+const destroySubscription = (subscribing, subscriber) => {
   const baseHeaders = defaultHeaders();
   const headers = appendCSRFToken(baseHeaders);
 
@@ -33,8 +33,8 @@ const destroySubscription = (userUUID, subscribingUserId) => {
     "/api/v1/subscriptions",
     {
       data: {
-        id: userUUID,
-        talent_id: subscribingUserId
+        id: subscriber,
+        talent_id: subscribing
       }
     },
     {

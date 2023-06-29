@@ -83,10 +83,10 @@ class API::V1::PublicAPI::SubscriptionsController < API::V1::PublicAPI::APIContr
   end
 
   def accept
-    subscribed_user = user || current_user
-    return not_found unless subscribed_user
+    subscriber_user = user || current_user
+    return not_found unless subscriber_user
 
-    subscription = PendingSubscription.find_by!(user: subscribed_user, subscriber: subscribing_user)
+    subscription = PendingSubscription.find_by!(user: subscribing_user, subscriber: subscriber_user)
 
     Subscriptions::Accept.new(subscription: subscription).call
 
@@ -94,7 +94,7 @@ class API::V1::PublicAPI::SubscriptionsController < API::V1::PublicAPI::APIContr
   rescue Subscriptions::Accept::AlreadyAcceptedError
     render json: {error: "Already subscribing."}, status: :conflict
   rescue Subscriptions::Accept::AcceptError => error
-    Rollbar.error(error, "Error accepting subscription", subscribing_user_id: subscribing_user.id, subscribed_user_id: subscribed_user.id, subscription_id: subscription.id)
+    Rollbar.error(error, "Error accepting subscription", subscribing_user_id: subscribing_user.id, subscriber_user_id: subscriber_user.id, subscription_id: subscription.id)
     render json: {error: "Unable to accept subscription."}, status: :bad_request
   end
 
