@@ -191,7 +191,7 @@ RSpec.describe "Subscriptions", type: :request do
     let(:subscribing_user) { create :user }
     let(:subscribing_user_id) { subscribing_user.uuid }
 
-    let!(:subscription) { create :pending_subscription, subscriber: subscribing_user, user: current_user, accepted_at: nil }
+    let!(:subscription) { create :pending_subscription, subscriber: current_user, user: subscribing_user, accepted_at: nil }
 
     let(:accept_subscription_class) { Subscriptions::Accept }
     let(:accept_subscription_instance) { instance_double(accept_subscription_class, call: true) }
@@ -261,7 +261,7 @@ RSpec.describe "Subscriptions", type: :request do
           error,
           "Error accepting subscription",
           subscription_id: subscription.id,
-          subscribed_user_id: current_user.id,
+          subscriber_user_id: current_user.id,
           subscribing_user_id: subscribing_user.id
         )
       end

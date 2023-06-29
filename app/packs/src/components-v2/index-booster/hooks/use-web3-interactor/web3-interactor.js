@@ -35,7 +35,7 @@ export class Web3Interactor {
     this.closeModal();
   };
 
-  isWalletConnected = () => this.wallet?.isConnected && this.wallet?.status === "connected";
+  isWalletConnected = () => this.wallet?.isConnected && this.wallet?.status === "connected" && this.wallet?.connector;
 
   swithNetwork = async chainId => {
     await switchNetwork({
@@ -43,18 +43,26 @@ export class Web3Interactor {
     });
   };
 
-  getProvider = () => {
+  getProvider = async () => {
     if (!this.isWalletConnected()) {
       throw new Error("Wallet is not connected");
     }
-    return this.wallet?.connector.options.getProvider();
+
+    if (this.wallet?.connector.options?.getProvider) {
+      return this.wallet?.connector.options?.getProvider();
+    } else {
+      return await this.wallet?.connector?.getProvider();
+    }
   };
 
-  getChainId = () => {
+  getChainId = async () => {
     if (!this.isWalletConnected()) {
       throw new Error("Wallet is not connected");
     }
-    return fromHex(this.wallet?.connector.options.getProvider()?.chainId, "number");
+
+    const provider = await this.getProvider();
+
+    return fromHex(provider?.chainId, "number");
   };
 
   disconnect = () => {

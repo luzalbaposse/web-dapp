@@ -25,8 +25,8 @@ class OnChain {
     this.env = env || "development";
   }
 
-  getChainID() {
-    return window.web3Interactor.getChainId();
+  async getChainID() {
+    return await window.web3Interactor.getChainId();
   }
 
   connectedAccount() {
@@ -36,7 +36,7 @@ class OnChain {
   }
 
   async readFromContract({ abi, address }, functionName, args = []) {
-    const chainId = window.web3Interactor.getChainId();
+    const chainId = await window.web3Interactor.getChainId();
 
     const client = await getPublicClient({
       chainId: chainId
@@ -56,7 +56,7 @@ class OnChain {
       return;
     }
 
-    const chainId = window.web3Interactor.getChainId();
+    const chainId = await window.web3Interactor.getChainId();
 
     const walletClient = await getWalletClient({
       chainId
@@ -97,7 +97,7 @@ class OnChain {
   }
 
   async recognizedChain() {
-    if (Addresses[this.env][window.web3Interactor.getChainId()]) {
+    if (Addresses[this.env][await window.web3Interactor.getChainId()]) {
       return true;
     } else {
       return false;
@@ -112,8 +112,8 @@ class OnChain {
     return false;
   }
 
-  factoryConfig() {
-    const chainId = window.web3Interactor.getChainId();
+  async factoryConfig() {
+    const chainId = await window.web3Interactor.getChainId();
 
     return {
       abi: TalentFactoryV3.abi,
@@ -122,7 +122,7 @@ class OnChain {
   }
 
   async stableConfig() {
-    const chainId = window.web3Interactor.getChainId();
+    const chainId = await window.web3Interactor.getChainId();
     let address = "";
     if (!Addresses[this.env][chainId]["stableAddress"]) {
       const celoKit = newKit(Addresses[this.env][chainId]["rpcURL"]);
@@ -137,8 +137,8 @@ class OnChain {
     };
   }
 
-  stakingConfig() {
-    const chainId = window.web3Interactor.getChainId();
+  async stakingConfig() {
+    const chainId = await window.web3Interactor.getChainId();
 
     return {
       abi: Staking.abi,
@@ -146,8 +146,8 @@ class OnChain {
     };
   }
 
-  sponsorshipConfig() {
-    const chainId = window.web3Interactor.getChainId();
+  async sponsorshipConfig() {
+    const chainId = await window.web3Interactor.getChainId();
 
     return {
       abi: TalentSponsorship.abi,
@@ -162,8 +162,8 @@ class OnChain {
     };
   }
 
-  stableDecimals() {
-    const chainId = window.web3Interactor.getChainId();
+  async stableDecimals() {
+    const chainId = await window.web3Interactor.getChainId();
     return Addresses[this.env][chainId]["stableDecimals"];
   }
 
@@ -218,7 +218,11 @@ class OnChain {
   }
 
   async createTalent(name, symbol) {
-    const { hash } = await this.writeToContract(this.factoryConfig(), "createTalent", [this.account, name, symbol]);
+    const { hash } = await this.writeToContract(await this.factoryConfig(), "createTalent", [
+      this.account,
+      name,
+      symbol
+    ]);
 
     if (!hash) {
       return false;
@@ -241,7 +245,7 @@ class OnChain {
 
     const timestamp = dayjs().unix();
 
-    const result = await this.readFromContract(this.stakingConfig(), "calculateEstimatedReturns", [
+    const result = await this.readFromContract(await this.stakingConfig(), "calculateEstimatedReturns", [
       _account || account,
       token,
       timestamp
@@ -253,7 +257,7 @@ class OnChain {
   async createStake(token, _amount) {
     const amount = parseUnits(_amount, this.stableDecimals());
 
-    const { hash } = await this.writeToContract(this.stakingConfig(), "stakeStable", [token, amount]);
+    const { hash } = await this.writeToContract(await this.stakingConfig(), "stakeStable", [token, amount]);
 
     try {
       await waitForTransaction({ hash });
@@ -271,7 +275,7 @@ class OnChain {
   }
 
   async claimRewards(token) {
-    const { hash } = await this.writeToContract(this.stakingConfig(), "claimRewards", [token]);
+    const { hash } = await this.writeToContract(await this.stakingConfig(), "claimRewards", [token]);
 
     try {
       await waitForTransaction({ hash });
@@ -318,7 +322,7 @@ class OnChain {
 
     const result = await this.readFromContract(await this.stableConfig(), "allowance", [
       account,
-      this.stakingConfig().address
+      (await this.stakingConfig()).address
     ]);
 
     if (formatted) {
@@ -331,7 +335,7 @@ class OnChain {
   async createSponsorship(talentAddress, tokenAddress, tokenDecimals, _amount) {
     const amount = parseUnits(_amount, tokenDecimals);
 
-    const { hash, client } = await this.writeToContract(this.sponsorshipConfig(), "sponsor", [
+    const { hash, client } = await this.writeToContract(await this.sponsorshipConfig(), "sponsor", [
       talentAddress,
       amount,
       tokenAddress
@@ -361,7 +365,7 @@ class OnChain {
   }
 
   async claimSponsorship(sponsor, tokenAddress) {
-    const { hash, client } = await this.writeToContract(this.sponsorshipConfig(), "withdrawToken", [
+    const { hash, client } = await this.writeToContract(await this.sponsorshipConfig(), "withdrawToken", [
       sponsor,
       tokenAddress
     ]);
@@ -390,7 +394,7 @@ class OnChain {
   }
 
   async revokeSponsorship(talentAddress, tokenAddress) {
-    const { hash, client } = await this.writeToContract(this.sponsorshipConfig(), "revokeSponsor", [
+    const { hash, client } = await this.writeToContract(await this.sponsorshipConfig(), "revokeSponsor", [
       talentAddress,
       tokenAddress
     ]);
@@ -422,7 +426,7 @@ class OnChain {
     const amount = parseUnits(_amount, decimals);
 
     const { hash } = await this.writeToContract(this.talentTokenConfig(address), "approve", [
-      this.sponsorshipConfig().address,
+      (await this.sponsorshipConfig()).address,
       amount
     ]);
 
@@ -461,7 +465,7 @@ class OnChain {
   }
 
   async maxPossibleStake(tokenAddress, formatted = false) {
-    const result = await this.readFromContract(this.stakingConfig(), "stakeAvailability", [tokenAddress]);
+    const result = await this.readFromContract(await this.stakingConfig(), "stakeAvailability", [tokenAddress]);
 
     if (formatted) {
       return formatUnits(result, 18);
@@ -493,7 +497,7 @@ class OnChain {
     });
 
     const result = await client.readContract({
-      ...this.factoryConfig(),
+      ...(await this.factoryConfig()),
       functionName: "whitelist",
       args: [address]
     });
@@ -531,7 +535,7 @@ class OnChain {
       return;
     }
 
-    const chainId = window.web3Interactor.getChainId();
+    const chainId = await window.web3Interactor.getChainId();
     const walletClient = await getWalletClient({
       chainId
     });
@@ -551,7 +555,7 @@ class OnChain {
   }
 
   async getNFTImg(contract_id, token_id) {
-    const chainId = window.web3Interactor.getChainId();
+    const chainId = await window.web3Interactor.getChainId();
 
     const client = await getPublicClient({
       chainId

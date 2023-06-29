@@ -39,17 +39,35 @@ export const TransactionStep = ({ profile, token, railsContext, amount, closeMod
   const [account, setAccount] = useState(null);
   const [primaryButtonState, setPrimaryButtonState] = useState(PRIMARY_BUTTON_STATES.APPROVE);
 
-  const setupOnChain = useCallback(async () => {
-    const newOnChain = new OnChain(railsContext.contractsEnv);
+  const setupOnChain = useCallback(
+    async errorCallback => {
+      try {
+        const newOnChain = new OnChain(railsContext.contractsEnv);
 
-    const _account = newOnChain.connectedAccount();
+        const _account = newOnChain.connectedAccount();
 
-    setOnchain(newOnChain);
-    setAccount(_account);
-  }, [setOnchain, setAccount]);
+        setOnchain(newOnChain);
+        setAccount(_account);
+      } catch (error) {
+        console.error(error);
+        errorCallback();
+      }
+    },
+    [setOnchain, setAccount]
+  );
 
   useEffect(() => {
-    setupOnChain();
+    let maxTries = 5;
+    const errorCallback = () => {
+      setTimeout(() => {
+        if (!!maxTries) {
+          setupOnChain(errorCallback);
+          maxTries--;
+        }
+        return;
+      }, 500);
+    };
+    setupOnChain(errorCallback);
   }, []);
 
   const approveTransactionCallback = useCallback(async () => {
