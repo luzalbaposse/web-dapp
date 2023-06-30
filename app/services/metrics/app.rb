@@ -356,5 +356,15 @@ module Metrics
     def total_users_that_received_messages
       Message.where(sent_to_supporters: false, career_update_id: nil).distinct.pluck(:receiver_id).count
     end
+
+    def total_users_with_active_goals
+      CareerGoal
+        .joins(:goals)
+        .where(goals: {progress: Goal::DOING})
+        .where("goals.due_date >= ?", Date.today)
+        .distinct
+        .pluck(:talent_id)
+        .count
+    end
   end
 end

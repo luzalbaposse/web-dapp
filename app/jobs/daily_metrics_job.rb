@@ -73,7 +73,8 @@ class DailyMetricsJob < ApplicationJob
       total_messages: total_messages,
       total_messages_read: total_messages_read,
       total_users_that_sent_messages: total_users_that_sent_messages,
-      total_users_that_received_messages: total_users_that_received_messages
+      total_users_that_received_messages: total_users_that_received_messages,
+      total_users_with_active_goals: total_users_with_active_goals
     )
   end
 end
