@@ -88,7 +88,8 @@ module GoogleDrive
         daily_metric.total_messages,
         daily_metric.total_messages_read,
         daily_metric.total_users_that_sent_messages,
-        daily_metric.total_users_that_received_messages
+        daily_metric.total_users_that_received_messages,
+        daily_metric.total_users_with_active_goals
       ]]
     end
 

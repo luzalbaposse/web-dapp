@@ -15,7 +15,7 @@ const acceptSubscription = (subscribing, subscriber) => {
     `/api/v1/subscriptions/accept`,
     {
       id: subscriber,
-      talent_id: subscribing
+      user_id: subscribing
     },
     {
       headers: {
@@ -34,7 +34,7 @@ const destroySubscription = (subscribing, subscriber) => {
     {
       data: {
         id: subscriber,
-        talent_id: subscribing
+        user_id: subscribing
       }
     },
     {

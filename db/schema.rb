@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_15_124155) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_30_140117) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -267,6 +267,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_15_124155) do
     t.integer "total_users_that_sent_messages"
     t.integer "total_messages_read"
     t.integer "total_messages"
+    t.integer "total_users_with_active_goals"
   end
 
   create_table "discovery_rows", force: :cascade do |t|

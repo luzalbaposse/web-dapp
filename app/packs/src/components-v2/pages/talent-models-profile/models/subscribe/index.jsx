@@ -19,13 +19,13 @@ export const SubscribeModel = ({ profile, setProfile, isCurrentUserProfile }) =>
     let new_status;
 
     if (profile.subscribing_status == "subscribed") {
-      response = await destroy(`/api/v1/subscriptions?talent_id=${profile.user.username}`);
+      response = await destroy(`/api/v1/subscriptions?user_id=${profile.user.username}`);
       successHeader = "Subscription removed";
       successMessage = `You're no longer subscribed to ${profile.user.name} career updates`;
       new_status = "unsubscribed";
     } else if (profile.subscribing_status == "unsubscribed") {
       response = await post(`/api/v1/subscriptions`, {
-        talent_id: profile.user.username
+        user_id: profile.user.username
       });
       successHeader = "New subscription requested";
       successMessage = `A subscription request was sent to ${profile.user.name}`;

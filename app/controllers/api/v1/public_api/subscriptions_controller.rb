@@ -115,11 +115,11 @@ class API::V1::PublicAPI::SubscriptionsController < API::V1::PublicAPI::APIContr
   private
 
   def subscription_params
-    params.permit(:talent_id)
+    params.permit(:user_id)
   end
 
   def subscribing_user
-    @subscribing_user ||= User.find_by!("uuid::text = :id OR wallet_id = :id OR username = :id", id: subscription_params[:talent_id])
+    @subscribing_user ||= User.find_by!("uuid::text = :id OR wallet_id = :id OR username = :id", id: subscription_params[:user_id])
   end
 
   def user
