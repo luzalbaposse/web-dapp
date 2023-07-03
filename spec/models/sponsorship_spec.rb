@@ -95,4 +95,28 @@ RSpec.describe Sponsorship, type: :model do
       end
     end
   end
+
+  describe "#invested_by_user" do
+    let(:wallet_id) { SecureRandom.hex }
+    let!(:user) { create :user, wallet_id: wallet_id }
+
+    context "when the user made sponsorships" do
+      before do
+        create :sponsorship, talent: wallet_id, symbol: "USDC", amount: 2500000, token_decimals: 6
+        create :sponsorship, talent: wallet_id, symbol: "USDC", amount: 2500000000000000000, token_decimals: 18
+      end
+
+      it "returns the amount invested by the user" do
+        expect(Sponsorship.invested_by_user(user)).to eq 5
+      end
+    end
+
+    context "when the user has made no sponsorships" do
+      let(:wallet_id) { SecureRandom.hex }
+
+      it "returns 0" do
+        expect(Sponsorship.invested_by_user(user)).to eq 0
+      end
+    end
+  end
 end

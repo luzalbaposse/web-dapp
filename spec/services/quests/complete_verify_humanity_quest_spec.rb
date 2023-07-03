@@ -4,6 +4,7 @@ RSpec.describe Quests::CompleteVerifyHumanityQuest do
   subject(:complete_verify_humanity_quest) { described_class.new(quest: quest, user: user, params: params).call }
 
   let(:user) { create :user, humanity_verified_at: humanity_verified_at }
+  let!(:talent) { create :talent, user: user }
 
   let!(:quest) { create :quest, quest_type: quest_type }
   let(:quest_type) { "verify_humanity" }

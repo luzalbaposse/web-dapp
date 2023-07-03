@@ -57,10 +57,34 @@ namespace :quests do
       },
       {
         title: "Verify Your Humanity",
-        description: "Validate you are a human using Worldcoin.",
+        description: "Validate you are a human using World ID.",
         quest_type: "verify_humanity",
         experience_points_amount: 1000,
         sponsored: true
+      },
+      {
+        title: "Create your Talent Mate",
+        description: "Mint your mate NFT, exclusive for Talent Protocol verified members.",
+        quest_type: "create_talent_mate",
+        experience_points_amount: 750
+      },
+      {
+        title: "Get 3+ Token Holders",
+        description: "Launch your Talent Token and get 3 people to stake on you.",
+        quest_type: "three_token_holders",
+        experience_points_amount: 2000
+      },
+      {
+        title: "Sponsor a Talent",
+        description: "Help a talent financially with $5 or more.",
+        quest_type: "sponsor_talent",
+        experience_points_amount: 2500
+      },
+      {
+        title: "Invite 3+ Friends",
+        description: "Get 3+ friends to sign up and verify their account.",
+        quest_type: "invite_three",
+        experience_points_amount: 1000
       }
     ]
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { QuestData, QuestDataRow, QuestEntry, QuestReward, RewardTag } from "./styled";
-import { Icon, Typography } from "@talentprotocol/design-system";
+import { Icon, Tag, Typography } from "@talentprotocol/design-system";
 import { VerifyHumanityQuest } from "./verify-humanity-quest";
 
 const QUEST_TYPE_MAP = {
@@ -13,7 +13,11 @@ const QUEST_TYPE_MAP = {
   supporting_three: "/talent",
   connect_wallet: "",
   complete_profile: "/u/__username__",
-  verify_humanity: ""
+  verify_humanity: "",
+  create_talent_mate: "https://mates.talentprotocol.com/",
+  three_token_holders: "/u/__username__#token",
+  sponsor_talent: "/talent",
+  invite_three: "?tab=invites"
 };
 
 export const Quest = ({ quest, username, railsContext }) => {
@@ -28,6 +32,7 @@ export const Quest = ({ quest, username, railsContext }) => {
           ? undefined
           : QUEST_TYPE_MAP[quest.quest_type].replace("__username__", username)
       }
+      target={QUEST_TYPE_MAP[quest.quest_type].includes("http") ? "_blank" : "_self"}
     >
       <QuestData>
         <QuestDataRow>
@@ -35,6 +40,7 @@ export const Quest = ({ quest, username, railsContext }) => {
           <Typography specs={{ variant: "p2", type: "medium" }} color={!!quest.completed_at ? "primary" : "primary01"}>
             {quest.title}
           </Typography>
+          {quest.new && <Tag textColor="bg01" backgroundColor="primary" size="small" label="New" />}
         </QuestDataRow>
         <Typography specs={{ variant: "p3", type: "regular" }} color={!!quest.completed_at ? "primary" : "primary04"}>
           {quest.description}
