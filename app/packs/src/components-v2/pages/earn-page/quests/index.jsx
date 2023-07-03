@@ -11,7 +11,7 @@ export const Quests = ({ profile, railsContext }) => {
     questsService
       .getQuests(profile.id, 20, 1)
       .then(({ data }) => {
-        setQuests(data.quests.sort(a => (a.completed_at ? -1 : 1)));
+        setQuests(data.quests.sort(a => (a.completed_at ? 1 : -1)));
       })
       .catch(() => {});
   }, [profile]);

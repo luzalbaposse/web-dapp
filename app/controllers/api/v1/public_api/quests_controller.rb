@@ -1,6 +1,5 @@
 class API::V1::PublicAPI::QuestsController < API::V1::PublicAPI::APIController
   before_action :internal_only, only: [:complete]
-  before_action :authenticated_only, only: [:complete]
 
   def index
     total_quests = Quest.all
@@ -35,7 +34,11 @@ class API::V1::PublicAPI::QuestsController < API::V1::PublicAPI::APIController
   end
 
   def complete
-    Quests::CompleteVerifyHumanityQuest.new(quest: quest, user: current_user, params: required_params.to_h).call
+    if quest_params[:quest_type] == "verify_humanity"
+      Quests::CompleteVerifyHumanityQuest.new(quest: quest, user: user, params: required_params.to_h).call
+    elsif quest_params[:quest_type] == "create_talent_mate"
+      Quests::RefreshUserQuest.new(user: user, quest: quest).call
+    end
 
     response_body = {quest: API::QuestBlueprint.render_as_json(quest, view: :normal)}
     log_request(response_body, :ok)
@@ -53,8 +56,12 @@ class API::V1::PublicAPI::QuestsController < API::V1::PublicAPI::APIController
     @user ||= User.find_by("uuid::text = :id OR wallet_id = :id OR username = :id", id: downcase_id)
   end
 
+  def quest_params
+    params.permit(:quest_type)
+  end
+
   def quest
-    @quest ||= Quest.find_by!(quest_type: params[:quest_type])
+    @quest ||= Quest.find_by!(quest_type: quest_params[:quest_type])
   end
 
   def required_params

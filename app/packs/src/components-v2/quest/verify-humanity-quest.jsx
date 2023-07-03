@@ -11,7 +11,7 @@ export const VerifyHumanityQuest = ({ quest, username, railsContext }) => {
 
   const verifyHumanityProof = data => {
     questsService
-      .completeQuest(quest.quest_type, { worldcoin_proof: data })
+      .completeQuest(quest.quest_type, { id: username, worldcoin_proof: data })
       .then(({ data }) => {
         if (data.error) {
           toast.error(<ToastBody heading="Error!" body={data.error} />, {
@@ -53,7 +53,8 @@ export const VerifyHumanityQuest = ({ quest, username, railsContext }) => {
           <Typography specs={{ variant: "p2", type: "medium" }} color={!!quest.completed_at ? "primary" : "primary01"}>
             {quest.title}
           </Typography>
-          <Tag color="primary-text" backgroundColor="primaryTint02" size="small" label="Partner" />
+          {quest.new && <Tag textColor="bg01" backgroundColor="primaryTint02" size="small" label="New" />}
+          <Tag textColor="primary-text" backgroundColor="primaryTint02" size="small" label="Partner" />
         </QuestDataRow>
         <Typography specs={{ variant: "p3", type: "regular" }} color={!!quest.completed_at ? "primary" : "primary04"}>
           {quest.description}

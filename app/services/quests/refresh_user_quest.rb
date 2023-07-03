@@ -1,6 +1,9 @@
+require "web3_api/api_proxy"
 # Refresh a specific quest for a specific user
 module Quests
   class RefreshUserQuest
+    TALENT_MATE_CONTRACT = "0x41033160a2351358ddc1b97edd0bc6f00cdeca92"
+
     def initialize(user:, quest:, notify: true)
       @user = user
       @quest = quest
@@ -71,6 +74,14 @@ module Quests
         profile_complete_quest_completed?
       when "verify_humanity"
         verify_humanity_quest_completed?
+      when "create_talent_mate"
+        create_talent_mate_quest_completed?
+      when "three_token_holders"
+        three_token_holders_quest_completed?
+      when "sponsor_talent"
+        sponsor_talent_quest_completed?
+      when "invite_three"
+        invite_three_quest_completed?
       else
         false
       end
@@ -119,6 +130,34 @@ module Quests
       user.humanity_verified_at.present?
     end
 
+    def create_talent_mate_quest_completed?
+      return false unless user.wallet_id
+
+      nfts = web3_proxy.retrieve_nfts(wallet_address: user.wallet_id, chain: "polygon")
+      nfts.pluck(:address).include?(TALENT_MATE_CONTRACT)
+    end
+
+    def three_token_holders_quest_completed?
+      return false unless user.talent.talent_token&.contract_id
+
+      TalentSupporter.where(talent_contract_id: user.talent.talent_token.contract_id).count >= 3
+    end
+
+    def sponsor_talent_quest_completed?
+      return false unless user.wallet_id
+
+      Sponsorship.invested_by_user(user) >= 5
+    end
+
+    def invite_three_quest_completed?
+      User
+        .joins(:talent)
+        .where(invite_id: user.invites.pluck(:id))
+        .where("users.created_at > ?", DateTime.new(2023, 6, 1))
+        .where(talent: {verified: true})
+        .count >= 3
+    end
+
     def notify_verified_profile
       CreateNotification.new.call(
         recipient: user,
@@ -142,6 +181,10 @@ module Quests
 
     def credit_invite_points
       ExperiencePoints::CreditInvitePoints.new(invite: user.invited).call
+    end
+
+    def web3_proxy
+      @web3_proxy ||= Web3Api::ApiProxy.new
     end
   end
 end

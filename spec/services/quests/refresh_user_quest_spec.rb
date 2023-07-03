@@ -312,53 +312,167 @@ RSpec.describe Quests::RefreshUserQuest do
 
         it_behaves_like "a refresh user quest without creating new records"
       end
+    end
 
-      context "when the quest type is connect_wallet" do
-        let(:quest_type) { "connect_wallet" }
+    context "when the quest type is connect_wallet" do
+      let(:quest_type) { "connect_wallet" }
 
-        context "when the quest was completed" do
-          let(:wallet_id) { SecureRandom.hex }
+      context "when the quest was completed" do
+        let(:wallet_id) { SecureRandom.hex }
 
-          it_behaves_like "a refresh user quest that creates new records"
-        end
-
-        context "when the quest was not completed" do
-          let(:wallet_id) { nil }
-
-          it_behaves_like "a refresh user quest without creating new records"
-        end
+        it_behaves_like "a refresh user quest that creates new records"
       end
 
-      context "when the quest type is complete_profile" do
-        let(:quest_type) { "complete_profile" }
+      context "when the quest was not completed" do
+        let(:wallet_id) { nil }
 
-        context "when the quest was completed" do
-          before do
-            allow_any_instance_of(User).to receive(:profile_complete_quest_completed?).and_return(true)
-          end
+        it_behaves_like "a refresh user quest without creating new records"
+      end
+    end
 
-          it_behaves_like "a refresh user quest that creates new records"
+    context "when the quest type is complete_profile" do
+      let(:quest_type) { "complete_profile" }
+
+      context "when the quest was completed" do
+        before do
+          allow_any_instance_of(User).to receive(:profile_complete_quest_completed?).and_return(true)
         end
 
-        context "when the quest was not completed" do
-          it_behaves_like "a refresh user quest without creating new records"
-        end
+        it_behaves_like "a refresh user quest that creates new records"
       end
 
-      context "when the quest type is verify_humanity" do
-        let(:quest_type) { "verify_humanity" }
+      context "when the quest was not completed" do
+        it_behaves_like "a refresh user quest without creating new records"
+      end
+    end
 
-        context "when the quest was completed" do
-          before do
-            user.update(humanity_verified_at: Time.current)
-          end
+    context "when the quest type is verify_humanity" do
+      let(:quest_type) { "verify_humanity" }
 
-          it_behaves_like "a refresh user quest that creates new records"
+      context "when the quest was completed" do
+        before do
+          user.update(humanity_verified_at: Time.current)
         end
 
-        context "when the quest was not completed" do
-          it_behaves_like "a refresh user quest without creating new records"
+        it_behaves_like "a refresh user quest that creates new records"
+      end
+
+      context "when the quest was not completed" do
+        it_behaves_like "a refresh user quest without creating new records"
+      end
+    end
+
+    context "when the quest type is create_talent_mate" do
+      let(:quest_type) { "create_talent_mate" }
+      let(:web3_proxy_class) { Web3Api::ApiProxy }
+      let(:web3_proxy) { instance_double(web3_proxy_class) }
+
+      before do
+        allow(web3_proxy_class).to receive(:new).and_return(web3_proxy)
+        allow(web3_proxy).to receive(:retrieve_nfts).and_return(nfts_response)
+      end
+
+      context "when the quest was completed" do
+        let(:nfts_response) do
+          [
+            {
+              address: "0x41033160a2351358ddc1b97edd0bc6f00cdeca92",
+              token_id: "5",
+              amount: "1",
+              name: "Talent Protocol NFT Collection",
+              symbol: "TalentNFT",
+              token_uri: "https://ipfs.moralis.io:2053/ipfs/bafyreifukbnxrw3zexd6b6s5ksrbzcw27upnz7srdjtlagbul5bvabm6wi/metadata.json",
+              metadata: {}
+            },
+            {
+              address: "ddd",
+              token_id: "8",
+              amount: "1",
+              name: "CeloApesKingdom",
+              symbol: "CAK",
+              token_uri: "https://ipfs.io/ipfs/bafybeih6g4g7ul4s3l2b6axygpf7s6fkpwhd6e5elgl2t7gmdwlc6lsmjq/metadata/8.json",
+              metadata: {}
+            }
+          ]
         end
+
+        it_behaves_like "a refresh user quest that creates new records"
+      end
+
+      context "when the quest was not completed" do
+        let(:nfts_response) do
+          [
+            {
+              address: "ddd",
+              token_id: "8",
+              amount: "1",
+              name: "CeloApesKingdom",
+              symbol: "CAK",
+              token_uri: "https://ipfs.io/ipfs/bafybeih6g4g7ul4s3l2b6axygpf7s6fkpwhd6e5elgl2t7gmdwlc6lsmjq/metadata/8.json",
+              metadata: {}
+            }
+          ]
+        end
+
+        it_behaves_like "a refresh user quest without creating new records"
+      end
+    end
+
+    context "when the quest type is three_token_holders" do
+      let(:quest_type) { "three_token_holders" }
+      let(:talent_token) { create :talent_token, talent: user.talent }
+
+      context "when the quest was completed" do
+        before do
+          create :talent_supporter, talent_contract_id: talent_token.contract_id
+          create :talent_supporter, talent_contract_id: talent_token.contract_id
+          create :talent_supporter, talent_contract_id: talent_token.contract_id
+        end
+
+        it_behaves_like "a refresh user quest that creates new records"
+      end
+
+      context "when the quest was not completed" do
+        it_behaves_like "a refresh user quest without creating new records"
+      end
+    end
+
+    context "when the quest type is sponsor_talent" do
+      let(:quest_type) { "sponsor_talent" }
+
+      context "when the quest was completed" do
+        before do
+          create :sponsorship, talent: user.wallet_id, symbol: "USDC", amount: 2500000, token_decimals: 6
+          create :sponsorship, talent: user.wallet_id, symbol: "USDC", amount: 2500000000000000000, token_decimals: 18
+        end
+
+        it_behaves_like "a refresh user quest that creates new records"
+      end
+
+      context "when the quest was not completed" do
+        it_behaves_like "a refresh user quest without creating new records"
+      end
+    end
+
+    context "when the quest type is invite_three" do
+      let(:quest_type) { "invite_three" }
+      let(:invite) { create :invite, user: user }
+      let(:user_invited_1) { create :user, invite_id: invite.id, created_at: DateTime.now }
+      let(:user_invited_2) { create :user, invite_id: invite.id, created_at: DateTime.now }
+      let(:user_invited_3) { create :user, invite_id: invite.id, created_at: DateTime.now }
+
+      context "when the quest was completed" do
+        before do
+          create :talent, user: user_invited_1, verified: true
+          create :talent, user: user_invited_2, verified: true
+          create :talent, user: user_invited_3, verified: true
+        end
+
+        it_behaves_like "a refresh user quest that creates new records"
+      end
+
+      context "when the quest was not completed" do
+        it_behaves_like "a refresh user quest without creating new records"
       end
     end
   end

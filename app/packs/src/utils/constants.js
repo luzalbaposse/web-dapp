@@ -46,7 +46,7 @@ export const TALENT_PROTOCOL_WEBSITE = "https://www.talentprotocol.com";
 
 export const TALENT_PROTOCOL_GITHUB = "https://github.com/talentprotocol";
 
-export const TALENT_PROTOCOL_TELEGRAM = "talentprotocol";
+export const TALENT_PROTOCOL_TELEGRAM = "https://t.me/talentprotocol";
 
 export const ERROR_MESSAGES = {
   ticker_reserved: "talent token with this symbol already exists",

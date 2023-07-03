@@ -51,3 +51,9 @@
     update_chewy_index:
       cron: "0 * * * *" # Runs every hour
       class: TriggerChewyIndexUpdateJob
+    refresh_quests_job:
+      cron: "0 13 * * *" # Runs once every day at 13:00
+      class: Quests::RefreshQuestsJob
+    refresh_talent_mate_quests_job:
+      cron: "0 14 * * *" # Runs once every day at 14:00
+      class: Quests::RefreshTalentMateQuestsJob

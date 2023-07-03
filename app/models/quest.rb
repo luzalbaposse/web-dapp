@@ -10,6 +10,10 @@ class Quest < ApplicationRecord
     five_subscribers
     complete_profile
     supporting_three
+    create_talent_mate
+    three_token_holders
+    sponsor_talent
+    invite_three
   ]
 
   validates :title, :quest_type, uniqueness: true

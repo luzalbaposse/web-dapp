@@ -554,6 +554,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_30_172436) do
     t.datetime "updated_at", null: false
     t.string "quest_type", null: false
     t.boolean "sponsored", default: false
+    t.boolean "new", default: true, null: false
     t.index ["quest_type"], name: "index_quests_on_quest_type", unique: true
     t.index ["uuid"], name: "index_quests_on_uuid"
   end
