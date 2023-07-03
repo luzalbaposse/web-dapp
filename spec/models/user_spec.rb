@@ -87,6 +87,14 @@ RSpec.describe User, type: :model do
       }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
+    it "does not allow multiple users with the same humanity_proof" do
+      create(:user, humanity_proof: "1")
+
+      expect {
+        create(:user, humanity_proof: "1")
+      }.to raise_error(ActiveRecord::RecordInvalid)
+    end
+
     it "does not allow non supported roles" do
       expect {
         create(:user, role: "Investor")

@@ -19,7 +19,8 @@ module Quests
 
       verify_proof!
 
-      user.update!(humanity_verified_at: Time.current, humanity_proof: proof.to_json)
+      user.update!(humanity_verified_at: Time.current, humanity_proof: proof["proof"])
+      user.talent.update!(verified: true)
 
       Quests::RefreshUserQuest.new(user: user, quest: quest, notify: true).call
     end

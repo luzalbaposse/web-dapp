@@ -8,6 +8,7 @@ class User < ApplicationRecord
   validate :validate_notification_preferences
   validate :username_is_valid
   validates :username, :email, uniqueness: true
+  validates :humanity_proof, uniqueness: true, if: -> { humanity_proof.present? }
   validates :wallet_id, uniqueness: true, if: -> { wallet_id.present? }
   validates_numericality_of :profile_completeness, less_than_or_equal_to: 1
 
