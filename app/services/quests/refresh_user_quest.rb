@@ -131,7 +131,7 @@ module Quests
     end
 
     def create_talent_mate_quest_completed?
-      return false unless user.wallet_id
+      return false unless user.wallet_id && user.talent&.verified
 
       nfts = web3_proxy.retrieve_nfts(wallet_address: user.wallet_id, chain: "polygon")
       nfts.pluck(:address).include?(TALENT_MATE_CONTRACT)
