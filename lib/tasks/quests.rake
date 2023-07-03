@@ -57,7 +57,7 @@ namespace :quests do
       },
       {
         title: "Verify Your Humanity",
-        description: "Validate you are a human using Worldcoin.",
+        description: "Validate you are a human using World ID.",
         quest_type: "verify_humanity",
         experience_points_amount: 1000,
         sponsored: true
