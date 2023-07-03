@@ -368,6 +368,7 @@ RSpec.describe Quests::RefreshUserQuest do
       let(:web3_proxy) { instance_double(web3_proxy_class) }
 
       before do
+        user.talent.update!(verified: true)
         allow(web3_proxy_class).to receive(:new).and_return(web3_proxy)
         allow(web3_proxy).to receive(:retrieve_nfts).and_return(nfts_response)
       end
