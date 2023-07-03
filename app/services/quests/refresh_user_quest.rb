@@ -133,8 +133,7 @@ module Quests
     def create_talent_mate_quest_completed?
       return false unless user.wallet_id && user.talent&.verified
 
-      nfts = web3_proxy.retrieve_nfts(wallet_address: user.wallet_id, chain: "polygon")
-      nfts.pluck(:address).include?(TALENT_MATE_CONTRACT)
+      polygon_client.call(talent_mate_contract, "balanceOf", user.wallet_id) > 0
     end
 
     def three_token_holders_quest_completed?
@@ -183,8 +182,20 @@ module Quests
       ExperiencePoints::CreditInvitePoints.new(invite: user.invited).call
     end
 
-    def web3_proxy
-      @web3_proxy ||= Web3Api::ApiProxy.new
+    def talent_mate_abi
+      @talent_mate_abi ||= JSON.parse(File.read("lib/abi/TalentNFT.json"))
+    end
+
+    def talent_mate_contract
+      @talent_mate_contract ||= Eth::Contract.from_abi(
+        name: "TalentNFT",
+        address: TALENT_MATE_CONTRACT,
+        abi: talent_mate_abi["abi"]
+      )
+    end
+
+    def polygon_client
+      @polygon_client ||= Eth::Client.create "https://polygon-rpc.com"
     end
   end
 end
