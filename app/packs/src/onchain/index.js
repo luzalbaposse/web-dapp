@@ -506,7 +506,7 @@ class OnChain {
   }
 
   async whitelistAddress(address) {
-    const { hash } = await this.writeToContract(this.talentFactory(), "whitelistAddress", [address]);
+    const { hash } = await this.writeToContract(await this.factoryConfig(), "whitelistAddress", [address]);
 
     try {
       await waitForTransaction({ hash });
