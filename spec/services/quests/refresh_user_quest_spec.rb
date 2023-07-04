@@ -364,55 +364,23 @@ RSpec.describe Quests::RefreshUserQuest do
 
     context "when the quest type is create_talent_mate" do
       let(:quest_type) { "create_talent_mate" }
-      let(:web3_proxy_class) { Web3Api::ApiProxy }
-      let(:web3_proxy) { instance_double(web3_proxy_class) }
+      let(:eth_client_class) { Eth::Client }
+      let(:client) { instance_double(eth_client_class) }
 
       before do
-        allow(web3_proxy_class).to receive(:new).and_return(web3_proxy)
-        allow(web3_proxy).to receive(:retrieve_nfts).and_return(nfts_response)
+        user.talent.update!(verified: true)
+        allow(eth_client_class).to receive(:create).and_return(client)
+        allow(client).to receive(:call).and_return(talent_mates_count)
       end
 
       context "when the quest was completed" do
-        let(:nfts_response) do
-          [
-            {
-              address: "0x41033160a2351358ddc1b97edd0bc6f00cdeca92",
-              token_id: "5",
-              amount: "1",
-              name: "Talent Protocol NFT Collection",
-              symbol: "TalentNFT",
-              token_uri: "https://ipfs.moralis.io:2053/ipfs/bafyreifukbnxrw3zexd6b6s5ksrbzcw27upnz7srdjtlagbul5bvabm6wi/metadata.json",
-              metadata: {}
-            },
-            {
-              address: "ddd",
-              token_id: "8",
-              amount: "1",
-              name: "CeloApesKingdom",
-              symbol: "CAK",
-              token_uri: "https://ipfs.io/ipfs/bafybeih6g4g7ul4s3l2b6axygpf7s6fkpwhd6e5elgl2t7gmdwlc6lsmjq/metadata/8.json",
-              metadata: {}
-            }
-          ]
-        end
+        let(:talent_mates_count) { 1 }
 
         it_behaves_like "a refresh user quest that creates new records"
       end
 
       context "when the quest was not completed" do
-        let(:nfts_response) do
-          [
-            {
-              address: "ddd",
-              token_id: "8",
-              amount: "1",
-              name: "CeloApesKingdom",
-              symbol: "CAK",
-              token_uri: "https://ipfs.io/ipfs/bafybeih6g4g7ul4s3l2b6axygpf7s6fkpwhd6e5elgl2t7gmdwlc6lsmjq/metadata/8.json",
-              metadata: {}
-            }
-          ]
-        end
+        let(:talent_mates_count) { 0 }
 
         it_behaves_like "a refresh user quest without creating new records"
       end
