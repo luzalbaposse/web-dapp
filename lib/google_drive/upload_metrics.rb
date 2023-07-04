@@ -89,7 +89,11 @@ module GoogleDrive
         daily_metric.total_messages_read,
         daily_metric.total_users_that_sent_messages,
         daily_metric.total_users_that_received_messages,
-        daily_metric.total_users_with_active_goals
+        daily_metric.total_users_with_active_goals,
+        daily_metric.total_old_users_season_4.to_i,
+        daily_metric.total_new_users_season_4.to_i,
+        daily_metric.total_organic_users_season_4.to_i,
+        daily_metric.total_referral_users_season_4.to_i
       ]]
     end
 

@@ -11,5 +11,9 @@ class DailyMetric < ApplicationRecord
     total_new_users_season_3
     total_organic_users_season_3
     total_referral_users_season_3
+    total_old_users_season_4
+    total_new_users_season_4
+    total_organic_users_season_4
+    total_referral_users_season_4
   ], coder: JSON
 end
