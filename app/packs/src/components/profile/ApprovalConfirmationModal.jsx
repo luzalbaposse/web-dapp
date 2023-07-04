@@ -14,7 +14,7 @@ import Divider from "src/components/design_system/other/Divider";
 import Button from "src/components/design_system/button";
 import { useWindowDimensionsHook } from "src/utils/window";
 
-const ApprovalConfirmationModal = ({ show, hide, talent, setTalent, railsContext }) => {
+const ApprovalConfirmationModal = ({ show, hide, talent, setProfile, railsContext }) => {
   const { mobile } = useWindowDimensionsHook();
   const [chainAPI, setChainAPI] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -36,7 +36,7 @@ const ApprovalConfirmationModal = ({ show, hide, talent, setTalent, railsContext
     });
 
     if (response && !response.error) {
-      setTalent(prev => ({
+      setProfile(prev => ({
         ...prev,
         user: { ...prev.user, profileType: "approved" }
       }));

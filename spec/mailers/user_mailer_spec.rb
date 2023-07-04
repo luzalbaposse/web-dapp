@@ -208,15 +208,4 @@ RSpec.describe UserMailer, type: :mailer do
       expect(mail.to).to eql([user.email])
     end
   end
-
-  describe "send opportunities open roles email" do
-    let(:mail) do
-      described_class.with(user: user).send_opportunities_open_roles_email
-    end
-
-    it "renders the header" do
-      expect(mail.subject).to eql("We have open roles for you!")
-      expect(mail.to).to eql([user.email])
-    end
-  end
 end

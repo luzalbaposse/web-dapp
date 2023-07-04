@@ -103,10 +103,6 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.with(goal: goal(user), user: user).send_goal_30_days_past_due_date_reminder_email
   end
 
-  def send_opportunities_open_roles_email
-    UserMailer.with(user: User.first).send_opportunities_open_roles_email
-  end
-
   private
 
   def goal(user)

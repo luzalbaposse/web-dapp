@@ -5,6 +5,8 @@ module Metrics
     ONBOARDING_START_DATE = Date.new(2022, 10, 13)
     SEASON_3_START_DATE = Date.new(2023, 0o1, 0o1)
     SEASON_3_END_DATE = Date.new(2023, 0o6, 30)
+    SEASON_4_START_DATE = Date.new(2023, 7, 1)
+    SEASON_4_END_DATE = Date.new(2023, 12, 31)
 
     def date
       Date.yesterday
@@ -126,12 +128,14 @@ module Metrics
 
     def total_advocates
       query = <<~SQL
-        SELECT COUNT(DISTINCT user_id)
-        FROM invites
-        where id IN (
+        SELECT COUNT(DISTINCT users.id)
+        FROM users
+        INNER JOIN invites on users.id = invites.user_id
+        WHERE onboarded_at IS NOT NULL AND
+        invites.id IN (
             SELECT invite_id
             FROM users
-            WHERE tokens_purchased = true
+            WHERE onboarded_at IS NOT NULL
         )
       SQL
 
@@ -232,11 +236,11 @@ module Metrics
     end
 
     def collect_onboarding_metrics(daily_metric)
-      daily_metric.total_old_users_season_3 = User.where("created_at < ? AND onboarded_at between ? AND ?", ONBOARDING_START_DATE, SEASON_3_START_DATE, SEASON_3_END_DATE).count
-      season_3_created_and_onboarded = User.where("created_at >= ? AND onboarded_at between ? AND ?", SEASON_3_START_DATE, SEASON_3_START_DATE, SEASON_3_END_DATE)
-      daily_metric.total_new_users_season_3 = season_3_created_and_onboarded.count
-      daily_metric.total_organic_users_season_3 = season_3_created_and_onboarded.where(invite_id: nil).count
-      daily_metric.total_referral_users_season_3 = season_3_created_and_onboarded.where.not(invite_id: nil).count
+      daily_metric.total_old_users_season_4 = User.where("created_at < ? AND onboarded_at between ? AND ?", ONBOARDING_START_DATE, SEASON_4_START_DATE, SEASON_4_END_DATE).count
+      season_4_created_and_onboarded = User.where("created_at >= ? AND onboarded_at between ? AND ?", SEASON_4_START_DATE, SEASON_4_START_DATE, SEASON_4_END_DATE)
+      daily_metric.total_new_users_season_4 = season_4_created_and_onboarded.count
+      daily_metric.total_organic_users_season_4 = season_4_created_and_onboarded.where(invite_id: nil).count
+      daily_metric.total_referral_users_season_4 = season_4_created_and_onboarded.where.not(invite_id: nil).count
       daily_metric
     end
 

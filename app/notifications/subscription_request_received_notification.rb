@@ -41,6 +41,6 @@ class SubscriptionRequestReceivedNotification < BaseNotification
   private
 
   def request_data
-    {id: recipient.uuid, user_id: source.uuid}
+    {id: source.uuid, user_id: recipient.uuid}
   end
 end
