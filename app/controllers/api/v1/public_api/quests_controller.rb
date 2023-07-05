@@ -35,7 +35,7 @@ class API::V1::PublicAPI::QuestsController < API::V1::PublicAPI::APIController
 
   def complete
     if quest_params[:quest_type] == "verify_humanity"
-      Quests::CompleteVerifyHumanityQuest.new(quest: quest, user: user, params: required_params.to_h).call
+      Quests::CompleteVerifyHumanityQuest.new(user: user, params: required_params.to_h).call
     elsif quest_params[:quest_type] == "create_talent_mate"
       Quests::RefreshUserQuest.new(user: user, quest: quest).call
     end

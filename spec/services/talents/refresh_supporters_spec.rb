@@ -9,6 +9,8 @@ RSpec.describe Talents::RefreshSupporters do
   let!(:supporter_one) { create :user, wallet_id: "99asn" }
   let!(:supporter_two) { create :user, wallet_id: "01ksh" }
 
+  let!(:quest) { create :quest, quest_type: "three_token_holders" }
+
   subject(:refresh_supporters) { described_class.new(talent_token: talent_token).call }
 
   let(:the_graph_client_class) { TheGraph::Celo::Client }
@@ -67,9 +69,13 @@ RSpec.describe Talents::RefreshSupporters do
     ]
   end
 
+  let(:refresh_user_quest_class) { Quests::RefreshUserQuest }
+  let(:refresh_user_quest_instance) { instance_double(refresh_user_quest_class, call: true) }
+
   before do
     allow(the_graph_client_class).to receive(:new).and_return(the_graph_client_instance)
     allow(the_graph_client_instance).to receive(:talent_supporters).and_return(talent_supporters_data)
+    allow(refresh_user_quest_class).to receive(:new).and_return(refresh_user_quest_instance)
   end
 
   it "initializes the graph client once" do
@@ -267,5 +273,15 @@ RSpec.describe Talents::RefreshSupporters do
         )
       end
     end
+  end
+
+  it "initializes and calls the refresh user quest service" do
+    refresh_supporters
+
+    expect(refresh_user_quest_class).to have_received(:new).with(
+      user: talent.user,
+      quest: quest
+    )
+    expect(refresh_user_quest_instance).to have_received(:call)
   end
 end

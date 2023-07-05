@@ -1,13 +1,16 @@
 require "rails_helper"
 
 RSpec.describe Quests::CompleteVerifyHumanityQuest do
-  subject(:complete_verify_humanity_quest) { described_class.new(quest: quest, user: user, params: params).call }
+  subject(:complete_verify_humanity_quest) { described_class.new(user: user, params: params).call }
 
-  let(:user) { create :user, humanity_verified_at: humanity_verified_at }
+  let(:user) { create :user, humanity_verified_at: humanity_verified_at, invite_id: invite.id }
+  let(:inviter_user) { create :user }
+  let(:invite) { create :invite, user: inviter_user }
   let!(:talent) { create :talent, user: user }
 
-  let!(:quest) { create :quest, quest_type: quest_type }
-  let(:quest_type) { "verify_humanity" }
+  let!(:verify_humanity_quest) { create :quest, quest_type: "verify_humanity" }
+  let!(:invite_three_quest) { create :quest, quest_type: "invite_three" }
+
   let(:params) do
     {}
   end
@@ -55,12 +58,18 @@ RSpec.describe Quests::CompleteVerifyHumanityQuest do
       it "initializes and calls the refresh user quest service" do
         complete_verify_humanity_quest
 
+        expect(refresh_user_quest_class).to have_received(:new).twice
         expect(refresh_user_quest_class).to have_received(:new).with(
           user: user,
-          quest: quest,
+          quest: verify_humanity_quest,
           notify: true
         )
-        expect(refresh_user_quest_instance).to have_received(:call)
+        expect(refresh_user_quest_class).to have_received(:new).with(
+          user: inviter_user,
+          quest: invite_three_quest,
+          notify: true
+        )
+        expect(refresh_user_quest_instance).to have_received(:call).twice
       end
 
       it "updates the user flag" do
@@ -68,6 +77,14 @@ RSpec.describe Quests::CompleteVerifyHumanityQuest do
           complete_verify_humanity_quest
 
           expect(user.reload.humanity_verified_at).to eq Time.current
+        end
+      end
+
+      it "updates the talent flag" do
+        freeze_time do
+          complete_verify_humanity_quest
+
+          expect(user.reload.talent.verified).to be true
         end
       end
     end

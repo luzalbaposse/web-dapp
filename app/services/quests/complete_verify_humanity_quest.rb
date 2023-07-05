@@ -8,9 +8,8 @@ module Quests
 
     WORLDCOIN_QUEST_ACTION = ENV["WORLDCOIN_QUEST_ACTION"]
 
-    def initialize(user:, quest:, params:)
+    def initialize(user:, params:)
       @user = user
-      @quest = quest
       @params = params
     end
 
@@ -22,12 +21,21 @@ module Quests
       user.update!(humanity_verified_at: Time.current, humanity_proof: proof["proof"])
       user.talent.update!(verified: true)
 
-      Quests::RefreshUserQuest.new(user: user, quest: quest, notify: true).call
+      Quests::RefreshUserQuest.new(user: user, quest: verify_humanity_quest, notify: true).call
+      Quests::RefreshUserQuest.new(user: user.invited.user, quest: invite_three_quest, notify: true).call if user.invited
     end
 
     private
 
     attr_reader :user, :quest, :params
+
+    def verify_humanity_quest
+      Quest.find_by(quest_type: "verify_humanity")
+    end
+
+    def invite_three_quest
+      Quest.find_by(quest_type: "invite_three")
+    end
 
     def already_verified?
       user.humanity_verified_at.present?
