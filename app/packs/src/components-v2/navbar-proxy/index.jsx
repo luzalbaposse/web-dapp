@@ -29,8 +29,8 @@ export const NavbarProxy = props => {
     element.style.zIndex = 88;
     return () => {
       element.style.zIndex = 1050;
-    }
-  }, [isOpen])
+    };
+  }, [isOpen]);
   return (
     <>
       <TopBar {...props} />

@@ -51,6 +51,8 @@ module Web3
             source_id: sponsorship.sponsor_user.id
           )
         end
+
+        refresh_user_quest(args[:sponsor])
       when "SponsorshipRevoked"
         sponsorship.update!(
           revoked_at: transaction_timestamp,
@@ -153,6 +155,13 @@ module Web3
       )
 
       sponsored_connection.refresh_connection!
+    end
+
+    def refresh_user_quest(wallet_id)
+      user = User.find_by(wallet_id: wallet_id)
+      quest = Quest.find_by(quest_type: "sponsor_talent")
+
+      Quests::RefreshUserQuest.new(user: user, quest: quest).call
     end
   end
 end

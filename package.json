@@ -128,7 +128,7 @@
     "build-storybook": "build-storybook",
     "pretest": "yarn lint",
     "lint": "eslint ./app/packs --ext js,jsx",
-    "format": "prettier --loglevel warn --write \"**/*.{js,jsx}\""
+    "format": "prettier --loglevel warn --write \"**/*.{js,jsx,scss}\""
   },
   "engines": {
     "node": "16.4.2"

@@ -33,6 +33,8 @@ module Talents
 
         talent_supporters_response = talent_supporters(offset: fetched_supporters_count)
       end
+
+      refresh_user_quest(talent.user, quest)
     end
 
     private
@@ -121,6 +123,14 @@ module Talents
 
       supporting_connection.refresh_connection!
       supporter_connection.refresh_connection!
+    end
+
+    def quest
+      Quest.find_by(quest_type: "three_token_holders")
+    end
+
+    def refresh_user_quest(user, quest)
+      Quests::RefreshUserQuest.new(user: user, quest: quest).call
     end
 
     def the_graph_client(chain_id)
