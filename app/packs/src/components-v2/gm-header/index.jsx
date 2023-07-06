@@ -9,7 +9,7 @@ export const GmHeader = ({ profile }) => {
 
   return profile ? (
     <Container>
-      <Avatar size="md" url={profile.profile_picture_url} userId={profile.id} profileURL={`/u/${profile.username}`} />
+      <Avatar size="md" url={profile.profile_picture_url} userId={1} profileURL={`/u/${profile.username}`} />
       <InnerContainer>
         <TextInput
           placeholder={`What's new in your career ${profile.name}?`}

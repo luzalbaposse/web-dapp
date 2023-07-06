@@ -50,6 +50,27 @@ export const ActivityWidget = ({ profile = {} }) => {
   });
   const [filter, setFilter] = useState(DROPDOWN_OPTIONS[0]);
   const [inputsWithContent, setInputsWithContent] = useState([]);
+
+  const loadActvities = useCallback(
+    tempFilterType => {
+      const filter = typeof tempFilterType === "string" ? tempFilterType : undefined;
+      activityService
+        .getActivity(perPage, undefined, filter)
+        .then(({ data }) => {
+          setActivity({
+            ...data,
+            activities: [...data.activities]
+          });
+          setInputsWithContent(new Array(data.activities.length).fill(false));
+          setIsLoading(false);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+    [setActivity, setIsLoading, setInputsWithContent, activity, filter]
+  );
+
   const loadMore = useCallback(
     tempFilterType => {
       const filter = typeof tempFilterType === "string" ? tempFilterType : undefined;
@@ -59,7 +80,7 @@ export const ActivityWidget = ({ profile = {} }) => {
           const recentActivities = [...data.activities];
           setActivity({
             ...data,
-            activities: filter ? [...recentActivities] : [...activity.activities, ...recentActivities]
+            activities: [...activity.activities, ...recentActivities]
           });
           setInputsWithContent(new Array(data.activities.length).fill(false));
           setIsLoading(false);
@@ -72,7 +93,7 @@ export const ActivityWidget = ({ profile = {} }) => {
   );
   useEffect(() => {
     inputRefs = [];
-    loadMore();
+    loadActvities();
   }, []);
   const sendMessage = useCallback((to, inputRef) => {
     messagesService
@@ -117,7 +138,7 @@ export const ActivityWidget = ({ profile = {} }) => {
               selectOption={option => {
                 if (option.type !== filter.type) {
                   setFilter(option);
-                  loadMore(option.type);
+                  loadActvities(option.type);
                 }
               }}
             />
@@ -184,7 +205,7 @@ export const ActivityWidget = ({ profile = {} }) => {
           })}
           {activity.pagination.cursor && (
             <LoadMoreContainer>
-              <Button hierarchy="secondary" size="medium" text="Load more" onClick={loadMore} />
+              <Button hierarchy="secondary" size="medium" text="Load more" onClick={() => loadMore(filter.type)} />
             </LoadMoreContainer>
           )}
         </UpdatesContainer>
