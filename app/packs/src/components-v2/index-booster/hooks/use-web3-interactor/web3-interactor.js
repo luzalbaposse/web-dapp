@@ -37,11 +37,10 @@ export class Web3Interactor {
 
   isWalletConnected = () => this.wallet?.isConnected && this.wallet?.status === "connected" && this.wallet?.connector;
 
-  swithNetwork = async chainId => {
+  switchNetwork = async chainId =>
     await switchNetwork({
       chainId
     });
-  };
 
   getProvider = async () => {
     if (!this.isWalletConnected()) {

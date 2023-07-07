@@ -115,6 +115,7 @@ const NewPortfolio = ({
   localAccount,
   currentChain,
   setLocalAccount,
+  networkChange,
   chainId
 }) => {
   // --- On chain variables ---
@@ -306,12 +307,6 @@ const NewPortfolio = ({
     if (contract_id && !currentUser?.impersonated) {
       setActiveContract(contract_id);
       setShow(true);
-    }
-  };
-
-  const networkChange = async chainId => {
-    if (chainAPI) {
-      await chainAPI.switchChain(chainId);
     }
   };
 
@@ -526,6 +521,7 @@ const NewPortfolioWrapped = props => (
 );
 
 const PortfolioWrapper = props => {
+  
   const [currentChain, setCurrentChain] = useState("Polygon");
   const [chainId, setChainId] = useState(null);
   const [chainAPI, setChainAPI] = useState(null);
@@ -534,6 +530,13 @@ const PortfolioWrapper = props => {
   const [localLoading, setLocalLoading] = useState(true);
   const [walletConnected, setWalletConnected] = useState(false);
   const [localAccount, setLocalAccount] = useState("");
+
+
+
+  const networkChange = async chainId => {
+    await window.web3Interactor.switchNetwork(chainId);
+    setCurrentChain(chainIdToName(chainId, props.railsContext.contractsEnv));
+  };
 
   const setupChain = useCallback(async errorCallback => {
     try {
@@ -585,12 +588,6 @@ const PortfolioWrapper = props => {
     };
     setupChain(errorCallback);
   }, []);
-
-  const networkChange = async chainId => {
-    if (chainAPI) {
-      await chainAPI.switchChain(chainId);
-    }
-  };
 
   return (
     <>

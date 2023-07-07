@@ -93,7 +93,7 @@ class OnChain {
   }
 
   async switchChain(chainId = 42220) {
-    await window.web3Interactor.swithNetwork(chainId);
+    await window.web3Interactor.switchNetwork(chainId);
   }
 
   async recognizedChain() {
