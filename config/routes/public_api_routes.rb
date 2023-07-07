@@ -39,6 +39,8 @@ module PublicAPIRoutes
               get :username, on: :collection
               get :email, on: :collection
             end
+
+            resources :organizations, only: [:index, :show]
           end
 
           # API non authenticated endpoints

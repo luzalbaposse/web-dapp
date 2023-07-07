@@ -139,6 +139,17 @@ RSpec.describe Users::Create do
       end
     end
 
+    context "when the invite belongs to an organization" do
+      let!(:invite) { create :organization_invite, organization: }
+      let(:organization) { create :community }
+
+      it "adds the user to the organization" do
+        expect { create_user }.to change(organization.users, :count).by(1)
+
+        expect(organization.reload.users).to include(User.last)
+      end
+    end
+
     context "when a user with the same username already exists" do
       before do
         create :user, username: username

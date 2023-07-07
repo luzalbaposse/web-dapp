@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { TalentThemeProvider } from "@talentprotocol/design-system";
 import { Column, Container, GMContainer } from "./styled";
 import { loggedInUserStore } from "src/contexts/state";
-import { ActivityWidget } from "../../activity-widget";
+import { ActivityWall } from "../../activity-wall";
 import { QuickNavigator } from "../../quick-navigator";
 import { GmHeader } from "../../gm-header";
 import { CompleteProfileWidget } from "../../complete-profile-widget";
@@ -37,7 +37,7 @@ export const HomepagePage = props => {
             <RecommendedBuildersWidget username={currentUser?.username} />
             <RecommendedTeamsWidget />
             <LeaderboardWidget user={currentUser} />
-            <ActivityWidget profile={currentUser} />
+            <ActivityWall profile={currentUser} />
           </Column>
         ) : (
           <>
@@ -45,7 +45,7 @@ export const HomepagePage = props => {
               <CompleteProfileWidget user={currentUser} />
               <QuickNavigator username={currentUser?.username} />
               {currentUser?.profile_completed && <QuestsWidget profile={currentUser} railsContext={railsContext} />}
-              <ActivityWidget profile={currentUser} />
+              <ActivityWall profile={currentUser} />
             </Column>
             <Column>
               <RecommendedBuildersWidget username={currentUser?.username} />

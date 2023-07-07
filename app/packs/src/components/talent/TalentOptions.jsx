@@ -9,7 +9,7 @@ import { useTheme } from "src/contexts/ThemeContext";
 import { camelCaseObject } from "src/utils/transformObjects";
 import { P1 } from "src/components/design_system/typography";
 import { lightPrimary, darkPrimary } from "src/utils/colors";
-
+import { ExploreTabs } from "src/components-v2/explore-tabs";
 import cx from "classnames";
 
 const TalentOptions = ({
@@ -73,6 +73,7 @@ const TalentOptions = ({
       className="my-6 d-flex flex-wrap justify-content-between align-items-center"
       style={{ height: mobile ? "" : 34 }}
     >
+      <ExploreTabs />
       {headerDescription && <P1 bold className="text-black" text={headerDescription} />}
       <div className={cx("d-flex ml-auto", mobile && "mt-3")}>
         <TalentKeywordSearch keyword={keyword} setKeyword={setKeyword} filter={filter} />

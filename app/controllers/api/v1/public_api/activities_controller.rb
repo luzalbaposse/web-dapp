@@ -17,6 +17,7 @@ class API::V1::PublicAPI::ActivitiesController < API::V1::PublicAPI::APIControll
         cursor: pagy.has_more? ? activities.last.uuid : nil
       }
     }
+
     log_request(response_body, :ok)
 
     render json: response_body, status: :ok
@@ -25,10 +26,27 @@ class API::V1::PublicAPI::ActivitiesController < API::V1::PublicAPI::APIControll
   private
 
   def activity_params
-    params.permit(:type)
+    params.permit(:organization, :type)
+  end
+
+  def organization_param
+    @organization_param ||= activity_params[:organization].presence
+  end
+
+  def organization_user_ids
+    Organization.find_by(slug: organization_param)&.user_ids || []
   end
 
   def total_activities
-    @total_activities ||= activity_params[:type].present? ? current_user.activity_feed.activities_of_type(params[:type]) : current_user.activity_feed.all_activities
+    return @total_activities if defined?(@total_activities)
+
+    @total_activities = type_param ? current_user.activity_feed.activities_of_type(type_param) : current_user.activity_feed.all_activities
+    @total_activities = @total_activities.joins(:origin_user).where(origin_user: {id: organization_user_ids}) if organization_param
+
+    @total_activities
+  end
+
+  def type_param
+    @type_param ||= activity_params[:type].presence
   end
 end

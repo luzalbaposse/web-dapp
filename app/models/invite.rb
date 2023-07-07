@@ -1,10 +1,11 @@
 class Invite < ApplicationRecord
+  belongs_to :organization, optional: true
   belongs_to :partnership, optional: true
   belongs_to :user, optional: true
 
   has_many :invitees, class_name: "User", inverse_of: :invited
 
-  validate :partnership_or_user
+  validate :one_associated_record
   validates :code, presence: true
 
   INVITE_CODE_SIZE = 8
@@ -24,11 +25,13 @@ class Invite < ApplicationRecord
   end
 
   def name
+    return organization.name if organization
     return partnership.name if partnership
     return user.name if user
   end
 
   def profile_picture_url
+    return organization.logo_url if organization
     return partnership.logo_url if partnership
     return user.profile_picture_url if user
   end
@@ -39,8 +42,8 @@ class Invite < ApplicationRecord
 
   private
 
-  def partnership_or_user
-    errors.add(:base, "Partnership and user can't both be present") if partnership && user
-    errors.add(:base, "Partnership or user can't both be blank") unless partnership || user
+  def one_associated_record
+    errors.add(:base, "Organization, partnership and user can't all be blank") unless organization || partnership || user
+    errors.add(:base, "Only one association can be present") if organization && partnership || organization && user || partnership && user
   end
 end

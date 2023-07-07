@@ -5,16 +5,10 @@ RSpec.describe Invites::Create do
 
   subject(:create_invite) { described_class.new(params).call }
 
-  let(:params) do
-    {
-      max_uses: max_uses,
-      partnership: partnership,
-      talent_invite: talent_invite,
-      user: user
-    }.compact
-  end
+  let(:params) { {max_uses:, organization:, partnership:, talent_invite:, user:}.compact }
 
   let(:max_uses) { nil }
+  let(:organization) { nil }
   let(:partnership) { nil }
   let(:talent_invite) { nil }
   let(:user) { create :user, username: "jack" }
@@ -32,6 +26,7 @@ RSpec.describe Invites::Create do
       aggregate_failures do
         expect(invite.code).to eq(user.username)
         expect(invite.max_uses).to be_nil
+        expect(invite.organization).to be_nil
         expect(invite.partnership).to be_nil
         expect(invite.talent_invite).to be_falsey
         expect(invite.user).to eq(user)
@@ -95,6 +90,7 @@ RSpec.describe Invites::Create do
       aggregate_failures do
         expect(invite.code).to eq(partnership.name.parameterize)
         expect(invite.max_uses).to be_nil
+        expect(invite.organization).to be_nil
         expect(invite.partnership).to eq(partnership)
         expect(invite.talent_invite).to be_falsey
         expect(invite.user).to be_nil
@@ -113,6 +109,48 @@ RSpec.describe Invites::Create do
 
     context "when the partnership already has an invite with the same talent_invite attribute" do
       let!(:invite) { create :partnership_invite, talent_invite: false, partnership: partnership }
+
+      it "does not create an invite" do
+        expect { create_invite }.not_to change(Invite, :count)
+      end
+
+      it "returns the invite" do
+        expect(create_invite).to eq(invite)
+      end
+    end
+  end
+
+  context "when an organization is passed" do
+    let(:organization) { create :community }
+    let(:user) { nil }
+
+    it "creates an invite for the organization" do
+      expect { create_invite }.to change { Invite.count }.by(1)
+
+      invite = Invite.last
+
+      aggregate_failures do
+        expect(invite.code).to eq(organization.name.parameterize)
+        expect(invite.max_uses).to be_nil
+        expect(invite.organization).to eq(organization)
+        expect(invite.partnership).to be_nil
+        expect(invite.talent_invite).to be_falsey
+        expect(invite.user).to be_nil
+      end
+    end
+
+    context "when max uses is passed" do
+      let(:max_uses) { 3 }
+
+      it "assigns the max uses to the invite" do
+        invite = create_invite
+
+        expect(invite.max_uses).to eq(3)
+      end
+    end
+
+    context "when the organization already has an invite with the same talent_invite attribute" do
+      let!(:invite) { create :organization_invite, talent_invite: false, organization: }
 
       it "does not create an invite" do
         expect { create_invite }.not_to change(Invite, :count)

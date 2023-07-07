@@ -12,6 +12,24 @@ module PublicAPI
       }
     }
 
+    ORGANIZATION_PROPERTIES = {
+      banner_url: {type: :string, nullable: true},
+      description: {type: :string, nullable: true},
+      discord: {type: :string, nullable: true},
+      github: {type: :string, nullable: true},
+      linkedin: {type: :string, nullable: true},
+      location: {type: :string, nullable: true},
+      logo_url: {type: :string, nullable: true},
+      name: {type: :string},
+      slug: {type: :string},
+      tags: {type: :array, items: {type: :string}},
+      telegram: {type: :string, nullable: true},
+      twitter: {type: :string, nullable: true},
+      type: {type: :string},
+      verified: {type: :boolean},
+      website: {type: :string, nullable: true}
+    }
+
     TALENT_PROPERTIES = {
       username: {type: :string},
       name: {type: :string},
