@@ -22,4 +22,30 @@ namespace :organizations do
   rescue Organizations::Create::Error => error
     puts "Could not create organization: #{error.message}"
   end
+
+  desc "Convert partnerships to organizations"
+  # rake "organizations:create_from_partnerships"
+  task create_from_partnerships: :environment do
+    Partnership.find_each do |partnership|
+      invite = partnership.invites.first
+
+      params = {
+        banner_url: partnership.banner_url,
+        description: partnership.description,
+        location: partnership.location,
+        logo_url: partnership.logo_url,
+        name: partnership.name,
+        twitter: partnership.twitter_url,
+        type: "Organizations::Community",
+        verified: true,
+        website: partnership.website_url
+      }
+
+      Organizations::Create.new(max_invite_uses: invite&.max_uses, params:, users: invite&.invitees || []).call
+
+      puts "Successfully created organization from partnership #{partnership.name} (##{partnership.id})"
+    rescue Organizations::Create::Error => error
+      puts "Could not create organization from partnership #{partnership.name} (##{partnership.id}): #{error.message}"
+    end
+  end
 end
