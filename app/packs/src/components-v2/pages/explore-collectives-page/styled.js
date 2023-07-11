@@ -4,7 +4,7 @@ import styled, { css } from "styled-components";
 export const CardsContainer = styled.div`
   display: flex;
   gap: 24px;
-  justify-content: space-around;
+  justify-content: space-between;
 
   ${mobileStyles(css`
     flex-direction: column;
@@ -25,18 +25,6 @@ export const EmptyStateContainer = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 48px;
-`;
-
-export const Header = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-bottom: 59px;
-  padding-top: 24px;
-
-  ${mobileStyles(css`
-    margin-bottom: 40px;
-  `)}
 `;
 
 export const LoadMoreButtonContainer = styled.div`

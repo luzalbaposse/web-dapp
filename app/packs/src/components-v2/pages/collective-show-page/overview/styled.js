@@ -23,10 +23,12 @@ export const DataContainer = styled.section`
   display: flex;
   justify-content: space-between;
   margin-top: 12px;
+  max-width: 60%;
 
   ${mobileStyles(css`
     flex-direction: column;
     padding: 0 24px;
+    max-width: 100%;
   `)}
 `;
 
@@ -42,8 +44,14 @@ export const InfoColumn = styled.div`
   gap: 24px;
 `;
 
+export const LocationContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
 export const Logo = styled.img`
-  background-color: ${buildColor("bg01")};  
+  background-color: ${buildColor("bg01")};
   border: 4px solid ${buildColor("bg01")};
   border-radius: 8px;
   height: 120px;

@@ -70,6 +70,7 @@ export const TalentUserDetailsItem = styled.div`
   ${margins.mr32}
   display: flex;
   align-items: center;
+  gap: 4px;
 `;
 
 export const VerifiedIcon = styled.img`

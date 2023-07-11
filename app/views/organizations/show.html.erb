@@ -1,5 +1,16 @@
+<% if @organization.present? %>
+  <% content_for :meta_title, "#{@organization["name"]} | #{DEFAULT_META["meta_product_name"]}" %>
+  <% if @organization["description"].present? %>
+    <% content_for :meta_description, @organization["description"] %>
+  <% end %>
+  <% if @organization["logo_url"].present? %>
+    <% content_for :meta_image, @organization["logo_url"] %>
+    <% content_for :meta_card_type, "summary" %>
+  <% end %>
+<% end %>
+
 <main class="main-content">
   <div class="container-grid">
-    <%= react_component "CollectiveShowPage", prerender: false %>
+    <%= react_component "CollectiveShowPage", props: { organization: @organization }, prerender: false %>
   </div>
 </main>

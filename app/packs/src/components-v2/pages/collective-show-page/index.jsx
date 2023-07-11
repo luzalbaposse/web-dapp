@@ -1,11 +1,10 @@
-import { Spinner, Tabs, TalentThemeProvider, useTabs } from "@talentprotocol/design-system";
-import React, { useEffect, useMemo, useState } from "react";
+import { Tabs, TalentThemeProvider, useTabs } from "@talentprotocol/design-system";
+import React, { useEffect, useMemo } from "react";
 import { Activity } from "./tabs/activity";
 import { camelCaseObject } from "src/utils/transformObjects";
-import { Container, Divider, SpinnerContainer, TabsContainer } from "./styled";
+import { Container, Divider, TabsContainer } from "./styled";
 import { loggedInUserStore } from "src/contexts/state";
 import { Members } from "./tabs/members";
-import { organizations } from "../../../api/organizations";
 import Overview from "./overview";
 import ThemeContainer from "src/contexts/ThemeContext";
 
@@ -16,32 +15,15 @@ const TAB_NAME_TO_INDEX = {
   members: 1
 };
 
-export const CollectiveShowPage = ({}) => {
+export const CollectiveShowPage = ({ organization }) => {
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
 
-  const [collective, setCollective] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const collective = { ...camelCaseObject(organization) };
 
   const tabState = useTabs();
 
   useEffect(() => {
     if (!currentUser) fetchCurrentUser();
-  }, []);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const id = window.location.pathname.split("/").reverse()[0];
-
-    organizations
-      .getOrganization(id)
-      .then(({ data }) => {
-        if (data.organization) {
-          setCollective({ ...camelCaseObject(data.organization) });
-          setLoading(false);
-        }
-      })
-      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -69,14 +51,6 @@ export const CollectiveShowPage = ({}) => {
         return <Members currentUser={currentUser} members={collective.users} />;
     }
   }, [collective, tabState.selectedIndex]);
-
-  if (loading || !collective) {
-    return (
-      <SpinnerContainer>
-        <Spinner />
-      </SpinnerContainer>
-    );
-  }
 
   return (
     <Container>

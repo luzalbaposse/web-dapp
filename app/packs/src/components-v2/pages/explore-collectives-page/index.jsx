@@ -1,7 +1,7 @@
 import { Button, Spinner, TalentThemeProvider, TeamCard, Typography } from "@talentprotocol/design-system";
 import React, { useEffect, useState } from "react";
 import { camelCaseObject } from "src/utils/transformObjects";
-import { CardsContainer, Container, EmptyStateContainer, Header, LoadMoreButtonContainer } from "./styled";
+import { CardsContainer, Container, EmptyStateContainer, LoadMoreButtonContainer } from "./styled";
 import { loggedInUserStore } from "src/contexts/state";
 import { organizations } from "../../../api/organizations";
 import CollectiveOptions from "./collective-options";
@@ -73,14 +73,6 @@ export const CollectivesPage = ({}) => {
 
   return (
     <Container>
-      <Header>
-        <Typography color="primary01" specs={{ type: "bold", variant: "h3" }}>
-          Communities
-        </Typography>
-        <Typography color="primary03" specs={{ variant: "p1" }}>
-          A partner list with teams, communities or collections.
-        </Typography>
-      </Header>
       <CollectiveOptions setCollectives={setCollectives} setPagination={setPagination} />
       {loading && <Spinner />}
       {!loading && collectives.length === 0 && (
@@ -109,14 +101,14 @@ export const CollectivesPage = ({}) => {
           );
         })}
       </CardsContainer>
-        <LoadMoreButtonContainer>
-      {showLoadMore ? (
+      <LoadMoreButtonContainer>
+        {showLoadMore ? (
           <Button hierarchy="secondary" size="small" text="Load more" onClick={() => loadMoreCollectives()} />
-      ) : (
-        <Typography color="primary03" specs={{ variant: "p3" }}>
-          You’ve reached the end of the list
-        </Typography>
-      )}
+        ) : (
+          <Typography color="primary03" specs={{ variant: "p3" }}>
+            You’ve reached the end of the list
+          </Typography>
+        )}
       </LoadMoreButtonContainer>
     </Container>
   );

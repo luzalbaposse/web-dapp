@@ -6,6 +6,7 @@ import {
   DataContainer,
   HeaderContainer,
   InfoColumn,
+  LocationContainer,
   Logo,
   LogoColumn,
   LogoContainer,
@@ -17,8 +18,10 @@ import {
   Title
 } from "./styled";
 import SocialRow from "src/components/profile/SocialRow";
+import { useWindowDimensionsHook } from "src/utils/window";
 
 const Overview = ({ collective }) => {
+  const { mobile } = useWindowDimensionsHook();
   const mainTag = collective.type === "team" ? "Company" : "Community";
   const members = collective.users;
   const memberCount = members.length;
@@ -31,7 +34,7 @@ const Overview = ({ collective }) => {
             <Logo src={collective.logoUrl} />
           </LogoContainer>
         </LogoColumn>
-        <Banner src={collective.bannerUrl} />
+        <Banner bannerUrl={collective.bannerUrl} />
       </BannerContainer>
       <DataContainer>
         <InfoColumn>
@@ -44,9 +47,29 @@ const Overview = ({ collective }) => {
             </Title>
             <TagsContainer>
               <Tag backgroundColor="primary" key={mainTag} label={mainTag} size="medium" textColor="bg01" />
-              {collective.tags.map(tag => (
-                <Tag backgroundColor="primaryTint02" key={tag} label={tag} size="medium" textColor="primaryText" />
-              ))}
+              {mobile ? (
+                <>
+                  {collective.tags.slice(0, 1).map(tag => (
+                    <Tag backgroundColor="primaryTint02" key={tag} label={tag} size="medium" textColor="primaryText" />
+                  ))}
+                </>
+              ) : (
+                <>
+                  {collective.tags.slice(0, 3).map(tag => (
+                    <Tag backgroundColor="primaryTint02" key={tag} label={tag} size="medium" textColor="primaryText" />
+                  ))}
+                </>
+              )}
+
+              {collective.tags.length > 4 && (
+                <Tag
+                  backgroundColor="primaryTint02"
+                  key={"more-tags"}
+                  label={`+${collective.tags.slice(3).length}`}
+                  size="medium"
+                  textColor="primaryText"
+                />
+              )}
             </TagsContainer>
             {collective.description && (
               <Typography color="primary03" specs={{ variant: "p1" }}>
@@ -55,16 +78,19 @@ const Overview = ({ collective }) => {
             )}
           </HeaderContainer>
           {collective.location && (
-            <Typography color="primary03" specs={{ variant: "p2" }}>
-              {collective.location}
-            </Typography>
+            <LocationContainer>
+              <Icon name="pin" color="primary04" size={16} />
+              <Typography color="primary03" specs={{ variant: "p2" }}>
+                {collective.location}
+              </Typography>
+            </LocationContainer>
           )}
           <MembersContainer>
             {memberCount > 0 && (
               <MemberAvatars>
-                {members.map(user => (
+                {members.slice(0, 4).map(user => (
                   <MemberAvatar key={user.id}>
-                    <Avatar size="sm" url={user.profile_picture_url} />
+                    <Avatar size="sm" url={user.profilePictureUrl} />
                   </MemberAvatar>
                 ))}
               </MemberAvatars>

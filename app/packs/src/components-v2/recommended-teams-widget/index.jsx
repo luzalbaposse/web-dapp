@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { Avatar, Tag, Typography, MembersList, TextLink } from "@talentprotocol/design-system";
 import {
   Container,
@@ -11,70 +10,50 @@ import {
   TitleContainer,
   VerifiedNameRow
 } from "./styled";
-import { discoveryRowsService } from "src/api/discovery-rows";
+import { camelCaseObject } from "src/utils/transformObjects";
+import { organizations } from "src/api/organizations";
 
 export const RecommendedTeamsWidget = ({}) => {
-  const [discoveryRows, setDiscoveryRows] = useState([]);
+  const [collectives, setCollectives] = useState([]);
 
   useEffect(() => {
-    loadRows();
+    const params = new URLSearchParams();
+    params.set("page", 1);
+    params.set("per_page", 3);
+    loadCollectives(params);
   }, []);
 
-  const loadRows = async () => {
-    const rowsResponse = await discoveryRowsService.getDiscoveryRows(1, 3, true);
-
-    let discoveryRows = [];
-    const rows = rowsResponse.data.discovery_rows;
-    let talentsResponse = await axios.get(`/api/v1/talent?page=1&discovery_row_id=${rows[0]?.id}&per_page=4`);
-    discoveryRows = [
-      {
-        discoveryRow: rows[0],
-        talentsData: talentsResponse.data
-      }
-    ];
-    talentsResponse = await axios.get(`/api/v1/talent?page=1&discovery_row_id=${rows[1]?.id}&per_page=4`);
-    discoveryRows = [
-      ...discoveryRows,
-      {
-        discoveryRow: rows[1],
-        talentsData: talentsResponse.data
-      }
-    ];
-    talentsResponse = await axios.get(`/api/v1/talent?page=1&discovery_row_id=${rows[2]?.id}&per_page=4`);
-    discoveryRows = [
-      ...discoveryRows,
-      {
-        discoveryRow: rows[2],
-        talentsData: talentsResponse.data
-      }
-    ];
-
-    setDiscoveryRows(discoveryRows);
+  const loadCollectives = params => {
+    organizations
+      .getOrganizations(params.toString())
+      .then(({ data }) => {
+        if (data.organizations) {
+          setCollectives(data.organizations.map(organization => ({ ...camelCaseObject(organization) })));
+        }
+      })
+      .catch(() => {});
   };
+
   return (
     <Container>
       <TitleContainer>
-        <Typography specs={{ variant: "h5", type: "bold" }}>Recommended Collections</Typography>
-        <TextLink href="/discovery" text="View all" rightIcon="carret" color="primary" size="medium" />
+        <Typography specs={{ variant: "h5", type: "bold" }}>Recommended Collectives</Typography>
+        <TextLink href="/collectives" text="View all" rightIcon="carret" color="primary" size="medium" />
       </TitleContainer>
       <TeamsList>
-        {discoveryRows.map((row, index) => (
-          <EntryContainer href={`/discovery/${row.discoveryRow?.slug}?page=1`} key={row.discoveryRow?.slug || index}>
-            <Avatar
-              size="md"
-              profileURL={`/discovery/${row.discoveryRow?.slug}?page=1`}
-              url={row.discoveryRow?.partnership.logo_url}
-            />
+        {collectives.map((collective, index) => (
+          <EntryContainer href={`/collectives/${collective.slug}`} key={collective.slug || index}>
+            <Avatar size="md" profileURL={`/collectives/${collective.slug}`} url={collective.logo_url} />
             <InfoColumn>
               <InfoGroup>
                 <VerifiedNameRow>
                   <Typography specs={{ variant: "label2", type: "medium" }} color="primary01">
-                    {row.discoveryRow?.title}
+                    {collective.name}
                   </Typography>
                   {/* <Icon name="verified-2" size={22} color="primary" /> */}
                 </VerifiedNameRow>
                 <Typography specs={{ variant: "p3", type: "regular" }} color="primary03">
-                  {row.discoveryRow?.description}
+                  {collective.description}
                 </Typography>
               </InfoGroup>
               <Tags>
@@ -82,18 +61,15 @@ export const RecommendedTeamsWidget = ({}) => {
                   backgroundColor="primaryTint02"
                   textColor="primaryText"
                   size="small"
-                  label={`@${row.discoveryRow?.slug.toUpperCase()}`}
+                  label={collective.type === "team" ? "Company" : "Community"}
                 />
               </Tags>
-              {!!row.talentsData.length && (
+              {collective.users.length > 0 && (
                 <MembersList
-                  membersImages={[
-                    row.talentsData.talents[0].profile_picture_url,
-                    row.talentsData.talents[1].profile_picture_url,
-                    row.talentsData.talents[2].profile_picture_url,
-                    row.talentsData.talents[3].profile_picture_url
-                  ]}
-                  totalMembers={row.talents.pagination.total}
+                  membersImages={collective.users
+                    .filter((user, index) => index < 4)
+                    .map(user => user.profilePictureUrl)}
+                  totalMembers={collective.users.length}
                 />
               )}
             </InfoColumn>

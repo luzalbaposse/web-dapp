@@ -26,7 +26,6 @@ import {
 } from "src/components/talent/utils/talent";
 
 import cx from "classnames";
-import { Typography } from "@talentprotocol/design-system";
 
 const TalentPage = ({ env }) => {
   const theme = useContext(ThemeContext);
@@ -132,14 +131,6 @@ const TalentPage = ({ env }) => {
 
   return (
     <div className={cx("pb-6", mobile && "p-4")}>
-      <div className="mb-5 d-flex flex-column justify-content-center">
-        <Typography className="mb-3" color="primary01" specs={{ type: "bold", variant: "h3" }}>
-          Explore All Talent
-        </Typography>
-        <Typography color="primary03" specs={{ variant: "p1" }}>
-          Support undiscovered talent and be rewarded as they grow.
-        </Typography>
-      </div>
       <TalentOptions
         listModeOnly={listModeOnly}
         searchUrl="/api/v1/talent"
