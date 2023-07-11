@@ -3,7 +3,7 @@ name: Continuos Deployment Action Staging
 on:
   push:
     branches:
-      - fl/teams
+      - dev
 
 jobs:
   build:

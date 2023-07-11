@@ -2,11 +2,13 @@ import { mobileStyles } from "@talentprotocol/design-system";
 import styled, { css } from "styled-components";
 
 export const CardsContainer = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 24px;
-  justify-content: space-between;
+  justify-items: center;
 
   ${mobileStyles(css`
+    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
