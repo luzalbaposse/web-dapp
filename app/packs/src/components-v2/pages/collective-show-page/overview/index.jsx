@@ -20,6 +20,10 @@ import {
 import SocialRow from "src/components/profile/SocialRow";
 import { useWindowDimensionsHook } from "src/utils/window";
 
+const NUMBER_OF_TAGS = 4;
+const NUMBER_OF_TAGS_MOBILE = 1;
+const NUMBER_OF_USERS = 4;
+
 const Overview = ({ collective }) => {
   const { mobile } = useWindowDimensionsHook();
   const mainTag = collective.type === "team" ? "Company" : "Community";
@@ -49,25 +53,38 @@ const Overview = ({ collective }) => {
               <Tag backgroundColor="primary" key={mainTag} label={mainTag} size="medium" textColor="bg01" />
               {mobile ? (
                 <>
-                  {collective.tags.slice(0, 1).map(tag => (
-                    <Tag backgroundColor="primaryTint02" key={tag} label={tag} size="medium" textColor="primaryText" />
-                  ))}
+                  {collective.tags
+                    .filter((_tag, index) => index < NUMBER_OF_TAGS_MOBILE)
+                    .map(tag => (
+                      <Tag borderColor="surfaceHover02" key={tag} label={tag} size="medium" textColor="primary02" />
+                    ))}
                 </>
               ) : (
                 <>
-                  {collective.tags.slice(0, 3).map(tag => (
-                    <Tag backgroundColor="primaryTint02" key={tag} label={tag} size="medium" textColor="primaryText" />
-                  ))}
+                  {collective.tags
+                    .filter((_tag, index) => index < NUMBER_OF_TAGS)
+                    .map(tag => (
+                      <Tag borderColor="surfaceHover02" key={tag} label={tag} size="medium" textColor="primary02" />
+                    ))}
                 </>
               )}
 
-              {collective.tags.length > 4 && (
+              {collective.tags.length > 4 && mobile && (
                 <Tag
-                  backgroundColor="primaryTint02"
+                  borderColor="surfaceHover02"
                   key={"more-tags"}
-                  label={`+${collective.tags.slice(3).length}`}
+                  label={`+${collective.tags.filter((_tag, index) => index >= NUMBER_OF_TAGS_MOBILE).length}`}
                   size="medium"
-                  textColor="primaryText"
+                  textColor="primary02"
+                />
+              )}
+              {collective.tags.length > 4 && !mobile && (
+                <Tag
+                  borderColor="surfaceHover02"
+                  key={"more-tags"}
+                  label={`+${collective.tags.filter((_tag, index) => index >= NUMBER_OF_TAGS).length}`}
+                  size="medium"
+                  textColor="primary02"
                 />
               )}
             </TagsContainer>
@@ -88,11 +105,13 @@ const Overview = ({ collective }) => {
           <MembersContainer>
             {memberCount > 0 && (
               <MemberAvatars>
-                {members.slice(0, 4).map(user => (
-                  <MemberAvatar key={user.id}>
-                    <Avatar size="sm" url={user.profilePictureUrl} />
-                  </MemberAvatar>
-                ))}
+                {members
+                  .filter((user, index) => index < NUMBER_OF_USERS && !!user.profilePictureUrl)
+                  .map(user => (
+                    <MemberAvatar key={user.id}>
+                      <Avatar size="sm" url={user.profilePictureUrl} />
+                    </MemberAvatar>
+                  ))}
               </MemberAvatars>
             )}
             <MemberCount>

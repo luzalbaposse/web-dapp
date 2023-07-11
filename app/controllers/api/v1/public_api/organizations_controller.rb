@@ -2,7 +2,7 @@ class API::V1::PublicAPI::OrganizationsController < API::V1::PublicAPI::APIContr
   before_action :internal_only
   before_action :authenticated_only
 
-  PER_PAGE = 10
+  PER_PAGE = 9
 
   TYPES = {
     "community" => "Organizations::Community",
