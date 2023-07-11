@@ -4,6 +4,9 @@ class Tag < ApplicationRecord
 
   validates :description, presence: true
 
+  has_many :organization_tags
+  has_many :organizations, through: :organization_tags
+
   scope :visible, -> { where(hidden: false) }
 
   def to_s

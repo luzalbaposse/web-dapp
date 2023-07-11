@@ -486,10 +486,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_30_172436) do
     t.text "logo_data"
     t.boolean "verified", default: false
     t.string "type", null: false
-    t.text "banner_data"
-    t.string "location"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "banner_data"
+    t.string "location"
     t.string "slug", null: false
     t.string "discord"
     t.string "github"
@@ -834,6 +834,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_30_172436) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  create_table "wallet_activities", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "wallet", null: false
+    t.datetime "tx_date", precision: nil, null: false
+    t.bigint "token", null: false
+    t.string "symbol", null: false
+    t.string "tx_hash", null: false
+    t.integer "chain_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_wallet_activities_on_user_id"
+  end
+
   create_table "with_persona_requests", force: :cascade do |t|
     t.integer "requests_counter", default: 0, null: false
     t.integer "month", null: false
@@ -899,4 +912,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_30_172436) do
   add_foreign_key "user_quests", "users"
   add_foreign_key "user_tags", "tags"
   add_foreign_key "user_tags", "users"
+  add_foreign_key "wallet_activities", "users"
 end

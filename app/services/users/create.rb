@@ -19,6 +19,7 @@ module Users
         create_invite(user)
         create_subscription(invite, user)
         create_activity_feed(user)
+        create_organization_membership(invite, user)
 
         @result[:user] = user
         @result[:success] = true
@@ -131,6 +132,15 @@ module Users
 
     def create_activity_feed(user)
       ActivityFeed.find_or_create_by(user: user)
+    end
+
+    def create_organization_membership(invite, user)
+      return unless invite
+
+      organization = invite.organization
+      return unless organization
+
+      organization.memberships.create!(active: true, user:)
     end
 
     def update_profile_completeness(user)

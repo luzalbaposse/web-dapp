@@ -22,7 +22,7 @@ export const RecommendedBuildersWidget = ({ username }) => {
 
   return (
     !isLoading &&
-    talents.length && (
+    talents.length > 0 && (
       <Container>
         <TitleContainer>
           <Typography specs={{ variant: "h5", type: "bold" }}>Recommended Builders</Typography>

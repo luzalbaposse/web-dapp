@@ -62,6 +62,10 @@ class API::UserBlueprint < Blueprinter::Base
       user.missing_profile_fields
     end
 
+    field :occupation do |user, _options|
+      user.talent&.occupation
+    end
+
     association :goals, blueprint: API::GoalBlueprint, view: :normal do |user, _options|
       if user.talent.career_goal.present?
         user.talent.career_goal.goals

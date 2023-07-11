@@ -58,6 +58,10 @@ class User < ApplicationRecord
   has_many :target_activities, class_name: "Activity", foreign_key: "target_user_id", dependent: :destroy
   has_one :activity_feed, dependent: :destroy
 
+  # teams - there are functions go get teams and/or communities
+  has_many :memberships
+  has_many :organizations, through: :memberships
+
   # Elasticsearch index update
   update_index("talents", :talent)
 
@@ -457,5 +461,13 @@ class User < ApplicationRecord
 
   def touch_talent
     talent.touch if talent.present?
+  end
+
+  def teams
+    organizations.where(type: "Organizations::Team")
+  end
+
+  def communities
+    organizations.where(type: "Organizations::Community")
   end
 end

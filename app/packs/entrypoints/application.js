@@ -46,6 +46,8 @@ import HomepagePage from "src/components-v2/pages/homepage";
 import EarnPage from "src/components-v2/pages/earn-page";
 import ConnectionsPage from "src/components-v2/pages/connections";
 import ProductAnnouncementModal from "src/components-v2/product-announcement-modal";
+import ExploreCollectivesPage from "src/components-v2/pages/explore-collectives-page";
+import CollectiveShowPage from "src/components-v2/pages/collective-show-page";
 
 import "stylesheets/application.scss";
 
@@ -84,6 +86,8 @@ ReactOnRails.register({
   ConnectionsPage,
   OnboardingPage,
   ProductAnnouncementModal,
+  ExploreCollectivesPage,
+  CollectiveShowPage,
   EarnPage
 });
 

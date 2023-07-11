@@ -1,6 +1,6 @@
+import { Button, Typography } from "@talentprotocol/design-system";
 import React from "react";
 import { ButtonContainer, Container } from "./styled";
-import { Button, Typography } from "@talentprotocol/design-system";
 
 export const QuickNavigator = ({ username }) => {
   return (
@@ -34,9 +34,9 @@ export const QuickNavigator = ({ username }) => {
         </Typography>
       </ButtonContainer>
       <ButtonContainer>
-        <Button hierarchy="secondary" size="large" leftIcon="email" iconColor="primary" href="/quests?tab=invites" />
+        <Button hierarchy="secondary" size="large" leftIcon="multiple-users" iconColor="primary" href="/collectives" />
         <Typography specs={{ variant: "p3", type: "medium" }} color="primary01">
-          Invites
+          Collectives
         </Typography>
       </ButtonContainer>
       <ButtonContainer>

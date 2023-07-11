@@ -1,26 +1,23 @@
-import React, { useState, useEffect, useCallback, useContext } from "react";
+import { Icon, Typography } from "@talentprotocol/design-system";
 import Modal from "react-bootstrap/Modal";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import transakSDK from "@transak/transak-sdk";
-import Web3ModalConnect from "../login/Web3ModalConnect";
+import { Container, IconContainer, InnerContainer } from "./styled";
 import { destroy } from "../../utils/requests";
-
+import { H5 } from "src/components/design_system/typography";
 import { OnChain } from "src/onchain";
 import { parseAndCommify, chainIdToName } from "src/onchain/utils";
-
-import { useWindowDimensionsHook } from "src/utils/window";
-
-import ThemeContainer, { ThemeContext } from "src/contexts/ThemeContext";
-import Notifications from "src/components/notifications";
-import UserMenu from "src/components/user_menu";
-import Tab from "src/components/design_system/tab";
-import Button from "src/components/design_system/button";
-import MobileTopBar from "src/components/top_bar/MobileTopBar";
 import { Polygon, Celo } from "src/components/icons";
-
-import { H5 } from "src/components/design_system/typography";
-import { Container, IconContainer, InnerContainer } from "./styled";
-import { Icon, Typography } from "@talentprotocol/design-system";
+import { useWindowDimensionsHook } from "src/utils/window";
+import Button from "src/components/design_system/button";
+import ExploreDropdown from "./ExploreDropdown";
+import MobileTopBar from "src/components/top_bar/MobileTopBar";
+import Notifications from "src/components/notifications";
 import SearchDropdown from "./SearchDropdown";
+import Tab from "src/components/design_system/tab";
+import ThemeContainer, { ThemeContext } from "src/contexts/ThemeContext";
+import UserMenu from "src/components/user_menu";
+import Web3ModalConnect from "../login/Web3ModalConnect";
 
 //const WARNING_MESSAGE =
 //("Token minting is temporarily paused while we are upgrading our smart contracts. This is a temporary warning.");
@@ -307,7 +304,7 @@ export const TopBar = ({
           </H5>
         </a>
         <div className="d-flex align-items-center">
-          <Tab href="/talent" text="Explore" type="white" active={activeTab.includes("/talent")} className="mr-4" />
+          <ExploreDropdown active={activeTab.includes("/talent") || activeTab.includes("/collectives")} />
           <Tab href="/portfolio" text="Portfolio" type="white" active={activeTab === "/portfolio"} className="mr-4" />
           <Tab
             href="/connection"

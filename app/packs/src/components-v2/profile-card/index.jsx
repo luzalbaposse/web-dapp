@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { Icon } from "@talentprotocol/design-system";
 import { ethers } from "ethers";
 import dayjs from "dayjs";
 import SocialRow from "src/components/profile/SocialRow";
@@ -6,7 +7,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import TalentProfilePicture from "src/components/talent/TalentProfilePicture";
 import { formatNumberWithSymbol, verifiedIcon } from "src/utils/viewHelpers";
 import { parseStableAmount } from "src/onchain/utils.js";
-import { Globe, Calendar } from "src/components/icons";
+import { Calendar } from "src/components/icons";
 import { P2 } from "src/components/design_system/typography";
 import { useTheme } from "src/contexts/ThemeContext";
 import Button from "src/components/design_system/button";
@@ -143,7 +144,7 @@ export const ProfileCard = ({
         )}
         <TalentUserDetails>
           <TalentUserDetailsItem>
-            <Globe className="mr-2" size={16} color={lightTextPrimary04} />
+            <Icon name="pin" color="primary04" size={16} />
             <P2 className="text-primary-03" text={userProfile.location} />
           </TalentUserDetailsItem>
           {!profileSubdomain && (
