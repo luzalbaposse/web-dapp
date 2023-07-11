@@ -25,7 +25,6 @@ import ResetPassword from "src/components/login/ResetPassword";
 import ChangePassword from "src/components/login/ChangePassword";
 import TopBar from "src/components-v2/navbar-proxy";
 import UserSettings from "src/components/talent/Edit/Settings";
-import NewPortfolio from "src/components/portfolio/NewPortfolio";
 import Discovery from "src/components/discovery";
 import DiscoveryShow from "src/components/discovery/show";
 import TalentPage from "src/components/talent/TalentPage";
@@ -48,6 +47,7 @@ import ConnectionsPage from "src/components-v2/pages/connections";
 import ProductAnnouncementModal from "src/components-v2/product-announcement-modal";
 import ExploreCollectivesPage from "src/components-v2/pages/explore-collectives-page";
 import CollectiveShowPage from "src/components-v2/pages/collective-show-page";
+import VirtualPortfolio from "src/components/virtual_portfolio/VirtualPortfolio";
 
 import "stylesheets/application.scss";
 
@@ -66,7 +66,6 @@ ReactOnRails.register({
   LoggedOutTopBar,
   Login,
   MessageUserList,
-  NewPortfolio,
   Notifications,
   ProfileShow,
   ResetPassword,
@@ -88,7 +87,8 @@ ReactOnRails.register({
   ProductAnnouncementModal,
   ExploreCollectivesPage,
   CollectiveShowPage,
-  EarnPage
+  EarnPage,
+  VirtualPortfolio
 });
 
 Rails.start();

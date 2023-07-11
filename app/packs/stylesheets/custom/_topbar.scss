@@ -12,6 +12,10 @@
   backdrop-filter: blur(48px);
 }
 
+.light-body .navbar-container {
+  border-bottom: 1px solid $light-surface-hover;
+}
+
 .dark-body .navbar-container {
   background: rgba(19, 20, 21, 0.7);
 }

@@ -3,9 +3,9 @@ export const PRIVACY_HREF = "https://talentprotocol.notion.site/Privacy-Policy-c
 
 export const THE_GRAPH_ENDPOINTS = {
   137: "https://api.thegraph.com/subgraphs/name/talent-protocol/polygon-prod-v3",
-  44787: "https://api.thegraph.com/subgraphs/name/talent-protocol/dev",
+  44787: "https://api.thegraph.com/subgraphs/name/talent-protocol/alfajores-dev-v3",
   42220: "https://api.thegraph.com/subgraphs/name/talent-protocol/prod",
-  80001: "https://api.thegraph.com/subgraphs/name/talent-protocol/mumbai-dev"
+  80001: "https://api.thegraph.com/subgraphs/name/talent-protocol/mumbai-dev-v3"
 };
 
 export const SUPPORTER_GUIDE =

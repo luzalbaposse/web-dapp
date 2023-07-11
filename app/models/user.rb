@@ -48,6 +48,9 @@ class User < ApplicationRecord
   # Rewards
   has_many :rewards
 
+  # Wallet Activity
+  has_many :wallet_activities
+
   # web3
   has_many :user_domains, dependent: :destroy
   has_many :erc20_tokens, dependent: :destroy
@@ -63,9 +66,9 @@ class User < ApplicationRecord
   has_many :organizations, through: :memberships
 
   # Elasticsearch index update
-  update_index("talents", :talent)
+  # update_index("talents", :talent)
 
-  after_save :touch_talent
+  # after_save :touch_talent
 
   VALID_ROLES = ["admin", "basic", "moderator"].freeze
   REQUIRED_PROFILE_FIELDS = [

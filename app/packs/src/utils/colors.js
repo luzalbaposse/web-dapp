@@ -18,3 +18,26 @@ export const danger = "#FF2222";
 export const grayPrimary = "#9fa3a9";
 export const lightBg01 = "#FAFAFB";
 export const darkBlue = "#1e2330";
+
+// FOR EASIER MIGRATION TO DESIGN SYSTEM (to be used with styled components)
+
+const LIGHT_PRIMARY = "#7857ED";
+const DARK_PRIMARY = "#BBED55";
+export const PRIMARY_COLOR = theme => (theme != "dark" ? LIGHT_PRIMARY : DARK_PRIMARY);
+
+const LIGHT_TEXT_PRIMARY_01 = "#1C2126";
+const DARK_TEXT_PRIMARY_01 = "#FFFFFF";
+export const TEXT_PRIMARY_01 = theme => (theme != "dark" ? LIGHT_TEXT_PRIMARY_01 : DARK_TEXT_PRIMARY_01);
+export const TEXT_PRIMARY_01_INVERSE = theme => (theme == "dark" ? LIGHT_TEXT_PRIMARY_01 : DARK_TEXT_PRIMARY_01);
+
+const LIGHT_TEXT_PRIMARY_03 = "#536471";
+const DARK_TEXT_PRIMARY_03 = "#AAADB3";
+export const TEXT_PRIMARY_03 = theme => (theme != "dark" ? LIGHT_TEXT_PRIMARY_03 : DARK_TEXT_PRIMARY_03);
+
+const LIGHT_TEXT_PRIMARY_04 = "#697F8F";
+const DARK_TEXT_PRIMARY_04 = "#71767B";
+export const TEXT_PRIMARY_04 = theme => (theme != "dark" ? LIGHT_TEXT_PRIMARY_04 : DARK_TEXT_PRIMARY_04);
+
+const LIGHT_SURFACE_HOVER_02 = "#DADDE1";
+const DARK_SURFACE_HOVER_02 = "#3B3C3F";
+export const SURFACE_HOVER_02 = theme => (theme != "dark" ? LIGHT_SURFACE_HOVER_02 : DARK_SURFACE_HOVER_02);

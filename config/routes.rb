@@ -44,7 +44,10 @@ Rails.application.routes.draw do
     # Talent pages & search
     resources :talent, only: [:index]
     # Portfolio
-    resource :portfolio, only: [:show]
+    resource :portfolio, only: [:show] do
+      get :tokens
+    end
+    get "wallet" => "portfolio#show", :as => :wallet
 
     # Chat
     resources :messages, only: [:index, :show, :create] do
@@ -103,6 +106,7 @@ Rails.application.routes.draw do
         resources :impersonations, only: [:create, :destroy]
         resources :tags, only: [:index]
         resource :with_persona_requests, only: [:update]
+        resources :wallet_activities, only: [:index, :create]
       end
     end
   end

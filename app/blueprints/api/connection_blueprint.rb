@@ -25,5 +25,9 @@ class API::ConnectionBlueprint < Blueprinter::Base
     field :ticker do |connection, _options|
       connection.connected_user&.talent&.talent_token&.ticker
     end
+
+    field :talent_token_address do |connection, _options|
+      connection.connected_user&.talent&.talent_token&.contract_id
+    end
   end
 end

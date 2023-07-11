@@ -12,10 +12,11 @@
 
 ActiveRecord::Schema[7.0].define(version: 2023_06_30_172436) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "activities", force: :cascade do |t|
-    t.string "content", null: false
+    t.jsonb "content", null: false
     t.bigint "origin_user_id", null: false
     t.bigint "target_user_id"
     t.datetime "created_at", null: false
@@ -486,10 +487,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_30_172436) do
     t.text "logo_data"
     t.boolean "verified", default: false
     t.string "type", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.text "banner_data"
     t.string "location"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "slug", null: false
     t.string "discord"
     t.string "github"
@@ -775,8 +776,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_30_172436) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.boolean "disabled", default: false
     t.string "theme_preference", default: "light"
+    t.boolean "disabled", default: false
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"
@@ -835,15 +836,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_30_172436) do
   end
 
   create_table "wallet_activities", force: :cascade do |t|
-    t.bigint "user_id"
     t.string "wallet", null: false
     t.datetime "tx_date", precision: nil, null: false
-    t.bigint "token", null: false
     t.string "symbol", null: false
     t.string "tx_hash", null: false
     t.integer "chain_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.string "event_type"
+    t.string "token"
     t.index ["user_id"], name: "index_wallet_activities_on_user_id"
   end
 

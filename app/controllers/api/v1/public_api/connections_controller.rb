@@ -35,7 +35,7 @@ class API::V1::PublicAPI::ConnectionsController < API::V1::PublicAPI::APIControl
   end
 
   def search_params
-    params.permit(:keyword, :connection_type)
+    params.permit(:keyword, :connection_type, connection_type: [])
   end
 
   def search_by_connection_type?

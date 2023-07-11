@@ -31,7 +31,7 @@ module TheGraphAPI
   end
 
   module Alfajores
-    HTTP = GraphQL::Client::HTTP.new("https://api.thegraph.com/subgraphs/name/talent-protocol/dev") do
+    HTTP = GraphQL::Client::HTTP.new("https://api.thegraph.com/subgraphs/name/talent-protocol/alfajores-dev-v3") do
       def headers(context)
         {"User-Agent": "Talent Protocol"}
       end
@@ -51,7 +51,7 @@ module TheGraphAPI
   end
 
   module Mumbai
-    HTTP = GraphQL::Client::HTTP.new("https://api.thegraph.com/subgraphs/name/talent-protocol/mumbai-dev") do
+    HTTP = GraphQL::Client::HTTP.new("https://api.thegraph.com/subgraphs/name/talent-protocol/mumbai-dev-v3") do
       def headers(context)
         {"User-Agent": "Talent Protocol"}
       end

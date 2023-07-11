@@ -52,7 +52,7 @@ Button.propTypes = {
     "dark-mode-static-white-default"
   ]),
   mode: oneOf(["light", "dark"]),
-  size: oneOf(["none", "icon", "normal", "big", "extra-big"]),
+  size: oneOf(["none", "icon", "small", "normal", "big", "extra-big"]),
   className: string,
   disabled: bool,
   style: object
