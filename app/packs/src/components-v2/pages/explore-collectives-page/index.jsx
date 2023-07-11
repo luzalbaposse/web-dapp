@@ -91,7 +91,7 @@ export const CollectivesPage = ({}) => {
               bannerImage={collective.bannerUrl}
               description={collective.description}
               key={collective.id}
-              membersImages={members.map(member => member.profile_picture_url)}
+              membersImages={members.filter(member => member.profilePictureUrl).map(member => member.profilePictureUrl)}
               name={collective.name}
               profileImage={collective.logoUrl}
               tags={collective.tags}
