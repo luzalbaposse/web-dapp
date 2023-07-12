@@ -52,6 +52,28 @@ export const ActivityWall = ({ hideTitle = false, organization = undefined, prof
   const [filter, setFilter] = useState(DROPDOWN_OPTIONS[0]);
   const [inputsWithContent, setInputsWithContent] = useState([]);
 
+  const loadActvities = useCallback(
+    tempFilterType => {
+      const filter = typeof tempFilterType === "string" ? tempFilterType : undefined;
+
+      activityService
+        .getActivity(perPage, undefined, organization, filter)
+        .then(({ data }) => {
+          const recentActivities = [...data.activities];
+          setActivity({
+            ...data,
+            activities: [...recentActivities]
+          });
+          setInputsWithContent(new Array(data.activities.length).fill(false));
+          setIsLoading(false);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+    [setActivity, setIsLoading, setInputsWithContent, activity, filter]
+  );
+
   const loadMore = useCallback(
     tempFilterType => {
       const filter = typeof tempFilterType === "string" ? tempFilterType : undefined;
@@ -62,7 +84,7 @@ export const ActivityWall = ({ hideTitle = false, organization = undefined, prof
           const recentActivities = [...data.activities];
           setActivity({
             ...data,
-            activities: tempFilterType ? [...recentActivities] : [...activity.activities, ...recentActivities]
+            activities: [...activity.activities, ...recentActivities]
           });
           setInputsWithContent(new Array(data.activities.length).fill(false));
           setIsLoading(false);
@@ -76,7 +98,7 @@ export const ActivityWall = ({ hideTitle = false, organization = undefined, prof
 
   useEffect(() => {
     inputRefs = [];
-    loadMore();
+    loadActvities();
   }, []);
 
   const sendMessage = useCallback((to, inputRef) => {
@@ -110,10 +132,12 @@ export const ActivityWall = ({ hideTitle = false, organization = undefined, prof
   return (
     <Container id="activity-widget">
       <TitleRow>
-        {!hideTitle && (
+        {!hideTitle ? (
           <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
             Activity
           </Typography>
+        ) : (
+          <div />
         )}
         <FilterContainer>
           <Typography specs={{ variant: "label2", type: "regular" }} color="primary03">
@@ -125,7 +149,7 @@ export const ActivityWall = ({ hideTitle = false, organization = undefined, prof
             selectOption={option => {
               if (option.type !== filter.type) {
                 setFilter(option);
-                loadMore(option.type);
+                loadActvities(option.type);
               }
             }}
           />
@@ -195,7 +219,7 @@ export const ActivityWall = ({ hideTitle = false, organization = undefined, prof
             })}
             {activity.pagination.cursor && (
               <LoadMoreContainer>
-                <Button hierarchy="secondary" size="medium" text="Load more" onClick={loadMore} />
+                <Button hierarchy="secondary" size="medium" text="Load more" onClick={() => loadMore(filter.type)} />
               </LoadMoreContainer>
             )}
           </>

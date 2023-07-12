@@ -43,7 +43,7 @@ export const RecommendedTeamsWidget = ({}) => {
       <TeamsList>
         {collectives.map((collective, index) => (
           <EntryContainer href={`/collectives/${collective.slug}`} key={collective.slug || index}>
-            <Avatar size="md" profileURL={`/collectives/${collective.slug}`} url={collective.logo_url} />
+            <Avatar size="md" profileURL={`/collectives/${collective.slug}`} url={collective.logoUrl} />
             <InfoColumn>
               <InfoGroup>
                 <VerifiedNameRow>

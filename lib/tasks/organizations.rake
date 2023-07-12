@@ -27,7 +27,7 @@ namespace :organizations do
   # rake "organizations:create_from_partnerships"
   task create_from_partnerships: :environment do
     Partnership.find_each do |partnership|
-      invite = partnership.invites.first
+      invites = partnership.invites
 
       params = {
         banner_url: partnership.banner_url,
@@ -41,7 +41,9 @@ namespace :organizations do
         website: partnership.website_url
       }
 
-      Organizations::Create.new(max_invite_uses: invite&.max_uses, params:, users: invite&.invitees || []).call
+      users = User.where(invite_id: invites.pluck(:id))
+
+      Organizations::Create.new(max_invite_uses: invites.first&.max_uses, params:, users: users || []).call
 
       puts "Successfully created organization from partnership #{partnership.name} (##{partnership.id})"
     rescue Organizations::Create::Error => error

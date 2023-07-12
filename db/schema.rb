@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_30_172436) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_11_170018) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -497,6 +497,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_30_172436) do
     t.string "linkedin"
     t.string "telegram"
     t.string "twitter"
+    t.integer "memberships_count", default: 0, null: false
   end
 
   create_table "partnerships", force: :cascade do |t|
@@ -809,7 +810,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_30_172436) do
     t.boolean "is_organization", default: false
     t.integer "experience_points_amount", default: 0, null: false
     t.datetime "profile_completed_at", precision: nil
-    t.datetime "humanity_verified_at"
+    t.datetime "humanity_verified_at", precision: nil
     t.string "humanity_proof"
     t.decimal "profile_completeness", default: "0.0"
     t.index ["created_at"], name: "index_users_on_created_at"
