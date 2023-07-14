@@ -56,8 +56,8 @@ export const ERROR_MESSAGES = {
 // This list and order is used to present in the onboarding flow by different categories
 // make sure to check app/packs/src/components/onboarding/OpenTo.jsx after making changes
 export const CAREER_NEEDS_OPTIONS = [
-  "Full-time Roles",
-  "Part-time Roles",
+  "Full-time roles",
+  "Part-time roles",
   "Freelancing or contract roles",
   "Internships",
   "Volunteering for impact projects",
