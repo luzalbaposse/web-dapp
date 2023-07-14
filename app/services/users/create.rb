@@ -19,6 +19,7 @@ module Users
         create_invite(user)
         create_subscription(invite, user)
         create_activity_feed(user)
+        create_profile_complete_activity(user.id)
         create_organization_membership(invite, user)
 
         @result[:user] = user
@@ -145,6 +146,10 @@ module Users
 
     def update_profile_completeness(user)
       Users::UpdateProfileCompleteness.new(user: user).call
+    end
+
+    def create_profile_complete_activity(user_id)
+      ActivityIngestJob.perform_later("profile_complete", nil, user_id)
     end
   end
 end
