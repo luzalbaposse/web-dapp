@@ -7,6 +7,8 @@ import { organizations } from "../../../api/organizations";
 import CollectiveOptions from "./collective-options";
 import ThemeContainer from "src/contexts/ThemeContext";
 
+const NUMBER_OF_TAGS = 2;
+
 export const CollectivesPage = ({}) => {
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
 
@@ -85,6 +87,32 @@ export const CollectivesPage = ({}) => {
       <CardsContainer>
         {collectives.map(collective => {
           const members = collective.users;
+          const mainTag = collective.type === "team" ? "Company" : "Community";
+          let tags = [
+            {
+              key: mainTag,
+              label: mainTag,
+              size: "small",
+              backgroundColor: "primary",
+              textColor: "bg01"
+            },
+            [...collective.tags].slice(0, NUMBER_OF_TAGS).map(tag => ({
+              key: tag,
+              label: tag,
+              size: "small",
+              borderColor: "surfaceHover02",
+              textColor: "primary02"
+            }))
+          ].flat();
+          if ([...collective.tags].slice(NUMBER_OF_TAGS).length > 0) {
+            tags.push({
+              key: `+${[...collective.tags].slice(NUMBER_OF_TAGS).length}`,
+              label: `+${[...collective.tags].slice(NUMBER_OF_TAGS).length}`,
+              size: "small",
+              borderColor: "surfaceHover02",
+              textColor: "primary02"
+            });
+          }
 
           return (
             <TeamCard
@@ -94,7 +122,7 @@ export const CollectivesPage = ({}) => {
               membersImages={members.filter(member => member.profilePictureUrl).map(member => member.profilePictureUrl)}
               name={collective.name}
               profileImage={collective.logoUrl}
-              tags={collective.tags}
+              tags={tags}
               to={`/collectives/${collective.slug}`}
               totalMembers={members.length}
             />
@@ -102,12 +130,16 @@ export const CollectivesPage = ({}) => {
         })}
       </CardsContainer>
       <LoadMoreButtonContainer>
-        {showLoadMore ? (
-          <Button hierarchy="secondary" size="small" text="Load more" onClick={() => loadMoreCollectives()} />
-        ) : (
-          <Typography color="primary03" specs={{ variant: "p3" }}>
-            You’ve reached the end of the list
-          </Typography>
+        {!loading && (
+          <>
+            {showLoadMore ? (
+              <Button hierarchy="secondary" size="small" text="Load more" onClick={() => loadMoreCollectives()} />
+            ) : (
+              <Typography color="primary03" specs={{ variant: "p3" }}>
+                You’ve reached the end of the list
+              </Typography>
+            )}
+          </>
         )}
       </LoadMoreButtonContainer>
     </Container>

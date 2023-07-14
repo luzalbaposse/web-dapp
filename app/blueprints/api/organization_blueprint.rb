@@ -1,4 +1,28 @@
 class API::OrganizationBlueprint < Blueprinter::Base
+  view :simple do
+    fields :banner_url,
+      :description,
+      :logo_url,
+      :name,
+      :slug,
+      :verified
+
+    field :tags do |organization, _options|
+      organization.tags.map(&:to_s)
+    end
+
+    field :type do |organization, _options|
+      case organization.type
+      when "Organizations::Community"
+        "community"
+      when "Organizations::Team"
+        "team"
+      end
+    end
+
+    association :users, blueprint: API::UserBlueprint, view: :simple
+  end
+
   view :normal do
     fields :banner_url,
       :description,
