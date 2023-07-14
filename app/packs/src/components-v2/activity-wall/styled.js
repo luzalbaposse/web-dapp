@@ -61,8 +61,11 @@ export const StyledTypography = styled(Typography)`
 export const StyledTypographyLink = styled.a`
   color: ${buildColor("primary01")} !important;
   font-weight: 700;
-  text-decoration: underline;
   outline: none;
+
+  :hover {
+    text-decoration: underline;
+  }
 `;
 
 export const Update = styled.article`
