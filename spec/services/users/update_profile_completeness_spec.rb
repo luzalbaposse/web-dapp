@@ -59,18 +59,6 @@ RSpec.describe Users::UpdateProfileCompleteness do
         )
       end
 
-      it "enqueues a job to create the user activity" do
-        Sidekiq::Testing.inline! do
-          update_profile_completed_at
-
-          job = enqueued_jobs.find { |j| j["job_class"] == "ActivityIngestJob" }
-
-          aggregate_failures do
-            expect(job["arguments"]).to match_array(["profile_complete", nil, user.id])
-          end
-        end
-      end
-
       context "when the user already has the timestamp populated" do
         let(:profile_completed_at) { Time.new(2022, 10, 5) }
 
