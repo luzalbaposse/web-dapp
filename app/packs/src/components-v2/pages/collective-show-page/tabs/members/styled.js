@@ -7,7 +7,7 @@ export const CardContainer = styled.div`
 
 export const Container = styled.div`
   display: grid;
-  gap: 35px;
+  gap: 24px;
   grid-template-columns: repeat(4, 1fr);
 
   ${mobileStyles(css`

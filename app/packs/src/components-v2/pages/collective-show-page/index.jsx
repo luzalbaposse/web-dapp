@@ -8,11 +8,11 @@ import { Members } from "./tabs/members";
 import Overview from "./overview";
 import ThemeContainer from "src/contexts/ThemeContext";
 
-const TAB_LIST = ["Activity", "Members"];
+const TAB_LIST = ["Members", "Activity"];
 
 const TAB_NAME_TO_INDEX = {
-  activity: 0,
-  members: 1
+  members: 0,
+  activity: 1
 };
 
 export const CollectiveShowPage = ({ organization }) => {
@@ -46,9 +46,9 @@ export const CollectiveShowPage = ({ organization }) => {
 
     switch (tabState.selectedIndex) {
       case 0:
-        return <Activity currentUser={currentUser} organization={collective.slug} />;
-      case 1:
         return <Members currentUser={currentUser} members={collective.users} />;
+      case 1:
+        return <Activity currentUser={currentUser} organization={collective.slug} />;
     }
   }, [collective, tabState.selectedIndex]);
 

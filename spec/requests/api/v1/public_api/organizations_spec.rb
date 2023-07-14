@@ -7,6 +7,10 @@ RSpec.describe "Organizations API", type: :request do
   let(:"X-API-KEY") { access_key }
   let(:user) { create :user }
 
+  let!(:user_1) { create :user, :with_talent }
+  let!(:user_2) { create :user, :with_talent }
+  let!(:user_3) { create :user, :with_talent }
+  let!(:user_4) { create :user, :with_talent }
   let!(:organization_1) { create :community, name: "Community 1" }
   let!(:organization_2) { create :community, name: "Community 2" }
   let!(:organization_3) { create :team, name: "Team 1" }
@@ -26,7 +30,15 @@ RSpec.describe "Organizations API", type: :request do
       let(:type) { nil }
       let(:user_id) { nil }
 
-      response "200", "get all organizations", save_example: true do
+      before do
+        [user_1, user_2, user_3, user_4].each do |user|
+          create :membership, organization: organization_1, user: user
+          create :membership, organization: organization_2, user: user
+          create :membership, organization: organization_3, user: user
+        end
+      end
+
+      response "200", "get all organizations with more than 3 memberships", save_example: true do
         schema type: :object,
           properties: {
             organizations: {
@@ -52,15 +64,14 @@ RSpec.describe "Organizations API", type: :request do
           data = JSON.parse(response.body)
 
           aggregate_failures do
-            expect(data["organizations"].count).to eq(4)
+            expect(data["organizations"].count).to eq(3)
 
             expect(data["organizations"].map { |organization| organization["name"] })
               .to match_array(
                 [
                   organization_1.name,
                   organization_2.name,
-                  organization_3.name,
-                  organization_4.name
+                  organization_3.name
                 ]
               )
           end
@@ -136,13 +147,12 @@ RSpec.describe "Organizations API", type: :request do
           data = JSON.parse(response.body)
 
           aggregate_failures do
-            expect(data["organizations"].count).to eq(2)
+            expect(data["organizations"].count).to eq(1)
 
             expect(data["organizations"].map { |organization| organization["name"] })
               .to match_array(
                 [
-                  organization_3.name,
-                  organization_4.name
+                  organization_3.name
                 ]
               )
           end
