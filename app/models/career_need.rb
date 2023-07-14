@@ -5,8 +5,8 @@ class CareerNeed < ApplicationRecord
 
   ROLE_NEEDS = [
     "Freelancing or contract roles",
-    "Full-time Roles",
-    "Part-time Roles"
+    "Full-time roles",
+    "Part-time roles"
   ].freeze
 
   belongs_to :career_goal
