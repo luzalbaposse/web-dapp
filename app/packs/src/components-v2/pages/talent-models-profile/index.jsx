@@ -1,3 +1,6 @@
+// DEPRECATED
+// Used to keep the support the tab pointing to old components
+
 import React, { useEffect, useState } from "react";
 import { Spinner, TalentThemeProvider } from "@talentprotocol/design-system";
 import { Container, ContentDesktopRow } from "./styled";

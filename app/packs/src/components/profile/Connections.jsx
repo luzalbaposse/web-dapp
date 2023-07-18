@@ -3,8 +3,6 @@ import { toast } from "react-toastify";
 import { ToastBody } from "src/components/design_system/toasts";
 
 import { get } from "src/utils/requests";
-import { ethers } from "ethers";
-import { parseAndCommify } from "src/onchain/utils";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
@@ -17,18 +15,14 @@ import { useWindowDimensionsHook } from "src/utils/window";
 import { useTheme } from "src/contexts/ThemeContext";
 import TalentProfilePicture from "src/components/talent/TalentProfilePicture";
 import Table from "src/components/design_system/table";
-import { lightTextPrimary03, darkTextPrimary03 } from "src/utils/colors.js";
 import TextInput from "src/components/design_system/fields/textinput";
 import { Search, OrderBy } from "src/components/icons";
 import Dropdown from "react-bootstrap/Dropdown";
 
 import cx from "classnames";
+import { buildColor } from "@talentprotocol/design-system";
 
-const ConnectionTable = ({ connections, mode, ticker, mobile }) => {
-  const displayableAmount = amount => {
-    return `${parseAndCommify(ethers.utils.formatUnits(amount || 0))}`;
-  };
-
+const ConnectionTable = ({ connections, mode, mobile }) => {
   const formattedConnectionType = connection_type => {
     return {
       sponsor: "Sponsor",
@@ -43,75 +37,55 @@ const ConnectionTable = ({ connections, mode, ticker, mobile }) => {
   };
 
   return (
-    <Table mode={mode}>
-      <Table.Head>
-        <Table.Th>
-          <Caption bold text="Talent" />
-        </Table.Th>
-        <Table.Th className={cx(mobile ? "text-right" : "")}>
-          <Caption bold text="Connection" />
-        </Table.Th>
-        <Table.Th className="hide-content-in-mobile">
-          <Caption bold text="Connection Strength" />
-        </Table.Th>
-        <Table.Th className="hide-content-in-mobile">
-          <Caption bold text="Since" />
-        </Table.Th>
-      </Table.Head>
-      <Table.Body>
-        {connections.map(connection => (
-          <Table.Tr
-            key={connection.id}
-            onClick={() => (window.location.href = `https://beta.talentprotocol.com/u/${connection.username}`)}
-          >
-            <Table.Td>
-              <div className="d-flex align-items-center">
-                <TalentProfilePicture src={connection.profile_picture_url} userId={connection.id} height={24} />
-                <P2 text={connection.name} bold className="ml-2" />
-                {connection.ticker && (
-                  <P2
-                    text={`$${connection.ticker}`}
-                    className="ml-2 text-uppercase hide-content-in-mobile"
-                    style={{
-                      color: mode == "dark" ? darkTextPrimary03 : lightTextPrimary03
-                    }}
-                  />
-                )}
-              </div>
-            </Table.Td>
-            <Table.Td>
-              <Tag className={cx("connection", `connection__${connection.connection_type}`, mobile ? "ml-auto" : "")}>
+    <>
+      <style type="text/css">
+        {`
+      td {
+        border-top: 1px solid ${buildColor("primaryDisable")};
+        border-bottom: 1px solid ${buildColor("primaryDisable")};
+        padding-bottom: 4px;
+      }
+      `}
+      </style>
+      <Table mode={mode}>
+        <Table.Head>
+          <Table.Th>
+            <Caption bold text="Talent" />
+          </Table.Th>
+          <Table.Th className={cx(mobile ? "text-right" : "")}>
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              <Caption bold text="Connection" />
+            </div>
+          </Table.Th>
+        </Table.Head>
+        <Table.Body>
+          {connections.map(connection => (
+            <Table.Tr
+              key={connection.id}
+              onClick={() => (window.location.href = `https://beta.talentprotocol.com/u/${connection.username}`)}
+            >
+              <Table.Td>
                 <div className="d-flex align-items-center">
-                  <P2 mode={mode} text={formattedConnectionType(connection.connection_type)} bold role="button" />
+                  <TalentProfilePicture src={connection.profile_picture_url} userId={connection.id} height={24} />
+                  <P2 text={connection.name} bold className="ml-2" />
                 </div>
-              </Tag>
-            </Table.Td>
-            <Table.Td className="hide-content-in-mobile">
-              <P2>
-                {connection.user_invested_amount > 0 && (
-                  <>
-                    <span className="bold">{displayableAmount(connection.user_invested_amount)}</span>
-                    <span className="ml-1">{`$${connection.ticker}`}</span>
-                  </>
-                )}
-                {connection.user_invested_amount > 0 && connection.connected_user_invested_amount > 0 && (
-                  <span className="ml-2 mr-2">+</span>
-                )}
-                {connection.connected_user_invested_amount > 0 && (
-                  <>
-                    <span className="bold">{displayableAmount(connection.connected_user_invested_amount)}</span>
-                    <span className="ml-1">{`$${ticker}`}</span>
-                  </>
-                )}
-              </P2>
-            </Table.Td>
-            <Table.Td className="hide-content-in-mobile">
-              <P2 text={dayjs(connection.connected_at, "YYYY-MM-DD").format("MMM DD, YYYY")} />
-            </Table.Td>
-          </Table.Tr>
-        ))}
-      </Table.Body>
-    </Table>
+              </Table.Td>
+              <Table.Td>
+                <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+                  <Tag
+                    className={cx("connection", `connection__${connection.connection_type}`, mobile ? "ml-auto" : "")}
+                  >
+                    <div className="d-flex align-items-center">
+                      <P2 mode={mode} text={formattedConnectionType(connection.connection_type)} bold role="button" />
+                    </div>
+                  </Tag>
+                </div>
+              </Table.Td>
+            </Table.Tr>
+          ))}
+        </Table.Body>
+      </Table>
+    </>
   );
 };
 
@@ -295,7 +269,7 @@ const Connections = ({ userId, talent, canUpdate }) => {
           <P2 className="text-primary-04" text="Subscribing" />
         </div>
       </div>
-      {talent?.connections_count > 0 && (
+      {!!connections.length && (
         <>
           <SearchForm
             options={options}

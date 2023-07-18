@@ -41,13 +41,13 @@ import SignUpPage from "src/components-v2/pages/sign-up";
 import OnboardingPage from "src/components-v2/pages/onboarding";
 import ForgotPasswordPage from "src/components-v2/pages/forgot-password";
 import SetPasswordPage from "src/components-v2/pages/set-password";
-import TalentModelsProfilePage from "src/components-v2/pages/talent-models-profile";
 import HomepagePage from "src/components-v2/pages/homepage";
 import EarnPage from "src/components-v2/pages/earn-page";
 import ConnectionsPage from "src/components-v2/pages/connections";
 import ProductAnnouncementModal from "src/components-v2/product-announcement-modal";
 import ExploreCollectivesPage from "src/components-v2/pages/explore-collectives-page";
 import CollectiveShowPage from "src/components-v2/pages/collective-show-page";
+import ProfilePage from "../src/components-v2/pages/profile";
 
 import "stylesheets/application.scss";
 
@@ -81,14 +81,14 @@ ReactOnRails.register({
   SignUpPage,
   ForgotPasswordPage,
   SetPasswordPage,
-  TalentModelsProfilePage,
   HomepagePage,
   ConnectionsPage,
   OnboardingPage,
   ProductAnnouncementModal,
   ExploreCollectivesPage,
   CollectiveShowPage,
-  EarnPage
+  EarnPage,
+  ProfilePage
 });
 
 Rails.start();

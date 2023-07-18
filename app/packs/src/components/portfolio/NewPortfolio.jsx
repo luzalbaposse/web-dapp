@@ -521,7 +521,6 @@ const NewPortfolioWrapped = props => (
 );
 
 const PortfolioWrapper = props => {
-  
   const [currentChain, setCurrentChain] = useState("Polygon");
   const [chainId, setChainId] = useState(null);
   const [chainAPI, setChainAPI] = useState(null);
@@ -530,8 +529,6 @@ const PortfolioWrapper = props => {
   const [localLoading, setLocalLoading] = useState(true);
   const [walletConnected, setWalletConnected] = useState(false);
   const [localAccount, setLocalAccount] = useState("");
-
-
 
   const networkChange = async chainId => {
     await window.web3Interactor.switchNetwork(chainId);

@@ -24,6 +24,14 @@ class TalentBlueprint < Blueprinter::Base
     field :supply_progress do |talent, _options|
       (talent.total_supply.to_f / Talent.max_supply) * 100
     end
+
+    field :username do |talent, _options|
+      talent.user.username
+    end
+
+    field :name do |talent, _options|
+      talent.user.name
+    end
   end
 
   view :extended do

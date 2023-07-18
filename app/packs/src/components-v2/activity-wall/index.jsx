@@ -203,7 +203,7 @@ export const ActivityWall = ({ hideTitle = false, organization = undefined, prof
                       hierarchy="primary"
                       size="small"
                       text="Support"
-                      href={`/u/${update.origin_user.username}/support`}
+                      href={`/u/${update.origin_user.username}?tab=support`}
                     />
                   </UpdateTitle>
                   <UpdateContent>

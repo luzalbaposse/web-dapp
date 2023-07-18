@@ -40,7 +40,7 @@ export const RecommendedBuildersWidget = ({ username }) => {
                 profileURL={`/u/${talent.username}`}
                 ellipsisAt={200}
               />
-              <Button hierarchy="primary" size="small" text="Support" href={`/u/${talent.username}/support`} />
+              <Button hierarchy="primary" size="small" text="Support" href={`/u/${talent.username}?tab=support`} />
             </BuilderEntry>
           ))}
         </BuildersList>
