@@ -48,6 +48,7 @@ import ProductAnnouncementModal from "src/components-v2/product-announcement-mod
 import ExploreCollectivesPage from "src/components-v2/pages/explore-collectives-page";
 import CollectiveShowPage from "src/components-v2/pages/collective-show-page";
 import VirtualPortfolio from "src/components/virtual_portfolio/VirtualPortfolio";
+import ProfilePage from "../src/components-v2/pages/profile";
 
 import "stylesheets/application.scss";
 
@@ -88,7 +89,8 @@ ReactOnRails.register({
   ExploreCollectivesPage,
   CollectiveShowPage,
   EarnPage,
-  VirtualPortfolio
+  VirtualPortfolio,
+  ProfilePage
 });
 
 Rails.start();
