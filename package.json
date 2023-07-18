@@ -47,6 +47,7 @@
     "graphql": "^15.6.0",
     "html-react-parser": "^1.2.8",
     "https-browserify": "^1.0.0",
+    "is-mobile": "^4.0.0",
     "lodash": "^4.17.21",
     "mini-css-extract-plugin": "^1.6.0",
     "os-browserify": "^0.3.0",
