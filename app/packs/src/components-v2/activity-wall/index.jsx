@@ -188,9 +188,11 @@ export const ActivityWall = ({ hideTitle = false, organization = undefined, prof
                     />
                   </UpdateTitle>
                   <UpdateContent>
-                    <Typography specs={{ variant: "p1", type: "medium" }} color="primary01">
-                      {ACTIVITY_TYPE_TO_TITLE_MAP[update.type]}
-                    </Typography>
+                    {update.type === "Activities::CareerUpdate" && (
+                      <Typography specs={{ variant: "p1", type: "medium" }} color="primary01">
+                        {ACTIVITY_TYPE_TO_TITLE_MAP[update.type]}
+                      </Typography>
+                    )}
                     <ActivityContainer>
                       <Activity content={content} originUser={update.origin_user} targetUser={update.target_user} />
                     </ActivityContainer>

@@ -7,7 +7,7 @@ RSpec.describe Activities::Sponsor do
 
   describe ".generate_content" do
     it "returns the correct content" do
-      expected_content = "@origin just sponsored @target."
+      expected_content = "@origin sponsored @target."
       expect(described_class.generate_content(nil, nil)).to eq(expected_content)
     end
   end
@@ -23,8 +23,8 @@ RSpec.describe Activities::Sponsor do
     let(:target_user) { create(:user, display_name: "Target User") }
 
     it "returns the message with the user names" do
-      activity.message = "@origin just sponsored @target."
-      expected_message = "Origin User just sponsored Target User."
+      activity.message = "@origin sponsored @target."
+      expected_message = "Origin User sponsored Target User."
       expect(activity.message_with_names).to eq(expected_message)
     end
   end

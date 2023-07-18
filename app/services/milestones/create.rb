@@ -27,10 +27,6 @@ module Milestones
 
       milestone.save!
 
-      if milestone.in_progress? || milestone.category == "Other" || milestone.start_date > 6.months.ago
-        ActivityIngestJob.perform_later("milestone_create", milestone_update_message(milestone), current_user.id)
-      end
-
       refresh_quests
       update_profile_completeness
 
@@ -40,17 +36,6 @@ module Milestones
     private
 
     attr_reader :talent, :current_user, :params
-
-    def milestone_update_message(milestone)
-      case milestone.category
-      when "Other"
-        "@origin has just added a new entry to their journey#{add_title(milestone.title)}"
-      when "Position"
-        "@origin has just added a new position to their journey#{add_title(milestone.title)}"
-      when "Education"
-        "@origin has just added a new Education to their journey#{add_title(milestone.title)}"
-      end
-    end
 
     def add_title(title)
       if title.present? && title.length > 0

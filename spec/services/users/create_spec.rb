@@ -87,6 +87,21 @@ RSpec.describe Users::Create do
       end
     end
 
+    it "enqueues the job to update the homepage activity" do
+      Sidekiq::Testing.inline! do
+        create_user
+
+        created_user = User.last
+        job = enqueued_jobs.find { |j| j["job_class"] == "ActivityIngestJob" }
+
+        aggregate_failures do
+          expect(job["arguments"][0]).to eq("profile_complete")
+          expect(job["arguments"][1]).to eq(nil)
+          expect(job["arguments"][2]).to eq(created_user.id)
+        end
+      end
+    end
+
     context "when a display name is provided" do
       let(:display_name) { "Jack Smith" }
 

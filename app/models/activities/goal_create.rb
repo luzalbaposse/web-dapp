@@ -5,7 +5,7 @@ module Activities
     ], coder: JSON
 
     def self.generate_content(_, _)
-      "@origin just added a new career goal!"
+      "@origin added a new career goal!"
     end
 
     def self.default_global_scope
