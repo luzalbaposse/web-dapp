@@ -14,7 +14,7 @@ RSpec.describe "Activities API", type: :request do
       produces "application/json"
       parameter name: :cursor, in: :query, type: :string, description: "The cursor to fetch the next page"
       parameter name: :organization, in: :query, type: :string, description: "The slug of the organization to retrieve member activities for"
-      parameter name: :type, in: :query, type: :string, description: "The type of activity to retrieve"
+      parameter name: :"types[]", in: :query, type: :array, collectionFormat: :multi, description: "The types of activities to retrieve"
       parameter name: "X-API-KEY", in: :header, type: :string, description: "Your Talent Protocol API key"
 
       let!(:api_key_object) { create(:api_key, :activated, access_key:) }
@@ -22,7 +22,7 @@ RSpec.describe "Activities API", type: :request do
       let(:"X-API-KEY") { access_key }
       let(:cursor) { nil }
       let(:organization) { nil }
-      let(:type) { nil }
+      let(:"types[]") { [] }
 
       let!(:user_one) { create :user, :with_talent_token, display_name: "API user 1" }
       let!(:user_two) { create :user, :with_talent_token, display_name: "API user 2" }
@@ -75,7 +75,7 @@ RSpec.describe "Activities API", type: :request do
       end
 
       response "200", "Only activities of a certain type retrieved", document: false do
-        let(:type) { "Activities::Subscribe" }
+        let(:"types[]") { ["Activities::Subscribe"] }
 
         schema type: :object,
           properties: {
