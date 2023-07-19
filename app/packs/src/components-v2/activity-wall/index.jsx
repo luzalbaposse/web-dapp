@@ -20,6 +20,8 @@ import dayjs from "dayjs";
 import { Activity } from "./activity";
 
 const ACTIVITY_TYPE_TO_TITLE_MAP = {
+  "Activities::GoalCreate": "Goals",
+  "Activities::GoalUpdate": "Goals",
   "Activities::CareerUpdate": "Career Update",
   "Activities::TokenLaunch": "Token Launch",
   "Activities::ProfileComplete": "Profile Complete",
@@ -33,6 +35,7 @@ const perPage = 8;
 
 const DROPDOWN_OPTIONS = [
   { type: undefined, value: "All" },
+  { type: ["Activities::GoalCreate", "Activities::GoalUpdate"], value: "Goals" },
   { type: "Activities::CareerUpdate", value: "Updates" },
   { type: "Activities::TokenLaunch", value: "Token Launches" },
   { type: "Activities::ProfileComplete", value: "Complete Profiles" },
@@ -54,7 +57,7 @@ export const ActivityWall = ({ hideTitle = false, organization = undefined, prof
 
   const loadActvities = useCallback(
     tempFilterType => {
-      const filter = typeof tempFilterType === "string" ? tempFilterType : undefined;
+      const filter = tempFilterType ? tempFilterType : undefined;
 
       activityService
         .getActivity(perPage, undefined, organization, filter)
@@ -76,7 +79,7 @@ export const ActivityWall = ({ hideTitle = false, organization = undefined, prof
 
   const loadMore = useCallback(
     tempFilterType => {
-      const filter = typeof tempFilterType === "string" ? tempFilterType : undefined;
+      const filter = tempFilterType ? tempFilterType : undefined;
 
       activityService
         .getActivity(perPage, activity.pagination.cursor, organization, filter)

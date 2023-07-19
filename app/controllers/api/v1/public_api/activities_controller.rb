@@ -26,7 +26,7 @@ class API::V1::PublicAPI::ActivitiesController < API::V1::PublicAPI::APIControll
   private
 
   def activity_params
-    params.permit(:organization, :type)
+    params.permit(:organization, type: [])
   end
 
   def organization_param
@@ -48,5 +48,9 @@ class API::V1::PublicAPI::ActivitiesController < API::V1::PublicAPI::APIControll
 
   def type_param
     @type_param ||= activity_params[:type].presence
+  end
+
+  def types_params
+    params.permit(types: [])
   end
 end

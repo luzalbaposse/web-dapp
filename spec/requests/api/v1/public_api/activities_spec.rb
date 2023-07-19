@@ -33,7 +33,7 @@ RSpec.describe "Activities API", type: :request do
         career_updates = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth"]
         activity_feed = user_one.activity_feed
 
-        activity = create :activity, content: {message: career_updates.first}.to_json, origin_user: user_one, type: "Activities::MilestoneCreate"
+        activity = create :activity, content: {message: career_updates.first}.to_json, origin_user: user_one, type: "Activities::Subscribe"
         activity_feed.activities << activity
 
         career_updates.drop(1).each do |message|
@@ -67,7 +67,7 @@ RSpec.describe "Activities API", type: :request do
 
           aggregate_failures do
             expect(data["activities"].map { |f| f["type"] }.uniq)
-              .to match_array(["Activities::CareerUpdate", "Activities::MilestoneCreate"])
+              .to match_array(["Activities::CareerUpdate", "Activities::Subscribe"])
 
             expect(data["pagination"]["total"]).to eq(10)
           end
@@ -75,7 +75,7 @@ RSpec.describe "Activities API", type: :request do
       end
 
       response "200", "Only activities of a certain type retrieved", document: false do
-        let(:type) { "Activities::MilestoneCreate" }
+        let(:type) { "Activities::Subscribe" }
 
         schema type: :object,
           properties: {
@@ -96,7 +96,7 @@ RSpec.describe "Activities API", type: :request do
           data = JSON.parse(response.body)
 
           aggregate_failures do
-            expect(data["activities"].map { |f| f["type"] }.uniq).to eq(["Activities::MilestoneCreate"])
+            expect(data["activities"].map { |f| f["type"] }.uniq).to eq(["Activities::Subscribe"])
             expect(data["pagination"]["total"]).to eq(1)
           end
         end
