@@ -1,4 +1,5 @@
-import styled from "styled-components";
+import { desktopStyles, mobileStyles } from "@talentprotocol/design-system";
+import styled, { css } from "styled-components";
 
 export const Container = styled.section`
   display: flex;
@@ -18,6 +19,10 @@ export const Actions = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 8px;
+
+  ${desktopStyles(css`
+    display: none;
+  `)}
 `;
 
 export const UserInfo = styled.div`
@@ -38,4 +43,15 @@ export const MembersContainer = styled.div`
   gap: 4px;
   padding: 8px 0 16px;
   align-items: center;
+`;
+
+export const DesktopActions = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  padding-top: 6px;
+  gap: 8px;
+
+  ${mobileStyles(css`
+    display: none;
+  `)}
 `;

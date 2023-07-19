@@ -162,11 +162,11 @@
 }
 
 .light-body .inverse-text-primary-01 {
-	color: $dark-text-primary-01 !important;
+  color: $dark-text-primary-01 !important;
 }
 
 .dark-body .inverse-text-primary-01 {
-	color: $light-text-primary-01 !important;
+  color: $light-text-primary-01 !important;
 }
 
 .dark-body .text-primary-01 {
@@ -362,27 +362,27 @@
 }
 
 .responsive-container {
-	display: flex;
-	flex-direction: column;
+  display: flex;
+  flex-direction: column;
 
-	@media (max-width: 992px) {
-		padding-right: 16px;
-		padding-left: 16px;
-		margin-top: 64px;
-		padding-top: 24px;
-		min-height: calc(100vh - 64px);
-	}
+  @media (max-width: 992px) {
+    padding-right: 16px;
+    padding-left: 16px;
+    margin-top: 64px;
+    padding-top: 24px;
+    min-height: calc(100vh - 64px);
+  }
 
-	@media (min-width: 992px) {
-		max-width: 1208px;
-		padding-right: 40px;
-		padding-left: 40px;
-		margin-top: 66px;
-		padding-top: 48px;
-		margin-right: auto;
-		margin-left: auto;
-		min-height: calc(100vh - 66px);
-	}
+  @media (min-width: 992px) {
+    max-width: 1208px;
+    padding-right: 40px;
+    padding-left: 40px;
+    margin-top: 66px;
+    padding-top: 48px;
+    margin-right: auto;
+    margin-left: auto;
+    min-height: calc(100vh - 66px);
+  }
 }
 
 .secondary-content {
@@ -475,11 +475,11 @@
 }
 
 .light-body .primary-background {
-	background-color: $light-primary;
+  background-color: $light-primary;
 }
 
 .dark-body .primary-background {
-	background-color: $dark-primary;
+  background-color: $dark-primary;
 }
 
 .overflow-y-scroll {
@@ -817,8 +817,6 @@
 .dark-body .border-bottom-black {
   border-bottom: 1px solid $dark-surface-hover-02 !important;
 }
-
-
 
 .left-dashed-border-black {
   border-left: 1px dashed $light-surface-hover-02;

@@ -8,7 +8,7 @@ const getActivity = (perPage, cursor = undefined, organization = undefined, type
   if (type) params.set("type", type);
 
   return axios.get(`/api/v1/activities?${params.toString()}`);
-}
+};
 
 export const activityService = {
   getActivity

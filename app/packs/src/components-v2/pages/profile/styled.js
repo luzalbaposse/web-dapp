@@ -19,6 +19,8 @@ export const DesktopColumn = styled.div`
 
   :nth-child(1) {
     flex-basis: 288px;
+    min-width: 288px;
+    max-width: 288px;
     padding: 24px 24px 0 0;
   }
 
@@ -28,6 +30,8 @@ export const DesktopColumn = styled.div`
 
   :nth-child(3) {
     flex-basis: 288px;
+    min-width: 288px;
+    max-width: 288px;
     padding: 24px 0 0 24px;
     border: none;
   }
