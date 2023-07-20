@@ -10,8 +10,8 @@ RSpec.describe Activities::CareerUpdate do
   end
 
   describe ".default_global_scope" do
-    it "returns false" do
-      expect(described_class.default_global_scope).to be false
+    it "returns true" do
+      expect(described_class.default_global_scope).to be true
     end
   end
 
