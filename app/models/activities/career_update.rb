@@ -9,7 +9,7 @@ module Activities
     end
 
     def self.default_global_scope
-      false
+      true
     end
 
     def message_with_names
