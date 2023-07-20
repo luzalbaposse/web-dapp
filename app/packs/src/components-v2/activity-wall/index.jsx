@@ -46,6 +46,7 @@ const DROPDOWN_OPTIONS = [
 
 export const ActivityWall = ({ hideTitle = false, organization = undefined, profile = {} }) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [hasSentMessage, setHasSentMessage] = useState({});
 
   const [activity, setActivity] = useState({
     activities: [],
@@ -104,10 +105,25 @@ export const ActivityWall = ({ hideTitle = false, organization = undefined, prof
     loadActvities();
   }, []);
 
-  const sendMessage = useCallback((to, inputRef) => {
+  useEffect(() => {
+    if (activity?.activities?.length > 0) {
+      setHasSentMessage(
+        activity.activities.reduce((result, { id }) => {
+          result[id] = false;
+
+          return result;
+        }, {})
+      );
+    }
+  }, [activity?.activities]);
+
+  const sendMessage = useCallback((update, inputRef) => {
     messagesService
-      .sendMessage(to, inputRef.current.value || "🔥")
+      .sendMessage(update.origin_user.id, inputRef.current.value || "🔥")
       .then(() => {
+        if (!inputRef.current.value) {
+          setHasSentMessage(prev => ({ ...prev, [update.id]: true }));
+        }
         inputRef.current.value = "";
         toast.success("Message sent");
       })
@@ -199,7 +215,7 @@ export const ActivityWall = ({ hideTitle = false, organization = undefined, prof
                     <ActivityContainer>
                       <Activity content={content} originUser={update.origin_user} targetUser={update.target_user} />
                     </ActivityContainer>
-                    {profile.username !== update.origin_user.username && (
+                    {profile.username !== update.origin_user.username && update.type === "Activities::CareerUpdate" && (
                       <ReplyArea>
                         <Input
                           placeholder="Reply directly..."
@@ -207,14 +223,15 @@ export const ActivityWall = ({ hideTitle = false, organization = undefined, prof
                           onChange={() => {
                             onInputChange(inputRefs[index], index);
                           }}
-                          onEnterCallback={() => sendMessage(update.origin_user.id, inputRefs[index])}
+                          onEnterCallback={() => sendMessage(update, inputRefs[index])}
                         />
                         <Button
                           hierarchy="secondary"
                           size="medium"
                           leftIcon={!inputsWithContent[index] ? "flame" : "send"}
                           iconColor={"primary01"}
-                          onClick={() => sendMessage(update.origin_user.id, inputRefs[index])}
+                          isDisabled={hasSentMessage[update.id]}
+                          onClick={() => sendMessage(update, inputRefs[index])}
                         />
                       </ReplyArea>
                     )}
