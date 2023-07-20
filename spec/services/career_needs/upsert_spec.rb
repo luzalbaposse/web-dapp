@@ -3,7 +3,9 @@ require "rails_helper"
 RSpec.describe CareerNeeds::Upsert do
   include ActiveJob::TestHelper
 
-  let(:career_goal) { create :career_goal }
+  let(:user) { create :user }
+  let(:talent) { create :talent, user: user }
+  let(:career_goal) { create :career_goal, talent: talent }
   let(:titles) { ["Internships"] }
 
   subject(:upsert_career_needs) do
@@ -41,6 +43,24 @@ RSpec.describe CareerNeeds::Upsert do
         subject.call
 
         expect(CareerNeed.exists?(career_need.id)).to eq(false)
+      end
+    end
+
+    context "when more than one career need is added" do
+      let(:titles) { ["Internships", "Finding a co-founder"] }
+
+      it "enqueues the job to update the career needs update activity" do
+        Sidekiq::Testing.inline! do
+          subject.call
+
+          job = enqueued_jobs.find { |j| j["job_class"] == "ActivityIngestJob" }
+
+          aggregate_failures do
+            expect(job["arguments"][0]).to eq("career_needs_update")
+            expect(job["arguments"][1]).to eq("@origin is open to internships and finding a co-founder.")
+            expect(job["arguments"][2]).to eq(user.id)
+          end
+        end
       end
     end
   end

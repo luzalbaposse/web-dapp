@@ -8,7 +8,7 @@ module Users
 
     def call
       user.talent.update!(verified: true)
-      ActivityIngestJob.perform_now("verify", nil, user.id)
+      ActivityIngestJob.perform_later("verify", nil, user.id)
     end
   end
 end
