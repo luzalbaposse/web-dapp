@@ -65,7 +65,7 @@ module Web3
         )
 
         if sponsorship.talent_user && sponsorship.sponsor_user
-          ActivityIngestJob.perform_later("sponsor", nil, sponsorship.sponsor_user.id, sponsorship.talent_user.id)
+          ActivityIngestJob.perform_later("sponsor", sponsorship_message(sponsorship), sponsorship.sponsor_user.id, sponsorship.talent_user.id)
           if with_notifications
             CreateNotification.new.call(
               recipient: sponsorship.sponsor_user,
@@ -162,6 +162,15 @@ module Web3
       quest = Quest.find_by(quest_type: "sponsor_talent")
 
       Quests::RefreshUserQuest.new(user: user, quest: quest).call
+    end
+
+    def sponsorship_message(sponsorship)
+      decimals = "1"
+      sponsorship.token_decimals.times { decimals << "0" }
+
+      invested = sponsorship.amount.to_f / decimals.to_f
+
+      "@origin sponsored @target with $#{invested}."
     end
   end
 end

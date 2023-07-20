@@ -28,7 +28,7 @@ export const Activity = ({ content, originUser, targetUser }) => {
         return (
           <>
             {contentArray[0]}
-            {originUser.name}
+            <StyledTypographyLink href={`/u/${originUser.username}`}>{originUser.name}</StyledTypographyLink>
             {contentArray[1]}
           </>
         );

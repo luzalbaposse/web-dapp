@@ -92,12 +92,17 @@ RSpec.describe Users::Create do
         create_user
 
         created_user = User.last
-        job = enqueued_jobs.find { |j| j["job_class"] == "ActivityIngestJob" }
+        profile_complete_job = enqueued_jobs.find { |j| j["job_class"] == "ActivityIngestJob" && j["arguments"][0] == "profile_complete" }
+        career_needs_update_job = enqueued_jobs.find { |j| j["job_class"] == "ActivityIngestJob" && j["arguments"][0] == "career_needs_update" }
 
         aggregate_failures do
-          expect(job["arguments"][0]).to eq("profile_complete")
-          expect(job["arguments"][1]).to eq(nil)
-          expect(job["arguments"][2]).to eq(created_user.id)
+          expect(profile_complete_job["arguments"][0]).to eq("profile_complete")
+          expect(profile_complete_job["arguments"][1]).to eq(nil)
+          expect(profile_complete_job["arguments"][2]).to eq(created_user.id)
+
+          expect(career_needs_update_job["arguments"][0]).to eq("career_needs_update")
+          expect(career_needs_update_job["arguments"][1]).to eq("@origin is open to mentoring others.")
+          expect(career_needs_update_job["arguments"][2]).to eq(created_user.id)
         end
       end
     end

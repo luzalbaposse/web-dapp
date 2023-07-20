@@ -19,7 +19,7 @@ module Quests
       verify_proof!
 
       user.update!(humanity_verified_at: Time.current, humanity_proof: proof["proof"])
-      user.talent.update!(verified: true)
+      Users::Verify.new(user: user).call
 
       Quests::RefreshUserQuest.new(user: user, quest: verify_humanity_quest, notify: true).call
       Quests::RefreshUserQuest.new(user: user.invited.user, quest: invite_three_quest, notify: true).call if user.invited

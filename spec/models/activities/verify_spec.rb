@@ -1,13 +1,13 @@
 require "rails_helper"
 
-RSpec.describe Activities::MilestoneCreate do
-  let(:origin_user) { create(:user) }
+RSpec.describe Activities::Verify do
+  let(:origin_user) { create(:user, :with_talent_token) }
   let(:activity) { described_class.new(origin_user_id: origin_user.id) }
 
   describe ".generate_content" do
     it "returns the correct content" do
-      expected_content = "@origin just added a new entry to their journey."
-      expect(described_class.generate_content(nil, nil)).to eq(expected_content)
+      expected_content = "@origin is now a verified user."
+      expect(described_class.generate_content(origin_user.id, nil)).to eq(expected_content)
     end
   end
 

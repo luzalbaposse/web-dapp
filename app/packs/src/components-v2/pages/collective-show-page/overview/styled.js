@@ -56,6 +56,7 @@ export const Logo = styled.img`
   border-radius: 8px;
   height: 120px;
   width: 120px;
+  object-fit: cover;
 `;
 
 export const LogoColumn = styled.div`

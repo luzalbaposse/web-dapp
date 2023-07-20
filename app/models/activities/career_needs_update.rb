@@ -1,11 +1,11 @@
 module Activities
-  class MilestoneCreate < Activity
+  class CareerNeedsUpdate < Activity
     store :content, accessors: %i[
       message
     ], coder: JSON
 
     def self.generate_content(_, _)
-      "@origin just added a new entry to their journey."
+      nil
     end
 
     def self.default_global_scope

@@ -1,16 +1,12 @@
 class CareerNeed < ApplicationRecord
-  HIRING_NEEDS = [
-    "Finding and hiring talent"
-  ].freeze
+  belongs_to :career_goal
 
+  HIRING_NEEDS = ["Finding and hiring talent"].freeze
   ROLE_NEEDS = [
     "Freelancing or contract roles",
     "Full-time roles",
     "Part-time roles"
   ].freeze
-
-  belongs_to :career_goal
-
   MENTORING_OTHERS = "Mentoring others".freeze
   LOOKING_MENTORSHIP = "Being matched with a mentor".freeze
 
