@@ -18,18 +18,6 @@ export const Container = styled.section`
   `)}
 `;
 
-export const TitleContainer = styled.div`
-  max-width: 327px;
-  margin: auto;
-  text-align: center;
-
-  ${desktopStyles(css`
-    max-width: 100%;
-    margin: 0;
-    text-align: left;
-  `)}
-`;
-
 export const SupportModelsContainer = styled.div`
   display: flex;
   flex-direction: column;

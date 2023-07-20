@@ -12,12 +12,12 @@ const TAB_TO_AREA_MAP = {
   2: Support
 };
 
-export const ProfileAreas = ({ currentUser }) => {
+export const ProfileAreas = ({ currentUser, railsContext }) => {
   const tabsState = useTabs();
   const memoizedArea = useMemo(() => {
     const Component = TAB_TO_AREA_MAP[tabsState.selectedIndex];
-    return <Component currentUser={currentUser} />;
-  }, [tabsState.selectedIndex, currentUser]);
+    return <Component currentUser={currentUser} railsContext={railsContext} />;
+  }, [tabsState.selectedIndex, currentUser, railsContext]);
   return (
     <Container>
       <TabsContainer>

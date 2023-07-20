@@ -6,7 +6,7 @@ import { ProfileAreas } from "./profile-areas";
 import { loggedInUserStore } from "src/contexts/state";
 import { useEffect } from "react";
 
-export const ProfilePage = ({ isMobile }) => {
+export const ProfilePage = ({ isMobile, railsContext }) => {
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
 
   useEffect(() => {
@@ -18,7 +18,7 @@ export const ProfilePage = ({ isMobile }) => {
   return isMobile ? (
     <PageContainer>
       <ProfileHeader />
-      <ProfileAreas currentUser={currentUser} />
+      <ProfileAreas currentUser={currentUser} railsContext={railsContext} />
     </PageContainer>
   ) : (
     <DesktopPageContainer>
@@ -26,7 +26,7 @@ export const ProfilePage = ({ isMobile }) => {
         <ProfileHeader />
       </DesktopColumn>
       <DesktopColumn>
-        <ProfileAreas currentUser={currentUser} />
+        <ProfileAreas currentUser={currentUser} railsContext={railsContext} />
       </DesktopColumn>
       <DesktopColumn></DesktopColumn>
     </DesktopPageContainer>
