@@ -12,12 +12,12 @@ const TAB_TO_AREA_MAP = {
   2: Support
 };
 
-export const ProfileAreas = () => {
+export const ProfileAreas = ({ currentUser }) => {
   const tabsState = useTabs();
   const memoizedArea = useMemo(() => {
     const Component = TAB_TO_AREA_MAP[tabsState.selectedIndex];
-    return <Component />;
-  }, [tabsState.selectedIndex]);
+    return <Component currentUser={currentUser} />;
+  }, [tabsState.selectedIndex, currentUser]);
   return (
     <Container>
       <TabsContainer>

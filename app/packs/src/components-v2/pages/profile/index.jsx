@@ -3,12 +3,22 @@ import isMobile from "is-mobile";
 import { PageContainer, DesktopPageContainer, DesktopColumn } from "./styled";
 import { ProfileHeader } from "./profile-header";
 import { ProfileAreas } from "./profile-areas";
+import { loggedInUserStore } from "src/contexts/state";
+import { useEffect } from "react";
 
 export const ProfilePage = ({ isMobile }) => {
+  const { currentUser, fetchCurrentUser } = loggedInUserStore();
+
+  useEffect(() => {
+    if (!currentUser) {
+      fetchCurrentUser();
+    }
+  }, []);
+
   return isMobile ? (
     <PageContainer>
       <ProfileHeader />
-      <ProfileAreas />
+      <ProfileAreas currentUser={currentUser} />
     </PageContainer>
   ) : (
     <DesktopPageContainer>
@@ -16,7 +26,7 @@ export const ProfilePage = ({ isMobile }) => {
         <ProfileHeader />
       </DesktopColumn>
       <DesktopColumn>
-        <ProfileAreas />
+        <ProfileAreas currentUser={currentUser} />
       </DesktopColumn>
       <DesktopColumn></DesktopColumn>
     </DesktopPageContainer>
