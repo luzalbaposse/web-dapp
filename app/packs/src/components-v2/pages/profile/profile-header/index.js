@@ -7,6 +7,7 @@ import {
   LocationContainer,
   MembersContainer,
   SpinnerContainer,
+  TagContainer,
   TopRow,
   UserInfo
 } from "./styled";
@@ -15,9 +16,9 @@ import { useProfileFetcher } from "src/hooks/use-profile-fetcher";
 export const ProfileHeader = ({ urlData }) => {
   const { profile, fetchProfile } = useProfileFetcher();
   useEffect(() => {
+    if (!urlData.profileUsername) return;
     fetchProfile(urlData.profileUsername);
   }, [urlData]);
-
   return !profile ? (
     <SpinnerContainer>
       <Spinner color="primary" size={48} />
@@ -37,6 +38,8 @@ export const ProfileHeader = ({ urlData }) => {
           {profile?.user.name}
         </Typography>
         <Icon name="verified-2" color="primary" size={18} />
+      </UserInfo>
+      <TagContainer>
         <Tag
           size="small"
           color="primary"
@@ -45,7 +48,7 @@ export const ProfileHeader = ({ urlData }) => {
           borderColor="surfaceHover02"
           textColor="primary02"
         />
-      </UserInfo>
+      </TagContainer>
       <Typography specs={{ type: "regular", variant: "p1" }} color="primary01">
         {profile.headline}
       </Typography>

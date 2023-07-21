@@ -24,8 +24,7 @@ export const Support = ({ currentUser, railsContext, urlData }) => {
         isCurrentUserProfile={profile.user.username === currentUser?.username}
         railsContext={railsContext}
       />
-      {/* ask this out */}
-      <Token profile={profile} talentTokenPrice={0.1} railsContext={railsContext} />
+      {profile.talent_token.deployed && <Token profile={profile} talentTokenPrice={0.1} railsContext={railsContext} />}
     </>
   );
 };

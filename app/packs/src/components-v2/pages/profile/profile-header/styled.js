@@ -41,6 +41,10 @@ export const UserInfo = styled.div`
   gap: 4px;
 `;
 
+export const TagContainer = styled.div`
+  display: flex;
+`;
+
 export const LocationContainer = styled.div`
   padding-top: 8px;
   display: flex;

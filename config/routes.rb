@@ -141,9 +141,9 @@ Rails.application.routes.draw do
   delete "/sign_out" => "sessions#destroy", :as => "sign_out"
   # end Auth
 
-  get "/u/:username/profile" => "profiles#preview"
   get "/u/:username/delete_account" => "users#destroy", :as => "delete_account", :constraints => {username: /[^\/]+/}
   get "/u/:username/support" => "profiles#talentmodels", :as => "user_support", :constraints => {username: /[^\/]+/}
+  get "/u/:username/profile" => "profiles#preview"
   get "/u/:username" => "profiles#show", :as => "user", :constraints => {username: /[^\/]+/}
   get "/u/:username/account_settings" => "users#edit_profile", :as => "account_settings", :constraints => {username: /[^\/]+/}
   # redirect /talent to /u so we have the old route still working

@@ -7,4 +7,4 @@ export const useUrlData = () => {
     setUrlData({ profileUsername: window.location.pathname.split("/")[2] });
   }, [setUrlData]);
   return urlData;
-}
+};
