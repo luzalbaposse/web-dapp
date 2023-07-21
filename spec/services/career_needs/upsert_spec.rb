@@ -63,5 +63,22 @@ RSpec.describe CareerNeeds::Upsert do
         end
       end
     end
+
+    context "when all career needs are deleted" do
+      let(:titles) { [] }
+      let!(:career_need) do
+        create :career_need, career_goal: career_goal, title: "Internships"
+      end
+
+      it "enqueues the job to update the career needs update activity" do
+        Sidekiq::Testing.inline! do
+          subject.call
+
+          job = enqueued_jobs.find { |j| j["job_class"] == "ActivityIngestJob" }
+
+          expect(job).to eq nil
+        end
+      end
+    end
   end
 end
