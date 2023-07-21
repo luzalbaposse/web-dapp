@@ -17,7 +17,6 @@ const Token = ({ profile, talentTokenPrice, railsContext }) => {
   const { mobile } = useWindowDimensionsHook();
   const { mode } = useTheme();
   const talentToken = profile.talent_token;
-
   const totalSupply = ethers.utils.formatUnits(profile.total_supply);
   const maxSupply = ethers.utils.formatUnits(profile.max_supply);
 

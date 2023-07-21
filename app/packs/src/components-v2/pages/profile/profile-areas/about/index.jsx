@@ -7,14 +7,16 @@ export const About = ({ currentUser }) => {
   const { profile, fetchProfile } = useProfileFetcher();
 
   useEffect(() => {
-    fetchProfile("bguedes")
+    fetchProfile("bguedes");
   }, []);
 
-  // add spinner
-  return !!profile && (
-    <>
-      <OldAbout profile={profile} />
-      <OldJourney talent={profile} canUpdate={profile.user.username === currentUser.username} />
-    </>
-  )
+  // todo: add spinner
+  return (
+    !!profile && (
+      <>
+        <OldAbout profile={profile} />
+        <OldJourney talent={profile} canUpdate={profile.user.username === currentUser.username} />
+      </>
+    )
+  );
 };

@@ -16,5 +16,4 @@ export const Goals = () => {
   );
 };
 
-
 // load more
