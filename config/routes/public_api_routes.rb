@@ -7,6 +7,10 @@ module PublicAPIRoutes
           scope module: :public_api, as: "public" do
             resources :talents, only: [:show, :index] do
               get "recommended", on: :collection
+              get "following", on: :collection
+              get "overview", on: :collection
+              get "about", on: :collection
+              get "support", on: :collection
             end
             resources :supporters, only: [:index]
             resources :activities, only: [:index]

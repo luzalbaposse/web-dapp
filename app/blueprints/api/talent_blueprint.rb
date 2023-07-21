@@ -1,6 +1,6 @@
 class API::TalentBlueprint < Blueprinter::Base
   view :normal do
-    fields :username, :name, :email, :profile_picture_url
+    fields :username, :email, :profile_picture_url
 
     field :id do |user, _options|
       user.uuid
@@ -29,6 +29,14 @@ class API::TalentBlueprint < Blueprinter::Base
     field :ticker do |user, _options|
       user.talent&.talent_token&.ticker
     end
+
+    field :banner_url do |user, _options|
+      user.talent&.banner_url
+    end
+
+    field :location do |user, _options|
+      user.talent&.location
+    end
   end
 
   view :detailed do
@@ -48,26 +56,6 @@ class API::TalentBlueprint < Blueprinter::Base
 
     field :subscribing_count do |user, _options|
       user.users_subscribing.count
-    end
-
-    field :ticker do |user, _options|
-      user.talent&.talent_token&.ticker
-    end
-  end
-
-  view :subscriber do
-    include_view :normal
-
-    field :verified do |user, _options|
-      user.talent&.verified?
-    end
-
-    field :occupation do |user, _options|
-      user.talent&.occupation
-    end
-
-    field :banner_url do |user, _options|
-      user.talent&.banner_url
     end
 
     field :ticker do |user, _options|
@@ -116,4 +104,48 @@ class API::TalentBlueprint < Blueprinter::Base
       user.score
     end
   end
+
+  # ------------ temporary views for Profile V1.0 ------------
+  view :overview do
+    include_view :normal
+
+    field :subscribing_status do |user, options|
+      status = "unsubscribed"
+      status = "subscribed" if options[:current_user_active_subscribing]&.include?(user.id)
+      status = "pending" if options[:current_user_pending_subscribing]&.include?(user.id)
+      status
+    end
+  end
+
+  view :about do
+    association :milestones, blueprint: MilestoneBlueprint, view: :normal do |user, options|
+      user.talent&.milestones
+    end
+    association :career_goal, blueprint: CareerGoalBlueprint, view: :normal do |user, options|
+      user.talent&.career_goal
+    end
+  end
+
+  view :support do
+    field :total_supply do |user, options|
+      user.talent&.total_supply
+    end
+
+    field :supporters_count do |user, options|
+      user.talent&.supporters_count
+    end
+
+    field :market_cap do |user, options|
+      user.talent&.market_cap
+    end
+
+    field :market_cap_variance do |user, options|
+      user.talent&.market_cap_variance
+    end
+
+    association :talent_token, blueprint: TalentTokenBlueprint, view: :normal do |user, options|
+      user.talent&.talent_token
+    end
+  end
+  # ------------ temporary views for Profile V1.0 ------------
 end

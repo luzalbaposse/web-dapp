@@ -136,6 +136,14 @@ class API::V1::PublicAPI::APIController < ActionController::Base
     @current_impersonated_user
   end
 
+  def current_user_active_subscribing
+    current_user ? current_user.active_subscribing.pluck(:user_id) : []
+  end
+
+  def current_user_pending_subscribing
+    current_user ? current_user.pending_subscribing.pluck(:user_id) : []
+  end
+
   def user_from_impersonated_cookie
     User.find_by(username: cookies.signed[:impersonated])
   end

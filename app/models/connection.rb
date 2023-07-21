@@ -58,7 +58,7 @@ class Connection < ApplicationRecord
 
   def calculate_connection_type(user_invested_amount, connected_user_invested_amount)
     return 8 if users_with_wallets_connected? && user_sponsoring_connected_user?
-    return 7 if users_with_wallets_connected? && connected_user_sponsorsing_user?
+    return 7 if users_with_wallets_connected? && connected_user_sponsoring_user?
     return 6 if user_invested_amount.to_i.positive? && connected_user_invested_amount.to_i.positive?
     return 5 if connected_user_invested_amount.to_i.positive?
     return 4 if user_invested_amount.to_i.positive?
@@ -68,7 +68,7 @@ class Connection < ApplicationRecord
   end
 
   def calculate_connection_types(user_invested_amount, connected_user_invested_amount)
-    connection_types << SPONSOR if users_with_wallets_connected? && connected_user_sponsorsing_user?
+    connection_types << SPONSOR if users_with_wallets_connected? && connected_user_sponsoring_user?
     connection_types << STAKER if connected_user_invested_amount.to_i.positive?
     connection_types << SUBSCRIBER if connected_user.subscribing.find_by(user_id: user_id).present?
 
@@ -87,7 +87,7 @@ class Connection < ApplicationRecord
     Sponsorship.claimed.where(sponsor: user.wallet_id, talent: connected_user.wallet_id).any?
   end
 
-  def connected_user_sponsorsing_user?
+  def connected_user_sponsoring_user?
     Sponsorship.claimed.where(sponsor: connected_user.wallet_id, talent: user.wallet_id).any?
   end
 end
