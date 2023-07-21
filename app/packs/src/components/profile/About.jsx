@@ -9,7 +9,7 @@ const About = ({ className, profile }) => {
   const careerGoal = profile?.career_goal;
 
   return (
-    <div className={cx(className, mobile ? "" : "d-flex")}>
+    <div className={cx(className, mobile ? "" : "d-flex mr-3 ml-3")}>
       <div className={cx("d-flex flex-column justify-content-center")}>
         <div>
           <div className="mb-4 d-flex align-items-center">

@@ -3,8 +3,8 @@ import styled, { css } from "styled-components";
 
 export const Container = styled.section`
   max-width: 1153px;
-  padding: 0 16px 48px;
-  margin: 40px auto 0;
+  padding: 0 24px 48px;
+  margin: auto;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -14,7 +14,7 @@ export const Container = styled.section`
   `)}
 
   ${desktopStyles(css`
-    padding: 0 0 48px;
+    padding: 0 24px 48px;
   `)}
 `;
 

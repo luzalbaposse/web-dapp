@@ -2892,10 +2892,10 @@
   dependencies:
     mini-svg-data-uri "^1.2.3"
 
-"@talentprotocol/design-system@^0.1.25":
-  version "0.1.25"
-  resolved "https://registry.yarnpkg.com/@talentprotocol/design-system/-/design-system-0.1.25.tgz#26a94158238f27067e7407915faf080469ee7805"
-  integrity sha512-vCZmzIi48AnhSLncJCvVj0teo6AAVwvspH6hQEBkiC3ig79rWx9LsWdtrMO3xomC1qtaXtEKosSsVrG+V6zIUw==
+"@talentprotocol/design-system@^0.1.26":
+  version "0.1.26"
+  resolved "https://registry.yarnpkg.com/@talentprotocol/design-system/-/design-system-0.1.26.tgz#4e4cb7c78ed41cd16a3c547446e497d28f54e783"
+  integrity sha512-pTm+1l0qBSTAGzXCeW8HzNEOt0LOBsNTPme1S4Vq36mAqdWbpvm5SkbW1q3lzuAmS8ummal5VDjG35YieBgX6g==
 
 "@tanstack/query-core@4.29.17":
   version "4.29.17"

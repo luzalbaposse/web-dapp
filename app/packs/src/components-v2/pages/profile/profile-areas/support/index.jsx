@@ -6,11 +6,9 @@ import Token from "../../../../../components/profile/Token";
 
 export const Support = ({ currentUser, railsContext, urlData }) => {
   const { profile, fetchProfile } = useProfileFetcher();
-
   useEffect(() => {
     fetchProfile(urlData.profileUsername);
   }, []);
-
   // todo: add spinner
   return (
     !!profile && (

@@ -27,7 +27,6 @@ export const DesktopColumn = styled.div`
 
   :nth-child(2) {
     flex-grow: 1;
-    overflow: scroll;
   }
 
   :nth-child(3) {
