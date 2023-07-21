@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Avatar, TextLink, Typography, Button } from "@talentprotocol/design-system";
-import { BuilderEntry, BuildersList, Container, TitleContainer } from "./styled";
+import { BuilderEntry, BuildersList, Container, SupportButtonContainer, TitleContainer } from "./styled";
 import { talentsService } from "../../api/talents";
+import { ViewAllContainer } from "../pages/profile/profile-header/styled";
 
 export const RecommendedBuildersWidget = ({ username }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -26,7 +27,6 @@ export const RecommendedBuildersWidget = ({ username }) => {
       <Container>
         <TitleContainer>
           <Typography specs={{ variant: "h5", type: "bold" }}>Recommended Builders</Typography>
-          <TextLink href="/talent" text="View all" rightIcon="carret" color="primary" size="medium" />
         </TitleContainer>
         <BuildersList>
           {talents.map(talent => (
@@ -40,10 +40,15 @@ export const RecommendedBuildersWidget = ({ username }) => {
                 profileURL={`/u/${talent.username}`}
                 ellipsisAt={200}
               />
-              <Button hierarchy="primary" size="small" text="Support" href={`/u/${talent.username}/support`} />
+              <SupportButtonContainer>
+                <Button hierarchy="primary" size="small" text="Support" href={`/u/${talent.username}/support`} />
+              </SupportButtonContainer>
             </BuilderEntry>
           ))}
         </BuildersList>
+        <ViewAllContainer>
+          <TextLink href="/talent" text="View all" rightIcon="carret" color="primary" size="medium" />
+        </ViewAllContainer>
       </Container>
     )
   );

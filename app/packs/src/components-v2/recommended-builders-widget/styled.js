@@ -39,8 +39,12 @@ export const BuildersList = styled.div`
 
 export const BuilderEntry = styled.div`
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
   padding: 16px 0;
+`;
+
+export const SupportButtonContainer = styled.div`
+  padding: 8px 0 0 56px;
 `;

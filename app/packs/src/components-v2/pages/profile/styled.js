@@ -35,5 +35,6 @@ export const DesktopColumn = styled.div`
     max-width: 288px;
     padding: 24px 0 0 24px;
     border: none;
+    flex-direction: column;
   }
 `;
