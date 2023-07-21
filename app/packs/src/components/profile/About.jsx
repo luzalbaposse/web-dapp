@@ -10,7 +10,7 @@ const About = ({ className, profile }) => {
 
   return (
     <div className={cx(className, mobile ? "" : "d-flex")}>
-      <div className={cx(mobile ? "col-12" : "col-6", "d-flex flex-column justify-content-center")}>
+      <div className={cx("d-flex flex-column justify-content-center")}>
         <div>
           <div className="mb-4 d-flex align-items-center">
             <H4 className="mr-4 mb-0" text="I'm open to" />

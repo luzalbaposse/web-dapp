@@ -1,14 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import isMobile from "is-mobile";
 import { PageContainer, DesktopPageContainer, DesktopColumn } from "./styled";
 import { ProfileHeader } from "./profile-header";
 import { ProfileAreas } from "./profile-areas";
 import { loggedInUserStore } from "src/contexts/state";
-import { useEffect } from "react";
+import { useUrlData } from "./hooks/use-url-data";
 
 export const ProfilePage = ({ isMobile, railsContext }) => {
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
-
+  const urlData = useUrlData();
   useEffect(() => {
     if (!currentUser) {
       fetchCurrentUser();
@@ -17,16 +17,16 @@ export const ProfilePage = ({ isMobile, railsContext }) => {
 
   return isMobile ? (
     <PageContainer>
-      <ProfileHeader />
-      <ProfileAreas currentUser={currentUser} railsContext={railsContext} />
+      <ProfileHeader currentUser={currentUser} urlData={urlData} />
+      <ProfileAreas currentUser={currentUser} railsContext={railsContext} urlData={urlData} />
     </PageContainer>
   ) : (
     <DesktopPageContainer>
       <DesktopColumn>
-        <ProfileHeader />
+        <ProfileHeader currentUser={currentUser} urlData={urlData} />
       </DesktopColumn>
       <DesktopColumn>
-        <ProfileAreas currentUser={currentUser} railsContext={railsContext} />
+        <ProfileAreas currentUser={currentUser} railsContext={railsContext} urlData={urlData} />
       </DesktopColumn>
       <DesktopColumn></DesktopColumn>
     </DesktopPageContainer>

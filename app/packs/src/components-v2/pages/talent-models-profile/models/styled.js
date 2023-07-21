@@ -23,8 +23,4 @@ export const SupportModelsContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 24px;
-  ${desktopStyles(css`
-    display: flex;
-    flex-direction: row;
-  `)}
 `;

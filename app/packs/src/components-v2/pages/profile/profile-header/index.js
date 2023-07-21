@@ -1,13 +1,31 @@
-import React from "react";
-import { Actions, Container, DesktopActions, LocationContainer, MembersContainer, TopRow, UserInfo } from "./styled";
-import { Avatar, Button, Icon, MembersList, Tag, Typography } from "@talentprotocol/design-system";
+import React, { useEffect } from "react";
+import { Avatar, Button, Icon, MembersList, Spinner, Tag, Typography } from "@talentprotocol/design-system";
+import {
+  Actions,
+  Container,
+  DesktopActions,
+  LocationContainer,
+  MembersContainer,
+  SpinnerContainer,
+  TopRow,
+  UserInfo
+} from "./styled";
+import { useProfileFetcher } from "src/hooks/use-profile-fetcher";
 
-export const ProfileHeader = () => {
-  // spinner for loading state
-  return (
+export const ProfileHeader = ({ urlData }) => {
+  const { profile, fetchProfile } = useProfileFetcher();
+  useEffect(() => {
+    fetchProfile(urlData.profileUsername);
+  }, [urlData]);
+
+  return !profile ? (
+    <SpinnerContainer>
+      <Spinner color="primary" size={48} />
+    </SpinnerContainer>
+  ) : (
     <Container>
       <TopRow>
-        <Avatar size="lg" userId={1} />
+        <Avatar size="lg" userId={1} url={profile.profile_picture_url} profileURL={`/u/${profile.user.username}`} />
         <Actions>
           <Button size="small" hierarchy="secondary" leftIcon="share-2" iconColor="primary01" />
           <Button size="small" hierarchy="secondary" leftIcon="email" iconColor="primary01" />
@@ -16,7 +34,7 @@ export const ProfileHeader = () => {
       </TopRow>
       <UserInfo>
         <Typography specs={{ type: "bold", variant: "h5" }} color="primary01">
-          John Doe
+          {profile?.user.name}
         </Typography>
         <Icon name="verified-2" color="primary" size={18} />
         <Tag
@@ -29,12 +47,12 @@ export const ProfileHeader = () => {
         />
       </UserInfo>
       <Typography specs={{ type: "regular", variant: "p1" }} color="primary01">
-        Think product. Execute like a developer. Designing with love at Talent Protocol.
+        {profile.headline}
       </Typography>
       <LocationContainer>
         <Icon name="pin" color="primary04" size={16} />
         <Typography specs={{ type: "regular", variant: "p2" }} color="primary04">
-          EthParis, France
+          {profile.profile.location || "..."}
         </Typography>
       </LocationContainer>
       <MembersContainer>

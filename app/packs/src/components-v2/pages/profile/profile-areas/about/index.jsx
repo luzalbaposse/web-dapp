@@ -3,12 +3,12 @@ import { useProfileFetcher } from "src/hooks/use-profile-fetcher";
 import OldAbout from "../../../../../components/profile/About";
 import OldJourney from "../../../../../components/profile/Journey";
 
-export const About = ({ currentUser }) => {
+export const About = ({ currentUser, urlData }) => {
   const { profile, fetchProfile } = useProfileFetcher();
-
   useEffect(() => {
-    fetchProfile("bguedes");
+    fetchProfile(urlData.profileUsername);
   }, []);
+
 
   // todo: add spinner
   return (
