@@ -8,12 +8,14 @@ module CareerNeeds
     end
 
     def call
+      return if titles.sort == career_goal.career_needs.pluck(:title).sort
+
       CareerNeed.transaction do
         destroy_career_needs
         upsert_career_needs
       end
 
-      create_activity
+      create_activity if career_goal.career_needs.reload.size.positive?
     end
 
     private

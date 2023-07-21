@@ -99,7 +99,10 @@ module Users
         tag = Tag.find_or_create_by(description: description.downcase)
         UserTag.find_or_create_by!(user: user, tag: tag)
       end
-      CareerNeeds::Upsert.new(career_goal: talent.career_goal, titles: params[:career_needs]).call
+
+      if params[:career_needs]&.length&.positive?
+        CareerNeeds::Upsert.new(career_goal: talent.career_goal, titles: params[:career_needs]).call
+      end
     end
 
     def create_talent_token(user)
