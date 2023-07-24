@@ -13,3 +13,4 @@ export * from "./users";
 export * from "./quests";
 export * from "./invited_talents";
 export * from "./career-update";
+export * from "./goals";

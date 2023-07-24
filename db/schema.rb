@@ -10,9 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_11_170018) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_24_104155) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "activities", force: :cascade do |t|
@@ -355,6 +354,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_11_170018) do
     t.string "title"
     t.string "link"
     t.string "progress"
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.index ["career_goal_id"], name: "index_goals_on_career_goal_id"
   end
 
@@ -777,8 +777,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_11_170018) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.string "theme_preference", default: "light"
     t.boolean "disabled", default: false
+    t.string "theme_preference", default: "light"
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"

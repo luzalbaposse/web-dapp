@@ -3,23 +3,24 @@ import { Container, GoalImage, GoalInfo, TagsRow } from "./styled";
 import { GoalTag } from "./goal-tag";
 import { Typography } from "@talentprotocol/design-system";
 
-export const GoalCard = () => {
+export const GoalCard = ({ progress, due_date, title, description, images }) => {
+  console.log("-----", images)
   return (
     <Container>
       <TagsRow>
-        <GoalTag state="doing" />
-        <GoalTag state="date" content={Date.now()} />
+        <GoalTag state={progress} />
+        <GoalTag state="date" date={new Date(due_date)} />
       </TagsRow>
       <GoalInfo>
         <Typography specs={{ type: "medium", variant: "p1" }} color="primary01">
-          I want to learn more about Product to get a job as Head of Design
+          {title}
         </Typography>
         <Typography specs={{ type: "regular", variant: "p2" }} color="primary03">
-          I'm starting learning 3D modeling in Blender to complement my UI's better and create 3D digital assets like
-          Tokens, Landscapes and imagine that this is the maxi
+          {description}
         </Typography>
       </GoalInfo>
-      <GoalImage src="https://hatrabbits.com/wp-content/uploads/2017/01/random.jpg" />
+      {!!images?.length && (
+        <GoalImage src={images[0].image_url} />)}
     </Container>
   );
 };

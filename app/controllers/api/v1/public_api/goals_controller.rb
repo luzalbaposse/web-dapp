@@ -14,7 +14,7 @@ class API::V1::PublicAPI::GoalsController < API::V1::PublicAPI::APIController
     )
 
     response_body = {
-      talents: API::GoalBlueprint.render_as_json(page_goals, view: :normal),
+      goals: API::GoalBlueprint.render_as_json(page_goals, view: :normal),
       pagination: {
         total: goals.count,
         cursor: pagy.has_more? ? page_goals.last.uuid : nil
