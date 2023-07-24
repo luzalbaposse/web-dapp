@@ -1,4 +1,4 @@
-import { buildColor, desktopStyles, mobileStyles } from "@talentprotocol/design-system";
+import { buildColor, desktopStyles } from "@talentprotocol/design-system";
 import styled, { css } from "styled-components";
 
 export const Container = styled.section`
@@ -6,14 +6,9 @@ export const Container = styled.section`
   flex-direction: column;
   justify-content: center;
 
-  ${mobileStyles(css`
-    margin-top: 24px;
-  `)}
-
   ${desktopStyles(css`
     border: 1px solid ${buildColor("surfaceHover02")};
     border-radius: 24px;
-    margin-top: 76px;
     padding-bottom: 30px;
   `)}
 `;
@@ -39,8 +34,16 @@ export const BuildersList = styled.div`
 
 export const BuilderEntry = styled.div`
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
   padding: 16px 0;
+`;
+
+export const SupportButtonContainer = styled.div`
+  padding: 8px 0 0 56px;
+`;
+
+export const ViewAllContainer = styled.div`
+  padding: 16px 0 0 16px;
 `;

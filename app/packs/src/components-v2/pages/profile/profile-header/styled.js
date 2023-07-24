@@ -69,7 +69,3 @@ export const DesktopActions = styled.div`
     display: none;
   `)}
 `;
-
-export const ViewAllContainer = styled.div`
-  padding: 16px 0 0 16px;
-`;

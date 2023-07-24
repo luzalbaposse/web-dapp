@@ -5,8 +5,8 @@ import { ProfileHeader } from "./profile-header";
 import { ProfileAreas } from "./profile-areas";
 import { loggedInUserStore } from "src/contexts/state";
 import { useUrlData } from "./hooks/use-url-data";
-import { RecommendedBuildersWidget } from "../../recommended-builders-widget";
-import { RecommendedTeamsWidget } from "../../recommended-teams-widget";
+import { RecommendedBuildersWidgetMini } from "../../recommended-builders-widget-mini";
+import { RecommendedTeamsWidgetMini } from "../../recommended-teams-widget-mini";
 
 export const ProfilePage = ({ isMobile, railsContext }) => {
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
@@ -31,8 +31,8 @@ export const ProfilePage = ({ isMobile, railsContext }) => {
         <ProfileAreas currentUser={currentUser} railsContext={railsContext} urlData={urlData} />
       </DesktopColumn>
       <DesktopColumn>
-        <RecommendedBuildersWidget username={currentUser?.username} />
-        <RecommendedTeamsWidget />
+        <RecommendedBuildersWidgetMini username={currentUser?.username} />
+        <RecommendedTeamsWidgetMini />
       </DesktopColumn>
     </DesktopPageContainer>
   );

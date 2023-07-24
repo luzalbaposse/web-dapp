@@ -30,11 +30,15 @@ export const DesktopColumn = styled.div`
   }
 
   :nth-child(3) {
+    display: flex;
+    flex-direction: column;
     flex-basis: 288px;
     min-width: 288px;
     max-width: 288px;
     padding: 24px 0 0 24px;
+    gap: 24px;
     border: none;
     flex-direction: column;
+    overflow-y: auto;
   }
 `;

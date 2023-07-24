@@ -8,12 +8,13 @@ import {
   Tags,
   TeamsList,
   TitleContainer,
-  VerifiedNameRow
+  VerifiedNameRow,
+  ViewAllContainer
 } from "./styled";
 import { camelCaseObject } from "src/utils/transformObjects";
 import { organizations } from "src/api/organizations";
 
-export const RecommendedTeamsWidget = ({ }) => {
+export const RecommendedTeamsWidgetMini = ({ }) => {
   const [collectives, setCollectives] = useState([]);
 
   useEffect(() => {
@@ -28,7 +29,7 @@ export const RecommendedTeamsWidget = ({ }) => {
       .getOrganizations(params.toString())
       .then(({ data }) => {
         if (data.organizations) {
-          setCollectives(data.organizations.map(organization => ({ ...camelCaseObject(organization) })));
+          setCollectives(data.organizations.slice(0, 2).map(organization => ({ ...camelCaseObject(organization) })));
         }
       })
       .catch(() => { });
@@ -38,7 +39,6 @@ export const RecommendedTeamsWidget = ({ }) => {
     <Container>
       <TitleContainer>
         <Typography specs={{ variant: "h5", type: "bold" }}>Recommended Collectives</Typography>
-        <TextLink href="/collectives" text="View all" rightIcon="carret" color="primary" size="medium" />
       </TitleContainer>
       <TeamsList>
         {collectives.map((collective, index) => (
@@ -76,6 +76,9 @@ export const RecommendedTeamsWidget = ({ }) => {
             {/* <Button hierarchy="primary" size="small" href="/discovery/top-100-talent?page=1" text="Go to page" /> */}
           </EntryContainer>
         ))}
+        <ViewAllContainer>
+          <TextLink href="/collectives" text="View all" rightIcon="carret" color="primary" size="medium" />
+        </ViewAllContainer>
       </TeamsList>
     </Container>
   );
