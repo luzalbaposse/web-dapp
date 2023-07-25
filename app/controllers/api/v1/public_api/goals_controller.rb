@@ -1,10 +1,6 @@
 class API::V1::PublicAPI::GoalsController < API::V1::PublicAPI::APIController
   def index
-    goals = if user
-      Goal.where(career_goal: user.talent.career_goal)
-    else
-      []
-    end
+    goals = Goal.where(career_goal: user.talent.career_goal)
 
     pagy, page_goals = pagy_uuid_cursor(
       goals,

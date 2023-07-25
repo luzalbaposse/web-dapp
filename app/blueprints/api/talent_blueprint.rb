@@ -115,6 +115,10 @@ class API::TalentBlueprint < Blueprinter::Base
       status = "pending" if options[:current_user_pending_subscribing]&.include?(user.id)
       status
     end
+
+    field :tal_domain do |user, options|
+      user.tal_domain&.domain
+    end
   end
 
   view :about do

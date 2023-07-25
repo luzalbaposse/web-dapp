@@ -1,6 +1,6 @@
 class API::GoalBlueprint < Blueprinter::Base
   view :normal do
-    fields :uuid, :title, :description, :link, :progress, :due_date, :created_at
+    fields :title, :description, :link, :progress, :due_date, :created_at
     association :goal_images, blueprint: GoalImageBlueprint, view: :normal, name: :images
   end
 end

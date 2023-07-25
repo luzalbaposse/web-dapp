@@ -232,5 +232,114 @@ RSpec.describe "Talents API" do
         run_test!
       end
     end
+
+    path "/talents/about" do
+      get "Retrieves a list of about talents" do
+        tags "Talents"
+        consumes "application/json"
+        produces "application/json"
+        parameter name: :id, in: :query, type: :string, description: "Wallet address or username"
+        parameter name: :cursor, in: :query, type: :string, description: "The cursor to fetch the next page"
+        parameter name: "X-API-KEY", in: :header, type: :string, description: "Your Talent Protocol API key"
+
+        let(:cursor) { nil }
+        let(:wallet_id) { SecureRandom.hex }
+        let(:id) { wallet_id }
+
+        let!(:user) { create(:user, wallet_id: wallet_id, display_name: "API user") }
+        let!(:talent) { create :talent, user: user }
+        let!(:milestone1) { create :milestone, talent: talent, title: "milestone1" }
+        let!(:milestone2) { create :milestone, talent: talent, title: "milestone2" }
+        let(:career_goal) { create(:career_goal, talent: talent) }
+        let!(:goal1) { create(:goal, career_goal: career_goal, title: "goal1", due_date: Time.zone.today) }
+        let!(:goal2) { create(:goal, career_goal: career_goal, title: "goal2", due_date: Time.zone.today) }
+        let!(:career_need1) { create(:career_need, career_goal: career_goal, title: "career_need1") }
+        let!(:career_need2) { create(:career_need, career_goal: career_goal, title: "career_need2") }
+
+        response "200", "talent found", save_example: true do
+          schema type: :object,
+            properties: {
+              talent: {
+                type: :object,
+                properties: PublicAPI::ObjectProperties::TALENT_PROPERTIES
+              }
+            }
+
+          run_test! do |response|
+            data = JSON.parse(response.body)
+
+            returned_talent = data["talent"]
+            returned_milestones = returned_talent["milestones"].map { |m| m["title"] }
+            returned_career_goal = data["talent"]["career_goal"]
+            returned_goals = returned_career_goal["goals"].map { |c| c["title"] }
+            returned_career_needs = returned_career_goal["career_needs"].map { |c| c["title"] }
+            aggregate_failures do
+              expect(returned_milestones).to match_array([milestone1.title, milestone2.title])
+              expect(returned_goals).to match_array([goal1.title, goal2.title])
+              expect(returned_career_needs).to match_array([career_need1.title, career_need2.title])
+            end
+          end
+        end
+
+        response "401", "unauthorized request" do
+          let(:"X-API-KEY") { "invalid" }
+          run_test!
+        end
+      end
+    end
+
+    path "/talents/support" do
+      get "Retrieves a list of support talents" do
+        tags "Talents"
+        consumes "application/json"
+        produces "application/json"
+        parameter name: :id, in: :query, type: :string, description: "Wallet address or username"
+        parameter name: :cursor, in: :query, type: :string, description: "The cursor to fetch the next page"
+        parameter name: "X-API-KEY", in: :header, type: :string, description: "Your Talent Protocol API key"
+
+        let(:cursor) { nil }
+        let(:wallet_id) { SecureRandom.hex }
+        let(:id) { wallet_id }
+
+        let!(:user) { create(:user, wallet_id: wallet_id, display_name: "API user") }
+        let!(:talent) do
+          create :talent,
+            user: user,
+            total_supply: "2",
+            supporters_count: 3,
+            market_cap: "1000",
+            market_cap_variance: "2.0"
+        end
+        let!(:talent_token) { create(:talent_token, talent: talent, contract_id: "CONTRACT_ID") }
+
+        response "200", "talent found", save_example: true do
+          schema type: :object,
+            properties: {
+              talent: {
+                type: :object,
+                properties: PublicAPI::ObjectProperties::TALENT_PROPERTIES
+              }
+            }
+
+          run_test! do |response|
+            data = JSON.parse(response.body)
+
+            returned_talent = data["talent"]
+            returned_talent_token = returned_talent["talent_token"]
+            aggregate_failures do
+              expect(returned_talent["total_supply"]).to eq(talent.total_supply)
+              expect(returned_talent["supporters_count"]).to eq(talent.supporters_count)
+              expect(returned_talent["market_cap"]).to eq(talent.market_cap)
+              expect(returned_talent_token["contract_id"]).to eq(talent_token.contract_id)
+            end
+          end
+        end
+
+        response "401", "unauthorized request" do
+          let(:"X-API-KEY") { "invalid" }
+          run_test!
+        end
+      end
+    end
   end
 end
