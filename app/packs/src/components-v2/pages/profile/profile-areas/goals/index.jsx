@@ -8,12 +8,13 @@ export const Goals = ({ urlData }) => {
   const [goals, setGoals] = useState([]);
   useEffect(() => {
     if (!urlData.profileUsername) return;
-    goalsService.getGoals(urlData.profileUsername)
+    goalsService
+      .getGoals(urlData.profileUsername)
       .then(({ data }) => {
         setGoals(data.goals);
       })
-      .catch((err) => {
-        console.error(err)
+      .catch(err => {
+        console.error(err);
       });
   }, [urlData]);
 
@@ -23,7 +24,7 @@ export const Goals = ({ urlData }) => {
     </SpinnerContainer>
   ) : (
     <Container>
-      {goals.map((goal) => (
+      {goals.map(goal => (
         <GoalCard key={goal.uuid} {...goal} />
       ))}
     </Container>

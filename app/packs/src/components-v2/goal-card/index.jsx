@@ -4,7 +4,6 @@ import { GoalTag } from "./goal-tag";
 import { Typography } from "@talentprotocol/design-system";
 
 export const GoalCard = ({ progress, due_date, title, description, images }) => {
-  console.log("-----", images)
   return (
     <Container>
       <TagsRow>
@@ -19,8 +18,7 @@ export const GoalCard = ({ progress, due_date, title, description, images }) => 
           {description}
         </Typography>
       </GoalInfo>
-      {!!images?.length && (
-        <GoalImage src={images[0].image_url} />)}
+      {!!images?.length && <GoalImage src={images[0].image_url} />}
     </Container>
   );
 };

@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Avatar, TextLink, Typography, Button } from "@talentprotocol/design-system";
-import { BuilderEntry, BuildersList, Container, SupportButtonContainer, TitleContainer, ViewAllContainer } from "./styled";
+import {
+  BuilderEntry,
+  BuildersList,
+  Container,
+  SupportButtonContainer,
+  TitleContainer,
+  ViewAllContainer
+} from "./styled";
 import { talentsService } from "../../api/talents";
 
 export const RecommendedBuildersWidgetMini = ({ username }) => {

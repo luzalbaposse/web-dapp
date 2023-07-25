@@ -13,7 +13,7 @@ import {
 import { camelCaseObject } from "src/utils/transformObjects";
 import { organizations } from "src/api/organizations";
 
-export const RecommendedTeamsWidget = ({ }) => {
+export const RecommendedTeamsWidget = ({}) => {
   const [collectives, setCollectives] = useState([]);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export const RecommendedTeamsWidget = ({ }) => {
           setCollectives(data.organizations.map(organization => ({ ...camelCaseObject(organization) })));
         }
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   return (

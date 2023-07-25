@@ -1,24 +1,29 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Spinner } from "@talentprotocol/design-system";
-import { useProfileFetcher } from "src/hooks/use-profile-fetcher";
 import OldAbout from "../../../../../components/profile/About";
 import OldJourney from "../../../../../components/profile/Journey";
 import { SpinnerContainer } from "./styled";
+import { talentsService } from "src/api";
 
 export const About = ({ currentUser, urlData }) => {
-  const { profile, fetchProfile } = useProfileFetcher();
+  const [aboutData, setAboutData] = useState(null);
+
   useEffect(() => {
-    fetchProfile(urlData.profileUsername);
+    if (!urlData.profileUsername) return;
+    talentsService.getAbout(urlData.profileUsername)
+      .then(({ data }) => {
+        setAboutData(data.talent);
+      });
   }, []);
 
-  return !profile ? (
+  return !aboutData ? (
     <SpinnerContainer>
       <Spinner color="primary" size={48} />
     </SpinnerContainer>
   ) : (
     <>
-      <OldAbout profile={profile} />
-      <OldJourney talent={profile} canUpdate={profile.user.username === currentUser.username} />
+      <OldAbout profile={aboutData} />
+      <OldJourney talent={aboutData} canUpdate={aboutData.profileUsername === currentUser?.username} />
     </>
   );
 };

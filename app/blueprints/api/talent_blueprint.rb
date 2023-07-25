@@ -118,6 +118,7 @@ class API::TalentBlueprint < Blueprinter::Base
   end
 
   view :about do
+    field :username
     association :milestones, blueprint: MilestoneBlueprint, view: :normal do |user, options|
       user.talent&.milestones
     end

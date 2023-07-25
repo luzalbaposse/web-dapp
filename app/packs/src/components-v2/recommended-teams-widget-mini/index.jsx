@@ -14,7 +14,7 @@ import {
 import { camelCaseObject } from "src/utils/transformObjects";
 import { organizations } from "src/api/organizations";
 
-export const RecommendedTeamsWidgetMini = ({ }) => {
+export const RecommendedTeamsWidgetMini = ({}) => {
   const [collectives, setCollectives] = useState([]);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export const RecommendedTeamsWidgetMini = ({ }) => {
           setCollectives(data.organizations.slice(0, 2).map(organization => ({ ...camelCaseObject(organization) })));
         }
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   return (
