@@ -19,6 +19,7 @@ import {
   DesktopActions,
   LocationContainer,
   MembersContainer,
+  Name,
   SpinnerContainer,
   TagContainer,
   TopRow,
@@ -123,10 +124,10 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile }) => {
           )}
         </TopRow>
         <UserInfo>
-          <Typography specs={{ type: "bold", variant: "h5" }} color="primary01">
+          <Name specs={{ type: "bold", variant: "h5" }} color="primary01">
             {data.profileOverview?.name}
-          </Typography>
-          <Icon name="verified-2" color="primary" size={18} />
+          </Name>
+          {data.profileOverview?.verified && <Icon name="verified-2" color="primary" size={18} />}
         </UserInfo>
         <TagContainer>
           {currentUser?.username !== data.profileOverview?.username && (
@@ -157,12 +158,12 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile }) => {
             <>
               <MembersList membersImages={data.supporters.talents.map(supporter => supporter.profile_picture_url)} />
               <Typography specs={{ type: "small", variant: "label3" }} color="primary04">
-                Supported by {data.supporters.pagination.total} of your connections.
+                Supported by {data.supporters?.pagination?.total} of your connections.
               </Typography>
             </>
           ) : (
             <Typography specs={{ type: "small", variant: "label3" }} color="primary04">
-              None of your connections is supporting {data.supporters.pagination.total}.
+              None of your connections is supporting {data.supporters?.pagination?.total}.
             </Typography>
           )}
         </MembersContainer>

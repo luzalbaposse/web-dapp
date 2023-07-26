@@ -3,8 +3,6 @@ import { toast } from "react-toastify";
 import { ToastBody } from "src/components/design_system/toasts";
 
 import { get } from "src/utils/requests";
-import { ethers } from "ethers";
-import { parseAndCommify } from "src/onchain/utils";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
@@ -17,7 +15,6 @@ import { useWindowDimensionsHook } from "src/utils/window";
 import { useTheme } from "src/contexts/ThemeContext";
 import TalentProfilePicture from "src/components/talent/TalentProfilePicture";
 import Table from "src/components/design_system/table";
-import { lightTextPrimary03, darkTextPrimary03 } from "src/utils/colors.js";
 import TextInput from "src/components/design_system/fields/textinput";
 import { Search, OrderBy } from "src/components/icons";
 import Dropdown from "react-bootstrap/Dropdown";

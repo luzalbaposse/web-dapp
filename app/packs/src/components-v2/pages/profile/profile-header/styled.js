@@ -1,4 +1,4 @@
-import { mobileStyles } from "@talentprotocol/design-system";
+import { Typography, mobileStyles } from "@talentprotocol/design-system";
 import styled, { css } from "styled-components";
 
 export const SpinnerContainer = styled.section`
@@ -26,6 +26,13 @@ export const TopRow = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+`;
+
+export const Name = styled(Typography)`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
 `;
 
 export const Actions = styled.div`
