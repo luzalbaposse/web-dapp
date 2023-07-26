@@ -148,6 +148,18 @@ class API::TalentBlueprint < Blueprinter::Base
       user.talent&.market_cap_variance
     end
 
+    field :supporting_count do |user, _options|
+      user.portfolio.count
+    end
+
+    field :subscribers_count do |user, _options|
+      user.subscribers.count
+    end
+
+    field :subscribing_count do |user, _options|
+      user.users_subscribing.count
+    end
+
     association :talent_token, blueprint: TalentTokenBlueprint, view: :normal do |user, options|
       user.talent&.talent_token
     end

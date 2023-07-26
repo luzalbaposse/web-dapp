@@ -2,16 +2,25 @@ import React, { useEffect, useState } from "react";
 import { Spinner } from "@talentprotocol/design-system";
 import OldAbout from "../../../../../components/profile/About";
 import OldJourney from "../../../../../components/profile/Journey";
-import { Container, SpinnerContainer } from "./styled";
+import Connections from "src/components/profile/Connections";
 import { talentsService } from "src/api";
+import { Container, SpinnerContainer } from "./styled";
 
 export const About = ({ currentUser, urlData }) => {
   const [aboutData, setAboutData] = useState(null);
+  const [supportData, setSupportData] = useState(null);
 
   useEffect(() => {
     if (!urlData.profileUsername) return;
     talentsService.getAbout(urlData.profileUsername).then(({ data }) => {
       setAboutData(data.talent);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!urlData.profileUsername) return;
+    talentsService.getSupportData(urlData.profileUsername).then(({ data }) => {
+      setSupportData(data.talent);
     });
   }, []);
 
@@ -23,6 +32,7 @@ export const About = ({ currentUser, urlData }) => {
     <Container>
       <OldAbout profile={aboutData} />
       <OldJourney talent={aboutData} canUpdate={aboutData.profileUsername === currentUser?.username} />
+      {!!currentUser?.id && (<Connections userId={currentUser?.id} talent={supportData} canUpdate={false} />)}
     </Container>
   );
 };

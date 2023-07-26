@@ -295,7 +295,7 @@ const Connections = ({ userId, talent, canUpdate }) => {
           <P2 className="text-primary-04" text="Subscribing" />
         </div>
       </div>
-      {talent?.connections_count > 0 && (
+      {!!connections.length && (
         <>
           <SearchForm
             options={options}

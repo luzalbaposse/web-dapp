@@ -229,7 +229,7 @@ const EditOverviewModalV2 = ({ show, hide, setProfile = noop, mode, username }) 
         }
       }));
     });
-    uppyProfile.on("upload", () => { });
+    uppyProfile.on("upload", () => {});
   }, [uppyProfile]);
 
   useEffect(() => {
@@ -253,7 +253,7 @@ const EditOverviewModalV2 = ({ show, hide, setProfile = noop, mode, username }) 
         }
       }));
     });
-    uppyBanner.on("upload", () => { });
+    uppyBanner.on("upload", () => {});
   }, [uppyBanner]);
 
   useEffect(() => {

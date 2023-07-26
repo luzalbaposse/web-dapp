@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import isMobile from "is-mobile";
+import { TalentThemeProvider } from "@talentprotocol/design-system";
 import { PageContainer, DesktopPageContainer, DesktopColumn } from "./styled";
 import { ProfileHeader } from "./profile-header";
 import { ProfileAreas } from "./profile-areas";
@@ -7,6 +8,7 @@ import { loggedInUserStore } from "src/contexts/state";
 import { useUrlData } from "./hooks/use-url-data";
 import { RecommendedBuildersWidgetMini } from "../../recommended-builders-widget-mini";
 import { RecommendedTeamsWidgetMini } from "../../recommended-teams-widget-mini";
+import ThemeContainer from "src/contexts/ThemeContext";
 
 export const ProfilePage = ({ isMobile, railsContext }) => {
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
@@ -39,5 +41,11 @@ export const ProfilePage = ({ isMobile, railsContext }) => {
 };
 
 export default (props, railsContext) => {
-  return () => <ProfilePage {...props} railsContext={railsContext} isMobile={isMobile()} />;
+  return () => (
+    <ThemeContainer>
+      <TalentThemeProvider>
+        <ProfilePage {...props} railsContext={railsContext} isMobile={isMobile()} />
+      </TalentThemeProvider>
+    </ThemeContainer>
+  );
 };
