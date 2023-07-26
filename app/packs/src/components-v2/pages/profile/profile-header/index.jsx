@@ -153,13 +153,17 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile }) => {
           </Typography>
         </LocationContainer>
         <MembersContainer>
-          {data.supporters.talents?.length && (
+          {data.supporters.talents?.length ? (
             <>
               <MembersList membersImages={data.supporters.talents.map(supporter => supporter.profile_picture_url)} />
               <Typography specs={{ type: "small", variant: "label3" }} color="primary04">
-                Mutually supported by {data.supporters.pagination.total}.
+                Supported by {data.supporters.pagination.total} of your connections.
               </Typography>
             </>
+          ) : (
+            <Typography specs={{ type: "small", variant: "label3" }} color="primary04">
+              None of your connections is supporting {data.supporters.pagination.total}.
+            </Typography>
           )}
         </MembersContainer>
         {!isMobile && (

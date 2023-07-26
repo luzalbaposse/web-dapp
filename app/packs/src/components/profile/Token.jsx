@@ -32,7 +32,10 @@ const Token = ({ profile, talentTokenPrice, railsContext }) => {
   };
 
   return (
-    <section className={cx("d-flex flex-column token-section", mobile ? "py-6" : "py-7")} style={{ borderRadius: "16px" }}>
+    <section
+      className={cx("d-flex flex-column token-section", mobile ? "py-6" : "py-7")}
+      style={{ borderRadius: "16px" }}
+    >
       <div className="row" style={{ justifyContent: "center" }}>
         <div className={cx("col-12 col-lg-4", mobile && "mb-6")}>
           <H3

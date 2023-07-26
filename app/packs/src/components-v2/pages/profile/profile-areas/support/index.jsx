@@ -25,7 +25,11 @@ export const Support = ({ currentUser, railsContext, urlData }) => {
         railsContext={railsContext}
       />
 
-      {profile.talent_token.deployed && (<TokenComponentContainer><Token profile={profile} talentTokenPrice={0.1} railsContext={railsContext} /></TokenComponentContainer>)}
+      {profile.talent_token.deployed && (
+        <TokenComponentContainer>
+          <Token profile={profile} talentTokenPrice={0.1} railsContext={railsContext} />
+        </TokenComponentContainer>
+      )}
     </>
   );
 };
