@@ -11,6 +11,7 @@ export const DesktopPageContainer = styled.div`
   max-height: 100vh;
   padding-top: 68px;
   max-width: 1224px;
+  min-width: 1224px;
   margin: auto;
 `;
 
@@ -27,6 +28,8 @@ export const DesktopColumn = styled.div`
 
   :nth-child(2) {
     flex-grow: 1;
+    min-width: 648px;
+    max-width: 648px;
   }
 
   :nth-child(3) {

@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useMemo, useCallback, useState } from "react";
 import { noop } from "lodash";
 import {
   Avatar,
@@ -12,6 +12,7 @@ import {
   useModal
 } from "@talentprotocol/design-system";
 import { QRCodeModal } from "src/components-v2/qr-code-modal";
+import EditOverviewModalV2 from "src/components/profile/edit/EditOverviewModalV2";
 import {
   Actions,
   Container,
@@ -24,29 +25,41 @@ import {
   UserInfo
 } from "./styled";
 import { useDataFetcher } from "./hooks/use-data-fetcher";
+import { useImpersonate } from "./hooks/use-impersonate";
 
 export const ProfileHeader = ({ urlData, currentUser }) => {
   const data = useDataFetcher(urlData);
+  const { impersonateUser } = useImpersonate();
   const qrCodeModalState = useModal();
+  const [isEditMode, setIsEditMode] = useState(false);
   const dropdownMenu = useMemo(() => {
     if (!currentUser) return [];
     const menu = [{ value: "Share", iconColor: "primary01", iconName: "share-2" }];
     if (currentUser?.admin) {
       menu.push({ value: "Impersonate", iconColor: "primary01", iconName: "user" });
     }
-    if (currentUser?.name === urlData) {
+    if (currentUser?.username === urlData.profileUsername) {
       menu.push({ value: "Edit", iconColor: "primary01", iconName: "edit" });
     }
     return menu;
   }, [currentUser, urlData]);
-  const onSelectOption = useCallback(option => {
-    switch (option.value) {
-      case "Share":
-      default:
-        qrCodeModalState.openModal();
-        return;
-    }
-  }, []);
+  const onSelectOption = useCallback(
+    option => {
+      switch (option.value) {
+        case "Edit":
+          setIsEditMode(true);
+          return;
+        case "Impersonate":
+          impersonateUser(urlData.profileUsername);
+          return;
+        case "Share":
+        default:
+          qrCodeModalState.openModal();
+          return;
+      }
+    },
+    [urlData.profileUsername]
+  );
   return !data.profileOverview ? (
     <SpinnerContainer>
       <Spinner color="primary" size={48} />
@@ -62,7 +75,7 @@ export const ProfileHeader = ({ urlData, currentUser }) => {
             profileURL={`/u/${data.profileOverview?.username}`}
           />
           <Actions>
-            <ButtonDropdown selectOption={noop} options={dropdownMenu}>
+            <ButtonDropdown selectOption={onSelectOption} options={dropdownMenu}>
               <Button size="small" hierarchy="secondary" leftIcon="navigation" iconColor="primary01" />
             </ButtonDropdown>
             {currentUser?.username !== data.profileOverview?.username && (
@@ -130,6 +143,12 @@ export const ProfileHeader = ({ urlData, currentUser }) => {
         username={data.profileOverview?.username}
         profilePicture={data.profileOverview?.profile_picture_url}
         tal_domain={void 0}
+      />
+      <EditOverviewModalV2
+        show={isEditMode}
+        hide={() => setIsEditMode(false)}
+        profile={data.profileOverview}
+        username={data.profileOverview.username}
       />
     </>
   );

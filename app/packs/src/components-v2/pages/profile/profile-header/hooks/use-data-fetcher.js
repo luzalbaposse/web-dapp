@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { talentsService } from "src/api/talents";
 import { ToastBody } from "src/components/design_system/toasts";
