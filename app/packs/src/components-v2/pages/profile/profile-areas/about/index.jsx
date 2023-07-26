@@ -32,7 +32,7 @@ export const About = ({ currentUser, urlData }) => {
     <Container>
       <OldAbout profile={aboutData} />
       <OldJourney talent={aboutData} canUpdate={aboutData.profileUsername === currentUser?.username} />
-      {!!currentUser?.id && (<Connections userId={currentUser?.id} talent={supportData} canUpdate={false} />)}
+      {!!currentUser?.id && <Connections userId={currentUser?.id} talent={supportData} canUpdate={false} />}
     </Container>
   );
 };

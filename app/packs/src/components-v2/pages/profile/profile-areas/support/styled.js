@@ -6,3 +6,7 @@ export const SpinnerContainer = styled.div`
   justify-content: center;
   padding: 24px;
 `;
+
+export const TokenComponentContainer = styled.div`
+  padding: 0 24px 24px;
+`;

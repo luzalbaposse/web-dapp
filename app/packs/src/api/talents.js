@@ -14,6 +14,10 @@ const getAbout = username => axios.get(`/api/v1/talents/about?id=${username}`);
 
 const getSupportData = username => axios.get(`/api/v1/talents/support?id=${username}`);
 
+const sendSubscribeRequest = username => axios.post(`/api/v1/subscriptions`, { user_id: username });
+
+const unsubscribe = username => axios.delete(`/api/v1/subscriptions?user_id=${username}`);
+
 export const talentsService = {
   getTalent,
   getCareerUpdates,
@@ -21,5 +25,7 @@ export const talentsService = {
   getProfileOverview,
   getFollowers,
   getAbout,
-  getSupportData
+  getSupportData,
+  sendSubscribeRequest,
+  unsubscribe
 };

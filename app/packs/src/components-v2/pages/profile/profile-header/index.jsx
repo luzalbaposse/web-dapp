@@ -1,5 +1,5 @@
 import React, { useMemo, useCallback, useState } from "react";
-import { noop } from "lodash";
+import { toast } from "react-toastify";
 import {
   Avatar,
   Button,
@@ -24,10 +24,12 @@ import {
   TopRow,
   UserInfo
 } from "./styled";
+import { talentsService } from "src/api";
 import { useDataFetcher } from "./hooks/use-data-fetcher";
 import { useImpersonate } from "./hooks/use-impersonate";
+import { ToastBody } from "src/components/design_system/toasts";
 
-export const ProfileHeader = ({ urlData, currentUser }) => {
+export const ProfileHeader = ({ urlData, currentUser, isMobile }) => {
   const data = useDataFetcher(urlData);
   const { impersonateUser } = useImpersonate();
   const qrCodeModalState = useModal();
@@ -60,6 +62,28 @@ export const ProfileHeader = ({ urlData, currentUser }) => {
     },
     [urlData.profileUsername]
   );
+  const subscribe = useCallback(() => {
+    talentsService
+      .sendSubscribeRequest(data.profileOverview?.username)
+      .then(() => {
+        toast.success(<ToastBody heading="Subscription request sent" />);
+        window.location.reload();
+      })
+      .catch(() => {
+        toast.error(<ToastBody heading="Something went wrong" />);
+      });
+  }, [data.profileOverview?.username]);
+  const unsubscribe = useCallback(() => {
+    talentsService
+      .unsubscribe(data.profileOverview?.username)
+      .then(() => {
+        toast.success(<ToastBody heading="Unsiubscribed successfulyy" />);
+        window.location.reload();
+      })
+      .catch(() => {
+        toast.error(<ToastBody heading="Something went wrong" />);
+      });
+  }, [data.profileOverview?.username]);
   return !data.profileOverview ? (
     <SpinnerContainer>
       <Spinner color="primary" size={48} />
@@ -74,17 +98,29 @@ export const ProfileHeader = ({ urlData, currentUser }) => {
             url={data.profileOverview?.profile_picture_url}
             profileURL={`/u/${data.profileOverview?.username}`}
           />
-          <Actions>
-            <ButtonDropdown selectOption={onSelectOption} options={dropdownMenu}>
-              <Button size="small" hierarchy="secondary" leftIcon="navigation" iconColor="primary01" />
-            </ButtonDropdown>
-            {currentUser?.username !== data.profileOverview?.username && (
-              <>
-                <Button size="small" hierarchy="secondary" leftIcon="email" iconColor="primary01" />
-                <Button size="small" hierarchy="secondary" text="Subscribe" />
-              </>
-            )}
-          </Actions>
+          {isMobile && (
+            <Actions>
+              <ButtonDropdown selectOption={onSelectOption} options={dropdownMenu}>
+                <Button size="small" hierarchy="secondary" leftIcon="navigation" iconColor="primary01" />
+              </ButtonDropdown>
+              {currentUser?.username !== data.profileOverview?.username && (
+                <>
+                  <Button
+                    size="small"
+                    hierarchy="secondary"
+                    leftIcon="email"
+                    iconColor="primary01"
+                    href={`/messages?user=${data.profileOverview?.username}`}
+                  />
+                  {data.profileOverview?.subscribing_status === "unsubscribed" ? (
+                    <Button size="small" hierarchy="secondary" text="Subscribe" onClick={subscribe} />
+                  ) : (
+                    <Button size="small" hierarchy="secondary" text="Unsubscribe" onClick={unsubscribe} />
+                  )}
+                </>
+              )}
+            </Actions>
+          )}
         </TopRow>
         <UserInfo>
           <Typography specs={{ type: "bold", variant: "h5" }} color="primary01">
@@ -121,22 +157,34 @@ export const ProfileHeader = ({ urlData, currentUser }) => {
             <>
               <MembersList membersImages={data.supporters.talents.map(supporter => supporter.profile_picture_url)} />
               <Typography specs={{ type: "small", variant: "label3" }} color="primary04">
-                Supported by {data.supporters.pagination.total} other connections.
+                Mutually supported by {data.supporters.pagination.total}.
               </Typography>
             </>
           )}
         </MembersContainer>
-        <DesktopActions>
-          <ButtonDropdown selectOption={onSelectOption} options={dropdownMenu}>
-            <Button size="small" hierarchy="secondary" leftIcon="navigation" iconColor="primary01" />
-          </ButtonDropdown>
-          {currentUser?.username !== data.profileOverview?.username && (
-            <>
-              <Button size="small" hierarchy="secondary" leftIcon="email" iconColor="primary01" />
-              <Button size="small" hierarchy="secondary" text="Subscribe" />
-            </>
-          )}
-        </DesktopActions>
+        {!isMobile && (
+          <DesktopActions>
+            <ButtonDropdown selectOption={onSelectOption} options={dropdownMenu}>
+              <Button size="small" hierarchy="secondary" leftIcon="navigation" iconColor="primary01" />
+            </ButtonDropdown>
+            {currentUser?.username !== data.profileOverview?.username && (
+              <>
+                <Button
+                  size="small"
+                  hierarchy="secondary"
+                  leftIcon="email"
+                  iconColor="primary01"
+                  href={`/messages?user=${data.profileOverview?.username}`}
+                />
+                {data.profileOverview?.subscribing_status === "unsubscribed" ? (
+                  <Button size="small" hierarchy="secondary" text="Subscribe" onClick={subscribe} />
+                ) : (
+                  <Button size="small" hierarchy="secondary" text="Unsubscribe" onClick={unsubscribe} />
+                )}
+              </>
+            )}
+          </DesktopActions>
+        )}
       </Container>
       <QRCodeModal
         modalState={qrCodeModalState}

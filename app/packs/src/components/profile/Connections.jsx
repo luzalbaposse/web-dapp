@@ -25,7 +25,6 @@ import Dropdown from "react-bootstrap/Dropdown";
 import cx from "classnames";
 
 const ConnectionTable = ({ connections, mode, mobile }) => {
-
   const formattedConnectionType = connection_type => {
     return {
       sponsor: "Sponsor",
@@ -46,7 +45,6 @@ const ConnectionTable = ({ connections, mode, mobile }) => {
           <Caption bold text="Talent" />
         </Table.Th>
         <Table.Th className={cx(mobile ? "text-right" : "")}>
-
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <Caption bold text="Connection" />
           </div>

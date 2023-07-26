@@ -1,4 +1,4 @@
-import { desktopStyles, mobileStyles } from "@talentprotocol/design-system";
+import { mobileStyles } from "@talentprotocol/design-system";
 import styled, { css } from "styled-components";
 
 export const SpinnerContainer = styled.section`
@@ -14,9 +14,12 @@ export const SpinnerContainer = styled.section`
 export const Container = styled.section`
   display: flex;
   flex-direction: column;
-  margin: 0 16px;
   padding-top: 16px;
   gap: 8px;
+
+  ${mobileStyles(css`
+    margin: 0 16px;
+  `)}
 `;
 
 export const TopRow = styled.div`
@@ -29,10 +32,6 @@ export const Actions = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 8px;
-
-  ${desktopStyles(css`
-    display: none;
-  `)}
 `;
 
 export const UserInfo = styled.div`
@@ -64,8 +63,4 @@ export const DesktopActions = styled.div`
   justify-content: flex-start;
   padding-top: 6px;
   gap: 8px;
-
-  ${mobileStyles(css`
-    display: none;
-  `)}
 `;
