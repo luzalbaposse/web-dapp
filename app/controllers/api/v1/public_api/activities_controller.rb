@@ -26,7 +26,7 @@ class API::V1::PublicAPI::ActivitiesController < API::V1::PublicAPI::APIControll
   private
 
   def activity_params
-    params.permit(:organization, :type)
+    params.permit(:organization, types: [])
   end
 
   def organization_param
@@ -40,13 +40,13 @@ class API::V1::PublicAPI::ActivitiesController < API::V1::PublicAPI::APIControll
   def total_activities
     return @total_activities if defined?(@total_activities)
 
-    @total_activities = type_param ? current_user.activity_feed.activities_of_type(type_param) : current_user.activity_feed.all_activities
+    @total_activities = types_param ? current_user.activity_feed.activities_of_types(types_param) : current_user.activity_feed.all_activities
     @total_activities = @total_activities.joins(:origin_user).where(origin_user: {id: organization_user_ids}) if organization_param
 
     @total_activities
   end
 
-  def type_param
-    @type_param ||= activity_params[:type].presence
+  def types_param
+    @type_param ||= activity_params[:types].presence
   end
 end

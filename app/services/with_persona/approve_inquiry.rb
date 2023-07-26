@@ -10,7 +10,7 @@ module WithPersona
 
     def call
       if names_match?
-        talent.update(verified: true)
+        Users::Verify.new(user: talent.user).call
         refresh_user_quests
       else
         with_persona_id = talent.with_persona_id

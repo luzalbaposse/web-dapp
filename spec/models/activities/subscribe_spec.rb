@@ -7,7 +7,7 @@ RSpec.describe Activities::Subscribe do
 
   describe ".generate_content" do
     it "returns the correct content" do
-      expected_content = "@origin just started subscribing to @target."
+      expected_content = "@origin subscribed to @target."
       expect(described_class.generate_content(nil, nil)).to eq(expected_content)
     end
   end
@@ -23,8 +23,8 @@ RSpec.describe Activities::Subscribe do
     let(:target_user) { create(:user, display_name: "Target User") }
 
     it "returns the message with the user names" do
-      activity.message = "@origin just started subscribing to @target."
-      expected_message = "Origin User just started subscribing to Target User."
+      activity.message = "@origin subscribed to @target."
+      expected_message = "Origin User subscribed to Target User."
       expect(activity.message_with_names).to eq(expected_message)
     end
   end

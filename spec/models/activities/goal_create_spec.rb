@@ -6,7 +6,7 @@ RSpec.describe Activities::GoalCreate do
 
   describe ".generate_content" do
     it "returns the correct content" do
-      expected_content = "@origin just added a new career goal!"
+      expected_content = "@origin added a new career goal!"
       expect(described_class.generate_content(nil, nil)).to eq(expected_content)
     end
   end

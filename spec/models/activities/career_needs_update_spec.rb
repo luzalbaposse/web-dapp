@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Activities::CareerUpdate do
+RSpec.describe Activities::CareerNeedsUpdate do
   let(:activity) { described_class.new }
 
   describe ".generate_content" do
@@ -12,13 +12,6 @@ RSpec.describe Activities::CareerUpdate do
   describe ".default_global_scope" do
     it "returns true" do
       expect(described_class.default_global_scope).to be true
-    end
-  end
-
-  describe "#message_with_names" do
-    it "returns the message as is" do
-      activity.message = "A sample message."
-      expect(activity.message_with_names).to eq("A sample message.")
     end
   end
 end

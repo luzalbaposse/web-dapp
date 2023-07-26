@@ -32,9 +32,9 @@ module Goals
 
     def goal_create_message(goal)
       if goal.title.present? && goal.title.length > 0
-        "@origin has just made progress on their journey by adding a new goal: '#{goal.title}'."
+        "@origin added a new goal: '#{goal.title}'."
       else
-        "@origin has just made progress on their journey by adding a new goal."
+        "@origin added a new goal."
       end
     end
 

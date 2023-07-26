@@ -6,7 +6,7 @@ RSpec.describe Activities::ProfileComplete do
 
   describe ".generate_content" do
     it "returns the correct content" do
-      expected_content = "@origin has joined Talent Protocol."
+      expected_content = "@origin joined Talent Protocol."
       expect(described_class.generate_content(nil, nil)).to eq(expected_content)
     end
   end
@@ -21,8 +21,8 @@ RSpec.describe Activities::ProfileComplete do
     let(:origin_user) { create(:user, display_name: "Origin User") }
 
     it "returns the message with the user name" do
-      activity.message = "@origin has joined Talent Protocol."
-      expected_message = "Origin User has joined Talent Protocol."
+      activity.message = "@origin joined Talent Protocol."
+      expected_message = "Origin User joined Talent Protocol."
       expect(activity.message_with_names).to eq(expected_message)
     end
   end
