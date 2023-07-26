@@ -7,7 +7,7 @@ RSpec.describe Activities::Stake do
 
   describe ".generate_content" do
     it "returns the correct content" do
-      expected_content = "@origin just staked on @target."
+      expected_content = "@origin staked on @target."
       expect(described_class.generate_content(nil, nil)).to eq(expected_content)
     end
   end
@@ -23,8 +23,8 @@ RSpec.describe Activities::Stake do
     let(:target_user) { create(:user, display_name: "Target User") }
 
     it "returns the message with the user names" do
-      activity.message = "@origin just staked on @target."
-      expected_message = "Origin User just staked on Target User."
+      activity.message = "@origin staked on @target."
+      expected_message = "Origin User staked on Target User."
       expect(activity.message_with_names).to eq(expected_message)
     end
   end

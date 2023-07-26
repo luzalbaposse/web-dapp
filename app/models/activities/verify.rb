@@ -1,19 +1,15 @@
 module Activities
-  class CareerUpdate < Activity
+  class Verify < Activity
     store :content, accessors: %i[
       message
     ], coder: JSON
 
     def self.generate_content(_, _)
-      nil
+      "@origin is now a verified user."
     end
 
     def self.default_global_scope
       true
-    end
-
-    def message_with_names
-      message
     end
   end
 end

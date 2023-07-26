@@ -40,22 +40,4 @@ RSpec.describe ActivityIngestJob, type: :job do
       clear_performed_jobs
     end
   end
-
-  describe "with Milestones" do
-    let(:provided_content) { "Provided content for activity." }
-    subject(:job) { described_class.perform_later("milestone_create", provided_content, origin_user.id, target_user.id) }
-
-    it "uses provided content over generated content" do
-      activity_class = "Activities::MilestoneCreate".constantize
-      activity = activity_class.new
-      activity.message = provided_content
-      activity.origin_user_id = origin_user.id
-      activity.target_user_id = target_user.id
-      activity.global = activity_class.default_global_scope
-
-      expect { perform_enqueued_jobs { job } }
-        .to change { Activities::MilestoneCreate.count }.by(1)
-      expect(Activities::MilestoneCreate.last.message).to eq(provided_content)
-    end
-  end
 end

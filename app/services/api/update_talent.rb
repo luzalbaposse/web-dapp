@@ -140,8 +140,8 @@ class API::UpdateTalent
       talent.open_to_job_offers = params[:open_to_job_offers]
     end
 
-    if params.key?(:verified) && user.admin?
-      talent.verified = params[:verified]
+    if params.key?(:verified) && user.admin? && !talent.verified
+      Users::Verify.new(user: talent.user).call
     end
 
     if params.key?(:with_persona_id)

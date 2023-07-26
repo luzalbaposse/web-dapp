@@ -15,7 +15,7 @@ import Addresses from "./addresses.json";
 import { ipfsToURL } from "./utils";
 import { externalGet } from "src/utils/requests";
 import { getWalletClient, getPublicClient } from "@wagmi/core";
-import { formatUnits, parseUnits } from "viem";
+import { formatUnits, parseUnits, parseAbiItem } from "viem";
 import { toast } from "react-toastify";
 import { ToastBody } from "src/components/design_system/toasts";
 
@@ -230,11 +230,8 @@ class OnChain {
   }
 
   async createTalent(name, symbol) {
-    const { hash } = await this.writeToContract(await this.factoryConfig(), "createTalent", [
-      this.account,
-      name,
-      symbol
-    ]);
+    const factoryConfig = await this.factoryConfig();
+    const { hash, client } = await this.writeToContract(factoryConfig, "createTalent", [this.account, name, symbol]);
 
     if (!hash) {
       return false;
@@ -242,11 +239,13 @@ class OnChain {
 
     const receipt = await waitForTransaction({ hash });
 
-    const event = receipt.events?.find(e => {
-      return e.event === "TalentCreated";
+    const logs = await client.getLogs({
+      address: factoryConfig.address,
+      event: parseAbiItem("event TalentCreated(address indexed talent, address indexed token)"),
+      blockHash: receipt.blockHash
     });
 
-    return event;
+    return logs?.find(e => e.eventName === "TalentCreated");
   }
 
   async calculateEstimatedReturns(_account) {

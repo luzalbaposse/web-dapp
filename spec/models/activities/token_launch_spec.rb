@@ -8,7 +8,7 @@ RSpec.describe Activities::TokenLaunch do
     it "returns the correct content" do
       origin_user.talent.talent_token.ticker = "TKR"
       origin_user.talent.talent_token.save!
-      expected_content = "@origin just launched their token $TKR."
+      expected_content = "@origin launched their token $TKR."
       expect(described_class.generate_content(origin_user.id, nil)).to eq(expected_content)
     end
   end
@@ -23,8 +23,8 @@ RSpec.describe Activities::TokenLaunch do
     it "returns the message with the user name" do
       origin_user.display_name = "Test User"
       origin_user.save!
-      activity.message = "@origin just launched their token."
-      expected_message = "Test User just launched their token."
+      activity.message = "@origin launched their token."
+      expected_message = "Test User launched their token."
       expect(activity.message_with_names).to eq(expected_message)
     end
   end

@@ -6,7 +6,7 @@ module Activities
 
     def self.generate_content(_, _)
       # @origin & @target are replaced with the names of the users on the frontend
-      "@origin just started subscribing to @target."
+      "@origin subscribed to @target."
     end
 
     def self.default_global_scope

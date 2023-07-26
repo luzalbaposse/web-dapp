@@ -19,6 +19,7 @@ module Users
         create_invite(user)
         create_subscription(invite, user)
         create_activity_feed(user)
+        create_profile_complete_activity(user.id)
         create_organization_membership(invite, user)
 
         @result[:user] = user
@@ -98,7 +99,10 @@ module Users
         tag = Tag.find_or_create_by(description: description.downcase)
         UserTag.find_or_create_by!(user: user, tag: tag)
       end
-      CareerNeeds::Upsert.new(career_goal: talent.career_goal, titles: params[:career_needs]).call
+
+      if params[:career_needs]&.length&.positive?
+        CareerNeeds::Upsert.new(career_goal: talent.career_goal, titles: params[:career_needs]).call
+      end
     end
 
     def create_talent_token(user)
@@ -145,6 +149,10 @@ module Users
 
     def update_profile_completeness(user)
       Users::UpdateProfileCompleteness.new(user: user).call
+    end
+
+    def create_profile_complete_activity(user_id)
+      ActivityIngestJob.perform_later("profile_complete", nil, user_id)
     end
   end
 end

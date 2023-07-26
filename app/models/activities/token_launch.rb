@@ -8,7 +8,7 @@ module Activities
       origin_user = User.find(origin_user_id)
 
       # @origin is replaced with the name of the user on the frontend
-      "@origin just launched their token $#{origin_user.talent.talent_token.ticker}."
+      "@origin launched their token $#{origin_user.talent.talent_token.ticker}."
     end
 
     def self.default_global_scope

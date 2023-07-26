@@ -25,9 +25,9 @@ module Goals
 
     def goal_update_message(goal)
       if goal.title.present? && goal.title.length > 0
-        "@origin has just made progress on their journey by updating their goal \"#{goal.title}\"."
+        "@origin updated the goal \"#{goal.title}\" to \"#{goal.progress}\"."
       else
-        "@origin has just made progress on their journey by updating their goals."
+        "@origin updated their goals."
       end
     end
 
