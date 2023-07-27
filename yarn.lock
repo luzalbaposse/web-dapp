@@ -2892,10 +2892,10 @@
   dependencies:
     mini-svg-data-uri "^1.2.3"
 
-"@talentprotocol/design-system@^0.1.32":
-  version "0.1.32"
-  resolved "https://registry.yarnpkg.com/@talentprotocol/design-system/-/design-system-0.1.32.tgz#704a1a9e2efd9ba5b613fe07ff04792cbdeeabc0"
-  integrity sha512-RrYKJ3HTo+xtW+q8E37ohXtZ2gC4719UuGs2lNq76K8HdlBE5CpR0RnNvC5FkmGA7CZ5aha2rU98m0bXLzSoDg==
+"@talentprotocol/design-system@^0.1.34":
+  version "0.1.34"
+  resolved "https://registry.yarnpkg.com/@talentprotocol/design-system/-/design-system-0.1.34.tgz#41cf07b90333c08fa98ace843d132898faa94914"
+  integrity sha512-Q1SHQpCkPFMzfx6UM1bDtIvzRMLhU84f5J5XDe3cNEywk0T7KomSHdIK5Lbwd6mFEx0eBoS4QGbXKeTt0NGwYQ==
 
 "@tanstack/query-core@4.29.17":
   version "4.29.17"
@@ -9908,10 +9908,10 @@ react-linkify-it@^1.0.4:
   resolved "https://registry.yarnpkg.com/react-linkify-it/-/react-linkify-it-1.0.4.tgz#58fd2bb63763f1dc888019d9b82339af8d600e93"
   integrity sha512-/XNtL2DNzhjBu60aUZ119uUBsV7tWUYcQjIU/Tti6B29h7QR1I+0Q/u84vUKfT0BIEeHbe41KgvkufKBxfNInw==
 
-react-on-rails@12.2.0:
-  version "12.2.0"
-  resolved "https://registry.yarnpkg.com/react-on-rails/-/react-on-rails-12.2.0.tgz#289d3752f695be7a9e71c8075a2601029e1ac71e"
-  integrity sha512-ev51+38S/CcivIE9PU7kGPkt/ckVaIbZbUKqfXR7BcM5V45vl0NUs1O0tjfT/XVggz7MWV2DA+My2lRjAPIeJA==
+react-on-rails@^13.3.5:
+  version "13.3.5"
+  resolved "https://registry.yarnpkg.com/react-on-rails/-/react-on-rails-13.3.5.tgz#7ad06ed1343861927338f77634ce757b683c6a68"
+  integrity sha512-3aAfuRaeEfPba0BpuoYv8KFczlWPUuLPXl8lvdZeVF9Y83gofsll5UPKRLk74y5fWK3a6H/3WUlOkjF4zQz+LQ==
   dependencies:
     "@babel/runtime-corejs3" "^7.12.5"
     concurrently "^5.1.0"

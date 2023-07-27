@@ -163,7 +163,7 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile }) => {
             </>
           ) : (
             <Typography specs={{ type: "small", variant: "label3" }} color="primary04">
-              None of your connections is supporting {data.supporters?.pagination?.total}.
+              None of your connections is supporting {data.profileOverview?.name}.
             </Typography>
           )}
         </MembersContainer>
