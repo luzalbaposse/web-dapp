@@ -132,8 +132,18 @@ class API::TalentBlueprint < Blueprinter::Base
   end
 
   view :support do
+    field :username
+
+    field :name do |user, _options|
+      user.name
+    end
+
     field :total_supply do |user, options|
       user.talent&.total_supply
+    end
+
+    field :max_supply do
+      Talent.max_supply.to_s
     end
 
     field :supporters_count do |user, options|

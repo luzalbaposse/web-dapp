@@ -10,10 +10,10 @@ export const StakingModel = ({ profile, isCurrentUserProfile, currentUserId, rai
 
   const text = useMemo(() => {
     if (reachedMaxSupply) {
-      return `Stake to vouch for someone you truly believe in. Currenly not available because ${profile.user.name} has reached their max supply.`;
+      return `Stake to vouch for someone you truly believe in. Currenly not available because ${profile.name} has reached their max supply.`;
     }
     if (tokenLaunched) {
-      return `Stake to vouch for someone you truly believe in. Both you and ${profile.user.name} will earn interest in TAL for the amount staked`;
+      return `Stake to vouch for someone you truly believe in. Both you and ${profile.name} will earn interest in TAL for the amount staked`;
     } else {
       return "Stake to vouch for someone you truly believe in. Currently only available for users that launched their own Talent Token.";
     }
@@ -27,9 +27,9 @@ export const StakingModel = ({ profile, isCurrentUserProfile, currentUserId, rai
           tokenAddress={profile.talent_token.contract_id}
           tokenId={profile.talent_token.id}
           userId={currentUserId}
-          userUsername={profile.user.username}
+          userUsername={profile.username}
           tokenChainId={profile.talent_token.chain_id}
-          talentName={profile.user.name}
+          talentName={profile.name}
           ticker={profile.talent_token.ticker}
           talentIsFromCurrentUser={isCurrentUserProfile}
           railsContext={railsContext}
