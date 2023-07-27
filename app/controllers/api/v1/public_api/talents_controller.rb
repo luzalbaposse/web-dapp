@@ -68,7 +68,7 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
   end
 
   def following
-    users = if downcase_id
+    users = if downcase_id&.length&.positive?
       current_user.following_user_followers(user.id)
     else
       current_user.following
