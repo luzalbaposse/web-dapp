@@ -6,6 +6,6 @@ class SubscriptionAcceptedNotification < BaseNotification
     if: :should_deliver_immediate_email?
 
   def url
-    user_support_url(username: source.username)
+    user_url(username: source.username)
   end
 end
