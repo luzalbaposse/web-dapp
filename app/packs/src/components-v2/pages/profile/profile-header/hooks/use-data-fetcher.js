@@ -17,7 +17,6 @@ export const useDataFetcher = urlData => {
         console.error(err);
         toast.error(<ToastBody heading={"Profile not found"} />);
         setTimeout(() => {
-          debugger;
           window.location.href = "/home";
         }, 500);
       });

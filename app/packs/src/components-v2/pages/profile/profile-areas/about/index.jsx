@@ -31,7 +31,7 @@ export const About = ({ currentUser, urlData }) => {
   ) : (
     <Container>
       <OldAbout profile={aboutData} />
-      <OldJourney talent={aboutData} canUpdate={aboutData.username === currentUser?.username} />
+      <OldJourney talent={aboutData} canUpdate={aboutData?.username === currentUser?.username} />
       {!!currentUser?.id && <Connections userId={currentUser?.id} talent={supportData} canUpdate={false} />}
     </Container>
   );

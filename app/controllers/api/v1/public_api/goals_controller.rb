@@ -3,7 +3,7 @@ class API::V1::PublicAPI::GoalsController < API::V1::PublicAPI::APIController
     goals = Goal.where(career_goal: user.talent.career_goal)
 
     pagy, page_goals = pagy_uuid_cursor(
-      goals,
+      goals.includes(:goal_images),
       before: cursor,
       items: per_page,
       order: {created_at: :desc, uuid: :desc}

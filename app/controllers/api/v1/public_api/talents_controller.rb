@@ -1,6 +1,6 @@
 class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
   before_action :internal_only, only: [:following, :overview]
-  before_action :authenticated_only, only: [:following, :overview]
+  before_action :authenticated_only, only: [:following]
 
   def show
     response_body = {
