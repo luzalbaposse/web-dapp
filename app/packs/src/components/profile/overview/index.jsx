@@ -462,7 +462,7 @@ const Overview = ({
                           className="mr-2"
                           type="primary-default"
                           text="Support"
-                          onClick={() => window.location.replace(`/u/${user.username}/support`)}
+                          onClick={() => window.location.replace(`/u/${user.username}?tab=support`)}
                         />
                         <Button
                           className="mr-2"
@@ -495,12 +495,12 @@ const Overview = ({
                             type="primary-default"
                             size="big"
                             text="Support"
-                            onClick={() => window.location.replace(`/u/${user.username}/support`)}
+                            onClick={() => window.location.replace(`/u/${user.username}?tab=support`)}
                           />
                         )}
                         {profileSubdomain && (
                           <a
-                            href={`https://beta.talentprotocol.com/join/${user.username}/support`}
+                            href={`https://beta.talentprotocol.com/join/${user.username}?tab=support`}
                             className="button-link"
                             target="_blank"
                           >
@@ -650,7 +650,7 @@ const Overview = ({
                           type="primary-default"
                           size="big"
                           text="Support"
-                          onClick={() => window.location.replace(`/u/${user.username}/support`)}
+                          onClick={() => window.location.replace(`/u/${user.username}?tab=support`)}
                         />
                         <Button
                           className="mr-2"
@@ -684,12 +684,12 @@ const Overview = ({
                             type="primary-default"
                             size="big"
                             text="Support"
-                            onClick={() => window.location.replace(`/u/${user.username}/support`)}
+                            onClick={() => window.location.replace(`/u/${user.username}?tab=support`)}
                           />
                         )}
                         {profileSubdomain && (
                           <a
-                            href={`https://beta.talentprotocol.com/join/${user.username}/support`}
+                            href={`https://beta.talentprotocol.com/join/${user.username}?tab=support`}
                             className="button-link"
                             target="_blank"
                           >

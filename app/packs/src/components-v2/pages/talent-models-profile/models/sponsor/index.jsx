@@ -16,8 +16,8 @@ export const SponsorModel = ({ isCurrentUserProfile, profile, railsContext }) =>
           Sponsorship
         </Typography>
         <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
-          Help {profile.user.name} grow by sending funds directly to their wallet. You can revoke your sponsorship
-          before {profile.user.name} claims it.
+          Help {profile.name} grow by sending funds directly to their wallet. You can revoke your sponsorship before{" "}
+          {profile.name} claims it.
         </Typography>
         <Button
           hierarchy="primary"

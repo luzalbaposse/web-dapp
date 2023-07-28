@@ -113,5 +113,19 @@ module PublicAPI
         }
       }
     }
+
+    GOAL_IMAGE_PROPERTIES = {
+      image_url: {type: :string, description: "The url of the goal image"}
+    }
+
+    GOAL_PROPERTIES = {
+      title: {type: :string, description: "The title of the goal"},
+      description: {type: :string, description: "The description of the goal", nullable: true},
+      link: {type: :string, description: "The link of the goal", nullable: true},
+      progress: {type: :string, description: "The progress of the goal", nullable: true},
+      created_at: {type: :string, format: :datetime, description: "The timestamp of the goal creation", nullable: true},
+      due_date: {type: :string, format: :datetime, description: "The timestamp of the goal due date", nullable: true},
+      goal_images: {type: :array, items: {type: :object, properties: GOAL_IMAGE_PROPERTIES}}
+    }
   end
 end

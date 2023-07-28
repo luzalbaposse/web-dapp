@@ -1,35 +1,10 @@
-<% if @talent.present? %>
-  <% content_for :meta_title, "#{@talent["user"]["username"]} | #{DEFAULT_META["meta_product_name"]}" %>
-  <% if @talent["headline"].present? %>
-    <% content_for :meta_description, @talent["headline"] %>
+<% if current_acting_user.nil? %>
+    <%= react_component("LoggedOutTopBar", props:
+      {
+      }, prerender: false)
+    %>
   <% end %>
-  <% if @talent["profile_picture_url"].present? %>
-    <% content_for :meta_image, @talent["profile_picture_url"] %>
-    <% content_for :meta_card_type, "summary" %>
-  <% end %>
-<% end %>
-
-<main class="main-content <%= tal_domain.present? ? "no-padding" : "" %>">
-  <div class="container-grid">
-    <% if current_user.nil? && tal_domain.nil? %>
-      <%= react_component("LoggedOutTopBar", props:
-        {
-        }, prerender: false)
-      %>
-    <% end %>
-
-    <% if @talent.present? %>
-      <%= react_component(
-        "ProfileShow",
-        props: {
-          profileSubdomain: tal_domain.present?,
-          withPersonaRequest: @with_persona_request
-        },
-        prerender: false
-      ) %>
-    <% end %>
-  </div>
-</main>
-<% if tal_domain.present? %>
-  <%= react_component("SubdomainFooter", props: { displayName: @talent["user"]["name"], username: @talent["user"]["username"] }, prerender: false) %>
-<% end  %>
+<%= react_component("ProfilePage",
+    props: {},
+    prerender: false)
+%>

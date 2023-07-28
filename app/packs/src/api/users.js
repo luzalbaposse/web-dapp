@@ -52,7 +52,7 @@ const finishOnboarding = user => {
   );
 };
 
-const sendConfirmationEmail = username => axios.post(`users/${username}/send_confirmation_email.json`);
+const sendConfirmationEmail = username => axios.post(`/users/${username}/send_confirmation_email.json`);
 
 const sendResetPasswordEmail = email => axios.post("/passwords", { email });
 

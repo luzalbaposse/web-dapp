@@ -413,6 +413,25 @@ class User < ApplicationRecord
     ).count
   end
 
+  def following
+    User
+      .joins("INNER JOIN connections ON users.id = connections.connected_user_id")
+      .where(connections: {user_id: id})
+      .where("connections.connection_types && ?", "{subscribing,staking,sponsoring}")
+      .distinct
+  end
+
+  def following_user_followers(user_id)
+    User
+      .joins("INNER JOIN connections AS c1 on users.id = c1.connected_user_id")
+      .joins("INNER JOIN connections AS c2 on users.id = c2.connected_user_id")
+      .where("c1.user_id = ?", id)
+      .where("c1.connection_types && ?", "{subscribing,staking,sponsoring}")
+      .where("c2.user_id = ?", user_id)
+      .where("c2.connection_types && ?", "{subscriber,staker,sponsor}")
+      .distinct
+  end
+
   private
 
   def email_and_password
