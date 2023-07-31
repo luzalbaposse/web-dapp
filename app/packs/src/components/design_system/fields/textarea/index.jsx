@@ -31,16 +31,13 @@ const TextArea = ({
     if (initialHeight === null) {
       setInitialHeight(Math.min(textAreaRef.current.scrollHeight, limit) + 6);
     } else if (value === "") {
-      setTextAreaHeight("inherit");
       setTextAreaHeight(`${initialHeight}px`);
-    } else {
-      setTextAreaHeight("inherit");
+    } else if (textAreaRef.current.clientHeight < textAreaRef.current.scrollHeight) {
       setTextAreaHeight(`${Math.min(textAreaRef.current.scrollHeight, limit) + 6}px`);
     }
   }, [value]);
 
   const onChangeHandler = e => {
-    setTextAreaHeight("auto");
     if (onChange) onChange(e);
   };
 
