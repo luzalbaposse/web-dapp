@@ -43,5 +43,9 @@ export const DesktopColumn = styled.div`
     border: none;
     flex-direction: column;
     overflow-y: auto;
+
+    ::-webkit-scrollbar{
+        display: none;
+      }
   }
 `;
