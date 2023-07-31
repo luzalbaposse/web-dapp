@@ -34,8 +34,6 @@ export const ProfilePage = ({ isMobile, railsContext }) => {
       </DesktopColumn>
       <DesktopColumn>
         <RecommendedBuildersWidgetMini username={currentUser?.username} />
-        <RecommendedBuildersWidgetMini username={currentUser?.username} />
-        <RecommendedBuildersWidgetMini username={currentUser?.username} />
         <RecommendedTeamsWidgetMini />
       </DesktopColumn>
     </DesktopPageContainer>
