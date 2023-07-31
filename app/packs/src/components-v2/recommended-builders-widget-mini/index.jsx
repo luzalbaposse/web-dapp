@@ -44,7 +44,7 @@ export const RecommendedBuildersWidgetMini = ({ username }) => {
                 occupation={talent.occupation}
                 url={talent.profile_picture_url}
                 profileURL={`/u/${talent.username}`}
-                ellipsisAt={200}
+                ellipsisAt={180}
               />
               <SupportButtonContainer>
                 <Button hierarchy="primary" size="small" text="Support" href={`/u/${talent.username}?tab=support`} />
