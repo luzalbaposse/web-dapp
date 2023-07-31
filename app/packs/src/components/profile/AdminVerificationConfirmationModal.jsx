@@ -12,7 +12,7 @@ import { useWindowDimensionsHook } from "src/utils/window";
 
 const AdminVerificationConfirmationModal = ({ show, hide, talent, setProfile }) => {
   const { mobile } = useWindowDimensionsHook();
-  const user = talent;
+  const user = talent?.user;
 
   const verifyTalent = async () => {
     const params = {
