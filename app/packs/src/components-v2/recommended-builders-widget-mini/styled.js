@@ -9,7 +9,7 @@ export const Container = styled.section`
   ${desktopStyles(css`
     border: 1px solid ${buildColor("surfaceHover02")};
     border-radius: 24px;
-    padding-bottom: 30px;
+    padding-bottom: 16px;
   `)}
 `;
 
@@ -37,7 +37,11 @@ export const BuilderEntry = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  padding: 16px 0;
+  padding: 16px 0 0;
+
+  :nth-child(1) {
+    padding-top: 0;
+  }
 `;
 
 export const SupportButtonContainer = styled.div`

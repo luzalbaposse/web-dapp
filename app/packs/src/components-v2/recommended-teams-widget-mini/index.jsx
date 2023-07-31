@@ -38,7 +38,7 @@ export const RecommendedTeamsWidgetMini = ({}) => {
   return (
     <Container>
       <TitleContainer>
-        <Typography specs={{ variant: "h5", type: "bold" }}>Recommended Collectives</Typography>
+        <Typography specs={{ variant: "p1", type: "bold" }}>Recommended Collectives</Typography>
       </TitleContainer>
       <TeamsList>
         {collectives.map((collective, index) => (

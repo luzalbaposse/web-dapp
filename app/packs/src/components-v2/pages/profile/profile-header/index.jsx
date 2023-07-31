@@ -1,5 +1,4 @@
 import React, { useMemo, useCallback, useState } from "react";
-import { noop } from "lodash";
 import { toast } from "react-toastify";
 import {
   Avatar,
@@ -121,7 +120,7 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
               <ButtonDropdown selectOption={onSelectOption} options={dropdownMenu}>
                 <Button size="small" hierarchy="secondary" leftIcon="navigation" iconColor="primary01" />
               </ButtonDropdown>
-              {currentUser?.username !== data.profileOverview?.username && (
+              {currentUser?.username !== data.profileOverview?.username ? (
                 <>
                   <Button
                     size="small"
@@ -136,6 +135,8 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
                     <Button size="small" hierarchy="secondary" text="Unsubscribe" onClick={unsubscribe} />
                   )}
                 </>
+              ) : (
+                <Button size="small" hierarchy="secondary" text="Edit profile" onClick={() => onSelectOption("Edit")} />
               )}
             </Actions>
           )}
@@ -147,19 +148,20 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
           {data.profileOverview?.verified && <Icon name="verified-2" color="primary" size={18} />}
         </UserInfo>
         <TagContainer>
-          {currentUser?.username !== data.profileOverview?.username && (
-            <Tag
-              size="small"
-              color="primary"
-              label={
-                data.profileOverview?.subscribing_status.charAt(0).toUpperCase() +
-                data.profileOverview?.subscribing_status.slice(1)
-              }
-              backgroundColor="bg01"
-              borderColor="surfaceHover02"
-              textColor="primary02"
-            />
-          )}
+          {currentUser?.username !== data.profileOverview?.username &&
+            data.profileOverview?.subscribing_status !== "unsubscribed" && (
+              <Tag
+                size="small"
+                color="primary"
+                label={
+                  data.profileOverview?.subscribing_status.charAt(0).toUpperCase() +
+                  data.profileOverview?.subscribing_status.slice(1)
+                }
+                backgroundColor="bg01"
+                borderColor="surfaceHover02"
+                textColor="primary02"
+              />
+            )}
         </TagContainer>
         <Typography specs={{ type: "regular", variant: "p1" }} color="primary01">
           {data.profileOverview?.headline}
@@ -189,7 +191,7 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
             <ButtonDropdown selectOption={onSelectOption} options={dropdownMenu}>
               <Button size="small" hierarchy="secondary" leftIcon="navigation" iconColor="primary01" />
             </ButtonDropdown>
-            {currentUser?.username !== data.profileOverview?.username && (
+            {currentUser?.username !== data.profileOverview?.username ? (
               <>
                 <Button
                   size="small"
@@ -204,6 +206,13 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
                   <Button size="small" hierarchy="secondary" text="Unsubscribe" onClick={unsubscribe} />
                 )}
               </>
+            ) : (
+              <Button
+                size="small"
+                hierarchy="secondary"
+                text="Edit profile"
+                onClick={() => onSelectOption({ value: "Edit" })}
+              />
             )}
           </DesktopActions>
         )}
@@ -225,7 +234,7 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
         setShow={setShowApproveModal}
         hide={() => setShowApproveModal(false)}
         talent={data.profileOverview}
-        setProfile={noop}
+        setProfile={() => { window.location.reload() }}
         railsContext={railsContext}
       />
       <AdminVerificationConfirmationModal

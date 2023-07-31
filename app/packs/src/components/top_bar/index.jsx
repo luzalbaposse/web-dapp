@@ -295,7 +295,7 @@ export const TopBar = ({
   }
 
   return (
-    <div className="navbar-container" style={{ borderBottom: `1px solid ${buildColor("surfaceHover02")}`}}>
+    <div className="navbar-container" style={{ borderBottom: `1px solid ${buildColor("surfaceHover02")}` }}>
       <nav className={`navbar ${theme.mode()} d-flex justify-content-between align-items-center`}>
         <TransakDone show={transakDone} hide={() => setTransakDone(false)} />
         <a href="/" className="mr-6">

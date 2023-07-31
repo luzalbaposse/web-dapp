@@ -3,8 +3,7 @@ import ThemeContainer from "src/contexts/ThemeContext";
 import { H5 } from "src/components/design_system/typography";
 import { TalentThemeProvider, buildColor, Button } from "@talentprotocol/design-system";
 
-export const LoggedOutTopBar = ({ }) => {
-
+export const LoggedOutTopBar = ({}) => {
   return (
     <div className="navbar-container" style={{ borderBottom: `1px solid ${buildColor("surfaceHover02")}` }}>
       <nav className={`navbar d-flex`}>
