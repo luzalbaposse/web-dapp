@@ -48,6 +48,9 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
       if (!data.profileOverview?.verified) {
         menu.push({ value: "Verify", iconColor: "primary01", iconName: "check" });
       }
+      if (data.profileOverview?.profile_type === "waiting_for_approval") {
+        menu.push({ value: "Approve", iconColor: "primary01", iconName: "check-chat" });
+      }
     }
     if (currentUser?.username === urlData.profileUsername) {
       menu.push({ value: "Edit", iconColor: "primary01", iconName: "edit" });
