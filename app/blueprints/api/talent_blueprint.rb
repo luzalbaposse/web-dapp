@@ -109,6 +109,10 @@ class API::TalentBlueprint < Blueprinter::Base
   view :overview do
     include_view :normal
 
+    field :wallet_address do |user, _options|
+      user.wallet_id
+    end
+
     field :subscribing_status do |user, options|
       status = "unsubscribed"
       status = "subscribed" if options[:current_user_active_subscribing]&.include?(user.id)

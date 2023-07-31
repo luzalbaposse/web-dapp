@@ -12,7 +12,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
-  padding: 0 24px;
+  padding: 0 24px 24px;
 `;
 
 export const EmptyStateContainer = styled.div`

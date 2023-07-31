@@ -1,4 +1,5 @@
 import React, { useMemo, useCallback, useState } from "react";
+import { noop } from "lodash";
 import { toast } from "react-toastify";
 import {
   Avatar,
@@ -29,17 +30,22 @@ import { talentsService } from "src/api";
 import { useDataFetcher } from "./hooks/use-data-fetcher";
 import { useImpersonate } from "./hooks/use-impersonate";
 import { ToastBody } from "src/components/design_system/toasts";
+import ApprovalConfirmationModal from "src/components/profile/ApprovalConfirmationModal";
 
-export const ProfileHeader = ({ urlData, currentUser, isMobile }) => {
+export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) => {
   const data = useDataFetcher(urlData);
   const { impersonateUser } = useImpersonate();
   const qrCodeModalState = useModal();
   const [isEditMode, setIsEditMode] = useState(false);
+  const [showApproveModal, setShowApproveModal] = useState(false);
   const dropdownMenu = useMemo(() => {
     if (!currentUser) return [];
     const menu = [{ value: "Share", iconColor: "primary01", iconName: "share-2" }];
     if (currentUser?.admin) {
       menu.push({ value: "Impersonate", iconColor: "primary01", iconName: "user" });
+      if (!data.profileOverview?.verified) {
+        menu.push({ value: "Approve", iconColor: "primary01", iconName: "check" });
+      }
     }
     if (currentUser?.username === urlData.profileUsername) {
       menu.push({ value: "Edit", iconColor: "primary01", iconName: "edit" });
@@ -54,6 +60,9 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile }) => {
           return;
         case "Impersonate":
           impersonateUser(urlData.profileUsername);
+          return;
+        case "Approve":
+          setShowApproveModal(true);
           return;
         case "Share":
         default:
@@ -202,6 +211,14 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile }) => {
         hide={() => setIsEditMode(false)}
         profile={data.profileOverview}
         username={data.profileOverview.username}
+      />
+      <ApprovalConfirmationModal
+        show={showApproveModal}
+        setShow={setShowApproveModal}
+        hide={() => setShowApproveModal(false)}
+        talent={data.profileOverview}
+        setProfile={noop}
+        railsContext={railsContext}
       />
     </>
   );

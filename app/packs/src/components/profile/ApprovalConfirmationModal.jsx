@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState, useMemo } from "react";
 import Modal from "react-bootstrap/Modal";
-
 import { patch } from "src/utils/requests";
 import { OnChain } from "src/onchain";
 import { getAllChainOptions } from "src/onchain/utils";
@@ -21,7 +20,7 @@ const ApprovalConfirmationModal = ({ show, hide, talent, setProfile, railsContex
   const [firstLoading, setFirstLoading] = useState(true);
   const [isWhitelisted, setIsWhitelisted] = useState({});
 
-  const user = talent?.user;
+  const user = talent;
 
   const approveUser = async () => {
     const params = {
@@ -55,7 +54,7 @@ const ApprovalConfirmationModal = ({ show, hide, talent, setProfile, railsContex
       await chainAPI.switchChain(chainId);
     } else {
       setLoading(true);
-      const isWhitelisted = await chainAPI.whitelistAddress(user?.wallet_id);
+      const isWhitelisted = await chainAPI.whitelistAddress(user?.wallet_address);
       setLoading(false);
       setIsWhitelisted(prev => ({ ...prev, [chainId]: isWhitelisted }));
     }
@@ -89,7 +88,7 @@ const ApprovalConfirmationModal = ({ show, hide, talent, setProfile, railsContex
       }
       for await (const option of getAllChainOptions(railsContext.contractsEnv)) {
         if (option.name == "Polygon") {
-          const isWhitelisted = await newOnChain.isAddressWhitelisted(user?.wallet_id, option.id);
+          const isWhitelisted = await newOnChain.isAddressWhitelisted(user?.wallet_address, option.id);
           setIsWhitelisted(prev => ({ ...prev, [option.id]: isWhitelisted }));
         }
       }
