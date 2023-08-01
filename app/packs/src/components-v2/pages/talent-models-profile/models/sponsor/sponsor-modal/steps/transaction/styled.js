@@ -1,6 +1,13 @@
 import { buildColor, mobileStyles } from "@talentprotocol/design-system";
 import styled, { css } from "styled-components";
 
+export const SpinnerContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 64px;
+`;
+
 export const Container = styled.section`
   display: flex;
   flex-direction: column;

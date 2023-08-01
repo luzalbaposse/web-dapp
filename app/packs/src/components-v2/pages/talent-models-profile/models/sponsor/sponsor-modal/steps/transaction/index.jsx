@@ -8,12 +8,14 @@ import {
   HeaderContainer,
   BottomDivider,
   FixedBottom,
-  ContentContainer
+  ContentContainer,
+  SpinnerContainer
 } from "./styled";
 import { OnChain } from "src/onchain";
 import { post } from "src/utils/requests";
 import { toast } from "react-toastify";
 import { ToastBody } from "src/components/design_system/toasts";
+import { useProfileFetcher } from "src/hooks/use-profile-fetcher";
 
 const PRIMARY_BUTTON_STATES = {
   APPROVE: {
@@ -34,10 +36,16 @@ const PRIMARY_BUTTON_STATES = {
   }
 };
 
-export const TransactionStep = ({ profile, token, railsContext, amount, closeModal, nextStep }) => {
+export const TransactionStep = ({ username, token, railsContext, amount, closeModal, nextStep }) => {
+  const { profile, fetchProfile } = useProfileFetcher();
   const [onchain, setOnchain] = useState(null);
   const [account, setAccount] = useState(null);
   const [primaryButtonState, setPrimaryButtonState] = useState(PRIMARY_BUTTON_STATES.APPROVE);
+
+  useEffect(() => {
+    if (!username) return;
+    fetchProfile(username);
+  }, [username, fetchProfile]);
 
   const setupOnChain = useCallback(
     async errorCallback => {
@@ -105,7 +113,10 @@ export const TransactionStep = ({ profile, token, railsContext, amount, closeMod
     }
   }, [onchain, account, setPrimaryButtonState, profile]);
 
-  return (
+  return !profile ? (
+    <SpinnerContainer>
+      <Spinner color="primary" size={48} />
+    </SpinnerContainer>) : (
     <>
       <Container>
         <ContentContainer>

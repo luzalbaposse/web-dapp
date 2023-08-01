@@ -11,14 +11,14 @@ export const SuccessStep = ({ closeModal, profile }) => {
           Transaction submitted
         </Typography>
         <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
-          Congratulations! You're officially a {profile.user.name} Sponsor!
+          Congratulations! You're officially a {profile.name} Sponsor!
         </Typography>
       </InfoContainer>
       <InfoContainer>
         <Button
           hierarchy="primary"
           size="medium"
-          onClick={() => (window.location.href = `/messages?user=${profile.user.username}`)}
+          onClick={() => (window.location.href = `/messages?user=${profile.username}`)}
           text="Send Message"
         />
         <Button hierarchy="secondary" size="medium" onClick={closeModal} text="Return" />
