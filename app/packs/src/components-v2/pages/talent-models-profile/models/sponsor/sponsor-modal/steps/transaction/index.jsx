@@ -1,4 +1,4 @@
-import { Avatar, Button, Typography } from "@talentprotocol/design-system";
+import { Avatar, Button, Spinner, Typography } from "@talentprotocol/design-system";
 import React, { useCallback, useState, useEffect } from "react";
 import {
   BottomContainer,
