@@ -98,10 +98,10 @@ export const TransactionStep = ({ sponsorship, railsContext, closeModal, nextSte
     <>
       <Container>
         <HeaderContainer>
-          <Avatar size="lg" url={sponsorship.sponsored.profile_picture_url} />
+          <Avatar size="lg" url={sponsorship.sponsored?.profile_picture_url} />
           <Typography specs={{ variant: "p2", type: "regular" }} color="primary03" className="mt-4">
-            Are you sure you want to cancel {sponsorship.sponsored.name} Sponsorship? If you do, all of your funds will
-            be returned to your wallet.
+            Are you sure you want to cancel {sponsorship.sponsored?.name || sponsorship.sponsored_address} Sponsorship?
+            If you do, all of your funds will be returned to your wallet.
           </Typography>
         </HeaderContainer>
         <DetailsContainer>
