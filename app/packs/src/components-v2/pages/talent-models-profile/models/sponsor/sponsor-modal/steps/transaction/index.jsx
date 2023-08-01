@@ -8,7 +8,8 @@ import {
   HeaderContainer,
   BottomDivider,
   FixedBottom,
-  ContentContainer
+  ContentContainer,
+  SpinnerContainer
 } from "./styled";
 import { OnChain } from "src/onchain";
 import { post } from "src/utils/requests";
@@ -112,7 +113,10 @@ export const TransactionStep = ({ username, token, railsContext, amount, closeMo
     }
   }, [onchain, account, setPrimaryButtonState, profile]);
 
-  return !profile ? "..." : (
+  return !profile ? (
+    <SpinnerContainer>
+      <Spinner color="primary" size={48} />
+    </SpinnerContainer>) : (
     <>
       <Container>
         <ContentContainer>
