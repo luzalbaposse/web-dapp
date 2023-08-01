@@ -5,7 +5,6 @@ import { Container, ImageContainer } from "./styled";
 
 export const SponsorModel = ({ isCurrentUserProfile, profile, railsContext }) => {
   const modalState = useModal();
-  console.log("=====================", modalState);
   return (
     <>
       <SponsorModal modalState={modalState} profile={profile} railsContext={railsContext} />

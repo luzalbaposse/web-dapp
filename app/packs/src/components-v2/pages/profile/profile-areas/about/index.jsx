@@ -17,8 +17,6 @@ export const About = ({ currentUser, urlData }) => {
     });
   }, []);
 
-  console.log("aboutData", aboutData);
-
   useEffect(() => {
     if (!urlData.profileUsername) return;
     talentsService.getSupportData(urlData.profileUsername).then(({ data }) => {
