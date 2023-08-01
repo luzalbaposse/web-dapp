@@ -166,12 +166,14 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
         <Typography specs={{ type: "regular", variant: "p1" }} color="primary01">
           {data.profileOverview?.headline}
         </Typography>
-        <LocationContainer>
-          <Icon name="pin" color="primary04" size={16} />
-          <Typography specs={{ type: "regular", variant: "p2" }} color="primary04">
-            {data.profileOverview?.location || "..."}
-          </Typography>
-        </LocationContainer>
+        {!!data.profileOverview?.location && (
+          <LocationContainer>
+            <Icon name="pin" color="primary04" size={16} />
+            <Typography specs={{ type: "regular", variant: "p2" }} color="primary04">
+              {data.profileOverview?.location}
+            </Typography>
+          </LocationContainer>
+        )}
         <MembersContainer>
           {data.supporters.talents?.length ? (
             <>
@@ -234,7 +236,9 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
         setShow={setShowApproveModal}
         hide={() => setShowApproveModal(false)}
         talent={data.profileOverview}
-        setProfile={() => { window.location.reload() }}
+        setProfile={() => {
+          window.location.reload();
+        }}
         railsContext={railsContext}
       />
       <AdminVerificationConfirmationModal
@@ -242,7 +246,9 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
         setShow={setShowVerifyModal}
         hide={() => setShowVerifyModal(false)}
         talent={data.profileOverview}
-        setProfile={() => { window.location.reload() }}
+        setProfile={() => {
+          window.location.reload();
+        }}
       />
     </>
   );
