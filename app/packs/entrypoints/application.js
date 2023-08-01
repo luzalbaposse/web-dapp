@@ -35,7 +35,6 @@ import UserSupportPage from "src/components-v2/user-support-page";
 import Footer from "src/components/design_system/footer";
 import SubdomainFooter from "src/components/design_system/subdomain_footer";
 import FlashMessages from "src/components/FlashMessages";
-import ProfileShow from "src/components/profile/show";
 import SignInPage from "src/components-v2/pages/sign-in";
 import SignUpPage from "src/components-v2/pages/sign-up";
 import OnboardingPage from "src/components-v2/pages/onboarding";
@@ -68,7 +67,6 @@ ReactOnRails.register({
   MessageUserList,
   NewPortfolio,
   Notifications,
-  ProfileShow,
   ResetPassword,
   TalentKeywordSearch,
   TalentPage,

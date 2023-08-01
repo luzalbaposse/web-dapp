@@ -223,7 +223,6 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
         modalState={qrCodeModalState}
         username={data.profileOverview?.username}
         profilePicture={data.profileOverview?.profile_picture_url}
-        tal_domain={void 0}
       />
       <EditOverviewModalV2
         show={isEditMode}

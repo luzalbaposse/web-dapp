@@ -116,13 +116,7 @@ class API::TalentBlueprint < Blueprinter::Base
       status
     end
 
-    field :tal_domain do |user, options|
-      user.tal_domain&.domain
-    end
-
-    field :profile_type do |user, options|
-      user.profile_type
-    end
+    field :profile_type
   end
 
   view :about do
