@@ -17,6 +17,8 @@ export const About = ({ currentUser, urlData }) => {
     });
   }, []);
 
+  console.log("aboutData", aboutData);
+
   useEffect(() => {
     if (!urlData.profileUsername) return;
     talentsService.getSupportData(urlData.profileUsername).then(({ data }) => {
@@ -32,7 +34,7 @@ export const About = ({ currentUser, urlData }) => {
     <Container>
       <OldAbout profile={aboutData} />
       <OldJourney talent={aboutData} canUpdate={aboutData?.username === currentUser?.username} />
-      {!!currentUser?.id && <Connections userId={currentUser?.id} talent={supportData} canUpdate={false} />}
+      {!!currentUser?.id && <Connections userId={aboutData?.username} talent={supportData} canUpdate={false} />}
     </Container>
   );
 };
