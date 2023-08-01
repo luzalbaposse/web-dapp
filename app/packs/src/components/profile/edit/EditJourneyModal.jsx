@@ -586,7 +586,7 @@ const GoalExperience = ({
   );
 };
 
-const EditJourneyModal = ({ show, hide, talent, setTalent, editType, setJourneyItem, journeyItem = {} }) => {
+const EditJourneyModal = ({ show, hide, talent, setTalent, editType, setJourneyItem, journeyItem = {}, selectedItem }) => {
   const { mobile } = useWindowDimensionsHook();
   const { mode } = useTheme();
   const [currentStep, setCurrentStep] = useState(1);
@@ -895,6 +895,11 @@ const EditJourneyModal = ({ show, hide, talent, setTalent, editType, setJourneyI
   };
 
   useEffect(() => {
+    if (!selectedItem) return;
+    goToNextStep(selectedItem);
+  }, []);
+
+  useEffect(() => {
     uppyBanner.on("restriction-failed", () => {
       uppyBanner.reset();
     });
@@ -919,7 +924,7 @@ const EditJourneyModal = ({ show, hide, talent, setTalent, editType, setJourneyI
         ]
       }));
     });
-    uppyBanner.on("upload", () => {});
+    uppyBanner.on("upload", () => { });
   }, [uppyBanner]);
 
   const debouncedSaveMilestone = debounce(() => saveMilestone(), 400);

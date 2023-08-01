@@ -150,36 +150,32 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
               </button>
               <button
                 type="button"
-                className={`mr-2 btn text-nowrap all-journey-button goal-journey-button${
-                  activeFilter == "Goal" ? " active" : ""
-                }`}
+                className={`mr-2 btn text-nowrap all-journey-button goal-journey-button${activeFilter == "Goal" ? " active" : ""
+                  }`}
                 onClick={() => setActiveFilter("Goal")}
               >
                 {iconForItem({ category: "Goal" }, true)} Goal {categoryCount("Goal")}
               </button>
               <button
                 type="button"
-                className={`mr-2 btn text-nowrap all-journey-button position-journey-button${
-                  activeFilter == "Position" ? " active" : ""
-                }`}
+                className={`mr-2 btn text-nowrap all-journey-button position-journey-button${activeFilter == "Position" ? " active" : ""
+                  }`}
                 onClick={() => setActiveFilter("Position")}
               >
                 {iconForItem({ category: "Position" }, true)} Position {categoryCount("Position")}
               </button>
               <button
                 type="button"
-                className={`mr-2 btn text-nowrap all-journey-button education-journey-button${
-                  activeFilter == "Education" ? " active" : ""
-                }`}
+                className={`mr-2 btn text-nowrap all-journey-button education-journey-button${activeFilter == "Education" ? " active" : ""
+                  }`}
                 onClick={() => setActiveFilter("Education")}
               >
                 {iconForItem({ category: "Education" }, true)} Education {categoryCount("Education")}
               </button>
               <button
                 type="button"
-                className={`btn all-journey-button text-nowrap other-journey-button${
-                  activeFilter == "Other" ? " active" : ""
-                }`}
+                className={`btn all-journey-button text-nowrap other-journey-button${activeFilter == "Other" ? " active" : ""
+                  }`}
                 onClick={() => setActiveFilter("Other")}
               >
                 {iconForItem({ category: "Other" }, true)} Other {categoryCount("Other")}
@@ -192,6 +188,7 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
               type="primary-default"
               size="big"
               text="Add Experience"
+              journeyItem="Career Goal"
               onClick={() => {
                 setEditType("Add");
                 setEditMode(true);
@@ -219,10 +216,10 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
                     mobile
                       ? `col-12 pl-6 ${cssForBorder(journeyItem, index, filteredJourneyItems.length)} position-relative`
                       : `col-10 pl-7 pr-0 ${cssForBorder(
-                          journeyItem,
-                          index,
-                          filteredJourneyItems.length
-                        )} position-relative`
+                        journeyItem,
+                        index,
+                        filteredJourneyItems.length
+                      )} position-relative`
                   )}
                 >
                   {mobile && (
