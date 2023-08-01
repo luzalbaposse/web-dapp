@@ -32,7 +32,7 @@ export const RecommendedBuildersWidgetMini = ({ username }) => {
     talents.length > 0 && (
       <Container>
         <TitleContainer>
-          <Typography specs={{ variant: "h5", type: "bold" }}>Recommended Builders</Typography>
+          <Typography specs={{ variant: "p1", type: "bold" }}>Recommended Builders</Typography>
         </TitleContainer>
         <BuildersList>
           {talents.map(talent => (
@@ -47,7 +47,7 @@ export const RecommendedBuildersWidgetMini = ({ username }) => {
                 ellipsisAt={180}
               />
               <SupportButtonContainer>
-                <Button hierarchy="primary" size="small" text="Support" href={`/u/${talent.username}?tab=support`} />
+                <Button hierarchy="secondary" size="small" text="Support" href={`/u/${talent.username}?tab=support`} />
               </SupportButtonContainer>
             </BuilderEntry>
           ))}

@@ -44,8 +44,8 @@ export const DesktopColumn = styled.div`
     flex-direction: column;
     overflow-y: auto;
 
-    ::-webkit-scrollbar{
-        display: none;
-      }
+    ::-webkit-scrollbar {
+      display: none;
+    }
   }
 `;
