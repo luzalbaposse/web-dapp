@@ -14,7 +14,7 @@ import JourneyImagesModal from "./edit/journey/JourneyImagesModal";
 
 import cx from "classnames";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import { noop } from "lodash";
+
 dayjs.extend(customParseFormat);
 
 const Journey = ({ className, talent, setTalent, canUpdate }) => {
