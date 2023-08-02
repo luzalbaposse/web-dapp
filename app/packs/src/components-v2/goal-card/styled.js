@@ -15,6 +15,12 @@ export const TagsRow = styled.div`
   gap: 4px;
 `;
 
+export const DropDownContainer = styled.div`
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-end;
+`;
+
 export const GoalInfo = styled.div`
   display: flex;
   flex-direction: column;

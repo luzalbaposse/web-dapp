@@ -18,7 +18,7 @@ export const Container = styled.div`
 export const ButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end;
-  `;
+`;
 
 export const EmptyStateContainer = styled.div`
   display: flex;
