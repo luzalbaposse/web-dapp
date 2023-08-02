@@ -50,14 +50,6 @@ class API::UserBlueprint < Blueprinter::Base
       user.talent&.talent_token&.ticker
     end
 
-    field :tal_domain do |user, options|
-      user.tal_domain&.domain
-    end
-
-    field :tal_domain_theme do |user, options|
-      user.tal_domain&.theme
-    end
-
     field :profile_completed do |user, _options|
       user.profile_completed_at.present?
     end

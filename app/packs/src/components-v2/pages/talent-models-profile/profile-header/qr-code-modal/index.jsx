@@ -13,9 +13,6 @@ export const QRCodeModal = ({ modalState, profile }) => {
           <Avatar size="md" url={profile.profile_picture_url} />
           <StyledQRCode value={inviteUrl} />
           <Typography specs={{ type: "medium", variant: "p2" }} color="primary01">
-            {profile.tal_domain && `@${profile.tal_domain}`}
-          </Typography>
-          <Typography specs={{ type: "medium", variant: "p2" }} color="primary01">
             Share this QRcode or link to invite others to Talent Protocol
           </Typography>
         </Container>
