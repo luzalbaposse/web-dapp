@@ -1,6 +1,12 @@
 class OnboardController < ApplicationController
   def sign_in
-    return redirect_to "https://beta.talentprotocol.com/" if profile_subdomain?
+    if profile_subdomain?
+      return redirect_to "https://beta.talentprotocol.com/" unless tal_domain
+
+      username = tal_domain.user.username
+
+      redirect_to "https://beta.talentprotocol.com/u/#{username}"
+    end
   end
 
   def sign_up
