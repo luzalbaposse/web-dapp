@@ -1,6 +1,5 @@
 class API::V1::PublicAPI::OrganizationsController < API::V1::PublicAPI::APIController
   before_action :internal_only
-  before_action :authenticated_only
 
   PER_PAGE = 9
 
@@ -10,7 +9,7 @@ class API::V1::PublicAPI::OrganizationsController < API::V1::PublicAPI::APIContr
   }.freeze
 
   def index
-    all_organizations = organization_params[:user_id].present? ? current_user.organizations : Organization.all.order(memberships_count: :desc)
+    all_organizations = Organization.all.order(memberships_count: :desc)
     all_organizations = all_organizations.where("name ILIKE ?", "%#{keyword_param}%") if keyword_param.present?
     all_organizations = all_organizations.where(type: TYPES[type_param]) if type_param.present?
     all_organizations = all_organizations.where("memberships_count > ?", 3)
@@ -43,7 +42,7 @@ class API::V1::PublicAPI::OrganizationsController < API::V1::PublicAPI::APIContr
   end
 
   def organization_params
-    params.permit(:keyword, :type, :user_id)
+    params.permit(:keyword, :type)
   end
 
   def per_page

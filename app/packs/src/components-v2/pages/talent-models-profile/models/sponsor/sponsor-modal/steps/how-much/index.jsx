@@ -71,9 +71,11 @@ export const HowMuchStep = ({ token, setToken, railsContext, setAmount, closeMod
         if (!!maxTries) {
           setupOnChain(errorCallback);
           maxTries--;
+        } else {
+          toast.error(<ToastBody heading="We couldn't find your wallet" />, { autoClose: 5000 });
         }
         return;
-      }, 500);
+      }, 250);
     };
     setupOnChain(errorCallback);
   }, []);

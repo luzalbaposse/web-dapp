@@ -17,7 +17,6 @@ const Token = ({ profile, talentTokenPrice, railsContext }) => {
   const { mobile } = useWindowDimensionsHook();
   const { mode } = useTheme();
   const talentToken = profile.talent_token;
-
   const totalSupply = ethers.utils.formatUnits(profile.total_supply);
   const maxSupply = ethers.utils.formatUnits(profile.max_supply);
 
@@ -33,8 +32,11 @@ const Token = ({ profile, talentTokenPrice, railsContext }) => {
   };
 
   return (
-    <section className={cx("d-flex flex-column mx-4 token-section", mobile ? "py-6" : "py-7")}>
-      <div className="row">
+    <section
+      className={cx("d-flex flex-column token-section", mobile ? "py-6" : "py-7")}
+      style={{ borderRadius: "16px" }}
+    >
+      <div className="row mt-6" style={{ justifyContent: "center" }}>
         <div className={cx("col-12 col-lg-4", mobile && "mb-6")}>
           <H3
             text={`$${parseAndCommify(totalSupply * talentTokenPrice)}`}
@@ -42,6 +44,8 @@ const Token = ({ profile, talentTokenPrice, railsContext }) => {
           ></H3>
           <P3 className="text-center inverted-text-primary-03">Market Cap</P3>
         </div>
+      </div>
+      <div className="row mt-6" style={{ justifyContent: "center" }}>
         <div className={cx("col-12 col-lg-4", mobile && "mb-6")}>
           <H3
             text={`${parseAndCommify(totalSupply)} $${talentToken.ticker}`}
@@ -49,6 +53,8 @@ const Token = ({ profile, talentTokenPrice, railsContext }) => {
           ></H3>
           <P3 className="text-center inverted-text-primary-03">Circulating Supply</P3>
         </div>
+      </div>
+      <div className="row mt-6" style={{ justifyContent: "center" }}>
         <div className={cx("col-12 col-lg-4", mobile && "mb-6")}>
           <H3
             text={`${ethers.utils.commify(maxSupply)} $${talentToken.ticker}`}
@@ -57,15 +63,28 @@ const Token = ({ profile, talentTokenPrice, railsContext }) => {
           <P3 className="text-center inverted-text-primary-03">Max Supply</P3>
         </div>
       </div>
-      <div className={cx("row", mobile ? "" : "mt-7")}>
+      <div className="row mt-6" style={{ justifyContent: "center" }}>
         <div className={cx("col-12 col-lg-4", mobile && "mb-6")}>
           <H3 text={profile.supporters_count || "0"} className="text-center inverted-text-primary-01"></H3>
           <P3 className="text-center inverted-text-primary-03">Supporters</P3>
         </div>
+      </div>
+      <div className="row mt-6" style={{ justifyContent: "center" }}>
         <div className={cx("col-12 col-lg-4", mobile && "mb-6")}>
           <H3 text={formatNumberWithSymbol(0.1)} className="text-center inverted-text-primary-01"></H3>
           <P3 className="text-center inverted-text-primary-03">Current Price</P3>
         </div>
+      </div>
+      <div className="row mt-6" style={{ justifyContent: "center" }}>
+        <div className={cx("col-12 col-lg-4", mobile && "mb-6")}>
+          <H3
+            text={`${ethers.utils.commify(maxSupply)} $${talentToken.ticker}`}
+            className="text-center inverted-text-primary-01"
+          ></H3>
+          <P3 className="text-center inverted-text-primary-03">Max Supply</P3>
+        </div>
+      </div>
+      <div className="row mt-6" style={{ justifyContent: "center" }}>
         <div className={cx("col-12 col-lg-4", mobile && "mb-6")}>
           <H3 text={shortenAddress(talentToken.contract_id)} className="text-center inverted-text-primary-01"></H3>
           <P3

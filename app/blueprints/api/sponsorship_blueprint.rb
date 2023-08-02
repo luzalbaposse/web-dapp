@@ -14,11 +14,11 @@ class API::SponsorshipBlueprint < Blueprinter::Base
       sponsorship.talent
     end
 
-    association :sponsor, blueprint: API::TalentBlueprint, view: :subscriber do |sponsorship, options|
+    association :sponsor, blueprint: API::TalentBlueprint, view: :normal do |sponsorship, options|
       sponsorship.sponsor_user
     end
 
-    association :sponsored, blueprint: API::TalentBlueprint, view: :subscriber do |sponsorship, options|
+    association :sponsored, blueprint: API::TalentBlueprint, view: :normal do |sponsorship, options|
       sponsorship.talent_user
     end
   end

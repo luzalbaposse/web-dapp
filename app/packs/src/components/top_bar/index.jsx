@@ -1,4 +1,4 @@
-import { Icon, Typography } from "@talentprotocol/design-system";
+import { Icon, Typography, buildColor } from "@talentprotocol/design-system";
 import Modal from "react-bootstrap/Modal";
 import React, { useState, useEffect, useCallback, useContext } from "react";
 import transakSDK from "@transak/transak-sdk";
@@ -295,7 +295,7 @@ export const TopBar = ({
   }
 
   return (
-    <div className="navbar-container">
+    <div className="navbar-container" style={{ borderBottom: `1px solid ${buildColor("surfaceHover02")}` }}>
       <nav className={`navbar ${theme.mode()} d-flex justify-content-between align-items-center`}>
         <TransakDone show={transakDone} hide={() => setTransakDone(false)} />
         <a href="/" className="mr-6">

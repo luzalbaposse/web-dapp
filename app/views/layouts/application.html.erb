@@ -29,7 +29,7 @@
           <%= yield %>
         </div>
         <%= react_component("ProductAnnouncementModal") %>
-        <%= render "shared/footer" unless current_page?(controller: 'messages') %>
+        <%= render 'shared/footer' unless current_page?(controller: 'messages') || (controller_name == 'profiles') %>
       </div>
     </body>
   <% else %>

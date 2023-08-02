@@ -34,13 +34,11 @@ import UserSupportPage from "src/components-v2/user-support-page";
 import Footer from "src/components/design_system/footer";
 import SubdomainFooter from "src/components/design_system/subdomain_footer";
 import FlashMessages from "src/components/FlashMessages";
-import ProfileShow from "src/components/profile/show";
 import SignInPage from "src/components-v2/pages/sign-in";
 import SignUpPage from "src/components-v2/pages/sign-up";
 import OnboardingPage from "src/components-v2/pages/onboarding";
 import ForgotPasswordPage from "src/components-v2/pages/forgot-password";
 import SetPasswordPage from "src/components-v2/pages/set-password";
-import TalentModelsProfilePage from "src/components-v2/pages/talent-models-profile";
 import HomepagePage from "src/components-v2/pages/homepage";
 import EarnPage from "src/components-v2/pages/earn-page";
 import ConnectionsPage from "src/components-v2/pages/connections";
@@ -48,6 +46,7 @@ import ProductAnnouncementModal from "src/components-v2/product-announcement-mod
 import ExploreCollectivesPage from "src/components-v2/pages/explore-collectives-page";
 import CollectiveShowPage from "src/components-v2/pages/collective-show-page";
 import VirtualPortfolio from "src/components/virtual_portfolio/VirtualPortfolio";
+import ProfilePage from "../src/components-v2/pages/profile";
 
 import "stylesheets/application.scss";
 
@@ -67,7 +66,6 @@ ReactOnRails.register({
   Login,
   MessageUserList,
   Notifications,
-  ProfileShow,
   ResetPassword,
   TalentKeywordSearch,
   TalentPage,
@@ -80,7 +78,6 @@ ReactOnRails.register({
   SignUpPage,
   ForgotPasswordPage,
   SetPasswordPage,
-  TalentModelsProfilePage,
   HomepagePage,
   ConnectionsPage,
   OnboardingPage,
@@ -88,7 +85,8 @@ ReactOnRails.register({
   ExploreCollectivesPage,
   CollectiveShowPage,
   EarnPage,
-  VirtualPortfolio
+  VirtualPortfolio,
+  ProfilePage
 });
 
 Rails.start();

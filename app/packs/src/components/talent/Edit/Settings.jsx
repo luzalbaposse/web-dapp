@@ -6,12 +6,10 @@ import { useWindowDimensionsHook } from "src/utils/window";
 
 import { loggedInUserStore } from "src/contexts/state";
 
-import { Switch } from "@talentprotocol/design-system/switch";
-
 import { emailRegex, usernameRegex } from "src/utils/regexes";
 import { H5, P2, P3 } from "src/components/design_system/typography";
 import { passwordMatchesRequirements } from "src/utils/passwordRequirements";
-import { patch, post, get } from "src/utils/requests";
+import { patch, post } from "src/utils/requests";
 import { ToastBody } from "src/components/design_system/toasts";
 import Button from "src/components/design_system/button";
 import Divider from "src/components/design_system/other/Divider";
@@ -19,7 +17,6 @@ import Link from "src/components/design_system/link";
 import LoadingButton from "src/components/button/LoadingButton";
 import Tag from "src/components/design_system/tag";
 import TextInput from "src/components/design_system/fields/textinput";
-import { CustomHandleInput } from "src/components-v2/custom-handle-input";
 
 const NotificationInputs = [
   {
@@ -37,15 +34,11 @@ const Settings = props => {
   const mode = theme.mode();
   const { mobile } = useWindowDimensionsHook();
 
-  const talBaseDomain = props.railsContext.talBaseDomain;
-
   const [notificationPreferences, setNotificationPreferences] = useState(props.notificationPreferences);
 
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
 
   const [settings, setSettings] = useState({
-    tal_domain: currentUser?.tal_domain || "",
-    tal_domain_theme: currentUser?.tal_domain_theme || "light",
     wallet_id: currentUser?.wallet_id || "",
     username: currentUser?.username || "",
     email: currentUser?.email || "",
@@ -59,8 +52,7 @@ const Settings = props => {
     username: false,
     currentPassword: false,
     newPassword: false,
-    deletePassword: false,
-    talDomain: false
+    deletePassword: false
   });
   const [saving, setSaving] = useState({
     loading: false,
@@ -68,7 +60,6 @@ const Settings = props => {
     public: false
   });
   const [emailValidated, setEmailValidated] = useState(false);
-  const [domainValidated, setDomainValidated] = useState(false);
   const { valid: validPassword, errors, tags } = passwordMatchesRequirements(settings.newPassword);
   const [notifications, setNotifications] = useState({
     saving: false,
@@ -87,8 +78,6 @@ const Settings = props => {
     }
 
     setSettings({
-      tal_domain: currentUser.tal_domain || "",
-      tal_domain_theme: currentUser.tal_domain_theme || "light",
       wallet_id: currentUser.wallet_id || "",
       username: currentUser.username || "",
       email: currentUser.email || "",
@@ -98,7 +87,6 @@ const Settings = props => {
       deletePassword: ""
     });
     setEmailValidated(!!currentUser.email);
-    setDomainValidated(!!currentUser.tal_domain);
   }, [currentUser]);
 
   const changeAttribute = (attribute, value) => {
@@ -108,9 +96,6 @@ const Settings = props => {
       setValidationErrors(prev => ({ ...prev, email: false }));
       setEmailValidated(false);
       if (emailRegex.test(value)) validateEmail(value);
-    } else if (attribute === "tal_domain") {
-      setValidationErrors(prev => ({ ...prev, tal_domain: false }));
-      setDomainValidated(false);
     } else if (attribute === "username") {
       if (usernameRegex.test(value)) {
         setValidationErrors(prev => ({ ...prev, username: false }));
@@ -205,12 +190,7 @@ const Settings = props => {
   const messagingModeChanged = () => settings.messagingDisabled != currentUser?.messaging_disabled;
 
   const cannotSaveSettings = () =>
-    !emailValidated ||
-    !!validationErrors.email ||
-    !domainValidated ||
-    !!validationErrors.talDomain ||
-    settings.username.length == 0 ||
-    !!validationErrors.username;
+    !emailValidated || !!validationErrors.email || settings.username.length == 0 || !!validationErrors.username;
 
   const cannotChangePassword = () =>
     !!validationErrors.currentPassword ||
@@ -231,38 +211,9 @@ const Settings = props => {
     setEmailValidated(true);
   };
 
-  const validateDomain = async talDomain => {
-    if (!talDomain) {
-      return;
-    }
-
-    let subdomainWithDomain = talDomain;
-
-    if (!subdomainWithDomain.includes(talBaseDomain)) {
-      subdomainWithDomain = `${talDomain}.${talBaseDomain}`;
-    }
-
-    const response = await get(`/api/v1/users/domain_owner?tal_domain=${subdomainWithDomain}`).catch(error =>
-      console.error(error)
-    );
-
-    if (response.error) {
-      setValidationErrors(prev => ({ ...prev, talDomain: response.error }));
-    } else {
-      setValidationErrors(prev => ({ ...prev, talDomain: false }));
-    }
-
-    setDomainValidated(true);
-  };
-
   const saveProfileDisabled = () => {
     return (saving.loading || cannotSaveSettings()) && !messagingModeChanged();
   };
-
-  const talSubdomain = () =>
-    settings.tal_domain.includes(talBaseDomain)
-      ? settings.tal_domain.replace(`.${talBaseDomain}`, "")
-      : settings.tal_domain;
 
   return (
     <div className="d-flex flex-column align-items-center mt-5">
@@ -295,50 +246,6 @@ const Settings = props => {
             onBlur={e => validateEmail(e.target.value)}
           />
           {validationErrors?.email && <P3 className="text-danger" text={validationErrors.email} />}
-        </div>
-        <div className="d-flex flex-row w-100 flex-wrap mt-4">
-          <div className="d-flex flex-row align-middle align-items-center mb-2">
-            <P2 className="text-primary-01" bold text="Custom domain" />
-            <Tag className="tag-available-label ml-2 square-tag" size="small">
-              <P3 className="bg-01" bold text="New" />
-            </Tag>
-          </div>
-          <CustomHandleInput
-            mode={mode}
-            onChange={e => changeAttribute("tal_domain", e.target.innerText)}
-            value={talSubdomain()}
-            onBlur={e => validateDomain(e.target.innerText)}
-          />
-          {validationErrors?.talDomain ? (
-            <P3 className="text-danger mt-1" text={validationErrors.talDomain} />
-          ) : (
-            <P3 className="mt-1">
-              Set your purchased username to configure your Talent Protocol custom domain.{" "}
-              <a href="https://talentprotocol.com/username" target="_blank">
-                Learn More
-              </a>
-            </P3>
-          )}
-        </div>
-        <div className="d-flex flex-column w-100 flex-wrap mt-4">
-          <div className="d-flex flex-row align-middle align-items-center mb-2">
-            <P2 className="text-primary-01" bold text="Custom domain theme" />
-            <Tag className="tag-available-label ml-2 square-tag" size="small">
-              <P3 className="bg-01" bold text="New" />
-            </Tag>
-          </div>
-
-          <div className="d-flex flex-row align-middle align-items-center">
-            <Switch
-              isDarkTheme={mode == "dark"}
-              isChecked={settings.tal_domain_theme == "dark"}
-              state={validationErrors?.talDomain || !settings.tal_domain ? "disabled" : "enabled"}
-              onChange={() =>
-                changeAttribute("tal_domain_theme", settings.tal_domain_theme == "dark" ? "light" : "dark")
-              }
-            />
-            <P2 className="text-primary-01 ml-2 mb-2" text="Dark Theme" />
-          </div>
         </div>
         <div className="d-flex flex-column w-100 flex-wrap mt-3">
           <div className={`d-flex flex-row ${mobile ? "justify-content-between" : "mt-4"} w-100 pb-4`}>

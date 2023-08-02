@@ -32,6 +32,7 @@ export const SponsorModal = ({ modalState, profile, railsContext }) => {
           nextStep={stepsState.nextStep}
           amount={amount}
           setAmount={setAmount}
+          username={profile?.username}
         />
       }
     </Modal>

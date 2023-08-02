@@ -147,6 +147,15 @@
     }
   }
 
+  &__mutual_stake {
+    background-color: $dark-primary;
+    border: 1px solid $dark-primary;
+
+    p {
+      color: $dark-bg-01;
+    }
+  }
+
   &__supporter {
     p {
       color: $dark-primary;
@@ -156,7 +165,6 @@
 
 .token-section {
   background-color: $dark-blue;
-  border-radius: 24px;
 }
 
 .dark-body .token-section {

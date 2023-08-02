@@ -24,6 +24,14 @@ class TalentBlueprint < Blueprinter::Base
     field :supply_progress do |talent, _options|
       (talent.total_supply.to_f / Talent.max_supply) * 100
     end
+
+    field :username do |talent, _options|
+      talent.user.username
+    end
+
+    field :name do |talent, _options|
+      talent.user.name
+    end
   end
 
   view :extended do
@@ -54,9 +62,6 @@ class TalentBlueprint < Blueprinter::Base
     end
     field :banner_data do |talent, _options|
       talent.banner_data ? JSON.parse(talent.banner_data) : nil
-    end
-    field :tal_domain do |talent, options|
-      talent.user.tal_domain&.domain
     end
 
     association :milestones, blueprint: MilestoneBlueprint, view: :normal

@@ -137,7 +137,10 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
                 what I've done and where I want to be!"
           />
           {journeyItems.length > 0 && (
-            <div className="w-100 my-6 px-4 d-flex flex-row overflow-x-scroll justify-content-lg-center">
+            <div
+              className="w-100 my-6 px-4 d-flex flex-row overflow-x-scroll justify-content-lg-center"
+              style={!mobile ? { overflow: "hidden" } : {}}
+            >
               <button
                 type="button"
                 className={`mr-2 btn text-nowrap all-journey-button${activeFilter == "All" ? " active" : ""}`}
@@ -238,7 +241,7 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
                       <Button
                         type="primary-outline"
                         text="Edit"
-                        style={{ maxHeight: "45px" }}
+                        style={{ maxHeight: "45px", marginBottom: "16px" }}
                         onClick={() => {
                           setJourneyItemInEditing(journeyItem);
                           setEditType("Edit");

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_11_170018) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_24_104155) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -355,6 +355,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_11_170018) do
     t.string "title"
     t.string "link"
     t.string "progress"
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.index ["career_goal_id"], name: "index_goals_on_career_goal_id"
   end
 

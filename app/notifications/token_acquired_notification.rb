@@ -19,7 +19,7 @@ class TokenAcquiredNotification < BaseNotification
   end
 
   def url
-    user_url(recipient.username, tab: "supporters")
+    user_url(recipient.username, tab: "support")
   end
 
   private
