@@ -17,7 +17,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 
 dayjs.extend(customParseFormat);
 
-const Journey = ({ className, talent, setTalent, canUpdate }) => {
+const Journey = ({ className, talent, canUpdate }) => {
   const { mobile } = useWindowDimensionsHook();
   const [journeyItems, setJourneyItems] = useState([]);
   const [filteredJourneyItems, setFilteredJourneyItems] = useState([]);
