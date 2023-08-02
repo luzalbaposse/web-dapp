@@ -28,8 +28,8 @@ export const GoalCard = ({ goal, openAddGoalModal, userId, isOwner }) => {
             });
           return;
         case "Edit goal":
-          openAddGoalModal("Edit", goal);
         default:
+          openAddGoalModal("Edit", goal);
           return;
       }
     },
