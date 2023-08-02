@@ -1,29 +1,6 @@
 class OnboardController < ApplicationController
   def sign_in
-    if profile_subdomain?
-      return redirect_to "https://beta.talentprotocol.com/" unless tal_domain
-
-      user = tal_domain.user
-
-      talent =
-        Talent
-          .includes([career_goal: {goals: :goal_images}, milestones: :milestone_images])
-          .find_by!(user: user)
-
-      CreateProfilePageVisitorJob.perform_later(ip: request.remote_ip, user_id: user.id)
-
-      @talent = TalentBlueprint.render_as_json(
-        talent,
-        view: :extended,
-        current_user_active_subscribing: current_user_active_subscribing,
-        current_user_pending_subscribing: current_user_pending_subscribing,
-        tags: user.tags.where(hidden: false)
-      )
-
-      @with_persona_request = WithPersonaRequestBlueprint.render_as_json(WithPersonaRequest.current_month_persona_request)
-
-      render "profiles/show"
-    end
+    return redirect_to "https://beta.talentprotocol.com/" if profile_subdomain?
   end
 
   def sign_up

@@ -20,18 +20,17 @@ RSpec.describe "Sessions", type: :request do
 
       let(:request_subdomain) { "dinis" }
 
-      # Failing in CI
-      # context "when the subdomain belongs to a tal domain" do
-      #   let!(:user) { create :user }
-      #   let!(:talent) { create :talent, user: user }
-      #   let!(:tal_domain) { create :user_domain, tal_domain: true, domain: request_subdomain, user: user }
+      context "when the subdomain belongs to a tal domain" do
+        let!(:user) { create :user }
+        let!(:talent) { create :talent, user: user }
+        let!(:tal_domain) { create :user_domain, tal_domain: true, domain: "#{request_subdomain}.tal.community", user: user }
 
-      #   it "renders the user profile" do
-      #     root_request
+        it "redirects to the main app" do
+          root_request
 
-      #     expect(response).to render_template("profiles/show")
-      #   end
-      # end
+          expect(response).to redirect_to("https://beta.talentprotocol.com/")
+        end
+      end
 
       context "when the subdomain does not belong to a tal domain" do
         it "redirects to the main app" do
