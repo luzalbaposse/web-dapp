@@ -687,7 +687,7 @@ const EditJourneyModal = ({
         ...currentJourneyItem
       }
     });
-
+    
     if (response && !response.error) {
       setTalent(prev => ({
         ...prev,

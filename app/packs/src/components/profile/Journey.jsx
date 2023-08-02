@@ -14,6 +14,7 @@ import JourneyImagesModal from "./edit/journey/JourneyImagesModal";
 
 import cx from "classnames";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { noop } from "lodash";
 dayjs.extend(customParseFormat);
 
 const Journey = ({ className, talent, setTalent, canUpdate }) => {
@@ -332,7 +333,7 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
           show={editMode}
           hide={() => setEditMode(false)}
           talent={talent}
-          setTalent={setTalent}
+          setTalent={() => window.location.reload()}
           editType={editType}
           journeyItem={journeyItemInEditing}
           setJourneyItem={setJourneyItemInEditing}
