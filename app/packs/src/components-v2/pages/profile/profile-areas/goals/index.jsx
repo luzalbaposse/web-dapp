@@ -28,16 +28,18 @@ export const Goals = ({ urlData, currentUser }) => {
     </SpinnerContainer>
   ) : (
     <Container>
-      <ButtonContainer>
-        <Button
-          text="Add new goal"
-          hierarchy="secondary"
-          size="small"
-          iconColor="primary01"
-          leftIcon="add"
-          onClick={() => addGoalModalState.openModal("Add")}
-        />
-      </ButtonContainer>
+      {urlData?.profileUsername === currentUser?.username && (
+        <ButtonContainer>
+          <Button
+            text="Add new goal"
+            hierarchy="secondary"
+            size="small"
+            iconColor="primary01"
+            leftIcon="add"
+            onClick={() => addGoalModalState.openModal("Add")}
+          />
+        </ButtonContainer>
+      )}
       {data.goals.length
         ? data.goals.map(goal => (
             <GoalCard
