@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Icon, Spinner, TextLink, Typography } from "@talentprotocol/design-system";
+import { Button, Icon, Spinner, TextLink, Typography } from "@talentprotocol/design-system";
 import { GoalCard } from "../../../../goal-card";
 import { goalsService } from "src/api";
-import { Container, EmptyStateContainer, EmptyStateCopy, SpinnerContainer } from "./styled";
+import { ButtonContainer, Container, EmptyStateContainer, EmptyStateCopy, SpinnerContainer } from "./styled";
+import { AddGoalModal } from "./add-goal-modal";
+import { useAddGoalModalState } from "./add-goal-modal/hooks/use-add-goal-modal";
 
 export const Goals = ({ urlData, currentUser }) => {
   const [data, setData] = useState({ goals: [], isLoading: true });
+  const addGoalModalState = useAddGoalModalState();
   useEffect(() => {
     if (!urlData.profileUsername) return;
     goalsService
@@ -25,8 +28,26 @@ export const Goals = ({ urlData, currentUser }) => {
     </SpinnerContainer>
   ) : (
     <Container>
+      <ButtonContainer>
+        <Button
+          text="Add new goal"
+          hierarchy="secondary"
+          size="small"
+          iconColor="primary01"
+          leftIcon="add"
+          onClick={() => addGoalModalState.openModal("Add")}
+        />
+      </ButtonContainer>
       {data.goals.length
-        ? data.goals.map(goal => <GoalCard key={goal.uuid} {...goal} />)
+        ? data.goals.map(goal => (
+            <GoalCard
+              key={goal.uuid}
+              goal={goal}
+              openAddGoalModal={addGoalModalState.openModal}
+              userId={currentUser?.username}
+              isOwner={urlData?.profileUsername === currentUser?.username}
+            />
+          ))
         : (currentUser?.username === urlData?.profileUsername && (
             <EmptyStateContainer>
               <Icon name="binoculars" size={64} color="primary04" />
@@ -49,6 +70,7 @@ export const Goals = ({ urlData, currentUser }) => {
               </EmptyStateCopy>
             </EmptyStateContainer>
           )}
+      <AddGoalModal {...addGoalModalState} />
     </Container>
   );
 };

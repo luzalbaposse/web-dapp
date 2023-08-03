@@ -121,9 +121,15 @@ class API::TalentBlueprint < Blueprinter::Base
 
   view :about do
     field :username
+
+    field :id do |user, _options|
+      user.talent.id
+    end
+
     association :milestones, blueprint: MilestoneBlueprint, view: :normal do |user, options|
       user.talent&.milestones&.includes(:milestone_images)
     end
+
     association :career_goal, blueprint: CareerGoalBlueprint, view: :normal do |user, options|
       user.talent&.career_goal
     end
