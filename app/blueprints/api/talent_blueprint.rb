@@ -135,7 +135,7 @@ class API::TalentBlueprint < Blueprinter::Base
     association :milestones, blueprint: MilestoneBlueprint, view: :normal do |user, options|
       user.talent&.milestones&.includes(:milestone_images)
     end
-    
+
     association :career_goal, blueprint: CareerGoalBlueprint, view: :normal do |user, options|
       user.talent&.career_goal
     end
