@@ -14,9 +14,10 @@ import JourneyImagesModal from "./edit/journey/JourneyImagesModal";
 
 import cx from "classnames";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+
 dayjs.extend(customParseFormat);
 
-const Journey = ({ className, talent, setTalent, canUpdate }) => {
+const Journey = ({ className, talent, canUpdate }) => {
   const { mobile } = useWindowDimensionsHook();
   const [journeyItems, setJourneyItems] = useState([]);
   const [filteredJourneyItems, setFilteredJourneyItems] = useState([]);
@@ -192,6 +193,7 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
               type="primary-default"
               size="big"
               text="Add Experience"
+              journeyItem="Career Goal"
               onClick={() => {
                 setEditType("Add");
                 setEditMode(true);
@@ -331,7 +333,7 @@ const Journey = ({ className, talent, setTalent, canUpdate }) => {
           show={editMode}
           hide={() => setEditMode(false)}
           talent={talent}
-          setTalent={setTalent}
+          setTalent={() => window.location.reload()}
           editType={editType}
           journeyItem={journeyItemInEditing}
           setJourneyItem={setJourneyItemInEditing}

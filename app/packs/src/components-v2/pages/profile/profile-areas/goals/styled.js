@@ -15,6 +15,11 @@ export const Container = styled.div`
   padding: 0 24px 24px;
 `;
 
+export const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
 export const EmptyStateContainer = styled.div`
   display: flex;
   align-items: center;

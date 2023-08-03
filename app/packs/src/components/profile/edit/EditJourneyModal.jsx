@@ -586,7 +586,16 @@ const GoalExperience = ({
   );
 };
 
-const EditJourneyModal = ({ show, hide, talent, setTalent, editType, setJourneyItem, journeyItem = {} }) => {
+const EditJourneyModal = ({
+  show,
+  hide,
+  talent,
+  setTalent,
+  editType,
+  setJourneyItem,
+  journeyItem = {},
+  skipToNextStepItemName
+}) => {
   const { mobile } = useWindowDimensionsHook();
   const { mode } = useTheme();
   const [currentStep, setCurrentStep] = useState(1);
@@ -678,7 +687,7 @@ const EditJourneyModal = ({ show, hide, talent, setTalent, editType, setJourneyI
         ...currentJourneyItem
       }
     });
-
+    
     if (response && !response.error) {
       setTalent(prev => ({
         ...prev,
@@ -893,6 +902,11 @@ const EditJourneyModal = ({ show, hide, talent, setTalent, editType, setJourneyI
     setJourneyItem(null);
     hide();
   };
+
+  useEffect(() => {
+    if (!skipToNextStepItemName) return;
+    goToNextStep(skipToNextStepItemName);
+  }, []);
 
   useEffect(() => {
     uppyBanner.on("restriction-failed", () => {

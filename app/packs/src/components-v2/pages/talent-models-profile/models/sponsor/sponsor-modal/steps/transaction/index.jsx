@@ -116,7 +116,8 @@ export const TransactionStep = ({ username, token, railsContext, amount, closeMo
   return !profile ? (
     <SpinnerContainer>
       <Spinner color="primary" size={48} />
-    </SpinnerContainer>) : (
+    </SpinnerContainer>
+  ) : (
     <>
       <Container>
         <ContentContainer>
