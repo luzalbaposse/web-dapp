@@ -42,7 +42,7 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
   const dropdownMenu = useMemo(() => {
     if (!currentUser) return [];
     const menu = [{ value: "Share", iconColor: "primary01", iconName: "share-2" }];
-    if (currentUser?.admin) {
+    if (currentUser?.admin || currentUser?.moderator) {
       menu.push({ value: "Impersonate", iconColor: "primary01", iconName: "user" });
       if (!data.profileOverview?.verified) {
         menu.push({ value: "Verify", iconColor: "primary01", iconName: "check" });
