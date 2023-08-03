@@ -124,6 +124,19 @@ jobs:
         node-version: ["16.4.2"]
 
     steps:
+      - name: Verify if tests should run
+        id: check_tests
+        run: bash ci-tests-helper.bash
+
+      - name: Check if tests should run
+        run: |
+          if [ ${{ steps.check_tests.outputs.should_run_tests }} == "true" ]; then
+            echo "FILES variable is not empty. Running tests..."
+          else
+            echo "No tests to run. Exiting job..."
+            exit 0  # Exit with a zero code to indicate a successful run when no tests are needed.
+          fi
+
       - name: Checkout code
         uses: actions/checkout@v2
 
