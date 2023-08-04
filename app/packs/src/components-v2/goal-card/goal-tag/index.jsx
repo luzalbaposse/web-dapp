@@ -26,7 +26,7 @@ export const GoalTag = ({ state, date }) => {
       return (
         <Tag label="Paused" backgroundColor="bg01" textColor="primary02" borderColor="surfaceHover02" size="small" />
       );
-    case "abndoned":
+    case "abandoned":
       return <Tag label="Abandoned" backgroundColor="dangerTint03" textColor="danger" size="small" />;
     case "doing":
     default:
