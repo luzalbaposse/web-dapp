@@ -162,11 +162,11 @@
 }
 
 .light-body .inverse-text-primary-01 {
-	color: $dark-text-primary-01 !important;
+  color: $dark-text-primary-01 !important;
 }
 
 .dark-body .inverse-text-primary-01 {
-	color: $light-text-primary-01 !important;
+  color: $light-text-primary-01 !important;
 }
 
 .dark-body .text-primary-01 {
@@ -818,11 +818,6 @@
   border-bottom: 1px solid $dark-surface-hover-02 !important;
 }
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> master
 .left-dashed-border-black {
   border-left: 1px dashed $light-surface-hover-02;
 }
