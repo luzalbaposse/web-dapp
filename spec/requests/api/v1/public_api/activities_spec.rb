@@ -137,4 +137,103 @@ RSpec.describe "Activities API", type: :request do
       end
     end
   end
+
+  path "/activities/of_user" do
+    get "Retrieves user's activities" do
+      tags "Activities"
+      consumes "application/json"
+      produces "application/json"
+      parameter name: :id, in: :query, type: :string, description: "The wallet address or username of the user to get the results from"
+      parameter name: :cursor, in: :query, type: :string, description: "The cursor to fetch the next page"
+      parameter name: :"types[]", in: :query, type: :array, collectionFormat: :multi, description: "The types of activities to retrieve"
+      parameter name: "X-API-KEY", in: :header, type: :string, description: "Your Talent Protocol API key"
+
+      let!(:api_key_object) { create(:api_key, :activated, access_key:) }
+      let(:access_key) { SecureRandom.hex }
+      let(:"X-API-KEY") { access_key }
+      let(:cursor) { nil }
+      let!(:id) { user_one.username }
+      let(:"types[]") { [] }
+
+      let!(:user_one) { create :user, :with_talent_token, username: "apiuser1", display_name: "API user 1" }
+      let!(:user_two) { create :user, :with_talent_token, username: "apiuser2", display_name: "API user 2" }
+
+      before do
+        career_updates = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth"]
+        activity_feed = user_one.activity_feed
+
+        activity = create :activity, content: {message: career_updates.first}.to_json, origin_user: user_one, type: "Activities::Subscribe"
+        activity_feed.activities << activity
+
+        career_updates.drop(1).each do |message|
+          activity = create :activity, content: {message:}.to_json, origin_user: user_one, type: "Activities::CareerUpdate"
+          activity_feed.activities << activity
+        end
+
+        create :activity, content: {message: "tenth"}.to_json, global: true, origin_user: user_two, type: "Activities::CareerUpdate"
+      end
+
+      response "200", "Activities of user retrieved", document: false do
+        schema type: :object,
+          properties: {
+            activities: {
+              type: :array,
+              items: {
+                type: :object,
+                properties: PublicAPI::ObjectProperties::ACTIVITY_PROPERTIES
+              }
+            },
+            pagination: {
+              type: :object,
+              properties: PublicAPI::ObjectProperties::PAGINATION_PROPERTIES
+            }
+          }
+
+        run_test! do |response|
+          data = JSON.parse(response.body)
+
+          aggregate_failures do
+            expect(data["activities"].map { |f| f["type"] }.uniq)
+              .to match_array(["Activities::CareerUpdate", "Activities::Subscribe"])
+
+            expect(data["pagination"]["total"]).to eq(9)
+          end
+        end
+      end
+
+      response "200", "Only activities of a certain type retrieved", document: false do
+        let(:"types[]") { ["Activities::Subscribe"] }
+
+        schema type: :object,
+          properties: {
+            activities: {
+              type: :array,
+              items: {
+                type: :object,
+                properties: PublicAPI::ObjectProperties::ACTIVITY_PROPERTIES
+              }
+            },
+            pagination: {
+              type: :object,
+              properties: PublicAPI::ObjectProperties::PAGINATION_PROPERTIES
+            }
+          }
+
+        run_test! do |response|
+          data = JSON.parse(response.body)
+
+          aggregate_failures do
+            expect(data["activities"].map { |f| f["type"] }.uniq).to eq(["Activities::Subscribe"])
+            expect(data["pagination"]["total"]).to eq(1)
+          end
+        end
+      end
+
+      response "401", "unauthorized request", document: false do
+        let(:"X-API-KEY") { "invalid" }
+
+        run_test!
+      end
+    end
+  end
 end

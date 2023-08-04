@@ -24,3 +24,13 @@ export const AreaContainer = styled.section`
     display: none;
   }
 `;
+
+export const SpinnerContainer = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 0 16px;
+  padding-top: 16px;
+  width: 100%;
+`;

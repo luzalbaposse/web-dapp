@@ -13,7 +13,9 @@ module PublicAPIRoutes
               get :support, on: :collection
             end
             resources :supporters, only: [:index]
-            resources :activities, only: [:index]
+            resources :activities, only: [:index] do
+              get :of_user, on: :collection
+            end
             resources :connections, only: [:index]
             resources :career_updates, only: [:index, :create]
             resources :sponsorships, only: [:create]

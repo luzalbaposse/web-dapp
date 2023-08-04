@@ -109,6 +109,8 @@ class API::TalentBlueprint < Blueprinter::Base
   view :overview do
     include_view :normal
 
+    field :profile_type
+
     field :subscribing_status do |user, options|
       status = "unsubscribed"
       status = "subscribed" if options[:current_user_active_subscribing]&.include?(user.id)
@@ -116,7 +118,9 @@ class API::TalentBlueprint < Blueprinter::Base
       status
     end
 
-    field :profile_type
+    field :updates_length do |user, options|
+      user.origin_activities.where(type: "Activities::CareerUpdate").count
+    end
   end
 
   view :about do
