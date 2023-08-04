@@ -14,7 +14,7 @@ export const Goals = ({ urlData, currentUser }) => {
     goalsService
       .getGoals(urlData.profileUsername)
       .then(({ data }) => {
-        setData({ goals: data.goals, isLoading: false });
+        setData({ goals: data.goals.sort((a, b) => new Date(b.due_date) - new Date(a.due_date)), isLoading: false });
       })
       .catch(err => {
         console.error(err);
