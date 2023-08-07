@@ -214,7 +214,6 @@ RSpec.describe "Talents API" do
 
         run_test! do |response|
           data = JSON.parse(response.body)
-          puts response.body
           returned_talents = data["talents"]
           returned_usernames = returned_talents.map { |f| f["username"] }
           returned_pagination = data["pagination"]
@@ -468,7 +467,6 @@ RSpec.describe "Talents API" do
 
         run_test! do |response|
           data = JSON.parse(response.body)
-          puts response.body
           returned_talents = data["talents"]
           returned_usernames = returned_talents.map { |f| f["username"] }
           returned_pagination = data["pagination"]
@@ -501,7 +499,6 @@ RSpec.describe "Talents API" do
 
         run_test! do |response|
           data = JSON.parse(response.body)
-          puts response.body
           returned_talents = data["talents"]
           returned_usernames = returned_talents.map { |f| f["username"] }
           returned_pagination = data["pagination"]

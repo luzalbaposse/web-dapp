@@ -208,6 +208,7 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
   const [currentTab, setCurrentTab] = useState(0);
   const [wrongChain, setWrongChain] = useState(false);
   const [loadingOnChain, setLoadingOnChain] = useState(true);
+  const [connectedAccount, setConnectedAccount] = useState();
 
   // onchain data
   const acceptedChains = ["Celo", "Polygon"];
@@ -230,6 +231,7 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
 
       setChainAPI(newOnChain);
       setChainId(chainId);
+      setConnectedAccount(currentAccount);
 
       if (!chainAvailable) {
         setWrongChain(!chainAvailable);
@@ -286,7 +288,7 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
           toast.error(
             <ToastBody
               heading="Unable to load your wallet"
-              body="There seems to be an issue with the RPC your wallet uses, check back later."
+              body="There seems to be an issue connecting to your wallet, make sure you are using a supported wallet."
             />
           );
         }
@@ -540,6 +542,18 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
     }
   };
 
+  const noWallet = () => {
+    return !loadingOnChain && !connectedAccount;
+  };
+
+  const isWrongChain = () => {
+    return !loadingOnChain && wrongChain && connectedAccount;
+  };
+
+  const walletConfigured = () => {
+    return !loadingOnChain && !wrongChain && connectedAccount;
+  };
+
   return (
     <>
       {/* {showSellModal && (
@@ -565,7 +579,13 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
           selectedIndex={activeNetworkTab()}
           onClick={selectedTab => networkChange(selectedTab)}
         />
-        <Button type="primary-default" size="small" onClick={() => console.log("Convert $TAL button")} text="Bridge" />
+        <Button
+          type="primary-default"
+          size="small"
+          disabled={true}
+          onClick={() => console.log("Convert $TAL button")}
+          text="Bridge"
+        />
       </NetworkSelection>
       <BalanceSection>
         <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
@@ -610,7 +630,12 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
               icon={"gift"}
             >
               <div style={{ alignSelf: "flex-end" }}>
-                <Button type="primary-default" onClick={() => claimSupportingRewards()} text="Claim rewards" />
+                <Button
+                  type="primary-default"
+                  onClick={() => claimSupportingRewards()}
+                  disabled={true}
+                  text="Claim rewards"
+                />
               </div>
             </BalanceCard>
             <BalanceCard
@@ -623,7 +648,12 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
               icon={"gift"}
             >
               <div style={{ alignSelf: "flex-end" }}>
-                <Button type="primary-default" onClick={() => claimSupportersRewards()} text="Claim rewards" />
+                <Button
+                  type="primary-default"
+                  onClick={() => claimSupportersRewards()}
+                  disabled={true}
+                  text="Claim rewards"
+                />
               </div>
             </BalanceCard>
           </BalanceInformation>
@@ -634,7 +664,17 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
           <Spinner />
         </div>
       )}
-      {!loadingOnChain && wrongChain && (
+      {noWallet() && (
+        <div className="d-flex flex-column justify-content-center align-items-center w-100 px-3 pb-3 mt-4">
+          <Typography specs={{ variant: "h5", type: "bold" }} color="primary01" className="mt-4">
+            Connect your wallet
+          </Typography>
+          <Typography specs={{ variant: "p2", type: "regular" }} color="primary01" className="mb-3">
+            You need to have your wallet connected in order to see your balance.
+          </Typography>
+        </div>
+      )}
+      {isWrongChain() && (
         <div className="d-flex flex-column justify-content-center align-items-center w-100 px-3 pb-3 mt-4">
           <Typography specs={{ variant: "h5", type: "bold" }} color="primary01" className="mt-4">
             Switch Network
@@ -644,7 +684,7 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
           </Typography>
         </div>
       )}
-      {!loadingOnChain && !wrongChain && (
+      {walletConfigured() && (
         <>
           <TableOptions>
             <Tabs

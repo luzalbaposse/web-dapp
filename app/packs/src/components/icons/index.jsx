@@ -67,3 +67,4 @@ export { default as Typing } from "src/components/icons/Typing";
 export { default as User } from "src/components/icons/User";
 export { default as Verified } from "src/components/icons/Verified";
 export { default as Wallet } from "src/components/icons/Wallet";
+export { default as USDC } from "src/components/icons/USDC";

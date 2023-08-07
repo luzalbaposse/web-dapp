@@ -45,3 +45,52 @@ export const RewardIcon = styled.div`
   background-color: #7857ed;
   color: white;
 `;
+
+export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+`;
+
+export const ConnectionModalTop = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const ConnectionModalTitle = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 36px;
+`;
+
+export const ConnectionModalContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 24px;
+`;
+
+export const ConnectionModalRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const ConnectionModalFooter = styled.div`
+  display: flex;
+  margin-top: auto;
+  flex-direction: row;
+  justify-content: end;
+  gap: 4px;
+  width: 100%;
+  border-top: 1px solid #dadde1;
+  padding-top: 16px;
+`;

@@ -285,7 +285,7 @@ class OnChain {
     return result;
   }
 
-  async getTALBalance(_account) {
+  async getTALBalance(_account, formatted = false) {
     const account = this.connectedAccount();
     if (!(_account || account)) {
       return;
@@ -293,7 +293,11 @@ class OnChain {
 
     const result = await this.readFromContract(await this.virtualTALConfig(), "addressToTAL", [_account || account]);
 
-    return result;
+    if (formatted) {
+      return formatUnits(result, 18);
+    } else {
+      return result;
+    }
   }
 
   async createStake(token, _amount) {

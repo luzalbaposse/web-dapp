@@ -24,4 +24,10 @@ class TalentTokenForSupporterBlueprint < Blueprinter::Base
   field :first_time_bought_at do |talent_token, options|
     TalentSupporter.find_by(talent_contract_id: talent_token.contract_id, supporter_wallet_id: options[:supporter_wallet_id])&.first_time_bought_at
   end
+
+  field :connection_type do |talent_token, options|
+    user = talent_token.talent.user
+    connected_user = User.find_by(wallet_id: options[:supporter_wallet_id])
+    Connection.find_by(user: user, connected_user: connected_user)&.connection_type
+  end
 end

@@ -85,9 +85,9 @@
 }
 
 .claim-rewards-dropdown-btn {
-  background-color: $light-surface-disable !important;
+  background-color: white !important;
   color: $black !important;
-  border: 1px solid rgba(0, 0, 0, 0) !important;
+  border: 1px solid $light-surface-hover-02 !important;
   box-shadow: none !important;
 
   &:hover {
@@ -107,7 +107,7 @@
 
 .dark-body .claim-rewards-dropdown-btn {
   color: $dark-text-primary-01 !important;
-  background-color: $dark-surface-disable !important;
+  background-color: $dark-surface-hover-02 !important;
 
   &:hover {
     background-color: $dark-surface-hover-02 !important;
