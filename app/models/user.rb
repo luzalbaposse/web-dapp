@@ -66,9 +66,9 @@ class User < ApplicationRecord
   has_many :organizations, through: :memberships
 
   # Elasticsearch index update
-  # update_index("talents", :talent)
+  update_index("talents", :talent)
 
-  # after_save :touch_talent
+  after_save :touch_talent
 
   VALID_ROLES = ["admin", "basic", "moderator"].freeze
   REQUIRED_PROFILE_FIELDS = [

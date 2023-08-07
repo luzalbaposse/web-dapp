@@ -145,7 +145,7 @@ const StakeRow = ({ activity, explorerURL }) => {
           <TalentProfilePicture src={activity.profile_picture_url} userId={activity.user_id} height={40} />
           <DetailsCell>
             <Typography specs={{ variant: "p2", type: "bold" }} color="primary01">
-              {"Stake $LEAL"}
+              {`Stake $${activity.symbol}`}
             </Typography>
             <Typography specs={{ variant: "p3", type: "regular" }} color="primary03">
               {dayjs(activity.tx_date, "YYYY-MM-DD").format("MMM DD, YYYY")}
@@ -199,7 +199,7 @@ const UnstakeRow = ({ activity, explorerURL }) => {
           <TalentProfilePicture src={activity.profile_picture_url} userId={activity.user_id} height={40} />
           <DetailsCell>
             <Typography specs={{ variant: "p2", type: "bold" }} color="primary01">
-              {"Unstake $LEAL"}
+              {`Unstake $${activity.symbol}`}
             </Typography>
             <Typography specs={{ variant: "p3", type: "regular" }} color="primary03">
               {dayjs(activity.tx_date, "YYYY-MM-DD").format("MMM DD, YYYY")}
