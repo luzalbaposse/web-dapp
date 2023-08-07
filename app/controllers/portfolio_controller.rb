@@ -11,6 +11,8 @@ class PortfolioController < ApplicationController
 
     talent_tokens = TalentToken.where(contract_id: supporting_relationships)
 
+    talent_tokens = talent_tokens.where(chain_id: chain_id) if chain_id.present?
+
     @pagy, talent_tokens = pagy(talent_tokens, items: per_page)
 
     @talent_tokens = TalentTokenForSupporterBlueprint.render_as_json(
@@ -31,5 +33,9 @@ class PortfolioController < ApplicationController
 
   def per_page
     params[:per_page] || PER_PAGE
+  end
+
+  def chain_id
+    params[:chain_id]
   end
 end

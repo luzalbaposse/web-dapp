@@ -447,8 +447,13 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
     if (currentTab === 0) {
       return;
     }
+    let url = "/portfolio/tokens";
 
-    get(`/portfolio/tokens`).then(response => {
+    if (chainId) {
+      url += `?chain_id=${chainId}`;
+    }
+
+    get(url).then(response => {
       if (response.error) {
         toast.error(<ToastBody heading="Error!" body={response.error} />);
       } else {
@@ -463,8 +468,6 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
     if (currentTab === 1 || !chainId) {
       return;
     }
-
-    // TODO: Add filters for types of activity
 
     get(`/api/v1/wallet_activities?chain_id=${chainId}`).then(response => {
       if (response.error) {
@@ -486,6 +489,7 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
     const params = new URLSearchParams(document.location.search);
     const url = new URL(window.location.href);
     params.set("page", nextPage);
+    params.set("chain_id", chainId);
 
     get(`/api/v1/wallet_activities?${params.toString()}`).then(response => {
       setActivities(prev => [...prev, ...response.activities]);
