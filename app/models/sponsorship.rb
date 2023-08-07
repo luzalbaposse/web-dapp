@@ -22,7 +22,7 @@ class Sponsorship < ApplicationRecord
 
   def self.invested_by_user(user)
     invested = 0
-    Sponsorship.where(talent: user.wallet_id, symbol: ["USDC", "cUSD"]).find_each do |sponsorship|
+    Sponsorship.where(sponsor: user.wallet_id, symbol: ["USDC", "cUSD"]).find_each do |sponsorship|
       decimals = "1"
       sponsorship.token_decimals.times { decimals << "0" }
 

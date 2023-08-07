@@ -133,6 +133,13 @@ RSpec.describe Web3::SponsorshipSync do
           revoked_at: nil
         )
       end
+      let!(:sponsor_user) { create :user, wallet_id: "0xe3103d2482ca341f75892a69696b3014ca673049" }
+      let(:refresh_user_quest_class) { Quests::RefreshUserQuest }
+      let(:refresh_user_quest_instance) { instance_double(refresh_user_quest_class, call: true) }
+
+      before do
+        allow(refresh_user_quest_class).to receive(:new).and_return(refresh_user_quest_instance)
+      end
 
       it "creates a new daily record with the correct arguments" do
         expect { sponsorship_sync.call }.not_to change(Sponsorship, :count)
@@ -149,9 +156,23 @@ RSpec.describe Web3::SponsorshipSync do
         expect(create_notification_class).not_to have_received(:new)
       end
 
+      it "refreshes user quest" do
+        sponsorship_sync.call
+
+        sponsorship = existing_sponsorship.reload
+        quest = Quest.find_by(quest_type: "sponsor_talent")
+
+        aggregate_failures do
+          expect(refresh_user_quest_class).to have_received(:new).with(
+            user: sponsorship.sponsor_user,
+            quest: quest
+          )
+          expect(refresh_user_quest_instance).to have_received(:call)
+        end
+      end
+
       context "when both users have wallets connected" do
         let!(:talent_user) { create :user, wallet_id: "0xe3103d2482ca341f75892a69696b3014ca673048" }
-        let!(:sponsor_user) { create :user, wallet_id: "0xe3103d2482ca341f75892a69696b3014ca673049" }
 
         it "creates the connections with the correct arguments" do
           sponsorship_sync.call

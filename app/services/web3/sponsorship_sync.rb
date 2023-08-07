@@ -51,8 +51,6 @@ module Web3
             source_id: sponsorship.sponsor_user.id
           )
         end
-
-        refresh_user_quest(args[:sponsor])
       when "SponsorshipRevoked"
         sponsorship.update!(
           revoked_at: transaction_timestamp,
@@ -64,17 +62,21 @@ module Web3
           transactions: transactions
         )
 
-        if sponsorship.talent_user && sponsorship.sponsor_user
-          ActivityIngestJob.perform_later("sponsor", sponsorship_message(sponsorship), sponsorship.sponsor_user.id, sponsorship.talent_user.id)
-          if with_notifications
-            CreateNotification.new.call(
-              recipient: sponsorship.sponsor_user,
-              type: SponsorshipClaimedNotification,
-              source_id: sponsorship.talent_user.id
-            )
-          end
+        if sponsorship.sponsor_user
+          refresh_user_quest(sponsorship.sponsor_user)
 
-          update_connections(sponsorship.sponsor_user, sponsorship.talent_user)
+          if sponsorship.talent_user
+            ActivityIngestJob.perform_later("sponsor", sponsorship_message(sponsorship), sponsorship.sponsor_user.id, sponsorship.talent_user.id)
+            if with_notifications
+              CreateNotification.new.call(
+                recipient: sponsorship.sponsor_user,
+                type: SponsorshipClaimedNotification,
+                source_id: sponsorship.talent_user.id
+              )
+            end
+
+            update_connections(sponsorship.sponsor_user, sponsorship.talent_user)
+          end
         end
       else
         raise InvalidEventError.new
@@ -157,8 +159,7 @@ module Web3
       sponsored_connection.refresh_connection!
     end
 
-    def refresh_user_quest(wallet_id)
-      user = User.find_by(wallet_id: wallet_id)
+    def refresh_user_quest(user)
       quest = Quest.find_by(quest_type: "sponsor_talent")
 
       Quests::RefreshUserQuest.new(user: user, quest: quest).call
