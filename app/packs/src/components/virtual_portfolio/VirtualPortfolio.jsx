@@ -559,6 +559,10 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
     }
   };
 
+  const chainName = () => {
+    return chainIdToName(chainId, railsContext.contractsEnv);
+  };
+
   const noWallet = () => {
     return !loadingOnChain && !connectedAccount;
   };
@@ -618,7 +622,7 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
               primary={true}
               icon={"wallet"}
             >
-              <Label>Total amount of TAL available in your internal wallet</Label>
+              <Label>Total amount of TAL available in your internal wallet on {chainName()}</Label>
             </BalanceCard>
             <BalanceCard
               title="Staked TAL"
@@ -638,7 +642,7 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
           </SecondRowTitle>
           <BalanceInformation>
             <BalanceCard
-              title="Rewards from supporting"
+              title="Unclaimed Supporter Rewards"
               value={balanceToText(talBalances.supportingRewards)}
               valueInDollars={balanceToDollar(talBalances.supportingRewards)}
               theme={theme}
@@ -656,7 +660,7 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
               </div>
             </BalanceCard>
             <BalanceCard
-              title="Rewards from supporters"
+              title="Unclaimed Talent Rewards"
               value={balanceToText(talBalances.supportersRewards)}
               valueInDollars={balanceToDollar(talBalances.supportersRewards)}
               theme={theme}
