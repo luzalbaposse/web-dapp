@@ -36,3 +36,7 @@ export const EmptyStateCopy = styled(Typography)`
     word-break: break-word;
   }
 `;
+
+export const EmptyStateButtonContainer = styled.div`
+  padding-top: 8px;
+`;

@@ -189,7 +189,7 @@ const Journey = ({ className, talent, canUpdate }) => {
           )}
           {canUpdate && (
             <Button
-              className="align-self-end"
+              className={`align-self-end${mobile ? "" : " mr-3"}`}
               type="primary-default"
               size="big"
               text="Add Experience"
@@ -204,7 +204,7 @@ const Journey = ({ className, talent, canUpdate }) => {
         <div className="d-flex flex-column">
           {filteredJourneyItems.map((journeyItem, index) => (
             <div className="d-flex flex-row" key={`journey-item-${index}`}>
-              <div className="d-flex col-12 pr-0">
+              <div className={`d-flex col-12${mobile ? " pr-0" : ""}`}>
                 {!mobile && (
                   <div className="d-flex flex-column col-2 pr-6 pt-1 text-right">
                     <P3 className="text-primary-04" bold>

@@ -1,5 +1,8 @@
 import create from "zustand";
 import { get } from "src/utils/requests";
+import { toast } from "react-toastify";
+import { talentsService } from "src/api/talents";
+import { ToastBody } from "src/components/design_system/toasts";
 
 const messagesStore = create(set => ({
   messageCount: 0,
@@ -26,4 +29,19 @@ const loggedInUserStore = create(set => ({
   }
 }));
 
-export { messagesStore, railsContextStore, urlStore, loggedInUserStore };
+const useProfileOverviewStore = create(set => ({
+  profileOverview: undefined,
+  fetchProfileOverview: async profileUsername => {
+    const { data } = await talentsService.getProfileOverview(profileUsername).catch(err => {
+      console.error(err);
+      toast.error(<ToastBody heading={"Profile not found"} />);
+      setTimeout(() => {
+        window.location.href = "/home";
+      }, 500);
+    });
+
+    set({ profileOverview: data.talent });
+  }
+}));
+
+export { messagesStore, railsContextStore, urlStore, loggedInUserStore, useProfileOverviewStore };

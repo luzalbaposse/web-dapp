@@ -5,8 +5,8 @@ import { TAB_NAME_TO_INDEX_MAP } from "../constants";
 export const useTabsOverride = () => {
   const tabsState = useTabs();
   const changeTab = useCallback(
-    index => {
-      window.history.pushState({}, "", `?tab=${Object.keys(TAB_NAME_TO_INDEX_MAP)[index]}`);
+    (index, withUpdatesTab) => {
+      window.history.pushState({}, "", `?tab=${Object.keys(TAB_NAME_TO_INDEX_MAP(withUpdatesTab))[index]}`);
       tabsState.selectElement(index);
     },
     [tabsState.selectElement]

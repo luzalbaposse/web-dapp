@@ -1,3 +1,4 @@
+export { default as Add } from "src/components/icons/Add";
 export { default as Alert } from "src/components/icons/Alert";
 export { default as ArrowFill } from "src/components/icons/ArrowFill";
 export { default as ArrowForward } from "src/components/icons/ArrowForward";
@@ -21,6 +22,7 @@ export { default as Envelope } from "src/components/icons/Envelope";
 export { default as Expand } from "src/components/icons/Expand";
 export { default as ExternalLink } from "src/components/icons/ExternalLink";
 export { default as Gif } from "src/components/icons/Gif";
+export { default as Gift } from "src/components/icons/Gift";
 export { default as Globe } from "src/components/icons/Globe";
 export { default as GreenCheck } from "src/components/icons/GreenCheck";
 export { default as Grid } from "src/components/icons/Grid";
@@ -65,3 +67,4 @@ export { default as Typing } from "src/components/icons/Typing";
 export { default as User } from "src/components/icons/User";
 export { default as Verified } from "src/components/icons/Verified";
 export { default as Wallet } from "src/components/icons/Wallet";
+export { default as USDC } from "src/components/icons/USDC";

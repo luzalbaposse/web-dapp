@@ -101,3 +101,35 @@ export const displayableAmount = amount => {
 
   return parseAndCommify(formattedAmount);
 };
+
+export const talentTokensInTAL = amount => {
+  if (!amount) {
+    return "0";
+  }
+  const amountBigNum = ethers.BigNumber.from(amount);
+  const formattedAmount = ethers.utils.formatUnits(amountBigNum);
+
+  return parseAndCommify(formattedAmount * 5);
+};
+export const talentTokensInUSD = amount => {
+  if (!amount) {
+    return "0";
+  }
+  const amountBigNum = ethers.BigNumber.from(amount);
+  const formattedAmount = ethers.utils.formatUnits(amountBigNum);
+
+  return parseAndCommify(formattedAmount * 0.1);
+};
+
+export const formattedConnectionType = connection_type => {
+  return {
+    sponsor: "Sponsor",
+    sponsored: "Sponsored",
+    mutual_stake: "Mutual Stake",
+    staker: "Staker",
+    staking: "Staking",
+    mutual_subscription: "Mutual Subscription",
+    subscriber: "Subscriber",
+    subscribing: "Subscribing"
+  }[connection_type];
+};

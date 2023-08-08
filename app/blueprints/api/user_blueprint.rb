@@ -14,6 +14,14 @@ class API::UserBlueprint < Blueprinter::Base
       user.uuid
     end
 
+    field :talent_id do |user, _options|
+      user.talent&.id
+    end
+
+    field :career_goal_id do |user, _options|
+      user.talent&.career_goal&.id
+    end
+
     field :wallet_address do |user, _options|
       user.wallet_id
     end

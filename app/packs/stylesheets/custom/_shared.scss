@@ -798,6 +798,12 @@
   .hide-content-in-mobile {
     display: none !important;
   }
+
+  .table-mobile-full-width {
+    margin-left: -16px;
+    margin-right: -16px;
+    width: calc(100% + 32px);
+  }
 }
 
 .border-dashed {

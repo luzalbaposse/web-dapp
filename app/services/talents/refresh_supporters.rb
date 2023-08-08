@@ -16,20 +16,22 @@ module Talents
 
       return if talent_supporters_response.blank?
 
-      supporters_count = talent_supporters_response.talent_token.supporter_counter.to_i
-      total_supply = talent_supporters_response.talent_token.total_supply
-      token_day_data = talent_supporters_response.talent_token.token_day_data
+      supporters_count = talent_supporters_response.talent_token&.supporter_counter&.to_i || 0
+      total_supply = talent_supporters_response.talent_token&.total_supply
+      token_day_data = talent_supporters_response.talent_token&.token_day_data
 
       upsert_talent_info(supporters_count, total_supply, token_day_data)
 
       loop do
-        supporters = talent_supporters_response.talent_token.supporters
+        supporters = talent_supporters_response.talent_token&.supporters
+
+        break if supporters.nil?
 
         upsert_talent_supporters(supporters)
 
         fetched_supporters_count += supporters.count
 
-        break if fetched_supporters_count >= talent_supporters_response.talent_token.supporter_counter.to_i
+        break if fetched_supporters_count >= (talent_supporters_response.talent_token&.supporter_counter&.to_i || 0)
 
         talent_supporters_response = talent_supporters(offset: fetched_supporters_count)
       end

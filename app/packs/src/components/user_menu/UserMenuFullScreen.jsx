@@ -75,12 +75,12 @@ const UserMenuFullScreen = ({
         <ArrowRight color="currentColor" />
       </Button>
       <Button
-        onClick={() => (window.location.href = `/portfolio`)}
+        onClick={() => (window.location.href = `/wallet`)}
         type="white-ghost"
         mode={mode}
         className="d-flex flex-row justify-content-between mt-3"
       >
-        <P1 className="text-black" bold text="Portfolio" />
+        <P1 className="text-black" bold text="Wallet" />
         <ArrowRight color="currentColor" />
       </Button>
       <Button

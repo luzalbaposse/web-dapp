@@ -109,14 +109,22 @@ class API::TalentBlueprint < Blueprinter::Base
   view :overview do
     include_view :normal
 
+    field :profile_type
+
     field :subscribing_status do |user, options|
       status = "unsubscribed"
       status = "subscribed" if options[:current_user_active_subscribing]&.include?(user.id)
+      status = "subscribing" if user.active_subscribing.pluck(:user_id)&.include?(options[:current_user_id])
+      if user.active_subscribing.pluck(:user_id)&.include?(options[:current_user_id]) && options[:current_user_active_subscribing]&.include?(user.id)
+        status = "both_subscribed"
+      end
       status = "pending" if options[:current_user_pending_subscribing]&.include?(user.id)
       status
     end
 
-    field :profile_type
+    field :updates_length do |user, options|
+      user.origin_activities.where(type: "Activities::CareerUpdate").count
+    end
   end
 
   view :about do

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { H5 } from "src/components/design_system/typography";
 import TalentProfilePicture from "src/components/talent/TalentProfilePicture";
 import Notifications from "src/components/notifications";
 import UserMenuFullScreen from "src/components/user_menu/UserMenuFullScreen";
 import Button from "src/components/design_system/button";
 import SearchDropdown from "./SearchDropdown";
+import { H5 } from "src/components/design_system/typography";
 
 const MobileUserMenu = ({
   mode,

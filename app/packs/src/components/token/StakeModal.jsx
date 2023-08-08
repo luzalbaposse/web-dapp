@@ -18,6 +18,7 @@ import { useWindowDimensionsHook } from "src/utils/window";
 import { darkTextPrimary01, black } from "src/utils/colors";
 import { toast } from "react-toastify";
 import { ToastBody } from "src/components/design_system/toasts";
+import CurrencySelectionDropdown from "./CurrencySelectionDropdown";
 
 const StakeModal = ({
   show,
@@ -38,6 +39,7 @@ const StakeModal = ({
   const [amount, setAmount] = useState("");
   const [showWalletConnectionError, setShowWalletConnectionError] = useState(false);
   const [availableAmount, setAvailableAmount] = useState("0");
+  const [availableAmountTAL, setAvailableAmountTAL] = useState("0");
   const [currentAccount, setCurrentAccount] = useState(null);
   const [maxMinting, setMaxMinting] = useState("0");
   const [chainData, setChainData] = useState(null);
@@ -50,6 +52,7 @@ const StakeModal = ({
   const [valueError, setValueError] = useState(false);
   const [showNewMessageModal, setShowNewMessageModal] = useState(false);
   const [chainName, setChainName] = useState("celo");
+  const [selectedCurrency, setSelectedCurrency] = useState("TAL");
 
   const setupOnChain = useCallback(async errorCallback => {
     try {
@@ -70,8 +73,13 @@ const StakeModal = ({
         setTargetToken(tokenAddress);
       }
 
+      setChainData(newOnChain);
+
       const _availableAmount = await newOnChain.getStableBalance(true);
       setAvailableAmount(_availableAmount);
+
+      const _talBalance = await newOnChain.getTALBalance(null, true);
+      setAvailableAmountTAL(_talBalance);
 
       const chainName = chainIdToName(tokenChainId, railsContext.contractsEnv);
       setChainName(chainName);
@@ -80,8 +88,6 @@ const StakeModal = ({
         const _tokenAvailability = await newOnChain.getTokenAvailability(tokenAddress, chainId, true);
         setMaxMinting(parseAndCommify(_tokenAvailability));
       }
-
-      setChainData(newOnChain);
     } catch (e) {
       console.error(e);
       errorCallback();
@@ -93,6 +99,9 @@ const StakeModal = ({
       const _availableAmount = await chainData.getStableBalance(true);
 
       setAvailableAmount(_availableAmount);
+
+      const _talBalance = await chainData.getTALBalance(null, true);
+      setAvailableAmountTAL(_talBalance);
     }
   }, [currentAccount]);
 
@@ -128,7 +137,7 @@ const StakeModal = ({
       return;
     }
 
-    if (parseFloat(amount) > parseFloat(availableAmount)) {
+    if (parseFloat(amount) > parseFloat(amountOnWallet())) {
       // AMOUNT IS TOO HIGH
       toast.error(
         <ToastBody
@@ -149,6 +158,9 @@ const StakeModal = ({
     if (result) {
       const _availableAmount = await chainData.getStableBalance(true);
       setAvailableAmount(_availableAmount);
+
+      const _talBalance = await chainData.getTALBalance(null, true);
+      setAvailableAmountTAL(_talBalance);
 
       const chainId = await chainData.getChainID();
 
@@ -178,10 +190,12 @@ const StakeModal = ({
     e.preventDefault();
     setApproving(true);
 
-    const allowedValue = await chainData.getStableAllowance(true);
+    if (selectedCurrency !== "TAL") {
+      const allowedValue = await chainData.getStableAllowance(true);
 
-    if (parseFloat(amount) > parseFloat(allowedValue)) {
-      await chainData.approveStable(amount);
+      if (parseFloat(amount) > parseFloat(allowedValue)) {
+        await chainData.approveStable(amount);
+      }
     }
 
     setDidAllowance(true);
@@ -212,7 +226,7 @@ const StakeModal = ({
   };
 
   const step = () => {
-    if (chainData?.account) {
+    if (currentAccount) {
       if (!validChain) {
         return "Change network";
       }
@@ -222,8 +236,12 @@ const StakeModal = ({
     }
   };
 
+  const amountOnWallet = () => {
+    return selectedCurrency === "TAL" ? availableAmountTAL : availableAmount;
+  };
+
   const setValidAmount = value => {
-    if (parseFloat(value) < 0 || parseFloat(value) > parseFloat(availableAmount)) {
+    if (parseFloat(value) < 0 || parseFloat(value) > parseFloat(amountOnWallet())) {
       setValueError(true);
     } else {
       setValueError(false);
@@ -236,15 +254,10 @@ const StakeModal = ({
     setAmount(value);
   };
 
-  const stableDescription = () => {
-    if (chainName == "Celo") {
-      return "Please insert the amount of cUSD (Celo's stablecoin) you wish to use to buy Talent Tokens.";
-    } else {
-      return "Please insert the amount of USDC you wish to use to buy Talent Tokens.";
-    }
-  };
-
   const stableSymbol = () => {
+    if (selectedCurrency === "TAL") {
+      return "TAL";
+    }
     if (chainName == "Celo") {
       return "cUSD";
     } else {
@@ -275,9 +288,7 @@ const StakeModal = ({
         <>
           <Modal.Header closeButton className="pt-4 px-4 pb-0">
             <P1
-              text={`BUY ${ticker} ${
-                railsContext.disableSmartContracts == "true" && chainName == "Polygon" ? "(currently unavailable)" : ""
-              }`}
+              text={`BUY ${ticker} ${railsContext.disableSmartContracts == "true" ? "(currently unavailable)" : ""}`}
               bold
               className="text-black mb-3"
             />
@@ -285,7 +296,7 @@ const StakeModal = ({
           <Modal.Body className="show-grid p-4">
             <div className="container-fluid">
               <div className="row d-flex flex-column">
-                {railsContext.disableSmartContracts == "true" && chainName == "Polygon" ? (
+                {railsContext.disableSmartContracts == "true" ? (
                   <P2
                     className="my-2"
                     text="For security reasons buying talent tokens is currently disabled, we're working
@@ -293,7 +304,7 @@ const StakeModal = ({
                   />
                 ) : (
                   <>
-                    <P2>{stableDescription()}</P2>
+                    <P2>Please insert the amount and the currency you wish to use to buy Talent Tokens.</P2>
                     <P2 className="my-2">
                       Check the{" "}
                       <a
@@ -308,13 +319,22 @@ const StakeModal = ({
                 )}
                 <div className="d-flex flex-column">
                   <div className="form-group position-relative m-0">
+                    <P2 bold style={{ marginBottom: 10, marginTop: 40 }}>
+                      Currency
+                    </P2>
+                    <CurrencySelectionDropdown
+                      mode={mode}
+                      chain={chainName}
+                      selectedCurrency={selectedCurrency}
+                      setSelectedCurrency={setSelectedCurrency}
+                    />
                     <TextInput
                       title={"Total Amount"}
                       mode={mode}
                       type={"number"}
-                      disabled={railsContext.disableSmartContracts == "true" && chainName == "Polygon"}
+                      disabled={railsContext.disableSmartContracts == "true"}
                       topCaption={
-                        currentAccount ? `Available amount: ${parseAndCommify(availableAmount)} ${stableSymbol()}` : ""
+                        currentAccount ? `Available amount: ${parseAndCommify(amountOnWallet())} ${stableSymbol()}` : ""
                       }
                       placeholder={"0.0"}
                       onChange={e => setValidAmount(e.target.value)}
@@ -360,11 +380,7 @@ const StakeModal = ({
                             mode={mode}
                             className="w-100 mr-2"
                             loading={approving}
-                            disabled={
-                              approving ||
-                              didAllowance ||
-                              (railsContext.disableSmartContracts == "true" && chainName == "Polygon")
-                            }
+                            disabled={approving || didAllowance || railsContext.disableSmartContracts == "true"}
                             success={didAllowance}
                             fillPrimary={darkTextPrimary01}
                             fillSecondary={black}
@@ -378,9 +394,7 @@ const StakeModal = ({
                             mode={mode}
                             className="w-100 ml-2"
                             disabled={
-                              !didAllowance ||
-                              stage == "Confirm" ||
-                              (railsContext.disableSmartContracts == "true" && chainName == "Polygon")
+                              !didAllowance || stage == "Confirm" || railsContext.disableSmartContracts == "true"
                             }
                             loading={stage == "Confirm"}
                             success={stage == "Verified"}

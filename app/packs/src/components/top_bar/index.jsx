@@ -305,7 +305,7 @@ export const TopBar = ({
         </a>
         <div className="d-flex align-items-center">
           <ExploreDropdown active={activeTab.includes("/talent") || activeTab.includes("/collectives")} />
-          <Tab href="/portfolio" text="Portfolio" type="white" active={activeTab === "/portfolio"} className="mr-4" />
+          <Tab href="/wallet" text="Wallet" type="white" active={activeTab === "/wallet"} className="mr-4" />
           <Tab
             href="/connection"
             text="Connections"

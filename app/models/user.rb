@@ -48,6 +48,9 @@ class User < ApplicationRecord
   # Rewards
   has_many :rewards
 
+  # Wallet Activity
+  has_many :wallet_activities
+
   # web3
   has_many :user_domains, dependent: :destroy
   has_many :erc20_tokens, dependent: :destroy

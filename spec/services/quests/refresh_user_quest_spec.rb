@@ -410,8 +410,8 @@ RSpec.describe Quests::RefreshUserQuest do
 
       context "when the quest was completed" do
         before do
-          create :sponsorship, talent: user.wallet_id, symbol: "USDC", amount: 2500000, token_decimals: 6
-          create :sponsorship, talent: user.wallet_id, symbol: "USDC", amount: 2500000000000000000, token_decimals: 18
+          create :sponsorship, sponsor: user.wallet_id, symbol: "USDC", amount: 2500000, token_decimals: 6
+          create :sponsorship, sponsor: user.wallet_id, symbol: "USDC", amount: 2500000000000000000, token_decimals: 18
         end
 
         it_behaves_like "a refresh user quest that creates new records"

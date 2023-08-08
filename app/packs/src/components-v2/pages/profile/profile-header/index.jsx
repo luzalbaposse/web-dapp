@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useState } from "react";
+import React, { useEffect, useMemo, useCallback, useState } from "react";
 import { toast } from "react-toastify";
 import {
   Avatar,
@@ -31,9 +31,11 @@ import { useImpersonate } from "./hooks/use-impersonate";
 import { ToastBody } from "src/components/design_system/toasts";
 import ApprovalConfirmationModal from "src/components/profile/ApprovalConfirmationModal";
 import AdminVerificationConfirmationModal from "src/components/profile/AdminVerificationConfirmationModal";
+import { useProfileOverviewStore } from "src/contexts/state";
 
 export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) => {
   const data = useDataFetcher(urlData);
+  const { profileOverview, fetchProfileOverview } = useProfileOverviewStore();
   const { impersonateUser } = useImpersonate();
   const qrCodeModalState = useModal();
   const [isEditMode, setIsEditMode] = useState(false);
@@ -44,10 +46,10 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
     const menu = [{ value: "Share", iconColor: "primary01", iconName: "share-2" }];
     if (currentUser?.admin || currentUser?.moderator) {
       menu.push({ value: "Impersonate", iconColor: "primary01", iconName: "user" });
-      if (!data.profileOverview?.verified) {
+      if (!profileOverview?.verified) {
         menu.push({ value: "Verify", iconColor: "primary01", iconName: "check" });
       }
-      if (data.profileOverview?.profile_type === "waiting_for_approval") {
+      if (profileOverview?.profile_type === "waiting_for_approval") {
         menu.push({ value: "Approve", iconColor: "primary01", iconName: "check-chat" });
       }
     }
@@ -81,7 +83,7 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
   );
   const subscribe = useCallback(() => {
     talentsService
-      .sendSubscribeRequest(data.profileOverview?.username)
+      .sendSubscribeRequest(profileOverview?.username)
       .then(() => {
         toast.success(<ToastBody heading="Subscription request sent" />);
         window.location.reload();
@@ -89,10 +91,10 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
       .catch(() => {
         toast.error(<ToastBody heading="Something went wrong" />);
       });
-  }, [data.profileOverview?.username]);
+  }, [profileOverview?.username]);
   const unsubscribe = useCallback(() => {
     talentsService
-      .unsubscribe(data.profileOverview?.username)
+      .unsubscribe(profileOverview?.username)
       .then(() => {
         toast.success(<ToastBody heading="Unsiubscribed successfulyy" />);
         window.location.reload();
@@ -101,7 +103,48 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
         toast.error(<ToastBody heading="Something went wrong" />);
       });
   }, [data.profileOverview?.username]);
-  return !data.profileOverview ? (
+  const MemoedTag = useMemo(() => {
+    if (
+      currentUser?.username === data.profileOverview?.username ||
+      data.profileOverview?.subscribing_status === "unsubscribed"
+    )
+      return <></>;
+    let tagLabel = "";
+    switch (data.profileOverview?.subscribing_status) {
+      case "subscribed":
+        tagLabel = "Supporting";
+        break;
+      case "subscribing":
+        tagLabel = "Supporting you";
+        break;
+      case "pending":
+        tagLabel = "Pending";
+        break;
+      case "both_subscribed":
+        tagLabel = "Both support";
+        break;
+      default:
+        tagLabel = "";
+        break;
+    }
+    return (
+      <TagContainer>
+        <Tag
+          size="small"
+          color="primary"
+          label={tagLabel}
+          backgroundColor="bg01"
+          borderColor="surfaceHover02"
+          textColor="primary02"
+        />
+      </TagContainer>
+    );
+  }, [data.profileOverview, currentUser?.username]);
+  useEffect(() => {
+    if (!urlData.profileUsername) return;
+    fetchProfileOverview(urlData.profileUsername)
+  }, [urlData.profileUsername]);
+  return !profileOverview ? (
     <SpinnerContainer>
       <Spinner color="primary" size={48} />
     </SpinnerContainer>
@@ -112,65 +155,55 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
           <Avatar
             size="lg"
             userId={1}
-            url={data.profileOverview?.profile_picture_url}
-            profileURL={`/u/${data.profileOverview?.username}`}
+            url={profileOverview?.profile_picture_url}
+            profileURL={`/u/${profileOverview?.username}`}
           />
           {isMobile && (
             <Actions>
-              <ButtonDropdown selectOption={onSelectOption} options={dropdownMenu}>
+              <ButtonDropdown selectOption={onSelectOption} options={dropdownMenu} opensOnRight>
                 <Button size="small" hierarchy="secondary" leftIcon="navigation" iconColor="primary01" />
               </ButtonDropdown>
-              {currentUser?.username !== data.profileOverview?.username ? (
+              {currentUser?.username !== profileOverview?.username ? (
                 <>
                   <Button
                     size="small"
                     hierarchy="secondary"
                     leftIcon="email"
                     iconColor="primary01"
-                    href={`/messages?user=${data.profileOverview?.username}`}
+                    href={`/messages?user=${profileOverview?.username}`}
                   />
-                  {data.profileOverview?.subscribing_status === "unsubscribed" ? (
+                  {profileOverview?.subscribing_status === "unsubscribed" ? (
                     <Button size="small" hierarchy="secondary" text="Subscribe" onClick={subscribe} />
                   ) : (
                     <Button size="small" hierarchy="secondary" text="Unsubscribe" onClick={unsubscribe} />
                   )}
                 </>
               ) : (
-                <Button size="small" hierarchy="secondary" text="Edit profile" onClick={() => onSelectOption("Edit")} />
+                <Button
+                  size="small"
+                  hierarchy="secondary"
+                  text="Edit profile"
+                  onClick={() => onSelectOption({ value: "Edit" })}
+                />
               )}
             </Actions>
           )}
         </TopRow>
         <UserInfo>
           <Name specs={{ type: "bold", variant: "h5" }} color="primary01">
-            {data.profileOverview?.name}
+            {profileOverview?.name}
           </Name>
-          {data.profileOverview?.verified && <Icon name="verified-2" color="primary" size={18} />}
+          {profileOverview?.verified && <Icon name="verified-2" color="primary" size={18} />}
         </UserInfo>
-        <TagContainer>
-          {currentUser?.username !== data.profileOverview?.username &&
-            data.profileOverview?.subscribing_status !== "unsubscribed" && (
-              <Tag
-                size="small"
-                color="primary"
-                label={
-                  data.profileOverview?.subscribing_status.charAt(0).toUpperCase() +
-                  data.profileOverview?.subscribing_status.slice(1)
-                }
-                backgroundColor="bg01"
-                borderColor="surfaceHover02"
-                textColor="primary02"
-              />
-            )}
-        </TagContainer>
+        {MemoedTag}
         <Typography specs={{ type: "regular", variant: "p1" }} color="primary01">
-          {data.profileOverview?.headline}
+          {profileOverview?.headline}
         </Typography>
-        {!!data.profileOverview?.location && (
+        {!!profileOverview?.location && (
           <LocationContainer>
             <Icon name="pin" color="primary04" size={16} />
             <Typography specs={{ type: "regular", variant: "p2" }} color="primary04">
-              {data.profileOverview?.location}
+              {profileOverview?.location}
             </Typography>
           </LocationContainer>
         )}
@@ -184,7 +217,7 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
             </>
           ) : (
             <Typography specs={{ type: "small", variant: "label3" }} color="primary04">
-              None of your connections is supporting {data.profileOverview?.name}.
+              None of your connections is supporting {profileOverview?.name}.
             </Typography>
           )}
         </MembersContainer>
@@ -193,16 +226,16 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
             <ButtonDropdown selectOption={onSelectOption} options={dropdownMenu}>
               <Button size="small" hierarchy="secondary" leftIcon="navigation" iconColor="primary01" />
             </ButtonDropdown>
-            {currentUser?.username !== data.profileOverview?.username ? (
+            {currentUser?.username !== profileOverview?.username ? (
               <>
                 <Button
                   size="small"
                   hierarchy="secondary"
                   leftIcon="email"
                   iconColor="primary01"
-                  href={`/messages?user=${data.profileOverview?.username}`}
+                  href={`/messages?user=${profileOverview?.username}`}
                 />
-                {data.profileOverview?.subscribing_status === "unsubscribed" ? (
+                {profileOverview?.subscribing_status === "unsubscribed" ? (
                   <Button size="small" hierarchy="secondary" text="Subscribe" onClick={subscribe} />
                 ) : (
                   <Button size="small" hierarchy="secondary" text="Unsubscribe" onClick={unsubscribe} />
@@ -221,20 +254,20 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
       </Container>
       <QRCodeModal
         modalState={qrCodeModalState}
-        username={data.profileOverview?.username}
-        profilePicture={data.profileOverview?.profile_picture_url}
+        username={profileOverview?.username}
+        profilePicture={profileOverview?.profile_picture_url}
       />
       <EditOverviewModalV2
         show={isEditMode}
         hide={() => setIsEditMode(false)}
-        profile={data.profileOverview}
-        username={data.profileOverview.username}
+        profile={profileOverview}
+        username={profileOverview.username}
       />
       <ApprovalConfirmationModal
         show={showApproveModal}
         setShow={setShowApproveModal}
         hide={() => setShowApproveModal(false)}
-        talent={data.profileOverview}
+        talent={profileOverview}
         setProfile={() => {
           window.location.reload();
         }}
@@ -244,7 +277,7 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
         show={showVerifyModal}
         setShow={setShowVerifyModal}
         hide={() => setShowVerifyModal(false)}
-        talent={data.profileOverview}
+        talent={profileOverview}
         setProfile={() => {
           window.location.reload();
         }}

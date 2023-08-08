@@ -28,7 +28,7 @@ export const GoalInfo = styled.div`
 `;
 
 export const GoalImage = styled.img`
-  border-radius: 8px;
+  border-radius: 16px;
   max-width: 100%;
   object-fit: cover;
 `;

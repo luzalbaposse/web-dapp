@@ -58,6 +58,12 @@
   }
 }
 
+.talent-table-action-options {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+}
+
 .wallet-id-text {
   color: $light-text-primary-disable;
 }

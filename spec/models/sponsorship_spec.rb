@@ -102,8 +102,8 @@ RSpec.describe Sponsorship, type: :model do
 
     context "when the user made sponsorships" do
       before do
-        create :sponsorship, talent: wallet_id, symbol: "USDC", amount: 2500000, token_decimals: 6
-        create :sponsorship, talent: wallet_id, symbol: "USDC", amount: 2500000000000000000, token_decimals: 18
+        create :sponsorship, sponsor: wallet_id, symbol: "USDC", amount: 2500000, token_decimals: 6
+        create :sponsorship, sponsor: wallet_id, symbol: "USDC", amount: 2500000000000000000, token_decimals: 18
       end
 
       it "returns the amount invested by the user" do

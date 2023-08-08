@@ -5,12 +5,12 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 import { waitForTransaction } from "wagmi/actions";
 import TalentToken from "../abis/recent/TalentToken.json";
-import Staking from "../abis/recent/Staking.json";
-// import TalentFactory from "../abis/recent/TalentFactory.json";
+import StakingV3 from "../abis/recent/StakingV3.json";
 import TalentFactoryV3 from "../abis/recent/TalentFactoryV3.json";
 import StableToken from "../abis/recent/StableToken.json";
 import CommunityUser from "../abis/recent/CommunityUser.json";
 import TalentSponsorship from "../abis/TalentSponsorship.json";
+import VirtualTAL from "../abis/recent/VirtualTAL.json";
 import Addresses from "./addresses.json";
 import { ipfsToURL } from "./utils";
 import { externalGet } from "src/utils/requests";
@@ -83,7 +83,6 @@ class OnChain {
     return { hash, chainId, client, walletClient };
   }
 
-  // NO LONGER USED WITH VIRTUAL WALLET => WILL BE DELETED
   getEnvBlockExplorerUrls(chainId = 42220) {
     if (Addresses[this.env][chainId]) {
       return Addresses[this.env][chainId]["paramsForMetamask"]["blockExplorerUrls"][0];
@@ -102,6 +101,10 @@ class OnChain {
     } else {
       return false;
     }
+  }
+
+  availableChainIds() {
+    return Object.keys(Addresses[this.env]).map(key => Addresses[this.env][key]["chainId"]);
   }
 
   retrieveAccount() {
@@ -141,7 +144,7 @@ class OnChain {
     const chainId = await window.web3Interactor.getChainId();
 
     return {
-      abi: Staking.abi,
+      abi: StakingV3.abi,
       address: Addresses[this.env][chainId]["staking"]
     };
   }
@@ -152,6 +155,15 @@ class OnChain {
     return {
       abi: TalentSponsorship.abi,
       address: Addresses[this.env][chainId]["sponsorship"]
+    };
+  }
+
+  async virtualTALConfig() {
+    const chainId = await window.web3Interactor.getChainId();
+
+    return {
+      abi: VirtualTAL.abi,
+      address: Addresses[this.env][chainId]["virtualTAL"]
     };
   }
 
@@ -236,7 +248,7 @@ class OnChain {
     return logs?.find(e => e.eventName === "TalentCreated");
   }
 
-  async calculateEstimatedReturns(token, _account) {
+  async calculateEstimatedReturns(_account) {
     const account = this.connectedAccount();
     if (!account && !_account) {
       return;
@@ -246,11 +258,46 @@ class OnChain {
 
     const result = await this.readFromContract(await this.stakingConfig(), "calculateEstimatedReturns", [
       _account || account,
-      token,
       timestamp
     ]);
 
     return result;
+  }
+
+  async pendingTalentRewards(talent_token) {
+    if (!talent_token) {
+      return;
+    }
+
+    const result = await this.readFromContract(await this.stakingConfig(), "calculateTalentRewards", [talent_token]);
+
+    return result;
+  }
+
+  async talLocked(_account) {
+    const account = this.connectedAccount();
+    if (!(_account || account)) {
+      return;
+    }
+
+    const result = await this.readFromContract(await this.stakingConfig(), "globalStakes", [_account || account]);
+
+    return result;
+  }
+
+  async getTALBalance(_account, formatted = false) {
+    const account = this.connectedAccount();
+    if (!(_account || account)) {
+      return;
+    }
+
+    const result = await this.readFromContract(await this.virtualTALConfig(), "addressToTAL", [_account || account]);
+
+    if (formatted) {
+      return formatUnits(result, 18);
+    } else {
+      return result;
+    }
   }
 
   async createStake(token, _amount) {
@@ -289,6 +336,58 @@ class OnChain {
     }
 
     return hash;
+  }
+
+  async claimRewardsToVirtualTAL() {
+    const { hash, client } = await this.writeToContract(await this.stakingConfig(), "claimRewardsToVirtualTAL", []);
+
+    try {
+      await waitForTransaction({ hash });
+    } catch (err) {
+      console.error(err);
+      toast.error(
+        <ToastBody
+          heading="Transaction Error"
+          body="The transaction couldn't be processed. Try later or contact us if the problem persists."
+        />
+      );
+    }
+
+    const transaction = await client.getTransactionReceipt({
+      hash
+    });
+
+    return [transaction, hash];
+  }
+
+  async claimTalentRewardsToVirtualTAL(tokenAddress) {
+    if (!tokenAddress) {
+      return;
+    }
+
+    const { hash, client } = await this.writeToContract(
+      await this.stakingConfig(),
+      "withdrawTalentRewardsToVirtualTAL",
+      [tokenAddress]
+    );
+
+    try {
+      await waitForTransaction({ hash });
+    } catch (err) {
+      console.error(err);
+      toast.error(
+        <ToastBody
+          heading="Transaction Error"
+          body="The transaction couldn't be processed. Try later or contact us if the problem persists."
+        />
+      );
+    }
+
+    const transaction = await client.getTransactionReceipt({
+      hash
+    });
+
+    return [transaction, hash];
   }
 
   async approveStable(_amount) {
@@ -524,6 +623,40 @@ class OnChain {
     }
 
     return true;
+  }
+
+  async unstakeTalentToken(token, _amount) {
+    if (!token) {
+      return;
+    }
+    const amount = parseUnits(_amount);
+
+    const { hash, client } = await this.writeToContract(await this.stakingConfig(), "sellTalentTokenForVirtualTAL", [
+      token,
+      amount
+    ]);
+
+    try {
+      await waitForTransaction({ hash });
+    } catch (err) {
+      console.error(err);
+      toast.error(
+        <ToastBody
+          heading="Transaction Error"
+          body="The transaction couldn't be processed. Try later or contact us if the problem persists."
+        />
+      );
+    }
+
+    if (!hash) {
+      return false;
+    }
+
+    const transaction = await client.getTransactionReceipt({
+      hash
+    });
+
+    return transaction;
   }
 
   // ONCHAIN UTILS

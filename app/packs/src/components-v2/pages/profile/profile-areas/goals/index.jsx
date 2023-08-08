@@ -2,7 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Button, Icon, Spinner, TextLink, Typography } from "@talentprotocol/design-system";
 import { GoalCard } from "../../../../goal-card";
 import { goalsService } from "src/api";
-import { ButtonContainer, Container, EmptyStateContainer, EmptyStateCopy, SpinnerContainer } from "./styled";
+import {
+  ButtonContainer,
+  Container,
+  EmptyStateButtonContainer,
+  EmptyStateContainer,
+  EmptyStateCopy,
+  SpinnerContainer
+} from "./styled";
 import { AddGoalModal } from "./add-goal-modal";
 import { useAddGoalModalState } from "./add-goal-modal/hooks/use-add-goal-modal";
 
@@ -43,7 +50,7 @@ export const Goals = ({ urlData, currentUser }) => {
       {data.goals.length
         ? data.goals.map(goal => (
             <GoalCard
-              key={goal.uuid}
+              key={goal.id}
               goal={goal}
               openAddGoalModal={addGoalModalState.openModal}
               userId={currentUser?.username}
@@ -53,18 +60,26 @@ export const Goals = ({ urlData, currentUser }) => {
         : (currentUser?.username === urlData?.profileUsername && (
             <EmptyStateContainer>
               <Icon name="binoculars" size={64} color="primary04" />
-              <Typography specs={{ type: "regular", variant: "p1" }} color="primary01">
+              <Typography specs={{ type: "regular", variant: "p1" }} color="primary04">
                 Setting goals is a powerful way to turn your dreams into reality. By defining your aspirations, you'll
                 have a clear direction, purpose, and something to strive for. Other community members are here and eager
                 to help you reach your goals. Collaboration and support from the community can make all the difference.
                 So, dream big and let's work together to make those dreams come true. I'm here to support you all the
                 way!
               </Typography>
+              <EmptyStateButtonContainer>
+                <Button
+                  hierarchy="primary"
+                  size="medium"
+                  text="Add new goal"
+                  onClick={() => addGoalModalState.openModal("Add")}
+                />
+              </EmptyStateButtonContainer>
             </EmptyStateContainer>
           )) || (
             <EmptyStateContainer>
               <Icon name="binoculars" size={64} color="primary04" />
-              <EmptyStateCopy specs={{ type: "regular", variant: "p1" }} color="primary01">
+              <EmptyStateCopy specs={{ type: "regular", variant: "p1" }} color="primary04">
                 Everyone is on a unique journey, and it seems like <b>{urlData?.profileUsername}</b> is still defining
                 their next steps. Check back soon to discover their goals and perhaps find exciting opportunities for
                 collaboration and inspiration! If you have a suggestion for them{" "}
@@ -72,7 +87,10 @@ export const Goals = ({ urlData, currentUser }) => {
               </EmptyStateCopy>
             </EmptyStateContainer>
           )}
-      <AddGoalModal {...addGoalModalState} />
+      <AddGoalModal
+        {...addGoalModalState}
+        talent={{ id: currentUser.talent_id, career_goal: { id: currentUser.career_goal_id } }}
+      />
     </Container>
   );
 };

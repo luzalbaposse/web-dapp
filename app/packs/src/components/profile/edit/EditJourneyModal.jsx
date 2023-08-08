@@ -366,9 +366,8 @@ const MilestoneExperience = ({
       </Modal.Body>
       <Divider />
       <Modal.Footer className="px-6 py-3 justify-content-between" style={{ borderTop: "none" }}>
-        {editType === "Add" ? (
-          <Button type="primary-outline" text="Back" onClick={goToPreviousStep} />
-        ) : (
+        {editType === "Add" && <Button type="primary-outline" text="Back" onClick={goToPreviousStep} />}
+        {editType !== "Add" && (
           <Button type="danger-outline" text={`Delete ${currentJourneyItem.category}`} onClick={deleteMilestone} />
         )}
         <div>
@@ -393,7 +392,8 @@ const GoalExperience = ({
   editType,
   validationErrors,
   uppyBanner,
-  deleteImage
+  deleteImage,
+  hideBackButton
 }) => {
   const [dueMonth, setDueMonth] = useState(returnMonth(currentJourneyItem.due_date));
   const [dueYear, setDueYear] = useState(returnYear(currentJourneyItem.due_date));
@@ -572,12 +572,13 @@ const GoalExperience = ({
       </Modal.Body>
       <Divider />
       <Modal.Footer className="px-6 py-3 justify-content-between" style={{ borderTop: "none" }}>
-        {editType === "Add" ? (
+        {editType === "Add" && !hideBackButton && (
           <Button type="primary-outline" text="Back" onClick={goToPreviousStep} />
-        ) : (
+        )}
+        {editType !== "Add" && (
           <Button type="danger-outline" text={`Delete ${currentJourneyItem.category}`} onClick={deleteGoal} />
         )}
-        <div>
+        <div style={{ marginLeft: editType === "Add" && hideBackButton ? "auto" : 0 }}>
           <Button className="mr-2" type="white-ghost" text="Cancel" onClick={hide} />
           <Button type="primary-default" text="Save" onClick={editType === "Add" ? saveGoal : updateGoal} />
         </div>
@@ -594,7 +595,8 @@ const EditJourneyModal = ({
   editType,
   setJourneyItem,
   journeyItem = {},
-  skipToNextStepItemName
+  skipToNextStepItemName,
+  hideBackButton = false
 }) => {
   const { mobile } = useWindowDimensionsHook();
   const { mode } = useTheme();
@@ -687,7 +689,7 @@ const EditJourneyModal = ({
         ...currentJourneyItem
       }
     });
-    
+
     if (response && !response.error) {
       setTalent(prev => ({
         ...prev,
@@ -799,24 +801,28 @@ const EditJourneyModal = ({
     });
 
     if (response && !response.error) {
-      const newGoals = talent.career_goal.goals.map(goal => {
-        if (goal.id === response.id) {
-          return { ...response };
-        }
-        return { ...goal };
-      });
+      if (talent.career_goal.goals?.length > 0) {
+        const newGoals = talent.career_goal.goals.map(goal => {
+          if (goal.id === response.id) {
+            return { ...response };
+          }
+          return { ...goal };
+        });
 
-      setTalent(prev => ({
-        ...prev,
-        career_goal: {
-          ...prev.career_goal,
-          goals: newGoals
-        }
-      }));
+        setTalent(prev => ({
+          ...prev,
+          career_goal: {
+            ...prev.career_goal,
+            goals: newGoals
+          }
+        }));
 
-      toast.success(<ToastBody heading="Success!" body={"Goal updated successfully."} mode={mode} />, {
-        autoClose: 1500
-      });
+        toast.success(<ToastBody heading="Success!" body={"Goal updated successfully."} mode={mode} />, {
+          autoClose: 1500
+        });
+      } else {
+        setTalent();
+      }
     } else {
       toast.error(<ToastBody heading="Error!" body={response?.error} mode={mode} />);
     }
@@ -828,20 +834,24 @@ const EditJourneyModal = ({
     const response = await destroy(`/api/v1/career_goals/${talent.career_goal.id}/goals/${currentJourneyItem.id}`);
 
     if (response) {
-      const index = talent.career_goal.goals.findIndex(goal => goal.id === response.id);
-      const newGoals = [...talent.career_goal.goals.slice(0, index), ...talent.career_goal.goals.slice(index + 1)];
+      if (talent.career_goal.goals?.length > 0) {
+        const index = talent.career_goal.goals.findIndex(goal => goal.id === response.id);
+        const newGoals = [...talent.career_goal.goals.slice(0, index), ...talent.career_goal.goals.slice(index + 1)];
 
-      setTalent(prev => ({
-        ...prev,
-        career_goal: {
-          ...prev.career_goal,
-          goals: newGoals
-        }
-      }));
+        setTalent(prev => ({
+          ...prev,
+          career_goal: {
+            ...prev.career_goal,
+            goals: newGoals
+          }
+        }));
 
-      toast.success(<ToastBody heading="Success!" body={"Goal deleted successfully."} mode={mode} />, {
-        autoClose: 1500
-      });
+        toast.success(<ToastBody heading="Success!" body={"Goal deleted successfully."} mode={mode} />, {
+          autoClose: 1500
+        });
+      } else {
+        setTalent();
+      }
     }
 
     exitModal();
@@ -970,6 +980,7 @@ const EditJourneyModal = ({
               validationErrors={validationErrors}
               uppyBanner={uppyBanner}
               deleteImage={deleteImage}
+              hideBackButton={hideBackButton}
             />
           )}
           {currentStep === 2 && currentJourneyItem.category === "Career Goal" && (
@@ -985,12 +996,13 @@ const EditJourneyModal = ({
               validationErrors={validationErrors}
               uppyBanner={uppyBanner}
               deleteImage={deleteImage}
+              hideBackButton={hideBackButton}
             />
           )}
         </>
       ) : (
         <>
-          {currentJourneyItem.category !== "Goal" ? (
+          {currentJourneyItem.category !== "Career Goal" ? (
             <MilestoneExperience
               mobile={mobile}
               changeAttribute={changeAttribute}
@@ -1005,6 +1017,7 @@ const EditJourneyModal = ({
               validationErrors={validationErrors}
               uppyBanner={uppyBanner}
               deleteImage={deleteImage}
+              hideBackButton={hideBackButton}
             />
           ) : (
             <GoalExperience
@@ -1021,6 +1034,7 @@ const EditJourneyModal = ({
               validationErrors={validationErrors}
               uppyBanner={uppyBanner}
               deleteImage={deleteImage}
+              hideBackButton={hideBackButton}
             />
           )}
         </>
