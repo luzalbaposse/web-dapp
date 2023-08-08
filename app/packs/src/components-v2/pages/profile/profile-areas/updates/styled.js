@@ -29,3 +29,8 @@ export const TypographyContainer = styled.div`
   flex-direction: column;
   gap: 8px;
 `;
+
+export const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;

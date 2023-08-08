@@ -341,7 +341,7 @@ const WalletActivityTable = ({ theme, activities, showLoadMoreActivities, loadMo
             <Table.Body className="">{activities.map(activity => chooseRenderedRow(activity))}</Table.Body>
           </Table>
           {showLoadMoreActivities() && (
-            <div className="d-flex flex-column justify-content-center">
+            <div className="d-flex flex-column justify-content-center my-6">
               <ThemedButton onClick={() => loadMoreActivities()} type="white-default" className="mx-auto">
                 Show More
               </ThemedButton>

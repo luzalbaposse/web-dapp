@@ -35,9 +35,7 @@ const SendCareerUpdateModal = ({ show, hide, placeholder }) => {
       if (response.error) {
         toast.error(<ToastBody heading="Error!" body={response.error} />);
       } else {
-        toast.success(
-          <ToastBody heading="Success!" body={"Your career update was created and sent to your supporters."} />
-        );
+        toast.success(<ToastBody heading="Success!" body={"Your update was sent to your subscribers."} />);
         hide();
       }
     });

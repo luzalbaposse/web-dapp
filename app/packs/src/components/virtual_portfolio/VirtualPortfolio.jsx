@@ -492,7 +492,12 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
     params.set("chain_id", chainId);
 
     get(`/api/v1/wallet_activities?${params.toString()}`).then(response => {
-      setActivities(prev => [...prev, ...response.activities]);
+      const newActivities = [...activities, ...response.activities];
+      const uniqueActivities = newActivities.reduce((acc, el) => {
+        acc[el.tx_hash] = el;
+        return acc;
+      }, {});
+      setActivities(Object.values(uniqueActivities));
       setPagination(response.pagination);
       window.history.replaceState({}, document.title, `${url.pathname}?${params.toString()}`);
     });
@@ -510,7 +515,12 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
     params.set("page", nextPage);
 
     get(`/portfolio/tokens?${params.toString()}`).then(response => {
-      setTokens(prev => [...prev, ...response.talent_tokens]);
+      const newTokens = [...tokens, ...response.talent_tokens];
+      const uniqueTokens = newTokens.reduce((acc, el) => {
+        acc[el.ticker] = el;
+        return acc;
+      }, {});
+      setTokens(Object.values(uniqueTokens));
       setPagination(response.pagination);
       window.history.replaceState({}, document.title, `${url.pathname}?${params.toString()}`);
     });
@@ -528,6 +538,9 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
   };
 
   const changeTab = selectedTab => {
+    const url = new URL(window.location.href);
+    window.history.replaceState({}, document.title, `${url.pathname}`);
+
     setCurrentTab(selectedTab);
     setPagination({});
   };

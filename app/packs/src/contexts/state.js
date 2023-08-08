@@ -1,7 +1,9 @@
+import React from "react";
 import create from "zustand";
 import { get } from "src/utils/requests";
 import { toast } from "react-toastify";
 import { talentsService } from "src/api/talents";
+import { careerUpdatesService } from "src/api";
 import { ToastBody } from "src/components/design_system/toasts";
 
 const messagesStore = create(set => ({
@@ -44,4 +46,29 @@ const useProfileOverviewStore = create(set => ({
   }
 }));
 
-export { messagesStore, railsContextStore, urlStore, loggedInUserStore, useProfileOverviewStore };
+const useCareerUpdatesStore = create(set => ({
+  // In the future we should put the list of career updates here and not only the one created
+  careerUpdates: [],
+  createCareerUpdate: async (message, selectedPills) => {
+    const { data } = await careerUpdatesService.sendUpdate(message, selectedPills).catch(err => {
+      console.error(err);
+      toast.error(<ToastBody heading={"Error"} />, { autoClose: 3000 });
+    });
+
+    if (data.career_update) {
+      set(state => ({ careerUpdates: [...state.careerUpdates, data.career_update] }));
+      toast.success(<ToastBody heading="Success!" body={"Your update was sent to your subscribers."} />, {
+        autoClose: 3000
+      });
+    }
+  }
+}));
+
+export {
+  messagesStore,
+  railsContextStore,
+  urlStore,
+  loggedInUserStore,
+  useProfileOverviewStore,
+  useCareerUpdatesStore
+};
