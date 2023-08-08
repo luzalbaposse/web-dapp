@@ -195,7 +195,7 @@ const TokensList = ({ theme, tokens, showLoadMoreTokens, loadMoreTokens }) => {
             </Table.Body>
           </Table>
           {showLoadMoreTokens() && (
-            <div className="d-flex flex-column justify-content-center">
+            <div className="d-flex flex-column justify-content-center my-6">
               <ThemedButton onClick={() => loadMoreTokens()} type="white-default" className="mx-auto">
                 Show More
               </ThemedButton>
