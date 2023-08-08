@@ -6,7 +6,7 @@ class API::V1::PublicAPI::GoalsController < API::V1::PublicAPI::APIController
       goals.includes(:goal_images),
       before: cursor,
       items: per_page,
-      order: {created_at: :desc, uuid: :desc}
+      order: {due_date: :desc}
     )
 
     response_body = {

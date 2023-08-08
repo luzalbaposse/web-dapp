@@ -50,7 +50,7 @@ export const Goals = ({ urlData, currentUser }) => {
       {data.goals.length
         ? data.goals.map(goal => (
             <GoalCard
-              key={goal.uuid}
+              key={goal.id}
               goal={goal}
               openAddGoalModal={addGoalModalState.openModal}
               userId={currentUser?.username}
@@ -87,7 +87,10 @@ export const Goals = ({ urlData, currentUser }) => {
               </EmptyStateCopy>
             </EmptyStateContainer>
           )}
-      <AddGoalModal {...addGoalModalState} currentUser={currentUser} />
+      <AddGoalModal
+        {...addGoalModalState}
+        talent={{ id: currentUser.talent_id, career_goal: { id: currentUser.career_goal_id } }}
+      />
     </Container>
   );
 };

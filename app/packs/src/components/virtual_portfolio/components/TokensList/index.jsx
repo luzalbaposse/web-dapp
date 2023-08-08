@@ -57,7 +57,6 @@ const ConnectionDetailsModal = ({ token, modalState, closeModal, clearToken }) =
     clearToken();
   };
 
-  console.log(token);
   if (!token || !modalState.isOpen) {
     return;
   }
