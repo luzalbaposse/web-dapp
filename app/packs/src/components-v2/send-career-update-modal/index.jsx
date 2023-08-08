@@ -1,14 +1,13 @@
 import { Button, Modal, Pills, TextArea, TextLink, Typography } from "@talentprotocol/design-system";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Container, ModalFooter, InLineTextWithComponents, EntryContainer, PillsContainer } from "./styled";
-import { toast } from "react-toastify";
-import { careerUpdatesService } from "../../api";
-import { ToastBody } from "src/components/design_system/toasts";
+import { useCareerUpdatesStore } from "src/contexts/state";
 
 const bootstrapGoals = goals => () =>
   goals.map(goal => ({ content: goal.title, isSelected: false, isDisabled: false, id: goal.id }));
 
 export const SendCareerUpdateModalV2 = ({ isOpen, closeModal, profile }) => {
+  const { createCareerUpdate } = useCareerUpdatesStore();
   const textAreaRef = React.useRef(null);
   const [pills, setPills] = useState(bootstrapGoals(profile.goals));
 
@@ -29,19 +28,9 @@ export const SendCareerUpdateModalV2 = ({ isOpen, closeModal, profile }) => {
       }
       return acc;
     }, []);
-    careerUpdatesService
-      .sendUpdate(message, selectedPills)
-      .then(() => {
-        toast.success(
-          <ToastBody heading="Success!" body={"Your career update was created and sent to your supporters."} />,
-          { autoClose: 3000 }
-        );
-        closeModal();
-      })
-      .catch(error => {
-        console.error(error);
-        toast.error(<ToastBody heading="Error!" />, { autoClose: 3000 });
-      });
+    createCareerUpdate(message, selectedPills).then(() => {
+      closeModal();
+    });
   }, [textAreaRef, pills, closeModal]);
   const modalFooter = useMemo(
     () => (
@@ -64,21 +53,20 @@ export const SendCareerUpdateModalV2 = ({ isOpen, closeModal, profile }) => {
     <Modal title="Career update" isOpen={isOpen} closeModal={closeModal} footer={modalFooter}>
       <Container>
         <InLineTextWithComponents specs={{ variant: "p2", type: "regular" }} color="primary03">
-          Think of this updates more as an intimate career log, and less like posting on social media or broadcasting to
-          an audience. Need help to write it? Check some tips
-          <TextLink
-            color="primary"
-            text="here."
-            size="small"
-            href="https://blog.talentprotocol.com/supporter-updates-guide/"
-            newPage
-          />
+          Share your progress with your subscribers. They will receive a DM, so make sure you end with a question or an
+          ask.
         </InLineTextWithComponents>
         <EntryContainer>
           <TextArea placeholder={`What's new in your career, ${profile?.name}?`} textAreaRef={textAreaRef} />
           <InLineTextWithComponents specs={{ variant: "p2", type: "regular" }} color="primary04">
-            Do you need help writing your career update? Ask our community on
-            <TextLink color="primary" text="Discord." size="small" href="https://discord.gg/talentprotocol" />
+            Need help writing your career update? Check some tips
+            <TextLink
+              color="primary"
+              text="here."
+              size="small"
+              href="https://blog.talentprotocol.com/supporter-updates-guide/"
+              newPage
+            />
           </InLineTextWithComponents>
         </EntryContainer>
         <PillsContainer>
