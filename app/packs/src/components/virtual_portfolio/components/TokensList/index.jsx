@@ -14,6 +14,7 @@ import {
   ConnectionModalRow,
   ConnectionModalFooter
 } from "./styled";
+import ThemedButton from "src/components/design_system/button";
 
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";

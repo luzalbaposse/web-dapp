@@ -14,6 +14,7 @@ import { parseAndCommify } from "src/onchain/utils";
 import { Add } from "src/components/icons";
 import { white, black } from "src/utils/colors";
 import { Icon, Typography } from "@talentprotocol/design-system";
+import ThemedButton from "src/components/design_system/button";
 
 const ClaimRewardsRow = ({ activity, explorerURL, theme }) => {
   const talAmount = () => {
