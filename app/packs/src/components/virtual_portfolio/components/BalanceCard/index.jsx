@@ -2,7 +2,7 @@ import React from "react";
 import { BalanceCardContainer, BalanceTitle, BalanceValue, BalanceValueInDollars, BalanceContainer } from "./styled";
 
 import { Icon } from "@talentprotocol/design-system";
-import { P2, H4 } from "src/components/design_system/typography";
+import { P2, H4, P3 } from "src/components/design_system/typography";
 
 /***
  * PROPS
@@ -24,7 +24,7 @@ const BalanceCard = ({ theme, primary, title, value, valueInDollars, highlightVa
       <BalanceContainer>
         <BalanceTitle>
           <Icon name={icon} size={16} color={iconColor()} />
-          <P2>{title}</P2>
+          <P3>{title}</P3>
         </BalanceTitle>
         <BalanceValue theme={theme} highlightValues={highlightValues}>
           <H4 className="mb-0" bold>
