@@ -102,12 +102,48 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
       .catch(() => {
         toast.error(<ToastBody heading="Something went wrong" />);
       });
-  }, [profileOverview?.username]);
-
+  }, [data.profileOverview?.username]);
+  const MemoedTag = useMemo(() => {
+    if (
+      currentUser?.username === data.profileOverview?.username ||
+      data.profileOverview?.subscribing_status === "unsubscribed"
+    )
+      return <></>;
+    let tagLabel = "";
+    switch (data.profileOverview?.subscribing_status) {
+      case "subscribed":
+        tagLabel = "Supporting";
+        break;
+      case "subscribing":
+        tagLabel = "Supporting you";
+        break;
+      case "pending":
+        tagLabel = "Pending";
+        break;
+      case "both_subscribed":
+        tagLabel = "Both support";
+        break;
+      default:
+        tagLabel = "";
+        break;
+    }
+    return (
+      <TagContainer>
+        <Tag
+          size="small"
+          color="primary"
+          label={tagLabel}
+          backgroundColor="bg01"
+          borderColor="surfaceHover02"
+          textColor="primary02"
+        />
+      </TagContainer>
+    );
+  }, [data.profileOverview, currentUser?.username]);
   useEffect(() => {
-    if (urlData.profileUsername) fetchProfileOverview(urlData.profileUsername);
+    if (!urlData.profileUsername) return;
+    fetchProfileOverview(urlData.profileUsername)
   }, [urlData.profileUsername]);
-
   return !profileOverview ? (
     <SpinnerContainer>
       <Spinner color="primary" size={48} />
@@ -124,7 +160,7 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
           />
           {isMobile && (
             <Actions>
-              <ButtonDropdown selectOption={onSelectOption} options={dropdownMenu}>
+              <ButtonDropdown selectOption={onSelectOption} options={dropdownMenu} opensOnRight>
                 <Button size="small" hierarchy="secondary" leftIcon="navigation" iconColor="primary01" />
               </ButtonDropdown>
               {currentUser?.username !== profileOverview?.username ? (
@@ -143,7 +179,12 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
                   )}
                 </>
               ) : (
-                <Button size="small" hierarchy="secondary" text="Edit profile" onClick={() => onSelectOption("Edit")} />
+                <Button
+                  size="small"
+                  hierarchy="secondary"
+                  text="Edit profile"
+                  onClick={() => onSelectOption({ value: "Edit" })}
+                />
               )}
             </Actions>
           )}
@@ -154,22 +195,7 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
           </Name>
           {profileOverview?.verified && <Icon name="verified-2" color="primary" size={18} />}
         </UserInfo>
-        <TagContainer>
-          {currentUser?.username !== profileOverview?.username &&
-            profileOverview?.subscribing_status !== "unsubscribed" && (
-              <Tag
-                size="small"
-                color="primary"
-                label={
-                  profileOverview?.subscribing_status.charAt(0).toUpperCase() +
-                  profileOverview?.subscribing_status.slice(1)
-                }
-                backgroundColor="bg01"
-                borderColor="surfaceHover02"
-                textColor="primary02"
-              />
-            )}
-        </TagContainer>
+        {MemoedTag}
         <Typography specs={{ type: "regular", variant: "p1" }} color="primary01">
           {profileOverview?.headline}
         </Typography>

@@ -99,7 +99,8 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
         user,
         view: :overview,
         current_user_active_subscribing: current_user_active_subscribing,
-        current_user_pending_subscribing: current_user_pending_subscribing
+        current_user_pending_subscribing: current_user_pending_subscribing,
+        current_user_id: current_user&.id
       )
     }
 

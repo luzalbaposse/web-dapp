@@ -2,7 +2,7 @@ import React from "react";
 import { noop } from "lodash";
 import EditJourneyModal from "src/components/profile/edit/EditJourneyModal";
 
-export const AddGoalModal = ({ modalState, closeModal }) => {
+export const AddGoalModal = ({ modalState, closeModal, currentUser }) => {
   return (
     modalState.isOpen && (
       <EditJourneyModal
@@ -12,6 +12,7 @@ export const AddGoalModal = ({ modalState, closeModal }) => {
         skipToNextStepItemName="Goal"
         setJourneyItem={noop}
         journeyItem={{ ...modalState.item, category: "Goal" }}
+        talent={currentUser}
       />
     )
   );

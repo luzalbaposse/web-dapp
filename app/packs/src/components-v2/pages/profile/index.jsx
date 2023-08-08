@@ -21,7 +21,7 @@ export const ProfilePage = ({ isMobile, railsContext }) => {
 
   return isMobile ? (
     <PageContainer>
-      <ProfileHeader currentUser={currentUser} urlData={urlData} railsContext={railsContext} />
+      <ProfileHeader currentUser={currentUser} urlData={urlData} railsContext={railsContext} isMobile />
       <ProfileAreas currentUser={currentUser} railsContext={railsContext} urlData={urlData} />
     </PageContainer>
   ) : (

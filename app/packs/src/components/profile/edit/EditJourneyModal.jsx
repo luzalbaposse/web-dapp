@@ -687,7 +687,7 @@ const EditJourneyModal = ({
         ...currentJourneyItem
       }
     });
-    
+
     if (response && !response.error) {
       setTalent(prev => ({
         ...prev,
@@ -794,29 +794,15 @@ const EditJourneyModal = ({
       return setValidationErrors(errors);
     }
 
-    const response = await patch(`/api/v1/career_goals/${talent.career_goal.id}/goals/${currentJourneyItem.id}`, {
+    const response = await patch(`/api/v1/career_goals/${talent.id}/goals/${currentJourneyItem.id}`, {
       goal: currentJourneyItem
     });
 
     if (response && !response.error) {
-      const newGoals = talent.career_goal.goals.map(goal => {
-        if (goal.id === response.id) {
-          return { ...response };
-        }
-        return { ...goal };
-      });
-
-      setTalent(prev => ({
-        ...prev,
-        career_goal: {
-          ...prev.career_goal,
-          goals: newGoals
-        }
-      }));
-
       toast.success(<ToastBody heading="Success!" body={"Goal updated successfully."} mode={mode} />, {
         autoClose: 1500
       });
+      window.location.reload();
     } else {
       toast.error(<ToastBody heading="Error!" body={response?.error} mode={mode} />);
     }
