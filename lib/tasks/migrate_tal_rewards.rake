@@ -7,9 +7,13 @@ namespace :db do
     puts "migrating #{Reward.where(migrated_at: nil).count} rewards"
     Reward.where(migrated_at: nil).find_each do |reward|
       if reward.user.wallet_id.present?
-        service.call(amount: reward.amount, to: reward.user.wallet_id, reason: "in_app_rewards")
-        reward.update!(migrated_at: Time.current)
-        puts "Awarded #{reward.amount} TAL to #{reward.user.id}}"
+        tx = service.call(amount: reward.amount, to: reward.user.wallet_id, reason: "in_app_rewards")
+        if tx
+          reward.update!(migrated_at: Time.current)
+          puts "Awarded #{reward.amount} TAL to #{reward.user.username} with tx hash: #{tx}"
+        else
+          puts "Transaction was not able to run for #{reward.id} and #{reward.user.username}"
+        end
       else
         puts "Unable to award reward"
       end
