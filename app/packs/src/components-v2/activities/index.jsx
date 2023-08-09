@@ -97,8 +97,8 @@ export const Activities = ({ data, isLoading, loadMore, filter, profileUsername 
                     <Button
                       hierarchy="primary"
                       size="small"
-                      text="Support"
-                      href={`/u/${update.origin_user.username}?tab=support`}
+                      text="Subscribe"
+                      href={`/u/${update.origin_user.username}`}
                     />
                   )}
                 </UpdateTitle>

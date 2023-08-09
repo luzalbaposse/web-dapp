@@ -30,7 +30,7 @@ const TalentTableCardMode = ({ talents }) => {
             isVerified={talent.verified}
             to={`/u/${talent.user.username}`}
           >
-            <Button size="small" hierarchy="primary" text="Support" href={`/u/${talent.user.username}?tab=support`} />
+            <Button size="small" hierarchy="primary" text="Subscribe" href={`/u/${talent.user.username}`} />
           </TalentCard>
         </EntryContainer>
       ))}

@@ -81,10 +81,10 @@ const NewMessageModal = ({
                 onClick={() => setShowMessageToAllSupporters()}
               >
                 {mode == "light" ? <ChatLight height="40" width="40" /> : <ChatDark height="40" width="40" />}
-                <P2 className="text-black d-inline mb-0 ml-3" text="Send message to all supporters" bold />
+                <P2 className="text-black d-inline mb-0 ml-3" text="Send message to all your subscribers" bold />
               </button>
             </div>
-            <P2 className="w-100 px-4 mb-3">Supporters</P2>
+            <P2 className="w-100 px-4 mb-3">Subscribers</P2>
           </>
         )}
         <div className="w-100 d-flex flex-column new-message-user-list px-4">

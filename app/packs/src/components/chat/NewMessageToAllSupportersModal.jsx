@@ -70,13 +70,13 @@ const NewMessageToAllSupportersModal = ({ show, setShow, mode, mobile }) => {
       fullscreen={"md-down"}
     >
       <Modal.Header className="py-3 px-4" closeButton>
-        Send a Message to your supporters
+        Send a Message to your subscribers
       </Modal.Header>
       <Modal.Body className="show-grid pt-0 pb-4 px-4">
         <TextArea
           mode={mode}
           onChange={e => setMessage(e.target.value)}
-          placeholder="Share something with your supporters"
+          placeholder="Share something with your subscribers"
           className="w-100"
           rows="5"
         />
@@ -91,7 +91,7 @@ const NewMessageToAllSupportersModal = ({ show, setShow, mode, mobile }) => {
         </Button>
         {pollingIntervalId && messagesTotal > 0 && (
           <P3 className="w-100 mt-2">
-            {`We're sending the message to your supporters! We've already sent ${messagesSent} of ${messagesTotal} messages.`}
+            {`We're sending the message to your subscribers! We've already sent ${messagesSent} of ${messagesTotal} messages.`}
           </P3>
         )}
         {jobFinished && messagesTotal > 0 && (
