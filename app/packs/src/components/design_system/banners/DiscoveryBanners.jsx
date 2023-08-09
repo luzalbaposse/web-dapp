@@ -93,7 +93,7 @@ const InviteTalentBanner = () => (
         <Caption className="mb-2 text-primary" text="SCOUT-TO-EARN" bold />
         <H3
           className="pb-4 permanent-text-black"
-          text="Invite your high-potential friends to join Talent Protocol and earn TAL."
+          text="Invite your high-potential friends to join Talent Protocol and earn $TAL."
           bold
         />
         <a className="button-link" href="/quests?tab=talent">

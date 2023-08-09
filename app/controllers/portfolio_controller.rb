@@ -7,9 +7,9 @@ class PortfolioController < ApplicationController
 
   def tokens
     wallet_id = current_user.wallet_id
-    supporting_relationships = TalentSupporter.where(supporter_wallet_id: wallet_id).pluck(:talent_contract_id)
+    supporting_relationships = TalentSupporter.where(supporter_wallet_id: wallet_id).order(approximate_amount: :desc).pluck(:talent_contract_id)
 
-    talent_tokens = TalentToken.where(contract_id: supporting_relationships)
+    talent_tokens = TalentToken.where(contract_id: supporting_relationships).in_order_of(:contract_id, supporting_relationships)
 
     talent_tokens = talent_tokens.where(chain_id: chain_id) if chain_id.present?
 

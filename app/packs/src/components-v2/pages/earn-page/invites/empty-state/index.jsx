@@ -24,7 +24,7 @@ export const EmptyState = ({ openQRCodeModal, username }) => {
           </Typography>
         </InvitesTextRow>
         <Typography specs={{ variant: "p3", type: "regular" }} color="primary04">
-          Invites prior to June 1st were rewarded with 100 TAL and are shown below only has history.
+          Invites prior to June 1st were rewarded with 100 $TAL and are shown below only has history.
         </Typography>
       </TitleContainer>
       <InviteLinkArea>

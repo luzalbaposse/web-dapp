@@ -47,7 +47,7 @@ export const RecommendedBuildersWidgetMini = ({ username }) => {
                 ellipsisAt={180}
               />
               <SupportButtonContainer>
-                <Button hierarchy="secondary" size="small" text="Support" href={`/u/${talent.username}?tab=support`} />
+                <Button hierarchy="secondary" size="small" text="Subscribe" href={`/u/${talent.username}`} />
               </SupportButtonContainer>
             </BuilderEntry>
           ))}

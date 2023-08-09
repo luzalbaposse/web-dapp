@@ -10,7 +10,7 @@ import { RecommendedBuildersWidgetMini } from "../../recommended-builders-widget
 import { RecommendedTeamsWidgetMini } from "../../recommended-teams-widget-mini";
 import ThemeContainer from "src/contexts/ThemeContext";
 
-export const ProfilePage = ({ isMobile, railsContext }) => {
+export const ProfilePage = ({ isMobile, railsContext, withPersonaRequest }) => {
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
   const urlData = useUrlData();
   useEffect(() => {
@@ -21,13 +21,13 @@ export const ProfilePage = ({ isMobile, railsContext }) => {
 
   return isMobile ? (
     <PageContainer>
-      <ProfileHeader currentUser={currentUser} urlData={urlData} railsContext={railsContext} isMobile />
+      <ProfileHeader currentUser={currentUser} urlData={urlData} railsContext={railsContext} isMobile withPersonaRequest={withPersonaRequest}/>
       <ProfileAreas currentUser={currentUser} railsContext={railsContext} urlData={urlData} />
     </PageContainer>
   ) : (
     <DesktopPageContainer>
       <DesktopColumn>
-        <ProfileHeader currentUser={currentUser} urlData={urlData} railsContext={railsContext} />
+        <ProfileHeader currentUser={currentUser} urlData={urlData} railsContext={railsContext} withPersonaRequest={withPersonaRequest} />
       </DesktopColumn>
       <DesktopColumn>
         <ProfileAreas currentUser={currentUser} railsContext={railsContext} urlData={urlData} />

@@ -93,12 +93,12 @@ const UserMenuFullScreen = ({
         <ArrowRight color="currentColor" />
       </Button>
       <Button
-        onClick={() => (window.location.href = `/earn`)}
+        onClick={() => (window.location.href = `/quests`)}
         type="white-ghost"
         mode={mode}
         className="d-flex flex-row justify-content-between my-3"
       >
-        <P1 className="text-black" bold text="Earn" />
+        <P1 className="text-black" bold text="Quests" />
         <ArrowRight color="currentColor" />
       </Button>
       <div className={`divider ${mode}`}></div>

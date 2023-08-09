@@ -95,6 +95,7 @@ module Talents
           talent_supporter.update!(
             amount: supporter.amount,
             tal_amount: supporter.tal_amount,
+            approximate_amount: supporter.amount.to_f / decimals.to_f,
             last_time_bought_at: Time.at(supporter.last_time_bought_at.to_i),
             synced_at: Time.zone.now
           )
@@ -102,6 +103,7 @@ module Talents
           talent_supporter.update!(
             amount: supporter.amount,
             tal_amount: supporter.tal_amount,
+            approximate_amount: supporter.amount.to_f / decimals.to_f,
             last_time_bought_at: Time.at(supporter.last_time_bought_at.to_i),
             first_time_bought_at: Time.at(supporter.first_time_bought_at.to_i),
             synced_at: Time.zone.now
@@ -138,6 +140,10 @@ module Talents
     def the_graph_client(chain_id)
       @the_graph_client ||=
         "TheGraph::#{TheGraphAPI::CHAIN_TO_NAME[chain_id]}::Client".constantize.new
+    end
+
+    def decimals
+      @decimals ||= "1#{"0" * 18}"
     end
   end
 end

@@ -10,6 +10,8 @@ module ExperiencePoints
     end
 
     def call
+      return unless inviter
+
       credited_at = Time.current
       description = "Invite #{invite.code} used."
 

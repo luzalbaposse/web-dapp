@@ -24,12 +24,12 @@ const LaunchToken = ({ mode, ticker, changeTicker, setSelectedChain, error }) =>
         <div className="d-flex flex-column w-100 px-3 pb-3">
           <P2 mode={mode}>
             All Talent Tokens have a 1,000,000.00 Maximum Supply. Until your token reaches the maximum supply it will
-            have a fixed price of 5 TAL.
+            have a fixed price of 5 $TAL.
           </P2>
           <TextInput
             title={"Ticker Name"}
             mode={mode}
-            placeholder={"TAL"}
+            placeholder={"$TAL"}
             shortCaption={"Upcase letters only. 3 to 8 characters"}
             onChange={e => changeTicker(e.target.value)}
             value={ticker || ""}

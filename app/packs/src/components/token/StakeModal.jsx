@@ -256,7 +256,7 @@ const StakeModal = ({
 
   const stableSymbol = () => {
     if (selectedCurrency === "TAL") {
-      return "TAL";
+      return "$TAL";
     }
     if (chainName == "Celo") {
       return "cUSD";

@@ -66,8 +66,8 @@ export const MyWalletWidget = () => {
         </ActivityEntry>
       </RecentActivityContainer>
       <FooterActions>
-        <Button hierarchy="primary" size="large" text="Earn TAL" isStretched />
-        <Button hierarchy="tertiary" size="large" text="Buy TAL" isStretched />
+        <Button hierarchy="primary" size="large" text="Earn $TAL" isStretched />
+        <Button hierarchy="tertiary" size="large" text="Buy $TAL" isStretched />
       </FooterActions>
     </Container>
   );
