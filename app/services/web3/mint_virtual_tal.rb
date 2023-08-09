@@ -39,6 +39,8 @@ module Web3
         )
 
         tx_hash
+      else
+        false
       end
     end
 
