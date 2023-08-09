@@ -31,9 +31,11 @@ import { useImpersonate } from "./hooks/use-impersonate";
 import { ToastBody } from "src/components/design_system/toasts";
 import ApprovalConfirmationModal from "src/components/profile/ApprovalConfirmationModal";
 import AdminVerificationConfirmationModal from "src/components/profile/AdminVerificationConfirmationModal";
+import PersonaVerificationConfirmationModal from "src/components/profile/PersonaVerificationConfirmationModal";
 import { useProfileOverviewStore } from "src/contexts/state";
+import { noop } from "lodash";
 
-export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) => {
+export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, withPersonaRequest }) => {
   const data = useDataFetcher(urlData);
   const { profileOverview, fetchProfileOverview } = useProfileOverviewStore();
   const { impersonateUser } = useImpersonate();
@@ -41,13 +43,14 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
   const [isEditMode, setIsEditMode] = useState(false);
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
+  const [showWithPersonaModal, setShowWithPersonaModal] = useState(false);
   const dropdownMenu = useMemo(() => {
     if (!currentUser) return [];
     const menu = [{ value: "Share", iconColor: "primary01", iconName: "share-2" }];
     if (currentUser?.admin) {
       menu.push({ value: "Impersonate", iconColor: "primary01", iconName: "user" });
       if (!profileOverview?.verified) {
-        menu.push({ value: "Verify", iconColor: "primary01", iconName: "check" });
+        menu.push({ value: "Verify user", iconColor: "primary01", iconName: "check" });
       }
       if (profileOverview?.profile_type === "waiting_for_approval") {
         menu.push({ value: "Approve", iconColor: "primary01", iconName: "check-chat" });
@@ -55,9 +58,14 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
     }
     if (currentUser?.username === urlData.profileUsername) {
       menu.push({ value: "Edit", iconColor: "primary01", iconName: "edit" });
+      if (!profileOverview?.verified && !(
+        profileOverview?.with_persona_id ||
+        withPersonaRequest.requests_counter > railsContext.withPersonaVerificationsLimit)) {
+        menu.push({ value: "Verify", iconColor: "primary01", iconName: "check" });
+      }
     }
     return menu;
-  }, [currentUser, urlData]);
+  }, [currentUser, urlData, profileOverview]);
   const onSelectOption = useCallback(
     option => {
       switch (option.value) {
@@ -70,8 +78,11 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
         case "Approve":
           setShowApproveModal(true);
           return;
-        case "Verify":
+        case "Verify user":
           setShowVerifyModal(true);
+          return;
+        case "Verify":
+          setShowWithPersonaModal(true);
           return;
         case "Share":
         default:
@@ -282,6 +293,17 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
           window.location.reload();
         }}
       />
+      {
+      !profileOverview?.verified && (
+        <PersonaVerificationConfirmationModal
+          show={showWithPersonaModal}
+          setShow={setShowWithPersonaModal}
+          hide={() => {setShowWithPersonaModal(false)}}
+          setProfile={noop}
+          username={profileOverview?.username}
+          railsContext={railsContext}
+        />
+      )}
     </>
   );
 };

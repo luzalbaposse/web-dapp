@@ -1,9 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { noop } from "lodash";
 import Modal from "react-bootstrap/Modal";
-
 import { patch } from "src/utils/requests";
-import {} from "src/utils/transformObjects";
-
 import { H5, P2 } from "src/components/design_system/typography";
 import { toast } from "react-toastify";
 import { ToastBody } from "src/components/design_system/toasts";
@@ -11,13 +9,19 @@ import Divider from "src/components/design_system/other/Divider";
 import LoadingButton from "src/components/button/LoadingButton";
 import Button from "src/components/design_system/button";
 import TextInput from "src/components/design_system/fields/textinput";
+import { useProfileFetcher } from "src/hooks/use-profile-fetcher";
 import { useWindowDimensionsHook } from "src/utils/window";
 
-const PersonaVerificationConfirmationModal = ({ show, hide, talent, setProfile, railsContext, mode }) => {
+const PersonaVerificationConfirmationModal = ({ show, hide, setProfile, railsContext, mode, username }) => {
+  const { profile, fetchProfile } = useProfileFetcher();
   const { mobile } = useWindowDimensionsHook();
-  const [editedTalent, setEditedTalent] = useState(talent);
+  const [editedTalent, setEditedTalent] = useState({});
   const [loading, setLoading] = useState(false);
-  const user = talent.user;
+
+  useEffect(() => {
+    if (!!profile) return;
+    fetchProfile(username, noop, setEditedTalent);
+  }, [username, profile]);  
 
   const changeUserAttribute = (attribute, value) => {
     setEditedTalent(prev => ({
@@ -45,19 +49,15 @@ const PersonaVerificationConfirmationModal = ({ show, hide, talent, setProfile, 
             with_persona_id: inquiryId
           },
           user: {
-            id: user.id
+            id: profile.id
           }
         };
-        patch(`/api/v1/talent/${user.id}`, params)
-          .then(response => {
-            setProfile(prev => ({
-              ...prev,
-              with_persona_id: response.with_persona_id
-            }));
-
+        patch(`/api/v1/talent/${profile.id}`, params)
+          .then(() => {
             toast.success(<ToastBody heading="Success!" body={"You're being verified. It can take up to 24 hours"} />, {
               autoClose: 2500
             });
+            setProfile();
             return true;
           })
           .catch(() => {
@@ -70,7 +70,7 @@ const PersonaVerificationConfirmationModal = ({ show, hide, talent, setProfile, 
   const saveProfile = async () => {
     setLoading(true);
 
-    const response = await patch(`/api/v1/talent/${user.id}`, {
+    const response = await patch(`/api/v1/talent/${profile.user.uuid}`, {
       user: {
         ...editedTalent.user
       },
@@ -80,18 +80,13 @@ const PersonaVerificationConfirmationModal = ({ show, hide, talent, setProfile, 
     });
 
     if (response && !response.error) {
-      setProfile(prev => ({
-        ...prev,
-        ...response
-      }));
-
       verifyTalent();
     } else {
       toast.error(<ToastBody heading="Error!" body={response?.error} mode={mode} />);
     }
   };
 
-  return (
+  return !profile || !editedTalent ? <></> : (
     <Modal
       scrollable={true}
       show={show}
