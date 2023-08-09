@@ -21,7 +21,7 @@ module Web3
       return if user.nil?
 
       decimals = "1#{"0" * 18}"
-      amount_to_charge = amount * decimals
+      amount_to_charge = amount * decimals.to_i
       reason_id = REASONS_FOR_TRANSFER[reason.to_sym]
 
       tx_hash = client.transact_and_wait(tal_contract, "adminMint", to, amount_to_charge, reason_id, sender_key: key)
