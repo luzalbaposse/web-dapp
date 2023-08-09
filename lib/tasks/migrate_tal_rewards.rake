@@ -1,7 +1,7 @@
 namespace :db do
   desc "Migrate Rewards that assigned TAL to users"
   task migrate_tal_rewards: :environment do
-    chain_id = rails_env.production? ? 137 : 44787
+    chain_id = (ENV["CONTRACTS_ENV"] == "production") ? 137 : 44787
     service = Web3::MintVirtualTal.new(chain_id: chain_id)
 
     puts "migrating #{Reward.where(migrated: nil).count} rewards"
