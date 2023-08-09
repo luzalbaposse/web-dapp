@@ -31,7 +31,7 @@ const Footer = () => {
             </a>
             <P2
               className="text-primary-03"
-              text="Publish your goals, make meaningful connections and grow your circle of supporters."
+              text="Where builders commit to goals, share their progress and find the support they need to succeed."
             />
           </div>
           <div className="col-lg-3"></div>

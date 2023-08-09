@@ -99,10 +99,10 @@ const ConnectionDetailsModal = ({ token, modalState, closeModal, clearToken }) =
           </ConnectionModalRow>
           <ConnectionModalRow>
             <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
-              {"TAL Staked"}
+              {"$TAL Staked"}
             </Typography>
             <Typography specs={{ variant: "p2", type: "bold" }} color="primary01">
-              {`${talAmount(token.tal_amount)} TAL`}
+              {`${talAmount(token.tal_amount)} $TAL`}
             </Typography>
           </ConnectionModalRow>
         </ConnectionModalContent>

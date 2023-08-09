@@ -54,7 +54,7 @@ const CurrencySelectionDropdown = ({ className, mode, selectedCurrency, setSelec
           onClick={e => setSelectedCurrency(e.target.innerText)}
         >
           <Talent className="mr-2" />
-          <P2 className="text-black" bold mode={mode} text="TAL" />
+          <P2 className="text-black" bold mode={mode} text="$TAL" />
         </Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>

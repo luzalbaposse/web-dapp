@@ -528,7 +528,7 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
 
   // local helpers
   const balanceToText = balance => {
-    return `${balance} TAL`;
+    return `${balance} $TAL`;
   };
 
   const balanceToDollar = balance => {
@@ -615,24 +615,24 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
         <BalanceRow>
           <BalanceInformation>
             <BalanceCard
-              title="TAL Balance"
+              title="$TAL Balance"
               value={balanceToText(talBalances.available)}
               valueInDollars={balanceToDollar(talBalances.available)}
               theme={theme}
               primary={true}
               icon={"wallet"}
             >
-              <Label>Total amount of TAL available in your internal wallet on {chainName()}</Label>
+              <Label>Total amount of $TAL available in your internal wallet on {chainName()}</Label>
             </BalanceCard>
             <BalanceCard
-              title="Staked TAL"
+              title="Staked $TAL"
               value={balanceToText(talBalances.staked)}
               valueInDollars={balanceToDollar(talBalances.staked)}
               theme={theme}
               primary={false}
               icon={"padlock"}
             >
-              <Label>The amount of TAL staked on Talent</Label>
+              <Label>The amount of $TAL staked on Talent</Label>
             </BalanceCard>
           </BalanceInformation>
           <SecondRowTitle>
@@ -642,7 +642,7 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
           </SecondRowTitle>
           <BalanceInformation>
             <BalanceCard
-              title="Unclaimed Supporter Rewards"
+              title="Rewards from supporting"
               value={balanceToText(talBalances.supportingRewards)}
               valueInDollars={balanceToDollar(talBalances.supportingRewards)}
               theme={theme}
@@ -660,7 +660,7 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
               </div>
             </BalanceCard>
             <BalanceCard
-              title="Unclaimed Talent Rewards"
+              title="Rewards from being supported"
               value={balanceToText(talBalances.supportersRewards)}
               valueInDollars={balanceToDollar(talBalances.supportersRewards)}
               theme={theme}

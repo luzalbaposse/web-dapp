@@ -32,7 +32,7 @@ export const InviteList = ({ list, openQRCodeModal, username, loadMore, totalInv
             <Icon name="flash" size={12} color="primary" /> 500 XP.
           </StyledTypography>
           <Typography specs={{ variant: "p3", type: "regular" }} color="primary04">
-            Invites prior to June 1st were rewarded with 100 TAL and are shown below only has history.
+            Invites prior to June 1st were rewarded with 100 $TAL and are shown below only has history.
           </Typography>
         </TitleContainer>
         <DesktopCopyInviteLinkContainer>
@@ -71,7 +71,7 @@ export const InviteList = ({ list, openQRCodeModal, username, loadMore, totalInv
               <RewardTag>
                 {joinedAt > XP_RELEASE_DATE && <Icon name="flash" size={12} />}
                 <Typography specs={{ variant: "label3", type: "medium" }} color={"primary02"}>
-                  {joinedAt > XP_RELEASE_DATE ? `+ ${item.experience_points_amount}` : `${item.tal_amount} TAL`}
+                  {joinedAt > XP_RELEASE_DATE ? `+ ${item.experience_points_amount}` : `${item.tal_amount} $TAL`}
                 </Typography>
               </RewardTag>
             </ListItem>

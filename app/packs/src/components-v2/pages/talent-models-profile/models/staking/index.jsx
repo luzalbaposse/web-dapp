@@ -13,7 +13,7 @@ export const StakingModel = ({ profile, isCurrentUserProfile, currentUserId, rai
       return `Stake to vouch for someone you truly believe in. Currenly not available because ${profile.name} has reached their max supply.`;
     }
     if (tokenLaunched) {
-      return `Stake to vouch for someone you truly believe in. Both you and ${profile.name} will earn interest in TAL for the amount staked`;
+      return `Stake to vouch for someone you truly believe in. Both you and ${profile.name} will earn interest in $TAL for the amount staked`;
     } else {
       return "Stake to vouch for someone you truly believe in. Currently only available for users that launched their own Talent Token.";
     }

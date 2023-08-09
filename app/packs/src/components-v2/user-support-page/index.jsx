@@ -26,7 +26,7 @@ export const UserSupportPage = ({ user, supportings, supporteds, totalRewards })
       <DataRow>
         <DataTitle>Total Rewards: </DataTitle>
         <DataItem>
-          {`${totalRewards}`} <b>TAL</b>
+          {`${totalRewards}`} <b>$TAL</b>
         </DataItem>
       </DataRow>
       <DataRow>
