@@ -12,7 +12,7 @@ import TextInput from "src/components/design_system/fields/textinput";
 import { useProfileFetcher } from "src/hooks/use-profile-fetcher";
 import { useWindowDimensionsHook } from "src/utils/window";
 
-const PersonaVerificationConfirmationModal = ({ show, hide, setProfile, railsContext, mode, username }) => {
+const PersonaVerificationConfirmationModal = ({ show, hide, railsContext, mode, username }) => {
   const { profile, fetchProfile } = useProfileFetcher();
   const { mobile } = useWindowDimensionsHook();
   const [editedTalent, setEditedTalent] = useState({});
@@ -21,7 +21,7 @@ const PersonaVerificationConfirmationModal = ({ show, hide, setProfile, railsCon
   useEffect(() => {
     if (!!profile) return;
     fetchProfile(username, noop, setEditedTalent);
-  }, [username, profile]);  
+  }, [username, profile]);
 
   const changeUserAttribute = (attribute, value) => {
     setEditedTalent(prev => ({
@@ -49,15 +49,15 @@ const PersonaVerificationConfirmationModal = ({ show, hide, setProfile, railsCon
             with_persona_id: inquiryId
           },
           user: {
-            id: profile.id
+            id: profile.user.id
           }
         };
-        patch(`/api/v1/talent/${profile.id}`, params)
+        patch(`/api/v1/talent/${profile.user.id}`, params)
           .then(() => {
             toast.success(<ToastBody heading="Success!" body={"You're being verified. It can take up to 24 hours"} />, {
               autoClose: 2500
             });
-            setProfile();
+
             return true;
           })
           .catch(() => {
@@ -69,13 +69,12 @@ const PersonaVerificationConfirmationModal = ({ show, hide, setProfile, railsCon
 
   const saveProfile = async () => {
     setLoading(true);
-
-    const response = await patch(`/api/v1/talent/${profile.user.uuid}`, {
+    const response = await patch(`/api/v1/talent/${profile.user.id}`, {
       user: {
         ...editedTalent.user
       },
       talent: {
-        ...editedTalent
+        id: editedTalent.id
       }
     });
 
@@ -86,7 +85,9 @@ const PersonaVerificationConfirmationModal = ({ show, hide, setProfile, railsCon
     }
   };
 
-  return !profile || !editedTalent ? <></> : (
+  return !profile || !editedTalent ? (
+    <></>
+  ) : (
     <Modal
       scrollable={true}
       show={show}

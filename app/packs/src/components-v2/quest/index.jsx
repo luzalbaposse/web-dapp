@@ -2,6 +2,7 @@ import React from "react";
 import { QuestData, QuestDataRow, QuestEntry, QuestReward, RewardTag } from "./styled";
 import { Icon, Tag, Typography } from "@talentprotocol/design-system";
 import { VerifyHumanityQuest } from "./verify-humanity-quest";
+import { VerifyQuest } from "./verify-quest";
 
 const QUEST_TYPE_MAP = {
   profile_picture: "/u/__username__",
@@ -23,6 +24,9 @@ const QUEST_TYPE_MAP = {
 export const Quest = ({ quest, username, railsContext }) => {
   if (quest.quest_type == "verify_humanity") {
     return <VerifyHumanityQuest quest={quest} username={username} railsContext={railsContext} />;
+  }
+  if (quest.quest_type == "verify_identity") {
+    return <VerifyQuest quest={quest} username={username} railsContext={railsContext} />;
   }
   return (
     <QuestEntry

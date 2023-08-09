@@ -33,7 +33,6 @@ import ApprovalConfirmationModal from "src/components/profile/ApprovalConfirmati
 import AdminVerificationConfirmationModal from "src/components/profile/AdminVerificationConfirmationModal";
 import PersonaVerificationConfirmationModal from "src/components/profile/PersonaVerificationConfirmationModal";
 import { useProfileOverviewStore } from "src/contexts/state";
-import { noop } from "lodash";
 
 export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, withPersonaRequest }) => {
   const data = useDataFetcher(urlData);
@@ -58,9 +57,13 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
     }
     if (currentUser?.username === urlData.profileUsername) {
       menu.push({ value: "Edit", iconColor: "primary01", iconName: "edit" });
-      if (!profileOverview?.verified && !(
-        profileOverview?.with_persona_id ||
-        withPersonaRequest.requests_counter > railsContext.withPersonaVerificationsLimit)) {
+      if (
+        !profileOverview?.verified &&
+        !(
+          profileOverview?.with_persona_id ||
+          withPersonaRequest.requests_counter > railsContext.withPersonaVerificationsLimit
+        )
+      ) {
         menu.push({ value: "Verify", iconColor: "primary01", iconName: "check" });
       }
     }
@@ -153,7 +156,7 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
   }, [data.profileOverview, currentUser?.username]);
   useEffect(() => {
     if (!urlData.profileUsername) return;
-    fetchProfileOverview(urlData.profileUsername)
+    fetchProfileOverview(urlData.profileUsername);
   }, [urlData.profileUsername]);
   return !profileOverview ? (
     <SpinnerContainer>
@@ -293,13 +296,11 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
           window.location.reload();
         }}
       />
-      {
-      !profileOverview?.verified && (
+      {!profileOverview?.verified && (
         <PersonaVerificationConfirmationModal
           show={showWithPersonaModal}
           setShow={setShowWithPersonaModal}
-          hide={() => {setShowWithPersonaModal(false)}}
-          setProfile={noop}
+          hide={() => setShowWithPersonaModal(false)}
           username={profileOverview?.username}
           railsContext={railsContext}
         />
