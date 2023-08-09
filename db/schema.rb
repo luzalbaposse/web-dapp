@@ -10,8 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_24_104155) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_08_155847) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
@@ -663,6 +664,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_24_104155) do
     t.datetime "updated_at", null: false
     t.datetime "last_time_bought_at", precision: nil
     t.datetime "first_time_bought_at", precision: nil
+    t.float "approximate_amount"
     t.index ["supporter_wallet_id", "talent_contract_id"], name: "talent_supporters_wallet_token_contract_uidx", unique: true
   end
 
@@ -778,8 +780,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_24_104155) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.string "theme_preference", default: "light"
     t.boolean "disabled", default: false
+    t.string "theme_preference", default: "light"
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"
