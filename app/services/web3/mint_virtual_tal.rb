@@ -15,7 +15,7 @@ module Web3
       @chain_id = chain_id
     end
 
-    def call(amount:, to:, reason:)
+    def call(amount:, to:, reason:, &block)
       user = User.find_by(wallet_id: to)
 
       return if user.nil?
@@ -24,30 +24,54 @@ module Web3
       amount_to_charge = amount * decimals.to_i
       reason_id = REASONS_FOR_TRANSFER[reason.to_sym]
 
-      tx_hash = client.transact_and_wait(tal_contract, "adminMint", to, amount_to_charge, reason_id, sender_key: key)
+      tx_hash = client.transact(tal_contract, "adminMint", to, amount_to_charge, reason_id, sender_key: key)
 
       if tx_hash
-        WalletActivity.create(
-          user: user,
-          wallet: to,
-          tx_date: Time.current,
-          token: amount_to_charge.to_s,
-          symbol: "TAL",
-          tx_hash: tx_hash,
-          chain_id: chain_id,
-          event_type: "AdminMinted"
-        )
+        yield(tx_hash) if block
+        success = wait_for_tx_to_run(tx_hash)
+        if success
+          WalletActivity.create(
+            user: user,
+            wallet: to,
+            tx_date: Time.current,
+            token: amount_to_charge.to_s,
+            symbol: "TAL",
+            tx_hash: tx_hash,
+            chain_id: chain_id,
+            event_type: "AdminMinted"
+          )
 
-        tx_hash
+          return tx_hash
+        end
+      end
+
+      false
+    end
+
+    private
+
+    def wait_for_tx_to_run(tx_hash)
+      # at most wait - 30 seconds
+      max_attempts = 300
+      attempts = 0
+      while !client.tx_mined?(tx_hash) && attempts < max_attempts
+        attempts += 1
+        sleep 0.1 # 100ms
+      end
+
+      # confirm we broke the loop with mined TX
+      if client.tx_mined?(tx_hash)
+        client.tx_succeeded?(tx_hash)
       else
         false
       end
     end
 
-    private
-
     def client
-      @client ||= Eth::Client.create rpc_url
+      c = Eth::Client.create rpc_url
+      c.max_priority_fee_per_gas = 100 * Eth::Unit::GWEI
+      c.max_fee_per_gas = 300 * Eth::Unit::GWEI
+      c
     end
 
     def rpc_url
@@ -71,7 +95,7 @@ module Web3
     end
 
     def tal_contract
-      @tal_contract ||= Eth::Contract.from_abi(name: "VirtualTAL", address: tal_address, abi: tal_contract_abi["abi"])
+      Eth::Contract.from_abi(name: "VirtualTAL", address: tal_address, abi: tal_contract_abi["abi"])
     end
   end
 end

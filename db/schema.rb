@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_09_112707) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_10_090809) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -582,6 +582,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_09_112707) do
     t.boolean "imported", default: false
     t.string "identifier"
     t.datetime "migrated_at"
+    t.string "tx_hash"
     t.index ["creator_id"], name: "index_rewards_on_creator_id"
     t.index ["identifier"], name: "index_rewards_on_identifier", unique: true
     t.index ["user_id"], name: "index_rewards_on_user_id"
