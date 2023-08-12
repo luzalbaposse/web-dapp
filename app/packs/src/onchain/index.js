@@ -291,7 +291,7 @@ class OnChain {
       return;
     }
 
-    const result = await this.readFromContract(await this.virtualTALConfig(), "addressToTAL", [_account || account]);
+    const result = await this.readFromContract(await this.virtualTALConfig(), "getBalance", [_account || account]);
 
     if (formatted) {
       return formatUnits(result, 18);
