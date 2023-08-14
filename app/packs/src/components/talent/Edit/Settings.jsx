@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import ThemeContainer, { ThemeContext } from "src/contexts/ThemeContext";
 import { toast } from "react-toastify";
-import Form from "react-bootstrap/Form";
 import { useWindowDimensionsHook } from "src/utils/window";
 
 import { loggedInUserStore } from "src/contexts/state";
@@ -18,23 +17,10 @@ import LoadingButton from "src/components/button/LoadingButton";
 import Tag from "src/components/design_system/tag";
 import TextInput from "src/components/design_system/fields/textinput";
 
-const NotificationInputs = [
-  {
-    description: "Someone bought your talent token",
-    name: "TokenAcquiredNotification"
-  },
-  {
-    description: "Someone sent you a chat message",
-    name: "MessageReceivedNotification"
-  }
-];
-
-const Settings = props => {
+const Settings = () => {
   const theme = useContext(ThemeContext);
   const mode = theme.mode();
   const { mobile } = useWindowDimensionsHook();
-
-  const [notificationPreferences, setNotificationPreferences] = useState(props.notificationPreferences);
 
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
 
@@ -61,10 +47,6 @@ const Settings = props => {
   });
   const [emailValidated, setEmailValidated] = useState(false);
   const { valid: validPassword, errors, tags } = passwordMatchesRequirements(settings.newPassword);
-  const [notifications, setNotifications] = useState({
-    saving: false,
-    success: false
-  });
 
   useEffect(() => {
     if (!currentUser) {
@@ -165,26 +147,6 @@ const Settings = props => {
     if (response && response.success) {
       toast.success(<ToastBody heading="Success!" body="Email sent!" />);
     }
-  };
-
-  const setNotificationSettings = name => event => {
-    const value = parseInt(event.currentTarget.value, 10);
-    const preferences = { ...notificationPreferences, [name]: value };
-    setNotificationPreferences(preferences);
-  };
-
-  const updateNotificationSettings = async () => {
-    let success = true;
-    setNotifications(prev => ({ ...prev, saving: true, success: false }));
-
-    const response = await patch(`/api/v1/users/${currentUser?.id}`, {
-      user: {
-        notification_preferences: notificationPreferences
-      }
-    }).catch(() => (success = false));
-
-    success = success && response && !response.errors;
-    setNotifications(prev => ({ ...prev, saving: false, success }));
   };
 
   const messagingModeChanged = () => settings.messagingDisabled != currentUser?.messaging_disabled;
@@ -304,49 +266,6 @@ const Settings = props => {
         >
           Change password
         </Button>
-
-        <Divider className="mb-4" />
-        <div className="d-flex flex-column w-100 my-3">
-          <H5 className="w-100 text-left" mode={mode} text="Email Notification Settings" bold />
-          <P2
-            className="w-100 text-left"
-            mode={mode}
-            text="For each type of notification you can select to receive an immediate email notification or to not receive any email."
-          />
-
-          {NotificationInputs.map(input => (
-            <div className="d-flex flex-row w-100 flex-wrap mt-4" key={input.name}>
-              <div className="d-flex flex-column w-100">
-                <div className="d-flex flex-row justify-content-between align-items-end">
-                  <P2 bold className="text-black mb-2">
-                    {input.description}
-                  </P2>
-                </div>
-                <Form.Control
-                  as="select"
-                  onChange={setNotificationSettings(input.name)}
-                  value={notificationPreferences[input.name]}
-                  className="height-auto"
-                >
-                  <option value="0">Disabled</option>
-                  <option value="1">Immediate</option>
-                </Form.Control>
-              </div>
-            </div>
-          ))}
-          <div className={`d-flex flex-row ${mobile ? "justify-content-between mt-4" : "mt-4"} w-100 pb-4`}>
-            <LoadingButton
-              onClick={updateNotificationSettings}
-              type="primary-default"
-              mode={mode}
-              loading={notifications.saving}
-              disabled={notifications.saving}
-              success={notifications.success}
-            >
-              Save Settings
-            </LoadingButton>
-          </div>
-        </div>
 
         <Divider className="mb-4" />
         <div className="d-flex flex-column w-100 my-3">

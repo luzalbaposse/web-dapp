@@ -2,14 +2,6 @@
 
 // Talent card
 
-.talent-link {
-  text-decoration: none;
-  color: inherit;
-  &:hover {
-    text-decoration: none;
-    color: inherit;
-  }
-}
 
 .blur-photo {
   filter: blur(128px);
@@ -24,58 +16,8 @@
   border: 8px solid $dark-bg-01;
 }
 
-.talent-list-header {
-  border-bottom: 1px solid $light-surface-01;
-  height: auto;
-  padding-bottom: 40px;
-
-  &::before {
-    background-color: $light-surface-01;
-    content: "";
-    height: inherit;
-    z-index: -1;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100vw;
-    margin-top: 66px;
-  }
-}
-
-.dark-body .talent-list-header {
-  border-bottom: 1px solid $dark-surface-disable;
-
-  &::before {
-    background-color: $dark-surface-01;
-  }
-}
-
-.pull-bottom-content {
-  margin-bottom: -40px;
-}
-
-.pull-bottom-content-70 {
-  margin-bottom: -70px;
-}
-
-.talent-search-icon {
-  position: absolute;
-  top: 1px;
-}
-
 .text-white-space-wrap {
   white-space: pre-wrap;
-}
-
-.active-talent-table-tab {
-  border-bottom: 1px solid $light-primary !important;
-  font-weight: 700;
-  color: $light-text-primary-01 !important;
-}
-
-.dark-body .active-talent-table-tab {
-  border-bottom: 1px solid $dark-primary !important;
-  color: $dark-text-primary-01 !important;
 }
 
 .talent-table-tabs {
@@ -86,100 +28,13 @@
   border-bottom: 1px solid $dark-surface-disable;
 }
 
-.talent-table-tab {
-  cursor: pointer;
-  padding-bottom: 16px;
-  margin-right: 24px;
-  color: $dark-text-primary-04;
-
-  &:hover {
-    color: $light-text-primary-01;
-  }
-}
-
-.dark-body .talent-table-tab {
-  color: $dark-text-primary-03;
-
-  &:hover {
-    color: $dark-text-primary-01;
-  }
-}
-
-.disabled-talent-table-tab {
-  pointer-events: none;
-  padding-bottom: 16px;
-  margin-right: 24px;
-  color: $light-text-primary-disable;
-}
-
-.dark-body .disabled-talent-table-tab {
-  color: $dark-surface-hover-02;
-}
-
-.table-hover {
-  cursor: pointer;
-}
-
 .uppy-Root {
   position: inherit;
   margin-bottom: 0;
 }
 
-.edit-profile-fixed-bar {
-  position: fixed;
-  width: 100%;
-  background-color: #ffffff;
-  top: 66px;
-  left: 0;
-  z-index: 1;
-}
-
-.dark-body .edit-profile-fixed-bar {
-  background-color: $dark-bg-01;
-}
-
-.edit-profile-public-check {
-  fill: $dark-positive;
-  color: $light-surface-disable;
-}
-
-.dark-body .edit-profile-public-check {
-  color: $dark-surface-disable;
-}
-
-.edit-profile-talent-progress-container-primary {
-  background: rgba($light-primary, 0.2);
-  color: $light-primary-hover;
-}
-
-.dark-body .edit-profile-talent-progress-container-primary {
-  background: $dark-secondary-shade-01;
-}
-
-.edit-profile-talent-progress-container-yellow {
-  background: rgba($light-warning-tint-01, 0.2);
-  color: $dark-warning-text;
-}
-
-.edit-profile-talent-progress-container-green {
-  background: rgba($dark-positive, 0.2);
-  color: $dark-positive-tint-01;
-}
-
-.edit-profile-talent-progress {
-  margin-right: auto;
-  margin-left: auto;
-  max-width: 1240px;
-  padding-left: 40px;
-  padding-right: 40px;
-}
-
 .edit-profile-content {
   max-width: 615px;
-}
-
-.edit-profile-input {
-  width: 568px !important;
 }
 
 .dark-body .uppy-FileInput-input {
@@ -212,86 +67,10 @@
   }
 }
 
-.discovery-stats {
-  gap: 24px;
-}
-
-.discovery-stat {
-  align-items: center;
-  background-color: $dark-text-primary-01;
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  height: 93px;
-  justify-content: center;
-
-  p {
-    overflow: hidden;
-    text-align: center;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 80%;
-  }
-}
-
-.dark-body .discovery-stat {
-  background-color: $dark-surface-01;
-}
-
-.partnership-banner {
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  border-radius: 8px;
-  height: 356px;
-  width: 100%;
-}
-
-.partnership-logo {
-  margin-top: -34px;
-}
-
-.partnership-social-link {
-  background-color: $light-surface-02;
-  border-radius: 50%;
-}
-
-.dark-body .partnership-social-link {
-  background-color: $dark-surface-hover !important;
-}
-
-.partnership-button {
-  border-radius: 32px;
-  font-family: "AcidGrotesk";
-  padding: 8px 16px;
-  width: max-content;
-}
-
-@media (max-width: 575px) {
-  .discovery-stat {
-    width: 100% !important;
-  }
-}
-
 @media (max-width: 992px) {
-  .discovery-stat {
-    width: 371px;
-  }
-
-  .edit-profile-fixed-bar {
-    width: 100% !important;
-  }
-
   .edit-profile-content {
     padding-left: 24px;
     padding-right: 16px;
-  }
-
-  .edit-profile-talent-progress {
-    margin-right: 0;
-    margin-left: 0;
-    padding-left: 0;
-    padding-right: 8px;
   }
 }
 

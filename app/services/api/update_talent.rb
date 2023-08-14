@@ -62,18 +62,40 @@ class API::UpdateTalent
     end
 
     if params[:profile]
-      if params[:profile][:headline]
-        talent.pronouns = params[:profile][:pronouns]
+      if params[:profile].key?(:occupation)
         talent.occupation = params[:profile][:occupation]
+      end
+
+      if params[:profile].key?(:location)
         talent.location = params[:profile][:location]
+      end
+
+      if params[:profile].key?(:headline)
         talent.headline = params[:profile][:headline]
+      end
+
+      if params[:profile].key?(:video)
         talent.video = params[:profile][:video]
-        talent.wallet_address = params[:profile][:wallet_address]
+      end
+
+      if params[:profile].key?(:gender)
         talent.gender = params[:profile][:gender]
+      end
+
+      if params[:profile].key?(:nationality)
         talent.nationality = params[:profile][:nationality]
+      end
+
+      if params[:profile].key?(:ethnicity)
         talent.ethnicity = params[:profile][:ethnicity]
+      end
+
+      if params[:profile].key?(:gender)
+        talent.gender = params[:profile][:gender]
+      end
+
+      if params[:profile].key?(:based_in)
         talent.based_in = params[:profile][:based_in]
-        talent.highlighted_headline_words_index = params[:profile][:highlighted_headline_words_index]
       end
 
       if params[:profile][:website]

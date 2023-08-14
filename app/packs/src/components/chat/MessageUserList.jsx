@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 
 import { get } from "src/utils/requests";
 import dayjs from "dayjs";
@@ -8,12 +8,10 @@ dayjs.extend(customParseFormat);
 dayjs.extend(relativeTime);
 
 import TalentProfilePicture from "../talent/TalentProfilePicture";
-import NewMessageModal from "./NewMessageModal";
-import NewMessageToAllSupportersModal from "./NewMessageToAllSupportersModal";
 import ThemedButton from "src/components/design_system/button";
 import { P2, P3 } from "src/components/design_system/typography";
 import TextInput from "src/components/design_system/fields/textinput";
-import { NewChat, Search } from "src/components/icons";
+import { Search } from "src/components/icons";
 import { buildColor, Tabs, useTabs } from "@talentprotocol/design-system";
 
 const lastMessageText = lastMessage => {
@@ -97,40 +95,12 @@ const MessageUserList = ({
   activeUserUsername,
   onClick,
   mode,
-  mobile,
-  supportersCount,
   loadMoreChats,
   showLoadMoreChats,
   searchChats,
   searchValue
 }) => {
   const tabState = useTabs();
-
-  const [showNewMessageModal, setShowNewMessageModal] = useState(false);
-  const [showNewMessageToAllSupporters, setShowNewMessageToAllSupporters] = useState(false);
-
-  const onNewMessageUser = user => {
-    onClick(user.username);
-    const index = chats.findIndex(chat => chat?.receiver_username == user.username);
-    const newChat = {
-      receiver_username: user.username,
-      receiver_profile_picture_url: user.profilePictureUrl
-    };
-
-    if (index < 0) {
-      setChats(prev => [newChat, ...prev]);
-    }
-    setShowNewMessageModal(false);
-  };
-
-  const onSendMessageToAllSupporters = () => {
-    setShowNewMessageModal(false);
-    setShowNewMessageToAllSupporters(true);
-  };
-
-  const showMessageToAllSupporters = () => {
-    return supportersCount > 0;
-  };
 
   const sortedChats = useMemo(() => {
     return chats.sort((a, b) => (Date.parse(a.last_message_at) < Date.parse(b.last_message_at) ? 1 : -1));
@@ -160,20 +130,6 @@ const MessageUserList = ({
 
   return (
     <>
-      <NewMessageModal
-        show={showNewMessageModal}
-        setShow={setShowNewMessageModal}
-        onUserChosen={onNewMessageUser}
-        setShowMessageToAllSupporters={onSendMessageToAllSupporters}
-        mobile={mobile}
-        showMessageToAllSupporter={showMessageToAllSupporters()}
-        mode={mode}
-      />
-      <NewMessageToAllSupportersModal
-        show={showNewMessageToAllSupporters}
-        setShow={setShowNewMessageToAllSupporters}
-        mobile={mobile}
-      />
       <div className="d-flex flex-column align-items-stretch lg-overflow-y-scroll" style={{ paddingBottom: "32px" }}>
         <div className="w-100 d-flex flex-row align-items-center py-4 pl-6 pr-6">
           <div className="position-relative w-100">
@@ -187,15 +143,6 @@ const MessageUserList = ({
             />
             <Search color="currentColor" className="position-absolute chat-search-icon" />
           </div>
-          <ThemedButton
-            onClick={() => setShowNewMessageModal(true)}
-            type="white-subtle"
-            mode={mode}
-            className="ml-2 p-2"
-            size="icon"
-          >
-            <NewChat color="currentColor" />
-          </ThemedButton>
         </div>
         <div className="themed-border-bottom pb-2">
           <Tabs

@@ -31,22 +31,6 @@ export const WalletConnectionError = ({ show, hide, mode }) => (
   </Modal>
 );
 
-export const UnableToConnect = ({ show, hide }) => (
-  <Modal show={show} onHide={hide} centered dialogClassName="remove-background">
-    <Modal.Header closeButton>
-      <Modal.Title>
-        Metamask <img src={MetamaskFox} height={32} alt="Metamask Fox" />
-      </Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-      <p className="text-danger">
-        We already have the public key you tried to connect in our system. We do not allow multiple users to use the
-        same wallet, please select a different one and try to connect again.
-      </p>
-    </Modal.Body>
-  </Modal>
-);
-
 const Web3ModalConnect = ({}) => {
   return (
     <Container>

@@ -23,15 +23,8 @@ Rails.application.routes.draw do
     resources :persona_webhooks, only: [:create]
   end
 
-  constraints Clearance::Constraints::SignedIn.new { |user| !user&.onboarding_complete? } do
-    root to: "onboard#onboard", as: :onboarding_root
-    post "/finish" => "onboarding#finish"
-
-    match "*unmatched", to: redirect("/"), via: :all
-  end
-
   # Business - require log-in
-  constraints Clearance::Constraints::SignedIn.new { |user| user&.onboarding_complete? } do
+  constraints Clearance::Constraints::SignedIn.new do
     get "/" => redirect("/home")
     get "/home" => "homepage#index", :as => :user_root
     # file uploads
@@ -95,13 +88,11 @@ Rails.application.routes.draw do
         end
         resources :talent, only: [:index, :update] do
           resources :milestones, only: [:create, :update, :destroy], module: "talent"
-          resources :perks, only: [:create, :update, :destroy], module: "talent"
           resources :tokens, only: [:update], module: "talent"
           resources :career_goals, only: [:update], module: "talent"
         end
         resources :stakes, only: [:create]
         post "reward_claiming", to: "stakes#reward_claiming"
-        resources :perks, only: [:show]
         resources :races, only: [:show]
         resources :impersonations, only: [:create, :destroy]
         resources :tags, only: [:index]
@@ -112,8 +103,6 @@ Rails.application.routes.draw do
   end
 
   # Public routes
-
-  resources :discovery, only: [:index, :show], param: :slug
 
   # Auth - Clearance generated routes
   resources :passwords, controller: "passwords", only: [:create]

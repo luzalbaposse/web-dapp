@@ -49,30 +49,6 @@
   width: 48px;
 }
 
-.perk-card {
-  .header {
-    height: 250px;
-    width: 100%;
-    border-radius: 16px;
-    background-color: $light-primary;
-  }
-
-  .footer {
-    height: 150px;
-    width: 100%;
-  }
-
-  .edit-perk-button {
-    display: none;
-  }
-
-  &:hover {
-    .edit-perk-button {
-      display: flex;
-    }
-  }
-}
-
 .banner-profile {
   height: 328px;
   width: 418px;

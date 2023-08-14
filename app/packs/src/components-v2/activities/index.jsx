@@ -130,7 +130,7 @@ export const Activities = ({ data, isLoading, loadMore, filter, profileUsername 
                       <Button
                         hierarchy="secondary"
                         size="medium"
-                        leftIcon={!inputsWithContent[index] ? "flame" : "send"}
+                        leftIcon={"send"}
                         iconColor={"primary01"}
                         isDisabled={hasSentMessage[update.id]}
                         onClick={() => sendMessage(update, inputRefs[index])}

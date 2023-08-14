@@ -48,8 +48,6 @@ const StakeModal = ({
   const [approving, setApproving] = useState(false);
   const [didAllowance, setDidAllowance] = useState(false);
   const [validChain, setValidChain] = useState(true);
-  // eslint-disable-next-line no-unused-vars
-  const [valueError, setValueError] = useState(false);
   const [showNewMessageModal, setShowNewMessageModal] = useState(false);
   const [chainName, setChainName] = useState("celo");
   const [selectedCurrency, setSelectedCurrency] = useState("TAL");
@@ -241,12 +239,6 @@ const StakeModal = ({
   };
 
   const setValidAmount = value => {
-    if (parseFloat(value) < 0 || parseFloat(value) > parseFloat(amountOnWallet())) {
-      setValueError(true);
-    } else {
-      setValueError(false);
-    }
-
     if (didAllowance) {
       setDidAllowance(false);
     }
