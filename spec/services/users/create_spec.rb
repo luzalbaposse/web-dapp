@@ -49,7 +49,6 @@ RSpec.describe Users::Create do
     it "creates a new user" do
       result = create_user
       user = result[:user]
-      talent_profile_data = JSON.parse(user.talent.profile.to_json)
 
       expect(result[:success]).to be(true)
       expect(user).to be_persisted
@@ -60,10 +59,6 @@ RSpec.describe Users::Create do
       expect(user.role).to eq("basic")
       expect(user.theme_preference).to eq("light")
       expect(user.username).to eq(username)
-      expect(talent_profile_data["gender"]).to eq(gender)
-      expect(talent_profile_data["location"]).to eq(location)
-      expect(talent_profile_data["nationality"]).to eq(nationality)
-      expect(talent_profile_data["headline"]).to eq(headline)
     end
 
     it "creates a new subscribe" do
@@ -93,45 +88,12 @@ RSpec.describe Users::Create do
 
         created_user = User.last
         profile_complete_job = enqueued_jobs.find { |j| j["job_class"] == "ActivityIngestJob" && j["arguments"][0] == "profile_complete" }
-        career_needs_update_job = enqueued_jobs.find { |j| j["job_class"] == "ActivityIngestJob" && j["arguments"][0] == "career_needs_update" }
 
         aggregate_failures do
           expect(profile_complete_job["arguments"][0]).to eq("profile_complete")
           expect(profile_complete_job["arguments"][1]).to eq(nil)
           expect(profile_complete_job["arguments"][2]).to eq(created_user.id)
-
-          expect(career_needs_update_job["arguments"][0]).to eq("career_needs_update")
-          expect(career_needs_update_job["arguments"][1]).to eq("@origin is open to mentoring others.")
-          expect(career_needs_update_job["arguments"][2]).to eq(created_user.id)
         end
-      end
-    end
-
-    context "when a display name is provided" do
-      let(:display_name) { "Jack Smith" }
-
-      let(:user_creation_params) do
-        super().tap { |params| params[:display_name] = display_name }
-      end
-
-      it "persists the display name" do
-        result = create_user
-
-        expect(result[:user].display_name).to eq(display_name)
-      end
-    end
-
-    context "when a theme preference is provided" do
-      let(:theme_preference) { "dark" }
-
-      let(:user_creation_params) do
-        super().tap { |params| params[:theme_preference] = theme_preference }
-      end
-
-      it "persists the theme preference" do
-        result = create_user
-
-        expect(result[:user].theme_preference).to eq(theme_preference)
       end
     end
 
@@ -151,11 +113,13 @@ RSpec.describe Users::Create do
         expect(user.password).to be_nil
       end
 
-      it "does not onboard the user" do
-        result = create_user
-        user = result[:user]
+      it "does onboard the user" do
+        freeze_time do
+          result = create_user
+          user = result[:user]
 
-        expect(user.onboarded_at).to eq(nil)
+          expect(user.onboarded_at).to eq(Time.current)
+        end
       end
     end
 
@@ -198,20 +162,6 @@ RSpec.describe Users::Create do
       end
     end
 
-    context "when a user with the same wallet already exists" do
-      before do
-        create :user, wallet_id: wallet_id
-      end
-
-      it "returns an error" do
-        result = create_user
-
-        expect(result[:success]).to eq(false)
-        expect(result[:field]).to eq("wallet_id")
-        expect(result[:error]).to eq("We already have that wallet in the system.")
-      end
-    end
-
     it "initializes and calls the notification creator with the correct arguments" do
       result = create_user
 
@@ -240,7 +190,7 @@ RSpec.describe Users::Create do
       let(:error) { StandardError.new }
 
       before do
-        allow(CareerNeeds::Upsert).to receive(:new).and_raise(error)
+        allow(Invites::Create).to receive(:new).and_raise(error)
         allow(Rollbar).to receive(:error)
       end
 

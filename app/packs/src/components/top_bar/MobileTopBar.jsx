@@ -13,18 +13,12 @@ const MobileUserMenu = ({
   connectedButton,
   showConnectButton,
   walletConnectButton,
-  onClickTransak,
   copyCodeToClipboard,
   inviteNumbers,
   signOut,
   children
 }) => {
   const [showMenu, setShowMenu] = useState(false);
-
-  const openTransak = e => {
-    setShowMenu(false);
-    onClickTransak(e);
-  };
 
   return (
     <div className="navbar-container">
@@ -50,7 +44,6 @@ const MobileUserMenu = ({
             connectedButton={connectedButton}
             showConnectButton={showConnectButton}
             walletConnectButton={walletConnectButton}
-            onClickTransak={openTransak}
             copyCodeToClipboard={copyCodeToClipboard}
             inviteNumbers={inviteNumbers}
             signOut={signOut}

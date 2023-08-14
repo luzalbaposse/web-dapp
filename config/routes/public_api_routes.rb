@@ -60,7 +60,6 @@ module PublicAPIRoutes
 
             namespace :profile do
               resources :community, only: [:index]
-              resources :perks, only: [:index]
 
               scope :web3 do
                 get :tokens, to: "web3#tokens"

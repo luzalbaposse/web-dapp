@@ -12,10 +12,6 @@ import Divider from "src/components/design_system/other/Divider";
 import { toast } from "react-toastify";
 import { ToastBody } from "src/components/design_system/toasts";
 
-// import { OnChain } from "src/onchain";
-// import { Client } from "@xmtp/xmtp-js";
-// const ENCODING = "binary";
-
 const SendCareerUpdateModal = ({ show, hide, placeholder }) => {
   const { mobile } = useWindowDimensionsHook();
   const [message, setMessage] = useState("");

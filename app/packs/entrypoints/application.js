@@ -8,14 +8,10 @@ import "regenerator-runtime/runtime";
 import Rails from "@rails/ujs";
 
 import "channels";
-import "@fontsource/plus-jakarta-sans";
 
 import ReactOnRails from "react-on-rails";
 import MessageUserList from "src/components/chat/MessageUserList";
 import Chat from "src/components/chat/Chat";
-import TalentKeywordSearch from "src/components/talent/TalentKeywordSearch";
-import Web3ModalConnect from "src/components/login/Web3ModalConnect";
-import UpcomingTalents from "src/components/talent/UpcomingTalents";
 import Notifications from "src/components/notifications";
 
 // New Layout components - @TODO: we need to check which of the above components we'll still be using or not
@@ -25,18 +21,14 @@ import ResetPassword from "src/components/login/ResetPassword";
 import ChangePassword from "src/components/login/ChangePassword";
 import TopBar from "src/components-v2/navbar-proxy";
 import UserSettings from "src/components/talent/Edit/Settings";
-import Discovery from "src/components/discovery";
-import DiscoveryShow from "src/components/discovery/show";
 import TalentPage from "src/components/talent/TalentPage";
 import LoggedOutTopBar from "src/components/top_bar/LoggedOutTopBar";
 import Support from "src/components-v2/support";
 import UserSupportPage from "src/components-v2/user-support-page";
 import Footer from "src/components/design_system/footer";
-import SubdomainFooter from "src/components/design_system/subdomain_footer";
 import FlashMessages from "src/components/FlashMessages";
 import SignInPage from "src/components-v2/pages/sign-in";
 import SignUpPage from "src/components-v2/pages/sign-up";
-import OnboardingPage from "src/components-v2/pages/onboarding";
 import ForgotPasswordPage from "src/components-v2/pages/forgot-password";
 import SetPasswordPage from "src/components-v2/pages/set-password";
 import HomepagePage from "src/components-v2/pages/homepage";
@@ -56,22 +48,16 @@ require.context("../images", true);
 ReactOnRails.register({
   ChangePassword,
   Chat,
-  Discovery,
-  DiscoveryShow,
   UserSettings,
   FlashMessages,
   Footer,
-  SubdomainFooter,
   LoggedOutTopBar,
   Login,
   MessageUserList,
   Notifications,
   ResetPassword,
-  TalentKeywordSearch,
   TalentPage,
   TopBar,
-  UpcomingTalents,
-  Web3ModalConnect,
   Support,
   UserSupportPage,
   SignInPage,
@@ -80,7 +66,6 @@ ReactOnRails.register({
   SetPasswordPage,
   HomepagePage,
   ConnectionsPage,
-  OnboardingPage,
   ProductAnnouncementModal,
   ExploreCollectivesPage,
   CollectiveShowPage,

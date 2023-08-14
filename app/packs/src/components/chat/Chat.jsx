@@ -16,7 +16,6 @@ const Chat = ({ chats, pagination }) => {
   const [activeUserUsername, setActiveUserUsername] = useState(baseUrl.searchParams.get("user") || "");
   const [localChats, setLocalChats] = useState(chats);
   const [localPagination, setLocalPagination] = useState(pagination);
-  const [perkId] = useState(baseUrl.searchParams.get("perk") || 0);
   const [activeChannel, setActiveChannel] = useState(null); // @TODO: Refactor chat
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
@@ -86,18 +85,6 @@ const Chat = ({ chats, pagination }) => {
       setGettingMessages(false);
     });
   }, [activeUserUsername]);
-
-  useEffect(() => {
-    if (perkId <= 0) {
-      return;
-    }
-
-    get(`api/v1/perks/${perkId}`).then(response => {
-      if (response.title) {
-        setMessage(`Hi! I'm reaching out because of your perk "${response.title}"`);
-      }
-    });
-  }, [perkId]);
 
   useEffect(() => {
     if (chatId != "") {

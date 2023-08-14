@@ -1,15 +1,3 @@
-.tal-th {
-  font-weight: lighter !important;
-}
-
-.tal-tr-item {
-  background-color: white;
-}
-
-.tal-table-price {
-  line-height: 1;
-}
-
 .talent-table {
   display: table;
   width: 100%;
@@ -58,16 +46,6 @@
   }
 }
 
-.talent-table-action-options {
-  display: flex;
-  flex-direction: row;
-  gap: 24px;
-}
-
-.wallet-id-text {
-  color: $light-text-primary-disable;
-}
-
 .progress {
   background-color: $light-surface-disable;
 
@@ -82,16 +60,6 @@
   .bg-secondary {
     background-color: $dark-text-primary-04 !important;
   }
-}
-
-// TODO need to find a more suitable place for these
-.star {
-  stroke: none;
-  fill: $light-warning;
-}
-
-.star-outline {
-  stroke: $light-text-primary-disable;
 }
 
 .table-options-dropdown {

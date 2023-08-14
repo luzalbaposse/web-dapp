@@ -91,21 +91,6 @@ RSpec.describe Subscriptions::Accept do
     end
   end
 
-  it "enqueues the job to update the homepage activity" do
-    Sidekiq::Testing.inline! do
-      accept_subscription
-
-      job = enqueued_jobs.find { |j| j["job_class"] == "ActivityIngestJob" }
-
-      aggregate_failures do
-        expect(job["job_class"]).to eq("ActivityIngestJob")
-        expect(job["arguments"][0]).to eq("subscribe")
-        expect(job["arguments"][2]).to eq(subscriber_user.id)
-        expect(job["arguments"][3]).to eq(subscribing_user.id)
-      end
-    end
-  end
-
   context "when the subscription is already accepted" do
     let(:accepted_at) { Date.yesterday }
 

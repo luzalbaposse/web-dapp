@@ -1,7 +1,5 @@
 import { Icon, Typography, buildColor } from "@talentprotocol/design-system";
-import Modal from "react-bootstrap/Modal";
 import React, { useState, useEffect, useCallback, useContext } from "react";
-import transakSDK from "@transak/transak-sdk";
 import { Container, IconContainer, InnerContainer } from "./styled";
 import { destroy } from "../../utils/requests";
 import { H5 } from "src/components/design_system/typography";
@@ -19,9 +17,6 @@ import ThemeContainer, { ThemeContext } from "src/contexts/ThemeContext";
 import UserMenu from "src/components/user_menu";
 import Web3ModalConnect from "../login/Web3ModalConnect";
 
-//const WARNING_MESSAGE =
-//("Token minting is temporarily paused while we are upgrading our smart contracts. This is a temporary warning.");
-
 const NotificationsIndicator = () => {
   return (
     <div className="position-relative">
@@ -33,39 +28,6 @@ const NotificationsIndicator = () => {
       </span>
     </div>
   );
-};
-
-const TransakDone = ({ show, hide }) => (
-  <Modal show={show} onHide={hide} centered dialogClassName="remove-background">
-    <Modal.Header closeButton>
-      <Modal.Title>Thank you for your support</Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-      <p>
-        You have successfully acquired cUSD on the CELO network. It usually takes a couple minutes to finish processing
-        and for you to receive your funds, you'll get a confirmation email from transak once you do. After that you're
-        ready to start supporting talent!
-      </p>
-    </Modal.Body>
-  </Modal>
-);
-
-const newTransak = (width, height, env, apiKey) => {
-  const envName = env ? env.toUpperCase() : "STAGING";
-
-  return new transakSDK({
-    apiKey: apiKey, // Your API Key
-    environment: envName, // STAGING/PRODUCTION
-    defaultCryptoCurrency: "CUSD",
-    fiatCurrency: "EUR",
-    defaultPaymentMethod: "credit_debit_card",
-    themeColor: "000000",
-    hostURL: window.location.origin,
-    widgetHeight: `${height}px`,
-    widgetWidth: `${width}px`,
-    networks: "celo,polygon",
-    cryptoCurrencyList: "CUSD,USDC"
-  });
 };
 
 export const TopBar = ({
@@ -94,8 +56,7 @@ export const TopBar = ({
   const [walletConnected, setWalletConnected] = useState(false);
   const [stableBalance, setStableBalance] = useState(0);
   const [account, setAccount] = useState("");
-  const { height, width } = useWindowDimensionsHook();
-  const [transakDone, setTransakDone] = useState(false);
+  const { width } = useWindowDimensionsHook();
   const [activeTab, setActiveTab] = useState(url.pathname);
   const [chainName, setChainName] = useState("Celo");
   const theme = useContext(ThemeContext);
@@ -106,27 +67,6 @@ export const TopBar = ({
 
   const copyCodeToClipboard = () => {
     navigator.clipboard.writeText(`${window.location.origin}${user.sign_up_path}`);
-  };
-
-  const onClickTransak = e => {
-    e.preventDefault();
-
-    const _width = width > 450 ? 450 : width;
-    const _height = height > 700 ? 700 : height;
-
-    const transak = newTransak(_width, _height, railsContext.contractsEnv, railsContext.transakApiKey);
-    transak.init();
-
-    // To get all the events
-    transak.on(transak.ALL_EVENTS, data => {
-      console.log(data);
-    });
-
-    // This will trigger when the user marks payment is made.
-    transak.on(transak.EVENTS.TRANSAK_ORDER_SUCCESSFUL, (/*orderData*/) => {
-      transak.close();
-      setTransakDone(true);
-    });
   };
 
   const signOut = async () => {
@@ -264,7 +204,6 @@ export const TopBar = ({
         showConnectButton={showConnectButton}
         connectedButton={connectedButton}
         walletConnectButton={walletConnectButton}
-        onClickTransak={onClickTransak}
         copyCodeToClipboard={copyCodeToClipboard}
         inviteNumbers={inviteNumbers()}
         userHasInvitesLeft={userHasInvitesLeft}
@@ -297,7 +236,6 @@ export const TopBar = ({
   return (
     <div className="navbar-container" style={{ borderBottom: `1px solid ${buildColor("surfaceHover02")}` }}>
       <nav className={`navbar ${theme.mode()} d-flex justify-content-between align-items-center`}>
-        <TransakDone show={transakDone} hide={() => setTransakDone(false)} />
         <a href="/" className="mr-6">
           <H5 bold className="mb-0">
             Talent Protocol
@@ -340,7 +278,6 @@ export const TopBar = ({
             mode={theme.mode()}
             userHasInvitesLeft={userHasInvitesLeft}
             inviteNumbers={inviteNumbers}
-            onClickTransak={onClickTransak}
             signOut={signOut}
           />
           <SearchDropdown className="talent-button white-subtle-button" />

@@ -119,23 +119,21 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
   }, [data.profileOverview?.username]);
   const MemoedTag = useMemo(() => {
     if (
-      currentUser?.username === data.profileOverview?.username ||
-      data.profileOverview?.subscribing_status === "unsubscribed"
+      !profileOverview ||
+      currentUser?.username === profileOverview?.username ||
+      profileOverview?.subscribing_status === "unsubscribed"
     )
       return <></>;
     let tagLabel = "";
-    switch (data.profileOverview?.subscribing_status) {
+    switch (profileOverview?.subscribing_status) {
       case "subscribed":
-        tagLabel = "Supporting";
+        tagLabel = "Subscribed";
         break;
       case "subscribing":
-        tagLabel = "Supporting you";
-        break;
-      case "pending":
-        tagLabel = "Pending";
+        tagLabel = "Subscribing to you";
         break;
       case "both_subscribed":
-        tagLabel = "Both support";
+        tagLabel = "Both subscribe";
         break;
       default:
         tagLabel = "";
@@ -153,7 +151,8 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
         />
       </TagContainer>
     );
-  }, [data.profileOverview, currentUser?.username]);
+  }, [profileOverview, currentUser?.username]);
+
   useEffect(() => {
     if (!urlData.profileUsername) return;
     fetchProfileOverview(urlData.profileUsername);
@@ -225,7 +224,7 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
           {data.supporters.talents?.length ? (
             <>
               <MembersList membersImages={data.supporters.talents.map(supporter => supporter.profile_picture_url)} />
-              <Typography specs={{ type: "small", variant: "label3" }} color="primary04">
+              <Typography specs={{ type: "small", variant: "label3" }} color="primary04" className="lh-0">
                 Supported by {data.supporters?.pagination?.total} of your connections.
               </Typography>
             </>

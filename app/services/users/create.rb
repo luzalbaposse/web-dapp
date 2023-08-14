@@ -64,45 +64,27 @@ module Users
 
     def create_user(params)
       user = User.new(attributes(params))
-      user.onboarded_at = Time.current unless params[:linkedin_id]
+      user.onboarded_at = Time.current
       user.save!
       user
     end
 
     def attributes(params)
       {
-        display_name: params[:display_name],
         utm_source: params[:utm_source],
         email_confirmation_token: Clearance::Token.new,
         email: params[:email].downcase,
-        wallet_id: params[:wallet_id]&.downcase,
         invited: params[:invite],
         linkedin_id: params[:linkedin_id],
         password: params[:password],
         role: "basic",
-        theme_preference: params[:theme_preference],
-        legal_first_name: params[:legal_first_name],
-        legal_last_name: params[:legal_last_name],
         username: params[:username].downcase.delete(" ", "")
       }.compact
     end
 
     def create_talent(user, params)
-      talent = user.create_talent!
+      user.create_talent!
       user.talent.create_career_goal!
-      talent.update(gender: params[:gender])
-      talent.update(location: params[:location])
-      talent.update(nationality: params[:nationality])
-      talent.update(headline: params[:headline])
-
-      params[:tags]&.each do |description|
-        tag = Tag.find_or_create_by(description: description.downcase)
-        UserTag.find_or_create_by!(user: user, tag: tag)
-      end
-
-      if params[:career_needs]&.length&.positive?
-        CareerNeeds::Upsert.new(career_goal: talent.career_goal, titles: params[:career_needs]).call
-      end
     end
 
     def create_talent_token(user)

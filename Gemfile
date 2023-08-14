@@ -25,7 +25,6 @@ gem "clearance"
 gem "rack-attack"
 
 # Web 3
-gem "schmooze"
 gem "eth"
 
 # Crypto

@@ -3,12 +3,7 @@ import { ModalDialog, Typography, useModal } from "@talentprotocol/design-system
 import { useStepExperience } from "../../hooks/use-step-experience";
 import { EmailPasswordStep } from "./steps/email-password";
 import { WelcomeStep } from "./steps/welcome";
-import { LegalNameStep } from "./steps/legal-name";
 import { HandleStep } from "./steps/handle";
-import { DefineStep } from "./steps/define";
-import { OccupationStep } from "./steps/occupation";
-import { LookingForStep } from "./steps/looking-for";
-import { IntroductionStep } from "./steps/introduction";
 import { ConfirmEmailStep } from "./steps/confirm-email";
 import { useUserBuilder } from "./hooks/use-user-builder";
 import { WelcomeFooter } from "./welcome-footer";
@@ -28,36 +23,14 @@ const STEP_TO_COMPONENT_MAP = {
     path: "email_password"
   },
   3: {
-    component: LegalNameStep,
-    path: "legal_names"
-  },
-  4: {
     component: HandleStep,
     path: "handle"
   },
-  5: {
-    component: DefineStep,
-    path: "define"
-  },
-  6: {
-    component: OccupationStep,
-    path: "occupation"
-  },
-  7: {
-    component: LookingForStep,
-    path: "looking_for"
-  },
-  8: {
-    component: IntroductionStep,
-    path: "introduction"
-  },
-  9: {
+  4: {
     component: ConfirmEmailStep,
     path: "confirm_email"
   }
 };
-
-const CAN_SKIP_STEPS = [5, 6, 7];
 
 export const SignUpFlow = props => {
   const captchaModalState = useModal();
@@ -132,7 +105,7 @@ export const SignUpFlow = props => {
   const MemoizedDefaultFooter = useMemo(
     () => (
       <DefaultFooter
-        showSkipButton={CAN_SKIP_STEPS.includes(stepsState.currentStep)}
+        showSkipButton={false}
         previousStep={stepsState.previousStep}
         nextStep={stepsState.nextStep}
         isNextDisabled={isNextDisabled}
@@ -146,7 +119,7 @@ export const SignUpFlow = props => {
         return <WelcomeFooter />;
       case 2:
         return MemoizedDefaultFooter;
-      case 8:
+      case 3:
         return (
           <CreateAccountFooter
             previousStep={stepsState.previousStep}
@@ -154,7 +127,7 @@ export const SignUpFlow = props => {
             isNextDisabled={isNextDisabled}
           />
         );
-      case 9:
+      case 4:
         return <EmailFooter hasCreateAccountError={hasCreateAccountError} createdUser={createdUser} />;
       default:
         return MemoizedDefaultFooter;

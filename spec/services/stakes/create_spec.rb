@@ -50,19 +50,6 @@ RSpec.describe Stakes::Create do
         end
       end
     end
-
-    it "enqueues the job to create the activity" do
-      Sidekiq::Testing.inline! do
-        create_stake
-
-        job = enqueued_jobs.find { |j| j["job_class"] == "ActivityIngestJob" }
-
-        aggregate_failures do
-          expect(job["job_class"]).to eq("ActivityIngestJob")
-          expect(job["arguments"][0]).to eq("stake")
-        end
-      end
-    end
   end
 
   context "when the user is buying a talent token from another user" do
@@ -134,8 +121,8 @@ RSpec.describe Stakes::Create do
           create_stake
 
           aggregate_failures do
-            expect(enqueued_jobs.count).to eq 2
-            expect(enqueued_jobs.pluck("job_class")).to match_array(["TalentSupportersRefreshJob", "ActivityIngestJob"])
+            expect(enqueued_jobs.count).to eq 1
+            expect(enqueued_jobs.pluck("job_class")).to match_array(["TalentSupportersRefreshJob"])
           end
         end
       end

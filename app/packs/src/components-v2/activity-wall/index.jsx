@@ -9,12 +9,9 @@ const perPage = 8;
 const DROPDOWN_OPTIONS = [
   { type: undefined, value: "All" },
   { type: ["Activities::GoalCreate", "Activities::GoalUpdate"], value: "Goals" },
-  { type: "Activities::CareerUpdate", value: "Updates" },
-  { type: "Activities::TokenLaunch", value: "Token Launches" },
-  { type: "Activities::ProfileComplete", value: "Complete Profiles" },
-  { type: "Activities::Stake", value: "Staking" },
-  { type: "Activities::Sponsor", value: "Sponsors" },
-  { type: "Activities::Subscribe", value: "Subscribes" }
+  { type: "Activities::CareerUpdate", value: "Career Updates" },
+  { type: "Activities::ProfileComplete", value: "New Members" },
+  { type: "Activities::Sponsor", value: "Sponsors" }
 ];
 
 export const ActivityWall = ({ hideTitle = false, organization = undefined, profile = {} }) => {

@@ -514,7 +514,6 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    schmooze (0.2.0)
     scrypt (3.0.7)
       ffi-compiler (>= 1.0, < 2.0)
     selenium-webdriver (4.9.0)
@@ -668,7 +667,6 @@ DEPENDENCIES
   rspec-rails
   rswag-specs
   sass-rails (>= 6)
-  schmooze
   sendgrid-ruby
   shoulda-matchers (~> 4.5.1)
   shrine (~> 3.0)

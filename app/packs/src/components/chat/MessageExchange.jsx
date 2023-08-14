@@ -49,13 +49,6 @@ const MessageExchange = props => {
   const searchParams = new URLSearchParams(url.search);
 
   useEffect(() => {
-    if (searchParams.has("perk")) {
-      searchParams.delete("perk");
-      window.history.replaceState({}, document.title, "/messages?" + searchParams.toString());
-    }
-  }, [props.value]);
-
-  useEffect(() => {
     var messagesDiv = document.getElementById("messages");
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
   }, [props.messages]);

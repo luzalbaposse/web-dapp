@@ -24,7 +24,6 @@ module Subscriptions
         type: SubscriptionAcceptedNotification,
         source_id: subscribing_user.id
       )
-      ActivityIngestJob.perform_later("subscribe", nil, subscriber_user.id, subscribing_user.id)
 
       refresh_quests
 
