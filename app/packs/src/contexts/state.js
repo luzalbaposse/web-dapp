@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { talentsService } from "src/api/talents";
 import { careerUpdatesService } from "src/api";
 import { ToastBody } from "src/components/design_system/toasts";
+import { createVolatilleStore } from "../zustand-wrapper";
 
 const messagesStore = create(set => ({
   messageCount: 0,
@@ -63,6 +64,11 @@ const useCareerUpdatesStore = create(set => ({
     }
   }
 }));
+
+createVolatilleStore("quim", (set) => ({
+  name: "ze",
+  setName: (newName) => set({name: newName})
+}))
 
 export {
   messagesStore,
