@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Spinner } from "@talentprotocol/design-system";
-import OldAbout from "../../../../../components/profile/About";
-import OldJourney from "../../../../../components/profile/Journey";
-import Connections from "src/components/profile/Connections";
 import { talentsService } from "src/api";
-import { Container, SpinnerContainer } from "./styled";
+import { Container, Divider, SpinnerContainer } from "./styled";
+import { AboutMe } from "./about-me";
+import { CurrentRole } from "./current-role";
+import { Tags } from "./tags";
+import { OnTheWeb } from "./on-the-web";
+import { SupportData } from "./support-data";
 
 export const About = ({ currentUser, urlData }) => {
   const [aboutData, setAboutData] = useState(null);
   const [supportData, setSupportData] = useState(null);
+
+  // TODO: check support data
 
   useEffect(() => {
     if (!urlData.profileUsername) return;
@@ -30,9 +34,12 @@ export const About = ({ currentUser, urlData }) => {
     </SpinnerContainer>
   ) : (
     <Container>
-      <OldAbout profile={aboutData} />
-      <OldJourney talent={aboutData} canUpdate={aboutData?.username === currentUser?.username} />
-      {!!currentUser?.id && <Connections userId={aboutData?.username} talent={supportData} canUpdate={false} />}
+      <AboutMe />
+      <CurrentRole />
+      <Tags />
+      <OnTheWeb />
+      <Divider />
+      <SupportData />
     </Container>
   );
 };

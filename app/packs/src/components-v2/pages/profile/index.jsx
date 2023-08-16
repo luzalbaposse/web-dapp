@@ -21,13 +21,24 @@ export const ProfilePage = ({ isMobile, railsContext, withPersonaRequest }) => {
 
   return isMobile ? (
     <PageContainer>
-      <ProfileHeader currentUser={currentUser} urlData={urlData} railsContext={railsContext} isMobile withPersonaRequest={withPersonaRequest}/>
+      <ProfileHeader
+        currentUser={currentUser}
+        urlData={urlData}
+        railsContext={railsContext}
+        isMobile
+        withPersonaRequest={withPersonaRequest}
+      />
       <ProfileAreas currentUser={currentUser} railsContext={railsContext} urlData={urlData} />
     </PageContainer>
   ) : (
     <DesktopPageContainer>
       <DesktopColumn>
-        <ProfileHeader currentUser={currentUser} urlData={urlData} railsContext={railsContext} withPersonaRequest={withPersonaRequest} />
+        <ProfileHeader
+          currentUser={currentUser}
+          urlData={urlData}
+          railsContext={railsContext}
+          withPersonaRequest={withPersonaRequest}
+        />
       </DesktopColumn>
       <DesktopColumn>
         <ProfileAreas currentUser={currentUser} railsContext={railsContext} urlData={urlData} />

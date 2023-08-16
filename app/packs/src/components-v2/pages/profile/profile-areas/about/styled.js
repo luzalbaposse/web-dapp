@@ -1,4 +1,4 @@
-import { mobileStyles } from "@talentprotocol/design-system";
+import { buildColor, mobileStyles } from "@talentprotocol/design-system";
 import styled, { css } from "styled-components";
 
 export const SpinnerContainer = styled.div`
@@ -9,12 +9,18 @@ export const SpinnerContainer = styled.div`
 `;
 
 export const Container = styled.div`
-  padding: 24px 0;
   display: flex;
   flex-direction: column;
+  padding: 0 24px 24px 24px;
   gap: 24px;
 
   ${mobileStyles(css`
     padding: 24px;
   `)}
+`;
+
+export const Divider = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: ${buildColor("surfaceHover02")};
 `;
