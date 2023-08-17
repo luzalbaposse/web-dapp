@@ -21,6 +21,7 @@ const TextInput = ({
   ariaDescribedBy,
   topCaption,
   defaultValue,
+  inputStyle,
   type = "text",
   maxLengthText = false
 }) => {
@@ -49,6 +50,7 @@ const TextInput = ({
         onBlur={onBlur}
         maxLength={maxLength}
         defaultValue={defaultValue}
+        style={inputStyle}
       />
 
       {shortCaption ? <p className="short-caption">{shortCaption}</p> : null}
