@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Avatar, TextLink, Typography, Button } from "@talentprotocol/design-system";
-import { BuilderEntry, BuildersList, Container, TitleContainer } from "./styled";
+import {
+  BuilderEntry,
+  BuildersList,
+  Container,
+  SupportButtonContainer,
+  TitleContainer,
+  ViewAllContainer
+} from "./styled";
 import { talentsService } from "../../api/talents";
 
-export const RecommendedBuildersWidget = ({ username }) => {
+export const RecommendedBuildersWidget = ({ username, ellipsisAt = 350 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [talents, setTalents] = useState([]);
   useEffect(() => {
@@ -25,8 +32,7 @@ export const RecommendedBuildersWidget = ({ username }) => {
     talents.length > 0 && (
       <Container>
         <TitleContainer>
-          <Typography specs={{ variant: "h5", type: "bold" }}>Recommended Builders</Typography>
-          <TextLink href="/talent" text="View all" rightIcon="carret" color="primary" size="medium" />
+          <Typography specs={{ variant: "p1", type: "medium" }}>Recommended Builders</Typography>
         </TitleContainer>
         <BuildersList>
           {talents.map(talent => (
@@ -38,12 +44,17 @@ export const RecommendedBuildersWidget = ({ username }) => {
                 occupation={talent.occupation}
                 url={talent.profile_picture_url}
                 profileURL={`/u/${talent.username}`}
-                ellipsisAt={200}
+                ellipsisAt={ellipsisAt}
               />
-              <Button hierarchy="primary" size="small" text="Subscribe" href={`/u/${talent.username}`} />
+              <SupportButtonContainer>
+                <Button hierarchy="secondary" size="small" text="Subscribe" href={`/u/${talent.username}`} />
+              </SupportButtonContainer>
             </BuilderEntry>
           ))}
         </BuildersList>
+        <ViewAllContainer>
+          <TextLink href="/talent" text="Show more" rightIcon="carret" color="primary" size="small" />
+        </ViewAllContainer>
       </Container>
     )
   );
