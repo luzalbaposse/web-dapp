@@ -2,7 +2,19 @@ import React, { useMemo } from "react";
 import { Container, LinkItem, LinksList } from "./styled";
 import { Button, Typography } from "@talentprotocol/design-system";
 
+const LINK_TYPE_TO_ICON = {
+  Website: "globe",
+  GitHub: "github",
+  Linkedin: "linkedin",
+  Twitter: "twitter",
+  Lens: "lens",
+  Mastodon: "globe",
+  Telegram: "telegram",
+  Discord: "discord"
+};
+
 export const OnTheWeb = ({ links }) => {
+  if (!links.some(linkObject => !!linkObject.link)) return <></>;
   const renderedLinks = useMemo(() =>
     links.reduce((acc, linkObject) => {
       if (!!linkObject.link) {
@@ -11,7 +23,7 @@ export const OnTheWeb = ({ links }) => {
             <Button
               hierarchy="secondary"
               size="small"
-              leftIcon="discord"
+              leftIcon={LINK_TYPE_TO_ICON[linkObject.type]}
               iconColor="primary03"
               href={linkObject.link}
             />

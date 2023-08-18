@@ -152,8 +152,11 @@ class API::TalentBlueprint < Blueprinter::Base
         { link: user.talent.mastodon, type: "Mastodon" },
         { link: user.talent.telegram, type: "Telegram" },
         { link: user.talent.discord, type: "Discord" },
-
       ]
+    end
+
+    field :current_position do |user, _options|
+      user.talent.milestones.where(end_date: nil).order(start_date: :desc).first
     end
 
     association :milestones, blueprint: MilestoneBlueprint, view: :normal do |user, options|

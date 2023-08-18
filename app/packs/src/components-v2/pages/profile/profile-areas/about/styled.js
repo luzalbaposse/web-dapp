@@ -19,6 +19,11 @@ export const Container = styled.div`
   `)}
 `;
 
+export const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
 export const Divider = styled.div`
   width: 100%;
   height: 1px;
