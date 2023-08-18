@@ -12,7 +12,7 @@ export const About = ({ currentUser, urlData }) => {
   const [aboutData, setAboutData] = useState(null);
   const [supportData, setSupportData] = useState(null);
 
-  // TODO: check support data
+  console.log("aboutData: ", aboutData);
 
   useEffect(() => {
     if (!urlData.profileUsername) return;
@@ -34,12 +34,12 @@ export const About = ({ currentUser, urlData }) => {
     </SpinnerContainer>
   ) : (
     <Container>
-      <AboutMe />
+      <AboutMe bio={aboutData.bio} />
       <CurrentRole />
-      <Tags />
-      <OnTheWeb />
+      <Tags tags={aboutData.tags} />
+      <OnTheWeb links={aboutData.social_links} />
       <Divider />
-      <SupportData />
+      <SupportData {...supportData} />
     </Container>
   );
 };

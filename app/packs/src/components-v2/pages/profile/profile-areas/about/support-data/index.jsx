@@ -2,12 +2,12 @@ import React from "react";
 import { Container, InfoGroup } from "./styled";
 import { Typography } from "@talentprotocol/design-system";
 
-export const SupportData = ({}) => {
+export const SupportData = ({ subscribers_count, goals_count, updates_count }) => {
   return (
     <Container>
       <InfoGroup>
         <Typography specs={{ type: "bold", variant: "p2" }} color="primary01">
-          63
+          {subscribers_count}
         </Typography>
         <Typography specs={{ type: "regular", variant: "p2" }} color="primary01">
           Subscribers
@@ -15,7 +15,7 @@ export const SupportData = ({}) => {
       </InfoGroup>
       <InfoGroup>
         <Typography specs={{ type: "bold", variant: "p2" }} color="primary01">
-          13
+          {goals_count}
         </Typography>
         <Typography specs={{ type: "regular", variant: "p2" }} color="primary01">
           Goals
@@ -23,7 +23,7 @@ export const SupportData = ({}) => {
       </InfoGroup>
       <InfoGroup>
         <Typography specs={{ type: "bold", variant: "p2" }} color="primary01">
-          2
+          {updates_count}
         </Typography>
         <Typography specs={{ type: "regular", variant: "p2" }} color="primary01">
           Updates

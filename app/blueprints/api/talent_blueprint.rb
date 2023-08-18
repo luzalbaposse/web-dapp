@@ -138,6 +138,24 @@ class API::TalentBlueprint < Blueprinter::Base
       user.talent.id
     end
 
+    field :tags do |user, _options|
+      user.tags
+    end
+
+    field :social_links do |user, _options|
+      [
+        { link: user.talent.website, type: "Website" },
+        { link: user.talent.github, type: "GitHub" },
+        { link: user.talent.linkedin, type: "Linkedin" },
+        { link: user.talent.twitter, type: "Twitter" },
+        { link: user.talent.lens, type: "Lens" },
+        { link: user.talent.mastodon, type: "Mastodon" },
+        { link: user.talent.telegram, type: "Telegram" },
+        { link: user.talent.discord, type: "Discord" },
+
+      ]
+    end
+
     association :milestones, blueprint: MilestoneBlueprint, view: :normal do |user, options|
       user.talent&.milestones&.includes(:milestone_images)
     end
@@ -184,6 +202,14 @@ class API::TalentBlueprint < Blueprinter::Base
 
     field :subscribing_count do |user, _options|
       user.users_subscribing.count
+    end
+
+    field :goals_count do |user, _options|
+      user.talent.career_goal.goals.count
+    end
+
+    field :updates_count do |user, _options|
+      user.career_updates.count
     end
 
     association :talent_token, blueprint: TalentTokenBlueprint, view: :normal do |user, options|
