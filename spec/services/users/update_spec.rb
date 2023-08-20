@@ -15,6 +15,7 @@ RSpec.describe Users::Update do
   end
 
   let(:user) { create :user }
+  let!(:talent) { create :talent, user: user }
   let(:user_params) { {} }
   let(:password_params) { {} }
   let(:tal_domain_params) { {} }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_10_090809) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_20_142025) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -667,6 +667,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_10_090809) do
     t.datetime "last_time_bought_at", precision: nil
     t.datetime "first_time_bought_at", precision: nil
     t.float "approximate_amount"
+    t.integer "chain_id"
     t.index ["supporter_wallet_id", "talent_contract_id"], name: "talent_supporters_wallet_token_contract_uidx", unique: true
   end
 
@@ -818,6 +819,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_10_090809) do
     t.datetime "humanity_verified_at", precision: nil
     t.string "humanity_proof"
     t.decimal "profile_completeness", default: "0.0"
+    t.datetime "talent_mate_whitelisted_at"
     t.index ["created_at"], name: "index_users_on_created_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["humanity_proof"], name: "index_users_on_humanity_proof", unique: true

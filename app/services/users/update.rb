@@ -76,6 +76,9 @@ module Users
 
       AddUsersToMailerliteJob.perform_later(user.id)
       Web3::RefreshDomains.new(user: user).call
+      if user.talent.verified && user.talent_mate_whitelisted_at.nil? && user.wallet_id.present?
+        WhitelistUserJob.perform_later(user_id: user.id, level: "verified")
+      end
     end
 
     def new_tal_domain?

@@ -14,7 +14,7 @@ module Web3
     end
 
     def call(user:, level:, &block)
-      if user.wallet_id
+      if user.wallet_id && user.talent_mate_whitelisted_at.nil?
         balance = client.call(mates_contract, "balanceOf", user.wallet_id)
         is_whitelisted = client.call(mates_contract, "isWhitelisted", user.wallet_id, "")
         if balance > 0 || is_whitelisted
@@ -31,6 +31,7 @@ module Web3
             end
           end
         end
+        user.update!(talent_mate_whitelisted_at: Time.current)
       end
     end
 
