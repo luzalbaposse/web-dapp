@@ -20,7 +20,7 @@ module Web3
         if balance > 0 || is_whitelisted
           puts "User #{user.wallet_id} already has a Mate NFT or is already eligible for one"
         else
-          tx_hash = client.transact(tal_contract, "whitelistAddress", user.wallet_id, AVAILABLE_LEVELS[level.to_sym], sender_key: key)
+          tx_hash = client.transact(mates_contract, "whitelistAddress", user.wallet_id, AVAILABLE_LEVELS[level.to_sym], sender_key: key)
 
           puts "Whitelisting user #{user.wallet_id} with level #{level} -> tx: #{tx_hash}"
           if tx_hash
