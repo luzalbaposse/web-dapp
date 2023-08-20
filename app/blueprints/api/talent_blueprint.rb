@@ -186,6 +186,10 @@ class API::TalentBlueprint < Blueprinter::Base
       user.users_subscribing.count
     end
 
+    field :connections_count do |user, _options|
+      user.connections.count
+    end
+
     association :talent_token, blueprint: TalentTokenBlueprint, view: :normal do |user, options|
       user.talent&.talent_token
     end

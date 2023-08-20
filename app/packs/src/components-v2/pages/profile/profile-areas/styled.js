@@ -19,6 +19,7 @@ export const AreaContainer = styled.section`
   flex-direction: column;
   gap: 24px;
   overflow-x: hidden;
+  height: 100%;
 
   ::-webkit-scrollbar {
     display: none;

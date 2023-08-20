@@ -21,6 +21,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 
 import { parseAndCommify } from "src/onchain/utils";
+import { formattedConnectionType } from "src/utils/viewHelpers";
 
 import { Icon, Typography, Button, Modal, useModal } from "@talentprotocol/design-system";
 
@@ -37,19 +38,6 @@ const talAmount = tal => {
 const dollarAmount = tal => {
   const amount = ethers.utils.parseUnits(tal.toString(), 0).div(50);
   return parseAndCommify(ethers.utils.formatUnits(amount, 18));
-};
-
-const formattedConnectionType = connection_type => {
-  return {
-    sponsor: "Sponsor",
-    sponsored: "Sponsored",
-    mutual_stake: "Mutual Stake",
-    staker: "Staker",
-    staking: "Staking",
-    mutual_subscription: "Mutual Subscription",
-    subscriber: "Subscriber",
-    subscribing: "Subscribing"
-  }[connection_type];
 };
 
 const ConnectionDetailsModal = ({ token, modalState, closeModal, clearToken }) => {

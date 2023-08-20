@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Avatar, Tag, Typography, MembersList, TextLink } from "@talentprotocol/design-system";
+import { Avatar, Icon, Typography, MembersList, TextLink } from "@talentprotocol/design-system";
 import {
   Container,
   EntryContainer,
   InfoColumn,
   InfoGroup,
-  Tags,
   TeamsList,
   TitleContainer,
-  VerifiedNameRow
+  ViewAllContainer,
+  EllipsisContainer
 } from "./styled";
 import { camelCaseObject } from "src/utils/transformObjects";
 import { organizations } from "src/api/organizations";
 
-export const RecommendedTeamsWidget = ({}) => {
+export const RecommendedTeamsWidget = ({ ellipsisAt = 350 }) => {
   const [collectives, setCollectives] = useState([]);
 
   useEffect(() => {
@@ -28,55 +28,55 @@ export const RecommendedTeamsWidget = ({}) => {
       .getOrganizations(params.toString())
       .then(({ data }) => {
         if (data.organizations) {
-          setCollectives(data.organizations.map(organization => ({ ...camelCaseObject(organization) })));
+          setCollectives(data.organizations.slice(0, 3).map(organization => ({ ...camelCaseObject(organization) })));
         }
       })
       .catch(() => {});
   };
 
   return (
-    <Container>
-      <TitleContainer>
-        <Typography specs={{ variant: "h5", type: "bold" }}>Recommended Collectives</Typography>
-        <TextLink href="/collectives" text="View all" rightIcon="carret" color="primary" size="medium" />
-      </TitleContainer>
-      <TeamsList>
-        {collectives.map((collective, index) => (
-          <EntryContainer href={`/collectives/${collective.slug}`} key={collective.slug || index}>
-            <Avatar size="md" profileURL={`/collectives/${collective.slug}`} url={collective.logoUrl} />
-            <InfoColumn>
-              <InfoGroup>
-                <VerifiedNameRow>
-                  <Typography specs={{ variant: "label2", type: "medium" }} color="primary01">
-                    {collective.name}
-                  </Typography>
-                  {/* <Icon name="verified-2" size={22} color="primary" /> */}
-                </VerifiedNameRow>
-                <Typography specs={{ variant: "p3", type: "regular" }} color="primary03">
-                  {collective.description}
-                </Typography>
-              </InfoGroup>
-              <Tags>
-                <Tag
-                  backgroundColor="primaryTint02"
-                  textColor="primaryText"
-                  size="small"
-                  label={collective.type === "team" ? "Company" : "Community"}
-                />
-              </Tags>
-              {collective.users.length > 0 && (
-                <MembersList
-                  membersImages={collective.users
-                    .filter((user, index) => index < 4)
-                    .map(user => user.profilePictureUrl)}
-                  totalMembers={collective.users.length}
-                />
-              )}
-            </InfoColumn>
-            {/* <Button hierarchy="primary" size="small" href="/discovery/top-100-talent?page=1" text="Go to page" /> */}
-          </EntryContainer>
-        ))}
-      </TeamsList>
-    </Container>
+    collectives.length > 0 && (
+      <Container>
+        <TitleContainer>
+          <Typography specs={{ variant: "p1", type: "medium" }} color="primary01">
+            Recommended Collectives
+          </Typography>
+        </TitleContainer>
+        <TeamsList>
+          {collectives.map((collective, index) => (
+            <EntryContainer href={`/collectives/${collective.slug}`} key={collective.slug || index}>
+              <Avatar size="md" square={true} profileURL={`/collectives/${collective.slug}`} url={collective.logoUrl} />
+              <InfoColumn>
+                <InfoGroup>
+                  <EllipsisContainer ellipsisAt={!!collective.verified ? ellipsisAt - 20 : ellipsisAt}>
+                    <Typography specs={{ variant: "label2", type: "medium" }} color="primary01">
+                      {collective.name}
+                    </Typography>
+                    {!!collective.verified && <Icon name="verified-2" size={16} />}
+                  </EllipsisContainer>
+                  <EllipsisContainer ellipsisAt={ellipsisAt}>
+                    <Typography specs={{ variant: "p3", type: "regular" }} color="primary03">
+                      {collective.description}
+                    </Typography>
+                  </EllipsisContainer>
+                </InfoGroup>
+                {collective.users.length > 0 && (
+                  <MembersList
+                    membersImages={collective.users
+                      .filter((user, index) => index < 4)
+                      .map(user => user.profilePictureUrl)}
+                    totalMembers={collective.users.length}
+                  />
+                )}
+              </InfoColumn>
+              {/* <Button hierarchy="primary" size="small" href="/discovery/top-100-talent?page=1" text="Go to page" /> */}
+            </EntryContainer>
+          ))}
+          <ViewAllContainer>
+            <TextLink href="/collectives" text="Show more" rightIcon="carret" color="primary" size="small" />
+          </ViewAllContainer>
+        </TeamsList>
+      </Container>
+    )
   );
 };
