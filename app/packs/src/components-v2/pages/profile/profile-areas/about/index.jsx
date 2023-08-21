@@ -54,7 +54,9 @@ export const About = ({ currentUser, urlData }) => {
         </ButtonContainer>
       )}
       {aboutData.career_goal.pitch && <AboutMe pitch={aboutData.career_goal.pitch} />}
-      {aboutData.current_position && <CurrentRole position={aboutData.current_position} />}
+      {aboutData.current_position && (
+        <CurrentRole position={aboutData.current_position} username={urlData.profileUsername} />
+      )}
       {aboutData.tags.length && <Tags tags={aboutData.tags} />}
       <OnTheWeb links={aboutData.social_links} />
       <Divider />

@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import isMobile from "is-mobile";
 import { TalentThemeProvider } from "@talentprotocol/design-system";
-import { PageContainer, DesktopPageContainer, DesktopColumn } from "./styled";
 import { ProfileHeader } from "./profile-header";
 import { ProfileAreas } from "./profile-areas";
 import { loggedInUserStore } from "src/contexts/state";
-import { useUrlData } from "./hooks/use-url-data";
+import { useUrlData } from "src/components-v2/shared-hooks/use-url-data";
 import { RecommendedBuildersWidgetMini } from "../../recommended-builders-widget-mini";
 import { RecommendedTeamsWidgetMini } from "../../recommended-teams-widget-mini";
 import ThemeContainer from "src/contexts/ThemeContext";
+import { DesktopPageContainer, PageContainer, DesktopColumn } from "src/components-v2/styled-containers";
 
 export const ProfilePage = ({ isMobile, railsContext, withPersonaRequest }) => {
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
