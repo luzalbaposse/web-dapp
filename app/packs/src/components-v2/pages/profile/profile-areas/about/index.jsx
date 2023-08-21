@@ -44,7 +44,7 @@ export const About = ({ currentUser, urlData }) => {
       {urlData?.profileUsername === currentUser?.username && (
         <ButtonContainer>
           <Button
-            text="Edit profile"
+            text="Edit"
             hierarchy="secondary"
             size="small"
             iconColor="primary01"

@@ -19,7 +19,7 @@ export const LocalHeader = ({ isOwner, username }) => {
         <TextLink color="primary01" href={`/u/${username}`} text="Experience" leftIcon="back-arrow" size="small" />
         {isOwner && <Button text="Edit" size="small" hierarchy="primary" onClick={() => setIsModalOpen(true)} />}
       </InnerHeaderContainer>
-      {!!profile && (
+      {isOwner && !!profile && (
         <EditJourneyModal
           show={isModalOpen}
           hide={() => setIsModalOpen(false)}
