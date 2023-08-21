@@ -208,7 +208,7 @@ class API::TalentBlueprint < Blueprinter::Base
     end
 
     field :goals_count do |user, _options|
-      user.talent.career_goal.goals.count
+      user.talent.career_goal&.goals&.count
     end
 
     field :updates_count do |user, _options|
