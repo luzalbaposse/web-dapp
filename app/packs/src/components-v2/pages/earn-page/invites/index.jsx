@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { EmptyState } from "./empty-state";
-import { QRCodeModal } from "../../talent-models-profile/profile-header/qr-code-modal";
+import { QRCodeModal } from "src/components-v2/qr-code-modal";
 import { Spinner, useModal } from "@talentprotocol/design-system";
 import { InviteList } from "./invite-list";
 import { invitedTalentsService } from "../../../../api";
 import { SpinnerContainer } from "./styled";
 
 export const Invites = ({ profile }) => {
+  const inviteUrl = `https://beta.talentprotocol.com/join/${profile.username}`;
   const [invitedTalentsState, setInvitedTalentsState] = useState({
     isLoading: true,
     talents: [],
@@ -39,7 +40,7 @@ export const Invites = ({ profile }) => {
 
   return (
     <>
-      {profile && <QRCodeModal modalState={modalState} profile={profile} />}
+      {profile && <QRCodeModal modalState={modalState} url={inviteUrl} profilePicture={profile.profile_picture_url} />}
       {invitedTalentsState.isLoading && (
         <SpinnerContainer>
           <Spinner />

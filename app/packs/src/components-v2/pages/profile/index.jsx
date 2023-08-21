@@ -5,10 +5,12 @@ import { ProfileHeader } from "./profile-header";
 import { ProfileAreas } from "./profile-areas";
 import { loggedInUserStore } from "src/contexts/state";
 import { useUrlData } from "src/components-v2/shared-hooks/use-url-data";
-import { RecommendedBuildersWidgetMini } from "../../recommended-builders-widget-mini";
-import { RecommendedTeamsWidgetMini } from "../../recommended-teams-widget-mini";
+import { RecommendedBuildersWidget } from "../../recommended-builders-widget";
+import { RecommendedTeamsWidget } from "../../recommended-teams-widget";
 import ThemeContainer from "src/contexts/ThemeContext";
 import { DesktopPageContainer, PageContainer, DesktopColumn } from "src/components-v2/styled-containers";
+
+const ELLIPSIS_AT = 175;
 
 export const ProfilePage = ({ isMobile, railsContext, withPersonaRequest }) => {
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
@@ -44,8 +46,8 @@ export const ProfilePage = ({ isMobile, railsContext, withPersonaRequest }) => {
         <ProfileAreas currentUser={currentUser} railsContext={railsContext} urlData={urlData} />
       </DesktopColumn>
       <DesktopColumn>
-        <RecommendedBuildersWidgetMini username={currentUser?.username} />
-        <RecommendedTeamsWidgetMini />
+        <RecommendedBuildersWidget username={currentUser?.username} ellipsisAt={ELLIPSIS_AT} />
+        <RecommendedTeamsWidget ellipsisAt={ELLIPSIS_AT} />
       </DesktopColumn>
     </DesktopPageContainer>
   );

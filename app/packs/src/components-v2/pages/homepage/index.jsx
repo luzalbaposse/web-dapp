@@ -17,6 +17,7 @@ export const HomepagePage = props => {
   const { mobile } = useWindowDimensionsHook();
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
   const railsContext = props.railsContext;
+  const ellipsisAt = mobile ? 300 : 350;
 
   useEffect(() => {
     if (!currentUser) {
@@ -34,8 +35,8 @@ export const HomepagePage = props => {
             <CompleteProfileWidget user={currentUser} />
             {currentUser?.profile_completed && <QuestsWidget profile={currentUser} railsContext={railsContext} />}
             <QuickNavigator username={currentUser?.username} />
-            <RecommendedBuildersWidget username={currentUser?.username} />
-            <RecommendedTeamsWidget />
+            <RecommendedBuildersWidget username={currentUser?.username} ellipsisAt={ellipsisAt} />
+            <RecommendedTeamsWidget ellipsisAt={ellipsisAt} />
             <LeaderboardWidget user={currentUser} />
             <ActivityWall profile={currentUser} />
           </Column>
@@ -48,8 +49,8 @@ export const HomepagePage = props => {
               <ActivityWall profile={currentUser} />
             </Column>
             <Column>
-              <RecommendedBuildersWidget username={currentUser?.username} />
-              <RecommendedTeamsWidget />
+              <RecommendedBuildersWidget username={currentUser?.username} ellipsisAt={ellipsisAt} />
+              <RecommendedTeamsWidget ellipsisAt={ellipsisAt} />
               <LeaderboardWidget user={currentUser} />
             </Column>
           </>

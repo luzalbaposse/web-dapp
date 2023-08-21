@@ -27,4 +27,17 @@ RSpec.describe Users::Verify do
       end
     end
   end
+
+  it "enqueues the job to whitelist the user" do
+    Sidekiq::Testing.inline! do
+      verify_user
+
+      job = enqueued_jobs.find { |j| j["job_class"] == "WhitelistUserJob" }
+
+      aggregate_failures do
+        expect(job["arguments"][0]["user_id"]).to eq(user.id)
+        expect(job["arguments"][0]["level"]).to eq("verified")
+      end
+    end
+  end
 end

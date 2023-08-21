@@ -1,6 +1,6 @@
 import { Avatar, Button, Icon, Typography, useModal } from "@talentprotocol/design-system";
 import React from "react";
-import { QRCodeModal } from "./qr-code-modal";
+import { QRCodeModal } from "src/components-v2/qr-code-modal";
 import defaultBanner from "../../../../../images/standard-banner.png";
 import {
   Banner,
@@ -25,7 +25,11 @@ export const ProfileHeader = ({ profile }) => {
 
   return (
     <>
-      <QRCodeModal modalState={modalState} profile={profile} />
+      <QRCodeModal
+        modalState={modalState}
+        url={`https://beta.talentprotocol.com/u/${profile.username}`}
+        profilePicture={profile.profile_picture_url}
+      />
       <Container>
         <AvatarContainer>
           <Avatar size="lg" url={profile.profile_picture_url} />

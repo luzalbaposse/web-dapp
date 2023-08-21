@@ -267,7 +267,7 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
       </Container>
       <QRCodeModal
         modalState={qrCodeModalState}
-        username={profileOverview?.username}
+        url={`https://beta.talentprotocol.com/u/${profileOverview?.username}`}
         profilePicture={profileOverview?.profile_picture_url}
       />
       <EditOverviewModalV2

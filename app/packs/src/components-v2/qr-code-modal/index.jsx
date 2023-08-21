@@ -4,21 +4,20 @@ import { toast } from "react-toastify";
 import { Container, BottomContainer, StyledQRCode, OutterContainer } from "./styled";
 import { ToastBody } from "src/components/design_system/toasts";
 
-export const QRCodeModal = ({ modalState, username, profilePicture }) => {
-  const inviteUrl = `https://beta.talentprotocol.com/join/${username}`;
+export const QRCodeModal = ({ modalState, profilePicture, url }) => {
   return (
     <Modal title="Share this profile" isOpen={modalState.isOpen} closeModal={modalState.closeModal}>
       <OutterContainer>
         <Container>
           <Avatar size="md" url={profilePicture} />
-          <StyledQRCode value={inviteUrl} />
+          <StyledQRCode value={url} />
           <Typography specs={{ type: "medium", variant: "p2" }} color="primary01">
             Share this QRcode or link to invite others to Talent Protocol
           </Typography>
         </Container>
         <BottomContainer>
           <Typography specs={{ type: "regular", variant: "p2" }} color="primary03">
-            {inviteUrl}
+            {url}
           </Typography>
           <Button
             size="large"
@@ -28,7 +27,7 @@ export const QRCodeModal = ({ modalState, username, profilePicture }) => {
             rightIcon="copy"
             onClick={() => {
               toast.success(<ToastBody heading="Success" body="Copied to clipboard" />, { autoClose: 5000 });
-              navigator.clipboard.writeText(inviteUrl);
+              navigator.clipboard.writeText(url);
             }}
           />
         </BottomContainer>

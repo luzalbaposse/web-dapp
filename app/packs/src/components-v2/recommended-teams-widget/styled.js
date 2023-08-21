@@ -5,7 +5,6 @@ export const Container = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-bottom: 8px;
 
   ${mobileStyles(css``)}
 
@@ -17,14 +16,10 @@ export const Container = styled.section`
 
 export const TitleContainer = styled.div`
   width: 100%;
-  padding: 16px;
+  padding: 16px 0px 8px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  ${desktopStyles(css`
-    padding: 24px;
-  `)}
 `;
 
 export const TeamsList = styled.div`
@@ -32,14 +27,15 @@ export const TeamsList = styled.div`
   flex-direction: column;
   width: 100%;
   padding: 0 16px;
-  gap: 16px 32px;
+  gap: 8px;
 `;
 
 export const EntryContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 16px 0;
+  padding-top: 8px;
+  padding-bottom: 8px;
   gap: 16px;
   text-decoration: none;
   outline: none;
@@ -64,35 +60,34 @@ export const InfoColumn = styled.div`
   flex-grow: 1;
   flex-direction: column;
   justify-content: center;
-  gap: 16px;
+  gap: 8px;
+`;
+
+export const EllipsisContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+
+  ${({ ellipsisAt }) =>
+    !!ellipsisAt &&
+    css`
+      p,
+      label {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: ${ellipsisAt}px;
+      }
+    `}
 `;
 
 export const InfoGroup = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-
-  p {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 232px;
-
-    ${desktopStyles(css`
-      max-width: 332px;
-    `)}
-  }
 `;
 
-export const VerifiedNameRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 4px;
-`;
-
-export const Tags = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 4px;
+export const ViewAllContainer = styled.div`
+  padding-bottom: 16px;
 `;

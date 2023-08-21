@@ -144,14 +144,14 @@ class API::TalentBlueprint < Blueprinter::Base
 
     field :social_links do |user, _options|
       [
-        { link: user.talent.website, type: "Website" },
-        { link: user.talent.github, type: "GitHub" },
-        { link: user.talent.linkedin, type: "Linkedin" },
-        { link: user.talent.twitter, type: "Twitter" },
-        { link: user.talent.lens, type: "Lens" },
-        { link: user.talent.mastodon, type: "Mastodon" },
-        { link: user.talent.telegram, type: "Telegram" },
-        { link: user.talent.discord, type: "Discord" },
+        {link: user.talent.website, type: "Website"},
+        {link: user.talent.github, type: "GitHub"},
+        {link: user.talent.linkedin, type: "Linkedin"},
+        {link: user.talent.twitter, type: "Twitter"},
+        {link: user.talent.lens, type: "Lens"},
+        {link: user.talent.mastodon, type: "Mastodon"},
+        {link: user.talent.telegram, type: "Telegram"},
+        {link: user.talent.discord, type: "Discord"}
       ]
     end
 
@@ -213,6 +213,10 @@ class API::TalentBlueprint < Blueprinter::Base
 
     field :updates_count do |user, _options|
       user.career_updates.count
+    end
+
+    field :connections_count do |user, _options|
+      user.connections.count
     end
 
     association :talent_token, blueprint: TalentTokenBlueprint, view: :normal do |user, options|

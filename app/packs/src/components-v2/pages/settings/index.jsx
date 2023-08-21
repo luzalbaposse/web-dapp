@@ -7,7 +7,7 @@ import { useUrlData } from "src/components-v2/shared-hooks/use-url-data";
 import { LocalHeader } from "./local-header";
 import { Experiences } from "./experiences";
 
-export const SettingsPage = ({ railsContext, isMobile }) => {
+export const SettingsPage = ({ isMobile }) => {
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
   const urlData = useUrlData();
   useEffect(() => {
