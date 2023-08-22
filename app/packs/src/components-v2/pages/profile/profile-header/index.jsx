@@ -272,6 +272,8 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
         modalState={qrCodeModalState}
         url={`https://beta.talentprotocol.com/u/${profileOverview?.username}`}
         profilePicture={profileOverview?.profile_picture_url}
+        text="Scan this QR code to open your profile."
+        buttonText="Copy profile URL"
       />
       <EditOverviewModalV2
         show={isEditMode}

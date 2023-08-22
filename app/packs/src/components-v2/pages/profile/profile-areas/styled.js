@@ -11,6 +11,7 @@ export const TabsContainer = styled.div`
   display: flex;
   padding: 24px 24px 0;
   border-bottom: 1px solid ${buildColor("surfaceHover02")};
+  overflow-x: auto;
 `;
 
 export const AreaContainer = styled.section`
@@ -24,14 +25,4 @@ export const AreaContainer = styled.section`
   ::-webkit-scrollbar {
     display: none;
   }
-`;
-
-export const SpinnerContainer = styled.section`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  margin: 0 16px;
-  padding-top: 16px;
-  width: 100%;
 `;

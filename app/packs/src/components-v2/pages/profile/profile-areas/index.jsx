@@ -1,6 +1,6 @@
 import React, { useMemo, useEffect, useState } from "react";
-import { TabsContainer, Container, AreaContainer, SpinnerContainer } from "./styled";
-import { Tabs, Spinner } from "@talentprotocol/design-system";
+import { TabsContainer, Container, AreaContainer } from "./styled";
+import { Tabs } from "@talentprotocol/design-system";
 import { useTabsOverride } from "./hooks/use-tabs-override";
 import { TAB_TO_AREA_MAP, TAB_NAME_TO_INDEX_MAP } from "./constants";
 import { useProfileOverviewStore } from "src/contexts/state";
