@@ -122,6 +122,29 @@ class API::TalentBlueprint < Blueprinter::Base
       status
     end
 
+    field :is_subscribing do |user, options|
+      status = false
+      status = true if user.active_subscribing.pluck(:user_id)&.include?(options[:current_user_id])
+
+      status
+    end
+
+    field :is_supporting do |user, options|
+      status = false
+      current_user = User.find_by(id: options[:current_user_id])
+      supporting = TalentSupporter.where(
+        supporter_wallet_id: user.wallet_id,
+        talent_contract_id: current_user&.talent&.talent_token&.contract_id
+      ).count > 0
+      sponsoring = Sponsorship.where(sponsor: user.wallet_id, talent: current_user&.wallet_id).count > 0
+
+      if supporting || sponsoring
+        status = true
+      end
+
+      status
+    end
+
     field :updates_length do |user, options|
       user.origin_activities.where(type: "Activities::CareerUpdate").count
     end

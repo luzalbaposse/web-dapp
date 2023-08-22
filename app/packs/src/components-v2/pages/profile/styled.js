@@ -18,6 +18,7 @@ export const DesktopPageContainer = styled.div`
 export const DesktopColumn = styled.div`
   display: flex;
   border-right: 1px solid ${buildColor("surfaceHover02")};
+  margin-bottom: 24px;
 
   :nth-child(1) {
     flex-basis: 288px;

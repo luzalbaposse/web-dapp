@@ -37,6 +37,11 @@ import { useProfileOverviewStore } from "src/contexts/state";
 export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, withPersonaRequest }) => {
   const data = useDataFetcher(urlData);
   const { profileOverview, fetchProfileOverview } = useProfileOverviewStore();
+  const isNotSubscribed = useMemo(
+    () =>
+      profileOverview?.subscribing_status === "unsubscribed" || profileOverview?.subscribing_status === "subscribing",
+    [profileOverview?.subscribing_status]
+  );
   const { impersonateUser } = useImpersonate();
   const qrCodeModalState = useModal();
   const [isEditMode, setIsEditMode] = useState(false);
@@ -116,29 +121,19 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
       .catch(() => {
         toast.error(<ToastBody heading="Something went wrong" />);
       });
-  }, [data.profileOverview?.username]);
+  }, [profileOverview?.username]);
   const MemoedTag = useMemo(() => {
-    if (
-      !profileOverview ||
-      currentUser?.username === profileOverview?.username ||
-      profileOverview?.subscribing_status === "unsubscribed"
-    )
-      return <></>;
-    let tagLabel = "";
-    switch (profileOverview?.subscribing_status) {
-      case "subscribed":
-        tagLabel = "Subscribed";
-        break;
-      case "subscribing":
-        tagLabel = "Subscribing to you";
-        break;
-      case "both_subscribed":
-        tagLabel = "Both subscribe";
-        break;
-      default:
-        tagLabel = "";
-        break;
+    if (!profileOverview || currentUser?.username === profileOverview?.username) return <></>;
+    let tagLabel = null;
+
+    if (profileOverview?.is_subscribing) {
+      tagLabel = "Subscriber";
     }
+    if (profileOverview?.is_supporting) {
+      tagLabel = "Supporter";
+    }
+
+    if (!tagLabel) return <></>;
     return (
       <TagContainer>
         <Tag
@@ -185,8 +180,12 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
                     iconColor="primary01"
                     href={`/messages?user=${profileOverview?.username}`}
                   />
-                  {profileOverview?.subscribing_status === "unsubscribed" ? (
-                    <Button size="small" hierarchy="secondary" text="Subscribe" onClick={subscribe} />
+                  {isNotSubscribed ? (
+                    profileOverview?.subscribing_status === "subscribing" ? (
+                      <Button size="small" hierarchy="secondary" text="Subscribe back" onClick={subscribe} />
+                    ) : (
+                      <Button size="small" hierarchy="secondary" text="Subscribe" onClick={subscribe} />
+                    )
                   ) : (
                     <Button size="small" hierarchy="secondary" text="Unsubscribe" onClick={unsubscribe} />
                   )}
@@ -248,8 +247,12 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
                   iconColor="primary01"
                   href={`/messages?user=${profileOverview?.username}`}
                 />
-                {profileOverview?.subscribing_status === "unsubscribed" ? (
-                  <Button size="small" hierarchy="secondary" text="Subscribe" onClick={subscribe} />
+                {isNotSubscribed ? (
+                  profileOverview?.subscribing_status === "subscribing" ? (
+                    <Button size="small" hierarchy="secondary" text="Subscribe back" onClick={subscribe} />
+                  ) : (
+                    <Button size="small" hierarchy="secondary" text="Subscribe" onClick={subscribe} />
+                  )
                 ) : (
                   <Button size="small" hierarchy="secondary" text="Unsubscribe" onClick={unsubscribe} />
                 )}
