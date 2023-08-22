@@ -44,9 +44,7 @@ export const ProfileAreas = ({ currentUser, railsContext, urlData }) => {
   }, [tabsState.selectElement, profileOverview, currentUser]);
 
   return !profileOverview ? (
-    <SpinnerContainer>
-      <Spinner color="primary" size={48} />
-    </SpinnerContainer>
+    <></>
   ) : (
     <Container>
       <TabsContainer>
