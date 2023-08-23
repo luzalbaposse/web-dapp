@@ -2661,10 +2661,15 @@
   dependencies:
     mini-svg-data-uri "^1.2.3"
 
-"@talentprotocol/design-system@^0.1.43":
-  version "0.1.43"
-  resolved "https://registry.yarnpkg.com/@talentprotocol/design-system/-/design-system-0.1.43.tgz#28c374fed770dbc60c3bf1f9cce2bc375e6aff7e"
-  integrity sha512-IYF08EfuBVvtk9lWTPUDAujaz8vamiyKwVzCNi2/RuK51lmpL0D8VNBhm/Q4Hm+529wdVeBp/hKiTGqOKq+CAg==
+"@talentprotocol/design-system@^0.1.58":
+  version "0.1.58"
+  resolved "https://registry.yarnpkg.com/@talentprotocol/design-system/-/design-system-0.1.58.tgz#28fa5435336e545872f9d67d0f61bd8e0f254439"
+  integrity sha512-UbYCvrVAlTL0KLdoyWIeaZSpDV2v8p1yMW6PLEicMYhD7ERi0bZON8YsImKNQfLVaDH0Afb7iwlf0L9eLg0vhA==
+
+"@talentprotocol/zustand-wrapper@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@talentprotocol/zustand-wrapper/-/zustand-wrapper-0.0.6.tgz#1ec2fb9a51380c3594c09068525f4a10bb04af47"
+  integrity sha512-wFh9JrcO84FBsCGvpj42GHAbPnF/o+7oocR9BRkbvz7cq2fhASSdS07r4DMRYnVIdDkb9qESeFyes4H2erimlA==
 
 "@tanstack/query-core@4.29.17":
   version "4.29.17"

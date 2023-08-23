@@ -12,7 +12,6 @@
 
 ActiveRecord::Schema[7.0].define(version: 2023_08_20_142025) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
@@ -667,7 +666,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_20_142025) do
     t.datetime "last_time_bought_at", precision: nil
     t.datetime "first_time_bought_at", precision: nil
     t.float "approximate_amount"
-    t.integer "chain_id"
     t.index ["supporter_wallet_id", "talent_contract_id"], name: "talent_supporters_wallet_token_contract_uidx", unique: true
   end
 
@@ -783,8 +781,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_20_142025) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.boolean "disabled", default: false
     t.string "theme_preference", default: "light"
+    t.boolean "disabled", default: false
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"
@@ -816,7 +814,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_20_142025) do
     t.boolean "is_organization", default: false
     t.integer "experience_points_amount", default: 0, null: false
     t.datetime "profile_completed_at", precision: nil
-    t.datetime "humanity_verified_at", precision: nil
+    t.datetime "humanity_verified_at"
     t.string "humanity_proof"
     t.decimal "profile_completeness", default: "0.0"
     t.datetime "talent_mate_whitelisted_at"

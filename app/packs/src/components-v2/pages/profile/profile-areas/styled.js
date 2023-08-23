@@ -8,10 +8,17 @@ export const Container = styled.div`
 `;
 
 export const TabsContainer = styled.div`
-  display: flex;
-  padding: 24px 24px 0;
+  padding: 24px 0 0;
   border-bottom: 1px solid ${buildColor("surfaceHover02")};
-  overflow-x: auto;
+
+  :nth-child(1) {
+    & div:first-child {
+      padding-left: 8px;
+    }
+    & div:last-child {
+      padding-right: 8px;
+    }
+  }
 `;
 
 export const AreaContainer = styled.section`

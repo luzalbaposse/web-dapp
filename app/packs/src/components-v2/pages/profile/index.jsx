@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import isMobile from "is-mobile";
 import { TalentThemeProvider } from "@talentprotocol/design-system";
-import { PageContainer, DesktopPageContainer, DesktopColumn } from "./styled";
 import { ProfileHeader } from "./profile-header";
 import { ProfileAreas } from "./profile-areas";
 import { loggedInUserStore } from "src/contexts/state";
-import { useUrlData } from "./hooks/use-url-data";
+import { useUrlData } from "src/components-v2/shared-hooks/use-url-data";
 import { RecommendedBuildersWidget } from "../../recommended-builders-widget";
 import { RecommendedTeamsWidget } from "../../recommended-teams-widget";
 import ThemeContainer from "src/contexts/ThemeContext";
+import { DesktopPageContainer, PageContainer, DesktopColumn } from "src/components-v2/styled-containers";
 
 const ELLIPSIS_AT = 175;
 

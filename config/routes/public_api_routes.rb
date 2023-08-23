@@ -11,6 +11,7 @@ module PublicAPIRoutes
               get :overview, on: :collection
               get :about, on: :collection
               get :support, on: :collection
+              get :milestones, on: :collection
             end
             resources :supporters, only: [:index]
             resources :activities, only: [:index] do

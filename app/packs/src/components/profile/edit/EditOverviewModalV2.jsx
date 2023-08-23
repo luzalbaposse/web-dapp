@@ -41,7 +41,7 @@ const Option = props => {
   );
 };
 
-const EditOverviewModalV2 = ({ show, hide, setProfile = noop, mode, username }) => {
+const EditOverviewModalV2 = ({ show, hide, setProfile = noop, mode, username, showOpenTo = true }) => {
   const { profile, fetchProfile } = useProfileFetcher();
   const { mobile } = useWindowDimensionsHook();
   const [editedTalent, setEditedTalent] = useState(null);
@@ -585,16 +585,18 @@ const EditOverviewModalV2 = ({ show, hide, setProfile = noop, mode, username }) 
             components={{ Option }}
           />
         </div>
-        <div className="mb-5">
-          <P2 className="mb-2 text-primary-01" bold text="Availability Highlight" />
-          <UserTags
-            tags={CAREER_NEEDS_OPTIONS}
-            tagsSelected={selectedCareerNeeds}
-            className="mr-2 mb-4"
-            clickable={false}
-            onClick={tag => changeSelectedCareerNeeds(tag)}
-          />
-        </div>
+        {showOpenTo && (
+          <div className="mb-5">
+            <P2 className="mb-2 text-primary-01" bold text="Availability Highlight" />
+            <UserTags
+              tags={CAREER_NEEDS_OPTIONS}
+              tagsSelected={selectedCareerNeeds}
+              className="mr-2 mb-4"
+              clickable={false}
+              onClick={tag => changeSelectedCareerNeeds(tag)}
+            />
+          </div>
+        )}
         <div className="w-100 mb-5">
           <H5 className="mb-5 text-primary-01" bold text="Links" />
           <div className="mb-5">

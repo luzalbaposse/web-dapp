@@ -128,6 +128,25 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
 
     render json: response_body, status: :ok
   end
+
+  def milestones
+    milestones = user.talent.milestones
+
+    pagy, page_milestones = pagy(milestones, items: per_page)
+
+    response_body = {
+      milestones: API::MilestoneBlueprint.render_as_json(page_milestones, view: :with_images),
+      pagination: {
+        total: milestones.count,
+        page: pagy.last
+      }
+    }
+
+    log_request(response_body, :ok)
+
+    render json: response_body, status: :ok
+  end
+
   # ------------ temporary calls for Profile V1.0 ------------
 
   private

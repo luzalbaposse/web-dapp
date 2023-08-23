@@ -161,8 +161,25 @@ class API::TalentBlueprint < Blueprinter::Base
       user.talent.id
     end
 
-    association :milestones, blueprint: MilestoneBlueprint, view: :normal do |user, options|
-      user.talent&.milestones&.includes(:milestone_images)
+    field :tags do |user, _options|
+      user.tags
+    end
+
+    field :social_links do |user, _options|
+      [
+        {link: user.talent.website, type: "Website"},
+        {link: user.talent.github, type: "GitHub"},
+        {link: user.talent.linkedin, type: "Linkedin"},
+        {link: user.talent.twitter, type: "Twitter"},
+        {link: user.talent.lens, type: "Lens"},
+        {link: user.talent.mastodon, type: "Mastodon"},
+        {link: user.talent.telegram, type: "Telegram"},
+        {link: user.talent.discord, type: "Discord"}
+      ]
+    end
+
+    association :milestone, blueprint: API::MilestoneBlueprint, view: :with_images, name: :current_position do |user, options|
+      user.talent.milestones.where(end_date: nil, category: "Position").order(start_date: :desc).includes(:milestone_images)&.first
     end
 
     association :career_goal, blueprint: CareerGoalBlueprint, view: :normal do |user, options|
@@ -207,6 +224,14 @@ class API::TalentBlueprint < Blueprinter::Base
 
     field :subscribing_count do |user, _options|
       user.users_subscribing.count
+    end
+
+    field :goals_count do |user, _options|
+      user.talent.career_goal&.goals&.count
+    end
+
+    field :updates_count do |user, _options|
+      user.career_updates.count
     end
 
     field :connections_count do |user, _options|

@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 export const PageContainer = styled.div`
   padding-top: 64px;
+  background: ${buildColor("bg01")};
 `;
 
 export const DesktopPageContainer = styled.div`
@@ -13,6 +14,7 @@ export const DesktopPageContainer = styled.div`
   max-width: 1224px;
   min-width: 1224px;
   margin: auto;
+  background: ${buildColor("bg01")};
 `;
 
 export const DesktopColumn = styled.div`
