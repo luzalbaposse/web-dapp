@@ -134,7 +134,7 @@ Rails.application.routes.draw do
   get "/u/:username/profile" => "profiles#preview"
   get "/u/:username" => "profiles#show", :as => "user", :constraints => {username: /[^\/]+/}
   get "/u/:username/account_settings" => "users#edit_profile", :as => "account_settings", :constraints => {username: /[^\/]+/}
-  get "/u/:username/settins" => "profiles#settings", :as => "user_details", :constraints => {username: /[^\/]+/}
+  get "/u/:username/settings" => "profiles#settings", :as => "user_details", :constraints => {username: /[^\/]+/}
   # redirect /talent to /u so we have the old route still working
   get "/talent/:username", to: redirect("/u/%{username}"), as: "talent_profile"
 
