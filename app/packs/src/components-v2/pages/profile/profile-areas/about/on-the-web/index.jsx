@@ -29,7 +29,7 @@ export const OnTheWeb = ({ links }) => {
                 href={linkObject.link}
                 newPage
               />
-              <TextLink color="primary01" size="small" text={linkObject.type} href={linkObject.link} />
+              <TextLink color="primary01" size="small" text={linkObject.type} href={linkObject.link} newPage />
             </LinkItem>
           );
         }
