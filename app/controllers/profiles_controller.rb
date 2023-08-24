@@ -1,7 +1,7 @@
 class ProfilesController < ApplicationController
   def show
     if user.is_organization && user.discovery_row.present?
-      redirect_to discovery_path(user.discovery_row.slug)
+      redirect_to collective_path(user.discovery_row.slug)
       return
     end
 
