@@ -96,6 +96,26 @@ class API::TalentBlueprint < Blueprinter::Base
     end
   end
 
+  view :with_subscribe_status do
+    include_view :normal
+
+    field :subscribed_status do |user, options|
+      subscription = Subscription.find_by(user: user, subscriber: User.find_by(id: options[:current_user_id]))
+
+      if subscription.present?
+        if subscription.accepted_at.present?
+          "Unsubscribe"
+        else
+          "Cancel Request"
+        end
+      elsif !!user.active_subscribing.pluck(:user_id)&.include?(options[:current_user_id])
+        "Subcribe Back"
+      else
+        "Subscribe"
+      end
+    end
+  end
+
   view :leaderboard do
     include_view :normal
 
@@ -107,7 +127,7 @@ class API::TalentBlueprint < Blueprinter::Base
 
   # ------------ temporary views for Profile V1.0 ------------
   view :overview do
-    include_view :normal
+    include_view :with_subscribe_status
 
     field :profile_type
 
@@ -123,10 +143,7 @@ class API::TalentBlueprint < Blueprinter::Base
     end
 
     field :is_subscribing do |user, options|
-      status = false
-      status = true if user.active_subscribing.pluck(:user_id)&.include?(options[:current_user_id])
-
-      status
+      !!user.active_subscribing.pluck(:user_id)&.include?(options[:current_user_id])
     end
 
     field :is_supporting do |user, options|
