@@ -28,7 +28,8 @@ export const ExperiencesComponent = ({ isOwner, username }) => {
     talentsService
       .getMilestones(username)
       .then(({ data }) => {
-        setMilestones(data.milestones.sort((a, b) => new Date(a.start_date) - new Date(b.start_date)));
+        console.log(data)
+        setMilestones(data.milestones.sort((a, b) => new Date(b.start_date) - new Date(a.start_date)));
       })
       .catch(() => {
         console.error("Error getting user experiences");
