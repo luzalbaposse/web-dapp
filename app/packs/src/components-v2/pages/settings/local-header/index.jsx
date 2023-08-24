@@ -23,7 +23,9 @@ export const LocalHeader = ({ isOwner, username }) => {
           leftIcon="back-arrow"
           size="small"
         />
-        {isOwner && <Button text="Edit" size="small" hierarchy="primary" onClick={() => setIsModalOpen(true)} />}
+        {isOwner && (
+          <Button text="Add Experience" size="small" hierarchy="primary" onClick={() => setIsModalOpen(true)} />
+        )}
       </InnerHeaderContainer>
       {isOwner && !!profile && (
         <EditJourneyModal

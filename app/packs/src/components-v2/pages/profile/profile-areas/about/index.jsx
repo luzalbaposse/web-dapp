@@ -11,9 +11,9 @@ import EditAboutModal from "src/components/profile/edit/EditAboutModal";
 
 const isProfileEmpty = aboutData =>
   !(
-    aboutData.career_goal.pitch &&
-    aboutData.current_position &&
-    aboutData.tags.length &&
+    aboutData.career_goal.pitch ||
+    aboutData.current_position ||
+    aboutData.tags.length ||
     aboutData.social_links.some(linkObject => !!linkObject.link)
   );
 
@@ -52,7 +52,7 @@ export const About = ({ currentUser, urlData }) => {
       {urlData?.profileUsername === currentUser?.username && (
         <ButtonContainer>
           <Button
-            text="Edit"
+            text="Edit About"
             hierarchy="secondary"
             size="small"
             iconColor="primary01"
@@ -61,20 +61,21 @@ export const About = ({ currentUser, urlData }) => {
           />
         </ButtonContainer>
       )}
-      {isProfileEmpty(aboutData) && (
+      {isProfileEmpty(aboutData) ? (
         <EmptyStateContainer>
           <Icon name="binoculars" size={64} color="primary04" />
           <Typography specs={{ type: "regular", variant: "p1" }} color="primary04">
-            Currently a blank slate, but soon to be filled with adventures, thoughts, and all things. 
+            Currently a blank slate, but soon to be filled with adventures, thoughts, and all things.
           </Typography>
         </EmptyStateContainer>
+      ) : (
+        <>
+          {aboutData.career_goal.pitch && <AboutMe pitch={aboutData.career_goal.pitch} />}
+          <CurrentRole position={aboutData.current_position} username={urlData.profileUsername} isOwner={urlData?.profileUsername === currentUser?.username} />
+          {!!aboutData.tags.length && <Tags tags={aboutData.tags} />}
+          <OnTheWeb links={aboutData.social_links} />
+        </>
       )}
-      {aboutData.career_goal.pitch && <AboutMe pitch={aboutData.career_goal.pitch} />}
-      {aboutData.current_position && (
-        <CurrentRole position={aboutData.current_position} username={urlData.profileUsername} />
-      )}
-      {aboutData.tags.length && <Tags tags={aboutData.tags} />}
-      <OnTheWeb links={aboutData.social_links} />
       <Divider />
       <SupportData {...supportData} />
       <EditAboutModal

@@ -86,18 +86,12 @@ export const Experiences = ({ isOwner, username }) => {
   return (
     <>
       <Container>
-        {!!memoedExperiences[0].length && (
-          <>
-            <Typography specs={{ type: "medium", variant: "p1" }}>Positions</Typography>
-            {memoedExperiences[0]}
-          </>
-        )}
-        {!!memoedExperiences[1].length && (
-          <>
-            <Typography specs={{ type: "medium", variant: "p1" }}>Education</Typography>
-            {memoedExperiences[1]}
-          </>
-        )}
+        <Typography specs={{ type: "medium", variant: "p1" }}>Positions</Typography>
+        {memoedExperiences[0]}
+        {!memoedExperiences[0].length && <Typography specs={{ type: "regular", variant: "p2" }} color="primary03">No position records available</Typography>}
+        <Typography specs={{ type: "medium", variant: "p1" }}>Education</Typography>
+        {memoedExperiences[1]}
+        {!memoedExperiences[1].length && <Typography specs={{ type: "regular", variant: "p2" }} color="primary03">No education records available</Typography>}
       </Container>
       {modalState.isOpen && (
         <EditJourneyModal

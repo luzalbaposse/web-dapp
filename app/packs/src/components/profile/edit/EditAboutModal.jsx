@@ -3,28 +3,19 @@ import cx from "classnames";
 import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
 import { patch, getAuthToken } from "src/utils/requests";
-import { useTheme } from "src/contexts/ThemeContext";
 import Uppy from "@uppy/core";
 import AwsS3Multipart from "@uppy/aws-s3-multipart";
-import CameraButton from "images/camera-button.png";
-import DeleteButton from "images/delete-button.png";
-import AboutImageLight from "images/about-image-light.png";
-import AboutImageDark from "images/about-image-dark.png";
-import TalentProfilePicture from "src/components/talent/TalentProfilePicture";
 import TextArea from "src/components/design_system/fields/textarea";
 import Divider from "src/components/design_system/other/Divider";
 import Button from "src/components/design_system/button";
-import UserTags from "src/components/talent/UserTags";
 import { H5, P2 } from "src/components/design_system/typography";
 import { ToastBody } from "src/components/design_system/toasts";
-import { CAREER_NEEDS_OPTIONS } from "src/utils/constants";
 import { useWindowDimensionsHook } from "src/utils/window";
 import { useProfileFetcher } from "src/hooks/use-profile-fetcher";
 
 const EditAboutModal = ({ show, hide, setProfile, username }) => {
   const { profile, fetchProfile } = useProfileFetcher();
   const { mobile } = useWindowDimensionsHook();
-  const { mode } = useTheme();
   const [editedTalent, setEditedTalent] = useState(undefined);
   const [aboutBannerFileInput, setAboutBannerFileInput] = useState(null);
   const [selectedCareerNeeds, setSelectedCareerNeeds] = useState([]);
@@ -53,10 +44,6 @@ const EditAboutModal = ({ show, hide, setProfile, username }) => {
 
     return errors;
   };
-
-  const imageSrc = !!editedTalent
-    ? editedTalent.career_goal.image_url || (mode() == "light" ? AboutImageLight : AboutImageDark)
-    : "";
 
   const uppyBanner = new Uppy({
     meta: { type: "avatar" },
@@ -192,28 +179,6 @@ const EditAboutModal = ({ show, hide, setProfile, username }) => {
     }));
   };
 
-  const deleteBannerImg = () => {
-    setEditedTalent(prev => ({
-      ...prev,
-      career_goal: {
-        ...prev.career_goal,
-        image_url: null,
-        image_data: null
-      }
-    }));
-  };
-
-  const changeSelectedCareerNeeds = tag => {
-    if (selectedCareerNeeds.includes(tag)) {
-      const array = selectedCareerNeeds;
-      const index = array.indexOf(tag);
-      array.splice(index, 1);
-      setSelectedCareerNeeds([...array]);
-    } else {
-      setSelectedCareerNeeds(prev => [...prev, tag]);
-    }
-  };
-
   return (
     !!profile &&
     !!editedTalent && (
@@ -228,7 +193,7 @@ const EditAboutModal = ({ show, hide, setProfile, username }) => {
         className="edit-modal"
       >
         <Modal.Header closeButton className="px-5">
-          <H5 bold text="Edit I'm Open to" />
+          <H5 bold text="Edit About" />
         </Modal.Header>
         <Divider />
         <Modal.Body
@@ -238,39 +203,6 @@ const EditAboutModal = ({ show, hide, setProfile, username }) => {
           )}
           style={{ maxHeight: mobile ? "" : "700px", overflowY: "overlay" }}
         >
-          <div className="d-flex align-items-center position-relative mb-5">
-            <TalentProfilePicture
-              className="position-relative cursor-pointer"
-              style={{ borderRadius: "24px" }}
-              src={imageSrc}
-              straight
-              height={mobile ? 257 : 332}
-              width={mobile ? 328 : 424}
-            />
-            <div className="edit-image" style={{ borderRadius: "24px" }}></div>
-            <label htmlFor="aboutBannerFileInput">
-              <TalentProfilePicture
-                className="position-absolute cursor-pointer"
-                style={{
-                  top: mobile ? "110px" : "145px",
-                  left: mobile ? "115px" : "160px"
-                }}
-                src={CameraButton}
-                height={40}
-              />
-            </label>
-            <input id="aboutBannerFileInput" className="d-none" type="file" accept=".jpg,.png,.jpeg,.gif"></input>
-            <button
-              className="button-link position-absolute"
-              style={{
-                top: mobile ? "110px" : "145px",
-                left: mobile ? "165px" : "210px"
-              }}
-              onClick={deleteBannerImg}
-            >
-              <TalentProfilePicture className="cursor-pointer" src={DeleteButton} height={40} />
-            </button>
-          </div>
           <div className="w-100 mb-5">
             <div className="d-flex justify-content-between align-items-center">
               <P2 className="text-primary-01" bold>
@@ -286,17 +218,6 @@ const EditAboutModal = ({ show, hide, setProfile, username }) => {
               error={validationErrors?.pitch}
             />
             <P2 className="text-primary-04" text="Let people know more about you and what you are looking for" />
-          </div>
-          <div className="w-100 mb-5">
-            <P2 className="text-primary-01 mb-2" bold text="I'm open to" />
-            <UserTags
-              tags={CAREER_NEEDS_OPTIONS}
-              tagsSelected={selectedCareerNeeds}
-              className="mr-2 mb-4"
-              clickable={false}
-              talent_id={`Edit-About`}
-              onClick={tag => changeSelectedCareerNeeds(tag)}
-            />
           </div>
         </Modal.Body>
         <Divider />
