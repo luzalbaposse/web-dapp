@@ -199,11 +199,13 @@ RSpec.describe Talents::RefreshSupporters do
         expect(talent_supporter_one.tal_amount).to eq "300000000000000000000"
         expect(talent_supporter_one.last_time_bought_at).to eq Time.at(1657727823)
         expect(talent_supporter_one.first_time_bought_at).to eq Time.at(1627727823)
+        expect(talent_supporter_one.chain_id).to eq 42220
 
         expect(talent_supporter_two.amount).to eq "90000000000000000000"
         expect(talent_supporter_two.tal_amount).to eq "450000000000000000000"
         expect(talent_supporter_two.last_time_bought_at).to eq Time.at(1657564775)
         expect(talent_supporter_two.first_time_bought_at).to eq Time.at(1627564775)
+        expect(talent_supporter_two.chain_id).to eq 42220
       end
     end
 

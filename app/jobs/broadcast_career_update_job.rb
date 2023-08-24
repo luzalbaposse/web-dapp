@@ -16,6 +16,7 @@ class BroadcastCareerUpdateJob < ApplicationJob
 
     activity.message = career_update.text
     activity.origin_user_id = sender.id
+    activity.global = true
     activity.save!
 
     Quests::RefreshUserQuests.new(user: sender).call
@@ -35,7 +36,8 @@ class BroadcastCareerUpdateJob < ApplicationJob
         sender: sender
       )
 
-      supporter.activity_feed.activities << activity
+      # career updates are global now
+      # supporter.activity_feed.activities << activity
     end
   end
 

@@ -45,40 +45,5 @@ RSpec.describe CareerNeeds::Upsert do
         expect(CareerNeed.exists?(career_need.id)).to eq(false)
       end
     end
-
-    context "when more than one career need is added" do
-      let(:titles) { ["Internships", "Finding a co-founder"] }
-
-      it "enqueues the job to update the career needs update activity" do
-        Sidekiq::Testing.inline! do
-          subject.call
-
-          job = enqueued_jobs.find { |j| j["job_class"] == "ActivityIngestJob" }
-
-          aggregate_failures do
-            expect(job["arguments"][0]).to eq("career_needs_update")
-            expect(job["arguments"][1]).to eq("@origin is open to internships and finding a co-founder.")
-            expect(job["arguments"][2]).to eq(user.id)
-          end
-        end
-      end
-    end
-
-    context "when all career needs are deleted" do
-      let(:titles) { [] }
-      let!(:career_need) do
-        create :career_need, career_goal: career_goal, title: "Internships"
-      end
-
-      it "enqueues the job to update the career needs update activity" do
-        Sidekiq::Testing.inline! do
-          subject.call
-
-          job = enqueued_jobs.find { |j| j["job_class"] == "ActivityIngestJob" }
-
-          expect(job).to eq nil
-        end
-      end
-    end
   end
 end

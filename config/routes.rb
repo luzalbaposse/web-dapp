@@ -39,6 +39,7 @@ Rails.application.routes.draw do
     # Portfolio
     resource :portfolio, only: [:show] do
       get :tokens
+      get :overview
     end
     get "wallet" => "portfolio#show", :as => :wallet
 

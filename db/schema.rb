@@ -666,6 +666,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_20_142025) do
     t.datetime "last_time_bought_at", precision: nil
     t.datetime "first_time_bought_at", precision: nil
     t.float "approximate_amount"
+    t.integer "chain_id"
     t.index ["supporter_wallet_id", "talent_contract_id"], name: "talent_supporters_wallet_token_contract_uidx", unique: true
   end
 
