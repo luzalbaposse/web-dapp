@@ -13,6 +13,32 @@ const LINK_TYPE_TO_ICON = {
   Discord: "discord"
 };
 
+const LINK_DTO = {
+  Website: (link) => link,
+  GitHub: (link) => link,
+  Linkedin: (link) => link,
+  Twitter: (link) => link,
+  Lens: (link) => link,
+  Mastodon: (link) => link,
+  Telegram: (link) => {
+    if (link.length > 0 && link[0] == "@") {
+      const newLink = "https://t.me/" + link.substring(1);
+      return newLink;
+    } else if (link.length > 0 && link.includes("t.me")) {
+      return link;
+    } else {
+      return "https://t.me/" + link;
+    }
+  },
+  Discord: (link) => {
+    if (link.length > 0 && link.includes("discordapp.com")) {
+      return link;
+    } else {
+      return `https://discordapp.com/users/${link}`;
+    }
+  }
+};
+
 export const OnTheWeb = ({ links }) => {
   if (!links.some(linkObject => !!linkObject.link)) return <></>;
   const renderedLinks = useMemo(
@@ -26,10 +52,10 @@ export const OnTheWeb = ({ links }) => {
                 size="small"
                 leftIcon={LINK_TYPE_TO_ICON[linkObject.type]}
                 iconColor="primary03"
-                href={linkObject.link}
+                href={LINK_DTO[linkObject.type](linkObject.link)}
                 newPage
               />
-              <TextLink color="primary01" size="small" text={linkObject.type} href={linkObject.link} newPage />
+              <TextLink color="primary01" size="small" text={linkObject.type} href={LINK_DTO[linkObject.type](linkObject.link)} newPage />
             </LinkItem>
           );
         }

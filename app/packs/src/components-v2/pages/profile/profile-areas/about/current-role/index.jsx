@@ -19,11 +19,11 @@ export const CurrentRole = ({ position, username, isOwner }) => {
             {position.title}
           </Typography>
           <Dot />
-          <TextLink color="primary01" size="small" text="View Experiences" href={`/u/${username}/settings`} />
+          <TextLink color="primary01" size="small" text="View Experiences" href={`/u/${username}/experiences`} />
         </>
       )}
       {!position?.title && isOwner && (
-          <TextLink color="primary01" size="small" text="Add Experiences" href={`/u/${username}/settings`} leftIcon="add"/>)}
+          <TextLink color="primary01" size="small" text="Add Experiences" href={`/u/${username}/experiences`} leftIcon="add"/>)}
     </Container>
   );
 };

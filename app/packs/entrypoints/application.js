@@ -40,6 +40,7 @@ import CollectiveShowPage from "src/components-v2/pages/collective-show-page";
 import VirtualPortfolio from "src/components/virtual_portfolio/VirtualPortfolio";
 import ProfilePage from "../src/components-v2/pages/profile";
 import SettingsPage from "../src/components-v2/pages/settings";
+import ExperiencesPage from "../src/components-v2/pages/experiences";
 
 import "stylesheets/application.scss";
 
@@ -73,7 +74,8 @@ ReactOnRails.register({
   EarnPage,
   VirtualPortfolio,
   ProfilePage,
-  SettingsPage
+  SettingsPage,
+  ExperiencesPage
 });
 
 Rails.start();
