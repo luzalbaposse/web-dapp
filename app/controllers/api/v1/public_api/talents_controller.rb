@@ -57,7 +57,7 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
     )
 
     response_body = {
-      talents: API::TalentBlueprint.render_as_json(page_recommended_users.includes(talent: :talent_token), view: :normal),
+      talents: API::TalentBlueprint.render_as_json(page_recommended_users.includes(talent: :talent_token), view: :with_subscribe_status, current_user_id: current_user&.id),
       pagination: {
         total: recommended_users.length,
         cursor: pagy.has_more? ? page_recommended_users.last.uuid : nil
@@ -128,6 +128,25 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
 
     render json: response_body, status: :ok
   end
+
+  def milestones
+    milestones = user.talent.milestones
+
+    pagy, page_milestones = pagy(milestones, items: per_page)
+
+    response_body = {
+      milestones: API::MilestoneBlueprint.render_as_json(page_milestones, view: :with_images),
+      pagination: {
+        total: milestones.count,
+        page: pagy.last
+      }
+    }
+
+    log_request(response_body, :ok)
+
+    render json: response_body, status: :ok
+  end
+
   # ------------ temporary calls for Profile V1.0 ------------
 
   private

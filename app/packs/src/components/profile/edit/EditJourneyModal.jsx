@@ -19,15 +19,31 @@ import TextArea from "src/components/design_system/fields/textarea";
 import Divider from "src/components/design_system/other/Divider";
 import Button from "src/components/design_system/button";
 import { ToastBody } from "src/components/design_system/toasts";
-import { Rocket, Toolbox, Bulb, Learn, Delete } from "src/components/icons";
+import { Toolbox, Learn, Delete } from "src/components/icons";
 import { H5, P2 } from "src/components/design_system/typography";
 import { lightTextPrimary01, darkTextPrimary01 } from "src/utils/colors";
 
 import { useWindowDimensionsHook } from "src/utils/window";
+import { useProfileFetcher } from "src/hooks/use-profile-fetcher";
 
 import cx from "classnames";
+import styled, { css } from "styled-components";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { mobileStyles } from "@talentprotocol/design-system";
 dayjs.extend(customParseFormat);
+
+const ButtonsContainer = styled.div`
+  height: 80%;
+  width: 100%;
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  justify-content: center;
+
+  ${mobileStyles(css`
+    flex-direction: column;
+  `)}
+`;
 
 const SelectExperienceType = ({ mobile, goToNextStep }) => {
   return (
@@ -46,44 +62,16 @@ const SelectExperienceType = ({ mobile, goToNextStep }) => {
           overflowY: "overlay"
         }}
       >
-        <div className="text-center mb-5">
-          <Button
-            className={cx(mobile ? "col-12 mb-4" : "col-5 mb-4 mr-4")}
-            type="white-subtle"
-            size="extra-big"
-            onClick={() => goToNextStep("Career Goal")}
-          >
-            <Rocket size={24} pathClassName="light-primary" color="#7857ED" />
-            <P2 medium text="Career Goal" />
-          </Button>
-          <Button
-            className={cx(mobile ? "col-12 mb-4" : "col-5 mb-4")}
-            type="white-subtle"
-            size="extra-big"
-            onClick={() => goToNextStep("Position")}
-          >
+        <ButtonsContainer>
+          <Button type="white-subtle" size="extra-big" onClick={() => goToNextStep("Position")}>
             <Toolbox size={24} pathClassName="light-primary" color="#328AFF" />
             <P2 medium text="Position" />
           </Button>
-          <Button
-            className={cx(mobile ? "col-12 mb-4" : "col-5 mr-4")}
-            type="white-subtle"
-            size="extra-big"
-            onClick={() => goToNextStep("Education")}
-          >
+          <Button type="white-subtle" size="extra-big" onClick={() => goToNextStep("Education")}>
             <Learn size={24} />
             <P2 medium text="Education" />
           </Button>
-          <Button
-            className={cx(mobile ? "col-12" : "col-5")}
-            type="white-subtle"
-            size="extra-big"
-            onClick={() => goToNextStep("Other")}
-          >
-            <Bulb size={24} />
-            <P2 medium text="Other" />
-          </Button>
-        </div>
+        </ButtonsContainer>
       </Modal.Body>
       <Divider />
     </>
@@ -596,8 +584,15 @@ const EditJourneyModal = ({
   setJourneyItem,
   journeyItem = {},
   skipToNextStepItemName,
-  hideBackButton = false
+  hideBackButton = false,
+  username
 }) => {
+  const { profile, fetchProfile } = useProfileFetcher();
+  useEffect(() => {
+    if (!!talent || !!profile) return;
+    fetchProfile(username);
+  }, [username, profile]);
+  const tempTalent = talent || profile;
   const { mobile } = useWindowDimensionsHook();
   const { mode } = useTheme();
   const [currentStep, setCurrentStep] = useState(1);
@@ -684,23 +679,23 @@ const EditJourneyModal = ({
       return setValidationErrors(errors);
     }
 
-    const response = await post(`/api/v1/talent/${talent.id}/milestones`, {
+    const response = await post(`/api/v1/talent/${tempTalent.id}/milestones`, {
       milestone: {
         ...currentJourneyItem
       }
     });
 
     if (response && !response.error) {
-      setTalent(prev => ({
-        ...prev,
-        milestones: [...prev.milestones, response]
-      }));
+      // setTalent(prev => ({
+      //   ...prev,
+      //   milestones: [...prev.milestones, response]
+      // }));
 
       toast.success(<ToastBody heading="Success!" body={"Milestone created successfully."} mode={mode} />, {
         autoClose: 1500
       });
-
       exitModal();
+      setTalent();
     } else {
       toast.error(<ToastBody heading="Error!" body={response?.error} mode={mode} />, { autoClose: 5000 });
     }
@@ -713,47 +708,49 @@ const EditJourneyModal = ({
       return setValidationErrors(errors);
     }
 
-    const response = await patch(`/api/v1/talent/${talent.id}/milestones/${currentJourneyItem.id}`, {
+    const response = await patch(`/api/v1/talent/${tempTalent.id}/milestones/${currentJourneyItem.id}`, {
       milestone: currentJourneyItem
     });
 
     if (response && !response.error) {
-      const newMilestones = talent.milestones.map(milestone => {
-        if (milestone.id === response.id) {
-          return { ...response };
-        }
-        return { ...milestone };
-      });
+      // const newMilestones = talent.milestones.map(milestone => {
+      //   if (milestone.id === response.id) {
+      //     return { ...response };
+      //   }
+      //   return { ...milestone };
+      // });
 
-      setTalent(prev => ({
-        ...prev,
-        milestones: newMilestones
-      }));
+      // setTalent(prev => ({
+      //   ...prev,
+      //   milestones: newMilestones
+      // }));
 
       toast.success(<ToastBody heading="Success!" body={"Milestone updated successfully."} mode={mode} />, {
         autoClose: 1500
       });
       exitModal();
+      setTalent();
     } else {
       toast.error(<ToastBody heading="Error!" body={response?.error} mode={mode} />, { autoClose: 5000 });
     }
   };
 
   const deleteMilestone = async () => {
-    const response = await destroy(`/api/v1/talent/${talent.id}/milestones/${currentJourneyItem.id}`);
+    const response = await destroy(`/api/v1/talent/${tempTalent.id}/milestones/${currentJourneyItem.id}`);
 
     if (response) {
-      const index = talent.milestones.findIndex(milestone => milestone.id === response.id);
-      const newMilestones = [...talent.milestones.slice(0, index), ...talent.milestones.slice(index + 1)];
+      // const index = talent.milestones.findIndex(milestone => milestone.id === response.id);
+      // const newMilestones = [...talent.milestones.slice(0, index), ...talent.milestones.slice(index + 1)];
 
-      setTalent(prev => ({
-        ...prev,
-        milestones: newMilestones
-      }));
+      // setTalent(prev => ({
+      //   ...prev,
+      //   milestones: newMilestones
+      // }));
 
       toast.success(<ToastBody heading="Success!" body={"Milestone deleted successfully."} mode={mode} />, {
         autoClose: 1500
       });
+      setTalent();
     }
 
     exitModal();

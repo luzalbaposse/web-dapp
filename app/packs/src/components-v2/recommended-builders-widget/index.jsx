@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Avatar, TextLink, Typography, Button } from "@talentprotocol/design-system";
+import { Avatar, TextLink, Typography } from "@talentprotocol/design-system";
 import {
   BuilderEntry,
   BuildersList,
@@ -9,10 +9,12 @@ import {
   ViewAllContainer
 } from "./styled";
 import { talentsService } from "../../api/talents";
+import { SubscriptionButton } from "src/components-v2/subscription-button";
 
 export const RecommendedBuildersWidget = ({ username, ellipsisAt = 350 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [talents, setTalents] = useState([]);
+
   useEffect(() => {
     if (username) {
       talentsService
@@ -26,6 +28,27 @@ export const RecommendedBuildersWidget = ({ username, ellipsisAt = 350 }) => {
         });
     }
   }, [username]);
+
+  const callback = (username, subscription) => {
+    let newTalents = [];
+    if (subscription === "subscribe") {
+      newTalents = talents.map(t => {
+        if (t.username === username) {
+          return { ...t, subscribed_status: "Cancel Request" };
+        }
+        return { ...t };
+      });
+    } else {
+      newTalents = talents.map(t => {
+        if (t.username === username) {
+          return { ...t, subscribed_status: "Subscribe" };
+        }
+        return { ...t };
+      });
+    }
+
+    setTalents(newTalents);
+  };
 
   return (
     !isLoading &&
@@ -47,7 +70,11 @@ export const RecommendedBuildersWidget = ({ username, ellipsisAt = 350 }) => {
                 ellipsisAt={ellipsisAt}
               />
               <SupportButtonContainer>
-                <Button hierarchy="secondary" size="small" text="Subscribe" href={`/u/${talent.username}`} />
+                <SubscriptionButton
+                  username={talent.username}
+                  subscribedStatus={talent.subscribed_status}
+                  callback={callback}
+                />
               </SupportButtonContainer>
             </BuilderEntry>
           ))}

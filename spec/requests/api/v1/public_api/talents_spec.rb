@@ -248,8 +248,6 @@ RSpec.describe "Talents API" do
 
       let!(:user) { create(:user, wallet_id: wallet_id, display_name: "API user") }
       let!(:talent) { create :talent, user: user }
-      let!(:milestone1) { create :milestone, talent: talent, title: "milestone1" }
-      let!(:milestone2) { create :milestone, talent: talent, title: "milestone2" }
       let(:career_goal) { create(:career_goal, talent: talent) }
       let!(:goal1) { create(:goal, career_goal: career_goal, title: "goal1", due_date: Time.zone.today) }
       let!(:goal2) { create(:goal, career_goal: career_goal, title: "goal2", due_date: Time.zone.today) }
@@ -267,14 +265,10 @@ RSpec.describe "Talents API" do
 
         run_test! do |response|
           data = JSON.parse(response.body)
-
-          returned_talent = data["talent"]
-          returned_milestones = returned_talent["milestones"].map { |m| m["title"] }
           returned_career_goal = data["talent"]["career_goal"]
           returned_goals = returned_career_goal["goals"].map { |c| c["title"] }
           returned_career_needs = returned_career_goal["career_needs"].map { |c| c["title"] }
           aggregate_failures do
-            expect(returned_milestones).to match_array([milestone1.title, milestone2.title])
             expect(returned_goals).to match_array([goal1.title, goal2.title])
             expect(returned_career_needs).to match_array([career_need1.title, career_need2.title])
           end

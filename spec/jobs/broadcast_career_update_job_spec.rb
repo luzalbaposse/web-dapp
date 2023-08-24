@@ -116,11 +116,11 @@ RSpec.describe BroadcastCareerUpdateJob, type: :job do
     )
   end
 
-  it "adds a new activity to the receiver" do
+  it "adds a new activity to the global feed" do
     broadcast_update
 
-    expect(subscriber_one.activity_feed.activities.count).to eq 1
-    expect(subscriber_two.activity_feed.activities.count).to eq 1
+    expect(subscriber_one.activity_feed.all_activities.count).to eq 1
+    expect(subscriber_two.activity_feed.all_activities.count).to eq 1
   end
 
   context "when the user has invested in himself" do

@@ -14,8 +14,6 @@ module CareerNeeds
         destroy_career_needs
         upsert_career_needs
       end
-
-      create_activity if career_goal.career_needs.reload.size.positive?
     end
 
     private
@@ -36,14 +34,6 @@ module CareerNeeds
     def career_needs_message
       career_needs = career_goal.career_needs.reload.pluck(:title).to_sentence(last_word_connector: " and ").downcase
       "@origin is open to #{career_needs}."
-    end
-
-    def create_activity
-      ActivityIngestJob.perform_later(
-        "career_needs_update",
-        career_needs_message,
-        career_goal.talent.user_id
-      )
     end
   end
 end

@@ -97,7 +97,8 @@ module Talents
             tal_amount: supporter.tal_amount,
             approximate_amount: supporter.amount.to_f / decimals.to_f,
             last_time_bought_at: Time.at(supporter.last_time_bought_at.to_i),
-            synced_at: Time.zone.now
+            synced_at: Time.zone.now,
+            chain_id: talent_token.chain_id
           )
         else
           talent_supporter.update!(
@@ -106,7 +107,8 @@ module Talents
             approximate_amount: supporter.amount.to_f / decimals.to_f,
             last_time_bought_at: Time.at(supporter.last_time_bought_at.to_i),
             first_time_bought_at: Time.at(supporter.first_time_bought_at.to_i),
-            synced_at: Time.zone.now
+            synced_at: Time.zone.now,
+            chain_id: talent_token.chain_id
           )
         end
 

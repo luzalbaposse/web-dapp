@@ -8,6 +8,8 @@ import { SpinnerContainer } from "./styled";
 
 export const Invites = ({ profile }) => {
   const inviteUrl = `https://beta.talentprotocol.com/join/${profile.username}`;
+  const qrCodeText = "Share this QRcode to invite others to Talent Protocol";
+  const qrCodeButtonText = "Share this profile";
   const [invitedTalentsState, setInvitedTalentsState] = useState({
     isLoading: true,
     talents: [],
@@ -40,7 +42,15 @@ export const Invites = ({ profile }) => {
 
   return (
     <>
-      {profile && <QRCodeModal modalState={modalState} url={inviteUrl} profilePicture={profile.profile_picture_url} />}
+      {profile && (
+        <QRCodeModal
+          modalState={modalState}
+          url={inviteUrl}
+          profilePicture={profile.profile_picture_url}
+          text={qrCodeText}
+          buttonText={qrCodeButtonText}
+        />
+      )}
       {invitedTalentsState.isLoading && (
         <SpinnerContainer>
           <Spinner />

@@ -9,15 +9,15 @@ export const TAB_TO_AREA_MAP = withUpdatesTab => {
     return {
       0: Goals,
       1: Updates,
-      2: Connections,
-      3: About,
+      2: About,
+      3: Connections,
       4: Support
     };
   } else {
     return {
       0: Goals,
-      1: Connections,
-      2: About,
+      1: About,
+      2: Connections,
       3: Support
     };
   }
@@ -28,15 +28,15 @@ export const TAB_NAME_TO_INDEX_MAP = withUpdatesTab => {
     return {
       goals: 0,
       updates: 1,
-      connections: 2,
-      about: 3,
+      about: 2,
+      connections: 3,
       support: 4
     };
   } else {
     return {
       goals: 0,
-      connections: 1,
-      about: 2,
+      about: 1,
+      connections: 2,
       support: 3
     };
   }

@@ -219,6 +219,7 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
   const [tokens, setTokens] = useState([]);
   const [activities, setActivities] = useState([]);
   const [pagination, setPagination] = useState({});
+  const [totalTALStaked, setTotalTALStaked] = useState(0);
 
   // onchain functions
   const setupChain = useCallback(async errorCallback => {
@@ -461,7 +462,7 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
         setTokens(response.talent_tokens);
       }
     });
-  }, [currentTab]);
+  }, [currentTab, chainId]);
 
   useEffect(() => {
     // Don't load if it's not the right tab
@@ -478,6 +479,20 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
       }
     });
   }, [currentTab, chainId]);
+
+  useEffect(() => {
+    if (!chainId) {
+      return;
+    }
+
+    get(`/portfolio/overview?chain_id=${chainId}`).then(response => {
+      if (response.error) {
+        toast.error(<ToastBody heading="Unable to load staked TAL amount" body={response.error} />);
+      } else {
+        setTotalTALStaked(response.total_staked * 5.0);
+      }
+    });
+  }, [chainId]);
 
   const showLoadMoreActivities = () => {
     return pagination.currentPage < pagination.lastPage;
@@ -626,8 +641,8 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
             </BalanceCard>
             <BalanceCard
               title="Staked $TAL"
-              value={balanceToText(talBalances.staked)}
-              valueInDollars={balanceToDollar(talBalances.staked)}
+              value={balanceToText(totalTALStaked)}
+              valueInDollars={balanceToDollar(totalTALStaked.toString())}
               theme={theme}
               primary={false}
               icon={"padlock"}

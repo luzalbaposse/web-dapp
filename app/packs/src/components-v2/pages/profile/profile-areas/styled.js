@@ -8,9 +8,17 @@ export const Container = styled.div`
 `;
 
 export const TabsContainer = styled.div`
-  display: flex;
-  padding: 24px 24px 0;
+  padding: 24px 0 0;
   border-bottom: 1px solid ${buildColor("surfaceHover02")};
+
+  :nth-child(1) {
+    & div:first-child {
+      padding-left: 8px;
+    }
+    & div:last-child {
+      padding-right: 8px;
+    }
+  }
 `;
 
 export const AreaContainer = styled.section`
@@ -24,14 +32,4 @@ export const AreaContainer = styled.section`
   ::-webkit-scrollbar {
     display: none;
   }
-`;
-
-export const SpinnerContainer = styled.section`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  margin: 0 16px;
-  padding-top: 16px;
-  width: 100%;
 `;

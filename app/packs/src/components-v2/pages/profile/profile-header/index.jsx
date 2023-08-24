@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useCallback, useState } from "react";
-import { toast } from "react-toastify";
 import {
   Avatar,
   Button,
@@ -25,18 +24,18 @@ import {
   TopRow,
   UserInfo
 } from "./styled";
-import { talentsService } from "src/api";
 import { useDataFetcher } from "./hooks/use-data-fetcher";
 import { useImpersonate } from "./hooks/use-impersonate";
-import { ToastBody } from "src/components/design_system/toasts";
 import ApprovalConfirmationModal from "src/components/profile/ApprovalConfirmationModal";
 import AdminVerificationConfirmationModal from "src/components/profile/AdminVerificationConfirmationModal";
 import PersonaVerificationConfirmationModal from "src/components/profile/PersonaVerificationConfirmationModal";
 import { useProfileOverviewStore } from "src/contexts/state";
+import { SubscriptionButton } from "src/components-v2/subscription-button";
 
 export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, withPersonaRequest }) => {
   const data = useDataFetcher(urlData);
   const { profileOverview, fetchProfileOverview } = useProfileOverviewStore();
+  const [localProfile, setLocalProfile] = useState(null);
   const { impersonateUser } = useImpersonate();
   const qrCodeModalState = useModal();
   const [isEditMode, setIsEditMode] = useState(false);
@@ -48,19 +47,19 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
     const menu = [{ value: "Share", iconColor: "primary01", iconName: "share-2" }];
     if (currentUser?.admin || currentUser?.moderator) {
       menu.push({ value: "Impersonate", iconColor: "primary01", iconName: "user" });
-      if (!profileOverview?.verified) {
+      if (!localProfile?.verified) {
         menu.push({ value: "Verify user", iconColor: "primary01", iconName: "check" });
       }
-      if (profileOverview?.profile_type === "waiting_for_approval") {
+      if (localProfile?.profile_type === "waiting_for_approval") {
         menu.push({ value: "Approve", iconColor: "primary01", iconName: "check-chat" });
       }
     }
     if (currentUser?.username === urlData.profileUsername) {
       menu.push({ value: "Edit", iconColor: "primary01", iconName: "edit" });
       if (
-        !profileOverview?.verified &&
+        !localProfile?.verified &&
         !(
-          profileOverview?.with_persona_id ||
+          localProfile?.with_persona_id ||
           withPersonaRequest.requests_counter > railsContext.withPersonaVerificationsLimit
         )
       ) {
@@ -68,7 +67,7 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
       }
     }
     return menu;
-  }, [currentUser, urlData, profileOverview]);
+  }, [currentUser, urlData, localProfile]);
   const onSelectOption = useCallback(
     option => {
       switch (option.value) {
@@ -95,50 +94,27 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
     },
     [urlData.profileUsername]
   );
-  const subscribe = useCallback(() => {
-    talentsService
-      .sendSubscribeRequest(profileOverview?.username)
-      .then(() => {
-        toast.success(<ToastBody heading="Subscription request sent" />);
-        window.location.reload();
-      })
-      .catch(() => {
-        toast.error(<ToastBody heading="Something went wrong" />);
-      });
-  }, [profileOverview?.username]);
-  const unsubscribe = useCallback(() => {
-    talentsService
-      .unsubscribe(profileOverview?.username)
-      .then(() => {
-        toast.success(<ToastBody heading="Unsiubscribed successfulyy" />);
-        window.location.reload();
-      })
-      .catch(() => {
-        toast.error(<ToastBody heading="Something went wrong" />);
-      });
-  }, [data.profileOverview?.username]);
-  const MemoedTag = useMemo(() => {
-    if (
-      !profileOverview ||
-      currentUser?.username === profileOverview?.username ||
-      profileOverview?.subscribing_status === "unsubscribed"
-    )
-      return <></>;
-    let tagLabel = "";
-    switch (profileOverview?.subscribing_status) {
-      case "subscribed":
-        tagLabel = "Subscribed";
-        break;
-      case "subscribing":
-        tagLabel = "Subscribing to you";
-        break;
-      case "both_subscribed":
-        tagLabel = "Both subscribe";
-        break;
-      default:
-        tagLabel = "";
-        break;
+
+  const callback = (_username, subscription) => {
+    if (subscription === "subscribe") {
+      setLocalProfile({ ...localProfile, subscribed_status: "Cancel Request" });
+    } else {
+      setLocalProfile({ ...localProfile, subscribed_status: "Subscribe" });
     }
+  };
+
+  const MemoedTag = useMemo(() => {
+    if (!localProfile || currentUser?.username === localProfile?.username) return <></>;
+    let tagLabel = null;
+
+    if (localProfile?.is_subscribing) {
+      tagLabel = "Subscriber";
+    }
+    if (localProfile?.is_supporting) {
+      tagLabel = "Supporter";
+    }
+
+    if (!tagLabel) return <></>;
     return (
       <TagContainer>
         <Tag
@@ -151,13 +127,20 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
         />
       </TagContainer>
     );
-  }, [profileOverview, currentUser?.username]);
+  }, [localProfile, currentUser?.username]);
 
   useEffect(() => {
     if (!urlData.profileUsername) return;
     fetchProfileOverview(urlData.profileUsername);
   }, [urlData.profileUsername]);
-  return !profileOverview ? (
+
+  useEffect(() => {
+    if (profileOverview) {
+      setLocalProfile(profileOverview);
+    }
+  }, [profileOverview]);
+
+  return !localProfile ? (
     <SpinnerContainer>
       <Spinner color="primary" size={48} />
     </SpinnerContainer>
@@ -168,28 +151,28 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
           <Avatar
             size="lg"
             userId={1}
-            url={profileOverview?.profile_picture_url}
-            profileURL={`/u/${profileOverview?.username}`}
+            url={localProfile.profile_picture_url}
+            profileURL={`/u/${localProfile.username}`}
           />
           {isMobile && (
             <Actions>
               <ButtonDropdown selectOption={onSelectOption} options={dropdownMenu} opensOnRight>
                 <Button size="small" hierarchy="secondary" leftIcon="navigation" iconColor="primary01" />
               </ButtonDropdown>
-              {currentUser?.username !== profileOverview?.username ? (
+              {currentUser?.username !== localProfile.username ? (
                 <>
                   <Button
                     size="small"
                     hierarchy="secondary"
                     leftIcon="email"
                     iconColor="primary01"
-                    href={`/messages?user=${profileOverview?.username}`}
+                    href={`/messages?user=${localProfile.username}`}
                   />
-                  {profileOverview?.subscribing_status === "unsubscribed" ? (
-                    <Button size="small" hierarchy="secondary" text="Subscribe" onClick={subscribe} />
-                  ) : (
-                    <Button size="small" hierarchy="secondary" text="Unsubscribe" onClick={unsubscribe} />
-                  )}
+                  <SubscriptionButton
+                    username={localProfile.username}
+                    subscribedStatus={localProfile.subscribed_status}
+                    callback={callback}
+                  />
                 </>
               ) : (
                 <Button
@@ -204,19 +187,19 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
         </TopRow>
         <UserInfo>
           <Name specs={{ type: "bold", variant: "h5" }} color="primary01">
-            {profileOverview?.name}
+            {localProfile.name}
           </Name>
-          {profileOverview?.verified && <Icon name="verified-2" color="primary" size={18} />}
+          {localProfile.verified && <Icon name="verified-2" color="primary" size={18} />}
         </UserInfo>
         {MemoedTag}
         <Typography specs={{ type: "regular", variant: "p1" }} color="primary01">
-          {profileOverview?.headline}
+          {localProfile.headline}
         </Typography>
-        {!!profileOverview?.location && (
+        {!!localProfile.location && (
           <LocationContainer>
             <Icon name="pin" color="primary04" size={16} />
             <Typography specs={{ type: "regular", variant: "p2" }} color="primary04">
-              {profileOverview?.location}
+              {localProfile.location}
             </Typography>
           </LocationContainer>
         )}
@@ -230,7 +213,7 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
             </>
           ) : (
             <Typography specs={{ type: "small", variant: "label3" }} color="primary04">
-              None of your connections is supporting {profileOverview?.name}.
+              None of your connections is supporting {localProfile.name}.
             </Typography>
           )}
         </MembersContainer>
@@ -239,20 +222,20 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
             <ButtonDropdown selectOption={onSelectOption} options={dropdownMenu}>
               <Button size="small" hierarchy="secondary" leftIcon="navigation" iconColor="primary01" />
             </ButtonDropdown>
-            {currentUser?.username !== profileOverview?.username ? (
+            {currentUser?.username !== localProfile.username ? (
               <>
                 <Button
                   size="small"
                   hierarchy="secondary"
                   leftIcon="email"
                   iconColor="primary01"
-                  href={`/messages?user=${profileOverview?.username}`}
+                  href={`/messages?user=${localProfile.username}`}
                 />
-                {profileOverview?.subscribing_status === "unsubscribed" ? (
-                  <Button size="small" hierarchy="secondary" text="Subscribe" onClick={subscribe} />
-                ) : (
-                  <Button size="small" hierarchy="secondary" text="Unsubscribe" onClick={unsubscribe} />
-                )}
+                <SubscriptionButton
+                  username={localProfile.username}
+                  subscribedStatus={localProfile.subscribed_status}
+                  callback={callback}
+                />
               </>
             ) : (
               <Button
@@ -267,20 +250,23 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
       </Container>
       <QRCodeModal
         modalState={qrCodeModalState}
-        url={`https://beta.talentprotocol.com/u/${profileOverview?.username}`}
-        profilePicture={profileOverview?.profile_picture_url}
+        url={`https://beta.talentprotocol.com/u/${localProfile.username}`}
+        profilePicture={localProfile.profile_picture_url}
+        text="Scan this QR code to open your profile."
+        buttonText="Copy profile URL"
       />
       <EditOverviewModalV2
         show={isEditMode}
         hide={() => setIsEditMode(false)}
-        profile={profileOverview}
-        username={profileOverview.username}
+        profile={localProfile}
+        username={localProfile.username}
+        showOpenTo={false}
       />
       <ApprovalConfirmationModal
         show={showApproveModal}
         setShow={setShowApproveModal}
         hide={() => setShowApproveModal(false)}
-        talent={profileOverview}
+        talent={localProfile}
         setProfile={() => {
           window.location.reload();
         }}
@@ -290,17 +276,17 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
         show={showVerifyModal}
         setShow={setShowVerifyModal}
         hide={() => setShowVerifyModal(false)}
-        talent={profileOverview}
+        talent={localProfile}
         setProfile={() => {
           window.location.reload();
         }}
       />
-      {!profileOverview?.verified && (
+      {!localProfile.verified && (
         <PersonaVerificationConfirmationModal
           show={showWithPersonaModal}
           setShow={setShowWithPersonaModal}
           hide={() => setShowWithPersonaModal(false)}
-          username={profileOverview?.username}
+          username={localProfile.username}
           railsContext={railsContext}
         />
       )}

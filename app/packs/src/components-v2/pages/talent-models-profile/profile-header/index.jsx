@@ -29,6 +29,8 @@ export const ProfileHeader = ({ profile }) => {
         modalState={modalState}
         url={`https://beta.talentprotocol.com/u/${profile.username}`}
         profilePicture={profile.profile_picture_url}
+        text="Scan this QR code to open your profile."
+        buttonText="Copy profile URL"
       />
       <Container>
         <AvatarContainer>

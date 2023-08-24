@@ -96,6 +96,26 @@ class API::TalentBlueprint < Blueprinter::Base
     end
   end
 
+  view :with_subscribe_status do
+    include_view :normal
+
+    field :subscribed_status do |user, options|
+      subscription = Subscription.find_by(user: user, subscriber: User.find_by(id: options[:current_user_id]))
+
+      if subscription.present?
+        if subscription.accepted_at.present?
+          "Unsubscribe"
+        else
+          "Cancel Request"
+        end
+      elsif !!user.active_subscribing.pluck(:user_id)&.include?(options[:current_user_id])
+        "Subcribe Back"
+      else
+        "Subscribe"
+      end
+    end
+  end
+
   view :leaderboard do
     include_view :normal
 
@@ -107,7 +127,7 @@ class API::TalentBlueprint < Blueprinter::Base
 
   # ------------ temporary views for Profile V1.0 ------------
   view :overview do
-    include_view :normal
+    include_view :with_subscribe_status
 
     field :profile_type
 
@@ -119,6 +139,26 @@ class API::TalentBlueprint < Blueprinter::Base
         status = "both_subscribed"
       end
       status = "pending" if options[:current_user_pending_subscribing]&.include?(user.id)
+      status
+    end
+
+    field :is_subscribing do |user, options|
+      !!user.active_subscribing.pluck(:user_id)&.include?(options[:current_user_id])
+    end
+
+    field :is_supporting do |user, options|
+      status = false
+      current_user = User.find_by(id: options[:current_user_id])
+      supporting = TalentSupporter.where(
+        supporter_wallet_id: user.wallet_id,
+        talent_contract_id: current_user&.talent&.talent_token&.contract_id
+      ).count > 0
+      sponsoring = Sponsorship.where(sponsor: user.wallet_id, talent: current_user&.wallet_id).count > 0
+
+      if supporting || sponsoring
+        status = true
+      end
+
       status
     end
 
@@ -138,8 +178,29 @@ class API::TalentBlueprint < Blueprinter::Base
       user.talent.id
     end
 
-    association :milestones, blueprint: MilestoneBlueprint, view: :normal do |user, options|
-      user.talent&.milestones&.includes(:milestone_images)
+    field :tags do |user, _options|
+      user.tags
+    end
+
+    field :social_links do |user, _options|
+      [
+        {link: user.talent.website, type: "Website"},
+        {link: user.talent.github, type: "GitHub"},
+        {link: user.talent.linkedin, type: "Linkedin"},
+        {link: user.talent.twitter, type: "Twitter"},
+        {link: user.talent.lens, type: "Lens"},
+        {link: user.talent.mastodon, type: "Mastodon"},
+        {link: user.talent.telegram, type: "Telegram"},
+        {link: user.talent.discord, type: "Discord"}
+      ]
+    end
+
+    association :milestone, blueprint: API::MilestoneBlueprint, view: :with_images, name: :current_position do |user, options|
+      position = user.talent.milestones.where(end_date: nil, category: "Position").order(start_date: :desc).includes(:milestone_images)&.first
+      if position.nil?
+        position = user.talent.milestones.where(end_date: nil, category: "Education").order(start_date: :desc).includes(:milestone_images)&.first
+      end
+      position
     end
 
     association :career_goal, blueprint: CareerGoalBlueprint, view: :normal do |user, options|
@@ -184,6 +245,14 @@ class API::TalentBlueprint < Blueprinter::Base
 
     field :subscribing_count do |user, _options|
       user.users_subscribing.count
+    end
+
+    field :goals_count do |user, _options|
+      user.talent.career_goal&.goals&.count
+    end
+
+    field :updates_count do |user, _options|
+      user.career_updates.count
     end
 
     field :connections_count do |user, _options|

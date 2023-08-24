@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { Container, BottomContainer, StyledQRCode, OutterContainer } from "./styled";
 import { ToastBody } from "src/components/design_system/toasts";
 
-export const QRCodeModal = ({ modalState, profilePicture, url }) => {
+export const QRCodeModal = ({ modalState, profilePicture, url, text, buttonText }) => {
   return (
     <Modal title="Share this profile" isOpen={modalState.isOpen} closeModal={modalState.closeModal}>
       <OutterContainer>
@@ -12,7 +12,7 @@ export const QRCodeModal = ({ modalState, profilePicture, url }) => {
           <Avatar size="md" url={profilePicture} />
           <StyledQRCode value={url} />
           <Typography specs={{ type: "medium", variant: "p2" }} color="primary01">
-            Share this QRcode or link to invite others to Talent Protocol
+            {text}
           </Typography>
         </Container>
         <BottomContainer>
@@ -22,7 +22,7 @@ export const QRCodeModal = ({ modalState, profilePicture, url }) => {
           <Button
             size="large"
             hierarchy="primary"
-            text="Share this profile"
+            text={buttonText}
             isStretched
             rightIcon="copy"
             onClick={() => {
