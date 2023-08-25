@@ -10,6 +10,13 @@ export const Container = styled.section`
   flex-direction: column;
 `;
 
+export const MilestoneTitleRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 export const Entry = styled.div`
   display: flex;
   gap: 8px;
