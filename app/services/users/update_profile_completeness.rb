@@ -5,6 +5,8 @@ module Users
     end
 
     def call
+      return if user.nil?
+
       profile_completed = user.profile_completed?
       user.upsert_profile_completeness!
 
