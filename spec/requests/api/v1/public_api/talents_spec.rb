@@ -102,20 +102,24 @@ RSpec.describe "Talents API" do
       parameter name: :id, in: :path, type: :string, description: "Wallet address or username"
       parameter name: "X-API-KEY", in: :header, type: :string, description: "Your Talent Protocol API key"
 
-      let!(:talent_user) { create(:user, :with_talent_token, wallet_id: wallet_id, display_name: "API user") }
+      let!(:talent_user) { create :user, :with_talent_token, wallet_id: wallet_id, display_name: "API user" }
       let(:wallet_id) { SecureRandom.hex }
       let(:id) { wallet_id }
+      let(:user_1) { create :user }
+      let(:user_2) { create :user, :with_talent_token }
+      let(:connection_1) { create :connection, user: talent_user, connected_user: user_1 }
+      let(:connection_2) { create :connection, user: talent_user, connected_user: user_2 }
 
       before do
-        user_1 = create :user
-        user_2 = create :user, :with_talent_token
-
         create :subscription, user: user_1, subscriber: talent_user
         create :subscription, user: user_2, subscriber: talent_user
         create :subscription, user: talent_user, subscriber: user_1
 
         create :talent_supporter, supporter_wallet_id: talent_user.wallet_id, talent_contract_id: user_2.talent.talent_token.contract_id, amount: "2000000"
         create :talent_supporter, supporter_wallet_id: user_1.wallet_id, talent_contract_id: talent_user.talent.talent_token.contract_id, amount: "1000000"
+
+        connection_1.refresh_connection!
+        connection_2.refresh_connection!
       end
 
       response "200", "talent found", save_example: true do
@@ -300,16 +304,32 @@ RSpec.describe "Talents API" do
       let(:wallet_id) { SecureRandom.hex }
       let(:id) { wallet_id }
 
-      let!(:user) { create(:user, wallet_id: wallet_id, display_name: "API user") }
+      let!(:user) { create :user, wallet_id: wallet_id, display_name: "API user" }
       let!(:talent) do
         create :talent,
           user: user,
           total_supply: "2",
-          supporters_count: 3,
+          supporters_count: 2,
           market_cap: "1000",
           market_cap_variance: "2.0"
       end
       let!(:talent_token) { create(:talent_token, talent: talent, contract_id: "CONTRACT_ID") }
+      let(:user_1) { create :user }
+      let(:user_2) { create :user, :with_talent_token }
+      let(:connection_1) { create :connection, user: user, connected_user: user_1 }
+      let(:connection_2) { create :connection, user: user, connected_user: user_2 }
+
+      before do
+        create :subscription, user: user_1, subscriber: user
+        create :subscription, user: user_2, subscriber: user
+        create :subscription, user: user, subscriber: user_1
+
+        create :talent_supporter, supporter_wallet_id: user.wallet_id, talent_contract_id: user_2.talent.talent_token.contract_id, amount: "2000000"
+        create :talent_supporter, supporter_wallet_id: user_1.wallet_id, talent_contract_id: user.talent.talent_token.contract_id, amount: "1000000"
+
+        connection_1.refresh_connection!
+        connection_2.refresh_connection!
+      end
 
       response "200", "talent found", save_example: true do
         schema type: :object,
@@ -327,7 +347,10 @@ RSpec.describe "Talents API" do
           returned_talent_token = returned_talent["talent_token"]
           aggregate_failures do
             expect(returned_talent["total_supply"]).to eq(talent.total_supply)
-            expect(returned_talent["supporters_count"]).to eq(talent.supporters_count)
+            expect(returned_talent["subscribers_count"]).to eq(1)
+            expect(returned_talent["subscribing_count"]).to eq(2)
+            expect(returned_talent["supporters_count"]).to eq(1)
+            expect(returned_talent["supporting_count"]).to eq(1)
             expect(returned_talent["market_cap"]).to eq(talent.market_cap)
             expect(returned_talent_token["contract_id"]).to eq(talent_token.contract_id)
           end
