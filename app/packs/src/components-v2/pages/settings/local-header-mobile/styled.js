@@ -32,6 +32,8 @@ export const HamburguerContainer = styled.div`
   padding: 0 16px;
   background: ${buildColor("bg01")};
   z-index: 1;
+  animation-duration: 0.25s;
+  opacity: 0;
 `;
 
 export const StyledNavLinks = styled(NavLinks)`

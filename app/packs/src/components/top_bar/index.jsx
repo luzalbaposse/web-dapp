@@ -16,6 +16,7 @@ import Tab from "src/components/design_system/tab";
 import ThemeContainer, { ThemeContext } from "src/contexts/ThemeContext";
 import UserMenu from "src/components/user_menu";
 import Web3ModalConnect from "../login/Web3ModalConnect";
+import "animate.css";
 
 const NotificationsIndicator = () => {
   return (
