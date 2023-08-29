@@ -43,8 +43,8 @@ export const NotificationsForm = () => {
           <ul>
             <li>When there is a reset password request, password changed, etc.</li>
             <li>Updates to our Privacy Policy, Code of Conduct and Terms of Use.</li>
-            <li>When we notice any unusual activity related
-          to your account.</li></ul>
+            <li>When we notice any unusual activity related to your account.</li>
+          </ul>
         </Typography>
       </Row16Gap>
     </Container>

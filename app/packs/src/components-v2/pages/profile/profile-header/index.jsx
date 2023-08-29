@@ -179,7 +179,7 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
                   size="small"
                   hierarchy="secondary"
                   text="Edit profile"
-                  onClick={() => onSelectOption({ value: "Edit" })}
+                  href={`/u/${localProfile.username}/settings`}
                 />
               )}
             </Actions>
@@ -242,7 +242,7 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
                 size="small"
                 hierarchy="secondary"
                 text="Edit profile"
-                onClick={() => onSelectOption({ value: "Edit" })}
+                href={`/u/${localProfile.username}/settings`}
               />
             )}
           </DesktopActions>

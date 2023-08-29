@@ -1,9 +1,9 @@
 import React from "react";
 import { Container, Link } from "./styled";
-import { Button, Typography } from "@talentprotocol/design-system";
+import { Typography } from "@talentprotocol/design-system";
 
-export const NavLinks = ({ goToPage, page }) => (
-  <Container>
+export const NavLinks = ({ goToPage, page, className }) => (
+  <Container className={className}>
     <Link onClick={() => goToPage("profile")}>
       <Typography specs={{ type: "medium", variant: "label1" }} color={page === "Profile" ? "primary01" : "primary03"}>
         Profile
