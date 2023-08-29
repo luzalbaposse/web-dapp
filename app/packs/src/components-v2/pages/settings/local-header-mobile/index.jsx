@@ -1,9 +1,16 @@
-import React from "react";
-import { noop } from "lodash";
+import React, { useEffect, useRef } from "react";
 import { TextLink } from "@talentprotocol/design-system";
 import { HamburguerContainer, HeaderContainer, InnerHeaderContainer, StyledNavLinks } from "./styled";
 
 export const LocalHeaderMobile = ({ username, goToPage, openHamburguer, isHamburguerOpen, page }) => {
+  const hamburguerRef = useRef(undefined);
+  useEffect(() => {
+    if (hamburguerRef.current) {
+      setTimeout(() => {
+        hamburguerRef.current.style.opacity = 1;
+      }, 250);
+    }
+  }, [hamburguerRef]);
   return (
     <>
       <HeaderContainer>
@@ -17,12 +24,11 @@ export const LocalHeaderMobile = ({ username, goToPage, openHamburguer, isHambur
             onClick={openHamburguer}
           />
         </InnerHeaderContainer>
-      </HeaderContainer>
-      {isHamburguerOpen && (
-        <HamburguerContainer>
+      </HeaderContainer> (
+        <HamburguerContainer ref={hamburguerRef} className={!isHamburguerOpen ? "animate__animated animate__slideOutLeft" : "animate__animated animate__slideInLeft"}>
           <StyledNavLinks goToPage={goToPage} />
         </HamburguerContainer>
-      )}
+      )
     </>
   );
 };

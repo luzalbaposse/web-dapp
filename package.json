@@ -32,6 +32,7 @@
     "@web3modal/ethereum": "^2.5.0",
     "@web3modal/react": "^2.5.0",
     "@worldcoin/idkit": "^0.4.9",
+    "animate.css": "^4.1.1",
     "assert": "^2.0.0",
     "autoprefixer": "^10.2.6",
     "axios": "^1.2.3",
