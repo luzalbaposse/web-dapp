@@ -11,11 +11,12 @@ import { ExperienceForm } from "./experience";
 import { AboutForm } from "./about";
 import { NotificationsForm } from "./notifications";
 import { AccountForm } from "./account";
+import { LocalHeaderMobile } from "./local-header-mobile";
 
 export const SettingsPage = ({ isMobile }) => {
   const urlData = useUrlData();
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
-  const nav = useCustomNavigation(urlData.tab);
+  const nav = useCustomNavigation(urlData.tab, isMobile);
 
   const content = useMemo(() => {
     switch (nav.page) {
@@ -40,7 +41,13 @@ export const SettingsPage = ({ isMobile }) => {
 
   return isMobile ? (
     <PageContainer>
-      <LocalHeader username={urlData.profileUsername} />
+      <LocalHeaderMobile
+        username={urlData.profileUsername}
+        goToPage={nav.goToPage}
+        openHamburguer={nav.openHamburguer}
+        isHamburguerOpen={nav.isHamburguerOpen}
+      />
+      {content}
     </PageContainer>
   ) : (
     <>
