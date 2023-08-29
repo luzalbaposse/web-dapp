@@ -121,7 +121,7 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
 
   def support
     response_body = {
-      talent: API::TalentBlueprint.render_as_json(user, view: :support)
+      talent: API::TalentBlueprint.render_as_json(user, view: :support, current_user_id: current_user&.id)
     }
 
     log_request(response_body, :ok)

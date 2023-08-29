@@ -10,7 +10,7 @@ class ApplicationMailer < ActionMailer::Base
 
   def set_profile_pictures_attachments(users)
     users.each do |user|
-      attachments.inline["profile_picture-#{user.id}.png"] = Down.download(user.profile_picture_url).read
+      attachments.inline["profile_picture-#{user.id}.png"] = Down.download(user.profile_picture_url).read if user.profile_picture_url.present?
     end
   rescue => e
     Rollbar.error(e, "Error downloading picture of users: ##{users.map(&:id).join(", ")}")

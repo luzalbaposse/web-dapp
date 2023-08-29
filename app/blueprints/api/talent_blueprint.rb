@@ -41,25 +41,28 @@ class API::TalentBlueprint < Blueprinter::Base
 
   view :detailed do
     include_view :normal
-
-    field :supporters_count do |user, _options|
-      user.supporters.count
-    end
-
-    field :supporting_count do |user, _options|
-      user.portfolio.count
-    end
-
-    field :subscribers_count do |user, _options|
-      user.subscribers.count
-    end
-
-    field :subscribing_count do |user, _options|
-      user.users_subscribing.count
-    end
+    include_view :with_connections_count
 
     field :ticker do |user, _options|
       user.talent&.talent_token&.ticker
+    end
+  end
+
+  view :with_connections_count do
+    field :supporters_count do |user, options|
+      user.connections.where("connection_types && ?", "{sponsor,staker}").count
+    end
+
+    field :supporting_count do |user, _options|
+      user.connections.where("connection_types && ?", "{sponsoring,staking}").count
+    end
+
+    field :subscribers_count do |user, _options|
+      user.connections.where("connection_types && ?", "{subscriber}").count
+    end
+
+    field :subscribing_count do |user, _options|
+      user.connections.where("connection_types && ?", "{subscribing}").count
     end
   end
 
@@ -209,7 +212,10 @@ class API::TalentBlueprint < Blueprinter::Base
   end
 
   view :support do
-    field :username
+    include_view :with_connections_count
+    include_view :with_subscribe_status
+
+    fields :username, :profile_picture_url
 
     field :name do |user, _options|
       user.name
@@ -223,28 +229,12 @@ class API::TalentBlueprint < Blueprinter::Base
       Talent.max_supply.to_s
     end
 
-    field :supporters_count do |user, options|
-      user.talent&.supporters_count
-    end
-
     field :market_cap do |user, options|
       user.talent&.market_cap
     end
 
     field :market_cap_variance do |user, options|
       user.talent&.market_cap_variance
-    end
-
-    field :supporting_count do |user, _options|
-      user.portfolio.count
-    end
-
-    field :subscribers_count do |user, _options|
-      user.subscribers.count
-    end
-
-    field :subscribing_count do |user, _options|
-      user.users_subscribing.count
     end
 
     field :goals_count do |user, _options|

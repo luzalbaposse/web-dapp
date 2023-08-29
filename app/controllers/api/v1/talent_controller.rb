@@ -56,13 +56,15 @@ class API::V1::TalentController < ApplicationController
   end
 
   def update
-    if !current_user.admin? && !current_user.moderator? && talent.id != current_acting_user.talent&.id
+    return render json: {error: "You need to be logged in,"}, status: :unauthorized if !current_user
+
+    if !current_user&.admin? && !current_user.moderator? && talent.id != current_acting_user&.talent&.id
       Rollbar.error(
         "You don't have access to perform that action",
-        admin: current_user.admin?,
-        moderator: current_user.moderator?,
-        talent_id: talent.id,
-        acting_talent_id: current_acting_user.talent&.id,
+        admin: current_user&.admin?,
+        moderator: current_user&.moderator?,
+        talent_id: talent&.id,
+        acting_talent_id: current_acting_user&.talent&.id,
         talent_params: talent_params.to_h,
         user_params: user_params.to_h,
         tag_params: tag_params.to_h,
