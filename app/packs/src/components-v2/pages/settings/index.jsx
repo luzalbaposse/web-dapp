@@ -46,6 +46,7 @@ export const SettingsPage = ({ isMobile }) => {
         goToPage={nav.goToPage}
         openHamburguer={nav.openHamburguer}
         isHamburguerOpen={nav.isHamburguerOpen}
+        page={nav.page}
       />
       {content}
     </PageContainer>
