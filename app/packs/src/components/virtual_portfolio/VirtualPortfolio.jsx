@@ -555,7 +555,7 @@ const VirtualPortfolio = ({ talent, railsContext }) => {
   const floatToDollar = balance => {
     const value = parseAndCommify(balance.toFixed(2));
 
-    return `$${value}`;
+    return `${value} $TAL`;
   };
 
   const changeTab = selectedTab => {
