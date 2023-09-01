@@ -1,6 +1,13 @@
 class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
   before_action :internal_only, only: [:following, :overview]
-  before_action :authenticated_only, only: [:following]
+  before_action :authenticated_only, only: [
+    :following,
+    :update_profile,
+    :update_about,
+    :update_experience,
+    :update_account
+  ]
+  before_action :can_update, only: [:update_profile, :update_about, :update_experience, :update_account]
 
   def show
     response_body = {
@@ -92,6 +99,41 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
     render json: response_body, status: :ok
   end
 
+  def update_profile
+    permitted_user_params = user_params.permit(:display_name)
+    permitted_talent_params = talent_params.permit(profile: [:location, :headline], profile_picture_data: {})
+
+    API::Users::UpdateProfile.new(user).call(
+      user_params: permitted_user_params.to_h,
+      talent_params: permitted_talent_params.to_h
+    )
+
+    render json: {}, status: :ok
+  end
+
+  def update_about
+    permitted_talent_params = talent_params.permit(
+      profile: [:about, :website, :twitter, :linkedin, :figma, :behance, :youtube, :github, :dribbble, :farcaster]
+    )
+
+    API::Users::UpdateAbout.new(user).call(
+      talent_params: permitted_talent_params.to_h,
+      tag_params: tag_params.to_h
+    )
+
+    render json: {}, status: :ok
+  end
+
+  def update_account
+    permitted_user_params = user_params.permit(
+      :username, :email, :current_password, :new_password, :legal_first_name, :legal_last_name
+    )
+
+    API::Users::UpdateAccount.new(user).call(user_params: permitted_user_params.to_h)
+
+    render json: {}, status: :ok
+  end
+
   # ------------ temporary calls for Profile V1.0 ------------
   def overview
     response_body = {
@@ -121,7 +163,7 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
 
   def support
     response_body = {
-      talent: API::TalentBlueprint.render_as_json(user, view: :support)
+      talent: API::TalentBlueprint.render_as_json(user, view: :support, current_user_id: current_user&.id)
     }
 
     log_request(response_body, :ok)
@@ -161,5 +203,69 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
 
   def filter_params
     params.permit(ids: [])
+  end
+
+  def user_params
+    params.require(:user).permit(
+      :display_name,
+      :username,
+      :ens_domain,
+      :legal_first_name,
+      :legal_last_name
+    )
+  end
+
+  def talent_params
+    params.require(:talent).permit(
+      :open_to_job_offers,
+      :verified,
+      :with_persona_id,
+      profile: [
+        :pronouns,
+        :occupation,
+        :location,
+        :headline,
+        :website,
+        :video,
+        :wallet_address,
+        :email,
+        :linkedin,
+        :twitter,
+        :telegram,
+        :lens,
+        :mastodon,
+        :discord,
+        :github,
+        :gender,
+        :ethnicity,
+        :nationality,
+        :based_in,
+        highlighted_headline_words_index: []
+      ],
+      profile_picture_data: {},
+      banner_data: {}
+    )
+  end
+
+  def tag_params
+    params.permit(tags: [])
+  end
+
+  def can_update
+    return render json: {error: "You need to be logged in,"}, status: :unauthorized if !current_user
+
+    if !current_user.admin? && !current_user.moderator? && user.id != current_user.id
+      Rollbar.error(
+        "You don't have access to perform that action",
+        admin: current_user&.admin?,
+        moderator: current_user&.moderator?,
+        talent_id: user.talent&.id,
+        acting_talent_id: current_user&.talent&.id,
+        talent_params: talent_params.to_h,
+        user_params: user_params.to_h,
+        tag_params: tag_params.to_h
+      )
+      render json: {error: "You don't have access to perform that action"}, status: :unauthorized
+    end
   end
 end

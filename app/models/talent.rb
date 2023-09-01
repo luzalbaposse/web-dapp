@@ -24,6 +24,12 @@ class Talent < ApplicationRecord
     video
     wallet_address
     website
+    figma
+    behance
+    youtube
+    dribbble
+    farcaster
+    about
     highlighted_headline_words_index
   ], coder: JSON
 

@@ -1,17 +1,15 @@
 export const DROPDOWN_OPTIONS = [
   { value: "All", type: null },
-  { value: "Sponsor", type: "sponsor" },
-  { value: "Sponsored", type: "sponsored" },
   {
-    value: "Mutual Stake",
-    type: "mutual_stake"
+    value: "Mutual Supporting",
+    type: "mutual_supporting"
   },
-  { value: "Staker", type: "staker" },
-  { value: "Staking", type: "staking" },
+  { value: "Supporters", type: "supporter" },
+  { value: "Supporting", type: "supporting" },
   {
     value: "Mutual Subscription",
     type: "mutual_subscription"
   },
-  { value: "Subscriber", type: "subscriber" },
+  { value: "Subscribers", type: "subscriber" },
   { value: "Subscribing", type: "subscribing" }
 ];
