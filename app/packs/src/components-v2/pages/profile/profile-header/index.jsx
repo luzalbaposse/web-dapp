@@ -97,7 +97,7 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
 
   const callback = (_username, subscription) => {
     if (subscription === "subscribe") {
-      setLocalProfile({ ...localProfile, subscribed_status: "Cancel Request" });
+      setLocalProfile({ ...localProfile, subscribed_status: "Cancel request" });
     } else {
       setLocalProfile({ ...localProfile, subscribed_status: "Subscribe" });
     }

@@ -35,13 +35,20 @@ export const SubscriptionButton = ({ username, subscribedStatus, callback }) => 
     [username, callback]
   );
 
-  const buttonOnClick = useCallback(() => {
-    if (subscribedStatus == "Unsubscribe" || subscribedStatus == "Cancel Request") {
-      unsubscribe(username);
-    } else {
-      subscribe(username);
-    }
-  }, [subscribedStatus, callback]);
+  const buttonOnClick = useCallback(
+    e => {
+      e.preventDefault();
 
-  return <Button hierarchy="secondary" size="small" text={subscribedStatus} onClick={buttonOnClick} />;
+      if (subscribedStatus == "Unsubscribe" || subscribedStatus == "Cancel request") {
+        unsubscribe(username);
+      } else if (subscribedStatus == "Visit profile") {
+        window.location.href = `/u/${username}`;
+      } else {
+        subscribe(username);
+      }
+    },
+    [subscribedStatus, callback]
+  );
+
+  return <Button hierarchy="secondary" size="small" text={subscribedStatus} onClick={e => buttonOnClick(e)} />;
 };

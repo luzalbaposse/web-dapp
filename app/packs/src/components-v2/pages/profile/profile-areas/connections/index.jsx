@@ -129,7 +129,7 @@ export const Connections = ({ currentUser, urlData }) => {
 
   const subscriptionCallback = (_username, subscription) => {
     if (subscription === "subscribe") {
-      setTalent({ ...talent, subscribed_status: "Cancel Request" });
+      setTalent({ ...talent, subscribed_status: "Cancel request" });
     } else {
       setTalent({ ...talent, subscribed_status: "Subscribe" });
     }
