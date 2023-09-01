@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useEditProfileStore } from "src/contexts/state";
 import { Container, AvatarRow, UploadContainer, UploadButtons, InfoRow } from "./styled";
 import { Avatar, Button, Input, TextArea, Typography } from "@talentprotocol/design-system";
+import { editProfileService } from "src/api/edit-profile";
 
 export const ProfileForm = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -10,6 +11,10 @@ export const ProfileForm = () => {
     setIsLoading(false);
   }, [setIsLoading]);
   const { profile } = useEditProfileStore();
+  const updateProfile = useCallback(() => {
+    editProfileService
+      .editProfile(profile);
+  }, [profile]);
   return (
     <Container>
       <AvatarRow>
@@ -20,7 +25,6 @@ export const ProfileForm = () => {
           </Typography>
           <UploadButtons>
             <Button hierarchy="primary" size="small" text="Upload Profile Picture" />
-            <Button hierarchy="secondary" size="small" text="Delete" />
           </UploadButtons>
         </UploadContainer>
       </AvatarRow>
@@ -38,7 +42,7 @@ export const ProfileForm = () => {
         placeholder="This is the first thing people read about you after your name. Make it count 💫"
         defaultValue={profile?.profile.headline}
       />
-      {!isLoading && createPortal(<Button hierarchy="primary" size="small" text="Save" />, document.getElementById("save-button"))}
+      {!isLoading && createPortal(<Button hierarchy="primary" size="small" text="Save" onClick={updateProfile} />, document.getElementById("save-button"))}
     </Container>
   );
 };

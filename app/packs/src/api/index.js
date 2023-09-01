@@ -14,3 +14,4 @@ export * from "./quests";
 export * from "./invited_talents";
 export * from "./career-update";
 export * from "./goals";
+export * from "./edit-profile";
