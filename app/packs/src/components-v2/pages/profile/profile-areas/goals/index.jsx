@@ -53,7 +53,7 @@ export const Goals = ({ urlData, currentUser }) => {
               key={goal.id}
               goal={goal}
               openAddGoalModal={addGoalModalState.openModal}
-              userId={currentUser?.username}
+              careerGoalId={currentUser?.career_goal_id}
               isOwner={urlData?.profileUsername === currentUser?.username}
             />
           ))
