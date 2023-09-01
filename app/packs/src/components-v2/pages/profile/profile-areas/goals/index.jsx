@@ -59,13 +59,10 @@ export const Goals = ({ urlData, currentUser }) => {
           ))
         : (currentUser?.username === urlData?.profileUsername && (
             <EmptyStateContainer>
-              <Icon name="binoculars" size={64} color="primary04" />
+              <Icon name="target" size={64} color="primary04" />
               <Typography specs={{ type: "regular", variant: "p1" }} color="primary04">
-                Setting goals is a powerful way to turn your dreams into reality. By defining your aspirations, you'll
-                have a clear direction, purpose, and something to strive for. Other community members are here and eager
-                to help you reach your goals. Collaboration and support from the community can make all the difference.
-                So, dream big and let's work together to make those dreams come true. I'm here to support you all the
-                way!
+                Setting a career goal is your spotlight moment! It's simple, impactful, and the key to meaningful
+                interactions with other members. Why wait? Share your goal and get the support you need to succeed.
               </Typography>
               <EmptyStateButtonContainer>
                 <Button
@@ -78,11 +75,10 @@ export const Goals = ({ urlData, currentUser }) => {
             </EmptyStateContainer>
           )) || (
             <EmptyStateContainer>
-              <Icon name="binoculars" size={64} color="primary04" />
+              <Icon name="target" size={64} color="primary04" />
               <EmptyStateCopy specs={{ type: "regular", variant: "p1" }} color="primary04">
-                Everyone is on a unique journey, and it seems like <b>{urlData?.profileUsername}</b> is still defining
-                their next steps. Check back soon to discover their goals and perhaps find exciting opportunities for
-                collaboration and inspiration! If you have a suggestion for them{" "}
+                Patience, my friend! <b>{urlData?.profileUsername}</b> is still working on their first goal. Keep an eye
+                out - you might just find the perfect chance to collaborate. Or drop them a suggestion directly.{" "}
                 <TextLink href={`/messages?user=${urlData?.profileUsername}`} text="reach out directly" />.
               </EmptyStateCopy>
             </EmptyStateContainer>
