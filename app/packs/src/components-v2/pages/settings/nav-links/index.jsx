@@ -27,13 +27,13 @@ export const NavLinks = ({ goToPage, page, className }) => (
         Account
       </Typography>
     </Link>
-    <Link onClick={() => goToPage("notifications")}>
+    {/* <Link onClick={() => goToPage("notifications")}>
       <Typography
         specs={{ type: "medium", variant: "label1" }}
         color={page === "Notifications" ? "primary01" : "primary03"}
       >
         Notifications
       </Typography>
-    </Link>
+    </Link> */}
   </Container>
 );
