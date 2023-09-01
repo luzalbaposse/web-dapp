@@ -1,12 +1,19 @@
-import React from "react";
-import { ConfirmPasswordContainer, Container, DeleteAccountContainer, TagsContainer } from "./styled";
+import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Input, Tag, Typography, Button } from "@talentprotocol/design-system";
+import { ConfirmPasswordContainer, Container, DeleteAccountContainer, TagsContainer } from "./styled";
+import { useEditProfileStore } from "src/contexts/state";
 
 export const AccountForm = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    setIsLoading(false);
+  }, [setIsLoading]);
+  const { profile } = useEditProfileStore();
   return (
     <Container>
-      <Input label="Username" />
-      <Input label="Email Address" />
+      <Input label="Username" defaultValue={profile?.username} />
+      <Input label="Email Address" defaultValue={profile?.user.email} />
       <Typography specs={{ type: "medium", variant: "p1" }} color="primary01">
         Change Password
       </Typography>
@@ -54,6 +61,7 @@ export const AccountForm = () => {
         </Typography>
         <Button hierarchy="danger" size="small" text="Delete Account" />
       </DeleteAccountContainer>
+      {!isLoading && createPortal(<Button hierarchy="primary" size="small" text="Save" />, document.getElementById("save-button"))}
     </Container>
   );
 };

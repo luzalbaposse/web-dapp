@@ -23,6 +23,7 @@ export const LocalHeaderMobile = ({ username, goToPage, openHamburguer, isHambur
             size="small"
             onClick={openHamburguer}
           />
+          <div id="save-button"></div>
         </InnerHeaderContainer>
       </HeaderContainer> (
         <HamburguerContainer ref={hamburguerRef} className={!isHamburguerOpen ? "animate__animated animate__slideOutLeft" : "animate__animated animate__slideInLeft"}>

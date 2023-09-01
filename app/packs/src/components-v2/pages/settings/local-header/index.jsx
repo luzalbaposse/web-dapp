@@ -7,6 +7,7 @@ export const LocalHeader = ({ username }) => {
     <HeaderContainer>
       <InnerHeaderContainer>
         <TextLink color="primary01" href={`/u/${username}`} text={"Edit Profile"} leftIcon="back-arrow" size="small" />
+        <div id="save-button"></div>
       </InnerHeaderContainer>
     </HeaderContainer>
   );

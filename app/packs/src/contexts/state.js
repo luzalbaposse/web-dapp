@@ -3,6 +3,7 @@ import create from "zustand";
 import { get } from "src/utils/requests";
 import { toast } from "react-toastify";
 import { talentsService } from "src/api/talents";
+import { users as usersService } from "src/api/users";
 import { careerUpdatesService } from "src/api";
 import { ToastBody } from "src/components/design_system/toasts";
 
@@ -46,6 +47,23 @@ const useProfileOverviewStore = create(set => ({
   }
 }));
 
+const useEditProfileStore = create(set => ({
+  profile: undefined,
+  fetchEditProfileInfo: async profileUsername => {
+    try {
+      const { data } = await usersService
+        .getProfile(profileUsername);
+      set({ profile: data.profile });
+    } catch (error) {
+      console.error(error);
+      window.location.href = "/home";
+    }
+  },
+  updateProfile: (newObject) => {
+    set(state => ({...state, ...newObject}))
+  }
+}));
+
 const useCareerUpdatesStore = create(set => ({
   // In the future we should put the list of career updates here and not only the one created
   careerUpdates: [],
@@ -70,5 +88,6 @@ export {
   urlStore,
   loggedInUserStore,
   useProfileOverviewStore,
-  useCareerUpdatesStore
+  useCareerUpdatesStore,
+  useEditProfileStore
 };

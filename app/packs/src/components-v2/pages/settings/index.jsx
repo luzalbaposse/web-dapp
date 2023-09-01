@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import isMobile from "is-mobile";
-import { loggedInUserStore } from "src/contexts/state";
+import { useEditProfileStore } from "src/contexts/state";
 import { DesktopColumn, DesktopPageContainer, PageContainer } from "src/components-v2/styled-containers";
 import { useUrlData } from "src/components-v2/shared-hooks/use-url-data";
 import { LocalHeader } from "./local-header";
@@ -15,7 +15,7 @@ import { LocalHeaderMobile } from "./local-header-mobile";
 
 export const SettingsPage = ({ isMobile }) => {
   const urlData = useUrlData();
-  const { currentUser, fetchCurrentUser } = loggedInUserStore();
+  const { profile, fetchEditProfileInfo } = useEditProfileStore();
   const nav = useCustomNavigation(urlData.tab, isMobile);
 
   const content = useMemo(() => {
@@ -27,17 +27,17 @@ export const SettingsPage = ({ isMobile }) => {
       case "About":
         return <AboutForm />;
       case "Account":
+        default:
         return <AccountForm />;
-      case "Notifications":
-      default:
-        return <NotificationsForm />;
+      // case "Notifications":
+      //   return <NotificationsForm />;
     }
   }, [nav.page]);
   useEffect(() => {
-    if (!currentUser) {
-      fetchCurrentUser();
+    if (!profile && urlData.profileUsername) {
+      fetchEditProfileInfo(urlData.profileUsername);
     }
-  }, []);
+  }, [urlData]);
 
   return isMobile ? (
     <PageContainer>
