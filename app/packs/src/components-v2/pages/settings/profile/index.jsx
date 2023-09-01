@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useEditProfileStore } from "src/contexts/state";
 import { Container, AvatarRow, UploadContainer, UploadButtons, InfoRow } from "./styled";
@@ -13,8 +13,25 @@ export const ProfileForm = () => {
   const { profile } = useEditProfileStore();
   const updateProfile = useCallback(() => {
     editProfileService
-      .editProfile(profile);
+      .editProfile(profile.username, {
+        user: {
+          display_name: refs.name.current.value,
+        },
+        talent: {
+          profile: {
+            location: refs.location.current.value,
+            headline: refs.headline.current.value
+          }
+        }
+      });
   }, [profile]);
+  const refs = {
+    name: useRef(),
+    location: useRef(),
+    headline: useRef(),
+  }
+
+  console.log(refs)
   return (
     <Container>
       <AvatarRow>
@@ -34,13 +51,15 @@ export const ProfileForm = () => {
           shortDescription="The name that we will generally use"
           placeholder="Pedro Pereira"
           defaultValue={profile?.user.name}
+          inputRef={refs.name}
         />
-        <Input label="Current Location" placeholder="City, Location" defaultValue={profile?.profile.location} />
+        <Input inputRef={refs.location} label="Current Location" placeholder="City, Location" defaultValue={profile?.profile.location} />
       </InfoRow>
       <TextArea
         label="Short Bio"
         placeholder="This is the first thing people read about you after your name. Make it count 💫"
         defaultValue={profile?.profile.headline}
+        textAreaRef={refs.headline}
       />
       {!isLoading && createPortal(<Button hierarchy="primary" size="small" text="Save" onClick={updateProfile} />, document.getElementById("save-button"))}
     </Container>
