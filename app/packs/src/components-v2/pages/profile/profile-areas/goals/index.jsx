@@ -78,8 +78,8 @@ export const Goals = ({ urlData, currentUser }) => {
               <Icon name="target" size={64} color="primary04" />
               <EmptyStateCopy specs={{ type: "regular", variant: "p1" }} color="primary04">
                 Patience, my friend! <b>{urlData?.profileUsername}</b> is still working on their first goal. Keep an eye
-                out - you might just find the perfect chance to collaborate. Or drop them a suggestion directly.{" "}
-                <TextLink href={`/messages?user=${urlData?.profileUsername}`} text="reach out directly" />.
+                out - you might just find the perfect chance to collaborate. Or drop them a suggestion{" "}
+                <TextLink href={`/messages?user=${urlData?.profileUsername}`} text="directly" />.
               </EmptyStateCopy>
             </EmptyStateContainer>
           )}
