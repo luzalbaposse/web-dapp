@@ -16,14 +16,11 @@ import {
 } from "./styled";
 import { ToastBody } from "src/components/design_system/toasts";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import EditJourneyModal from "src/components/profile/edit/EditJourneyModal";
-import { noop } from "lodash";
 
 dayjs.extend(customParseFormat);
 
-export const ExperiencesComponent = ({ isOwner, username }) => {
+export const ExperiencesComponent = ({ isOwner, username, openAddExperienceScreen }) => {
   const [milestones, setMilestones] = useState([]);
-  const [modalState, setModalState] = useState({ isOpen: false, milestone: null });
   useEffect(() => {
     if (!username) return;
     talentsService
@@ -70,7 +67,7 @@ export const ExperiencesComponent = ({ isOwner, username }) => {
                   size="small"
                   iconColor="primary01"
                   onClick={() => {
-                    setModalState({ isOpen: true, milestone });
+                    openAddExperienceScreen(milestone.category.toLocaleLowerCase(), milestone);
                   }}
                 />
               </EditButtonContainer>
@@ -83,13 +80,21 @@ export const ExperiencesComponent = ({ isOwner, username }) => {
       },
       [[], []]
     );
-  }, [milestones, isOwner]);
+  }, [milestones, isOwner, openAddExperienceScreen]);
   return (
     <>
       <Container>
         <MilestoneTitleRow>
           <Typography specs={{ type: "medium", variant: "p1" }}>Positions</Typography>
-          {isOwner && <Button leftIcon="add" hierarchy="secondary" size="small" iconColor="primary01" />}
+          {isOwner && (
+            <Button
+              onClick={() => openAddExperienceScreen("position")}
+              leftIcon="add"
+              hierarchy="secondary"
+              size="small"
+              iconColor="primary01"
+            />
+          )}
         </MilestoneTitleRow>
         {memoedExperiences[0]}
         {!memoedExperiences[0].length && (
@@ -99,7 +104,15 @@ export const ExperiencesComponent = ({ isOwner, username }) => {
         )}
         <MilestoneTitleRow>
           <Typography specs={{ type: "medium", variant: "p1" }}>Education</Typography>
-          {isOwner && <Button leftIcon="add" hierarchy="secondary" size="small" iconColor="primary01" />}
+          {isOwner && (
+            <Button
+              onClick={() => openAddExperienceScreen("education")}
+              leftIcon="add"
+              hierarchy="secondary"
+              size="small"
+              iconColor="primary01"
+            />
+          )}
         </MilestoneTitleRow>
         {memoedExperiences[1]}
         {!memoedExperiences[1].length && (
@@ -108,17 +121,6 @@ export const ExperiencesComponent = ({ isOwner, username }) => {
           </Typography>
         )}
       </Container>
-      {modalState.isOpen && (
-        <EditJourneyModal
-          show={modalState.isOpen}
-          hide={() => setModalState({ isOpen: false, milestone: null })}
-          setTalent={() => window.location.reload()}
-          editType="Edit"
-          journeyItem={modalState.milestone}
-          setJourneyItem={noop}
-          username={username}
-        />
-      )}
     </>
   );
 };

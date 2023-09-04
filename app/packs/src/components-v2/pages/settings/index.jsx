@@ -27,7 +27,7 @@ export const SettingsPage = ({ isMobile }) => {
       case "About":
         return <AboutForm />;
       case "Account":
-        default:
+      default:
         return <AccountForm />;
       // case "Notifications":
       //   return <NotificationsForm />;
