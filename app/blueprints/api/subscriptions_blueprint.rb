@@ -62,7 +62,7 @@ class API::SubscriptionsBlueprint < Blueprinter::Base
       if subscription.subscribed_back_status == "accepted"
         "Visit profile"
       elsif subscription.subscribed_back_status === "no_request"
-        "Subcribe back"
+        "Subscribe back"
       elsif subscription.subscribed_back_status === "pending"
         "Cancel request"
       end

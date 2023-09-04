@@ -112,7 +112,7 @@ class API::TalentBlueprint < Blueprinter::Base
           "Cancel request"
         end
       elsif !!user.active_subscribing.pluck(:user_id)&.include?(options[:current_user_id])
-        "Subcribe back"
+        "Subscribe back"
       else
         "Subscribe"
       end
