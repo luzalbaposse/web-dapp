@@ -9,7 +9,7 @@ export const LeaderboardWidget = ({ user }) => {
   const [leaderboardData, setLeaderboardData] = useState([]);
   useEffect(() => {
     leaderboardService
-      .getExperiencePointsLeaderboard()
+      .getExperiencePointsLeaderboard(5)
       .then(({ data }) => {
         setLeaderboardData(data.leaderboard);
         setIsLoading(false);
@@ -30,7 +30,7 @@ export const LeaderboardWidget = ({ user }) => {
           </TitleContainer>
         )}
         <ListContainer>
-          {leaderboardData.results.slice(0, 5).map((entry, index) => (
+          {leaderboardData.results.map((entry, index) => (
             <Entry key={entry.username}>
               <EntryIdentification>
                 <Typography specs={{ variant: "label2", type: "medium" }} color="primary01">
