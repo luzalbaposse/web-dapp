@@ -51,16 +51,15 @@ const useEditProfileStore = create(set => ({
   profile: undefined,
   fetchEditProfileInfo: async profileUsername => {
     try {
-      const { data } = await usersService
-        .getProfile(profileUsername);
+      const { data } = await usersService.getProfile(profileUsername);
       set({ profile: data.profile });
     } catch (error) {
       console.error(error);
       window.location.href = "/home";
     }
   },
-  updateProfile: (newObject) => {
-    set(state => ({...state, ...newObject}))
+  updateProfileState: newObject => {
+    set(state => ({ profile: { ...state, ...newObject } }));
   }
 }));
 

@@ -14,6 +14,7 @@ export const ConfirmPasswordContainer = styled.div`
 
 export const TagsContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
   gap: 4px;
   margin-top: 8px;
 `;
