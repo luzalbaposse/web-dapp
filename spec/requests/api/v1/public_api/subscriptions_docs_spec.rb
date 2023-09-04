@@ -22,10 +22,15 @@ RSpec.describe "Subscriptions API" do
 
       let(:user_1) { create :user }
       let(:user_2) { create :user }
+      let(:user_3) { create :user }
 
       before do
-        create :subscription, user: talent_user, subscriber: user_1
-        create :subscription, user: talent_user, subscriber: user_2
+        stub_const("API::V1::PublicAPI::APIController::INTERNAL_DOMAINS", ["talentprotocol.com"])
+        host! "app.talentprotocol.com"
+
+        create :subscription, user: talent_user, subscriber: user_1, subscribed_back_status: "accepted"
+        create :subscription, user: talent_user, subscriber: user_2, subscribed_back_status: "no_request"
+        create :subscription, user: talent_user, subscriber: user_3, subscribed_back_status: "pending"
       end
 
       response "200", "talent found", save_example: true do
@@ -51,10 +56,10 @@ RSpec.describe "Subscriptions API" do
           returned_usernames = returned_subscribers.map { |f| f["username"] }
           returned_pagination = data["pagination"]
           aggregate_failures do
-            expect(data["subscribers"].count).to eq 2
-            expect(returned_usernames).to match_array([user_1.username, user_2.username])
+            expect(data["subscribers"].count).to eq 3
+            expect(returned_usernames).to match_array([user_1.username, user_2.username, user_3.username])
 
-            expect(returned_pagination["total"]).to eq 2
+            expect(returned_pagination["total"]).to eq 3
             expect(returned_pagination["cursor"]).to eq nil
           end
         end

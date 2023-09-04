@@ -20,6 +20,7 @@ module Subscriptions
     end
 
     def opposite_subscription_status
+      return "no_request" unless subscription.persisted?
       return "pending" if subscription.pending?
       "accepted"
     end

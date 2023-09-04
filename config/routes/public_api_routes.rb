@@ -12,6 +12,10 @@ module PublicAPIRoutes
               get :about, on: :collection
               get :support, on: :collection
               get :milestones, on: :collection
+              patch :update_profile, on: :collection
+              patch :update_about, on: :collection
+              patch :update_experience, on: :collection
+              patch :update_account, on: :collection
             end
             resources :supporters, only: [:index]
             resources :activities, only: [:index] do
