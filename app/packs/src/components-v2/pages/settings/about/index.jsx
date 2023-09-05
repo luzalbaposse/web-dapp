@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { createPortal } from "react-dom";
-import { Button, Input, TextArea, Typography } from "@talentprotocol/design-system";
+import { Button, Input, TagsInput, TextArea, Typography } from "@talentprotocol/design-system";
 import { Container, LinksArea, LinksRow } from "./styled";
 import { useEditProfileStore } from "src/contexts/state";
 import { editProfileService } from "src/api/edit-profile";
@@ -54,7 +54,7 @@ export const AboutForm = () => {
   useEffect(() => {
     setIsLoading(false);
   }, [setIsLoading]);
-  return (
+  return !isLoading && !!profile && (
     <Container>
       <TextArea
         textAreaRef={refs.pitch}
@@ -65,7 +65,7 @@ export const AboutForm = () => {
       <Typography specs={{ type: "medium", variant: "p1" }} color="primary01">
         On The Web
       </Typography>
-      <div>Insert tags component here</div>
+      <TagsInput onNewQueryTerm={() => {}} suggestions={[]} label="Tags" placeholder="Search skills, interests, roles" description="Min 3, up to 10" defaultTags={profile?.tags.map(tag => tag.description)} />
       <LinksArea>
         <LinksRow>
           <Input
