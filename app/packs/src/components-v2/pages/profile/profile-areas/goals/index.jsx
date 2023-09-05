@@ -85,7 +85,7 @@ export const Goals = ({ urlData, currentUser }) => {
           )}
       <AddGoalModal
         {...addGoalModalState}
-        talent={{ id: currentUser.talent_id, career_goal: { id: currentUser.career_goal_id } }}
+        talent={{ id: currentUser?.talent_id, career_goal: { id: currentUser?.career_goal_id } }}
       />
     </Container>
   );

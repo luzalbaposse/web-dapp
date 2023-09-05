@@ -59,11 +59,11 @@ export const Updates = ({ urlData, currentUser }) => {
             id: careerUpdate.id,
             type: "Activities::CareerUpdate",
             origin_user: {
-              id: currentUser.id,
-              name: currentUser.name,
-              profile_picture_url: currentUser.profile_picture_url,
-              username: currentUser.username,
-              verified: currentUser.verified
+              id: currentUser?.id,
+              name: currentUser?.name,
+              profile_picture_url: currentUser?.profile_picture_url,
+              username: currentUser?.username,
+              verified: currentUser?.verified
             }
           },
           ...data.activities
@@ -116,7 +116,9 @@ export const Updates = ({ urlData, currentUser }) => {
           <Button hierarchy="primary" size="medium" text="Write Update" onClick={() => modalState.openModal()} />
         </EmptyStateContainer>
       )}
-      <SendCareerUpdateModalV2 isOpen={modalState.isOpen} closeModal={modalState.closeModal} profile={currentUser} />
+      {urlData?.profileUsername === currentUser?.username && (
+        <SendCareerUpdateModalV2 isOpen={modalState.isOpen} closeModal={modalState.closeModal} profile={currentUser} />
+      )}
     </Container>
   );
 };

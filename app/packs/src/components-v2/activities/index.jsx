@@ -117,26 +117,28 @@ export const Activities = ({ data, isLoading, loadMore, filter, profileUsername 
                   <ActivityContainer>
                     <Activity content={content} originUser={update.origin_user} targetUser={update.target_user} />
                   </ActivityContainer>
-                  {profileUsername !== update.origin_user.username && update.type === "Activities::CareerUpdate" && (
-                    <ReplyArea>
-                      <Input
-                        placeholder="Reply directly..."
-                        inputRef={inputRefs[index]}
-                        onChange={() => {
-                          onInputChange(inputRefs[index], index);
-                        }}
-                        onEnterCallback={() => sendMessage(update, inputRefs[index])}
-                      />
-                      <Button
-                        hierarchy="secondary"
-                        size="medium"
-                        leftIcon={"send"}
-                        iconColor={"primary01"}
-                        isDisabled={hasSentMessage[update.id]}
-                        onClick={() => sendMessage(update, inputRefs[index])}
-                      />
-                    </ReplyArea>
-                  )}
+                  {profileUsername &&
+                    profileUsername !== update.origin_user.username &&
+                    update.type === "Activities::CareerUpdate" && (
+                      <ReplyArea>
+                        <Input
+                          placeholder="Reply directly..."
+                          inputRef={inputRefs[index]}
+                          onChange={() => {
+                            onInputChange(inputRefs[index], index);
+                          }}
+                          onEnterCallback={() => sendMessage(update, inputRefs[index])}
+                        />
+                        <Button
+                          hierarchy="secondary"
+                          size="medium"
+                          leftIcon={"send"}
+                          iconColor={"primary01"}
+                          isDisabled={hasSentMessage[update.id]}
+                          onClick={() => sendMessage(update, inputRefs[index])}
+                        />
+                      </ReplyArea>
+                    )}
                 </UpdateContent>
               </Update>
             );

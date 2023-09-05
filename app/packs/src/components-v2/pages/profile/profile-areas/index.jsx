@@ -29,7 +29,7 @@ export const ProfileAreas = ({ currentUser, railsContext, urlData }) => {
   }, [withUpdatesTab]);
 
   useEffect(() => {
-    if (!profileOverview || !currentUser) return;
+    if (!profileOverview) return;
     const params = new URL(document.location).searchParams;
     const selectedTab = params.get("tab")?.toLowerCase();
     if (selectedTab) {
@@ -41,7 +41,7 @@ export const ProfileAreas = ({ currentUser, railsContext, urlData }) => {
       }
     }
     setLoading(false);
-  }, [tabsState.selectElement, profileOverview, currentUser]);
+  }, [tabsState.selectElement, profileOverview]);
 
   return !profileOverview ? (
     <></>
