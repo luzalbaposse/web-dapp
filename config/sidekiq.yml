@@ -57,3 +57,7 @@
     send_subscription_reminder:
       cron: "0 10 * * *" # Runs once every day at 10am
       class: EmailReminders::SendSubscriptionRequestEmailJob
+    upload_galxe_wallet_addresses_job:
+      cron: "0 */4 * * *" # Runs every four hours
+      class: Galxe::UploadWalletAddressesJob
+      enabled: <%= ENV["ENABLE_GALXE_JOBS"] %>
