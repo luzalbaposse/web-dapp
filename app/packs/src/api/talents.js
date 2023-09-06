@@ -20,6 +20,10 @@ const unsubscribe = username => axios.delete(`/api/v1/subscriptions?user_id=${us
 
 const getMilestones = username => axios.get(`/api/v1/talents/milestones?id=${username}`);
 
+const createMilestone = (talentId, milestone) => axios.post(`/api/v1/talent/${talentId}/milestones`, milestone);
+
+const updateMilestone = (talentId, milestone) => axios.patch(`/api/v1/talent/${talentId}/milestones/${milestone.id}`, milestone);
+
 export const talentsService = {
   getTalent,
   getCareerUpdates,
@@ -30,5 +34,7 @@ export const talentsService = {
   getSupportData,
   sendSubscribeRequest,
   unsubscribe,
-  getMilestones
+  getMilestones,
+  createMilestone,
+  updateMilestone
 };
