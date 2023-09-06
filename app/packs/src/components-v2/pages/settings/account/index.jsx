@@ -9,29 +9,34 @@ import { ToastBody } from "src/components/design_system/toasts";
 
 export const AccountForm = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [isHiddingPassword, setIsHiddingPassword] = useState(true);
   const { profile, updateProfileState } = useEditProfileStore();
   const refs = {
     username: useRef(),
     email: useRef(),
     newPassword: useRef(),
-    confirmPassword: useRef()
+    currentPassword: useRef()
   };
   const updateAccount = useCallback(() => {
     editProfileService
       .editAccount(profile?.username, {
-        ...profile
-        // profile: {
-        //   ...profile?.profile,
-        //   website: refs.website.current.value,
-        //   twitter: refs.twitter.current.value,
-        //   linkedin: refs.linkedin.current.value,
-        //   figma: refs.figma.current.value,
-        //   behance: refs.behance.current.value,
-        //   youtube: refs.youtube.current.value
-        // }
+        user: {
+          username: refs.username.current.value,
+          email: refs.email.current.value,
+          current_password: refs.currentPassword.current.value,
+          new_password: refs.newPassword.current.value
+        }
       })
       .then(() => {
-        updateProfileState({});
+        updateProfileState({
+          ...profile,
+          user: {
+            ...profile.user,
+            username: refs.username.current.value,
+            email: refs.email.current.value
+          },
+          username: refs.username.current.value,
+        })
       })
       .catch(err => {
         console.error(err);
@@ -49,19 +54,23 @@ export const AccountForm = () => {
         Change Password
       </Typography>
       <Input
-        inputRef={refs.newPassword}
+        inputRef={refs.currentPassword}
         label="New Password"
+        type={isHiddingPassword ? "password" : "text"}
         placeholder="******"
-        rightIcon="eye-disabled"
+        rightIcon={isHiddingPassword ? "eye-disabled" : "eye"}
+        rightIconCallback={() => setIsHiddingPassword(!isHiddingPassword)}
         iconColor="primary03"
       />
       <ConfirmPasswordContainer>
         <Input
-          inputRef={refs.confirmPassword}
+          inputRef={refs.newPassword}
           label="Confirm Password"
+          type={isHiddingPassword ? "password" : "text"}
           placeholder="******"
-          rightIcon="eye-disabled"
+          rightIcon={isHiddingPassword ? "eye-disabled" : "eye"}
           iconColor="primary03"
+          rightIconCallback={() => setIsHiddingPassword(!isHiddingPassword)}
         />
         <TagsContainer>
           <Tag backgroundColor="bg01" label="Number" size="small" borderColor="surfaceHover02" textColor="pimary01" />
