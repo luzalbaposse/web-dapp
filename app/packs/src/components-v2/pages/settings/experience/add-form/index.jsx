@@ -1,6 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { Container, Row } from "./styled";
-import { Checkbox, Dropdown, Input } from "@talentprotocol/design-system";
+import { Button, Checkbox, Dropdown, Input } from "@talentprotocol/design-system";
+import { createPortal } from "react-dom";
+import { talentsService } from "../../../../../api/talents";
+import { useEditProfileStore } from "src/contexts/state";
+import { ToastBody } from "src/components/design_system/toasts";
+import { toast } from "react-toastify";
 
 const MONTHS = [
   { value: "January" },
@@ -18,7 +23,29 @@ const MONTHS = [
 ];
 const YEARS = new Array(200).fill(0).map((_, i) => ({ value: 1907 + i }));
 
-export const AddExperienceForm = ({ category, milestone }) => {
+export const AddExperienceForm = ({ username, category, milestone }) => {
+  const { profile } = useEditProfileStore();
+  const storeMilestone = useCallback(() => {
+    if (!milestone) {
+      talentsService.updateMilestone(profile.id, milestone)
+        .then(({ data }) => {
+
+        })
+        .catch(err => {
+          console.error(err);
+          toast.error(<ToastBody heading="Error" body={"Something happened while updating your profile"} />);
+        });
+    } else {
+      talentsService.createMilestone(profile.id, milestone)
+      .then(({ data }) => {
+
+      })
+      .catch(err => {
+        console.error(err);
+        toast.error(<ToastBody heading="Error" body={"Something happened while updating your profile"} />);
+      });
+    }
+  }, [username, milestone, profile]);
   const refs = {
     title: useRef(null),
     organization: useRef(null),
@@ -83,6 +110,10 @@ export const AddExperienceForm = ({ category, milestone }) => {
           placeholder="Year"
         />
       </Row>
+      {createPortal(
+        <Button hierarchy="primary" size="small" text="Save" onClick={storeMilestone} />,
+        document.getElementById("save-button")
+      )}
     </Container>
   );
 };

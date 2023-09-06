@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { createPortal } from "react-dom";
 import { Container } from "./styled";
 import { ExperiencesComponent } from "src/components-v2/experiences-component";
-import { Button } from "@talentprotocol/design-system";
 import { AddExperienceForm } from "./add-form";
 
 export const ExperienceForm = ({ username }) => {
@@ -24,15 +22,7 @@ export const ExperienceForm = ({ username }) => {
       {!isAdding && (
         <ExperiencesComponent username={username} isOwner openAddExperienceScreen={openAddExperienceScreen} />
       )}
-      {!isLoading && isAdding && (
-        <>
-          <AddExperienceForm category={currentExperience} milestone={currentExperience} />
-          {createPortal(
-            <Button hierarchy="primary" size="small" text="Save" />,
-            document.getElementById("save-button")
-          )}
-        </>
-      )}
+      {!isLoading && isAdding && <AddExperienceForm category={currentExperience} milestone={currentExperience} username={username} />}
     </Container>
   );
 };
