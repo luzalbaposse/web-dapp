@@ -22,6 +22,9 @@ module PublicAPIRoutes
               get :of_user, on: :collection
             end
             resources :connections, only: [:index]
+            resources :experience_rewards, only: [:index], type: :uuid do
+              post :claim
+            end
             resources :career_updates, only: [:index, :create]
             resources :sponsorships, only: [:create]
             get "sponsorships", to: "sponsorships#index"
