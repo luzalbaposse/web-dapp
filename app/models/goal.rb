@@ -32,14 +32,4 @@ class Goal < ApplicationRecord
   def to_s
     "#{due_date}: #{description}"
   end
-
-  update_index("talents") { career_goal.talent }
-
-  after_save :touch_talent
-
-  private
-
-  def touch_talent
-    career_goal.talent.touch
-  end
 end

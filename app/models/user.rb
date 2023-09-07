@@ -68,11 +68,6 @@ class User < ApplicationRecord
   has_many :memberships
   has_many :organizations, through: :memberships
 
-  # Elasticsearch index update
-  update_index("talents", :talent)
-
-  after_save :touch_talent
-
   VALID_ROLES = ["admin", "basic", "moderator"].freeze
   REQUIRED_PROFILE_FIELDS = [
     {
@@ -482,10 +477,6 @@ class User < ApplicationRecord
     if !valid
       errors.add(:notification_preferences, "Invalid notification preferences.")
     end
-  end
-
-  def touch_talent
-    talent.touch if talent.present?
   end
 
   def teams

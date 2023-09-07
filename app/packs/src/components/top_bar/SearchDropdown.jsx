@@ -190,12 +190,12 @@ const TalentDropdownItem = ({ talent }) => {
   return (
     <Dropdown.Item
       className="align-items-center d-flex search-dropdown-item"
-      href={`/u/${talent.user.username}`}
+      href={`/u/${talent.username}`}
       key={talent.id}
     >
       <TalentProfilePicture className="mr-2" height={32} src={talent.profilePictureUrl} />
       <P2 className="mb-0 text-primary-01" medium>
-        {talent.user.name}
+        {talent.name}
       </P2>
     </Dropdown.Item>
   );
