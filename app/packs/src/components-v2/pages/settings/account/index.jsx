@@ -55,7 +55,7 @@ export const AccountForm = () => {
       </Typography>
       <Input
         inputRef={refs.currentPassword}
-        label="New Password"
+        label="Current Password"
         type={isHiddingPassword ? "password" : "text"}
         placeholder="******"
         rightIcon={isHiddingPassword ? "eye-disabled" : "eye"}
@@ -65,7 +65,7 @@ export const AccountForm = () => {
       <ConfirmPasswordContainer>
         <Input
           inputRef={refs.newPassword}
-          label="Confirm Password"
+          label="New Password"
           type={isHiddingPassword ? "password" : "text"}
           placeholder="******"
           rightIcon={isHiddingPassword ? "eye-disabled" : "eye"}
