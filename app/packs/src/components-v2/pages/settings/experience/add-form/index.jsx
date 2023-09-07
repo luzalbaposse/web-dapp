@@ -26,7 +26,7 @@ const YEARS = new Array(200).fill(0).map((_, i) => ({ value: 1907 + i }));
 export const AddExperienceForm = ({ username, category, milestone }) => {
   const { profile } = useEditProfileStore();
   const storeMilestone = useCallback(() => {
-    if (!milestone) {
+    if (milestone) {
       talentsService.updateMilestone(profile.id, milestone)
         .then(({ data }) => {
 
