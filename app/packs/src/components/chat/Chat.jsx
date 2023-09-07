@@ -54,7 +54,7 @@ const Chat = ({ chats, pagination }) => {
 
   // Get user from URL
   useEffect(() => {
-    if (activeUserUsername == "") {
+    if (!activeUserUsername) {
       return;
     }
 

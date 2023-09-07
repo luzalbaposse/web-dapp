@@ -144,7 +144,7 @@ const MessageUserList = ({
             <Search color="currentColor" className="position-absolute chat-search-icon" />
           </div>
         </div>
-        <div className="themed-border-bottom pb-2">
+        <div className="themed-border-bottom pb-2 pl-6">
           <Tabs
             selectedIndex={tabState.selectedIndex}
             onClick={changeTab}
