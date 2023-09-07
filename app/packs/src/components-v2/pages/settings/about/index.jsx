@@ -34,7 +34,8 @@ export const AboutForm = () => {
   );
   const onTagsUpdate = useCallback(tags => {
     setCurrentTags(tags);
-  }, [setCurrentTags]);
+    setTagsSuggestions([]);
+  }, [setCurrentTags, setTagsSuggestions]);
   const refs = {
     pitch: useRef(),
     website: useRef(),
