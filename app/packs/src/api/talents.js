@@ -1,4 +1,5 @@
 import axios from "axios";
+import { defaultHeaders, getAuthToken } from "./utils";
 
 const getTalent = username => axios.get(`/api/v1/talents/${username}`);
 
@@ -20,9 +21,17 @@ const unsubscribe = username => axios.delete(`/api/v1/subscriptions?user_id=${us
 
 const getMilestones = username => axios.get(`/api/v1/talents/milestones?id=${username}`);
 
-const createMilestone = (talentId, milestone) => axios.post(`/api/v1/talent/${talentId}/milestones`, milestone);
+const createMilestone = (talentId, milestone) => {
+  const baseHeaders = defaultHeaders();
+  const headers = appendCSRFToken(baseHeaders);
+  return axios.post(`/api/v1/talent/${talentId}/milestones`, milestone, {headers});
+}
 
-const updateMilestone = (talentId, milestone) => axios.patch(`/api/v1/talent/${talentId}/milestones/${milestone.id}`, milestone);
+const updateMilestone = (talentId, milestone) => {
+  const baseHeaders = defaultHeaders();
+  const headers = appendCSRFToken(baseHeaders);
+  return axios.patch(`/api/v1/talent/${talentId}/milestones/${milestone.id}`, milestone, {headers});
+}
 
 export const talentsService = {
   getTalent,
