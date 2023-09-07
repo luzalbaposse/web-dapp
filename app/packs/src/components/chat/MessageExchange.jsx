@@ -115,7 +115,7 @@ const MessageExchange = props => {
           <div className={`divider ${mode}`}></div>
         </>
       )}
-      {props.activeUserUsername !== "" && (
+      {props.activeUserUsername && (
         <ChatHeader
           username={props.username}
           profilePictureUrl={props.profilePictureUrl}
@@ -125,8 +125,8 @@ const MessageExchange = props => {
         />
       )}
       <div id="messages" className="px-3 overflow-y-scroll d-flex flex-column pb-3" style={{ height: "100%" }}>
-        {props.messages.length === 0 && props.activeUserUsername === 0 && <CommunicateFirst />}
-        {props.messages.length === 0 && props.activeUserUsername !== 0 && <EmptyMessages />}
+        {props.messages.length === 0 && props.activeUserUsername && <CommunicateFirst />}
+        {props.messages.length === 0 && !props.activeUserUsername && <EmptyMessages />}
         {props.messages.map((message, index) => (
           <Message
             key={`message_${message.id}`}
@@ -142,7 +142,7 @@ const MessageExchange = props => {
           />
         ))}
       </div>
-      {props.activeUserUsername !== "" && (
+      {props.activeUserUsername && (
         <div className="d-flex flex-row w-100 p-2" style={{ padding: "0 16px" }}>
           <TextArea
             mode={mode}

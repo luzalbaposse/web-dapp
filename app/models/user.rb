@@ -47,6 +47,9 @@ class User < ApplicationRecord
 
   # Rewards
   has_many :rewards
+  has_many :experience_points
+  has_many :experience_reward_claims, dependent: :destroy
+  has_many :merch_codes
 
   # Wallet Activity
   has_many :wallet_activities
