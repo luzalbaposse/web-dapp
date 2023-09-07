@@ -5,7 +5,6 @@
   - high
   - default
   - mailers
-  - chewy
   - low
 :limits:
   low: 1
@@ -45,9 +44,6 @@
     sync_with_persona_job:
       cron: "0 * * * *" # Runs every hour
       class: SyncWithPersonaJob
-    update_chewy_index:
-      cron: "0 * * * *" # Runs every hour
-      class: TriggerChewyIndexUpdateJob
     refresh_quests_job:
       cron: "0 13 * * *" # Runs once every day at 13:00
       class: Quests::RefreshQuestsJob

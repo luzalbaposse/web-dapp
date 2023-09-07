@@ -9,14 +9,4 @@ class CareerNeed < ApplicationRecord
   ].freeze
   MENTORING_OTHERS = "Mentoring others".freeze
   LOOKING_MENTORSHIP = "Being matched with a mentor".freeze
-
-  update_index("talents") { career_goal.talent }
-
-  after_save :touch_talent
-
-  private
-
-  def touch_talent
-    career_goal.talent.touch
-  end
 end

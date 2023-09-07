@@ -3,40 +3,29 @@ class API::V1::TalentController < ApplicationController
   PAGE_NEUTRALIZER = 1
 
   def index
-    paging, talents = Talents::ChewySearch.new(
-      filter_params: filter_params.to_h,
-      admin_or_moderator: current_user&.admin_or_moderator?,
-      size: per_page,
-      from: ((params[:page] || PAGE_NEUTRALIZER).to_i - PAGE_NEUTRALIZER) * per_page,
-      searching_user: current_user,
-      discovery_row: discovery_row
-    ).call
-
-    render json: {
-      talents: talents,
-      pagination: {
-        currentPage: paging[:current_page],
-        lastPage: paging[:last_page],
-        total: paging[:total_count]
-      }
-    }, status: :ok
-  end
-
-  # public /
-  def public_index
     talents =
-      if token_id_params.present?
-        Talent.includes(:talent_token, :user).where(talent_tokens: {contract_id: token_id_params})
+      if filter_params[:keyword].present?
+        filter_query = ActiveRecord::Base.sanitize_sql_array(["SIMILARITY(COALESCE(display_name, username), :keyword) >= 0.3", keyword: filter_params[:keyword]])
+        order_query = ActiveRecord::Base.sanitize_sql_array(["SIMILARITY(COALESCE(display_name, username), :keyword) DESC", keyword: filter_params[:keyword]])
+        User.where("profile_completeness >= ?", 0.5).where(filter_query).order(Arel.sql(order_query))
       else
-        []
+        User.where("profile_completeness >= ?", 0.5)
       end
 
-    render json: TalentBlueprint.render(
-      talents,
-      view: :normal,
-      current_user_active_subscribing: current_user_active_subscribing,
-      current_user_pending_subscribing: current_user_pending_subscribing
-    ), status: :ok
+    pagy, talents = pagy(talents, items: per_page, no_order: true)
+    talents = API::TalentBlueprint.render_as_json(talents.includes(:talent), view: :normal)
+
+    render(
+      json: {
+        talents: talents,
+        pagination: {
+          currentPage: pagy.page,
+          lastPage: pagy.last,
+          total: pagy.count
+        }
+      },
+      status: :ok
+    )
   end
 
   # Public endpoint
@@ -105,11 +94,7 @@ class API::V1::TalentController < ApplicationController
   end
 
   def filter_params
-    params.permit(:keyword, :status, :discovery_row_id, :watchlist_only)
-  end
-
-  def discovery_row
-    DiscoveryRow.find_by(id: filter_params[:discovery_row_id])
+    params.permit(:keyword, :status)
   end
 
   def user_params

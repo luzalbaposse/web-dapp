@@ -1,7 +1,5 @@
 require "active_support/testing/time_helpers"
 require "webmock/rspec"
-require "chewy"
-require "chewy/rspec"
 
 RSpec.configure do |config|
   config.include ActiveSupport::Testing::TimeHelpers
@@ -26,10 +24,6 @@ RSpec.configure do |config|
 
   if config.files_to_run.one?
     config.default_formatter = "doc"
-  end
-
-  config.before(:suite) do
-    Chewy.strategy(:bypass)
   end
 
   config.profile_examples = 5

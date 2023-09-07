@@ -5,15 +5,7 @@ import P2 from "src/components/design_system/typography/p2";
 
 import cx from "classnames";
 
-const UserTags = ({
-  tags,
-  talent_id,
-  className,
-  /*mode,*/
-  tagsSelected,
-  clickable = true,
-  onClick = null
-}) => {
+const UserTags = ({ tags, talent_id, className, tagsSelected, clickable = true, onClick = null }) => {
   const validTags = tags?.filter(item => item != "");
 
   if (validTags && validTags.length > 0) {
