@@ -1,5 +1,5 @@
 import axios from "axios";
-import { defaultHeaders, getAuthToken } from "./utils";
+import { defaultHeaders, defaultHeaders } from "./utils";
 
 const getTalent = username => axios.get(`/api/v1/talents/${username}`);
 
