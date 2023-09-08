@@ -1,11 +1,12 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { noop } from "lodash";
+import { toast } from "react-toastify";
 import { Container, Row } from "./styled";
 import { Button, Checkbox, Dropdown, Input } from "@talentprotocol/design-system";
 import { createPortal } from "react-dom";
 import { talentsService } from "../../../../../api/talents";
 import { useEditProfileStore } from "src/contexts/state";
 import { ToastBody } from "src/components/design_system/toasts";
-import { toast } from "react-toastify";
 
 const MONTHS = [
   { value: "January" },
@@ -23,27 +24,31 @@ const MONTHS = [
 ];
 const YEARS = new Array(200).fill(0).map((_, i) => ({ value: 1907 + i }));
 
-export const AddExperienceForm = ({ username, category, milestone }) => {
-  const { profile } = useEditProfileStore();
+export const AddExperienceForm = ({ username, category, milestone, backCallback }) => {
+  const { profile, updateSubFormCallback } = useEditProfileStore();
+  useEffect(() => {
+    updateSubFormCallback(backCallback);
+    return () => {
+      updateSubFormCallback(undefined);
+    };
+  }, [updateSubFormCallback]);
   const storeMilestone = useCallback(() => {
     if (milestone) {
-      talentsService.updateMilestone(profile.id, milestone)
-        .then(({ data }) => {
-
-        })
+      talentsService
+        .updateMilestone(profile.id, milestone)
+        .then(({ data }) => {})
         .catch(err => {
           console.error(err);
           toast.error(<ToastBody heading="Error" body={"Something happened while updating your profile"} />);
         });
     } else {
-      talentsService.createMilestone(profile.id, milestone)
-      .then(({ data }) => {
-
-      })
-      .catch(err => {
-        console.error(err);
-        toast.error(<ToastBody heading="Error" body={"Something happened while updating your profile"} />);
-      });
+      talentsService
+        .createMilestone(profile.id, milestone)
+        .then(({ data }) => {})
+        .catch(err => {
+          console.error(err);
+          toast.error(<ToastBody heading="Error" body={"Something happened while updating your profile"} />);
+        });
     }
   }, [username, milestone, profile]);
   const refs = {
