@@ -433,6 +433,10 @@ class User < ApplicationRecord
       .distinct
   end
 
+  def tal_balance?
+    tokens_purchased || wallet_activities.where(symbol: "TAL").any?
+  end
+
   private
 
   def email_and_password

@@ -788,4 +788,28 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe "tal_balance?" do
+    context "when the user has purchased tokens" do
+      before { user.update(tokens_purchased: true) }
+
+      it "returns true" do
+        expect(user.tal_balance?).to eq(true)
+      end
+    end
+
+    context "when the user has TAL wallet activities" do
+      before { create :wallet_activity, symbol: "TAL", user: }
+
+      it "returns true" do
+        expect(user.tal_balance?).to eq(true)
+      end
+    end
+
+    context "when the user has not purchased tokens and no TAL wallet activities" do
+      it "returns false" do
+        expect(user.tal_balance?).to eq(false)
+      end
+    end
+  end
 end
