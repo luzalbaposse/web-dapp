@@ -44,7 +44,7 @@ module API
           end
         end
 
-        user.update!(params.except(:legal_first_name, :legal_last_name, :password))
+        user.update!(params.except(:legal_first_name, :legal_last_name, :current_password, :new_password))
       end
 
       def refresh_quests

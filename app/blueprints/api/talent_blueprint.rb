@@ -18,6 +18,10 @@ class API::TalentBlueprint < Blueprinter::Base
       user.talent&.headline
     end
 
+    field :about do |user, _options|
+      user.talent&.about
+    end
+
     field :occupation do |user, _options|
       user.talent&.occupation
     end
