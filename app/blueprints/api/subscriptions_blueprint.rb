@@ -57,5 +57,15 @@ class API::SubscriptionsBlueprint < Blueprinter::Base
     field :ticker do |subscription, _options|
       subscription.subscriber.talent&.talent_token&.ticker
     end
+
+    field :subscribed_status do |subscription, _options|
+      if subscription.subscribed_back_status == "accepted"
+        "Visit profile"
+      elsif subscription.subscribed_back_status === "no_request"
+        "Subscribe back"
+      elsif subscription.subscribed_back_status === "pending"
+        "Cancel request"
+      end
+    end
   end
 end

@@ -472,7 +472,6 @@ const EditOverviewModal = ({ show, hide, profile, setProfile, mode }) => {
               onChange={e => changeUserAttribute("legal_first_name", e.target.value)}
               value={editedTalent.user.legal_first_name}
               error={validationErrors?.legal_first_name}
-              disabled={editedTalent.with_persona_id}
             />
             <P2
               className="text-primary-04"
@@ -486,7 +485,6 @@ const EditOverviewModal = ({ show, hide, profile, setProfile, mode }) => {
               onChange={e => changeUserAttribute("legal_last_name", e.target.value)}
               value={editedTalent.user.legal_last_name}
               error={validationErrors?.legal_last_name}
-              disabled={editedTalent.with_persona_id}
             />
             <P2 className="text-primary-04" text="Your legal last name that will be used when verifying your account" />
           </div>

@@ -47,6 +47,9 @@ class User < ApplicationRecord
 
   # Rewards
   has_many :rewards
+  has_many :experience_points
+  has_many :experience_reward_claims, dependent: :destroy
+  has_many :merch_codes
 
   # Wallet Activity
   has_many :wallet_activities
@@ -64,11 +67,6 @@ class User < ApplicationRecord
   # teams - there are functions go get teams and/or communities
   has_many :memberships
   has_many :organizations, through: :memberships
-
-  # Elasticsearch index update
-  update_index("talents", :talent)
-
-  after_save :touch_talent
 
   VALID_ROLES = ["admin", "basic", "moderator"].freeze
   REQUIRED_PROFILE_FIELDS = [
@@ -435,6 +433,10 @@ class User < ApplicationRecord
       .distinct
   end
 
+  def tal_balance?
+    tokens_purchased || wallet_activities.where(symbol: "TAL").any?
+  end
+
   private
 
   def email_and_password
@@ -479,10 +481,6 @@ class User < ApplicationRecord
     if !valid
       errors.add(:notification_preferences, "Invalid notification preferences.")
     end
-  end
-
-  def touch_talent
-    talent.touch if talent.present?
   end
 
   def teams

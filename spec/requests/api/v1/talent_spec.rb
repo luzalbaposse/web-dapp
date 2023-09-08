@@ -4,33 +4,43 @@ RSpec.describe "Talent", type: :request do
   let(:current_user) { create :user }
 
   describe "#index" do
-    let(:talents_search_class) { Talents::ChewySearch }
-    let(:talents_search) { instance_double(talents_search_class, call: [{current_page: 1, last_page: 1}, Talent.all]) }
-
-    before do
-      allow(talents_search_class).to receive(:new).and_return(talents_search)
-    end
-
-    subject(:get_talents) do
-      get api_v1_talent_index_path(status: "Pending approval", as: current_user)
-    end
+    let!(:user) { create :user, username: "frank" }
+    let!(:user2) { create :user, username: "suzie" }
+    let!(:user3) { create :user, username: "rob" }
 
     it "initialises and calls the talents search with the correct a" do
-      get_talents
+      get api_v1_talent_index_path, as: current_user
 
-      aggregate_failures do
-        expect(talents_search_class).to have_received(:new)
-          .with(
-            admin_or_moderator: false,
-            filter_params: {"status" => "Pending approval"},
-            searching_user: current_user,
-            discovery_row: nil,
-            size: 40,
-            from: 0
-          )
+      expect(response).to have_http_status(:ok)
+    end
 
-        expect(talents_search).to have_received(:call)
-      end
+    it "returns no user that doesn't have a complete profile" do
+      get api_v1_talent_index_path(keyword: "frank", as: current_user)
+
+      content = JSON.parse(response.body)
+      expect(response).to have_http_status(:ok)
+      expect(content["talents"]).to eq []
+    end
+
+    it "returns the users with complete profiles" do
+      user.update!(profile_completeness: 1)
+
+      get api_v1_talent_index_path(as: current_user)
+
+      content = JSON.parse(response.body)
+      expect(response).to have_http_status(:ok)
+      expect(content["talents"].map { |t| t["username"] }).to eq [user.username]
+    end
+
+    it "returns the right user for the query" do
+      user.update!(profile_completeness: 1)
+      user2.update!(profile_completeness: 1)
+
+      get api_v1_talent_index_path(keyword: "frank", as: current_user)
+
+      content = JSON.parse(response.body)
+      expect(response).to have_http_status(:ok)
+      expect(content["talents"].map { |t| t["username"] }).to eq [user.username]
     end
   end
 

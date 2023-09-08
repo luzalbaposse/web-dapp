@@ -67,6 +67,16 @@ export const SignUpFlow = props => {
     window.history.pushState({}, document.title, urlWithPath);
   }, [stepsState.currentStep]);
 
+  useEffect(() => {
+    const handleBrowserBackButton = () => {
+      stepsState.previousStep();
+    };
+    window.addEventListener('popstate', handleBrowserBackButton);
+    return () => {
+      window.removeEventListener('popstate', handleBrowserBackButton);
+    };
+  }, [stepsState]);
+
   const MemoizedStep = useMemo(
     () => (
       <StepScreen

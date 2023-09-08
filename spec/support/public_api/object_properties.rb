@@ -127,5 +127,15 @@ module PublicAPI
       due_date: {type: :string, format: :datetime, description: "The timestamp of the goal due date", nullable: true},
       goal_images: {type: :array, items: {type: :object, properties: GOAL_IMAGE_PROPERTIES}}
     }
+
+    EXPERIENCE_REWARD_PROPERTIES = {
+      image_url: {type: :string, description: "The url of the reward image", nullable: true},
+      title: {type: :string, description: "The title of the reward"},
+      description: {type: :string, description: "The description of the reward"},
+      cost: {type: :integer, description: "The cost of the reward"},
+      stock: {type: :integer, description: "The amount of this reward that can still be claimed"},
+      active: {type: :boolean, description: "Whether the reward is active or not"},
+      claimed: {type: :boolean, description: "Whether the reward has been claimed by the user that is requesting it or not"}
+    }
   end
 end

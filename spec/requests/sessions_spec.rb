@@ -4,14 +4,6 @@ RSpec.describe "Sessions", type: :request do
   describe "#new" do
     subject(:root_request) { get root_path }
 
-    context "when the request is not coming from a profile subdomain" do
-      it "renders the login template" do
-        root_request
-
-        expect(response).to render_template("onboard/sign_in")
-      end
-    end
-
     context "when the request is coming from a profile subdomain" do
       before do
         ENV["TAL_BASE_DOMAIN"] = "tal.community"

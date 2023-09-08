@@ -10,8 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_20_142025) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_06_152129) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_trgm"
   enable_extension "plpgsql"
 
   create_table "activities", force: :cascade do |t|
@@ -337,6 +338,29 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_20_142025) do
     t.index ["uuid"], name: "index_experience_points_on_uuid"
   end
 
+  create_table "experience_reward_claims", force: :cascade do |t|
+    t.bigint "experience_reward_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["experience_reward_id"], name: "index_experience_reward_claims_on_experience_reward_id"
+    t.index ["user_id"], name: "index_experience_reward_claims_on_user_id"
+  end
+
+  create_table "experience_rewards", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.text "image_data"
+    t.string "title", null: false
+    t.string "description", null: false
+    t.integer "cost", null: false
+    t.integer "stock", default: 0
+    t.boolean "active", default: true, null: false
+    t.string "type", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["uuid"], name: "index_experience_rewards_on_uuid"
+  end
+
   create_table "goal_images", force: :cascade do |t|
     t.bigint "goal_id", null: false
     t.text "image_data"
@@ -417,6 +441,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_20_142025) do
     t.datetime "updated_at", null: false
     t.index ["organization_id"], name: "index_memberships_on_organization_id"
     t.index ["user_id"], name: "index_memberships_on_user_id"
+  end
+
+  create_table "merch_codes", force: :cascade do |t|
+    t.bigint "experience_reward_id", null: false
+    t.string "code"
+    t.boolean "assigned", default: false
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["experience_reward_id"], name: "index_merch_codes_on_experience_reward_id"
+    t.index ["user_id"], name: "index_merch_codes_on_user_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -882,6 +917,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_20_142025) do
   add_foreign_key "erc20_tokens", "users"
   add_foreign_key "erc721_tokens", "users"
   add_foreign_key "experience_points", "users"
+  add_foreign_key "experience_reward_claims", "experience_rewards"
+  add_foreign_key "experience_reward_claims", "users"
   add_foreign_key "goal_images", "goals"
   add_foreign_key "goals", "career_goals"
   add_foreign_key "impersonations", "users", column: "impersonated_id"
@@ -894,6 +931,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_20_142025) do
   add_foreign_key "marketing_articles", "users"
   add_foreign_key "memberships", "organizations"
   add_foreign_key "memberships", "users"
+  add_foreign_key "merch_codes", "experience_rewards"
+  add_foreign_key "merch_codes", "users"
   add_foreign_key "messages", "career_updates"
   add_foreign_key "messages", "chats"
   add_foreign_key "milestone_images", "milestones"

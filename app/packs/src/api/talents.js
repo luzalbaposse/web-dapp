@@ -24,13 +24,13 @@ const getMilestones = username => axios.get(`/api/v1/talents/milestones?id=${use
 const createMilestone = (talentId, milestone) => {
   const baseHeaders = defaultHeaders();
   const headers = appendCSRFToken(baseHeaders);
-  return axios.post(`/api/v1/talent/${talentId}/milestones`, milestone, { headers });
+  return axios.post(`/api/v1/talent/${talentId}/milestones`, {milestone}, { headers });
 };
 
 const updateMilestone = (talentId, milestone) => {
   const baseHeaders = defaultHeaders();
   const headers = appendCSRFToken(baseHeaders);
-  return axios.patch(`/api/v1/talent/${talentId}/milestones/${milestone.id}`, milestone, { headers });
+  return axios.patch(`/api/v1/talent/${talentId}/milestones/${milestone.id}`, {milestone}, { headers });
 };
 
 export const talentsService = {

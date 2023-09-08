@@ -5,7 +5,6 @@
   - high
   - default
   - mailers
-  - chewy
   - low
 :limits:
   low: 1
@@ -42,12 +41,6 @@
     daily_metrics:
       cron: "1 0 * * *" # runs once every day at 8am
       class: DailyMetricsJob
-    sync_with_persona_job:
-      cron: "0 * * * *" # Runs every hour
-      class: SyncWithPersonaJob
-    update_chewy_index:
-      cron: "0 * * * *" # Runs every hour
-      class: TriggerChewyIndexUpdateJob
     refresh_quests_job:
       cron: "0 13 * * *" # Runs once every day at 13:00
       class: Quests::RefreshQuestsJob
@@ -57,3 +50,15 @@
     send_subscription_reminder:
       cron: "0 10 * * *" # Runs once every day at 10am
       class: EmailReminders::SendSubscriptionRequestEmailJob
+    upload_galxe_wallet_addresses_job:
+      cron: "0 */4 * * *" # Runs every four hours
+      class: Galxe::UploadWalletAddressesJob
+      enabled: <%= ENV["ENABLE_GALXE_JOBS"] %>
+    delete_all_contacts_on_sendgrid_job:
+      cron: "0 4 * * *" # Runs once every day at 4:00
+      class: Sendgrid::DeleteAllContactsJob
+      enabled: <%= ENV["ENABLE_SENDGRID_CONTACT_JOBS"] %>
+    upsert_all_contacts_on_sendgrid_job:
+      cron: "0 5 * * *" # Runs once every day at 5:00
+      class: Sendgrid::UpsertAllContactsJob
+      enabled: <%= ENV["ENABLE_SENDGRID_CONTACT_JOBS"] %>

@@ -1,6 +1,6 @@
-import { Icon, Typography, buildColor } from "@talentprotocol/design-system";
+import { buildColor } from "@talentprotocol/design-system";
 import React, { useState, useEffect, useCallback, useContext } from "react";
-import { Container, IconContainer, InnerContainer } from "./styled";
+// import { Container, IconContainer, InnerContainer } from "./styled";
 import { destroy } from "../../utils/requests";
 import { H5 } from "src/components/design_system/typography";
 import { OnChain } from "src/onchain";
@@ -41,18 +41,18 @@ export const TopBar = ({
   impersonatedUsername,
   stopImpersonationPath
 }) => {
-  const sessionItem = railsContext.disableSmartContractsMessage.replace(" ", "-").substring(0, 3);
-  const [isWarningEnabled, setIsWarningEnabled] = useState(() => {
-    if (railsContext.disableSmartContracts != "true") {
-      return false;
-    }
-    if (typeof window !== "undefined") {
-      const hasDisabledWarning = sessionStorage.getItem(sessionItem);
-      if (!hasDisabledWarning) return true;
-      return false;
-    }
-    return false;
-  });
+  // const sessionItem = railsContext.disableSmartContractsMessage.replace(" ", "-").substring(0, 3);
+  // const [isWarningEnabled, setIsWarningEnabled] = useState(() => {
+  //   if (railsContext.disableSmartContracts != "true") {
+  //     return false;
+  //   }
+  //   if (typeof window !== "undefined") {
+  //     const hasDisabledWarning = sessionStorage.getItem(sessionItem);
+  //     if (!hasDisabledWarning) return true;
+  //     return false;
+  //   }
+  //   return false;
+  // });
   const url = new URL(document.location);
   const [walletConnected, setWalletConnected] = useState(false);
   const [stableBalance, setStableBalance] = useState(0);
@@ -210,7 +210,8 @@ export const TopBar = ({
         userHasInvitesLeft={userHasInvitesLeft}
         signOut={signOut}
       >
-        {isWarningEnabled && (
+        {/* Hide warning mesessage without enabling smart contracts functionality */}
+        {/* {isWarningEnabled && (
           <Container>
             <InnerContainer>
               <Typography specs={{ variant: "p3", type: "bold" }} color="primary01">
@@ -229,7 +230,7 @@ export const TopBar = ({
               </IconContainer>
             </InnerContainer>
           </Container>
-        )}
+        )} */}
       </MobileTopBar>
     );
   }
@@ -285,7 +286,8 @@ export const TopBar = ({
           <Notifications mode={theme.mode()} />
         </div>
       </nav>
-      {isWarningEnabled && (
+      {/* Hide warning mesessage without enabling smart contracts functionality */}
+      {/* {isWarningEnabled && (
         <Container>
           <InnerContainer>
             <Typography specs={{ variant: "p3", type: "bold" }} color="primary01">
@@ -304,7 +306,7 @@ export const TopBar = ({
             </IconContainer>
           </InnerContainer>
         </Container>
-      )}
+      )} */}
     </div>
   );
 };

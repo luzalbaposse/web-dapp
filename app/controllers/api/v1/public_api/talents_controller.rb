@@ -109,6 +109,14 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
     )
 
     render json: {}, status: :ok
+  rescue => e
+    Rollbar.error(
+      e,
+      "Unable to update profile",
+      user_id: user.id
+    )
+
+    render json: {error: "Unable to update profile"}, status: :unprocessable_entity
   end
 
   def update_about
@@ -122,6 +130,14 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
     )
 
     render json: {}, status: :ok
+  rescue => e
+    Rollbar.error(
+      e,
+      "Unable to update about section of profile",
+      user_id: user.id
+    )
+
+    render json: {error: "Unable to update about section of profile"}, status: :unprocessable_entity
   end
 
   def update_account
@@ -132,6 +148,16 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
     API::Users::UpdateAccount.new(user).call(user_params: permitted_user_params.to_h)
 
     render json: {}, status: :ok
+  rescue API::Users::UpdateAccount::IncorrentPasswordError => e
+    render json: {error: e.message}, status: :unprocessable_entity
+  rescue => e
+    Rollbar.error(
+      e,
+      "Unable to update account",
+      user_id: user.id
+    )
+
+    render json: {error: "Unable to update account"}, status: :unprocessable_entity
   end
 
   # ------------ temporary calls for Profile V1.0 ------------
@@ -206,21 +232,28 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
   end
 
   def user_params
+    return unless params[:user]
+
     params.require(:user).permit(
       :display_name,
       :username,
+      :email,
       :ens_domain,
       :legal_first_name,
-      :legal_last_name
+      :legal_last_name,
+      :current_password,
+      :new_password
     )
   end
 
   def talent_params
+    return unless params[:talent]
+
     params.require(:talent).permit(
       :open_to_job_offers,
       :verified,
-      :with_persona_id,
       profile: [
+        :about,
         :pronouns,
         :occupation,
         :location,
@@ -240,6 +273,11 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
         :ethnicity,
         :nationality,
         :based_in,
+        :figma,
+        :behance,
+        :youtube,
+        :dribbble,
+        :farcaster,
         highlighted_headline_words_index: []
       ],
       profile_picture_data: {},
@@ -261,9 +299,9 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
         moderator: current_user&.moderator?,
         talent_id: user.talent&.id,
         acting_talent_id: current_user&.talent&.id,
-        talent_params: talent_params.to_h,
-        user_params: user_params.to_h,
-        tag_params: tag_params.to_h
+        talent_params: talent_params&.to_h,
+        user_params: user_params&.to_h,
+        tag_params: tag_params&.to_h
       )
       render json: {error: "You don't have access to perform that action"}, status: :unauthorized
     end

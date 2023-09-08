@@ -18,6 +18,10 @@ class API::TalentBlueprint < Blueprinter::Base
       user.talent&.headline
     end
 
+    field :about do |user, _options|
+      user.talent&.about
+    end
+
     field :occupation do |user, _options|
       user.talent&.occupation
     end
@@ -109,10 +113,10 @@ class API::TalentBlueprint < Blueprinter::Base
         if subscription.accepted_at.present?
           "Unsubscribe"
         else
-          "Cancel Request"
+          "Cancel request"
         end
       elsif !!user.active_subscribing.pluck(:user_id)&.include?(options[:current_user_id])
-        "Subcribe Back"
+        "Subscribe back"
       else
         "Subscribe"
       end
@@ -167,10 +171,6 @@ class API::TalentBlueprint < Blueprinter::Base
 
     field :updates_length do |user, options|
       user.origin_activities.where(type: "Activities::CareerUpdate").count
-    end
-
-    field :with_persona_id do |user, _options|
-      user.talent&.with_persona_id
     end
   end
 

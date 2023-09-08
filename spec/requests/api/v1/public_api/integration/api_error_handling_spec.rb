@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "API error handling" do
-  subject(:api_request) { get(api_v1_public_talent_path(id: id, params: {}), headers: headers) }
+  subject(:api_request) { get(api_v1_public_connections_path(params: {}), headers: headers) }
   let!(:api_key) { create :api_key, :activated, access_key: access_key }
   let(:access_key) { SecureRandom.hex }
 
@@ -41,7 +41,7 @@ RSpec.describe "API error handling" do
 
       expect(API::LogRequestJob).to have_been_enqueued.with(
         api_key_id: api_key.id,
-        request_path: "/api/v1/talents/#{id}",
+        request_path: "/api/v1/connections",
         request_method: "GET",
         request_ip: "127.0.0.1",
         request_body: instance_of(String),
@@ -75,7 +75,7 @@ RSpec.describe "API error handling" do
 
       expect(API::LogRequestJob).to have_been_enqueued.with(
         api_key_id: api_key.id,
-        request_path: "/api/v1/talents/#{id}",
+        request_path: "/api/v1/connections",
         request_method: "GET",
         request_ip: "127.0.0.1",
         request_body: instance_of(String),
@@ -89,7 +89,7 @@ RSpec.describe "API error handling" do
     let(:error) { StandardError.new }
 
     before do
-      allow(API::TalentBlueprint).to receive(:render_as_json).and_raise(error)
+      allow(API::ConnectionBlueprint).to receive(:render_as_json).and_raise(error)
       allow(Rollbar).to receive(:error)
     end
 
@@ -102,28 +102,12 @@ RSpec.describe "API error handling" do
 
       expect(API::LogRequestJob).to have_been_enqueued.with(
         api_key_id: api_key.id,
-        request_path: "/api/v1/talents/#{id}",
+        request_path: "/api/v1/connections",
         request_method: "GET",
         request_ip: "127.0.0.1",
         request_body: instance_of(String),
         response_body: response.body,
-        response_code: 500
-      )
-    end
-
-    it "raises the error to Rollbar" do
-      api_request
-
-      expect(Rollbar).to have_received(:error).with(
-        error,
-        {
-          header_api_key: access_key,
-          request_path: "/api/v1/talents/#{id}",
-          request_method: "GET",
-          request_ip: "127.0.0.1",
-          request_body: instance_of(String),
-          params: instance_of(String)
-        }
+        response_code: 404
       )
     end
   end

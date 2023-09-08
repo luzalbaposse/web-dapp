@@ -22,15 +22,15 @@ const TalentTableCardMode = ({ talents }) => {
       {talents.map(talent => (
         <EntryContainer key={talent.id}>
           <TalentCard
-            name={talent.user.name}
+            name={talent.name}
             profileImage={talent.profilePictureUrl}
             bannerImage={talent.bannerUrl}
-            ticker={talent.talentToken.ticker}
+            ticker={talent.ticker}
             occupation={talent.occupation}
             isVerified={talent.verified}
-            to={`/u/${talent.user.username}`}
+            to={`/u/${talent.username}`}
           >
-            <Button size="small" hierarchy="primary" text="Subscribe" href={`/u/${talent.user.username}`} />
+            <Button size="small" hierarchy="primary" text="Subscribe" href={`/u/${talent.username}`} />
           </TalentCard>
         </EntryContainer>
       ))}

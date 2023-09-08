@@ -7,7 +7,15 @@ module Web3
     REASONS_FOR_TRANSFER = {
       talent_tokens_sold: 3,
       in_app_rewards: 4,
-      investor: 5
+      investor: 5,
+      experience_rewards: 4
+    }
+
+    APP_DESCRIPTION = {
+      talent_tokens_sold: "Unstake",
+      in_app_rewards: "AdminMinted",
+      investor: "AdminMinted",
+      experience_rewards: "ExperienceRewards"
     }
 
     def initialize(chain_id:)
@@ -38,7 +46,7 @@ module Web3
             symbol: "TAL",
             tx_hash: tx_hash,
             chain_id: chain_id,
-            event_type: "AdminMinted"
+            event_type: APP_DESCRIPTION[reason.to_sym]
           )
 
           return tx_hash

@@ -36,7 +36,7 @@ export const Connections = ({ currentUser, urlData }) => {
   const [connectionType, setConnectionType] = useState(
     DROPDOWN_OPTIONS.filter(option => option.type === url.searchParams.get("connection_type"))[0] || DROPDOWN_OPTIONS[0]
   );
-  const canUpdate = currentUser.username == urlData?.profileUsername;
+  const canUpdate = currentUser?.username == urlData?.profileUsername;
 
   useEffect(() => {
     if (!urlData.profileUsername) return;
@@ -129,7 +129,7 @@ export const Connections = ({ currentUser, urlData }) => {
 
   const subscriptionCallback = (_username, subscription) => {
     if (subscription === "subscribe") {
-      setTalent({ ...talent, subscribed_status: "Cancel Request" });
+      setTalent({ ...talent, subscribed_status: "Cancel request" });
     } else {
       setTalent({ ...talent, subscribed_status: "Subscribe" });
     }

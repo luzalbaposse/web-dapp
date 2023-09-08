@@ -534,4 +534,251 @@ RSpec.describe "Talents API" do
       end
     end
   end
+
+  path "/talents/update_profile" do
+    patch "Updates profile part of the user" do
+      tags "Talents"
+      consumes "application/json"
+      produces "application/json"
+      parameter name: :id, in: :query, type: :string, description: "Wallet address or username"
+      parameter name: :cursor, in: :query, type: :string, description: "The cursor to fetch the next page"
+      parameter name: "X-API-KEY", in: :header, type: :string, description: "Your Talent Protocol API key"
+      parameter name: :params, in: :body, schema: {
+        type: :object,
+        properties: {
+          user: {type: :object, properties: {
+            display_name: {type: :string}
+          }},
+          talent: {type: :object, properties: {
+            profile_picture_data: {type: :object},
+            profile: {type: :object}
+          }},
+          required: ["user", "talent"]
+        }
+      }
+
+      let(:cursor) { nil }
+      let(:wallet_id) { SecureRandom.hex }
+      let(:id) { wallet_id }
+
+      let!(:current_user) { create(:user, display_name: "API user", wallet_id: wallet_id) }
+      let!(:current_talent) { create :talent, user: current_user }
+
+      let(:params) {
+        {
+          user: {display_name: "New Display Name"},
+          talent: {
+            profile_picture_data: {
+              id: "b7d3e25bd98cf67b7eb485f62679bc39.jpeg",
+              storage: "cache",
+              metadata: {
+                size: 22078,
+                filename: "5319238.jpeg",
+                mime_type: "image/jpeg"
+              }
+            },
+            profile: {
+              location: "New location",
+              headline: "New headline"
+            }
+          }
+        }
+      }
+
+      before do
+        stub_const("API::V1::PublicAPI::APIController::INTERNAL_DOMAINS", ["talentprotocol.com"])
+        host! "app.talentprotocol.com"
+        allow_any_instance_of(API::V1::PublicAPI::APIController).to receive(:current_user).and_return(current_user)
+      end
+
+      response "200", "user and talent updated", save_example: true do
+        run_test! do
+          current_user.reload
+
+          aggregate_failures do
+            expect(current_user.display_name).to eq "New Display Name"
+            expect(current_user.talent.location).to eq "New location"
+            expect(current_user.talent.headline).to eq "New headline"
+          end
+        end
+      end
+
+      response "401", "unauthorized request" do
+        let(:user_wallet_id) { SecureRandom.hex }
+        let!(:user1) { create(:user, wallet_id: user_wallet_id) }
+        let!(:id) { user_wallet_id }
+
+        run_test!
+      end
+    end
+  end
+
+  path "/talents/update_about" do
+    patch "Updates profile part of the user" do
+      tags "Talents"
+      consumes "application/json"
+      produces "application/json"
+      parameter name: :id, in: :query, type: :string, description: "Wallet address or username"
+      parameter name: :cursor, in: :query, type: :string, description: "The cursor to fetch the next page"
+      parameter name: "X-API-KEY", in: :header, type: :string, description: "Your Talent Protocol API key"
+      parameter name: :params, in: :body, schema: {
+        type: :object,
+        properties: {
+          talent: {type: :object, properties: {profile: {type: :object}}},
+          tags: {type: :array},
+          required: ["talent"]
+        }
+      }
+
+      let(:cursor) { nil }
+      let(:wallet_id) { SecureRandom.hex }
+      let(:id) { wallet_id }
+
+      let!(:current_user) { create(:user, display_name: "API user", wallet_id: wallet_id) }
+      let!(:current_talent) { create :talent, user: current_user }
+
+      let(:params) {
+        {
+          talent: {
+            profile: {
+              about: "New about me",
+              website: "http://website.com",
+              twitter: "twitter.com",
+              linkedin: "linkedin.com",
+              figma: "figma.com",
+              behance: "behance.com",
+              youtube: "youtube.com",
+              github: "github.com",
+              dribbble: "dribbble.com",
+              farcaster: "farcaster.com"
+            }
+          },
+          tags: ["tag1", "tag2"]
+        }
+      }
+
+      before do
+        stub_const("API::V1::PublicAPI::APIController::INTERNAL_DOMAINS", ["talentprotocol.com"])
+        host! "app.talentprotocol.com"
+        allow_any_instance_of(API::V1::PublicAPI::APIController).to receive(:current_user).and_return(current_user)
+      end
+
+      response "200", "user and talent updated", save_example: true do
+        run_test! do
+          current_user.reload
+
+          aggregate_failures do
+            expect(current_user.talent.about).to eq "New about me"
+            expect(current_user.talent.website).to eq "http://website.com"
+            expect(current_user.talent.twitter).to eq "https://twitter.com"
+            expect(current_user.talent.linkedin).to eq "https://linkedin.com"
+            expect(current_user.talent.figma).to eq "https://figma.com"
+            expect(current_user.talent.behance).to eq "https://behance.com"
+            expect(current_user.talent.youtube).to eq "https://youtube.com"
+            expect(current_user.talent.github).to eq "https://github.com"
+            expect(current_user.talent.dribbble).to eq "https://dribbble.com"
+            expect(current_user.talent.farcaster).to eq "https://farcaster.com"
+            expect(current_user.tags.pluck(:description)).to match_array(["tag1", "tag2"])
+          end
+        end
+      end
+
+      response "401", "unauthorized request" do
+        let(:user_wallet_id) { SecureRandom.hex }
+        let!(:user1) { create(:user, wallet_id: user_wallet_id) }
+        let!(:id) { user_wallet_id }
+
+        run_test!
+      end
+    end
+  end
+
+  path "/talents/update_account" do
+    patch "Updates profile part of the user" do
+      tags "Talents"
+      consumes "application/json"
+      produces "application/json"
+      parameter name: :id, in: :query, type: :string, description: "Wallet address or username"
+      parameter name: :cursor, in: :query, type: :string, description: "The cursor to fetch the next page"
+      parameter name: "X-API-KEY", in: :header, type: :string, description: "Your Talent Protocol API key"
+      parameter name: :params, in: :body, schema: {
+        type: :object,
+        properties: {
+          user: {type: :object, properties: {
+            username: {type: :string},
+            email: {type: :string},
+            current_password: {type: :string},
+            new_password: {type: :string},
+            legal_first_name: {type: :string},
+            legal_last_name: {type: :string}
+          }},
+          required: ["user"]
+        }
+      }
+
+      let(:cursor) { nil }
+      let(:wallet_id) { SecureRandom.hex }
+      let(:id) { wallet_id }
+
+      let!(:current_user) { create(:user, display_name: "API user", wallet_id: wallet_id) }
+      let!(:current_talent) { create :talent, user: current_user }
+
+      let(:params) {
+        {
+          user: {
+            username: "username",
+            email: "email@email.com",
+            legal_first_name: "First Name",
+            legal_last_name: "Last Name"
+          }
+        }
+      }
+
+      before do
+        stub_const("API::V1::PublicAPI::APIController::INTERNAL_DOMAINS", ["talentprotocol.com"])
+        host! "app.talentprotocol.com"
+        allow_any_instance_of(API::V1::PublicAPI::APIController).to receive(:current_user).and_return(current_user)
+      end
+
+      response "200", "user and talent updated", save_example: true do
+        run_test! do
+          current_user.reload
+
+          aggregate_failures do
+            expect(current_user.username).to eq "username"
+            expect(current_user.email).to eq "email@email.com"
+            expect(current_user.legal_first_name).to eq "First Name"
+            expect(current_user.legal_last_name).to eq "Last Name"
+          end
+        end
+      end
+
+      response "422", "unauthorized request" do
+        let(:params) {
+          {
+            user: {
+              username: "username",
+              email: "email@email.com",
+              current_password: "incorrect_password",
+              new_password: "new_password",
+              legal_first_name: "First Name",
+              legal_last_name: "Last Name"
+            }
+          }
+        }
+
+        run_test! do |response|
+          expect(JSON.parse(response.body)["error"]).to eq "Password is incorrect"
+        end
+      end
+
+      response "401", "unauthorized request" do
+        let(:user_wallet_id) { SecureRandom.hex }
+        let!(:user1) { create(:user, wallet_id: user_wallet_id) }
+        let!(:id) { user_wallet_id }
+
+        run_test!
+      end
+    end
+  end
 end

@@ -22,6 +22,9 @@ module PublicAPIRoutes
               get :of_user, on: :collection
             end
             resources :connections, only: [:index]
+            resources :experience_rewards, only: [:index], type: :uuid do
+              post :claim
+            end
             resources :career_updates, only: [:index, :create]
             resources :sponsorships, only: [:create]
             get "sponsorships", to: "sponsorships#index"
@@ -58,7 +61,6 @@ module PublicAPIRoutes
           # API non authenticated endpoints
           resources :portfolio_supporters, only: [:index]
           resources :talent, only: [:show, :index]
-          get "/public_talent" => "talent#public_index"
 
           resources :users, only: [:show] do
             get :domain_owner, on: :collection

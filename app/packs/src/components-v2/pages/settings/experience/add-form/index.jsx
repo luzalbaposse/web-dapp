@@ -1,12 +1,15 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { noop } from "lodash";
 import { toast } from "react-toastify";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import { Container, Row } from "./styled";
 import { Button, Checkbox, Dropdown, Input } from "@talentprotocol/design-system";
 import { createPortal } from "react-dom";
 import { talentsService } from "../../../../../api/talents";
 import { useEditProfileStore } from "src/contexts/state";
 import { ToastBody } from "src/components/design_system/toasts";
+
+dayjs.extend(customParseFormat);
 
 const MONTHS = [
   { value: "January" },
@@ -35,7 +38,7 @@ export const AddExperienceForm = ({ username, category, milestone, backCallback 
   const storeMilestone = useCallback(() => {
     if (milestone) {
       talentsService
-        .updateMilestone(profile.id, milestone)
+        .updateMilestone(profile.id, { ...milestone, end_date: "", due_date: "", progress: "", start_date: dayjs(milestone.start_date, "YYYY-MM-DD").format("DD-MM-YYYY")})
         .then(({ data }) => {})
         .catch(err => {
           console.error(err);
@@ -57,7 +60,7 @@ export const AddExperienceForm = ({ username, category, milestone, backCallback 
     currentlyWorkingHere: useRef(null)
   };
   const dateInfo = {
-    startDateMonth: new Date(milestone.start_date).getMonth(),
+    startDateMonth: new Date(milestone.start_date).getMonth().toString(),
     startDateYear: new Date(milestone.start_date).getFullYear().toString(),
     endDateMonth: milestone.end_date && new Date(milestone.end_date).getMonth(),
     endDateYear: milestone.end_date && new Date(milestone.end_date).getFullYear()

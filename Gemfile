@@ -97,10 +97,6 @@ gem "paper_trail"
 gem "blazer"
 gem "google_drive"
 
-# Elasticsearch
-gem "chewy", ">= 7.2.7"
-gem "faraday_middleware-aws-sigv4"
-
 group :development, :test do
   gem "awesome_print"
   gem "bundler-audit"

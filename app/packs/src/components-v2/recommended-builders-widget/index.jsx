@@ -29,12 +29,12 @@ export const RecommendedBuildersWidget = ({ username, ellipsisAt = 350 }) => {
     }
   }, [username]);
 
-  const callback = (username, subscription) => {
+  const callback = (_e, username, subscription) => {
     let newTalents = [];
     if (subscription === "subscribe") {
       newTalents = talents.map(t => {
         if (t.username === username) {
-          return { ...t, subscribed_status: "Cancel Request" };
+          return { ...t, subscribed_status: "Cancel request" };
         }
         return { ...t };
       });

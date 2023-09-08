@@ -36,7 +36,7 @@ class TalentBlueprint < Blueprinter::Base
 
   view :extended do
     include_view :normal
-    fields :banner_url, :profile, :public, :with_persona_id
+    fields :banner_url, :profile, :public
     association :user, blueprint: UserBlueprint, view: :extended
     association :tags, blueprint: TagBlueprint do |talent, options|
       options[:tags] || talent.user.tags
