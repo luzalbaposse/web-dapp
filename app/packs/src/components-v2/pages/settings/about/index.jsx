@@ -40,7 +40,7 @@ export const AboutForm = () => {
     [setCurrentTags, setTagsSuggestions]
   );
   const refs = {
-    pitch: useRef(),
+    about: useRef(),
     website: useRef(),
     twitter: useRef(),
     linkedin: useRef(),
@@ -53,7 +53,7 @@ export const AboutForm = () => {
       .editAbout(profile?.username, {
         talent: {
           profile: {
-            about: refs.pitch.current.value,
+            about: refs.about.current.value,
             website: refs.website.current.value,
             twitter: refs.twitter.current.value,
             linkedin: refs.linkedin.current.value,
@@ -92,10 +92,10 @@ export const AboutForm = () => {
     !!profile && (
       <Container>
         <TextArea
-          textAreaRef={refs.pitch}
+          textAreaRef={refs.about}
           label="About me"
           placeholder="You can write about your experience, passions or achievements."
-          defaultValue={profile?.career_goal.pitch}
+          defaultValue={profile?.profile.about}
         />
         <Typography specs={{ type: "medium", variant: "p1" }} color="primary01">
           On The Web
