@@ -28,11 +28,10 @@ import { useDataFetcher } from "./hooks/use-data-fetcher";
 import { useImpersonate } from "./hooks/use-impersonate";
 import ApprovalConfirmationModal from "src/components/profile/ApprovalConfirmationModal";
 import AdminVerificationConfirmationModal from "src/components/profile/AdminVerificationConfirmationModal";
-import PersonaVerificationConfirmationModal from "src/components/profile/PersonaVerificationConfirmationModal";
 import { useProfileOverviewStore } from "src/contexts/state";
 import { SubscriptionButton } from "src/components-v2/subscription-button";
 
-export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, withPersonaRequest }) => {
+export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) => {
   const data = useDataFetcher(urlData);
   const { profileOverview, fetchProfileOverview } = useProfileOverviewStore();
   const [localProfile, setLocalProfile] = useState(null);
@@ -41,7 +40,6 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
   const [isEditMode, setIsEditMode] = useState(false);
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
-  const [showWithPersonaModal, setShowWithPersonaModal] = useState(false);
   const dropdownMenu = useMemo(() => {
     if (!currentUser) return [];
     const menu = [{ value: "Share", iconColor: "primary01", iconName: "share-2" }];
@@ -56,15 +54,6 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
     }
     if (currentUser?.username === urlData.profileUsername) {
       menu.push({ value: "Edit", iconColor: "primary01", iconName: "edit" });
-      if (
-        !localProfile?.verified &&
-        !(
-          localProfile?.with_persona_id ||
-          withPersonaRequest.requests_counter > railsContext.withPersonaVerificationsLimit
-        )
-      ) {
-        menu.push({ value: "Verify", iconColor: "primary01", iconName: "check" });
-      }
     }
     return menu;
   }, [currentUser, urlData, localProfile]);
@@ -82,9 +71,6 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
           return;
         case "Verify user":
           setShowVerifyModal(true);
-          return;
-        case "Verify":
-          setShowWithPersonaModal(true);
           return;
         case "Share":
         default:
@@ -281,15 +267,6 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext, wi
           window.location.reload();
         }}
       />
-      {!localProfile.verified && (
-        <PersonaVerificationConfirmationModal
-          show={showWithPersonaModal}
-          setShow={setShowWithPersonaModal}
-          hide={() => setShowWithPersonaModal(false)}
-          username={localProfile.username}
-          railsContext={railsContext}
-        />
-      )}
     </>
   );
 };

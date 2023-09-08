@@ -124,7 +124,6 @@ class API::V1::TalentController < ApplicationController
       :public,
       :open_to_job_offers,
       :verified,
-      :with_persona_id,
       profile: [
         :pronouns,
         :occupation,

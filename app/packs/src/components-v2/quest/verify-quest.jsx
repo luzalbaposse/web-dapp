@@ -1,28 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { QuestData, QuestDataRow, QuestEntry, QuestReward, RewardTag } from "./styled";
 import { Icon, Tag, Typography } from "@talentprotocol/design-system";
-import PersonaVerificationConfirmationModal from "src/components/profile/PersonaVerificationConfirmationModal";
 
-export const VerifyQuest = ({ quest, username, railsContext }) => {
-  const [showWithPersonaModal, setShowWithPersonaModal] = useState(false);
-
-  const onQuestClick = questType => {
-    if (questType == "verify_identity") {
-      setShowWithPersonaModal(true);
-    }
-  };
-
+export const VerifyQuest = ({ quest }) => {
   return (
-    <QuestEntry isCompleted={!!quest.completed_at} onClick={() => onQuestClick(quest.quest_type)}>
-      {!quest.completed_at && (
-        <PersonaVerificationConfirmationModal
-          show={showWithPersonaModal}
-          setShow={setShowWithPersonaModal}
-          hide={() => setShowWithPersonaModal(false)}
-          username={username}
-          railsContext={railsContext}
-        />
-      )}
+    <QuestEntry isCompleted={!!quest.completed_at} onClick={() => null}>
       <QuestData>
         <QuestDataRow>
           {!!quest.completed_at && <Icon name="check" size={16} color="primary" />}
