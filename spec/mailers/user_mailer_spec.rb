@@ -106,15 +106,6 @@ RSpec.describe UserMailer, type: :mailer do
     end
   end
 
-  describe "send persona verification failed profile email" do
-    let(:mail) { described_class.with(source_id: user.id, reason: "with_persona").send_verification_failed_email }
-
-    it "renders the header" do
-      expect(mail.subject).to eql("Verification failed 💔")
-      expect(mail.to).to eql([user.email])
-    end
-  end
-
   describe "send message received email" do
     let(:sender) { create :user, username: "alicesmith" }
     let(:notification) { create :notification, type: "MessageReceivedNotification", recipient: user }

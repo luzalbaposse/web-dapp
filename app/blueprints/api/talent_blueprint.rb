@@ -168,10 +168,6 @@ class API::TalentBlueprint < Blueprinter::Base
     field :updates_length do |user, options|
       user.origin_activities.where(type: "Activities::CareerUpdate").count
     end
-
-    field :with_persona_id do |user, _options|
-      user.talent&.with_persona_id
-    end
   end
 
   view :about do

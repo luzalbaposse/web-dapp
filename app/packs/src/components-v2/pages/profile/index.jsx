@@ -12,7 +12,7 @@ import { DesktopPageContainer, PageContainer, DesktopColumn } from "src/componen
 
 const ELLIPSIS_AT = 175;
 
-export const ProfilePage = ({ isMobile, railsContext, withPersonaRequest }) => {
+export const ProfilePage = ({ isMobile, railsContext }) => {
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
   const urlData = useUrlData();
   useEffect(() => {
@@ -23,24 +23,13 @@ export const ProfilePage = ({ isMobile, railsContext, withPersonaRequest }) => {
 
   return isMobile ? (
     <PageContainer>
-      <ProfileHeader
-        currentUser={currentUser}
-        urlData={urlData}
-        railsContext={railsContext}
-        isMobile
-        withPersonaRequest={withPersonaRequest}
-      />
+      <ProfileHeader currentUser={currentUser} urlData={urlData} railsContext={railsContext} isMobile />
       <ProfileAreas currentUser={currentUser} railsContext={railsContext} urlData={urlData} />
     </PageContainer>
   ) : (
     <DesktopPageContainer>
       <DesktopColumn>
-        <ProfileHeader
-          currentUser={currentUser}
-          urlData={urlData}
-          railsContext={railsContext}
-          withPersonaRequest={withPersonaRequest}
-        />
+        <ProfileHeader currentUser={currentUser} urlData={urlData} railsContext={railsContext} />
       </DesktopColumn>
       <DesktopColumn>
         <ProfileAreas currentUser={currentUser} railsContext={railsContext} urlData={urlData} />

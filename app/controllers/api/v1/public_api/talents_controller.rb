@@ -219,7 +219,6 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
     params.require(:talent).permit(
       :open_to_job_offers,
       :verified,
-      :with_persona_id,
       profile: [
         :pronouns,
         :occupation,

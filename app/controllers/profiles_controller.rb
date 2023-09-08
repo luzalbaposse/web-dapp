@@ -20,9 +20,6 @@ class ProfilesController < ApplicationController
       current_user_pending_subscribing: current_user_pending_subscribing,
       tags: user.tags.where(hidden: false)
     )
-
-    @with_persona_request = WithPersonaRequestBlueprint.render_as_json(WithPersonaRequest.current_month_persona_request)
-
     respond_to do |format|
       format.html {}
       format.json { render json: {profile: @talent}, status: :ok }

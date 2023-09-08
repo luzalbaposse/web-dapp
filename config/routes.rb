@@ -19,10 +19,6 @@ Rails.application.routes.draw do
   end
   # end Moderator
 
-  namespace :external, defaults: {format: :json} do
-    resources :persona_webhooks, only: [:create]
-  end
-
   # Business - require log-in
   constraints Clearance::Constraints::SignedIn.new do
     get "/" => redirect("/home")
@@ -97,7 +93,6 @@ Rails.application.routes.draw do
         resources :races, only: [:show]
         resources :impersonations, only: [:create, :destroy]
         resources :tags, only: [:index]
-        resource :with_persona_requests, only: [:update]
         resources :wallet_activities, only: [:index, :create]
       end
     end
