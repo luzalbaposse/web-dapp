@@ -22,7 +22,17 @@ export const ExperienceForm = ({ username }) => {
       {!isAdding && (
         <ExperiencesComponent username={username} isOwner openAddExperienceScreen={openAddExperienceScreen} />
       )}
-      {!isLoading && isAdding && <AddExperienceForm category={currentExperience} milestone={currentExperience} username={username} />}
+      {!isLoading && isAdding && (
+        <AddExperienceForm
+          category={currentExperience}
+          milestone={currentExperience}
+          username={username}
+          backCallback={() => {
+            setCurrentExperience({});
+            setIsAdding(false);
+          }}
+        />
+      )}
     </Container>
   );
 };

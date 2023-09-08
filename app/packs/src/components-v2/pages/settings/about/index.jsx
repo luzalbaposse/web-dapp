@@ -32,10 +32,13 @@ export const AboutForm = () => {
     }, 250),
     []
   );
-  const onTagsUpdate = useCallback(tags => {
-    setCurrentTags(tags);
-    setTagsSuggestions([]);
-  }, [setCurrentTags, setTagsSuggestions]);
+  const onTagsUpdate = useCallback(
+    tags => {
+      setCurrentTags(tags);
+      setTagsSuggestions([]);
+    },
+    [setCurrentTags, setTagsSuggestions]
+  );
   const refs = {
     pitch: useRef(),
     website: useRef(),
@@ -57,7 +60,7 @@ export const AboutForm = () => {
             figma: refs.figma.current.value,
             behance: refs.behance.current.value,
             youtube: refs.youtube.current.value
-          },
+          }
         },
         tags: currentTags
       })

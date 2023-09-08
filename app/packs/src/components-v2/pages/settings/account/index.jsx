@@ -35,8 +35,8 @@ export const AccountForm = () => {
             username: refs.username.current.value,
             email: refs.email.current.value
           },
-          username: refs.username.current.value,
-        })
+          username: refs.username.current.value
+        });
       })
       .catch(err => {
         console.error(err);

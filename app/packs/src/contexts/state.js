@@ -58,8 +58,12 @@ const useEditProfileStore = create(set => ({
       window.location.href = "/home";
     }
   },
+  subFormCallback: undefined,
+  updateSubFormCallback: callback => {
+    set({ subFormCallback: callback });
+  },
   updateProfileState: newObject => {
-    set(state => ({ profile: { ...state, ...newObject } }));
+    set(state => ({ profile: { ...state.profile, ...newObject } }));
   }
 }));
 
