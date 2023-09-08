@@ -1,6 +1,7 @@
 // config/webpack/base.js
-const { webpackConfig, merge } = require("@rails/webpacker");
+const { generateWebpackConfig, merge } = require("shakapacker");
 const webpack = require("webpack");
+const webpackConfig = generateWebpackConfig();
 
 const customConfig = {
   resolve: {
