@@ -13,7 +13,7 @@ module Sendgrid
       end
 
       def call
-        return unless users.any?
+        return unless members.any?
 
         upsert_contacts!
       end
@@ -23,8 +23,8 @@ module Sendgrid
       attr_reader :additional_list_ids, :user_ids
 
       def upsert_contacts!
-        users.find_in_batches(batch_size: 10000) do |batched_users|
-          response = marketing_endpoint.contacts.put(request_body: request_body(batched_users))
+        members.find_in_batches(batch_size: 2500) do |batched_members|
+          response = marketing_endpoint.contacts.put(request_body: request_body(batched_members))
           raise_error(response) unless response.status_code == "202"
         end
       end
@@ -37,19 +37,19 @@ module Sendgrid
         SendGrid::API.new(api_key: ENV["SENDGRID_API_KEY"])
       end
 
-      def request_body(batched_users)
+      def request_body(users)
         {
-          contacts: batched_users.map { |user| contact(user) },
+          contacts: users.map { |user| contact(user) },
           list_ids: [ENV["SENDGRID_MEMBERS_LIST_ID"]] + Array.wrap(additional_list_ids)
         }
       end
 
-      def users
-        @users ||=
+      def members
+        @members ||=
           begin
             user_scope = User.includes(:career_updates, :invites, :tags, :subscriptions, {talent: {career_goal: :goals}}, :wallet_activities)
-            confirmed_users = user_scope.where.not(email_confirmed_at: nil)
-            user_ids.present? ? confirmed_users.where(id: user_ids) : confirmed_users
+            members = user_scope.where("last_access_at >= CURRENT_DATE - 180").where.not(email_confirmed_at: nil)
+            user_ids.present? ? members.where(id: user_ids) : members
           end
       end
 

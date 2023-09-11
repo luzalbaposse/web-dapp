@@ -9,6 +9,7 @@ RSpec.describe Sendgrid::Contacts::Upsert do
     create :user,
       email: "jessie@gmail.com",
       email_confirmed_at:,
+      last_access_at:,
       experience_points_amount: 500,
       legal_first_name: "Jessie",
       legal_last_name: "Lee",
@@ -22,6 +23,7 @@ RSpec.describe Sendgrid::Contacts::Upsert do
     create :user,
       email: "jonny@gmail.com",
       email_confirmed_at:,
+      last_access_at:,
       experience_points_amount: 1000,
       legal_first_name: "Jonny",
       legal_last_name: "Smith",
@@ -40,7 +42,19 @@ RSpec.describe Sendgrid::Contacts::Upsert do
       wallet_id: "dsafds93292828ox0381203820123223"
   end
 
+  let!(:user_four) do
+    create :user,
+      email: "ruby@gmail.com",
+      email_confirmed_at:,
+      last_access_at: nil,
+      experience_points_amount: 1500,
+      legal_first_name: "Ruby",
+      username: "ruby",
+      wallet_id: "skhdguyagsai83833"
+  end
+
   let(:email_confirmed_at) { "2023-01-11T13:43:49.398Z".to_datetime }
+  let(:last_access_at) { Date.yesterday }
   let(:tag_one) { create :tag, description: "foo" }
   let(:tag_two) { create :tag, description: "bar" }
 
