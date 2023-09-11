@@ -2912,10 +2912,10 @@
   dependencies:
     mini-svg-data-uri "^1.2.3"
 
-"@talentprotocol/design-system@^0.1.75":
-  version "0.1.75"
-  resolved "https://registry.yarnpkg.com/@talentprotocol/design-system/-/design-system-0.1.75.tgz#cfba80b42bdc17b43cc84b5f9caa19a9ad621f04"
-  integrity sha512-7TTVrj/3LLcgifqCx6Oo7f9FNH5mpFsJhrH8qyZ35QgsYg1aT7TRrcCivoSksMBg+x3NPHV0NYRhNWk1iTzO1g==
+"@talentprotocol/design-system@^0.1.76":
+  version "0.1.76"
+  resolved "https://registry.yarnpkg.com/@talentprotocol/design-system/-/design-system-0.1.76.tgz#bf5e1243de1938f5f5289954c64260822eb5b780"
+  integrity sha512-F1ARj1Uz6Ijyg81n+5Iu6nEeTQ0taRMfywxkH55Mvj+e+IlbRHvbr8skSXDl0MDtdVAV/NvhI+BpRbG/7z3/FA==
 
 "@talentprotocol/zustand-wrapper@^0.0.6":
   version "0.0.6"
