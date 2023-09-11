@@ -1,5 +1,5 @@
 class CareerNeed < ApplicationRecord
-  belongs_to :career_goal
+  belongs_to :career_goal, optional: true
 
   HIRING_NEEDS = ["Finding and hiring talent"].freeze
   ROLE_NEEDS = [

@@ -1,7 +1,7 @@
 class Goal < ApplicationRecord
   has_paper_trail
 
-  belongs_to :career_goal
+  belongs_to :career_goal, optional: true
   # TODO: Make it mandatory
   belongs_to :user, optional: true
 

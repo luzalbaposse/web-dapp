@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_08_133614) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_11_110223) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -143,7 +143,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_08_133614) do
 
   create_table "career_needs", force: :cascade do |t|
     t.string "title", null: false
-    t.bigint "career_goal_id", null: false
+    t.bigint "career_goal_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["career_goal_id"], name: "index_career_needs_on_career_goal_id"
