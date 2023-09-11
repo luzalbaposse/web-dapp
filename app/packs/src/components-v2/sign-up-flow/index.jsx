@@ -71,9 +71,9 @@ export const SignUpFlow = props => {
     const handleBrowserBackButton = () => {
       stepsState.previousStep();
     };
-    window.addEventListener('popstate', handleBrowserBackButton);
+    window.addEventListener("popstate", handleBrowserBackButton);
     return () => {
-      window.removeEventListener('popstate', handleBrowserBackButton);
+      window.removeEventListener("popstate", handleBrowserBackButton);
     };
   }, [stepsState]);
 

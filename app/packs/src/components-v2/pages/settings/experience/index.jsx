@@ -24,7 +24,7 @@ export const ExperienceForm = ({ username }) => {
       )}
       {!isLoading && isAdding && (
         <AddExperienceForm
-          category={currentExperience}
+          category={isAdding}
           milestone={currentExperience}
           username={username}
           backCallback={() => {

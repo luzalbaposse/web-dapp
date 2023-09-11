@@ -19,18 +19,18 @@ const sendSubscribeRequest = username => axios.post(`/api/v1/subscriptions`, { u
 
 const unsubscribe = username => axios.delete(`/api/v1/subscriptions?user_id=${username}`);
 
-const getMilestones = username => axios.get(`/api/v1/talents/milestones?id=${username}`);
+const getMilestones = username => axios.get(`/api/v1/talents/milestones?id=${username}&per_page=25`);
 
 const createMilestone = (talentId, milestone) => {
   const baseHeaders = defaultHeaders();
   const headers = appendCSRFToken(baseHeaders);
-  return axios.post(`/api/v1/talent/${talentId}/milestones`, {milestone}, { headers });
+  return axios.post(`/api/v1/talent/${talentId}/milestones`, { milestone }, { headers });
 };
 
 const updateMilestone = (talentId, milestone) => {
   const baseHeaders = defaultHeaders();
   const headers = appendCSRFToken(baseHeaders);
-  return axios.patch(`/api/v1/talent/${talentId}/milestones/${milestone.id}`, {milestone}, { headers });
+  return axios.patch(`/api/v1/talent/${talentId}/milestones/${milestone.id}`, { milestone }, { headers });
 };
 
 export const talentsService = {
