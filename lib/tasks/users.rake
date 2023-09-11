@@ -8,4 +8,13 @@ namespace :users do
 
     TalentsIndex.import!
   end
+
+  task migrate_pitch_to_profile: :environment do
+    desc "Migrate pitch from career goal to profile on talent"
+
+    Talent.joins(:career_goal).where.not(career_goal: {pitch: nil}).find_each do |talent|
+      talent.about = talent.career_goal.pitch
+      talent.save(touch: false)
+    end
+  end
 end
