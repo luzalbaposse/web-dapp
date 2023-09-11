@@ -11,7 +11,7 @@ RSpec.describe Sendgrid::DeleteNonMemberContactsJob, type: :job do
 
     create :user, email: "user-one@gmail.com", last_access_at: Date.current - 181.days
     create :user, email: "user-two@gmail.com", last_access_at: Date.current - 182.days
-    create :user, email: "user-three@gmail.com", last_access_at: Date.current - 181.days
+    create :user, email: "user-three@gmail.com", last_access_at: Date.current - 183.days
   end
 
   subject { described_class.new }
@@ -23,7 +23,7 @@ RSpec.describe Sendgrid::DeleteNonMemberContactsJob, type: :job do
       aggregate_failures do
         expect(delete_class)
           .to have_received(:new)
-          .with(emails: ["user-one@gmail.com", "user-three@gmail.com"])
+          .with(emails: ["user-one@gmail.com"])
 
         expect(delete).to have_received(:call)
       end
