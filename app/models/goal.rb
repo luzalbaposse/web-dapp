@@ -2,6 +2,8 @@ class Goal < ApplicationRecord
   has_paper_trail
 
   belongs_to :career_goal
+  # TODO: Make it mandatory
+  belongs_to :user, optional: true
 
   has_many :career_update_associations, as: :associable_entity
   has_many :career_updates, through: :career_update_associations
