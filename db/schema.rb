@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_06_152129) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_11_110223) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -143,7 +143,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_06_152129) do
 
   create_table "career_needs", force: :cascade do |t|
     t.string "title", null: false
-    t.bigint "career_goal_id", null: false
+    t.bigint "career_goal_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["career_goal_id"], name: "index_career_needs_on_career_goal_id"
@@ -381,7 +381,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_06_152129) do
     t.string "link"
     t.string "progress"
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.bigint "user_id"
     t.index ["career_goal_id"], name: "index_goals_on_career_goal_id"
+    t.index ["user_id"], name: "index_goals_on_user_id"
   end
 
   create_table "impersonations", force: :cascade do |t|
@@ -923,6 +925,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_06_152129) do
   add_foreign_key "experience_reward_claims", "users"
   add_foreign_key "goal_images", "goals"
   add_foreign_key "goals", "career_goals"
+  add_foreign_key "goals", "users"
   add_foreign_key "impersonations", "users", column: "impersonated_id"
   add_foreign_key "impersonations", "users", column: "impersonator_id"
   add_foreign_key "invites", "organizations"
