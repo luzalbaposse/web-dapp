@@ -67,7 +67,7 @@ export const ExperiencesComponent = ({ isOwner, username, openAddExperienceScree
                   size="small"
                   iconColor="primary01"
                   onClick={() => {
-                    openAddExperienceScreen(milestone.category.toLocaleLowerCase(), milestone);
+                    openAddExperienceScreen(milestone.category, milestone);
                   }}
                 />
               </EditButtonContainer>
@@ -88,7 +88,7 @@ export const ExperiencesComponent = ({ isOwner, username, openAddExperienceScree
           <Typography specs={{ type: "medium", variant: "p1" }}>Positions</Typography>
           {isOwner && (
             <Button
-              onClick={() => openAddExperienceScreen("position")}
+              onClick={() => openAddExperienceScreen("Position")}
               leftIcon="add"
               hierarchy="secondary"
               size="small"
@@ -106,7 +106,7 @@ export const ExperiencesComponent = ({ isOwner, username, openAddExperienceScree
           <Typography specs={{ type: "medium", variant: "p1" }}>Education</Typography>
           {isOwner && (
             <Button
-              onClick={() => openAddExperienceScreen("education")}
+              onClick={() => openAddExperienceScreen("Education")}
               leftIcon="add"
               hierarchy="secondary"
               size="small"
