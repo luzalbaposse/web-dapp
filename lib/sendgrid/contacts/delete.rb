@@ -7,11 +7,13 @@ module Sendgrid
 
       class BadResponse < Error; end
 
-      def initialize(emails: [])
-        @emails = emails
+      def initialize(emails:)
+        @emails = Array.wrap(emails)
       end
 
       def call
+        return unless emails.any?
+
         delete_contacts!
       end
 
@@ -20,8 +22,14 @@ module Sendgrid
       attr_reader :emails
 
       def delete_contacts!
-        response = contacts_endpoint.delete(query_params:)
-        raise_error(response) unless response.status_code == "202"
+        emails.each_slice(100) do |email_slice|
+          contact_ids = fetch_contact_ids(email_slice)
+          ids = ids(contact_ids, email_slice)
+          next unless ids.present?
+
+          response = contacts_endpoint.delete(query_params: {ids:})
+          raise_error(response) unless response.status_code == "202"
+        end
       end
 
       def contacts_endpoint
@@ -32,24 +40,18 @@ module Sendgrid
         SendGrid::API.new(api_key: ENV["SENDGRID_API_KEY"])
       end
 
-      def query_params
-        return {delete_all_contacts: "true"} if emails.blank?
-
-        {ids: emails.map { |email| contact_id(email) }.compact.join(", ")}
+      def ids(contact_ids, email_slice)
+        email_slice
+          .map { |email| contact_ids.dig(email, "contact", "id") }
+          .compact
+          .join(", ")
       end
 
-      def contact_id(email)
-        contact_ids.dig(email, "contact", "id")
-      end
+      def fetch_contact_ids(email_slice)
+        response = contacts_endpoint.search.emails.post(request_body: {emails: email_slice})
+        raise_error(response) unless response.status_code == "200"
 
-      def contact_ids
-        @contact_ids ||=
-          begin
-            response = contacts_endpoint.search.emails.post(request_body: {emails:})
-            raise_error(response) unless response.status_code == "200"
-
-            JSON.parse(response.body)["result"]
-          end
+        JSON.parse(response.body)["result"]
       end
 
       def raise_error(response)
