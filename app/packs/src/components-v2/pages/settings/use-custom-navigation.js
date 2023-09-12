@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { BASE_PAGES } from "./base-pages";
 
-export const useCustomNavigation = (initialPage = "profile", isMobile) => {
+export const useCustomNavigation = (initialPage = "profile") => {
   const [page, setPage] = useState(() => BASE_PAGES[initialPage]);
   const [isHamburguerOpen, setIsHamburguerOpen] = useState(false);
   const openHamburguer = useCallback(
