@@ -2661,10 +2661,10 @@
   dependencies:
     mini-svg-data-uri "^1.2.3"
 
-"@talentprotocol/design-system@^0.1.76":
-  version "0.1.76"
-  resolved "https://registry.yarnpkg.com/@talentprotocol/design-system/-/design-system-0.1.76.tgz#bf5e1243de1938f5f5289954c64260822eb5b780"
-  integrity sha512-F1ARj1Uz6Ijyg81n+5Iu6nEeTQ0taRMfywxkH55Mvj+e+IlbRHvbr8skSXDl0MDtdVAV/NvhI+BpRbG/7z3/FA==
+"@talentprotocol/design-system@^0.1.77":
+  version "0.1.77"
+  resolved "https://registry.yarnpkg.com/@talentprotocol/design-system/-/design-system-0.1.77.tgz#ae18903be79849478de52c4c8387b77bdb49fa09"
+  integrity sha512-/x5tVh5LcNbPCNkAQreHWEC/MOJLP+ENf6XL7SVL1jxOxr/5kbVvuaIwR4u3qU96NitxdTRyu3DK4LpqvLA03g==
 
 "@talentprotocol/zustand-wrapper@^0.0.6":
   version "0.0.6"

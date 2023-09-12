@@ -77,9 +77,14 @@ export const AddExperienceForm = ({ username, category, milestone, backCallback 
           in_progress: isInProgress
         })
         .then(({ data }) => {
+          const tempMilestones = [...profile.milestones];
+          const index = tempMilestones.map(m => m.id).indexOf(milestone.id);
+          if (index === -1) return;
+          tempMilestones[index] = data;
+          tempMilestones.push(data);
           updateProfileState({
             ...profile,
-            milestones: profile.milestones[profile.milestones.map(m => m.id).indexOf(milestone.id)] = data
+            milestones: tempMilestones
           });
           backCallback();
         })
@@ -112,9 +117,11 @@ export const AddExperienceForm = ({ username, category, milestone, backCallback 
           in_progress: isInProgress
         })
         .then(({ data }) => {
+          const tempMilestones = [...profile.milestones];
+          tempMilestones.push(data);
           updateProfileState({
             ...profile,
-            milestones: profile.milestones.push(data)
+            milestones: tempMilestones
           });
           backCallback();})
         .catch(err => {
@@ -123,6 +130,7 @@ export const AddExperienceForm = ({ username, category, milestone, backCallback 
         });
     }
   }, [username, milestone, profile, dateState, isInProgress]);
+  console.log(profile.milestones);
   return (
     <Container>
       <Input
