@@ -11,7 +11,7 @@ class Sendgrid::DeleteNonMemberContactsJob < ApplicationJob
 
   def emails
     User
-      .where("last_access_at = CURRENT_DATE - 181")
+      .where("last_access_at = CURRENT_DATE - 181 AND last_access_at::date != created_at::date")
       .where
       .not(email_confirmed_at: nil)
       .pluck(:email)

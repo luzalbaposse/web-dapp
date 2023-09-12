@@ -63,16 +63,6 @@ Rails.application.routes.draw do
       namespace :v1 do
         resources :users, only: [:index, :update] do
           resources :delete_account_tokens, module: "users", only: [:create]
-
-          namespace :profile do
-            resources :web3, controller: :web3, only: [:update]
-
-            scope :web3 do
-              post :refresh_tokens, to: "web3#refresh_tokens"
-              post :refresh_nfts, to: "web3#refresh_nfts"
-              post :refresh_poaps, to: "web3#refresh_poaps"
-            end
-          end
         end
 
         resources :notifications, only: [:index] do

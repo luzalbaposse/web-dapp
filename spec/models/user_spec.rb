@@ -102,6 +102,19 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe "scopes" do
+    describe ".members" do
+      let(:user_one) { create :user, last_access_at: Date.today, created_at: Date.yesterday }
+      let(:user_two) { create :user, last_access_at: Date.yesterday, created_at: Date.yesterday }
+      let(:user_three) { create :user, last_access_at: Date.today - 10.days, created_at: Date.today - 10.days }
+      let(:user_four) { create :user, last_access_at: Date.today, created_at: Date.today - 10.days }
+
+      it "only returns members" do
+        expect(User.members).to match_array([user_one, user_four])
+      end
+    end
+  end
+
   describe "helper methods" do
     it "calculates the correct chat id" do
       user1 = create(:user, wallet_id: "0", username: "0")
