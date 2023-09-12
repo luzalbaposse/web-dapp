@@ -86,6 +86,7 @@ export const AddExperienceForm = ({ username, category, milestone, backCallback 
             ...profile,
             milestones: tempMilestones
           });
+          toast.success(<ToastBody heading="Success!" body="Experience updated successfully." />, { autoClose: 1500 });
           backCallback();
         })
         .catch(err => {
@@ -123,7 +124,9 @@ export const AddExperienceForm = ({ username, category, milestone, backCallback 
             ...profile,
             milestones: tempMilestones
           });
-          backCallback();})
+          toast.success(<ToastBody heading="Success!" body="Experience added successfully." />, { autoClose: 1500 });
+          backCallback();
+        })
         .catch(err => {
           console.error(err);
           toast.error(<ToastBody heading="Error" body={"Something happened while updating your profile"} />);

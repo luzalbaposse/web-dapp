@@ -40,6 +40,7 @@ export const AccountForm = () => {
           },
           username: refs.username.current.value
         });
+        toast.success(<ToastBody heading="Success!" body="Account updated successfully." />, { autoClose: 1500 });
       })
       .catch(err => {
         console.error(err);

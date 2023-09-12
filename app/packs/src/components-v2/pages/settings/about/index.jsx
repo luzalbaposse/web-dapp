@@ -78,6 +78,7 @@ export const AboutForm = () => {
           },
           tags: currentTags
         });
+        toast.success(<ToastBody heading="Success!" body="Account updated successfully." />, { autoClose: 1500 });
       })
       .catch(err => {
         console.error(err);

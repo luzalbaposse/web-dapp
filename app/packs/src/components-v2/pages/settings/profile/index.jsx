@@ -21,7 +21,7 @@ export const ProfileForm = () => {
   const [profilePic, setProfilePic] = useState({ url: profile?.profile_picture_url });
   useEffect(() => {
     if (!profile) return;
-    setProfilePic({url: profile.profile_picture_url});
+    setProfilePic({ url: profile.profile_picture_url });
   }, [profile]);
   const updateProfile = useCallback(() => {
     const payloadObject = {
@@ -58,6 +58,7 @@ export const ProfileForm = () => {
           headline: refs.headline.current.value,
           profile_picture_url: profilePic.url
         });
+        toast.success(<ToastBody heading="Success!" body="Account updated successfully." />, { autoClose: 1500 });
       })
       .catch(err => {
         console.error(err);
@@ -113,7 +114,8 @@ export const ProfileForm = () => {
       uppyProfile.reset();
     });
     uppyProfile.on("upload-success", (file, response) => {
-      setProfilePic({file:  {
+      setProfilePic({
+        file: {
           // eslint-disable-next-line  no-useless-escape
           id: response.uploadURL.match(/\/cache\/([^\?]+)/)[1], // extract key without prefix
           new_upload: true,
@@ -123,7 +125,9 @@ export const ProfileForm = () => {
             filename: file.name,
             mime_type: file.type
           }
-        }, url: response.uploadURL });
+        },
+        url: response.uploadURL
+      });
     });
     uppyProfile.on("upload", () => {});
   }, [uppyProfile]);
@@ -137,14 +141,14 @@ export const ProfileForm = () => {
           </Typography>
           <UploadButtons>
             <FileInput
-                uppy={uppyProfile}
-                inputName="profiles[]"
-                locale={{
-                  strings: {
-                    chooseFiles: "Upload Profile Picture",
-                  }
-                }}
-              />
+              uppy={uppyProfile}
+              inputName="profiles[]"
+              locale={{
+                strings: {
+                  chooseFiles: "Upload Profile Picture"
+                }
+              }}
+            />
           </UploadButtons>
         </UploadContainer>
       </AvatarRow>
