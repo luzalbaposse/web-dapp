@@ -1,35 +1,14 @@
 module Web3Api
   module Moralis
     class Client
-      BASE_URI = "https://deep-index.moralis.io/api/v2"
-      TOKENS_URI_PATH = "erc20"
+      BASE_URI = "https://deep-index.moralis.io/api/v2.2"
       NFTS_URI_PATH = "nft"
 
-      def retrieve_tokens(wallet_address:, chain:)
-        url = "#{BASE_URI}/#{wallet_address}/#{TOKENS_URI_PATH}"
-
-        params = {
-          chain: chain
-        }
-        Faraday.get(url, params, headers)
-      end
-
-      def retrieve_wallet_nfts(wallet_address:, chain:)
-        url = "#{BASE_URI}/#{wallet_address}/#{NFTS_URI_PATH}"
-
-        params = {
-          chain: chain
-        }
-        Faraday.get(url, params, headers)
-      end
-
       def retrieve_contract_nfts(contract_address:, chain:)
-        url = "#{BASE_URI}/#{NFTS_URI_PATH}/#{contract_address}"
+        url = "#{BASE_URI}/#{NFTS_URI_PATH}/#{contract_address}/stats"
 
         params = {
-          chain: chain,
-          format: "decimal",
-          disable_total: false
+          chain: chain
         }
         Faraday.get(url, params, headers)
       end

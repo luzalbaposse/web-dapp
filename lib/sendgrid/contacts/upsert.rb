@@ -47,8 +47,7 @@ module Sendgrid
       def members
         @members ||=
           begin
-            user_scope = User.includes(:career_updates, :invites, :tags, :subscriptions, {talent: {career_goal: :goals}}, :wallet_activities)
-            members = user_scope.where("last_access_at >= CURRENT_DATE - 180").where.not(email_confirmed_at: nil)
+            members = User.members.includes(:career_updates, :invites, :tags, :subscriptions, {talent: {career_goal: :goals}}, :wallet_activities)
             user_ids.present? ? members.where(id: user_ids) : members
           end
       end

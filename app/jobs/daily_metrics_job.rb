@@ -47,7 +47,6 @@ class DailyMetricsJob < ApplicationJob
       total_polygon_supporters: total_polygon_supporters,
       total_polygon_tokens: total_polygon_tokens,
       total_claimed_domains: total_claimed_domains,
-      total_tal_subdomain_transactions: total_tal_subdomain_transactions,
       total_talent_token_applications: total_talent_token_applications,
       total_approved_talent_token_applications: total_approved_talent_token_applications,
       total_polygon_tvl: total_polygon_tvl,

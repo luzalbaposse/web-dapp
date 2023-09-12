@@ -127,6 +127,7 @@ class User < ApplicationRecord
   end
 
   scope :onboarded, -> { where.not(onboarded_at: nil) }
+  scope :members, -> { where("last_access_at >= CURRENT_DATE - 180 AND last_access_at::date != created_at::date").where.not(email_confirmed_at: nil) }
   scope :profile_completed, -> { where.not(profile_completed_at: nil) }
 
   # [CLEARANCE] override email writing to allow nil but not two emails ""

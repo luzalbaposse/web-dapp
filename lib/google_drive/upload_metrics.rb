@@ -98,7 +98,7 @@ module GoogleDrive
     end
 
     def total_blockchain_transactions
-      total_polygon_transactions + total_celo_transactions + daily_metric.total_tal_subdomain_transactions.to_i
+      total_polygon_transactions + total_celo_transactions
     end
 
     def total_polygon_transactions

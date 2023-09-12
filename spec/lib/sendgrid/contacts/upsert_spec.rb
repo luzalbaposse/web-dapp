@@ -53,6 +53,18 @@ RSpec.describe Sendgrid::Contacts::Upsert do
       wallet_id: "skhdguyagsai83833"
   end
 
+  let!(:user_five) do
+    create :user,
+      email: "rails@gmail.com",
+      email_confirmed_at:,
+      last_access_at:,
+      created_at: last_access_at,
+      experience_points_amount: 1500,
+      legal_first_name: "Rails",
+      username: "rails",
+      wallet_id: "aldaskd0os"
+  end
+
   let(:email_confirmed_at) { "2023-01-11T13:43:49.398Z".to_datetime }
   let(:last_access_at) { Date.yesterday }
   let(:tag_one) { create :tag, description: "foo" }

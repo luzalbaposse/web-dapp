@@ -82,38 +82,40 @@ module Metrics
     end
 
     def collect_polygon_transactions(daily_metric)
-      staking_count = web3_proxy.retrieve_transactions_count(
-        address: POLYGON_OLD_STAKING["address"],
-        chain: "polygon",
-        start_timestamp: POLYGON_OLD_STAKING["start_tracking"],
-        end_timestamp: POLYGON_OLD_STAKING["stop_tracking"]
-      ).to_i
-      staking_count += web3_proxy.retrieve_transactions_count(
-        address: POLYGON_CURRENT_STAKING["address"],
-        chain: "polygon",
-        start_timestamp: POLYGON_CURRENT_STAKING["start_tracking"]
-      ).to_i
-      staking_count += web3_proxy.retrieve_transactions_count(
-        address: POLYGON_OLD_FACTORY["address"],
-        chain: "polygon",
-        start_timestamp: POLYGON_OLD_FACTORY["start_tracking"],
-        end_timestamp: POLYGON_OLD_FACTORY["stop_tracking"]
-      ).to_i
-      staking_count += web3_proxy.retrieve_transactions_count(
-        address: POLYGON_CURRENT_FACTORY["address"],
-        chain: "polygon",
-        start_timestamp: POLYGON_CURRENT_FACTORY["start_tracking"],
-        end_timestamp: POLYGON_CURRENT_FACTORY["stop_tracking"]
-      ).to_i
-      sponsorship_count = web3_proxy.retrieve_transactions_count(
-        address: POLYGON_SPONSORSHIP_ADDRESS,
-        chain: "polygon",
-        start_timestamp: TRANSACTIONS_KPI_START_DATE
-      ).to_i
+      # Transactions in polygin are not working now due to Moralis upgrade
+
+      # staking_count = web3_proxy.retrieve_transactions_count(
+      #   address: POLYGON_OLD_STAKING["address"],
+      #   chain: "polygon",
+      #   start_timestamp: POLYGON_OLD_STAKING["start_tracking"],
+      #   end_timestamp: POLYGON_OLD_STAKING["stop_tracking"]
+      # ).to_i
+      # staking_count += web3_proxy.retrieve_transactions_count(
+      #   address: POLYGON_CURRENT_STAKING["address"],
+      #   chain: "polygon",
+      #   start_timestamp: POLYGON_CURRENT_STAKING["start_tracking"]
+      # ).to_i
+      # staking_count += web3_proxy.retrieve_transactions_count(
+      #   address: POLYGON_OLD_FACTORY["address"],
+      #   chain: "polygon",
+      #   start_timestamp: POLYGON_OLD_FACTORY["start_tracking"],
+      #   end_timestamp: POLYGON_OLD_FACTORY["stop_tracking"]
+      # ).to_i
+      # staking_count += web3_proxy.retrieve_transactions_count(
+      #   address: POLYGON_CURRENT_FACTORY["address"],
+      #   chain: "polygon",
+      #   start_timestamp: POLYGON_CURRENT_FACTORY["start_tracking"],
+      #   end_timestamp: POLYGON_CURRENT_FACTORY["stop_tracking"]
+      # ).to_i
+      # sponsorship_count = web3_proxy.retrieve_transactions_count(
+      #   address: POLYGON_SPONSORSHIP_ADDRESS,
+      #   chain: "polygon",
+      #   start_timestamp: TRANSACTIONS_KPI_START_DATE
+      # ).to_i
 
       daily_metric.total_polygon_sponsorship_volume_usdc = total_sponsorship_volume_polygon_usdc
-      daily_metric.total_polygon_stake_transactions = staking_count.to_i
-      daily_metric.total_polygon_sponsorship_transactions = sponsorship_count.to_i
+      daily_metric.total_polygon_stake_transactions = 0
+      daily_metric.total_polygon_sponsorship_transactions = 0
       daily_metric.total_mates_nfts = total_mates_nfts.to_i
       daily_metric
     end
@@ -146,14 +148,6 @@ module Metrics
       daily_metric.total_celo_stake_transactions = staking_count.to_i
       daily_metric.total_celo_sponsorship_transactions = sponsorship_count.to_i
       daily_metric
-    end
-
-    def total_tal_subdomain_transactions
-      web3_proxy.retrieve_transactions_count(
-        address: ETH_TAL_SUBDOMAIN_ADDRESS,
-        chain: "eth",
-        start_timestamp: TRANSACTIONS_KPI_START_DATE
-      ).to_i
     end
 
     # TVL in USD
