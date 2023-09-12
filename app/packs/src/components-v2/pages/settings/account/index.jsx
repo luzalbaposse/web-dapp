@@ -1,13 +1,15 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { createPortal } from "react-dom";
-import { Input, Tag, Typography, Button } from "@talentprotocol/design-system";
+import { Input, Tag, Typography, Button, useModal } from "@talentprotocol/design-system";
 import { ConfirmPasswordContainer, Container, DeleteAccountContainer, TagsContainer } from "./styled";
 import { useEditProfileStore } from "src/contexts/state";
 import { editProfileService } from "src/api/edit-profile";
 import { ToastBody } from "src/components/design_system/toasts";
+import { DeleteAccountEmail } from "./delete-account-email";
 
 export const AccountForm = () => {
+  const modalState = useModal();
   const [isLoading, setIsLoading] = useState(true);
   const [isHiddingPassword, setIsHiddingPassword] = useState(true);
   const { profile, updateProfileState } = useEditProfileStore();
@@ -17,6 +19,7 @@ export const AccountForm = () => {
     newPassword: useRef(),
     currentPassword: useRef()
   };
+
   const updateAccount = useCallback(() => {
     editProfileService
       .editAccount(profile?.username, {
@@ -43,9 +46,11 @@ export const AccountForm = () => {
         toast.error(<ToastBody heading="Error" body={"Something happened while updating your profile"} />);
       });
   }, [refs, profile]);
+
   useEffect(() => {
     setIsLoading(false);
   }, [setIsLoading]);
+
   return (
     <Container>
       <Input inputRef={refs.username} label="Username" defaultValue={profile?.username} />
@@ -111,13 +116,14 @@ export const AccountForm = () => {
         <Typography specs={{ type: "regular", variant: "p2" }} color="primary03">
           Delete your account and account data. This can’t be undone!
         </Typography>
-        <Button hierarchy="danger" size="small" text="Delete Account" />
+        <Button hierarchy="danger" size="small" text="Delete Account" onClick={modalState.openModal} />
       </DeleteAccountContainer>
       {!isLoading &&
         createPortal(
           <Button onClick={updateAccount} hierarchy="primary" size="small" text="Save" />,
           document.getElementById("save-button")
         )}
+      <DeleteAccountEmail modalState={modalState} userId={profile?.user?.uuid} />
     </Container>
   );
 };

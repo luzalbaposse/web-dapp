@@ -44,9 +44,9 @@ class UsersController < ApplicationController
       result = Users::Destroy.new(user: user).call
       return redirect_to root_url, flash: {success: "Account deleted"} if result
 
-      redirect_to account_settings_path(username: user.username), flash: {error: "Unable to delete account"}
+      redirect_to settings_path(username: user.username, tab: "Account"), flash: {error: "Unable to delete account"}
     else
-      redirect_to account_settings_path(username: user.username), flash: {error: "Invalid token"}
+      redirect_to settings_path(username: user.username, tab: "Account"), flash: {error: "Invalid token"}
     end
   end
 
