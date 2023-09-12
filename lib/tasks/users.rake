@@ -1,12 +1,9 @@
 namespace :users do
-  task update_profile_completeness: :environment do
-    desc "Update profile completeness % for all users"
-
-    User.find_each do |user|
-      Users::UpdateProfileCompleteness.new(user: user).call
+  desc "Associate goals with users"
+  task associate_goals: :environment do
+    Goal.includes(career_goal: [talent: :user]).find_each do |goal|
+      goal.update_column(:user_id, goal.career_goal.talent.user_id)
     end
-
-    TalentsIndex.import!
   end
 
   task migrate_pitch_to_profile: :environment do

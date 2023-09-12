@@ -34,7 +34,9 @@ module Users
         Subscription.where(subscriber: user).destroy_all
         Reward.where(user: user).destroy_all
 
-        user.destroy!
+        user
+          .destroy!
+          .tap { Sendgrid::DeleteContactJob.perform_later(user.email) }
       end
     end
 

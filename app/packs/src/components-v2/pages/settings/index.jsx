@@ -9,7 +9,7 @@ import { NavLinks } from "./nav-links";
 import { ProfileForm } from "./profile";
 import { ExperienceForm } from "./experience";
 import { AboutForm } from "./about";
-import { NotificationsForm } from "./notifications";
+// import { NotificationsForm } from "./notifications";
 import { AccountForm } from "./account";
 import { LocalHeaderMobile } from "./local-header-mobile";
 

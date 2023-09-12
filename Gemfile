@@ -3,15 +3,15 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.1.4"
 
-gem "rails", "7.0.4.1"
+gem "rails", "~> 7.0.8"
 gem "pg", "~> 1.1"
 gem "puma", "~> 5.6"
 
 # Frontend Dependencies
 gem "sass-rails", ">= 6"
-gem "webpacker", github: "rails/webpacker", branch: "master"
+gem "shakapacker", "7.0.3"
 gem "jbuilder"
-gem "react_on_rails", "= 12.2.0"
+gem "react_on_rails", "~> 13.0"
 gem "mini_racer", platforms: :ruby
 
 # Email
@@ -113,7 +113,6 @@ end
 group :development do
   gem "letter_opener_web"
   gem "web-console", ">= 4.1.0"
-  gem "rack-mini-profiler", "~> 2.0"
   gem "listen", "~> 3.3"
   gem "spring"
   gem "foreman"

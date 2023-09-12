@@ -1,12 +1,23 @@
 require "rails_helper"
 
 RSpec.describe Users::Destroy do
-  subject(:destroy_user) { described_class.new(user: user).call }
+  include ActiveJob::TestHelper
+
+  subject(:destroy_user) { described_class.new(user:).call }
 
   let!(:user) { create :user }
 
   it "destroys the user" do
     expect { destroy_user }.to change(User, :count).from(1).to(0)
+  end
+
+  it "enqueues a job to delete the contact from SendGrid" do
+    Sidekiq::Testing.inline! do
+      destroy_user
+
+      expect(enqueued_jobs[0][:job]).to eq(Sendgrid::DeleteContactJob)
+      expect(enqueued_jobs[0][:args]).to eq([user.email])
+    end
   end
 
   context "when the user has talent relations" do

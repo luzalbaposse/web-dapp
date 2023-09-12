@@ -43,7 +43,8 @@ module.exports = function (api) {
           development: isDevelopmentEnv || isTestEnv,
           useBuiltIns: true
         }
-      ]
+      ],
+      ["./node_modules/shakapacker/package/babel/preset.js"]
     ].filter(Boolean),
     plugins: [
       "babel-plugin-macros",
@@ -56,6 +57,7 @@ module.exports = function (api) {
           loose: true
         }
       ],
+      ["@babel/plugin-transform-private-property-in-object", { loose: true }],
       [
         "@babel/plugin-proposal-private-methods",
         {
