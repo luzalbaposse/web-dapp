@@ -1,15 +1,6 @@
 module Web3Api
   module CeloExplorer
     class Client
-      def retrieve_tokens(wallet_address:)
-        params = {
-          module: "account",
-          action: "tokenlist",
-          address: wallet_address
-        }
-        Faraday.get(ENV["CELO_EXPLORER_BASE_URI"], params, headers)
-      end
-
       def retrieve_transactions(address:, start_timestamp:, end_timestamp: nil)
         params = {
           module: "account",
