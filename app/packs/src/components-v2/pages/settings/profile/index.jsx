@@ -85,7 +85,7 @@ export const ProfileForm = () => {
     }
   });
   useEffect(() => {
-    if (profileFileInput.current) return;
+    if (!profileFileInput.current) return;
     profileFileInput?.current.addEventListener("change", event => {
       const files = Array.from(event.target.files);
       files.forEach(file => {
@@ -136,11 +136,9 @@ export const ProfileForm = () => {
             JPG or PNG. Max 1MB
           </Typography>
           <UploadButtons>
-            <Button hierarchy="primary" size="small" text="Upload Profile Picture" buttonRef={profileFileInput} />
             <FileInput
                 uppy={uppyProfile}
-                pretty
-                inputName="banners[]"
+                inputName="profiles[]"
                 locale={{
                   strings: {
                     chooseFiles: "Upload Profile Picture",
