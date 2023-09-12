@@ -12,6 +12,7 @@ RSpec.describe Sendgrid::DeleteNonMemberContactsJob, type: :job do
     create :user, email: "user-one@gmail.com", last_access_at: Date.current - 181.days
     create :user, email: "user-two@gmail.com", last_access_at: Date.current - 182.days
     create :user, email: "user-three@gmail.com", last_access_at: Date.current - 183.days
+    create :user, email: "user-four@gmail.com", last_access_at: Date.current - 181.days, created_at: Date.current - 181.days
   end
 
   subject { described_class.new }
