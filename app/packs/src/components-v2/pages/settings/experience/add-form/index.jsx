@@ -155,7 +155,7 @@ export const AddExperienceForm = ({ username, category, milestone, backCallback 
         onCheckboxClick={() => setIsInProgress(!isInProgress)}
       />
       <Typography specs={{ type: "bold", variant: "p2" }} color="primary01">
-        End date
+        Start date
       </Typography>
       <Row>
         <Dropdown

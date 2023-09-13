@@ -46,7 +46,12 @@ export const AboutForm = () => {
     linkedin: useRef(),
     figma: useRef(),
     behance: useRef(),
-    youtube: useRef()
+    youtube: useRef(),
+    github: useRef(),
+    lens: useRef(),
+    farcaster: useRef(),
+    instagram: useRef(),
+    tiktok: useRef()
   };
   const updateAbout = useCallback(() => {
     editProfileService
@@ -59,7 +64,12 @@ export const AboutForm = () => {
             linkedin: refs.linkedin.current.value,
             figma: refs.figma.current.value,
             behance: refs.behance.current.value,
-            youtube: refs.youtube.current.value
+            youtube: refs.youtube.current.value,
+            github: refs.github.current.value,
+            lens: refs.lens.current.value,
+            farcaster: refs.farcaster.current.value,
+            instagram: refs.instagram.current.value,
+            tiktok: refs.tiktok.current.value
           }
         },
         tags: currentTags
@@ -74,7 +84,12 @@ export const AboutForm = () => {
             linkedin: refs.linkedin.current.value,
             figma: refs.figma.current.value,
             behance: refs.behance.current.value,
-            youtube: refs.youtube.current.value
+            youtube: refs.youtube.current.value,
+            github: refs.github.current.value,
+            lens: refs.lens.current.value,
+            farcaster: refs.farcaster.current.value,
+            instagram: refs.instagram.current.value,
+            tiktok: refs.tiktok.current.value
           },
           tags: currentTags
         });
@@ -151,6 +166,42 @@ export const AboutForm = () => {
               label="Youtube"
               placeholder="youtube.com/"
               defaultValue={profile?.profile.youtube}
+            />
+          </LinksRow>
+          <LinksRow>
+            <Input
+              inputRef={refs.behance}
+              label="Gihub"
+              placeholder="github.com/"
+              defaultValue={profile?.profile.github}
+            />
+            <Input
+              inputRef={refs.youtube}
+              label="Lens"
+              placeholder="lens.xyz/"
+              defaultValue={profile?.profile.lens}
+            />
+          </LinksRow>
+          <LinksRow>
+            <Input
+              inputRef={refs.behance}
+              label="Farcaster"
+              placeholder="farcaster.xyz/"
+              defaultValue={profile?.profile.farcaster}
+            />
+            <Input
+              inputRef={refs.youtube}
+              label="Instagram"
+              placeholder="instagram.com/"
+              defaultValue={profile?.profile.instagram}
+            />
+          </LinksRow>
+          <LinksRow>
+            <Input
+              inputRef={refs.behance}
+              label="Tik Tok"
+              placeholder="tiktok.net/"
+              defaultValue={profile?.profile.tiktok}
             />
           </LinksRow>
         </LinksArea>
