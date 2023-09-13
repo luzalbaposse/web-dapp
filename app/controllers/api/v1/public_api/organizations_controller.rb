@@ -5,7 +5,8 @@ class API::V1::PublicAPI::OrganizationsController < API::V1::PublicAPI::APIContr
 
   TYPES = {
     "community" => "Organizations::Community",
-    "team" => "Organizations::Team"
+    "team" => "Organizations::Team",
+    "election" => "Organizations::Election"
   }.freeze
 
   def index
