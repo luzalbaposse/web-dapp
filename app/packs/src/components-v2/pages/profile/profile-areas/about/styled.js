@@ -19,7 +19,7 @@ export const Container = styled.div`
   `)}
 `;
 
-export const ButtonContainer = styled.div`
+export const ButtonContainer = styled.a`
   display: flex;
   justify-content: flex-end;
 `;

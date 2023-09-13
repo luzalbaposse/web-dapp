@@ -50,14 +50,14 @@ export const About = ({ currentUser, urlData }) => {
   ) : (
     <Container>
       {urlData?.profileUsername === currentUser?.username && (
-        <ButtonContainer>
+        <ButtonContainer href={`/u/${urlData?.profileUsername}/settings?tab=About`}>
           <Button
             text="Edit About"
             hierarchy="secondary"
             size="small"
             iconColor="primary01"
             leftIcon="edit"
-            onClick={openEditModal}
+            onClick={() => null}
           />
         </ButtonContainer>
       )}
