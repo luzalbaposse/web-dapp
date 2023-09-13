@@ -16,28 +16,10 @@
     send_goal_due_in_one_month_reminder_job:
       cron: "0 12 * * *" # Runs once every day at 12:00
       class: EmailReminders::SendGoalDueInOneMonthReminderJob
-    send_goal_15_days_past_due_date_reminder_job:
-      cron: "0 12 * * *" # Runs once every day at 12:00
-      class: EmailReminders::SendGoal15DaysPastDueDateReminderJob
-    send_goal_30_days_past_due_date_reminder_job:
-      cron: "0 12 * * *" # Runs once every day at 12:00
-      class: EmailReminders::SendGoal30DaysPastDueDateReminderJob
     sync_on_chain_talent_supporters:
       cron: "0 * * * *" # Runs every hour
       class: TriggerTalentSupportersRefreshJob
       enabled: <%= ENV["ENABLE_THE_GRAPH_JOBS"] %>
-    send_token_launch_reminder:
-      cron: "0 10 * * *" # Runs once every day at 10am
-      class: EmailReminders::SendTokenLaunchReminderJob
-      enabled: <%= ENV["EMAIL_REMINDER_DAYS"].to_i > 0 %>
-    send_token_purchase_reminder:
-      cron: "0 10 * * *" # Runs once every day at 10am
-      class: EmailReminders::SendTokenPurchaseReminderJob
-      enabled: <%= ENV["EMAIL_REMINDER_DAYS"].to_i > 0 %>
-    send_complete_profile_reminder:
-      cron: "0 10 * * *" # runs once every day at 10am
-      class: EmailReminders::SendCompleteProfileReminderJob
-      enabled: <%= ENV["EMAIL_REMINDER_DAYS"].to_i > 0 %>
     daily_metrics:
       cron: "1 0 * * *" # runs once every day at 8am
       class: DailyMetricsJob

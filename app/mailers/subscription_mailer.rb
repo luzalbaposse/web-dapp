@@ -1,20 +1,32 @@
 class SubscriptionMailer < ApplicationMailer
   def subscription_request_email
-    @recipient = User.find(indifferent_access_params[:recipient_id])
-    pending_subscribers = @recipient.pending_subscribers.order(id: :desc)
-    @pending_subscribers_total_count = pending_subscribers.count
-    @pending_subscribers = pending_subscribers.limit(5)
-    set_profile_pictures_attachments(@pending_subscribers)
+    user = User.find(indifferent_access_params[:recipient_id])
+    pending_subscribe_requests = user.pending_subscribers.count
 
-    bootstrap_mail(to: @recipient.email, subject: "You have new subscription requests")
+    dynamic_template_data = {
+      first_name: sendgrid_first_name_variable(user),
+      pending_subscribe_requests:
+    }
+
+    template_id = "d-cce7c115f2dd4e9dbf2898403ea2b6fb"
+    to = user.email
+
+    send_sendgrid_email(dynamic_template_data:, template_id:, to:)
   end
 
   def subscription_accepted_email
-    @recipient = indifferent_access_params[:recipient]
-    @sender = User.find(indifferent_access_params[:source_id])
+    subscribed = User.find(indifferent_access_params[:source_id])
+    user = indifferent_access_params[:recipient]
 
-    set_profile_picture_attachment(@sender)
+    dynamic_template_data = {
+      first_name: sendgrid_first_name_variable(user),
+      subscribed_profile: user_url(username: subscribed.username),
+      subscribed_username: subscribed.username
+    }
 
-    bootstrap_mail(to: @recipient.email, subject: "Your subscription request was accepted")
+    template_id = "d-adfed86609d246679a69351e34e3fd9a"
+    to = indifferent_access_params[:recipient].email
+
+    send_sendgrid_email(dynamic_template_data:, template_id:, to:)
   end
 end

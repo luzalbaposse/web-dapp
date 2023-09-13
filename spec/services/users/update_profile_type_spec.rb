@@ -93,10 +93,6 @@ RSpec.describe Users::UpdateProfileType do
       expect { update_profile_type }.to change(Notification, :count).from(0).to(1)
     end
 
-    it "enqueues a job to send the notification by email" do
-      expect { update_profile_type }.to have_enqueued_job(Noticed::DeliveryMethods::Email)
-    end
-
     it "creates the new notification with the correct params" do
       update_profile_type
 
@@ -125,10 +121,6 @@ RSpec.describe Users::UpdateProfileType do
 
     it "creates a new notification" do
       expect { update_profile_type }.to change(Notification, :count).from(0).to(1)
-    end
-
-    it "enqueues a job to send the notification by email" do
-      expect { update_profile_type }.to have_enqueued_job(Noticed::DeliveryMethods::Email)
     end
 
     it "creates the new notification with the correct params" do

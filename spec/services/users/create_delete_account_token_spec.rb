@@ -21,19 +21,13 @@ RSpec.describe Users::CreateDeleteAccountToken do
       end
     end
 
-    it "sends the confirm account deletion email to the user" do
-      Sidekiq::Testing.inline! do
-        create_delete_account_token
+    it "enqueues a job to send a confirm account deletion email to the user" do
+      expect { create_delete_account_token }
+        .to have_enqueued_job
+        .exactly(:once)
+        .and have_enqueued_job(ActionMailer::MailDeliveryJob)
 
-        perform_enqueued_jobs
-
-        mail = ActionMailer::Base.deliveries.first
-
-        aggregate_failures do
-          expect(ActionMailer::Base.deliveries.count).to eq(1)
-          expect(mail.subject).to eq "Is this goodbye?"
-        end
-      end
+      expect(enqueued_jobs[0][:args]).to include("send_confirm_account_deletion_email")
     end
 
     it "returns a success result" do
