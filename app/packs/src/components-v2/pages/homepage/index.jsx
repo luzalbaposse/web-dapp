@@ -11,7 +11,6 @@ import { RecommendedBuildersWidget } from "../../recommended-builders-widget";
 import { RecommendedTeamsWidget } from "../../recommended-teams-widget";
 import { useWindowDimensionsHook } from "src/utils/window";
 import { QuestsWidget } from "../../quests-widget";
-// import { MyWalletWidget } from "../../my-wallet-widget";
 
 export const HomepagePage = props => {
   const { mobile } = useWindowDimensionsHook();

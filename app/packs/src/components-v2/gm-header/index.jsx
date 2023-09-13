@@ -2,7 +2,7 @@ import React from "react";
 import { Container, InnerContainer } from "./styled";
 import { Avatar, useModal } from "@talentprotocol/design-system";
 import TextInput from "src/components/design_system/fields/textinput";
-import { SendCareerUpdateModalV2 } from "../send-career-update-modal";
+import { SendCareerUpdateModal } from "../send-career-update-modal";
 
 export const GmHeader = ({ profile }) => {
   const modalState = useModal();
@@ -16,7 +16,7 @@ export const GmHeader = ({ profile }) => {
           onClick={() => modalState.openModal()}
           className="w-100"
         />
-        <SendCareerUpdateModalV2 isOpen={modalState.isOpen} closeModal={modalState.closeModal} profile={profile} />
+        <SendCareerUpdateModal isOpen={modalState.isOpen} closeModal={modalState.closeModal} profile={profile} />
       </InnerContainer>
     </Container>
   ) : (

@@ -6,7 +6,7 @@ import { useCareerUpdatesStore } from "src/contexts/state";
 const bootstrapGoals = goals => () =>
   goals.map(goal => ({ content: goal.title, isSelected: false, isDisabled: false, id: goal.id }));
 
-export const SendCareerUpdateModalV2 = ({ isOpen, closeModal, profile }) => {
+export const SendCareerUpdateModal = ({ isOpen, closeModal, profile }) => {
   const { createCareerUpdate } = useCareerUpdatesStore();
   const textAreaRef = React.useRef(null);
   const [pills, setPills] = useState(bootstrapGoals(profile.goals));
