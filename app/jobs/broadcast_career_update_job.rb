@@ -23,6 +23,7 @@ class BroadcastCareerUpdateJob < ApplicationJob
 
     receivers.find_each do |supporter|
       create_notification_service.call(
+        extra_params: {career_update_id: career_update.id},
         recipient: supporter,
         source_id: sender.id,
         type: CareerUpdateCreatedNotification

@@ -4,6 +4,43 @@ class ApplicationMailer < ActionMailer::Base
 
   private
 
+  def send_sendgrid_email(dynamic_template_data:, template_id:, to:)
+    request_body = sendgrid_request_body(dynamic_template_data:, template_id:, to:)
+    response = sendgrid_api.client.mail._("send").post(request_body:)
+
+    if response.status_code != "202"
+      Rollbar.error(
+        "Unable to deliver email.",
+        dynamic_template_data: dynamic_template_data,
+        status_code: response.status_code,
+        response_body: response.body,
+        template_id: template_id,
+        to: to
+      )
+    end
+  end
+
+  def sendgrid_api
+    @sendgrid_api ||= SendGrid::API.new(api_key: ENV["SENDGRID_API_KEY"])
+  end
+
+  def sendgrid_request_body(dynamic_template_data:, template_id:, to:)
+    {
+      dynamic_template_data:,
+      from: {
+        email: "no-reply@talentprotocol.com",
+        name: ENV["EMAILS_FROM"]
+      },
+      mail_settings: {sandbox_mode: {enable: !Rails.env.production?}},
+      personalizations: [{to: [{email: to}]}],
+      template_id:
+    }
+  end
+
+  def sendgrid_first_name_variable(user)
+    user.legal_first_name || user.username
+  end
+
   def indifferent_access_params
     @indifferent_access_params ||= params.with_indifferent_access
   end

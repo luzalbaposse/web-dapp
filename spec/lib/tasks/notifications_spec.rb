@@ -9,33 +9,27 @@ RSpec.describe "notifications:send_emails_to_admin" do
   let(:role) { "admin" }
 
   it "sends all user emails to the admin" do
-    Sidekiq::Testing.inline! do
-      subject.invoke(user.id)
+    expect { subject.invoke(user.id) }
+      .to have_enqueued_job(ActionMailer::MailDeliveryJob)
+      .exactly(11)
+      .times
 
-      perform_enqueued_jobs
-
-      emails = ActionMailer::Base.deliveries
-
-      aggregate_failures do
-        expect(emails.count).to eq(11)
-
-        expect(emails.map(&:subject)).to match_array(
-          [
-            "Confirm your email address",
-            "Talent Protocol - Did you forget your password?",
-            "Welcome to the home of talented builders",
-            "No token, no supporters 🤔",
-            "Congrats, your Talent Token is now live!",
-            "You're missing out on $TAL rewards!",
-            "Complete your profile and earn your NFT today! 🚀",
-            "You're verified! ✅",
-            "Verification failed 💔",
-            "We've received your application",
-            "Hey, you can now launch your token 🚀"
-          ]
-        )
-      end
-    end
+    expect(enqueued_jobs.map { |job| job[:args][1] })
+      .to match_array(
+        %w[
+          send_sign_up_email
+          send_password_reset_email
+          send_verified_profile_email
+          send_verification_failed_email
+          send_confirm_account_deletion_email
+          send_goal_deadline_reminder_email
+          send_goal_due_in_one_month_reminder_email
+          send_career_update_created_email
+          subscription_request_email
+          subscription_accepted_email
+          new_sponsor_email
+        ]
+      )
   end
 
   context "when the user is not an admin" do
