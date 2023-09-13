@@ -16,17 +16,28 @@ namespace :collective do
     org.verified = true
     org.type = "Organizations::Election"
     org.location = "Istanbul, Turkey"
-    tags.each do |tag|
-      org.tags << Tag.find_or_create_by(description: tag)
+    if org.new_record?
+      tags.each do |tag|
+        org.tags << Tag.find_or_create_by(description: tag)
+      end
+
+      org.logo_attacher.context[:url] = true
+      org.logo = Down.open(logo)
+
+      org.banner_attacher.context[:url] = true
+      org.banner = Down.open(banner)
     end
-
-    org.logo_attacher.context[:url] = true
-    org.logo = Down.open(logo)
-
-    org.banner_attacher.context[:url] = true
-    org.banner = Down.open(banner)
 
     org.save!
     puts "Successfully created organization - #{org.name}"
+
+    # Create election
+    puts "Creating election for Takeoff Istanbul"
+    election = Election.find_or_initialize_by(organization: org)
+    election.start_date = Rails.env.production? ? Date.parse("2023-09-18") : Date.parse("2023-09-13")
+    election.voting_start_date = Rails.env.production? ? Date.parse("2023-09-25") : Date.parse("2023-09-13")
+    election.voting_end_date = Rails.env.production? ? Date.parse("2023-10-06"): Date.parse("2023-09-22")
+    election.save!
+    puts "Successfully created election for #{org.name}"
   end
 end
