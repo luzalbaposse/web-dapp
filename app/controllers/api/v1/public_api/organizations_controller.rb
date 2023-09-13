@@ -10,7 +10,7 @@ class API::V1::PublicAPI::OrganizationsController < API::V1::PublicAPI::APIContr
   }.freeze
 
   def index
-    all_organizations = Organization.all.order(memberships_count: :desc)
+    all_organizations = Organization.all.order(created_at: :desc)
     all_organizations = all_organizations.where("name ILIKE ?", "%#{keyword_param}%") if keyword_param.present?
     all_organizations = all_organizations.where(type: TYPES[type_param]) if type_param.present?
     all_organizations = all_organizations.where("memberships_count > ?", 3)

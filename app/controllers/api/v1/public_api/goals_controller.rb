@@ -9,8 +9,11 @@ class API::V1::PublicAPI::GoalsController < API::V1::PublicAPI::APIController
       order: {due_date: :desc}
     )
 
+    active_election = Election.where("start_date > ? and end_date < ?", Date.today, Date.today).exists?
+
     response_body = {
       goals: API::GoalBlueprint.render_as_json(page_goals, view: :normal),
+      active_election: active_election,
       pagination: {
         total: goals.count,
         cursor: pagy.has_more? ? page_goals.last.uuid : nil

@@ -390,7 +390,8 @@ const GoalExperience = ({
   validationErrors,
   uppyBanner,
   deleteImage,
-  hideBackButton
+  hideBackButton,
+  activeElection
 }) => {
   const [dueMonth, setDueMonth] = useState(returnMonth(currentJourneyItem.due_date));
   const [dueYear, setDueYear] = useState(returnYear(currentJourneyItem.due_date));
@@ -594,7 +595,8 @@ const EditJourneyModal = ({
   journeyItem = {},
   skipToNextStepItemName,
   hideBackButton = false,
-  username
+  username,
+  activeElection
 }) => {
   const { profile, fetchProfile } = useProfileFetcher();
   useEffect(() => {
@@ -1004,6 +1006,7 @@ const EditJourneyModal = ({
               uppyBanner={uppyBanner}
               deleteImage={deleteImage}
               hideBackButton={hideBackButton}
+              activeElection={activeElection}
             />
           )}
         </>
@@ -1042,6 +1045,7 @@ const EditJourneyModal = ({
               uppyBanner={uppyBanner}
               deleteImage={deleteImage}
               hideBackButton={hideBackButton}
+              activeElection={activeElection}
             />
           )}
         </>

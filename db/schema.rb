@@ -290,6 +290,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_13_152251) do
   create_table "elections", force: :cascade do |t|
     t.date "start_date", null: false
     t.date "voting_start_date", null: false
+    t.date "voting_end_date", null: false
     t.date "end_date", null: false
     t.bigint "organization_id", null: false
     t.boolean "rewards_distributed", default: false, null: false

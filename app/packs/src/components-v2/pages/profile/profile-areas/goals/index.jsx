@@ -14,14 +14,14 @@ import { AddGoalModal } from "./add-goal-modal";
 import { useAddGoalModalState } from "./add-goal-modal/hooks/use-add-goal-modal";
 
 export const Goals = ({ urlData, currentUser }) => {
-  const [data, setData] = useState({ goals: [], isLoading: true });
+  const [data, setData] = useState({ goals: [], isLoading: true, activeElection: false });
   const addGoalModalState = useAddGoalModalState();
   useEffect(() => {
     if (!urlData.profileUsername) return;
     goalsService
       .getGoals(urlData.profileUsername)
       .then(({ data }) => {
-        setData({ goals: data.goals, isLoading: false });
+        setData({ goals: data.goals, isLoading: false, activeElection: data.active_election });
       })
       .catch(err => {
         console.error(err);
@@ -86,6 +86,7 @@ export const Goals = ({ urlData, currentUser }) => {
       <AddGoalModal
         {...addGoalModalState}
         talent={{ id: currentUser?.talent_id, career_goal: { id: currentUser?.career_goal_id } }}
+        activeElection={data.activeElection}
       />
     </Container>
   );
