@@ -22,7 +22,7 @@ namespace :collective do
 
     org.logo_attacher.context[:url] = true
     org.logo = Down.open(logo)
-    
+
     org.banner_attacher.context[:url] = true
     org.banner = Down.open(banner)
 
