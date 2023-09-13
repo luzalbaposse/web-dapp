@@ -44,6 +44,7 @@ class User < ApplicationRecord
   has_many :quests
   has_many :connections, dependent: :destroy
   has_many :career_updates
+  has_many :goals
 
   # Rewards
   has_many :rewards

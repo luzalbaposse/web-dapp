@@ -5,20 +5,21 @@ import { VerifyHumanityQuest } from "./verify-humanity-quest";
 // import { VerifyQuest } from "./verify-quest";
 
 const QUEST_TYPE_MAP = {
-  profile_picture: "/u/__username__",
-  three_talent_subscribe: "/talent",
-  three_journey_entries: "/u/__username__#journey",
-  send_career_update: "/home",
-  verify_identity: "/u/__username__",
-  five_subscribers: "/quests?tab=invites",
-  supporting_three: "/talent",
-  connect_wallet: "",
+  active_goal: "u/__username__?tab=goals",
   complete_profile: "/u/__username__",
-  verify_humanity: "",
+  connect_wallet: "",
   create_talent_mate: "https://mates.talentprotocol.com/",
-  three_token_holders: "/u/__username__#token",
+  five_subscribers: "/quests?tab=invites",
+  invite_three: "?tab=invites",
+  profile_picture: "/u/__username__",
+  send_career_update: "/home",
   sponsor_talent: "/talent",
-  invite_three: "?tab=invites"
+  supporting_three: "/talent",
+  three_journey_entries: "/u/__username__#journey",
+  three_talent_subscribe: "/talent",
+  three_token_holders: "/u/__username__#token",
+  verify_humanity: "",
+  verify_identity: "/u/__username__"
 };
 
 export const Quest = ({ quest, username, railsContext }) => {

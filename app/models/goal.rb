@@ -12,6 +12,7 @@ class Goal < ApplicationRecord
   accepts_nested_attributes_for :goal_images, allow_destroy: true
   validates_associated :goal_images
 
+  scope :active, -> { where("due_date >= ? AND progress = ?", Date.current, DOING) }
   scope :due_today, -> { where(due_date: Date.current, progress: [PAUSED, PLANNED, DOING]) }
   scope :due_in_one_month, -> { where(due_date: 30.days.after, progress: [PAUSED, PLANNED, DOING]) }
   scope :due_date_passed_15_days_ago, -> { where(progress: [PLANNED, DOING], due_date: 15.days.ago) }

@@ -1,6 +1,19 @@
 require "rails_helper"
 
 RSpec.describe Goal, type: :model do
+  describe ".active" do
+    let!(:goal_one) { create :goal, due_date: Date.tomorrow, progress: Goal::DOING }
+    let!(:goal_two) { create :goal, due_date: Date.current, progress: Goal::DOING }
+    let!(:goal_three) { create :goal, due_date: Date.yesterday, progress: Goal::DOING }
+    let!(:goal_four) { create :goal, due_date: Date.tomorrow, progress: Goal::PLANNED }
+    let!(:goal_five) { create :goal, due_date: Date.current, progress: Goal::PAUSED }
+    let!(:goal_six) { create :goal, due_date: Date.tomorrow, progress: Goal::ABANDONED }
+
+    it "returns the goals that are due today or in the future with a 'doing' progress" do
+      expect(described_class.active).to eq([goal_one, goal_two])
+    end
+  end
+
   describe ".due_today" do
     let!(:goal_one) { create :goal, due_date: Date.tomorrow, progress: Goal::PLANNED }
     let!(:goal_two) { create :goal, due_date: Date.current, progress: Goal::PLANNED }

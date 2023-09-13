@@ -22,6 +22,7 @@ module Goals
 
       refresh_quests
       update_profile_completeness
+      send_discord_notification(goal) if goal.accomplished?
 
       goal
     end
@@ -51,6 +52,10 @@ module Goals
 
     def update_profile_completeness
       Users::UpdateProfileCompleteness.new(user: career_goal.talent.user).call
+    end
+
+    def send_discord_notification(goal)
+      Discord::SendAccomplishedGoalNotificationJob.perform_later(goal.id)
     end
   end
 end
