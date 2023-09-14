@@ -4,7 +4,6 @@ RSpec.shared_examples "a SendGrid email" do
       .to receive_message_chain(:mail, :_, :post)
       .with(
         request_body: {
-          dynamic_template_data:,
           from: sendgrid_from,
           mail_settings: sendgrid_mail_settings,
           personalizations: sendgrid_personalizations,

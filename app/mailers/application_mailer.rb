@@ -26,13 +26,17 @@ class ApplicationMailer < ActionMailer::Base
 
   def sendgrid_request_body(dynamic_template_data:, template_id:, to:)
     {
-      dynamic_template_data:,
       from: {
         email: "no-reply@talentprotocol.com",
         name: ENV["EMAILS_FROM"]
       },
       mail_settings: {sandbox_mode: {enable: !Rails.env.production?}},
-      personalizations: [{to: [{email: to}]}],
+      personalizations: [
+        {
+          to: [{email: to}],
+          dynamic_template_data:
+        }
+      ],
       template_id:
     }
   end

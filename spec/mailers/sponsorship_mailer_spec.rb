@@ -21,7 +21,14 @@ RSpec.describe SponsorshipMailer, type: :mailer do
   end
 
   let(:sendgrid_mail_settings) { {sandbox_mode: {enable: true}} }
-  let(:sendgrid_personalizations) { [{to: [{email: user.email}]}] }
+  let(:sendgrid_personalizations) do
+    [
+      {
+        to: [{email: user.email}],
+        dynamic_template_data:
+      }
+    ]
+  end
 
   before do
     ENV["EMAILS_FROM"] = "Filipe at Talent Protocol"
