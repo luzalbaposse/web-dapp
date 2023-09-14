@@ -1,13 +1,20 @@
-import { buildColor } from "@talentprotocol/design-system";
-import styled from "styled-components";
+import { buildColor, mobileStyles } from "@talentprotocol/design-system";
+import styled, { css } from "styled-components";
 
 export const Container = styled.section`
-  margin-top: 58px;
+  margin-top: 66px;
   padding: 24px;
   gap: 24px;
   width: 100%;
   display: flex;
   flex-direction: column;
+`;
+
+export const MilestoneTitleRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export const Entry = styled.div`

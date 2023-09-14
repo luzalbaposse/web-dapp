@@ -13,13 +13,9 @@ export const Container = styled.div`
   flex-direction: column;
   padding: 0 24px 24px 24px;
   gap: 24px;
-
-  ${mobileStyles(css`
-    padding: 24px;
-  `)}
 `;
 
-export const ButtonContainer = styled.div`
+export const ButtonContainer = styled.a`
   display: flex;
   justify-content: flex-end;
 `;

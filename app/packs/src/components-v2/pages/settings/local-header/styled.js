@@ -21,4 +21,18 @@ export const InnerHeaderContainer = styled.div`
   margin: auto;
   display: flex;
   justify-content: space-between;
+  height: 33px;
+`;
+
+export const DialogContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+`;
+
+export const DialogButtonsRow = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  gap: 8px;
 `;

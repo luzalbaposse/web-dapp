@@ -20,7 +20,6 @@ export const DesktopPageContainer = styled.div`
 export const DesktopColumn = styled.div`
   display: flex;
   border-right: 1px solid ${buildColor("surfaceHover02")};
-  margin-bottom: 24px;
 
   :nth-child(1) {
     flex-basis: 288px;
@@ -41,7 +40,7 @@ export const DesktopColumn = styled.div`
     flex-basis: 288px;
     min-width: 288px;
     max-width: 288px;
-    padding: 24px 0 0 24px;
+    padding: 24px 0 24px 24px;
     gap: 24px;
     border: none;
     flex-direction: column;

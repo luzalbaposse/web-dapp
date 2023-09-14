@@ -50,14 +50,14 @@ export const About = ({ currentUser, urlData }) => {
   ) : (
     <Container>
       {urlData?.profileUsername === currentUser?.username && (
-        <ButtonContainer>
+        <ButtonContainer href={`/u/${urlData?.profileUsername}/settings?tab=About`}>
           <Button
             text="Edit About"
             hierarchy="secondary"
             size="small"
             iconColor="primary01"
             leftIcon="edit"
-            onClick={openEditModal}
+            onClick={() => null}
           />
         </ButtonContainer>
       )}
@@ -71,7 +71,11 @@ export const About = ({ currentUser, urlData }) => {
       ) : (
         <>
           {aboutData.career_goal.pitch && <AboutMe pitch={aboutData.career_goal.pitch} />}
-          <CurrentRole position={aboutData.current_position} username={urlData.profileUsername} isOwner={urlData?.profileUsername === currentUser?.username} />
+          <CurrentRole
+            position={aboutData.current_position}
+            username={urlData.profileUsername}
+            isOwner={urlData?.profileUsername === currentUser?.username}
+          />
           {!!aboutData.tags.length && <Tags tags={aboutData.tags} />}
           <OnTheWeb links={aboutData.social_links} />
         </>

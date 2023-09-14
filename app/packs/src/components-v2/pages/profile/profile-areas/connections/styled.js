@@ -14,10 +14,6 @@ export const Container = styled.div`
   flex-direction: column;
   gap: 24px;
   padding: 0 24px 24px;
-
-  ${mobileStyles(css`
-    padding: 24px;
-  `)}
 `;
 
 export const EmptyStateContainer = styled.div`
