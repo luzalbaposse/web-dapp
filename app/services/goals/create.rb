@@ -7,26 +7,26 @@ module Goals
     end
 
     def call
-      goal = Goal.new(params.except(:images, :election_selected))
+      ActiveRecord::Base.transaction do
+        goal = Goal.new(params.except(:images, :election_selected))
 
-      parsed_date = params[:due_date].split("-").map(&:to_i)
-      goal.due_date = Date.new(parsed_date[2], parsed_date[1], parsed_date[0])
+        parsed_date = params[:due_date].split("-").map(&:to_i)
+        goal.due_date = Date.new(parsed_date[2], parsed_date[1], parsed_date[0])
 
-      goal.career_goal = career_goal
+        goal.career_goal = career_goal
 
-      create_goal_images(goal: goal) if params[:images].length > 0
+        create_goal_images(goal: goal) if params[:images].length > 0 && params[:election_selected].nil?
 
-      goal.save!
+        goal.save!
 
-      ActivityIngestJob.perform_later("goal_create", goal_create_message(goal), current_user.id)
+        add_to_collective(goal) if params[:election_selected]
 
-      refresh_quests
-      update_profile_completeness
-      send_discord_notification(goal) if goal.accomplished?
+        refresh_quests
+        update_profile_completeness
+        send_discord_notification(goal) if goal.accomplished?
 
-      add_to_collective if params[:election_selected]
-
-      goal
+        goal
+      end
     end
 
     private
@@ -48,6 +48,10 @@ module Goals
       end
     end
 
+    def add_to_feed(goal)
+      ActivityIngestJob.perform_later("goal_create", goal_create_message(goal), current_user.id)
+    end
+
     def refresh_quests
       Quests::RefreshUserQuestsJob.perform_later(career_goal.talent.user.id)
     end
@@ -60,10 +64,12 @@ module Goals
       Discord::SendAccomplishedGoalNotificationJob.perform_later(goal.id)
     end
 
-    def add_to_collective
+    def add_to_collective(goal)
       collective = Organization.find_by(slug: "takeoff-istambul")
       if collective.active_election.present?
         collective.memberships.create!(active: true, user: career_goal.talent.user)
+        goal.goal_images.create!(image_data: collective.banner_data)
+        goal.update!(election: collective.active_election, pin: true)
       end
     end
   end

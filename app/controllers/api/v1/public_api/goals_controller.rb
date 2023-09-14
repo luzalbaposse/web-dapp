@@ -12,7 +12,7 @@ class API::V1::PublicAPI::GoalsController < API::V1::PublicAPI::APIController
     active_election = Election.active.exists?
 
     response_body = {
-      goals: API::GoalBlueprint.render_as_json(page_goals, view: :normal),
+      goals: API::GoalBlueprint.render_as_json(page_goals, view: :normal, current_user: current_user),
       active_election: active_election,
       pagination: {
         total: goals.count,

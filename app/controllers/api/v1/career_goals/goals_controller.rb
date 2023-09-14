@@ -38,7 +38,9 @@ class API::V1::CareerGoals::GoalsController < ApplicationController
   end
 
   def destroy
-    if goal.destroy
+    service = Goals::Destroy.new(goal: goal)
+
+    if service.call
       render json: GoalBlueprint.render(goal, view: :normal), status: :ok
     else
       render json: {error: "Unable to delete requested goal."}, status: :unprocessable_entity

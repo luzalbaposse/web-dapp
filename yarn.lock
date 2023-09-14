@@ -2851,10 +2851,10 @@
   dependencies:
     mini-svg-data-uri "^1.2.3"
 
-"@talentprotocol/design-system@^0.1.78":
-  version "0.1.79"
-  resolved "https://registry.yarnpkg.com/@talentprotocol/design-system/-/design-system-0.1.79.tgz#93c9583d67e08ac0f59bf3f179768ff4c95c65de"
-  integrity sha512-zkgDzbS7zPyinioJAGIsR+t4dYkhIpvemNDM/u2t3E39vO7FCHVcxE6hljYT6Bfq1Fm4qZ0x8l4t9aULMj9sTw==
+"@talentprotocol/design-system@^0.1.81":
+  version "0.1.81"
+  resolved "https://registry.yarnpkg.com/@talentprotocol/design-system/-/design-system-0.1.81.tgz#00842552eb94e9ebf13cdb210004866eff759e62"
+  integrity sha512-g4M95nAFPZucicgc1RnA+cTgBhBvQWQsaHU/aS0lnFo1kSK7YXWhCLyDNwtnjTVImGw/REoS4J7sfRhNXk34Hg==
 
 "@talentprotocol/zustand-wrapper@^0.0.6":
   version "0.0.6"
