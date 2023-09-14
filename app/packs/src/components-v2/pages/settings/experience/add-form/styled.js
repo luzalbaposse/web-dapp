@@ -11,5 +11,10 @@ export const Row = styled.div`
   display: flex;
   flex-direction: row;
   gap: 24px;
-  margin-top: -14px;
+  align-items: flex-end;
+`;
+
+export const PortalContainer = styled.div`
+  display: flex;
+  gap: 8px;
 `;

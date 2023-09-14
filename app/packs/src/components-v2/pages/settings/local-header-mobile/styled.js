@@ -40,3 +40,16 @@ export const HamburguerContainer = styled.div`
 export const StyledNavLinks = styled(NavLinks)`
   margin-top: 16px;
 `;
+
+export const DialogContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+`;
+
+export const DialogButtonsRow = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  gap: 8px;
+`;

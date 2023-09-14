@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import { Container, Row } from "./styled";
+import { Container, Row, PortalContainer } from "./styled";
 import { Button, Checkbox, Dropdown, Input, Typography } from "@talentprotocol/design-system";
 import { createPortal } from "react-dom";
 import { talentsService } from "../../../../../api/talents";
@@ -25,35 +25,54 @@ const MONTHS = [
   { value: "November", index: "11" },
   { value: "December", index: "12" }
 ];
-const YEARS = new Array(200).fill(0).map((_, i) => ({ value: 1907 + i }));
+const START_YEARS = new Array(80).fill(0).map((_, i) => ({ value: new Date().getFullYear() - 79 + i }));
+const END_YEARS = new Array(160).fill(0).map((_, i) => ({ value: new Date().getFullYear() - 79 + i }));
 
 export const AddExperienceForm = ({ username, category, milestone, backCallback }) => {
   const [isInProgress, setIsInProgress] = useState(!!milestone?.in_progress);
+  const [updating, setUpdating] = useState(false);
+  const [errors, setErrors] = useState({
+    title: null,
+    organization: null,
+    startDate: null
+  });
+  const saveEnabled = Object.keys(errors).every(err => errors[err] === false);
   const { profile, updateSubFormCallback, updateProfileState } = useEditProfileStore();
+
+  useEffect(() => {
+    if (Object.keys(milestone).length > 0) {
+      setUpdating(true);
+    }
+  }, []);
+
   useEffect(() => {
     updateSubFormCallback(backCallback);
     return () => {
       updateSubFormCallback(undefined);
     };
   }, [updateSubFormCallback]);
+
   const refs = {
     title: useRef(null),
     organization: useRef(null),
     currentlyWorkingHere: useRef(null),
     inProgress: useRef(null)
   };
+
   const dateInfo = {
     startDateMonth: milestone.start_date && new Date(milestone.start_date).getMonth().toString(),
     startDateYear: milestone.start_date && new Date(milestone.start_date).getFullYear().toString(),
     endDateMonth: milestone.end_date && new Date(milestone.end_date).getMonth(),
     endDateYear: milestone.end_date && new Date(milestone.end_date).getFullYear()
   };
+
   const [dateState, setDateState] = useState({
     startDateMonth: MONTHS[dateInfo.startDateMonth],
     startDateYear: { value: dateInfo.startDateYear ? dateInfo.startDateYear : undefined },
     endDateMonth: MONTHS[dateInfo.endDateMonth],
     endDateYear: { value: dateInfo.endDateYear ? dateInfo.endDateYear : undefined }
   });
+
   const storeMilestone = useCallback(() => {
     if (milestone.id) {
       talentsService
@@ -133,7 +152,38 @@ export const AddExperienceForm = ({ username, category, milestone, backCallback 
         });
     }
   }, [username, milestone, profile, dateState, isInProgress]);
-  console.log(profile.milestones);
+
+  const deleteMilestone = () => {
+    talentsService.deleteMilestone(profile.id, milestone.id).then(() => {
+      const index = profile.milestones.findIndex(mil => mil.id === milestone.id);
+      const newMilestones = [...profile.milestones.slice(0, index), ...profile.milestones.slice(index + 1)];
+
+      updateProfileState({
+        ...profile,
+        milestones: newMilestones
+      });
+      toast.success(<ToastBody heading="Success!" body="Experience deleted successfully." />, { autoClose: 1500 });
+      backCallback();
+    });
+  };
+
+  const validateErrors = (title, value) => {
+    const newErrors = { ...errors, [title]: value.length === 0 ? true : false };
+
+    setErrors({ ...newErrors });
+  };
+
+  useEffect(() => {
+    if (dateState.startDateMonth?.value && dateState.startDateYear?.value) {
+      setErrors(prev => ({ ...prev, startDate: false }));
+    } else {
+      setErrors(prev => ({ ...prev, startDate: true }));
+    }
+  }, [dateState]);
+
+  console.log("dateState", dateState);
+  console.log("errors", errors);
+
   return (
     <Container>
       <Input
@@ -141,12 +191,18 @@ export const AddExperienceForm = ({ username, category, milestone, backCallback 
         label={category === "Position" ? "Title" : "Degree"}
         placeholder={category === "Position" ? "Senior Product Designer" : "Degree in Engineering"}
         defaultValue={milestone.title}
+        hasError={errors.title}
+        shortDescription={errors.title && "Mandatory field"}
+        onChange={e => validateErrors("title", e.target.value)}
       />
       <Input
         inputRef={refs.organization}
         label={category === "Position" ? "Organization" : "Institution"}
         placeholder={category === "Position" ? "Talent Protocol" : "Stanford University"}
         defaultValue={milestone.institution}
+        hasError={errors.organization}
+        shortDescription={errors.organization && "Mandatory field"}
+        onChange={e => validateErrors("organization", e.target.value)}
       />
       <Checkbox
         label={`I currently ${category === "Position" ? "work on this position" : "study on this institution"}`}
@@ -154,27 +210,22 @@ export const AddExperienceForm = ({ username, category, milestone, backCallback 
         checkboxRef={refs.inProgress}
         onCheckboxClick={() => setIsInProgress(!isInProgress)}
       />
-      <Typography specs={{ type: "bold", variant: "p2" }} color="primary01">
-        Start date
-      </Typography>
       <Row>
         <Dropdown
           selectOption={option => setDateState({ ...dateState, startDateMonth: option })}
           selectedOption={dateState.startDateMonth}
           options={MONTHS}
           label="Start Date"
+          required={true}
           placeholder="Month"
         />
         <Dropdown
           selectOption={option => setDateState({ ...dateState, startDateYear: option })}
           selectedOption={dateState.startDateYear || { value: new Date().getFullYear() }}
-          options={YEARS}
+          options={START_YEARS}
           placeholder="Year"
         />
       </Row>
-      <Typography specs={{ type: "bold", variant: "p2" }} color="primary01">
-        End date
-      </Typography>
       <Row>
         <Dropdown
           selectOption={option => setDateState({ ...dateState, endDateMonth: option })}
@@ -187,13 +238,22 @@ export const AddExperienceForm = ({ username, category, milestone, backCallback 
         <Dropdown
           selectOption={option => setDateState({ ...dateState, endDateYear: option })}
           selectedOption={dateState.endDateYear}
-          options={YEARS}
+          options={END_YEARS}
           placeholder="Year"
           isDisabled={isInProgress}
         />
       </Row>
       {createPortal(
-        <Button hierarchy="primary" size="small" text="Save" onClick={storeMilestone} />,
+        <PortalContainer>
+          {updating && <Button hierarchy="secondary" size="small" text="Delete" onClick={deleteMilestone} />}
+          <Button
+            hierarchy="primary"
+            size="small"
+            text={updating ? "Update" : "Save"}
+            onClick={storeMilestone}
+            isDisabled={!saveEnabled}
+          />
+        </PortalContainer>,
         document.getElementById("save-button")
       )}
     </Container>

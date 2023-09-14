@@ -33,6 +33,12 @@ const updateMilestone = (talentId, milestone) => {
   return axios.patch(`/api/v1/talent/${talentId}/milestones/${milestone.id}`, { milestone }, { headers });
 };
 
+const deleteMilestone = (talentId, milestoneId) => {
+  const baseHeaders = defaultHeaders();
+  const headers = appendCSRFToken(baseHeaders);
+  return axios.delete(`/api/v1/talent/${talentId}/milestones/${milestoneId}`, { headers });
+};
+
 export const talentsService = {
   getTalent,
   getCareerUpdates,
@@ -45,5 +51,6 @@ export const talentsService = {
   unsubscribe,
   getMilestones,
   createMilestone,
-  updateMilestone
+  updateMilestone,
+  deleteMilestone
 };
