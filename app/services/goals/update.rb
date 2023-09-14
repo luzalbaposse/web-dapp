@@ -15,6 +15,8 @@ module Goals
       goal.save!
 
       ActivityIngestJob.perform_later("goal_update", goal_update_message(goal), goal.career_goal.talent.user_id)
+      refresh_quests
+      send_discord_notification if goal.saved_change_to_progress? && goal.accomplished?
 
       goal
     end
@@ -43,6 +45,14 @@ module Goals
           goal_image.image_derivatives!
         end
       end
+    end
+
+    def send_discord_notification
+      Discord::SendAccomplishedGoalNotificationJob.perform_later(goal.id)
+    end
+
+    def refresh_quests
+      Quests::RefreshUserQuestsJob.perform_later(goal.user_id) if goal.user_id.present?
     end
   end
 end

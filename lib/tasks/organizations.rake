@@ -10,8 +10,8 @@ namespace :organizations do
     end
 
     max_invite_uses = args.max_invite_uses&.to_i
-    tags = Tag.where(id: args.tag_ids.split("/"))
-    users = User.where(id: args.user_ids.split("/"))
+    tags = Tag.where(id: args.tag_ids&.split("/"))
+    users = User.where(id: args.user_ids&.split("/"))
 
     json_data = json_path.starts_with?("http") ? URI.parse(json_path).read : File.read(json_path)
     data = JSON.parse(json_data)

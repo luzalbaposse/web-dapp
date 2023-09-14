@@ -1,5 +1,5 @@
 namespace :quests do
-  task create_initial_quests: :environment do
+  task upsert: :environment do
     quests = [
       {
         title: "Profile Picture",
@@ -84,6 +84,12 @@ namespace :quests do
         title: "Invite 3+ Friends",
         description: "Get 3+ friends to sign up and verify their account.",
         quest_type: "invite_three",
+        experience_points_amount: 1000
+      },
+      {
+        title: "Have 1+ Active Goal",
+        description: "Add a new goal, set the status to ‘Doing’ and a due date in the future.",
+        quest_type: "active_goal",
         experience_points_amount: 1000
       }
     ]

@@ -82,6 +82,8 @@ module Quests
         sponsor_talent_quest_completed?
       when "invite_three"
         invite_three_quest_completed?
+      when "active_goal"
+        active_goal_quest_completed?
       else
         false
       end
@@ -155,6 +157,10 @@ module Quests
         .where("users.created_at > ?", DateTime.new(2023, 6, 1))
         .where(talent: {verified: true})
         .count >= 3
+    end
+
+    def active_goal_quest_completed?
+      user.goals.active.any?
     end
 
     def notify_verified_profile

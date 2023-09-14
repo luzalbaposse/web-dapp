@@ -68,12 +68,16 @@ RSpec.describe BroadcastCareerUpdateJob, type: :job do
     broadcast_update
 
     expect(create_notification_class).to have_received(:new)
+
     expect(create_notification_instance).to have_received(:call).with(
+      extra_params: {career_update_id: career_update.id},
       recipient: investor_user_one,
       source_id: sender.id,
       type: CareerUpdateCreatedNotification
     )
+
     expect(create_notification_instance).to have_received(:call).with(
+      extra_params: {career_update_id: career_update.id},
       recipient: investor_user_two,
       source_id: sender.id,
       type: CareerUpdateCreatedNotification
@@ -85,11 +89,13 @@ RSpec.describe BroadcastCareerUpdateJob, type: :job do
 
     expect(create_notification_class).to have_received(:new)
     expect(create_notification_instance).to have_received(:call).with(
+      extra_params: {career_update_id: career_update.id},
       recipient: subscriber_one,
       source_id: sender.id,
       type: CareerUpdateCreatedNotification
     )
     expect(create_notification_instance).to have_received(:call).with(
+      extra_params: {career_update_id: career_update.id},
       recipient: subscriber_two,
       source_id: sender.id,
       type: CareerUpdateCreatedNotification
@@ -132,6 +138,7 @@ RSpec.describe BroadcastCareerUpdateJob, type: :job do
       broadcast_update
 
       expect(create_notification_instance).not_to have_received(:call).with(
+        extra_params: {career_update_id: career_update.id},
         recipient: sender,
         source_id: sender.id,
         type: CareerUpdateCreatedNotification
@@ -160,6 +167,7 @@ RSpec.describe BroadcastCareerUpdateJob, type: :job do
       broadcast_update
 
       expect(create_notification_instance).to have_received(:call).with(
+        extra_params: {career_update_id: career_update.id},
         recipient: investor_user_one,
         source_id: sender.id,
         type: CareerUpdateCreatedNotification

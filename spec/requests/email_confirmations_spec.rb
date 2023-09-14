@@ -26,15 +26,5 @@ RSpec.describe "EmailConfirmations", type: :request do
 
       expect(add_users_to_mailerlite_job_class).to have_received(:perform_later).with(user.id)
     end
-
-    it "sends the welcome email" do
-      Sidekiq::Testing.inline! do
-        get confirm_email_path(token:)
-
-        perform_enqueued_jobs
-
-        expect(ActionMailer::Base.deliveries.last.subject).to include("Welcome to the home of talented builders")
-      end
-    end
   end
 end

@@ -3,7 +3,7 @@ import { Spinner, Typography, Icon, Button, useModal } from "@talentprotocol/des
 import { activitiesService } from "src/api";
 import { Container, SpinnerContainer, EmptyStateContainer, TypographyContainer, ButtonContainer } from "./styled";
 import { Activities } from "src/components-v2/activities";
-import { SendCareerUpdateModalV2 } from "src/components-v2/send-career-update-modal";
+import { SendCareerUpdateModal } from "src/components-v2/send-career-update-modal";
 import { useCareerUpdatesStore } from "src/contexts/state";
 
 export const Updates = ({ urlData, currentUser }) => {
@@ -117,7 +117,7 @@ export const Updates = ({ urlData, currentUser }) => {
         </EmptyStateContainer>
       )}
       {urlData?.profileUsername === currentUser?.username && (
-        <SendCareerUpdateModalV2 isOpen={modalState.isOpen} closeModal={modalState.closeModal} profile={currentUser} />
+        <SendCareerUpdateModal isOpen={modalState.isOpen} closeModal={modalState.closeModal} profile={currentUser} />
       )}
     </Container>
   );

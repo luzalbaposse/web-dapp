@@ -10,15 +10,7 @@ import Rails from "@rails/ujs";
 import "channels";
 
 import ReactOnRails from "react-on-rails";
-import MessageUserList from "src/components/chat/MessageUserList";
 import Chat from "src/components/chat/Chat";
-import Notifications from "src/components/notifications";
-
-// New Layout components - @TODO: we need to check which of the above components we'll still be using or not
-
-import Login from "src/components/login/Login";
-import ResetPassword from "src/components/login/ResetPassword";
-import ChangePassword from "src/components/login/ChangePassword";
 import TopBar from "src/components-v2/navbar-proxy";
 import UserSettings from "src/components/talent/Edit/Settings";
 import TalentPage from "src/components/talent/TalentPage";
@@ -48,16 +40,11 @@ import "stylesheets/application.scss";
 require.context("../images", true);
 
 ReactOnRails.register({
-  ChangePassword,
   Chat,
   UserSettings,
   FlashMessages,
   Footer,
   LoggedOutTopBar,
-  Login,
-  MessageUserList,
-  Notifications,
-  ResetPassword,
   TalentPage,
   TopBar,
   Support,

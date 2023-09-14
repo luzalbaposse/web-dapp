@@ -1,17 +1,16 @@
 class SponsorshipMailer < ApplicationMailer
   def new_sponsor_email
-    @recipient = indifferent_access_params[:recipient]
-    @sender = User.find(indifferent_access_params[:source_id])
-    set_profile_picture_attachment(@sender)
+    sponsor = User.find(indifferent_access_params[:source_id])
+    user = indifferent_access_params[:recipient]
 
-    bootstrap_mail(to: @recipient.email, subject: "You have a new sponsor on Talent Protocol")
-  end
+    dynamic_template_data = {
+      first_name: sendgrid_name_variable(user),
+      sponsor_request_username: sponsor.username
+    }
 
-  def sponsorship_claimed_email
-    @recipient = indifferent_access_params[:recipient]
-    @sender = User.find(indifferent_access_params[:source_id])
-    set_profile_picture_attachment(@sender)
+    template_id = "d-5b54752273534b819f73ffdf79b172e1"
+    to = user.email
 
-    bootstrap_mail(to: @recipient.email, subject: "#{@sender.username} accepted your sponsorship on Talent Protocol")
+    send_sendgrid_email(dynamic_template_data:, template_id:, to:)
   end
 end

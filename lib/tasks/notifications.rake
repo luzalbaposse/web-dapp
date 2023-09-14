@@ -7,14 +7,14 @@ namespace :notifications do
 
     UserMailer.with(user_id: user.id).send_sign_up_email.deliver_later
     UserMailer.with(user:).send_password_reset_email.deliver_later
-    UserMailer.with(user:).send_welcome_email.deliver_later
-    UserMailer.with(user:).send_token_launch_reminder_email.deliver_later
-    UserMailer.with(user:).send_token_launched_email.deliver_later
-    UserMailer.with(user:).send_token_purchase_reminder_email.deliver_later
-    UserMailer.with(user:).send_complete_profile_reminder_email.deliver_later
     UserMailer.with(source_id: user.id).send_verified_profile_email.deliver_later
     UserMailer.with(reason: "name", source_id: user.id).send_verification_failed_email.deliver_later
-    UserMailer.with(recipient: user).send_application_received_email.deliver_later
-    UserMailer.with(recipient: user).send_application_approved_email.deliver_later
+    UserMailer.with(token: "test", user: user).send_confirm_account_deletion_email.deliver_later
+    UserMailer.with(goal: Goal.first, user: user).send_goal_deadline_reminder_email.deliver_later
+    UserMailer.with(goal: Goal.first, user: user).send_goal_due_in_one_month_reminder_email.deliver_later
+    UserMailer.with(career_update_id: CareerUpdate.last&.id, source_id: user.id, recipient: user).send_career_update_created_email.deliver_later
+    SubscriptionMailer.with(recipient_id: user.id).subscription_request_email.deliver_later
+    SubscriptionMailer.with(recipient: user, source_id: user.id).subscription_accepted_email.deliver_later
+    SponsorshipMailer.with(recipient: user, source_id: user.id).new_sponsor_email.deliver_later
   end
 end

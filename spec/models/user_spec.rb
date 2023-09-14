@@ -20,6 +20,7 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_many(:users_subscribing) }
     it { is_expected.to have_many(:pending_subscriptions) }
     it { is_expected.to have_many(:connections) }
+    it { is_expected.to have_many(:goals) }
   end
 
   describe "validations" do

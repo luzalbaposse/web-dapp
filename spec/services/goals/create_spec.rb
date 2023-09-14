@@ -8,12 +8,16 @@ RSpec.describe Goals::Create do
   let(:user) { create :user, :with_talent }
   let(:career_goal) { create :career_goal, talent: user.talent }
   let(:current_user) { create :user }
+
   let(:params) do
     {
       due_date: "01-05-2023",
-      images: []
+      images: [],
+      progress:
     }
   end
+
+  let(:progress) { Goal::DOING }
 
   let(:profile_completeness_class) { Users::UpdateProfileCompleteness }
   let(:profile_completeness_instance) { instance_double(profile_completeness_class, call: true) }
@@ -37,9 +41,32 @@ RSpec.describe Goals::Create do
   it "initializes and calls the update profile completeness" do
     create_goal
 
-    expect(profile_completeness_class).to have_received(:new).with(
-      user: user
-    )
+    expect(profile_completeness_class).to have_received(:new).with(user:)
     expect(profile_completeness_instance).to have_received(:call)
+  end
+
+  context "when the goal is accomplished" do
+    let(:progress) { Goal::ACCOMPLISHED }
+
+    it "enqueues a job to send a notification to Discord" do
+      Sidekiq::Testing.inline! do
+        create_goal
+
+        job = enqueued_jobs.find { |j| j[:job] == Discord::SendAccomplishedGoalNotificationJob }
+
+        expect(job[:args][0]).to eq(Goal.last.id)
+      end
+    end
+  end
+
+  context "when the goal is not accomplished" do
+    it "does not enqueue a job to send a notification to Discord" do
+      Sidekiq::Testing.inline! do
+        create_goal
+
+        expect(enqueued_jobs.pluck(:job))
+          .not_to include(Discord::SendAccomplishedGoalNotificationJob)
+      end
+    end
   end
 end

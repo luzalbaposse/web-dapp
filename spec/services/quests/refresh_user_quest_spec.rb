@@ -443,6 +443,22 @@ RSpec.describe Quests::RefreshUserQuest do
         it_behaves_like "a refresh user quest without creating new records"
       end
     end
+
+    context "when the quest type is active_goal" do
+      let(:quest_type) { "active_goal" }
+
+      context "when the quest was completed" do
+        before do
+          create :goal, due_date: Date.current, progress: Goal::DOING, user:
+        end
+
+        it_behaves_like "a refresh user quest that creates new records"
+      end
+
+      context "when the quest was not completed" do
+        it_behaves_like "a refresh user quest without creating new records"
+      end
+    end
   end
 
   context "when the quest was already credited for the user" do

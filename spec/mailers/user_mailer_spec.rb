@@ -3,149 +3,134 @@ require "rails_helper"
 RSpec.describe UserMailer, type: :mailer do
   let(:user) { create :user }
 
+  let(:sendgrid_api_class) { SendGrid::API }
+  let(:sendgrid_api) { instance_double(sendgrid_api_class, client: sendgrid_client) }
+  let(:sendgrid_client) { double(SendGrid::Client) }
+
+  let(:sendgrid_response) do
+    OpenStruct.new(body: {}.to_json, status_code: sendgrid_response_status_code)
+  end
+
+  let(:sendgrid_response_status_code) { "202" }
+
+  let(:sendgrid_from) do
+    {
+      email: "no-reply@talentprotocol.com",
+      name: "Filipe at Talent Protocol"
+    }
+  end
+
+  let(:sendgrid_mail_settings) { {sandbox_mode: {enable: true}} }
+  let(:sendgrid_personalizations) do
+    [
+      {
+        to: [{email: user.email}],
+        dynamic_template_data:
+      }
+    ]
+  end
+
+  before do
+    ENV["EMAILS_FROM"] = "Filipe at Talent Protocol"
+
+    allow(sendgrid_api_class).to receive(:new).and_return(sendgrid_api)
+    allow(sendgrid_client).to receive_message_chain(:mail, :_, :post).and_return(sendgrid_response)
+  end
+
   describe "sign up email" do
     let(:mail) { described_class.with(user_id: user.id).send_sign_up_email }
 
-    it "renders the header" do
-      expect(mail.subject).to eql("Confirm your email address")
-      expect(mail.to).to eql([user.email])
+    let(:dynamic_template_data) do
+      {
+        confirm_email: confirm_email_url(token: user.email_confirmation_token),
+        first_name: user.username
+      }
     end
 
-    it "assigns email verify url" do
-      expect { confirm_email_url(token: user.email_confirmation_token) }.not_to raise_error
-    end
+    let(:template_id) { "d-0e31e2fe5a76467e8973cf16484bf15a" }
+
+    it_behaves_like "a SendGrid email"
   end
 
   describe "password reset email" do
     let(:mail) { described_class.with(user: user).send_password_reset_email }
 
-    it "renders the header" do
-      expect(mail.subject).to eql("Talent Protocol - Did you forget your password?")
-      expect(mail.to).to eql([user.email])
+    let(:dynamic_template_data) do
+      {
+        first_name: user.username,
+        reset_password: url_for(
+          action: "reset_password",
+          controller: "onboard",
+          token: user.confirmation_token,
+          user_id: user.uuid
+        )
+      }
     end
 
-    it "assigns reset password url" do
-      expect { url_for(controller: "onboard", action: "reset_password", user_id: user.uuid, token: user.confirmation_token) }.not_to raise_error
-    end
-  end
+    let(:template_id) { "d-e90e5023339d4ad69e74c272c0761000" }
 
-  describe "welcome email" do
-    let(:mail) { described_class.with(user: user).send_welcome_email }
-
-    it "renders the header" do
-      expect(mail.subject).to eql("Welcome to the home of talented builders")
-      expect(mail.to).to eql([user.email])
-    end
-  end
-
-  describe "token launch email" do
-    let(:mail) { described_class.with(user: user).send_token_launched_email }
-
-    it "renders the header" do
-      expect(mail.subject).to eql("Congrats, your Talent Token is now live!")
-      expect(mail.to).to eql([user.email])
-    end
-
-    it "assigns profile url" do
-      expect { user_url(user.username) }.not_to raise_error
-    end
-  end
-
-  describe "send complete profile reminder email" do
-    let(:mail) { described_class.with(user: user).send_complete_profile_reminder_email }
-
-    it "renders the header" do
-      expect(mail.subject).to eql("Complete your profile and earn your NFT today! 🚀")
-      expect(mail.to).to eql([user.email])
-    end
-  end
-
-  describe "send application received email" do
-    let(:mail) { described_class.with(recipient: user).send_application_received_email }
-
-    it "renders the header" do
-      expect(mail.subject).to eql("We've received your application")
-      expect(mail.to).to eql([user.email])
-    end
-  end
-
-  describe "send application rejected email" do
-    let(:reviewer) { create :user }
-    let(:mail) { described_class.with(recipient: user, source_id: reviewer.id).send_application_rejected_email }
-
-    it "renders the header" do
-      expect(mail.subject).to eql("Your application hasn't been approved")
-      expect(mail.to).to eql([user.email])
-    end
-  end
-
-  describe "send application approved email" do
-    let(:mail) { described_class.with(recipient: user).send_application_approved_email }
-
-    it "renders the header" do
-      expect(mail.subject).to eql("Hey, you can now launch your token 🚀")
-      expect(mail.to).to eql([user.email])
-    end
+    it_behaves_like "a SendGrid email"
   end
 
   describe "send verified profile email" do
     let(:mail) { described_class.with(source_id: user.id).send_verified_profile_email }
 
-    it "renders the header" do
-      expect(mail.subject).to eql("You're verified! ✅")
-      expect(mail.to).to eql([user.email])
-    end
+    let(:dynamic_template_data) { {first_name: user.username} }
+    let(:template_id) { "d-1cc5d11d6b5b40e2b6437e900c392722" }
+
+    it_behaves_like "a SendGrid email"
   end
 
-  describe "send name verification failed profile email" do
+  describe "send verification failed profile email" do
     let(:mail) { described_class.with(source_id: user.id, reason: "name").send_verification_failed_email }
 
-    it "renders the header" do
-      expect(mail.subject).to eql("Verification failed 💔")
-      expect(mail.to).to eql([user.email])
-    end
+    let(:dynamic_template_data) { {first_name: user.username} }
+    let(:template_id) { "d-4872e699a01d40ffaa04d7d894bb836c" }
+
+    it_behaves_like "a SendGrid email"
   end
 
   describe "send message received email" do
-    let(:sender) { create :user, username: "alicesmith" }
     let(:notification) { create :notification, type: "MessageReceivedNotification", recipient: user }
-    let(:mail) { described_class.with(recipient: user, sender_id: sender.id, record: notification).send_message_received_email }
+    let(:sender) { create :user, username: "alicesmith" }
+
+    let(:mail) do
+      described_class
+        .with(recipient: user, sender_id: sender.id, record: notification)
+        .send_message_received_email
+    end
+
+    let(:dynamic_template_data) do
+      {
+        DM_sender_username: sender.username,
+        first_name: user.username,
+        link_message: messages_url(user: sender.username)
+      }
+    end
+
+    let(:template_id) { "d-aad307f9267342a49724a0cd1834de98" }
 
     before do
       allow(user).to receive(:has_unread_messages?).and_return(true)
     end
 
-    it "renders the header" do
-      expect(mail.subject).to eql("You have a new message from alicesmith")
-      expect(mail.to).to eql([user.email])
-    end
-  end
-
-  describe "send invite used email" do
-    let(:invitee) { create :user }
-    let(:notification) { create :notification, emailed_at: nil, recipient: user }
-
-    let(:mail) do
-      described_class
-        .with(recipient: user, record: notification, source_id: invitee.id)
-        .send_invite_used_email
-    end
-
-    it "renders the header" do
-      expect(mail.subject).to eql("#{invitee.username} signed up with your invite!")
-      expect(mail.to).to eql([user.email])
-    end
+    it_behaves_like "a SendGrid email"
   end
 
   describe "send confirm account deletion email" do
-    let(:mail) do
-      described_class.with(token: "token", user: user).send_confirm_account_deletion_email
+    let(:token) { "token" }
+    let(:mail) { described_class.with(token:, user:).send_confirm_account_deletion_email }
+
+    let(:dynamic_template_data) do
+      {
+        delete_account: delete_account_url(token:, username: user.username),
+        first_name: user.username
+      }
     end
 
-    it "renders the header" do
-      expect(mail.subject).to eql("Is this goodbye?")
-      expect(mail.to).to eql([user.email])
-    end
+    let(:template_id) { "d-421a265369d447ff899fcdcb5b5c3de8" }
+
+    it_behaves_like "a SendGrid email"
   end
 
   describe "send goal deadline reminder email" do
@@ -155,10 +140,18 @@ RSpec.describe UserMailer, type: :mailer do
 
     let(:goal) { create :goal, due_date: Date.current }
 
-    it "renders the header" do
-      expect(mail.subject).to eql("Your goal's deadline is today!")
-      expect(mail.to).to eql([user.email])
+    let(:dynamic_template_data) do
+      {
+        edit_goal: user_url(username: user.username, tab: "goals"),
+        first_name: user.username,
+        goal_title: goal.title,
+        tab_updates: user_url(username: user.username, tab: "updates")
+      }
     end
+
+    let(:template_id) { "d-a74bb51a5dc549eaa8d9a677a67cfe56" }
+
+    it_behaves_like "a SendGrid email"
   end
 
   describe "send goal due in one month reminder email" do
@@ -168,35 +161,41 @@ RSpec.describe UserMailer, type: :mailer do
 
     let(:goal) { create :goal, due_date: 30.days.after }
 
-    it "renders the header" do
-      expect(mail.subject).to eql("Your goal's deadline is in one month!")
-      expect(mail.to).to eql([user.email])
+    let(:dynamic_template_data) do
+      {
+        edit_goal: user_url(username: user.username, tab: "goals"),
+        first_name: user.username,
+        goal_title: goal.title,
+        tab_updates: user_url(username: user.username, tab: "updates")
+      }
     end
+
+    let(:template_id) { "d-d00675dee35c4a8dbcdcb4395d9e803c" }
+
+    it_behaves_like "a SendGrid email"
   end
 
-  describe "send goal 15 days past due date reminder email" do
+  describe "send career update created email" do
+    let(:career_update) { create :career_update, text: "New job!", user: sender }
+    let(:sender) { create :user }
+
     let(:mail) do
-      described_class.with(goal: goal, user: user).send_goal_15_days_past_due_date_reminder_email
+      described_class
+        .with(career_update_id: career_update.id, recipient: user, source_id: sender.id)
+        .send_career_update_created_email
     end
 
-    let(:goal) { create :goal, due_date: 15.days.ago }
-
-    it "renders the header" do
-      expect(mail.subject).to eql("Your goal's deadline was 15 days ago!")
-      expect(mail.to).to eql([user.email])
-    end
-  end
-
-  describe "send goal 30 days past due date reminder email" do
-    let(:mail) do
-      described_class.with(goal: goal, user: user).send_goal_30_days_past_due_date_reminder_email
+    let(:dynamic_template_data) do
+      {
+        career_update: career_update.text,
+        first_name: user.username,
+        link_send_DM: messages_url(user: sender.username),
+        update_sender_username: sender.username
+      }
     end
 
-    let(:goal) { create :goal, due_date: 30.days.ago }
+    let(:template_id) { "d-a031432f14d344f09a1536a4ecdf851f" }
 
-    it "renders the header" do
-      expect(mail.subject).to eql("Your Goal's Journey: Past Its Due Date, What's Next?")
-      expect(mail.to).to eql([user.email])
-    end
+    it_behaves_like "a SendGrid email"
   end
 end

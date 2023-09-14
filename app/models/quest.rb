@@ -1,19 +1,20 @@
 class Quest < ApplicationRecord
   VALID_QUEST_TYPES = %w[
-    profile_picture
-    three_journey_entries
-    connect_wallet
-    send_career_update
-    three_talent_subscribe
-    verify_identity
-    verify_humanity
-    five_subscribers
+    active_goal
     complete_profile
-    supporting_three
+    connect_wallet
     create_talent_mate
-    three_token_holders
-    sponsor_talent
+    five_subscribers
     invite_three
+    profile_picture
+    send_career_update
+    sponsor_talent
+    supporting_three
+    three_journey_entries
+    three_talent_subscribe
+    three_token_holders
+    verify_humanity
+    verify_identity
   ]
 
   validates :title, :quest_type, uniqueness: true
