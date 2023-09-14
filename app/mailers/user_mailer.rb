@@ -4,7 +4,7 @@ class UserMailer < ApplicationMailer
 
     dynamic_template_data = {
       confirm_email: confirm_email_url(token: user.email_confirmation_token),
-      first_name: sendgrid_first_name_variable(user)
+      first_name: sendgrid_name_variable(user)
     }
 
     template_id = "d-0e31e2fe5a76467e8973cf16484bf15a"
@@ -17,7 +17,7 @@ class UserMailer < ApplicationMailer
     user = indifferent_access_params[:user]
 
     dynamic_template_data = {
-      first_name: sendgrid_first_name_variable(user),
+      first_name: sendgrid_name_variable(user),
       reset_password: url_for(
         action: "reset_password",
         controller: "onboard",
@@ -43,7 +43,7 @@ class UserMailer < ApplicationMailer
 
     dynamic_template_data = {
       DM_sender_username: sender.username,
-      first_name: sendgrid_first_name_variable(user),
+      first_name: sendgrid_name_variable(user),
       link_message: messages_url(user: sender.username)
     }
 
@@ -55,7 +55,7 @@ class UserMailer < ApplicationMailer
   def send_verified_profile_email
     user = User.find(indifferent_access_params[:source_id])
 
-    dynamic_template_data = {first_name: sendgrid_first_name_variable(user)}
+    dynamic_template_data = {first_name: sendgrid_name_variable(user)}
     template_id = "d-1cc5d11d6b5b40e2b6437e900c392722"
     to = user.email
 
@@ -65,7 +65,7 @@ class UserMailer < ApplicationMailer
   def send_verification_failed_email
     user = User.find(indifferent_access_params[:source_id])
 
-    dynamic_template_data = {first_name: sendgrid_first_name_variable(user)}
+    dynamic_template_data = {first_name: sendgrid_name_variable(user)}
     template_id = "d-4872e699a01d40ffaa04d7d894bb836c"
     to = user.email
 
@@ -78,7 +78,7 @@ class UserMailer < ApplicationMailer
 
     dynamic_template_data = {
       delete_account: delete_account_url(token:, username: user.username),
-      first_name: sendgrid_first_name_variable(user)
+      first_name: sendgrid_name_variable(user)
     }
 
     template_id = "d-421a265369d447ff899fcdcb5b5c3de8"
@@ -93,7 +93,7 @@ class UserMailer < ApplicationMailer
 
     dynamic_template_data = {
       edit_goal: user_url(username: user.username, tab: "goals"),
-      first_name: sendgrid_first_name_variable(user),
+      first_name: sendgrid_name_variable(user),
       goal_title: goal.title,
       tab_updates: user_url(username: user.username, tab: "updates")
     }
@@ -110,7 +110,7 @@ class UserMailer < ApplicationMailer
 
     dynamic_template_data = {
       edit_goal: user_url(username: user.username, tab: "goals"),
-      first_name: sendgrid_first_name_variable(user),
+      first_name: sendgrid_name_variable(user),
       goal_title: goal.title,
       tab_updates: user_url(username: user.username, tab: "updates")
     }
@@ -128,7 +128,7 @@ class UserMailer < ApplicationMailer
 
     dynamic_template_data = {
       career_update: career_update.text,
-      first_name: sendgrid_first_name_variable(user),
+      first_name: sendgrid_name_variable(user),
       link_send_DM: messages_url(user: sender.username),
       update_sender_username: sender.username
     }

@@ -37,8 +37,8 @@ class ApplicationMailer < ActionMailer::Base
     }
   end
 
-  def sendgrid_first_name_variable(user)
-    user.legal_first_name || user.username
+  def sendgrid_name_variable(user)
+    user.name
   end
 
   def indifferent_access_params

@@ -38,7 +38,7 @@ RSpec.describe SponsorshipMailer, type: :mailer do
 
     let(:dynamic_template_data) do
       {
-        first_name: user.legal_first_name,
+        first_name: user.name,
         sponsor_request_username: sponsor.username
       }
     end

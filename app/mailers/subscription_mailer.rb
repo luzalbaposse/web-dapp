@@ -4,7 +4,7 @@ class SubscriptionMailer < ApplicationMailer
     pending_subscribe_requests = user.pending_subscribers.count
 
     dynamic_template_data = {
-      first_name: sendgrid_first_name_variable(user),
+      first_name: sendgrid_name_variable(user),
       pending_subscribe_requests:
     }
 
@@ -19,7 +19,7 @@ class SubscriptionMailer < ApplicationMailer
     user = indifferent_access_params[:recipient]
 
     dynamic_template_data = {
-      first_name: sendgrid_first_name_variable(user),
+      first_name: sendgrid_name_variable(user),
       subscribed_profile: user_url(username: subscribed.username),
       subscribed_username: subscribed.username
     }

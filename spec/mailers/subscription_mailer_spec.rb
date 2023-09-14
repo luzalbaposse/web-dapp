@@ -35,7 +35,7 @@ RSpec.describe SubscriptionMailer, type: :mailer do
 
     let(:dynamic_template_data) do
       {
-        first_name: user.legal_first_name,
+        first_name: user.name,
         pending_subscribe_requests: 0
       }
     end
@@ -51,7 +51,7 @@ RSpec.describe SubscriptionMailer, type: :mailer do
 
     let(:dynamic_template_data) do
       {
-        first_name: user.legal_first_name,
+        first_name: user.name,
         subscribed_profile: user_url(username: subscribed.username),
         subscribed_username: subscribed.username
       }

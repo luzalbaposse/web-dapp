@@ -4,7 +4,7 @@ class SponsorshipMailer < ApplicationMailer
     user = indifferent_access_params[:recipient]
 
     dynamic_template_data = {
-      first_name: sendgrid_first_name_variable(user),
+      first_name: sendgrid_name_variable(user),
       sponsor_request_username: sponsor.username
     }
 
