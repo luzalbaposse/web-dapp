@@ -9,6 +9,7 @@ class Organization < ApplicationRecord
   has_many :organization_tags, dependent: :destroy
   has_many :tags, through: :organization_tags
   has_many :users, through: :memberships
+  has_many :elections, dependent: :destroy
 
   validates :discord,
     :github,
@@ -22,4 +23,8 @@ class Organization < ApplicationRecord
   validates :name, :slug, presence: true, uniqueness: true
 
   friendly_id :name, use: :slugged
+
+  def active_election
+    elections.active.take
+  end
 end

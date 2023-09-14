@@ -47,7 +47,7 @@ export const Goals = ({ urlData, currentUser }) => {
           />
         </ButtonContainer>
       )}
-      {data.goals.length
+      {data?.goals.length
         ? data.goals.map(goal => (
             <GoalCard
               key={goal.id}

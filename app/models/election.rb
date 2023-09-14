@@ -7,6 +7,8 @@ class Election < ApplicationRecord
 
   scope :active, -> { where("start_date <= ? AND voting_end_date >= ?", Date.today, Date.today) }
 
+  validate :only_one_active_for_organization
+
   def active?
     start_date <= Date.today && voting_end_date >= Date.today
   end
@@ -25,5 +27,13 @@ class Election < ApplicationRecord
 
   def election_over?
     voting_end_ate <= Date.today && rewards_distributed == true
+  end
+
+  private
+
+  def only_one_active_for_organization
+    return unless organization.elections.active.exists?
+
+    errors.add(:base, "There can only be one active election per organization")
   end
 end

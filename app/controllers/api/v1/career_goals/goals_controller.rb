@@ -63,6 +63,7 @@ class API::V1::CareerGoals::GoalsController < ApplicationController
       :description,
       :link,
       :progress,
+      :electionSelected,
       images: [
         :id,
         image_data: {}

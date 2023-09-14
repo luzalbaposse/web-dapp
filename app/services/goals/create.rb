@@ -24,6 +24,8 @@ module Goals
       update_profile_completeness
       send_discord_notification(goal) if goal.accomplished?
 
+      add_to_collective if params[:electionSelected]
+
       goal
     end
 
@@ -56,6 +58,13 @@ module Goals
 
     def send_discord_notification(goal)
       Discord::SendAccomplishedGoalNotificationJob.perform_later(goal.id)
+    end
+
+    def add_to_collective
+      collective = Organization.find_by(slug: "takeoff-istambul")
+      if collective.active_election.present?
+        collective.memberships.create!(active: true, user: career_goal.talent.user)
+      end
     end
   end
 end

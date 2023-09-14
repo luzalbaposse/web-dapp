@@ -9,7 +9,7 @@ class API::V1::PublicAPI::GoalsController < API::V1::PublicAPI::APIController
       order: {due_date: :desc}
     )
 
-    active_election = Election.where("start_date > ? and end_date < ?", Date.today, Date.today).exists?
+    active_election = Election.active.exists?
 
     response_body = {
       goals: API::GoalBlueprint.render_as_json(page_goals, view: :normal),
