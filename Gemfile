@@ -62,7 +62,7 @@ gem "faker"
 gem "rollbar"
 
 # Async jobs
-gem "sidekiq", "~> 6.5.8"
+gem "sidekiq", "~> 7.1.3"
 gem "sidekiq-scheduler"
 gem "sidekiq-status"
 
