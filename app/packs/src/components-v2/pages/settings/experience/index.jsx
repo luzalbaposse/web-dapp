@@ -3,7 +3,7 @@ import { Container } from "./styled";
 import { ExperiencesComponent } from "src/components-v2/experiences-component";
 import { AddExperienceForm } from "./add-form";
 
-export const ExperienceForm = ({ username }) => {
+export const ExperienceForm = ({ username, setIsDirty }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAdding, setIsAdding] = useState(false);
   const [currentExperience, setCurrentExperience] = useState({});

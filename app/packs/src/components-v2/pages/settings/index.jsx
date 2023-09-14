@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import isMobile from "is-mobile";
 import { useEditProfileStore } from "src/contexts/state";
 import { DesktopColumn, DesktopPageContainer, PageContainer } from "src/components-v2/styled-containers";
@@ -12,23 +12,27 @@ import { AboutForm } from "./about";
 // import { NotificationsForm } from "./notifications";
 import { AccountForm } from "./account";
 import { LocalHeaderMobile } from "./local-header-mobile";
+import { DiscardModal } from "./discard-modal";
 
 export const SettingsPage = ({ isMobile }) => {
   const urlData = useUrlData();
   const { profile, fetchEditProfileInfo } = useEditProfileStore();
   const nav = useCustomNavigation(urlData.tab, isMobile);
+  const [isDirty, setIsDirty] = useState(false);
+  const [nextTab, setNextTab] = useState("");
+  const [isDiscardModalOpen, setIsDiscardModalOpen] = useState(false);
 
   const content = useMemo(() => {
     switch (nav.page) {
       case "Profile":
-        return <ProfileForm />;
+        return <ProfileForm setIsDirty={setIsDirty} />;
       case "Experience":
-        return <ExperienceForm username={urlData.profileUsername} />;
+        return <ExperienceForm username={urlData.profileUsername} setIsDirty={setIsDirty} />;
       case "About":
-        return <AboutForm />;
+        return <AboutForm setIsDirty={setIsDirty} />;
       case "Account":
       default:
-        return <AccountForm />;
+        return <AccountForm setIsDirty={setIsDirty} />;
       // case "Notifications":
       //   return <NotificationsForm />;
     }
@@ -39,27 +43,51 @@ export const SettingsPage = ({ isMobile }) => {
     }
   }, [urlData]);
 
-  return isMobile ? (
-    <PageContainer>
-      <LocalHeaderMobile
-        username={urlData.profileUsername}
-        goToPage={nav.goToPage}
-        openHamburguer={nav.openHamburguer}
-        isHamburguerOpen={nav.isHamburguerOpen}
-        page={nav.page}
-      />
-      {content}
-    </PageContainer>
-  ) : (
+  const changeTab = tab => {
+    if (isDirty) {
+      setIsDiscardModalOpen(true);
+      setNextTab(tab);
+    } else {
+      nav.goToPage(tab);
+    }
+  };
+
+  const discardChangesCallback = () => {
+    setIsDirty(false);
+    nav.goToPage(nextTab);
+  };
+
+  return (
     <>
-      <LocalHeader username={urlData.profileUsername} />
-      <DesktopPageContainer>
-        <DesktopColumn>
-          <NavLinks goToPage={nav.goToPage} page={nav.page} />
-        </DesktopColumn>
-        <DesktopColumn>{content}</DesktopColumn>
-        <DesktopColumn></DesktopColumn>
-      </DesktopPageContainer>
+      {isMobile ? (
+        <PageContainer>
+          <LocalHeaderMobile
+            username={urlData.profileUsername}
+            goToPage={changeTab}
+            openHamburguer={nav.openHamburguer}
+            isHamburguerOpen={nav.isHamburguerOpen}
+            page={nav.page}
+          />
+          {content}
+        </PageContainer>
+      ) : (
+        <>
+          <LocalHeader username={urlData.profileUsername} />
+          <DesktopPageContainer>
+            <DesktopColumn>
+              <NavLinks goToPage={changeTab} page={nav.page} />
+            </DesktopColumn>
+            <DesktopColumn>{content}</DesktopColumn>
+            <DesktopColumn></DesktopColumn>
+          </DesktopPageContainer>
+        </>
+      )}
+      <DiscardModal
+        isOpen={isDiscardModalOpen}
+        setIsDiscardModalOpen={setIsDiscardModalOpen}
+        callBack={discardChangesCallback}
+      />
+      ;
     </>
   );
 };

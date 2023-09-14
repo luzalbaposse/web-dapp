@@ -9,7 +9,7 @@ import { ToastBody } from "src/components/design_system/toasts";
 import { debounce } from "lodash";
 import { tagsService } from "src/api";
 
-export const AboutForm = () => {
+export const AboutForm = setIsDirty => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentTags, setCurrentTags] = useState([]);
   const [tagsSuggestions, setTagsSuggestions] = useState([]);

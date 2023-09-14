@@ -8,7 +8,7 @@ import { editProfileService } from "src/api/edit-profile";
 import { ToastBody } from "src/components/design_system/toasts";
 import { DeleteAccountEmail } from "./delete-account-email";
 
-export const AccountForm = () => {
+export const AccountForm = setIsDirty => {
   const modalState = useModal();
   const [isLoading, setIsLoading] = useState(true);
   const [isHiddingPassword, setIsHiddingPassword] = useState(true);

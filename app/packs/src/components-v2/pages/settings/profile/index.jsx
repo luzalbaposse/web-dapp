@@ -11,7 +11,7 @@ import { editProfileService } from "src/api/edit-profile";
 import { ToastBody } from "src/components/design_system/toasts";
 import { getAuthToken } from "src/api/utils";
 
-export const ProfileForm = () => {
+export const ProfileForm = ({ setIsDirty }) => {
   const profileFileInput = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -19,10 +19,12 @@ export const ProfileForm = () => {
   }, [setIsLoading]);
   const { profile, updateProfileState } = useEditProfileStore();
   const [profilePic, setProfilePic] = useState({ url: profile?.profile_picture_url });
+
   useEffect(() => {
     if (!profile) return;
     setProfilePic({ url: profile.profile_picture_url });
   }, [profile]);
+
   const updateProfile = useCallback(() => {
     const payloadObject = {
       user: {
@@ -59,17 +61,20 @@ export const ProfileForm = () => {
           profile_picture_url: profilePic.url
         });
         toast.success(<ToastBody heading="Success!" body="Account updated successfully." />, { autoClose: 1500 });
+        setIsDirty(false);
       })
       .catch(err => {
         console.error(err);
         toast.error(<ToastBody heading="Error" body={"Something happened while updating your profile"} />);
       });
   }, [profile, profilePic]);
+
   const refs = {
     name: useRef(),
     location: useRef(),
     headline: useRef()
   };
+
   const uppyProfile = new Uppy({
     meta: { type: "avatar" },
     restrictions: {
@@ -78,6 +83,7 @@ export const ProfileForm = () => {
     },
     autoProceed: true
   });
+
   uppyProfile.use(AwsS3Multipart, {
     limit: 4,
     companionUrl: "/",
@@ -85,6 +91,7 @@ export const ProfileForm = () => {
       "X-CSRF-Token": getAuthToken()
     }
   });
+
   useEffect(() => {
     if (!profileFileInput.current) return;
     profileFileInput?.current.addEventListener("change", event => {
@@ -109,6 +116,7 @@ export const ProfileForm = () => {
       });
     });
   }, [profileFileInput]);
+
   useEffect(() => {
     uppyProfile.on("restriction-failed", () => {
       uppyProfile.reset();
@@ -131,6 +139,7 @@ export const ProfileForm = () => {
     });
     uppyProfile.on("upload", () => {});
   }, [uppyProfile]);
+
   return (
     <Container>
       <AvatarRow>
@@ -159,6 +168,7 @@ export const ProfileForm = () => {
           placeholder="Pedro Pereira"
           defaultValue={profile?.user.name}
           inputRef={refs.name}
+          onChange={() => setIsDirty(true)}
         />
         <Input
           inputRef={refs.location}

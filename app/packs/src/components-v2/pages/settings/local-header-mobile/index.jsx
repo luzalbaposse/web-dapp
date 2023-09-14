@@ -1,14 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import { TextLink, ModalDialog, Typography, Button } from "@talentprotocol/design-system";
-import {
-  HamburguerContainer,
-  HeaderContainer,
-  InnerHeaderContainer,
-  StyledNavLinks,
-  DialogContainer,
-  DialogButtonsRow
-} from "./styled";
+import { HamburguerContainer, HeaderContainer, InnerHeaderContainer, StyledNavLinks } from "./styled";
 import { useEditProfileStore } from "src/contexts/state";
+import { DiscardModal } from "../discard-modal";
 
 export const LocalHeaderMobile = ({ username, goToPage, openHamburguer, isHamburguerOpen, page }) => {
   const [isDiscardModalOpen, setIsDiscardModalOpen] = useState(false);
@@ -48,24 +42,11 @@ export const LocalHeaderMobile = ({ username, goToPage, openHamburguer, isHambur
       >
         <StyledNavLinks goToPage={goToPage} />
       </HamburguerContainer>
-      <ModalDialog isOpen={isDiscardModalOpen} closeModal={() => setIsDiscardModalOpen(false)} title="Discard changes?">
-        <DialogContainer>
-          <Typography specs={{ type: "regular", variant: "p1" }} color="primary04">
-            This can't be undone and you'll loose your changes.
-          </Typography>
-          <DialogButtonsRow>
-            <Button
-              hierarchy="danger"
-              size="medium"
-              text="Discard"
-              onClick={() => {
-                setIsDiscardModalOpen(false);
-                subFormCallback();
-              }}
-            />
-          </DialogButtonsRow>
-        </DialogContainer>
-      </ModalDialog>
+      <DiscardModal
+        isOpen={isDiscardModalOpen}
+        setIsDiscardModalOpen={setIsDiscardModalOpen}
+        callBack={subFormCallback}
+      />
     </>
   );
 };
