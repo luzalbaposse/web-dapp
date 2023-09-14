@@ -7,7 +7,7 @@ module Goals
     end
 
     def call
-      goal = Goal.new(params.except(:images))
+      goal = Goal.new(params.except(:images, :election_selected))
 
       parsed_date = params[:due_date].split("-").map(&:to_i)
       goal.due_date = Date.new(parsed_date[2], parsed_date[1], parsed_date[0])
@@ -24,7 +24,7 @@ module Goals
       update_profile_completeness
       send_discord_notification(goal) if goal.accomplished?
 
-      add_to_collective if params[:electionSelected]
+      add_to_collective if params[:election_selected]
 
       goal
     end

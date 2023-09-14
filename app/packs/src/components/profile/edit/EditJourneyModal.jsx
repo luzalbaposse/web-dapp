@@ -399,7 +399,7 @@ const GoalExperience = ({
 }) => {
   const [dueMonth, setDueMonth] = useState(returnMonth(currentJourneyItem.due_date));
   const [dueYear, setDueYear] = useState(returnYear(currentJourneyItem.due_date));
-  const [electionSelected, setElectionSelected] = useState(false);
+  const [election_selected, setelection_selected] = useState(false);
   const checkboxRef = useRef(false);
 
   const progressOptions = [
@@ -445,12 +445,12 @@ const GoalExperience = ({
   }, [dueMonth, dueYear]);
 
   const toggleTakeoffApplication = event => {
-    setElectionSelected(event.target.checked);
+    setelection_selected(event.target.checked);
 
     if (event.target.checked) {
       changeAttribute("progress", "planned");
       changeAttribute("title", "Take Off Istanbul");
-      changeAttribute("electionSelected", true);
+      changeAttribute("election_selected", true);
       setDueMonth("November");
       setDueYear("2023");
     }
@@ -475,7 +475,7 @@ const GoalExperience = ({
         {activeElection && (
           <div className="w-100 mb-5">
             <DesignSystemCheckbox
-              checked={electionSelected}
+              checked={election_selected}
               onChange={toggleTakeoffApplication}
               checkboxRef={checkboxRef}
               label={
@@ -498,7 +498,7 @@ const GoalExperience = ({
             placeholder="Ex: Finding a co-founder for my startup"
             required={true}
             error={validationErrors?.title}
-            disabled={electionSelected}
+            disabled={election_selected}
           />
         </div>
         <div className="w-100 mb-5">
@@ -513,7 +513,7 @@ const GoalExperience = ({
             onChange={e => changeAttribute("progress", e.target.value)}
             value={currentJourneyItem.progress}
             placeholder="Please Select"
-            disabled={electionSelected}
+            disabled={election_selected}
             className={cx("height-auto", "mr-2", validationErrors?.progress && "border-danger")}
           >
             <option value=""></option>
@@ -526,7 +526,7 @@ const GoalExperience = ({
         </div>
         <div className="w-100 mb-5">
           <TextArea
-            title={electionSelected ? "Application Letter" : "Description"}
+            title={election_selected ? "Application Letter" : "Description"}
             onChange={e => changeAttribute("description", e.target.value)}
             value={currentJourneyItem.description}
             maxLength={800}
@@ -546,7 +546,7 @@ const GoalExperience = ({
               onChange={e => setDueMonth(e.target.value)}
               value={dueMonth}
               placeholder="Month"
-              disabled={electionSelected}
+              disabled={election_selected}
               className={cx("height-auto", "mr-2", validationErrors?.dueDate && "border-danger")}
             >
               <option value=""></option>
@@ -561,7 +561,7 @@ const GoalExperience = ({
               onChange={e => setDueYear(e.target.value)}
               value={dueYear}
               placeholder="Year"
-              disabled={electionSelected}
+              disabled={election_selected}
               className={cx("height-auto", "ml-2", validationErrors?.dueDate && "border-danger")}
             >
               <option value=""></option>
@@ -573,7 +573,7 @@ const GoalExperience = ({
             </Form.Control>
           </div>
         </div>
-        {!electionSelected && (
+        {!election_selected && (
           <div className="w-100 mb-5">
             <P2 className="mb-2 text-primary-01" bold text="Media" />
             <FileInput

@@ -30,8 +30,8 @@ class API::V1::CareerGoals::GoalsController < ApplicationController
     Rollbar.error(
       e,
       "Unable to create goal",
-      goal_id: goal.id,
-      career_goal_id: career_goal.id
+      goal_id: goal&.id,
+      career_goal_id: career_goal&.id
     )
 
     render json: {error: "Unable to create goal"}, status: :unprocessable_entity
@@ -63,7 +63,7 @@ class API::V1::CareerGoals::GoalsController < ApplicationController
       :description,
       :link,
       :progress,
-      :electionSelected,
+      :election_selected,
       images: [
         :id,
         image_data: {}
