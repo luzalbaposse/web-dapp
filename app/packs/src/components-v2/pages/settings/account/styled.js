@@ -25,3 +25,11 @@ export const DeleteAccountContainer = styled.div`
   gap: 10px;
   align-items: flex-start;
 `;
+
+export const PasswordLabelRow = styled.div`
+  display: flex;
+
+  p {
+    flex-grow: 1;
+  }
+`;

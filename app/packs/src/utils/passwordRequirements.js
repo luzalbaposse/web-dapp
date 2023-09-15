@@ -1,5 +1,5 @@
 export const passwordMatchesRequirements = password => {
-  const tags = ["Number", "Upper Case", "Lower Case", "8 Characters"];
+  const tags = ["Number", "Upper case", "Lower case", "8 characters"];
   const lengthRegex = new RegExp("^.{8,}$");
   const lowercaseRegex = new RegExp("(?=.*[a-z])");
   const uppercaseRegex = new RegExp("(?=.*[A-Z])");
@@ -9,24 +9,24 @@ export const passwordMatchesRequirements = password => {
 
   // the keys must match the tag names
   if (!lengthRegex.test(password)) {
-    errors["8 Characters"] = true;
+    errors["8 characters"] = true;
     valid = false;
   } else {
-    errors["8 Characters"] = false;
+    errors["8 characters"] = false;
   }
 
   if (!lowercaseRegex.test(password)) {
-    errors["Lower Case"] = true;
+    errors["Lower case"] = true;
     valid = false;
   } else {
-    errors["Lower Case"] = false;
+    errors["Lower case"] = false;
   }
 
   if (!uppercaseRegex.test(password)) {
-    errors["Upper Case"] = true;
+    errors["Upper case"] = true;
     valid = false;
   } else {
-    errors["Upper Case"] = false;
+    errors["Upper case"] = false;
   }
 
   if (!digitRegex.test(password)) {
