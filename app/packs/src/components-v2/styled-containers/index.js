@@ -9,7 +9,7 @@ export const PageContainer = styled.div`
 export const DesktopPageContainer = styled.div`
   display: flex;
   height: 100vh;
-  max-height: 100vh;
+  max-height: 100%;
   padding-top: 68px;
   max-width: 1224px;
   min-width: 1224px;
@@ -20,6 +20,7 @@ export const DesktopPageContainer = styled.div`
 export const DesktopColumn = styled.div`
   display: flex;
   border-right: 1px solid ${buildColor("surfaceHover02")};
+  height: calc(100vh + 64px);
 
   :nth-child(1) {
     flex-basis: 288px;

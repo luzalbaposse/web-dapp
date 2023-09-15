@@ -40,8 +40,9 @@ export const AboutForm = ({ setIsDirty }) => {
     tags => {
       setCurrentTags(tags);
       setTagsSuggestions([]);
+      setIsDirty(true);
     },
-    [setCurrentTags, setTagsSuggestions]
+    [setCurrentTags, setTagsSuggestions, setIsDirty]
   );
 
   const refs = {
@@ -134,7 +135,6 @@ export const AboutForm = ({ setIsDirty }) => {
           description="Min 3, up to 10"
           defaultTags={profile?.tags.map(tag => tag.description)}
           onTagsUpdate={onTagsUpdate}
-          onChange={() => setIsDirty(true)}
         />
         <LinksArea>
           <LinksRow>

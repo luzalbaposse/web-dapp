@@ -78,7 +78,7 @@ export const ProfileForm = ({ setIsDirty }) => {
   const uppyProfile = new Uppy({
     meta: { type: "avatar" },
     restrictions: {
-      maxFileSize: 5120000,
+      maxFileSize: 1048576,
       allowedFileTypes: [".jpg", ".png", ".jpeg"]
     },
     autoProceed: true
@@ -118,7 +118,8 @@ export const ProfileForm = ({ setIsDirty }) => {
   }, [profileFileInput]);
 
   useEffect(() => {
-    uppyProfile.on("restriction-failed", () => {
+    uppyProfile.on("restriction-failed", (file, error) => {
+      toast.error(<ToastBody heading="Error" body={error.message} />);
       uppyProfile.reset();
     });
     uppyProfile.on("upload-success", (file, response) => {
@@ -146,7 +147,7 @@ export const ProfileForm = ({ setIsDirty }) => {
       <AvatarRow>
         <Avatar size="xl" url={profilePic.url} />
         <UploadContainer>
-          <Typography specs={{ type: "regular", variant: "p3" }} color="primary04">
+          <Typography specs={{ type: "light", variant: "p3" }} color="primary04">
             JPG or PNG. Max 1MB
           </Typography>
           <UploadButtons>
