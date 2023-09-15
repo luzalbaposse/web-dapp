@@ -32,7 +32,7 @@ export const CurrentRole = ({ position, username, isOwner }) => {
           color="primary01"
           size="small"
           text="Add Experiences"
-          href={`/u/${username}/experiences`}
+          href={`/u/${username}/settings?tab=Experience`}
           leftIcon="add"
         />
       )}
