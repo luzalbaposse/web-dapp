@@ -1,11 +1,17 @@
-import React, { useEffect, useState, useRef } from "react";
-import { TextLink, ModalDialog, Typography, Button } from "@talentprotocol/design-system";
+import React, { useEffect, useRef } from "react";
+import { TextLink } from "@talentprotocol/design-system";
 import { HamburguerContainer, HeaderContainer, InnerHeaderContainer, StyledNavLinks } from "./styled";
 import { useEditProfileStore } from "src/contexts/state";
-import { DiscardModal } from "../discard-modal";
 
-export const LocalHeaderMobile = ({ username, goToPage, openHamburguer, isHamburguerOpen, page }) => {
-  const [isDiscardModalOpen, setIsDiscardModalOpen] = useState(false);
+export const LocalHeaderMobile = ({
+  username,
+  goToPage,
+  openHamburguer,
+  isHamburguerOpen,
+  page,
+  setIsDiscardModalOpen,
+  isDirty
+}) => {
   const hamburguerRef = useRef(undefined);
   const { subFormCallback } = useEditProfileStore();
 
@@ -16,6 +22,7 @@ export const LocalHeaderMobile = ({ username, goToPage, openHamburguer, isHambur
       }, 250);
     }
   }, [hamburguerRef]);
+
   return (
     <>
       <HeaderContainer>
@@ -24,10 +31,10 @@ export const LocalHeaderMobile = ({ username, goToPage, openHamburguer, isHambur
             color="primary01"
             text={isHamburguerOpen ? "Edit Profile" : page}
             leftIcon="back-arrow"
-            href={!subFormCallback ? `/u/${username}` : undefined}
+            href={!subFormCallback && !isDirty ? `/u/${username}` : undefined}
             size="small"
             onClick={e => {
-              if (!subFormCallback) return openHamburguer(e);
+              if (!subFormCallback && !isDirty) return openHamburguer(e);
               setIsDiscardModalOpen(true);
             }}
           />
@@ -42,11 +49,6 @@ export const LocalHeaderMobile = ({ username, goToPage, openHamburguer, isHambur
       >
         <StyledNavLinks goToPage={goToPage} />
       </HamburguerContainer>
-      <DiscardModal
-        isOpen={isDiscardModalOpen}
-        setIsDiscardModalOpen={setIsDiscardModalOpen}
-        callBack={subFormCallback}
-      />
     </>
   );
 };

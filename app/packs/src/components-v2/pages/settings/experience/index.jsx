@@ -31,6 +31,7 @@ export const ExperienceForm = ({ username, setIsDirty }) => {
             setCurrentExperience({});
             setIsAdding(false);
           }}
+          setIsDirty={setIsDirty}
         />
       )}
     </Container>

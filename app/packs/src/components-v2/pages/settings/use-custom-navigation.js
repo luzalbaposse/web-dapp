@@ -8,8 +8,10 @@ export const useCustomNavigation = (initialPage = "profile") => {
     event => {
       if (isHamburguerOpen) return;
       setIsHamburguerOpen(true);
-      event.stopPropagation();
-      event.preventDefault();
+      if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
     },
     [setIsHamburguerOpen, isHamburguerOpen]
   );

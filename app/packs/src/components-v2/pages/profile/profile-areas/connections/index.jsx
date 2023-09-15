@@ -135,8 +135,6 @@ export const Connections = ({ currentUser, urlData }) => {
     }
   };
 
-  console.log("talent", talent);
-
   return !talent || !userId ? (
     <SpinnerContainer>
       <Spinner color="primary" size={48} />

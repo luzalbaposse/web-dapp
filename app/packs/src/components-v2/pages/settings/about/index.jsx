@@ -9,7 +9,7 @@ import { ToastBody } from "src/components/design_system/toasts";
 import { debounce } from "lodash";
 import { tagsService } from "src/api";
 
-export const AboutForm = setIsDirty => {
+export const AboutForm = ({ setIsDirty }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentTags, setCurrentTags] = useState([]);
   const [tagsSuggestions, setTagsSuggestions] = useState([]);
@@ -105,6 +105,7 @@ export const AboutForm = setIsDirty => {
         console.error(err);
         toast.error(<ToastBody heading="Error" body={"Something happened while updating your profile"} />);
       });
+    setIsDirty(false);
   }, [refs, profile]);
 
   useEffect(() => {
@@ -120,6 +121,7 @@ export const AboutForm = setIsDirty => {
           label="About me"
           placeholder="You can write about your experience, passions or achievements."
           defaultValue={profile?.profile.about}
+          onChange={() => setIsDirty(true)}
         />
         <Typography specs={{ type: "medium", variant: "p1" }} color="primary01">
           On The Web
@@ -132,6 +134,7 @@ export const AboutForm = setIsDirty => {
           description="Min 3, up to 10"
           defaultTags={profile?.tags.map(tag => tag.description)}
           onTagsUpdate={onTagsUpdate}
+          onChange={() => setIsDirty(true)}
         />
         <LinksArea>
           <LinksRow>
@@ -140,12 +143,14 @@ export const AboutForm = setIsDirty => {
               label="Website"
               placeholder="www."
               defaultValue={profile?.profile.website || "www."}
+              onChange={() => setIsDirty(true)}
             />
             <Input
               inputRef={refs.twitter}
               label="Twitter"
               placeholder="twitter.com/"
               defaultValue={profile?.profile.twitter || "twitter.com/"}
+              onChange={() => setIsDirty(true)}
             />
           </LinksRow>
           <LinksRow>
@@ -154,12 +159,14 @@ export const AboutForm = setIsDirty => {
               label="LinkedIn"
               placeholder="linkedin.com/in/"
               defaultValue={profile?.profile.linkedin || "linkedin.com/in/"}
+              onChange={() => setIsDirty(true)}
             />
             <Input
               inputRef={refs.figma}
               label="Figma"
               placeholder="figma.com/@"
               defaultValue={profile?.profile.figma || "figma.com/@"}
+              onChange={() => setIsDirty(true)}
             />
           </LinksRow>
           <LinksRow>
@@ -168,12 +175,14 @@ export const AboutForm = setIsDirty => {
               label="Behance"
               placeholder="behance.net/"
               defaultValue={profile?.profile.behance || "behance.net/"}
+              onChange={() => setIsDirty(true)}
             />
             <Input
               inputRef={refs.youtube}
               label="Youtube"
               placeholder="youtube.com/"
               defaultValue={profile?.profile.youtube || "youtube.com/"}
+              onChange={() => setIsDirty(true)}
             />
           </LinksRow>
           <LinksRow>
@@ -182,12 +191,14 @@ export const AboutForm = setIsDirty => {
               label="Gihub"
               placeholder="github.com/"
               defaultValue={profile?.profile.github || "github.com/"}
+              onChange={() => setIsDirty(true)}
             />
             <Input
               inputRef={refs.lens}
               label="Lens"
               placeholder="lens.xyz/"
               defaultValue={profile?.profile.lens || "lens.xyz/"}
+              onChange={() => setIsDirty(true)}
             />
           </LinksRow>
           <LinksRow>
@@ -196,12 +207,14 @@ export const AboutForm = setIsDirty => {
               label="Farcaster"
               placeholder="farcaster.xyz/"
               defaultValue={profile?.profile.farcaster || "farcaster.xyz/"}
+              onChange={() => setIsDirty(true)}
             />
             <Input
               inputRef={refs.instagram}
               label="Instagram"
               placeholder="instagram.com/"
               defaultValue={profile?.profile.instagram || "instagram.com/"}
+              onChange={() => setIsDirty(true)}
             />
           </LinksRow>
           <LinksRow>
@@ -210,6 +223,7 @@ export const AboutForm = setIsDirty => {
               label="Tik Tok"
               placeholder="tiktok.net/"
               defaultValue={profile?.profile.tiktok || "tiktok.net/"}
+              onChange={() => setIsDirty(true)}
             />
           </LinksRow>
         </LinksArea>

@@ -136,6 +136,7 @@ export const ProfileForm = ({ setIsDirty }) => {
         },
         url: response.uploadURL
       });
+      setIsDirty(true);
     });
     uppyProfile.on("upload", () => {});
   }, [uppyProfile]);
@@ -175,6 +176,7 @@ export const ProfileForm = ({ setIsDirty }) => {
           label="Current Location"
           placeholder="City, Location"
           defaultValue={profile?.profile.location}
+          onChange={() => setIsDirty(true)}
         />
       </InfoRow>
       <TextArea
@@ -182,6 +184,7 @@ export const ProfileForm = ({ setIsDirty }) => {
         placeholder="This is the first thing people read about you after your name. Make it count 💫"
         defaultValue={profile?.profile.headline}
         textAreaRef={refs.headline}
+        onChange={() => setIsDirty(true)}
       />
       {!isLoading &&
         createPortal(

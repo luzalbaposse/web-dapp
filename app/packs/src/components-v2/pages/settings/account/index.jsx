@@ -8,7 +8,7 @@ import { editProfileService } from "src/api/edit-profile";
 import { ToastBody } from "src/components/design_system/toasts";
 import { DeleteAccountEmail } from "./delete-account-email";
 
-export const AccountForm = setIsDirty => {
+export const AccountForm = ({ setIsDirty }) => {
   const modalState = useModal();
   const [isLoading, setIsLoading] = useState(true);
   const [isHiddingPassword, setIsHiddingPassword] = useState(true);
@@ -21,10 +21,12 @@ export const AccountForm = setIsDirty => {
   };
 
   const updateAccount = useCallback(() => {
+    const newUsername = refs.username.current.value;
+    const usernameChanged = profile?.username != newUsername;
     editProfileService
       .editAccount(profile?.username, {
         user: {
-          username: refs.username.current.value,
+          username: newUsername,
           email: refs.email.current.value,
           current_password: refs.currentPassword.current.value,
           new_password: refs.newPassword.current.value
@@ -46,6 +48,11 @@ export const AccountForm = setIsDirty => {
         console.error(err);
         toast.error(<ToastBody heading="Error" body={"Something happened while updating your profile"} />);
       });
+    setIsDirty(false);
+    // Reload page since the route needs to be changed
+    if (usernameChanged) {
+      window.location.href = `/u/${newUsername}/settings?tab=Account`;
+    }
   }, [refs, profile]);
 
   useEffect(() => {
@@ -54,8 +61,18 @@ export const AccountForm = setIsDirty => {
 
   return (
     <Container>
-      <Input inputRef={refs.username} label="Username" defaultValue={profile?.username} />
-      <Input inputRef={refs.email} label="Email Address" defaultValue={profile?.user.email} />
+      <Input
+        inputRef={refs.username}
+        label="Username"
+        defaultValue={profile?.username}
+        onChange={() => setIsDirty(true)}
+      />
+      <Input
+        inputRef={refs.email}
+        label="Email Address"
+        defaultValue={profile?.user.email}
+        onChange={() => setIsDirty(true)}
+      />
       <Typography specs={{ type: "medium", variant: "p1" }} color="primary01">
         Change Password
       </Typography>
@@ -67,6 +84,7 @@ export const AccountForm = setIsDirty => {
         rightIcon={isHiddingPassword ? "eye-disabled" : "eye"}
         rightIconCallback={() => setIsHiddingPassword(!isHiddingPassword)}
         iconColor="primary03"
+        onChange={() => setIsDirty(true)}
       />
       <ConfirmPasswordContainer>
         <Input
@@ -77,6 +95,7 @@ export const AccountForm = setIsDirty => {
           rightIcon={isHiddingPassword ? "eye-disabled" : "eye"}
           iconColor="primary03"
           rightIconCallback={() => setIsHiddingPassword(!isHiddingPassword)}
+          onChange={() => setIsDirty(true)}
         />
         <TagsContainer>
           <Tag backgroundColor="bg01" label="Number" size="small" borderColor="surfaceHover02" textColor="pimary01" />

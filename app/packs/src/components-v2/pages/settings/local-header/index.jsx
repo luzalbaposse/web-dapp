@@ -4,8 +4,7 @@ import { HeaderContainer, InnerHeaderContainer } from "./styled";
 import { useEditProfileStore } from "src/contexts/state";
 import { DiscardModal } from "../discard-modal";
 
-export const LocalHeader = ({ username }) => {
-  const [isDiscardModalOpen, setIsDiscardModalOpen] = useState(false);
+export const LocalHeader = ({ username, setIsDiscardModalOpen }) => {
   const { subFormCallback } = useEditProfileStore();
 
   return (
@@ -26,11 +25,6 @@ export const LocalHeader = ({ username }) => {
           <div id="save-button"></div>
         </InnerHeaderContainer>
       </HeaderContainer>
-      <DiscardModal
-        isOpen={isDiscardModalOpen}
-        setIsDiscardModalOpen={setIsDiscardModalOpen}
-        callBack={subFormCallback}
-      />
     </>
   );
 };

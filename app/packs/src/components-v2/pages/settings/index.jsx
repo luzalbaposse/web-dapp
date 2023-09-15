@@ -16,7 +16,7 @@ import { DiscardModal } from "./discard-modal";
 
 export const SettingsPage = ({ isMobile }) => {
   const urlData = useUrlData();
-  const { profile, fetchEditProfileInfo } = useEditProfileStore();
+  const { profile, fetchEditProfileInfo, subFormCallback } = useEditProfileStore();
   const nav = useCustomNavigation(urlData.tab, isMobile);
   const [isDirty, setIsDirty] = useState(false);
   const [nextTab, setNextTab] = useState("");
@@ -54,7 +54,10 @@ export const SettingsPage = ({ isMobile }) => {
 
   const discardChangesCallback = () => {
     setIsDirty(false);
-    nav.goToPage(nextTab);
+
+    if (nextTab) nav.goToPage(nextTab);
+    if (isMobile) nav.openHamburguer();
+    if (subFormCallback) subFormCallback();
   };
 
   return (
@@ -67,12 +70,14 @@ export const SettingsPage = ({ isMobile }) => {
             openHamburguer={nav.openHamburguer}
             isHamburguerOpen={nav.isHamburguerOpen}
             page={nav.page}
+            setIsDiscardModalOpen={setIsDiscardModalOpen}
+            isDirty={isDirty}
           />
           {content}
         </PageContainer>
       ) : (
         <>
-          <LocalHeader username={urlData.profileUsername} />
+          <LocalHeader username={urlData.profileUsername} setIsDiscardModalOpen={setIsDiscardModalOpen} />
           <DesktopPageContainer>
             <DesktopColumn>
               <NavLinks goToPage={changeTab} page={nav.page} />
