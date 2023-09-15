@@ -25,17 +25,24 @@ const MONTHS = [
   { value: "November", index: "11" },
   { value: "December", index: "12" }
 ];
-const START_YEARS = new Array(80).fill(0).map((_, i) => ({ value: new Date().getFullYear() - 79 + i }));
-const END_YEARS = new Array(160).fill(0).map((_, i) => ({ value: new Date().getFullYear() - 79 + i }));
+const START_YEARS = new Array(80)
+  .fill(0)
+  .map((_, i) => ({ value: new Date().getFullYear() - 79 + i }))
+  .reverse();
+const END_YEARS = new Array(80)
+  .fill(0)
+  .map((_, i) => ({ value: new Date().getFullYear() - 79 + i }))
+  .reverse();
 
 export const AddExperienceForm = ({ username, category, milestone, backCallback, setIsDirty }) => {
   const [isInProgress, setIsInProgress] = useState(!!milestone?.in_progress);
   const [updating, setUpdating] = useState(false);
   const [errors, setErrors] = useState({
-    title: null,
-    organization: null,
-    startDate: null
+    title: false,
+    organization: false,
+    startDate: false
   });
+
   const saveEnabled = Object.keys(errors).every(err => errors[err] === false);
   const { profile, updateSubFormCallback, updateProfileState } = useEditProfileStore();
 
@@ -191,7 +198,10 @@ export const AddExperienceForm = ({ username, category, milestone, backCallback,
         defaultValue={milestone.title}
         hasError={errors.title}
         shortDescription={errors.title && "Mandatory field"}
-        onChange={(e => validateErrors("title", e.target.value), setIsDirty(true))}
+        onChange={e => {
+          validateErrors("title", e.target.value);
+          setIsDirty(true);
+        }}
       />
       <Input
         inputRef={refs.organization}
@@ -200,19 +210,25 @@ export const AddExperienceForm = ({ username, category, milestone, backCallback,
         defaultValue={milestone.institution}
         hasError={errors.organization}
         shortDescription={errors.organization && "Mandatory field"}
-        onChange={(e => validateErrors("organization", e.target.value), setIsDirty(true))}
+        onChange={e => {
+          validateErrors("organization", e.target.value);
+          setIsDirty(true);
+        }}
       />
       <Checkbox
         label={`I currently ${category === "Position" ? "work on this position" : "study on this institution"}`}
         isChecked={milestone.in_progress}
         checkboxRef={refs.inProgress}
         onCheckboxClick={() => {
-          setIsInProgress(!isInProgress), setIsDirty(true);
+          setIsInProgress(!isInProgress);
+          setIsDirty(true);
         }}
       />
       <Row>
         <Dropdown
-          selectOption={(option => setDateState({ ...dateState, startDateMonth: option }), setIsDirty(true))}
+          selectOption={option => {
+            setDateState({ ...dateState, startDateMonth: option }), setIsDirty(true);
+          }}
           selectedOption={dateState.startDateMonth}
           options={MONTHS}
           label="Start Date"
@@ -220,7 +236,10 @@ export const AddExperienceForm = ({ username, category, milestone, backCallback,
           placeholder="Month"
         />
         <Dropdown
-          selectOption={(option => setDateState({ ...dateState, startDateYear: option }), setIsDirty(true))}
+          selectOption={option => {
+            setDateState({ ...dateState, startDateYear: option });
+            setIsDirty(true);
+          }}
           selectedOption={dateState.startDateYear || { value: new Date().getFullYear() }}
           options={START_YEARS}
           placeholder="Year"
@@ -228,7 +247,10 @@ export const AddExperienceForm = ({ username, category, milestone, backCallback,
       </Row>
       <Row>
         <Dropdown
-          selectOption={(option => setDateState({ ...dateState, endDateMonth: option }), setIsDirty(true))}
+          selectOption={option => {
+            setDateState({ ...dateState, endDateMonth: option });
+            setIsDirty(true);
+          }}
           selectedOption={dateState.endDateMonth}
           options={MONTHS}
           label="End Date"
@@ -236,8 +258,11 @@ export const AddExperienceForm = ({ username, category, milestone, backCallback,
           isDisabled={isInProgress}
         />
         <Dropdown
-          selectOption={(option => setDateState({ ...dateState, endDateYear: option }), setIsDirty(true))}
-          selectedOption={dateState.endDateYear}
+          selectOption={option => {
+            setDateState({ ...dateState, endDateYear: option });
+            setIsDirty(true);
+          }}
+          selectedOption={dateState.endDateYear || { value: new Date().getFullYear() }}
           options={END_YEARS}
           placeholder="Year"
           isDisabled={isInProgress}
