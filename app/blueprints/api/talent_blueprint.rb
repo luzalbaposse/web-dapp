@@ -198,16 +198,16 @@ class API::TalentBlueprint < Blueprinter::Base
       ]
     end
 
+    field :about do |user, _options|
+      user.talent&.about
+    end
+
     association :milestone, blueprint: API::MilestoneBlueprint, view: :with_images, name: :current_position do |user, options|
       position = user.talent.milestones.where(end_date: nil, category: "Position").order(start_date: :desc).includes(:milestone_images)&.first
       if position.nil?
         position = user.talent.milestones.where(end_date: nil, category: "Education").order(start_date: :desc).includes(:milestone_images)&.first
       end
       position
-    end
-
-    association :career_goal, blueprint: CareerGoalBlueprint, view: :normal do |user, options|
-      user.talent&.career_goal
     end
   end
 

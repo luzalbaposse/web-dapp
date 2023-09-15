@@ -11,7 +11,7 @@ import EditAboutModal from "src/components/profile/edit/EditAboutModal";
 
 const isProfileEmpty = aboutData =>
   !(
-    aboutData.career_goal.pitch ||
+    aboutData.about ||
     aboutData.current_position ||
     aboutData.tags.length ||
     aboutData.social_links.some(linkObject => !!linkObject.link)
@@ -70,7 +70,7 @@ export const About = ({ currentUser, urlData }) => {
         </EmptyStateContainer>
       ) : (
         <>
-          {aboutData.career_goal.pitch && <AboutMe pitch={aboutData.career_goal.pitch} />}
+          {aboutData.about && <AboutMe pitch={aboutData.about} />}
           <CurrentRole
             position={aboutData.current_position}
             username={urlData.profileUsername}
