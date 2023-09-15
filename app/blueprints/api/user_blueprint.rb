@@ -7,6 +7,22 @@ class API::UserBlueprint < Blueprinter::Base
     end
   end
 
+  view :card do
+    fields :username, :name, :profile_picture_url
+
+    field :id do |user, _options|
+      user.uuid
+    end
+
+    field :occupation do |user, _options|
+      user.talent&.occupation
+    end
+
+    field :verified do |user, _options|
+      user.talent&.verified?
+    end
+  end
+
   view :normal do
     fields :username, :name, :email, :profile_picture_url, :messaging_disabled, :profile_type, :experience_points_amount
 

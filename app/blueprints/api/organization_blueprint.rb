@@ -48,9 +48,17 @@ class API::OrganizationBlueprint < Blueprinter::Base
         "community"
       when "Organizations::Team"
         "team"
+      when "Organizations::Election"
+        "election"
       end
     end
 
-    association :users, blueprint: API::UserBlueprint, view: :normal
+    association :election, blueprint: API::ElectionBlueprint, view: :normal
+
+    association :election, blueprint: API::ElectionBlueprint, view: :normal do |organization, _options|
+      organization.active_election
+    end
+
+    association :users, blueprint: API::UserBlueprint, view: :card
   end
 end
