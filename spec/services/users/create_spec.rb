@@ -16,7 +16,6 @@ RSpec.describe Users::Create do
       nationality: nationality,
       location: location,
       headline: headline,
-      career_needs: ["Mentoring others"],
       tags: ["Web3"]
     }
   }

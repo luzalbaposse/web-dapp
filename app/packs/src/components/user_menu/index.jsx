@@ -29,7 +29,7 @@ const UserMenu = ({ user, signOut }) => {
         <Dropdown.Item
           key="tab-dropdown-settings"
           className="text-black d-flex flex-row align-items-center user-menu-dropdown-item"
-          href={`/u/${user.username}/account_settings`}
+          href={`/u/${user.username}/settings?tab=account`}
         >
           <Settings pathClassName="icon-dropdown-item" />
           <P2 bold text="Settings" className="text-black ml-3" />

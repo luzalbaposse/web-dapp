@@ -1,6 +1,9 @@
 class API::V1::PublicAPI::GoalsController < API::V1::PublicAPI::APIController
+  before_action :internal_only, except: [:index]
+  before_action :authenticated_only, except: [:index]
+
   def index
-    goals = Goal.where(career_goal: user.talent.career_goal)
+    goals = user.goals
 
     pagy, page_goals = pagy_uuid_cursor(
       goals.includes(:goal_images),
@@ -22,13 +25,66 @@ class API::V1::PublicAPI::GoalsController < API::V1::PublicAPI::APIController
     render json: response_body, status: :ok
   end
 
+  def update
+    updated_goal = Goals::Update.new(goal: goal, params: goal_params).call
+
+    response_body = {
+      goal: API::GoalBlueprint.render_as_json(updated_goal, view: :normal)
+    }
+    render json: response_body, status: :ok
+  rescue Goals::Update::UpdateError => error
+    Rollbar.error(error, "Error updating goal", current_user_id: current_user.id, goal_id: goal.id, goal_params: goal_params.to_h)
+    render json: {error: "Unable to update goal."}, status: :bad_request
+  end
+
+  def create
+    created_goal = Goals::Create.new(
+      user: current_user,
+      params: goal_params
+    ).call
+
+    response_body = {
+      goal: API::GoalBlueprint.render_as_json(created_goal, view: :normal)
+    }
+    render json: response_body, status: :created
+  rescue Goals::Create::CreationError => error
+    Rollbar.error(error, "Error creating goal", current_user_id: current_user.id, goal_params: goal_params.to_h)
+    render json: {error: "Unable to create goal."}, status: :bad_request
+  end
+
+  def destroy
+    if goal.destroy
+      response_body = {
+        goal: API::GoalBlueprint.render_as_json(goal, view: :normal)
+      }
+
+      render json: response_body, status: :ok
+    else
+      render json: {error: "Unable to delete requested goal."}, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def user
     @user ||= User.find_by!("wallet_id = :id OR username = :id", id: downcase_id)
   end
 
-  def filter_params
-    params.permit(ids: [])
+  def goal
+    @goal ||= current_user.goals.find_by!(uuid: params[:id])
+  end
+
+  def goal_params
+    params.require(:goal).permit(
+      :title,
+      :due_date,
+      :description,
+      :link,
+      :progress,
+      images: [
+        :id,
+        image_data: {}
+      ]
+    )
   end
 end

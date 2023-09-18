@@ -5,6 +5,7 @@ import { Button, Icon, Typography } from "@talentprotocol/design-system";
 import { talentsService } from "src/api";
 import {
   Container,
+  MilestoneTitleRow,
   DescriptionLine,
   Dot,
   EditButtonContainer,
@@ -15,20 +16,17 @@ import {
 } from "./styled";
 import { ToastBody } from "src/components/design_system/toasts";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import EditJourneyModal from "../../../../components/profile/edit/EditJourneyModal";
-import { noop } from "lodash";
 
 dayjs.extend(customParseFormat);
 
-export const Experiences = ({ isOwner, username }) => {
+export const ExperiencesComponent = ({ isOwner, username, openAddExperienceScreen }) => {
   const [milestones, setMilestones] = useState([]);
-  const [modalState, setModalState] = useState({ isOpen: false, milestone: null });
   useEffect(() => {
     if (!username) return;
     talentsService
       .getMilestones(username)
       .then(({ data }) => {
-        setMilestones(data.milestones);
+        setMilestones(data.milestones.sort((a, b) => new Date(b.start_date) - new Date(a.start_date)));
       })
       .catch(() => {
         console.error("Error getting user experiences");
@@ -69,7 +67,7 @@ export const Experiences = ({ isOwner, username }) => {
                   size="small"
                   iconColor="primary01"
                   onClick={() => {
-                    setModalState({ isOpen: true, milestone });
+                    openAddExperienceScreen(milestone.category, milestone);
                   }}
                 />
               </EditButtonContainer>
@@ -82,28 +80,48 @@ export const Experiences = ({ isOwner, username }) => {
       },
       [[], []]
     );
-  }, [milestones, isOwner]);
+  }, [milestones, isOwner, openAddExperienceScreen]);
+
   return (
     <>
       <Container>
-        <Typography specs={{ type: "medium", variant: "p1" }}>Positions</Typography>
+        <MilestoneTitleRow>
+          <Typography specs={{ type: "medium", variant: "p1" }}>Positions</Typography>
+          {isOwner && (
+            <Button
+              onClick={() => openAddExperienceScreen("Position")}
+              leftIcon="add"
+              hierarchy="secondary"
+              size="small"
+              iconColor="primary01"
+            />
+          )}
+        </MilestoneTitleRow>
         {memoedExperiences[0]}
-        {!memoedExperiences[0].length && <Typography specs={{ type: "regular", variant: "p2" }} color="primary03">No position records available</Typography>}
-        <Typography specs={{ type: "medium", variant: "p1" }}>Education</Typography>
+        {!memoedExperiences[0].length && (
+          <Typography specs={{ type: "regular", variant: "p2" }} color="primary03">
+            No position records available
+          </Typography>
+        )}
+        <MilestoneTitleRow>
+          <Typography specs={{ type: "medium", variant: "p1" }}>Education</Typography>
+          {isOwner && (
+            <Button
+              onClick={() => openAddExperienceScreen("Education")}
+              leftIcon="add"
+              hierarchy="secondary"
+              size="small"
+              iconColor="primary01"
+            />
+          )}
+        </MilestoneTitleRow>
         {memoedExperiences[1]}
-        {!memoedExperiences[1].length && <Typography specs={{ type: "regular", variant: "p2" }} color="primary03">No education records available</Typography>}
+        {!memoedExperiences[1].length && (
+          <Typography specs={{ type: "regular", variant: "p2" }} color="primary03">
+            No education records available
+          </Typography>
+        )}
       </Container>
-      {modalState.isOpen && (
-        <EditJourneyModal
-          show={modalState.isOpen}
-          hide={() => setModalState({ isOpen: false, milestone: null })}
-          setTalent={() => window.location.reload()}
-          editType="Edit"
-          journeyItem={modalState.milestone}
-          setJourneyItem={noop}
-          username={username}
-        />
-      )}
     </>
   );
 };

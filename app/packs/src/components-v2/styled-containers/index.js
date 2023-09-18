@@ -8,8 +8,7 @@ export const PageContainer = styled.div`
 
 export const DesktopPageContainer = styled.div`
   display: flex;
-  height: 100vh;
-  max-height: 100vh;
+  min-height: 100vh;
   padding-top: 68px;
   max-width: 1224px;
   min-width: 1224px;
@@ -19,8 +18,6 @@ export const DesktopPageContainer = styled.div`
 
 export const DesktopColumn = styled.div`
   display: flex;
-  border-right: 1px solid ${buildColor("surfaceHover02")};
-  margin-bottom: 24px;
 
   :nth-child(1) {
     flex-basis: 288px;
@@ -33,6 +30,9 @@ export const DesktopColumn = styled.div`
     flex-grow: 1;
     min-width: 648px;
     max-width: 648px;
+    border-right: 1px solid ${buildColor("surfaceHover02")};
+    border-left: 1px solid ${buildColor("surfaceHover02")};
+    margin-bottom: -24px;
   }
 
   :nth-child(3) {
@@ -41,7 +41,7 @@ export const DesktopColumn = styled.div`
     flex-basis: 288px;
     min-width: 288px;
     max-width: 288px;
-    padding: 24px 0 0 24px;
+    padding: 24px 0 24px 24px;
     gap: 24px;
     border: none;
     flex-direction: column;

@@ -1,24 +1,25 @@
 module Goals
   class Create
-    def initialize(career_goal:, current_user:, params:)
-      @career_goal = career_goal
-      @current_user = current_user
+    class Error < StandardError; end
+
+    class CreationError < Error; end
+
+    def initialize(user:, params:)
+      @user = user
       @params = params
     end
 
     def call
-      goal = Goal.new(params.except(:images))
+      goal = user.goals.new(params.except(:images))
 
       parsed_date = params[:due_date].split("-").map(&:to_i)
       goal.due_date = Date.new(parsed_date[2], parsed_date[1], parsed_date[0])
 
-      goal.career_goal = career_goal
+      create_goal_images(goal: goal) if params[:images] && params[:images].length > 0
 
-      create_goal_images(goal: goal) if params[:images].length > 0
+      raise CreationError unless goal.save
 
-      goal.save!
-
-      ActivityIngestJob.perform_later("goal_create", goal_create_message(goal), current_user.id)
+      ActivityIngestJob.perform_later("goal_create", goal_create_message(goal), user.id)
 
       refresh_quests
       update_profile_completeness
@@ -29,7 +30,7 @@ module Goals
 
     private
 
-    attr_reader :career_goal, :current_user, :params
+    attr_reader :user, :params
 
     def goal_create_message(goal)
       if goal.title.present? && goal.title.length > 0
@@ -47,11 +48,11 @@ module Goals
     end
 
     def refresh_quests
-      Quests::RefreshUserQuestsJob.perform_later(career_goal.talent.user.id)
+      Quests::RefreshUserQuestsJob.perform_later(user.id)
     end
 
     def update_profile_completeness
-      Users::UpdateProfileCompleteness.new(user: career_goal.talent.user).call
+      Users::UpdateProfileCompleteness.new(user: user).call
     end
 
     def send_discord_notification(goal)

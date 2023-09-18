@@ -3,14 +3,12 @@ require "rails_helper"
 RSpec.describe Goals::Create do
   include ActiveJob::TestHelper
 
-  subject(:create_goal) { described_class.new(career_goal:, current_user:, params:).call }
+  subject(:create_goal) { described_class.new(user:, params:).call }
 
-  let(:user) { create :user, :with_talent }
-  let(:career_goal) { create :career_goal, talent: user.talent }
-  let(:current_user) { create :user }
-
+  let(:user) { create :user }
   let(:params) do
     {
+      title: "New Goal",
       due_date: "01-05-2023",
       images: [],
       progress:

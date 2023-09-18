@@ -16,32 +16,10 @@ const createAccount = user => {
       password: user.password,
       theme_preference: "light",
       username: user.handle,
-      career_needs: user.careerNeeds,
       headline: user.headline,
       gender: user.gender,
       nationality: user.nationality,
       location: user.location,
-      tags: user.tags
-    },
-    {
-      headers: {
-        ...headers
-      }
-    }
-  );
-};
-
-const finishOnboarding = user => {
-  const baseHeaders = defaultHeaders();
-  const headers = appendCSRFToken(baseHeaders);
-  return axios.post(
-    "/finish",
-    {
-      gender: user.gender,
-      nationality: user.nationality,
-      location: user.location,
-      career_needs: user.careerNeeds,
-      headline: user.headline,
       tags: user.tags
     },
     {
@@ -106,6 +84,13 @@ const getSubscribers = username =>
     }
   });
 
+const sendDeleteAccountEmail = userId => {
+  const baseHeaders = defaultHeaders();
+  const headers = appendCSRFToken(baseHeaders);
+
+  return axios.post(`/api/v1/users/${userId}/delete_account_tokens`, {}, { headers: { ...headers } });
+};
+
 export const users = {
   createAccount,
   sendConfirmationEmail,
@@ -115,5 +100,5 @@ export const users = {
   getProfile,
   getSupporters,
   getSubscribers,
-  finishOnboarding
+  sendDeleteAccountEmail
 };

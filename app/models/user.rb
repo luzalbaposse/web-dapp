@@ -7,6 +7,7 @@ class User < ApplicationRecord
   validate :email_and_credentials
   validate :validate_notification_preferences
   validate :username_is_valid
+  validates :username, presence: true
   validates :username, :email, uniqueness: true
   validates :humanity_proof, uniqueness: true, if: -> { humanity_proof.present? }
   validates :wallet_id, uniqueness: true, if: -> { wallet_id.present? }
@@ -16,6 +17,7 @@ class User < ApplicationRecord
   belongs_to :race, optional: true
 
   has_many :invites
+  has_many :goals
   has_many :user_tags
   has_many :tags, through: :user_tags
 

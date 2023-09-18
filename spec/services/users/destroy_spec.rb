@@ -21,13 +21,13 @@ RSpec.describe Users::Destroy do
   end
 
   context "when the user has talent relations" do
-    let!(:talent) { create :talent, user: user }
-    let!(:talent_token) { create :talent_token, talent: talent, contract_id: nil }
-    let!(:career_goal) { create :career_goal, talent: talent }
-    let!(:goal) { create :goal, career_goal: career_goal, title: "Test", due_date: Date.tomorrow }
+    let!(:user) { create :user, :with_talent }
+    let!(:talent_token) { create :talent_token, talent: user.talent, contract_id: nil }
+    let!(:career_goal) { create :career_goal, talent: user.talent }
+    let!(:goal) { create :goal, career_goal: career_goal, user: user, title: "Test", due_date: Date.tomorrow }
     let!(:career_need) { create :career_need, career_goal: career_goal, title: "Test" }
-    let!(:milestone) { create :milestone, talent: talent }
-    let!(:perk) { create :perk, talent: talent, title: "Test" }
+    let!(:milestone) { create :milestone, talent: user.talent }
+    let!(:perk) { create :perk, talent: user.talent, title: "Test" }
 
     it "returns the destroyed user" do
       expect(destroy_user).to eq user

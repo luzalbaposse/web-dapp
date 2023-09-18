@@ -1,5 +1,4 @@
-import { mobileStyles } from "@talentprotocol/design-system";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 export const SpinnerContainer = styled.div`
   display: flex;
@@ -14,10 +13,6 @@ export const Container = styled.div`
   flex-direction: column;
   gap: 24px;
   padding: 0 24px 24px;
-
-  ${mobileStyles(css`
-    padding: 24px;
-  `)}
 `;
 
 export const EmptyStateContainer = styled.div`

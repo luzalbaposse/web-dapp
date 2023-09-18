@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, Icon, Spinner, Typography } from "@talentprotocol/design-system";
+import { Icon, Spinner, Typography } from "@talentprotocol/design-system";
 import { talentsService } from "src/api";
-import { Container, Divider, SpinnerContainer, ButtonContainer, EmptyStateContainer } from "./styled";
+import { Container, Divider, SpinnerContainer, EmptyStateContainer } from "./styled";
 import { AboutMe } from "./about-me";
 import { CurrentRole } from "./current-role";
 import { Tags } from "./tags";
@@ -11,7 +11,7 @@ import EditAboutModal from "src/components/profile/edit/EditAboutModal";
 
 const isProfileEmpty = aboutData =>
   !(
-    aboutData.career_goal.pitch ||
+    aboutData.about ||
     aboutData.current_position ||
     aboutData.tags.length ||
     aboutData.social_links.some(linkObject => !!linkObject.link)
@@ -24,9 +24,6 @@ export const About = ({ currentUser, urlData }) => {
 
   const closeEditModal = useCallback(() => {
     setIsEditModalOpen(false);
-  }, []);
-  const openEditModal = useCallback(() => {
-    setIsEditModalOpen(true);
   }, []);
 
   useEffect(() => {
@@ -49,18 +46,6 @@ export const About = ({ currentUser, urlData }) => {
     </SpinnerContainer>
   ) : (
     <Container>
-      {urlData?.profileUsername === currentUser?.username && (
-        <ButtonContainer>
-          <Button
-            text="Edit About"
-            hierarchy="secondary"
-            size="small"
-            iconColor="primary01"
-            leftIcon="edit"
-            onClick={openEditModal}
-          />
-        </ButtonContainer>
-      )}
       {isProfileEmpty(aboutData) ? (
         <EmptyStateContainer>
           <Icon name="binoculars" size={64} color="primary04" />
@@ -70,8 +55,12 @@ export const About = ({ currentUser, urlData }) => {
         </EmptyStateContainer>
       ) : (
         <>
-          {aboutData.career_goal.pitch && <AboutMe pitch={aboutData.career_goal.pitch} />}
-          <CurrentRole position={aboutData.current_position} username={urlData.profileUsername} isOwner={urlData?.profileUsername === currentUser?.username} />
+          {aboutData.about && <AboutMe pitch={aboutData.about} />}
+          <CurrentRole
+            position={aboutData.current_position}
+            username={urlData.profileUsername}
+            isOwner={urlData?.profileUsername === currentUser?.username}
+          />
           {!!aboutData.tags.length && <Tags tags={aboutData.tags} />}
           <OnTheWeb links={aboutData.social_links} />
         </>

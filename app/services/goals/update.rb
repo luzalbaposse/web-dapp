@@ -1,5 +1,9 @@
 module Goals
   class Update
+    class Error < StandardError; end
+
+    class UpdateError < Error; end
+
     def initialize(goal:, params:)
       @goal = goal
       @params = params
@@ -10,11 +14,11 @@ module Goals
       parsed_date = params[:due_date].split("-").map(&:to_i)
       goal.due_date = Date.new(parsed_date[2], parsed_date[1], parsed_date[0])
 
-      update_goal_images
+      update_goal_images if params[:images] && params[:images].length > 0
 
-      goal.save!
+      raise UpdateError unless goal.save
 
-      ActivityIngestJob.perform_later("goal_update", goal_update_message(goal), goal.career_goal.talent.user_id)
+      ActivityIngestJob.perform_later("goal_update", goal_update_message(goal), goal.user_id)
       refresh_quests
       send_discord_notification if goal.saved_change_to_progress? && goal.accomplished?
 

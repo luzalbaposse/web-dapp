@@ -4,9 +4,9 @@ import { toast } from "react-toastify";
 import { useWindowDimensionsHook } from "src/utils/window";
 
 import { loggedInUserStore } from "src/contexts/state";
+import { H5, P2, P3 } from "src/components/design_system/typography";
 
 import { emailRegex, usernameRegex } from "src/utils/regexes";
-import { H5, P2, P3 } from "src/components/design_system/typography";
 import { passwordMatchesRequirements } from "src/utils/passwordRequirements";
 import { patch, post } from "src/utils/requests";
 import { ToastBody } from "src/components/design_system/toasts";

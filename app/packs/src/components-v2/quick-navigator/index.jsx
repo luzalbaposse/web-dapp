@@ -45,7 +45,7 @@ export const QuickNavigator = ({ username }) => {
           size="large"
           leftIcon="settings"
           iconColor="primary"
-          href={`/u/${username}/account_settings`}
+          href={`/u/${username}/?account`}
         />
         <Typography specs={{ variant: "p3", type: "medium" }} color="primary01">
           Settings

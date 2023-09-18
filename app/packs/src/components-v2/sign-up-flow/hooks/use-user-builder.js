@@ -13,8 +13,7 @@ export const useUserBuilder = () => {
     nationality: "",
     location: "",
     headline: "",
-    tags: [],
-    careerNeeds: []
+    tags: []
   });
   return { user, setUser };
 };
