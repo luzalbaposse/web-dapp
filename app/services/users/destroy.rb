@@ -33,6 +33,8 @@ module Users
         Subscription.where(user: user).destroy_all
         Subscription.where(subscriber: user).destroy_all
         Reward.where(user: user).destroy_all
+        Membership.where(user: user).destroy_all
+        CareerUpdate.where(user: user).destroy_all
 
         user
           .destroy!
@@ -50,7 +52,6 @@ module Users
 
         if user.talent.career_goal.goals.exists?
           user.talent.career_goal.goals.destroy_all
-
         end
 
         if user.talent.career_goal.career_needs.exists?
