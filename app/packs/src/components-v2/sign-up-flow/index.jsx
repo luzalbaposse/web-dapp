@@ -71,9 +71,9 @@ export const SignUpFlow = props => {
     const handleBrowserBackButton = () => {
       stepsState.previousStep();
     };
-    window.addEventListener('popstate', handleBrowserBackButton);
+    window.addEventListener("popstate", handleBrowserBackButton);
     return () => {
-      window.removeEventListener('popstate', handleBrowserBackButton);
+      window.removeEventListener("popstate", handleBrowserBackButton);
     };
   }, [stepsState]);
 
@@ -155,21 +155,17 @@ export const SignUpFlow = props => {
         />
       </ModalDialog>
       <Container>
-        {stepsState.currentStep === 10 || stepsState.currentStep === 9 ? (
-          <></>
-        ) : (
-          <StepCounterContainer>
-            <Typography specs={{ variant: "p2", type: "medium" }} color="primary01">
-              Step {stepsState.currentStep}
-            </Typography>
-            <Typography specs={{ variant: "p2", type: "medium" }} color="primary03">
-              /
-            </Typography>
-            <Typography specs={{ variant: "p2", type: "medium" }} color="primary04">
-              9
-            </Typography>
-          </StepCounterContainer>
-        )}
+        <StepCounterContainer>
+          <Typography specs={{ variant: "p2", type: "medium" }} color="primary01">
+            Step {stepsState.currentStep}
+          </Typography>
+          <Typography specs={{ variant: "p2", type: "medium" }} color="primary03">
+            /
+          </Typography>
+          <Typography specs={{ variant: "p2", type: "medium" }} color="primary04">
+            4
+          </Typography>
+        </StepCounterContainer>
         <StepContainer>{MemoizedStep}</StepContainer>
       </Container>
       <ActionContainer>{MemoizedActionArea}</ActionContainer>
