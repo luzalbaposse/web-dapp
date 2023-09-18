@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { Container, Row, PortalContainer } from "./styled";
-import { Button, Checkbox, Dropdown, Input, Typography } from "@talentprotocol/design-system";
+import { Button, Checkbox, Dropdown, Input } from "@talentprotocol/design-system";
 import { createPortal } from "react-dom";
 import { talentsService } from "../../../../../api/talents";
 import { useEditProfileStore } from "src/contexts/state";

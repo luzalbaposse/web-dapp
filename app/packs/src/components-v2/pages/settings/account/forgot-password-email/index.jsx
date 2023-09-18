@@ -8,9 +8,9 @@ import { OutterContainer, Container, BottomContainer } from "./styled";
 export const ForgotPasswordEmail = ({ modalState, email }) => {
   const sendResetPasswordEmail = useCallback(() => {
     users
-      .sendResetPasswordEmail(profile?.user.email)
+      .sendResetPasswordEmail(email)
       .then(() => {
-        toast.success(<ToastBody heading={`We have sent and reset password email to: ${profile?.user.email}`} />, {
+        toast.success(<ToastBody heading={`We have sent and reset password email to: ${email}`} />, {
           autoClose: 5000
         });
 

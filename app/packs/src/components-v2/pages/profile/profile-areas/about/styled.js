@@ -1,5 +1,5 @@
-import { buildColor, mobileStyles } from "@talentprotocol/design-system";
-import styled, { css } from "styled-components";
+import { buildColor } from "@talentprotocol/design-system";
+import styled from "styled-components";
 
 export const SpinnerContainer = styled.div`
   display: flex;

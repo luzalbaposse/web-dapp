@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, Icon, Spinner, Typography } from "@talentprotocol/design-system";
+import { Icon, Spinner, Typography } from "@talentprotocol/design-system";
 import { talentsService } from "src/api";
-import { Container, Divider, SpinnerContainer, ButtonContainer, EmptyStateContainer } from "./styled";
+import { Container, Divider, SpinnerContainer, EmptyStateContainer } from "./styled";
 import { AboutMe } from "./about-me";
 import { CurrentRole } from "./current-role";
 import { Tags } from "./tags";
@@ -24,9 +24,6 @@ export const About = ({ currentUser, urlData }) => {
 
   const closeEditModal = useCallback(() => {
     setIsEditModalOpen(false);
-  }, []);
-  const openEditModal = useCallback(() => {
-    setIsEditModalOpen(true);
   }, []);
 
   useEffect(() => {

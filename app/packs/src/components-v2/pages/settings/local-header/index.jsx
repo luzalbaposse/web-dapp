@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { TextLink } from "@talentprotocol/design-system";
 import { HeaderContainer, InnerHeaderContainer } from "./styled";
 import { useEditProfileStore } from "src/contexts/state";
-import { DiscardModal } from "../discard-modal";
 
 export const LocalHeader = ({ username, setIsDiscardModalOpen }) => {
   const { subFormCallback } = useEditProfileStore();
