@@ -52,21 +52,3 @@ export const ERROR_MESSAGES = {
   ticker_reserved: "talent token with this symbol already exists",
   action_canceled: "User denied transaction signature"
 };
-
-// This list and order is used to present in the onboarding flow by different categories
-// make sure to check app/packs/src/components/onboarding/OpenTo.jsx after making changes
-export const CAREER_NEEDS_OPTIONS = [
-  "Full-time roles",
-  "Part-time roles",
-  "Freelancing or contract roles",
-  "Internships",
-  "Volunteering for impact projects",
-  "Being matched with a mentor",
-  "Finding a co-founder",
-  "Finding and hiring talent",
-  "Learning about web3",
-  "Meeting new people",
-  "Mentoring others",
-  "Assisting others with their job search",
-  "Investing in talent, projects or startups"
-];

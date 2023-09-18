@@ -246,7 +246,6 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
         hide={() => setIsEditMode(false)}
         profile={localProfile}
         username={localProfile.username}
-        showOpenTo={false}
       />
       <ApprovalConfirmationModal
         show={showApproveModal}

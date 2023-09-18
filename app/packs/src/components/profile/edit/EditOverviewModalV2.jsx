@@ -22,11 +22,9 @@ import Divider from "src/components/design_system/other/Divider";
 import TextInput from "src/components/design_system/fields/textinput";
 import TextArea from "src/components/design_system/fields/textarea";
 import Button from "src/components/design_system/button";
-import UserTags from "src/components/talent/UserTags";
 import TagsWithIndex from "src/components/design_system/tag/TagsWithIndex";
 import { H5, P2, P3 } from "src/components/design_system/typography";
 import { ToastBody } from "src/components/design_system/toasts";
-import { CAREER_NEEDS_OPTIONS } from "src/utils/constants";
 
 import { useWindowDimensionsHook } from "src/utils/window";
 
@@ -41,13 +39,12 @@ const Option = props => {
   );
 };
 
-const EditOverviewModalV2 = ({ show, hide, setProfile = noop, mode, username, showOpenTo = true }) => {
+const EditOverviewModalV2 = ({ show, hide, setProfile = noop, mode, username }) => {
   const { profile, fetchProfile } = useProfileFetcher();
   const { mobile } = useWindowDimensionsHook();
   const [editedTalent, setEditedTalent] = useState(null);
   const [profileFileInput, setProfileFileInput] = useState(null);
   const [bannerFileInput, setBannerFileInput] = useState(null);
-  const [selectedCareerNeeds, setSelectedCareerNeeds] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   useEffect(() => {
     if (!!profile) return;
@@ -65,7 +62,6 @@ const EditOverviewModalV2 = ({ show, hide, setProfile = noop, mode, username, sh
             label: tag.description
           }))
         );
-        setSelectedCareerNeeds(() => profileData?.career_goal.career_needs.map(need => need.title));
       }
     );
   }, [username]);
@@ -187,8 +183,7 @@ const EditOverviewModalV2 = ({ show, hide, setProfile = noop, mode, username, sh
       talent: {
         ...editedTalent
       },
-      tags: selectedTags.map(tag => tag.value),
-      career_needs: selectedCareerNeeds
+      tags: selectedTags.map(tag => tag.value)
     });
 
     if (response && !response.error) {
@@ -314,17 +309,6 @@ const EditOverviewModalV2 = ({ show, hide, setProfile = noop, mode, username, sh
       ...prev,
       tags: tags.map(tag => tag.label.toLowerCase())
     }));
-  };
-
-  const changeSelectedCareerNeeds = tag => {
-    if (selectedCareerNeeds.includes(tag)) {
-      const array = selectedCareerNeeds;
-      const index = array.indexOf(tag);
-      array.splice(index, 1);
-      setSelectedCareerNeeds([...array]);
-    } else {
-      setSelectedCareerNeeds(prev => [...prev, tag]);
-    }
   };
 
   const headlineHighlightedWords = useMemo(() => {
@@ -583,18 +567,6 @@ const EditOverviewModalV2 = ({ show, hide, setProfile = noop, mode, username, sh
             components={{ Option }}
           />
         </div>
-        {showOpenTo && (
-          <div className="mb-5">
-            <P2 className="mb-2 text-primary-01" bold text="Availability Highlight" />
-            <UserTags
-              tags={CAREER_NEEDS_OPTIONS}
-              tagsSelected={selectedCareerNeeds}
-              className="mr-2 mb-4"
-              clickable={false}
-              onClick={tag => changeSelectedCareerNeeds(tag)}
-            />
-          </div>
-        )}
         <div className="w-100 mb-5">
           <H5 className="mb-5 text-primary-01" bold text="Links" />
           <div className="mb-5">

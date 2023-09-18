@@ -5,7 +5,7 @@ module Users
     end
 
     def call
-      if user.talent? && user.talent.talent_token.contract_id.present?
+      if user.talent? && user.talent.talent_token&.contract_id&.present?
         return false
       end
 
@@ -50,8 +50,8 @@ module Users
       if user.talent?
         user.talent.talent_token.destroy!
 
-        if user.talent.career_goal.goals.exists?
-          user.talent.career_goal.goals.destroy_all
+        if user.goals.exists?
+          user.goals.destroy_all
         end
 
         if user.talent.career_goal.career_needs.exists?

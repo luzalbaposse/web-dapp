@@ -56,14 +56,13 @@ class API::V1::TalentController < ApplicationController
         acting_talent_id: current_acting_user&.talent&.id,
         talent_params: talent_params.to_h,
         user_params: user_params.to_h,
-        tag_params: tag_params.to_h,
-        career_need_params: career_need_params.to_h
+        tag_params: tag_params.to_h
       )
       return render json: {error: "You don't have access to perform that action"}, status: :unauthorized
     end
 
     service = API::UpdateTalent.new(talent, current_user)
-    service.call(talent_params, user_params, tag_params, career_need_params)
+    service.call(talent_params, user_params, tag_params)
 
     if service.success
       CreateNotificationTalentChangedJob.perform_later(talent.user.subscriptions.pluck(:subscriber_id), talent.user_id)
@@ -111,10 +110,6 @@ class API::V1::TalentController < ApplicationController
 
   def tag_params
     params.permit(tags: [])
-  end
-
-  def career_need_params
-    params.permit(career_needs: [])
   end
 
   def talent_params

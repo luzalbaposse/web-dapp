@@ -16,32 +16,10 @@ const createAccount = user => {
       password: user.password,
       theme_preference: "light",
       username: user.handle,
-      career_needs: user.careerNeeds,
       headline: user.headline,
       gender: user.gender,
       nationality: user.nationality,
       location: user.location,
-      tags: user.tags
-    },
-    {
-      headers: {
-        ...headers
-      }
-    }
-  );
-};
-
-const finishOnboarding = user => {
-  const baseHeaders = defaultHeaders();
-  const headers = appendCSRFToken(baseHeaders);
-  return axios.post(
-    "/finish",
-    {
-      gender: user.gender,
-      nationality: user.nationality,
-      location: user.location,
-      career_needs: user.careerNeeds,
-      headline: user.headline,
       tags: user.tags
     },
     {
@@ -114,6 +92,5 @@ export const users = {
   getConnections,
   getProfile,
   getSupporters,
-  getSubscribers,
-  finishOnboarding
+  getSubscribers
 };

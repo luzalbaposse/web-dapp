@@ -7,11 +7,10 @@ class API::UpdateTalent
     @success = false
   end
 
-  def call(talent_params, user_params, tag_params, career_need_params)
+  def call(talent_params, user_params, tag_params)
     update_talent(talent_params)
     update_user(user_params)
     update_tags(tag_params[:tags]) if tag_params[:tags]
-    update_career_needs(career_need_params[:career_needs]) if career_need_params[:career_needs]
     refresh_quests
     refresh_inviter_points
 
@@ -193,10 +192,6 @@ class API::UpdateTalent
 
       user_tag.save! unless user_tag.persisted?
     end
-  end
-
-  def update_career_needs(career_needs)
-    CareerNeeds::Upsert.new(career_goal: talent.career_goal, titles: career_needs).call
   end
 
   def refresh_quests

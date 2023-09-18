@@ -1,9 +1,6 @@
 module Goals
-  class Update
-    class Error < StandardError; end
-
-    class UpdateError < Error; end
-
+  # TODO: remove after profile changes
+  class DeprecatedUpdate
     def initialize(goal:, params:)
       @goal = goal
       @params = params
@@ -14,9 +11,9 @@ module Goals
       parsed_date = params[:due_date].split("-").map(&:to_i)
       goal.due_date = Date.new(parsed_date[2], parsed_date[1], parsed_date[0])
 
-      update_goal_images if params[:images] && params[:images].length > 0
+      update_goal_images
 
-      raise UpdateError unless goal.save
+      goal.save!
 
       ActivityIngestJob.perform_later("goal_update", goal_update_message(goal), goal.user_id)
       refresh_quests
@@ -51,12 +48,12 @@ module Goals
       end
     end
 
-    def send_discord_notification
-      Discord::SendAccomplishedGoalNotificationJob.perform_later(goal.id)
+    def refresh_quests
+      Quests::RefreshUserQuestsJob.perform_later(goal.user_id)
     end
 
-    def refresh_quests
-      Quests::RefreshUserQuestsJob.perform_later(goal.user_id) if goal.user_id.present?
+    def send_discord_notification
+      Discord::SendAccomplishedGoalNotificationJob.perform_later(goal.id)
     end
   end
 end

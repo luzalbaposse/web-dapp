@@ -1,8 +1,9 @@
+# TODO: Delete after detaching career_goal from goal in the client
 class API::V1::CareerGoals::GoalsController < ApplicationController
   before_action :validate_access
 
   def update
-    service = Goals::Update.new(goal: goal, params: goal_params)
+    service = Goals::DeprecatedUpdate.new(goal: goal, params: goal_params)
     updated_goal = service.call
 
     render json: GoalBlueprint.render(updated_goal, view: :normal), status: :ok
@@ -10,7 +11,7 @@ class API::V1::CareerGoals::GoalsController < ApplicationController
     Rollbar.error(
       e,
       "Unable to update goal",
-      goal_id: updated_goal.id,
+      goal_id: goal.id,
       career_goal_id: career_goal.id
     )
 
@@ -18,7 +19,7 @@ class API::V1::CareerGoals::GoalsController < ApplicationController
   end
 
   def create
-    service = Goals::Create.new(
+    service = Goals::DeprecatedCreate.new(
       career_goal: career_goal,
       current_user: current_acting_user,
       params: goal_params
@@ -30,7 +31,6 @@ class API::V1::CareerGoals::GoalsController < ApplicationController
     Rollbar.error(
       e,
       "Unable to create goal",
-      goal_id: goal.id,
       career_goal_id: career_goal.id
     )
 

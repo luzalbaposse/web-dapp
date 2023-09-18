@@ -255,8 +255,6 @@ RSpec.describe "Talents API" do
       let(:career_goal) { create(:career_goal, talent: talent) }
       let!(:goal1) { create(:goal, career_goal: career_goal, title: "goal1", due_date: Time.zone.today) }
       let!(:goal2) { create(:goal, career_goal: career_goal, title: "goal2", due_date: Time.zone.today) }
-      let!(:career_need1) { create(:career_need, career_goal: career_goal, title: "career_need1") }
-      let!(:career_need2) { create(:career_need, career_goal: career_goal, title: "career_need2") }
 
       response "200", "talent found", save_example: true do
         schema type: :object,
@@ -271,10 +269,8 @@ RSpec.describe "Talents API" do
           data = JSON.parse(response.body)
           returned_career_goal = data["talent"]["career_goal"]
           returned_goals = returned_career_goal["goals"].map { |c| c["title"] }
-          returned_career_needs = returned_career_goal["career_needs"].map { |c| c["title"] }
           aggregate_failures do
             expect(returned_goals).to match_array([goal1.title, goal2.title])
-            expect(returned_career_needs).to match_array([career_need1.title, career_need2.title])
           end
         end
       end

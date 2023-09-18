@@ -55,7 +55,7 @@ module PublicAPIRoutes
             end
 
             resources :organizations, only: [:index, :show]
-            resources :goals, only: [:index]
+            resources :goals, only: [:index, :create, :update, :destroy]
           end
 
           # API non authenticated endpoints

@@ -9,6 +9,5 @@ class CareerGoalBlueprint < Blueprinter::Base
     association :goals, blueprint: GoalBlueprint, view: :normal do |career_goal, options|
       career_goal.goals.includes(:goal_images)
     end
-    association :career_needs, blueprint: CareerNeedBlueprint
   end
 end

@@ -18,7 +18,6 @@ const EditAboutModal = ({ show, hide, setProfile, username }) => {
   const { mobile } = useWindowDimensionsHook();
   const [editedTalent, setEditedTalent] = useState(undefined);
   const [aboutBannerFileInput, setAboutBannerFileInput] = useState(null);
-  const [selectedCareerNeeds, setSelectedCareerNeeds] = useState([]);
   const [validationErrors, setValidationErrors] = useState({ pitch: false });
 
   useEffect(() => {
@@ -31,7 +30,6 @@ const EditAboutModal = ({ show, hide, setProfile, username }) => {
       },
       profileData => {
         setEditedTalent(profileData);
-        setSelectedCareerNeeds(() => profileData?.career_goal.career_needs.map(need => need.title));
       }
     );
   }, [username]);
@@ -96,8 +94,7 @@ const EditAboutModal = ({ show, hide, setProfile, username }) => {
       },
       talent: {
         ...editedTalent
-      },
-      career_needs: selectedCareerNeeds
+      }
     });
 
     const careerGoalResponse = await patch(
