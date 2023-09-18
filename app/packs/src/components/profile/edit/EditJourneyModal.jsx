@@ -30,8 +30,8 @@ import { useProfileFetcher } from "src/hooks/use-profile-fetcher";
 import cx from "classnames";
 import styled, { css } from "styled-components";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import { mobileStyles, Checkbox as DesignSystemCheckbox, Typography } from "@talentprotocol/design-system";
-import { StyledTypographyLink } from "./styled";
+import { mobileStyles, Typography, Switch } from "@talentprotocol/design-system";
+import { StyledTypographyLink, SwitchContainer } from "./styled";
 import { TAKEOFF_TERMS_AND_CONDITIONS } from "src/utils/constants";
 dayjs.extend(customParseFormat);
 
@@ -106,7 +106,6 @@ const MilestoneExperience = ({
   saveMilestone,
   updateMilestone,
   deleteMilestone,
-  mode,
   editType,
   validationErrors,
   uppyBanner,
@@ -357,7 +356,7 @@ const MilestoneExperience = ({
                   size="icon"
                   onClick={() => deleteImage(image.image_url)}
                 >
-                  <Delete color={mode() == "light" ? lightTextPrimary01 : darkTextPrimary01} size={16} />
+                  <Delete color={lightTextPrimary01} size={16} />
                 </Button>
               </div>
             ))}
@@ -388,7 +387,6 @@ const GoalExperience = ({
   saveGoal,
   updateGoal,
   deleteGoal,
-  mode,
   editType,
   validationErrors,
   uppyBanner,
@@ -399,8 +397,7 @@ const GoalExperience = ({
 }) => {
   const [dueMonth, setDueMonth] = useState(returnMonth(currentJourneyItem.due_date));
   const [dueYear, setDueYear] = useState(returnYear(currentJourneyItem.due_date));
-  const [election_selected, setelection_selected] = useState(false);
-  const checkboxRef = useRef(false);
+  const [election_selected, setElectionSelected] = useState(!!currentJourneyItem.electionStatus);
 
   const progressOptions = [
     { value: "planned", title: "Planned" },
@@ -445,7 +442,7 @@ const GoalExperience = ({
   }, [dueMonth, dueYear]);
 
   const toggleTakeoffApplication = event => {
-    setelection_selected(event.target.checked);
+    setElectionSelected(event.target.checked);
 
     if (event.target.checked) {
       changeAttribute("progress", "planned");
@@ -473,22 +470,22 @@ const GoalExperience = ({
         }}
       >
         {activeElection && (
-          <div className="w-100 mb-5">
-            <DesignSystemCheckbox
-              checked={election_selected}
-              onChange={toggleTakeoffApplication}
-              checkboxRef={checkboxRef}
-              label={
-                <Typography specs={{ variant: "p2", type: "regular" }}>
-                  I'm applying to Take Off Istanbul, and I agree to the{" "}
-                  <StyledTypographyLink target="_blank" href={TAKEOFF_TERMS_AND_CONDITIONS}>
-                    terms and conditions
-                  </StyledTypographyLink>
-                  .
-                </Typography>
-              }
-            />
-          </div>
+          <SwitchContainer>
+            <div style={{ minWidth: 46 }}>
+              <Switch
+                isChecked={election_selected}
+                state={activeElection && editType === "Add" ? "enabled" : "disabled"}
+                onChange={toggleTakeoffApplication}
+              />
+            </div>
+            <Typography specs={{ variant: "p2", type: "regular" }} className="flex">
+              I'm applying to Take Off Istanbul, and I agree to the{" "}
+              <StyledTypographyLink target="_blank" href={TAKEOFF_TERMS_AND_CONDITIONS}>
+                terms and conditions
+              </StyledTypographyLink>
+              .
+            </Typography>
+          </SwitchContainer>
         )}
         <div className="w-100 mb-5">
           <TextInput
@@ -604,7 +601,7 @@ const GoalExperience = ({
                     size="icon"
                     onClick={() => deleteImage(image.image_url)}
                   >
-                    <Delete color={mode() == "light" ? lightTextPrimary01 : darkTextPrimary01} size={16} />
+                    <Delete color={lightTextPrimary01} size={16} />
                   </Button>
                 </div>
               ))}
@@ -675,7 +672,8 @@ const EditJourneyModal = ({
     in_progress: journeyItem?.in_progress || false,
     progress: journeyItem?.progress || "",
     category: journeyItem?.category || "",
-    images: journeyItem?.images || []
+    images: journeyItem?.images || [],
+    electionStatus: journeyItem.election_status
   });
   const [performingRequest, setPerformingRequest] = useState(false);
 
