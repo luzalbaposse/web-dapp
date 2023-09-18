@@ -3,9 +3,9 @@
 namespace :collective do
   task create_takeoff_istambul: :environment do
     puts "Setting up Take Off Istanbul Collective"
-    logo = "https://file.notion.so/f/f/16cd58fd-bb08-46b6-817c-f2fce5ebd03d/da38767a-19d8-4385-985b-98af50de821c/takeoff-logo.png?id=6aac63d5-ed89-4804-a911-c80399837f60&table=block&spaceId=16cd58fd-bb08-46b6-817c-f2fce5ebd03d&expirationTimestamp=1694707200000&signature=R1GSRdgZG4OAODP9DC19QXXDjXhPEuq0Cl-edMaic7g&downloadName=takeoff-logo.png"
-    banner = "https://file.notion.so/f/f/16cd58fd-bb08-46b6-817c-f2fce5ebd03d/dfeca599-9fb5-4417-a53a-a23586b0a45d/takeoff-banner.png?id=f7cbe2fb-3b80-42c3-ae9d-97f087f61549&table=block&spaceId=16cd58fd-bb08-46b6-817c-f2fce5ebd03d&expirationTimestamp=1694707200000&signature=rjTPiOyqh86d_TITo54ldcFqjCaeH1bYvrR5nCSm9cY&downloadName=takeoff-banner.png"
-    tags = ["Community", "Scholarship", "Event", "Web3"]
+    logo = "https://file.notion.so/f/f/16cd58fd-bb08-46b6-817c-f2fce5ebd03d/da38767a-19d8-4385-985b-98af50de821c/takeoff-logo.png?id=6aac63d5-ed89-4804-a911-c80399837f60&table=block&spaceId=16cd58fd-bb08-46b6-817c-f2fce5ebd03d&expirationTimestamp=1695117600000&signature=Nr7aGJFrwwBVxJsqE0-UQQUKV_P-69a5PJmHTXgvIKc&downloadName=takeoff-logo.png"
+    banner = "https://file.notion.so/f/f/16cd58fd-bb08-46b6-817c-f2fce5ebd03d/dfeca599-9fb5-4417-a53a-a23586b0a45d/takeoff-banner.png?id=f7cbe2fb-3b80-42c3-ae9d-97f087f61549&table=block&spaceId=16cd58fd-bb08-46b6-817c-f2fce5ebd03d&expirationTimestamp=1695117600000&signature=Z3--R5dkL26rvBYzPiJUGDIx2ZaqxEovO-cJesjHzRo&downloadName=takeoff-banner.png"
+    tags = ["Community", "Scholarship", "Web3"]
     slug = "takeoff-istambul"
 
     org = Organization.find_or_initialize_by(slug: slug)
@@ -33,7 +33,7 @@ namespace :collective do
 
     # Create election
     puts "Creating election for Takeoff Istanbul"
-    election = Election.find_or_initialize_by(organization: org)
+    election = Election.find_or_initialize_by(organization_id: org.id)
     election.start_date = Rails.env.production? ? Date.parse("2023-09-18") : Date.parse("2023-09-13")
     election.voting_start_date = Rails.env.production? ? Date.parse("2023-09-25") : Date.parse("2023-09-13")
     election.voting_end_date = Rails.env.production? ? Date.parse("2023-10-06"): Date.parse("2023-09-22")
