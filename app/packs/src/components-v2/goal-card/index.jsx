@@ -65,7 +65,7 @@ export const GoalCard = ({ goal, openAddGoalModal, careerGoalId, isOwner }) => {
         <Typography specs={{ type: "medium", variant: "p1" }} color="primary01">
           {goal.title}
         </Typography>
-        <Typography specs={{ type: "regular", variant: "p2" }} color="primary03">
+        <Typography specs={{ type: "regular", variant: "p2" }} color="primary03" className="text-white-space-wrap">
           {goal.description}
         </Typography>
       </GoalInfo>
