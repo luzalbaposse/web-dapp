@@ -1,5 +1,5 @@
-import { buildColor, mobileStyles } from "@talentprotocol/design-system";
-import styled, { css } from "styled-components";
+import { buildColor } from "@talentprotocol/design-system";
+import styled from "styled-components";
 
 export const SpinnerContainer = styled.div`
   display: flex;
@@ -13,13 +13,9 @@ export const Container = styled.div`
   flex-direction: column;
   padding: 0 24px 24px 24px;
   gap: 24px;
-
-  ${mobileStyles(css`
-    padding: 24px;
-  `)}
 `;
 
-export const ButtonContainer = styled.div`
+export const ButtonContainer = styled.a`
   display: flex;
   justify-content: flex-end;
 `;

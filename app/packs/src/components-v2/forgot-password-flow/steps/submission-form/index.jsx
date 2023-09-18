@@ -21,7 +21,7 @@ export const SubmissionFormStep = props => {
         Forgot Password?
       </Typography>
       <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
-        Enter the email address associated with your account and we’ll send you a link to reset your password.
+        Enter the email address associated with your account and we'll send you a link to reset your password.
       </Typography>
       <Form>
         <EmailBox>

@@ -11,7 +11,6 @@ import {
   useModal
 } from "@talentprotocol/design-system";
 import { QRCodeModal } from "src/components-v2/qr-code-modal";
-import EditOverviewModalV2 from "src/components/profile/edit/EditOverviewModalV2";
 import {
   Actions,
   Container,
@@ -37,7 +36,6 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
   const [localProfile, setLocalProfile] = useState(null);
   const { impersonateUser } = useImpersonate();
   const qrCodeModalState = useModal();
-  const [isEditMode, setIsEditMode] = useState(false);
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
   const dropdownMenu = useMemo(() => {
@@ -60,9 +58,6 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
   const onSelectOption = useCallback(
     option => {
       switch (option.value) {
-        case "Edit":
-          setIsEditMode(true);
-          return;
         case "Impersonate":
           impersonateUser(urlData.profileUsername);
           return;
@@ -165,7 +160,7 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
                   size="small"
                   hierarchy="secondary"
                   text="Edit profile"
-                  onClick={() => onSelectOption({ value: "Edit" })}
+                  href={`/u/${localProfile.username}/settings`}
                 />
               )}
             </Actions>
@@ -228,7 +223,7 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
                 size="small"
                 hierarchy="secondary"
                 text="Edit profile"
-                onClick={() => onSelectOption({ value: "Edit" })}
+                href={`/u/${localProfile.username}/settings`}
               />
             )}
           </DesktopActions>
@@ -240,12 +235,6 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
         profilePicture={localProfile.profile_picture_url}
         text="Scan this QR code to open your profile."
         buttonText="Copy profile URL"
-      />
-      <EditOverviewModalV2
-        show={isEditMode}
-        hide={() => setIsEditMode(false)}
-        profile={localProfile}
-        username={localProfile.username}
       />
       <ApprovalConfirmationModal
         show={showApproveModal}

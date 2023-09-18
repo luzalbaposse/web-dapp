@@ -21,4 +21,5 @@ export const InnerHeaderContainer = styled.div`
   margin: auto;
   display: flex;
   justify-content: space-between;
+  height: 33px;
 `;

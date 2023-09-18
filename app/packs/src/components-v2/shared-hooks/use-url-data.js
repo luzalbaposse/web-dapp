@@ -1,10 +1,12 @@
-import { useEffect } from "react";
 import { useState } from "react";
 
 export const useUrlData = () => {
-  const [urlData, setUrlData] = useState({ profileUsername: "" });
-  useEffect(() => {
-    setUrlData({ profileUsername: window.location.pathname.split("/")[2] });
-  }, [setUrlData]);
+  const [urlData] = useState(() => {
+    const url = new URL(window.location.href);
+    return {
+      profileUsername: window.location.pathname.split("/")[2],
+      tab: url.searchParams.get("tab")?.toLocaleLowerCase()
+    };
+  });
   return urlData;
 };

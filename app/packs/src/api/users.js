@@ -84,6 +84,13 @@ const getSubscribers = username =>
     }
   });
 
+const sendDeleteAccountEmail = userId => {
+  const baseHeaders = defaultHeaders();
+  const headers = appendCSRFToken(baseHeaders);
+
+  return axios.post(`/api/v1/users/${userId}/delete_account_tokens`, {}, { headers: { ...headers } });
+};
+
 export const users = {
   createAccount,
   sendConfirmationEmail,
@@ -92,5 +99,6 @@ export const users = {
   getConnections,
   getProfile,
   getSupporters,
-  getSubscribers
+  getSubscribers,
+  sendDeleteAccountEmail
 };

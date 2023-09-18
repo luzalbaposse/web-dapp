@@ -14,13 +14,13 @@ const LINK_TYPE_TO_ICON = {
 };
 
 const LINK_DTO = {
-  Website: (link) => link,
-  GitHub: (link) => link,
-  Linkedin: (link) => link,
-  Twitter: (link) => link,
-  Lens: (link) => link,
-  Mastodon: (link) => link,
-  Telegram: (link) => {
+  Website: link => link,
+  GitHub: link => link,
+  Linkedin: link => link,
+  Twitter: link => link,
+  Lens: link => link,
+  Mastodon: link => link,
+  Telegram: link => {
     if (link.length > 0 && link[0] == "@") {
       const newLink = "https://t.me/" + link.substring(1);
       return newLink;
@@ -30,7 +30,7 @@ const LINK_DTO = {
       return "https://t.me/" + link;
     }
   },
-  Discord: (link) => {
+  Discord: link => {
     if (link.length > 0 && link.includes("discordapp.com")) {
       return link;
     } else {
@@ -55,7 +55,13 @@ export const OnTheWeb = ({ links }) => {
                 href={LINK_DTO[linkObject.type](linkObject.link)}
                 newPage
               />
-              <TextLink color="primary01" size="small" text={linkObject.type} href={LINK_DTO[linkObject.type](linkObject.link)} newPage />
+              <TextLink
+                color="primary01"
+                size="small"
+                text={linkObject.type}
+                href={LINK_DTO[linkObject.type](linkObject.link)}
+                newPage
+              />
             </LinkItem>
           );
         }
