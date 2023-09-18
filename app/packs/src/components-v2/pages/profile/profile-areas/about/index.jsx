@@ -49,18 +49,6 @@ export const About = ({ currentUser, urlData }) => {
     </SpinnerContainer>
   ) : (
     <Container>
-      {urlData?.profileUsername === currentUser?.username && (
-        <ButtonContainer href={`/u/${urlData?.profileUsername}/settings?tab=About`}>
-          <Button
-            text="Edit About"
-            hierarchy="secondary"
-            size="small"
-            iconColor="primary01"
-            leftIcon="edit"
-            onClick={() => null}
-          />
-        </ButtonContainer>
-      )}
       {isProfileEmpty(aboutData) ? (
         <EmptyStateContainer>
           <Icon name="binoculars" size={64} color="primary04" />

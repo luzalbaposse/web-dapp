@@ -22,7 +22,6 @@ export const AboutForm = ({ setIsDirty }) => {
 
   const getTags = useCallback(
     debounce(query => {
-      debugger;
       tagsService
         .getTags(query)
         .then(({ data }) => {
@@ -50,7 +49,6 @@ export const AboutForm = ({ setIsDirty }) => {
     website: useRef(),
     twitter: useRef(),
     linkedin: useRef(),
-    figma: useRef(),
     behance: useRef(),
     youtube: useRef(),
     github: useRef(),
@@ -61,6 +59,14 @@ export const AboutForm = ({ setIsDirty }) => {
   };
 
   const updateAbout = useCallback(() => {
+    if (currentTags.length < 3) {
+      toast.error(<ToastBody heading="Insufficient tags" body={"You need at least 3 tags"} />);
+      return;
+    }
+    if (currentTags.length > 10) {
+      toast.error(<ToastBody heading="Exceeded maximum tags" body={"You can't add more than 10 tags"} />);
+      return;
+    }
     editProfileService
       .editAbout(profile?.username, {
         talent: {
@@ -69,7 +75,6 @@ export const AboutForm = ({ setIsDirty }) => {
             website: refs.website.current.value,
             twitter: refs.twitter.current.value,
             linkedin: refs.linkedin.current.value,
-            figma: refs.figma.current.value,
             behance: refs.behance.current.value,
             youtube: refs.youtube.current.value,
             github: refs.github.current.value,
@@ -89,7 +94,6 @@ export const AboutForm = ({ setIsDirty }) => {
             website: refs.website.current.value,
             twitter: refs.twitter.current.value,
             linkedin: refs.linkedin.current.value,
-            figma: refs.figma.current.value,
             behance: refs.behance.current.value,
             youtube: refs.youtube.current.value,
             github: refs.github.current.value,
@@ -146,26 +150,26 @@ export const AboutForm = ({ setIsDirty }) => {
               onChange={() => setIsDirty(true)}
             />
             <Input
-              inputRef={refs.twitter}
-              label="Twitter"
-              placeholder="twitter.com/"
-              defaultValue={profile?.profile.twitter || "twitter.com/"}
-              onChange={() => setIsDirty(true)}
-            />
-          </LinksRow>
-          <LinksRow>
-            <Input
               inputRef={refs.linkedin}
               label="LinkedIn"
               placeholder="linkedin.com/in/"
               defaultValue={profile?.profile.linkedin || "linkedin.com/in/"}
               onChange={() => setIsDirty(true)}
             />
+          </LinksRow>
+          <LinksRow>
             <Input
-              inputRef={refs.figma}
-              label="Figma"
-              placeholder="figma.com/@"
-              defaultValue={profile?.profile.figma || "figma.com/@"}
+              inputRef={refs.twitter}
+              label="Twitter"
+              placeholder="twitter.com/"
+              defaultValue={profile?.profile.twitter || "twitter.com/"}
+              onChange={() => setIsDirty(true)}
+            />
+            <Input
+              inputRef={refs.github}
+              label="Github"
+              placeholder="github.com/"
+              defaultValue={profile?.profile.github || "github.com/"}
               onChange={() => setIsDirty(true)}
             />
           </LinksRow>
@@ -178,38 +182,6 @@ export const AboutForm = ({ setIsDirty }) => {
               onChange={() => setIsDirty(true)}
             />
             <Input
-              inputRef={refs.youtube}
-              label="Youtube"
-              placeholder="youtube.com/"
-              defaultValue={profile?.profile.youtube || "youtube.com/"}
-              onChange={() => setIsDirty(true)}
-            />
-          </LinksRow>
-          <LinksRow>
-            <Input
-              inputRef={refs.github}
-              label="Gihub"
-              placeholder="github.com/"
-              defaultValue={profile?.profile.github || "github.com/"}
-              onChange={() => setIsDirty(true)}
-            />
-            <Input
-              inputRef={refs.lens}
-              label="Lens"
-              placeholder="lens.xyz/"
-              defaultValue={profile?.profile.lens || "lens.xyz/"}
-              onChange={() => setIsDirty(true)}
-            />
-          </LinksRow>
-          <LinksRow>
-            <Input
-              inputRef={refs.farcaster}
-              label="Farcaster"
-              placeholder="farcaster.xyz/"
-              defaultValue={profile?.profile.farcaster || "farcaster.xyz/"}
-              onChange={() => setIsDirty(true)}
-            />
-            <Input
               inputRef={refs.instagram}
               label="Instagram"
               placeholder="instagram.com/"
@@ -219,11 +191,35 @@ export const AboutForm = ({ setIsDirty }) => {
           </LinksRow>
           <LinksRow>
             <Input
+              inputRef={refs.lens}
+              label="Lens"
+              placeholder="lens.xyz/"
+              defaultValue={profile?.profile.lens || "lens.xyz/"}
+              onChange={() => setIsDirty(true)}
+            />
+            <Input
+              inputRef={refs.farcaster}
+              label="Farcaster"
+              placeholder="farcaster.xyz/"
+              defaultValue={profile?.profile.farcaster || "farcaster.xyz/"}
+              onChange={() => setIsDirty(true)}
+            />
+          </LinksRow>
+          <LinksRow>
+            <Input
+              inputRef={refs.youtube}
+              label="Youtube"
+              placeholder="youtube.com/"
+              defaultValue={profile?.profile.youtube || "youtube.com/"}
+              onChange={() => setIsDirty(true)}
+            />
+            <Input
               inputRef={refs.tiktok}
               label="Tik Tok"
               placeholder="tiktok.net/"
               defaultValue={profile?.profile.tiktok || "tiktok.net/"}
               onChange={() => setIsDirty(true)}
+              style={{ width: "48%" }}
             />
           </LinksRow>
         </LinksArea>

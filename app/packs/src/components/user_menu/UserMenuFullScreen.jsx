@@ -88,7 +88,7 @@ const UserMenuFullScreen = ({
       </Button>
       <div className={`divider ${mode}`}></div>
       <Button
-        onClick={() => (window.location.href = `/u/${user.username}/settings`)}
+        onClick={() => (window.location.href = `/u/${user.username}/settings?tab=account`)}
         type="white-ghost"
         mode={mode}
         className="d-flex flex-row justify-content-between mb-3 mt-1"
