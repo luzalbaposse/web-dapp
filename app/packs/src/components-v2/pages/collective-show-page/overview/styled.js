@@ -125,3 +125,17 @@ export const VerifiedIcon = styled.img`
   height: 20px;
   width: 20px;
 `;
+
+export const ElectionInfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+`;
+
+export const ElectionInfoRow = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+`;

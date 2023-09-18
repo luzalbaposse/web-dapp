@@ -70,3 +70,6 @@ export const CAREER_NEEDS_OPTIONS = [
   "Assisting others with their job search",
   "Investing in talent, projects or startups"
 ];
+
+export const TAKEOFF_TERMS_AND_CONDITIONS =
+  "https://www.notion.so/talentprotocol/Terms-and-Conditions-for-Take-Off-Voting-d61c1af32142472e81800f6e4a0521eb?pvs=4";

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import dayjs from "dayjs";
 import debounce from "lodash/debounce";
 import { toast } from "react-toastify";
@@ -18,6 +18,7 @@ import TextInput from "src/components/design_system/fields/textinput";
 import TextArea from "src/components/design_system/fields/textarea";
 import Divider from "src/components/design_system/other/Divider";
 import Button from "src/components/design_system/button";
+import LoadingButton from "../../button/LoadingButton";
 import { ToastBody } from "src/components/design_system/toasts";
 import { Toolbox, Learn, Delete } from "src/components/icons";
 import { H5, P2 } from "src/components/design_system/typography";
@@ -29,7 +30,9 @@ import { useProfileFetcher } from "src/hooks/use-profile-fetcher";
 import cx from "classnames";
 import styled, { css } from "styled-components";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import { mobileStyles } from "@talentprotocol/design-system";
+import { mobileStyles, Checkbox as DesignSystemCheckbox, Typography } from "@talentprotocol/design-system";
+import { StyledTypographyLink } from "./styled";
+import { TAKEOFF_TERMS_AND_CONDITIONS } from "src/utils/constants";
 dayjs.extend(customParseFormat);
 
 const ButtonsContainer = styled.div`
@@ -390,10 +393,14 @@ const GoalExperience = ({
   validationErrors,
   uppyBanner,
   deleteImage,
-  hideBackButton
+  hideBackButton,
+  activeElection,
+  performingRequest
 }) => {
   const [dueMonth, setDueMonth] = useState(returnMonth(currentJourneyItem.due_date));
   const [dueYear, setDueYear] = useState(returnYear(currentJourneyItem.due_date));
+  const [election_selected, setelection_selected] = useState(false);
+  const checkboxRef = useRef(false);
 
   const progressOptions = [
     { value: "planned", title: "Planned" },
@@ -437,6 +444,18 @@ const GoalExperience = ({
     }
   }, [dueMonth, dueYear]);
 
+  const toggleTakeoffApplication = event => {
+    setelection_selected(event.target.checked);
+
+    if (event.target.checked) {
+      changeAttribute("progress", "planned");
+      changeAttribute("title", "Take Off Istanbul");
+      changeAttribute("election_selected", true);
+      setDueMonth("November");
+      setDueYear("2023");
+    }
+  };
+
   return (
     <>
       <Modal.Header closeButton className="px-5">
@@ -453,6 +472,24 @@ const GoalExperience = ({
           overflowY: "overlay"
         }}
       >
+        {activeElection && (
+          <div className="w-100 mb-5">
+            <DesignSystemCheckbox
+              checked={election_selected}
+              onChange={toggleTakeoffApplication}
+              checkboxRef={checkboxRef}
+              label={
+                <Typography specs={{ variant: "p2", type: "regular" }}>
+                  I'm applying to Take Off Istanbul, and I agree to the{" "}
+                  <StyledTypographyLink target="_blank" href={TAKEOFF_TERMS_AND_CONDITIONS}>
+                    terms and conditions
+                  </StyledTypographyLink>
+                  .
+                </Typography>
+              }
+            />
+          </div>
+        )}
         <div className="w-100 mb-5">
           <TextInput
             title="Title"
@@ -461,6 +498,7 @@ const GoalExperience = ({
             placeholder="Ex: Finding a co-founder for my startup"
             required={true}
             error={validationErrors?.title}
+            disabled={election_selected}
           />
         </div>
         <div className="w-100 mb-5">
@@ -475,6 +513,7 @@ const GoalExperience = ({
             onChange={e => changeAttribute("progress", e.target.value)}
             value={currentJourneyItem.progress}
             placeholder="Please Select"
+            disabled={election_selected}
             className={cx("height-auto", "mr-2", validationErrors?.progress && "border-danger")}
           >
             <option value=""></option>
@@ -487,16 +526,18 @@ const GoalExperience = ({
         </div>
         <div className="w-100 mb-5">
           <TextArea
-            title="Description"
+            title={election_selected ? "Application Letter" : "Description"}
             onChange={e => changeAttribute("description", e.target.value)}
             value={currentJourneyItem.description}
+            maxLength={800}
+            maxLengthText
             rows={3}
           />
         </div>
         <div className="w-100 mb-5">
           <label htmlFor="inputDueMonth">
             <P2 className="mb-2 text-primary-01" bold>
-              Due Date <span className="text-danger">*</span>
+              Expected Due Date <span className="text-danger">*</span>
             </P2>
           </label>
           <div className="d-flex flex-row justify-content-between">
@@ -505,6 +546,7 @@ const GoalExperience = ({
               onChange={e => setDueMonth(e.target.value)}
               value={dueMonth}
               placeholder="Month"
+              disabled={election_selected}
               className={cx("height-auto", "mr-2", validationErrors?.dueDate && "border-danger")}
             >
               <option value=""></option>
@@ -519,6 +561,7 @@ const GoalExperience = ({
               onChange={e => setDueYear(e.target.value)}
               value={dueYear}
               placeholder="Year"
+              disabled={election_selected}
               className={cx("height-auto", "ml-2", validationErrors?.dueDate && "border-danger")}
             >
               <option value=""></option>
@@ -530,54 +573,68 @@ const GoalExperience = ({
             </Form.Control>
           </div>
         </div>
-        <div className="w-100 mb-5">
-          <P2 className="mb-2 text-primary-01" bold text="Media" />
-          <FileInput
-            uppy={uppyBanner}
-            pretty
-            inputName="profiles[]"
-            locale={{
-              strings: {
-                chooseFiles: "Add media"
-              }
-            }}
-          />
-          <div className={cx("d-flex", "flex-wrap", mobile ? "justify-content-center" : "justify-content-between")}>
-            {currentJourneyItem.images?.map(image => (
-              <div className="position-relative" key={`${image.image_url}`}>
-                <TalentProfilePicture
-                  className="position-relative mt-2"
-                  style={{ borderRadius: "24px" }}
-                  src={image.image_url}
-                  straight
-                  height={213}
-                  width={272}
-                />
-                <Button
-                  className="position-absolute"
-                  style={{ top: "16px", right: "8px" }}
-                  type="white-subtle"
-                  size="icon"
-                  onClick={() => deleteImage(image.image_url)}
-                >
-                  <Delete color={mode() == "light" ? lightTextPrimary01 : darkTextPrimary01} size={16} />
-                </Button>
-              </div>
-            ))}
+        {!election_selected && (
+          <div className="w-100 mb-5">
+            <P2 className="mb-2 text-primary-01" bold text="Media" />
+            <FileInput
+              uppy={uppyBanner}
+              pretty
+              inputName="profiles[]"
+              locale={{
+                strings: {
+                  chooseFiles: "Add media"
+                }
+              }}
+            />
+            <div className={cx("d-flex", "flex-wrap", mobile ? "justify-content-center" : "justify-content-between")}>
+              {currentJourneyItem.images?.map(image => (
+                <div className="position-relative" key={`${image.image_url}`}>
+                  <TalentProfilePicture
+                    className="position-relative mt-2"
+                    style={{ borderRadius: "24px" }}
+                    src={image.image_url}
+                    straight
+                    height={213}
+                    width={272}
+                  />
+                  <Button
+                    className="position-absolute"
+                    style={{ top: "16px", right: "8px" }}
+                    type="white-subtle"
+                    size="icon"
+                    onClick={() => deleteImage(image.image_url)}
+                  >
+                    <Delete color={mode() == "light" ? lightTextPrimary01 : darkTextPrimary01} size={16} />
+                  </Button>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </Modal.Body>
       <Divider />
       <Modal.Footer className="px-6 py-3 justify-content-between" style={{ borderTop: "none" }}>
         {editType === "Add" && !hideBackButton && (
-          <Button type="primary-outline" text="Back" onClick={goToPreviousStep} />
+          <Button disabled={performingRequest} type="primary-outline" text="Back" onClick={goToPreviousStep} />
         )}
         {editType !== "Add" && (
-          <Button type="danger-outline" text={`Delete ${currentJourneyItem.category}`} onClick={deleteGoal} />
+          <LoadingButton
+            loading={performingRequest}
+            disabled={performingRequest}
+            type="danger-outline"
+            text={`Delete ${currentJourneyItem.category}`}
+            onClick={deleteGoal}
+          />
         )}
         <div style={{ marginLeft: editType === "Add" && hideBackButton ? "auto" : 0 }}>
-          <Button className="mr-2" type="white-ghost" text="Cancel" onClick={hide} />
-          <Button type="primary-default" text="Save" onClick={editType === "Add" ? saveGoal : updateGoal} />
+          <Button disabled={performingRequest} className="mr-2" type="white-ghost" text="Cancel" onClick={hide} />
+          <LoadingButton
+            loading={performingRequest}
+            disabled={performingRequest}
+            type="primary-default"
+            text="Save"
+            onClick={editType === "Add" ? saveGoal : updateGoal}
+          />
         </div>
       </Modal.Footer>
     </>
@@ -594,7 +651,8 @@ const EditJourneyModal = ({
   journeyItem = {},
   skipToNextStepItemName,
   hideBackButton = false,
-  username
+  username,
+  activeElection
 }) => {
   const { profile, fetchProfile } = useProfileFetcher();
   useEffect(() => {
@@ -619,6 +677,7 @@ const EditJourneyModal = ({
     category: journeyItem?.category || "",
     images: journeyItem?.images || []
   });
+  const [performingRequest, setPerformingRequest] = useState(false);
 
   const [validationErrors, setValidationErrors] = useState({
     title: false,
@@ -688,6 +747,8 @@ const EditJourneyModal = ({
       return setValidationErrors(errors);
     }
 
+    setPerformingRequest(true);
+
     const response = await post(`/api/v1/talent/${tempTalent.id}/milestones`, {
       milestone: {
         ...currentJourneyItem
@@ -695,11 +756,6 @@ const EditJourneyModal = ({
     });
 
     if (response && !response.error) {
-      // setTalent(prev => ({
-      //   ...prev,
-      //   milestones: [...prev.milestones, response]
-      // }));
-
       toast.success(<ToastBody heading="Success!" body={"Milestone created successfully."} mode={mode} />, {
         autoClose: 1500
       });
@@ -708,6 +764,7 @@ const EditJourneyModal = ({
     } else {
       toast.error(<ToastBody heading="Error!" body={response?.error} mode={mode} />, { autoClose: 5000 });
     }
+    setPerformingRequest(false);
   };
 
   const updateMilestone = async () => {
@@ -717,23 +774,13 @@ const EditJourneyModal = ({
       return setValidationErrors(errors);
     }
 
+    setPerformingRequest(true);
+
     const response = await patch(`/api/v1/talent/${tempTalent.id}/milestones/${currentJourneyItem.id}`, {
       milestone: currentJourneyItem
     });
 
     if (response && !response.error) {
-      // const newMilestones = talent.milestones.map(milestone => {
-      //   if (milestone.id === response.id) {
-      //     return { ...response };
-      //   }
-      //   return { ...milestone };
-      // });
-
-      // setTalent(prev => ({
-      //   ...prev,
-      //   milestones: newMilestones
-      // }));
-
       toast.success(<ToastBody heading="Success!" body={"Milestone updated successfully."} mode={mode} />, {
         autoClose: 1500
       });
@@ -742,26 +789,21 @@ const EditJourneyModal = ({
     } else {
       toast.error(<ToastBody heading="Error!" body={response?.error} mode={mode} />, { autoClose: 5000 });
     }
+
+    setPerformingRequest(false);
   };
 
   const deleteMilestone = async () => {
+    setPerformingRequest(true);
     const response = await destroy(`/api/v1/talent/${tempTalent.id}/milestones/${currentJourneyItem.id}`);
 
     if (response) {
-      // const index = talent.milestones.findIndex(milestone => milestone.id === response.id);
-      // const newMilestones = [...talent.milestones.slice(0, index), ...talent.milestones.slice(index + 1)];
-
-      // setTalent(prev => ({
-      //   ...prev,
-      //   milestones: newMilestones
-      // }));
-
       toast.success(<ToastBody heading="Success!" body={"Milestone deleted successfully."} mode={mode} />, {
         autoClose: 1500
       });
       setTalent();
     }
-
+    setPerformingRequest(false);
     exitModal();
   };
 
@@ -771,6 +813,7 @@ const EditJourneyModal = ({
     if (Object.keys(errors).length > 0) {
       return setValidationErrors(errors);
     }
+    setPerformingRequest(true);
 
     const response = await post(`/api/v1/career_goals/${talent.career_goal.id}/goals`, {
       goal: currentJourneyItem
@@ -792,6 +835,7 @@ const EditJourneyModal = ({
       toast.error(<ToastBody heading="Error!" body={response?.error} mode={mode} />);
     }
 
+    setPerformingRequest(false);
     exitModal();
   };
 
@@ -802,6 +846,7 @@ const EditJourneyModal = ({
       return setValidationErrors(errors);
     }
 
+    setPerformingRequest(true);
     const response = await patch(`/api/v1/career_goals/${talent.career_goal.id}/goals/${currentJourneyItem.id}`, {
       goal: currentJourneyItem
     });
@@ -832,11 +877,12 @@ const EditJourneyModal = ({
     } else {
       toast.error(<ToastBody heading="Error!" body={response?.error} mode={mode} />);
     }
-
+    setPerformingRequest(false);
     exitModal();
   };
 
   const deleteGoal = async () => {
+    setPerformingRequest(true);
     const response = await destroy(`/api/v1/career_goals/${talent.career_goal.id}/goals/${currentJourneyItem.id}`);
 
     if (response) {
@@ -860,6 +906,7 @@ const EditJourneyModal = ({
       }
     }
 
+    setPerformingRequest(false);
     exitModal();
   };
 
@@ -988,6 +1035,7 @@ const EditJourneyModal = ({
               uppyBanner={uppyBanner}
               deleteImage={deleteImage}
               hideBackButton={hideBackButton}
+              performingRequest={performingRequest}
             />
           )}
           {currentStep === 2 && currentJourneyItem.category === "Career Goal" && (
@@ -1004,6 +1052,8 @@ const EditJourneyModal = ({
               uppyBanner={uppyBanner}
               deleteImage={deleteImage}
               hideBackButton={hideBackButton}
+              activeElection={activeElection}
+              performingRequest={performingRequest}
             />
           )}
         </>
@@ -1025,6 +1075,7 @@ const EditJourneyModal = ({
               uppyBanner={uppyBanner}
               deleteImage={deleteImage}
               hideBackButton={hideBackButton}
+              performingRequest={performingRequest}
             />
           ) : (
             <GoalExperience
@@ -1042,6 +1093,8 @@ const EditJourneyModal = ({
               uppyBanner={uppyBanner}
               deleteImage={deleteImage}
               hideBackButton={hideBackButton}
+              activeElection={activeElection}
+              performingRequest={performingRequest}
             />
           )}
         </>

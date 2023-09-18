@@ -1,6 +1,6 @@
 import { Button, TalentCard, Typography } from "@talentprotocol/design-system";
 import React from "react";
-import { CardContainer, Container } from "./styled";
+import { CardContainer, Container, VoteTextContainer, VoteDiv } from "./styled";
 
 export const Members = ({ members }) => {
   return (
@@ -16,7 +16,29 @@ export const Members = ({ members }) => {
               ticker={member.ticker}
               to={`/u/${member.username}`}
             >
-              <Button size="small" hierarchy="primary" text="Subscribe" href={`/u/${member.username}`} />
+              <Button size="small" hierarchy="secondary" isDisabled={true}>
+                <VoteTextContainer>
+                  <Typography
+                    specs={{
+                      variant: "label2",
+                      type: "medium"
+                    }}
+                    color={true ? "primaryDisable" : "primary01"}
+                  >
+                    Vote
+                  </Typography>
+                  <VoteDiv />
+                  <Typography
+                    specs={{
+                      variant: "label2",
+                      type: "medium"
+                    }}
+                    color={true ? "primaryDisable" : "primary01"}
+                  >
+                    {0}
+                  </Typography>
+                </VoteTextContainer>
+              </Button>
             </TalentCard>
           </CardContainer>
         ))}
