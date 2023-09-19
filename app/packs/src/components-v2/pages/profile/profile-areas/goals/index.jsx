@@ -105,7 +105,6 @@ export const Goals = ({ urlData, currentUser }) => {
             key={goal.id}
             goal={goal}
             openAddGoalModal={addGoalModalState.openModal}
-            careerGoalId={currentUser?.career_goal_id}
             isOwner={urlData?.profileUsername === currentUser?.username}
           />
         ))}
@@ -115,14 +114,13 @@ export const Goals = ({ urlData, currentUser }) => {
             key={goal.id}
             goal={goal}
             openAddGoalModal={addGoalModalState.openModal}
-            careerGoalId={currentUser?.career_goal_id}
             isOwner={urlData?.profileUsername === currentUser?.username}
           />
         ))}
       {showEmptyState()}
       <AddGoalModal
         {...addGoalModalState}
-        talent={{ id: currentUser?.talent_id, career_goal: { id: currentUser?.career_goal_id } }}
+        talent={{ id: currentUser?.talent_id }}
         activeElection={data.activeElection}
       />
     </Container>

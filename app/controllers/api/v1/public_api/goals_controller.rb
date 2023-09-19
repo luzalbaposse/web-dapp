@@ -56,7 +56,9 @@ class API::V1::PublicAPI::GoalsController < API::V1::PublicAPI::APIController
   end
 
   def destroy
-    if goal.destroy
+    service = Goals::Destroy.new(goal: goal)
+
+    if service.call
       response_body = {
         goal: API::GoalBlueprint.render_as_json(goal, view: :normal)
       }
@@ -84,6 +86,7 @@ class API::V1::PublicAPI::GoalsController < API::V1::PublicAPI::APIController
       :description,
       :link,
       :progress,
+      :election_selected,
       images: [
         :id,
         image_data: {}

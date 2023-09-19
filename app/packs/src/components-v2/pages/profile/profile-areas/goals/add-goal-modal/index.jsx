@@ -12,9 +12,13 @@ export const AddGoalModal = ({ modalState, closeModal, talent, activeElection })
         skipToNextStepItemName="Career Goal"
         setJourneyItem={noop}
         journeyItem={{ ...modalState.item, category: "Career Goal" }}
-        hideBackButton={true}
         talent={talent}
-        setTalent={() => window.location.reload()}
+        // TODO - Set goals state
+        refreshWindow={() =>
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000)
+        }
         activeElection={activeElection}
       />
     )

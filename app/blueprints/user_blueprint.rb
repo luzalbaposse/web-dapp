@@ -54,6 +54,8 @@ class UserBlueprint < Blueprinter::Base
     field :profile_completed do |user, _options|
       user.profile_completed_at.present?
     end
+
+    association :goals, blueprint: GoalBlueprint, view: :normal
   end
 
   view :with_pictures do

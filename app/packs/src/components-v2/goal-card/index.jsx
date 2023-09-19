@@ -17,14 +17,13 @@ import { ToastBody } from "src/components/design_system/toasts";
 
 const DROPDOWN_OPTIONS = [{ value: "Edit goal" }, { value: "Delete goal" }];
 
-export const GoalCard = ({ goal, openAddGoalModal, careerGoalId, isOwner }) => {
+export const GoalCard = ({ goal, openAddGoalModal, isOwner }) => {
   const selectOption = useCallback(
     ({ value }) => {
       switch (value) {
         case "Delete goal":
-          if (!careerGoalId) return;
           goalsService
-            .deleteGoal(careerGoalId, goal.id)
+            .deleteGoal(goal.id)
             .then(() => {
               toast.success(<ToastBody heading="Goal deleted successfully." />);
               setTimeout(() => {
@@ -42,7 +41,7 @@ export const GoalCard = ({ goal, openAddGoalModal, careerGoalId, isOwner }) => {
           return;
       }
     },
-    [goal, careerGoalId]
+    [goal]
   );
 
   const disableVoteButton = () => goal.election_status != "voting_active";
