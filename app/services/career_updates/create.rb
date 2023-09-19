@@ -24,7 +24,7 @@ module CareerUpdates
         )
 
         goals&.each do |goal|
-          goal = Goal.find(goal[:id])
+          goal = Goal.find_by!("uuid::text = ?", goal[:id])
           career_update.goals << goal
         end
 

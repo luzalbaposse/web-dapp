@@ -15,6 +15,7 @@ class Quest < ApplicationRecord
     three_token_holders
     verify_humanity
     verify_identity
+    galxe_verification
   ]
 
   validates :title, :quest_type, uniqueness: true

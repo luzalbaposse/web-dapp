@@ -61,13 +61,23 @@ export const VerifyHumanityQuest = ({ quest, username, railsContext }) => {
         </Typography>
       </QuestData>
       <QuestReward>
+        {quest.tal_reward > 0 && (
+          <RewardTag>
+            <Typography
+              specs={{ variant: "label3", type: "medium" }}
+              color={!!quest.completed_at ? "primary" : "primary02"}
+            >
+              {quest.tal_reward.toLocaleString()} $TAL
+            </Typography>
+          </RewardTag>
+        )}
         <RewardTag>
           <Icon name="flash" size={12} />
           <Typography
             specs={{ variant: "label3", type: "medium" }}
             color={!!quest.completed_at ? "primary" : "primary02"}
           >
-            + {quest.experience_points_amount.toLocaleString()}
+            {quest.experience_points_amount.toLocaleString()}
           </Typography>
         </RewardTag>
       </QuestReward>

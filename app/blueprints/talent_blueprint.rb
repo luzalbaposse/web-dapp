@@ -64,7 +64,6 @@ class TalentBlueprint < Blueprinter::Base
     end
 
     association :milestones, blueprint: MilestoneBlueprint, view: :normal
-    association :career_goal, blueprint: CareerGoalBlueprint, view: :normal
     association :sponsorships, blueprint: API::SponsorshipBlueprint, view: :normal do |talent, options|
       talent.user.claimed_sponsors
     end

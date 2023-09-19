@@ -288,41 +288,6 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe "#visible_digital_collectibles?" do
-    let(:user) { create :user }
-
-    context "when a user has an erc20 token visible" do
-      before do
-        create :erc20_token, user: user, show: true
-      end
-
-      it "returns true" do
-        expect(user.visible_digital_collectibles?).to eq(true)
-      end
-    end
-
-    context "when a user has an erc721 token visible" do
-      before do
-        create :erc721_token, user: user, show: true
-      end
-
-      it "returns true" do
-        expect(user.visible_digital_collectibles?).to eq(true)
-      end
-    end
-
-    context "when a user does not have a visible token" do
-      before do
-        create :erc20_token, user: user, show: false
-        create :erc721_token, user: user, show: false
-      end
-
-      it "shortens the wallet id for displaying" do
-        expect(user.visible_digital_collectibles?).to eq(false)
-      end
-    end
-  end
-
   describe "#supporters" do
     let(:user) { create :user, talent: talent }
     let(:talent) { create :talent }

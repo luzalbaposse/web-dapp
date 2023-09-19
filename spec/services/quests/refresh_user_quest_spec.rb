@@ -57,7 +57,29 @@ RSpec.shared_examples "a refresh user quest that creates new records" do
         recipient: user,
         source_id: quest.id,
         type: QuestCompletedNotification,
-        extra_params: {source_type: "Quest", experience_points: quest.experience_points_amount}
+        extra_params: {source_type: "Quest", experience_points: quest.experience_points_amount, tal_reward: quest.tal_reward}
+      )
+    end
+  end
+
+  context "when the quest has a tal reward" do
+    let(:tal_reward) { 10 }
+
+    let(:virtual_tal_class) { Web3::MintVirtualTal }
+    let(:virtual_tal_instance) { instance_double(virtual_tal_class, call: true) }
+
+    before do
+      allow(virtual_tal_class).to receive(:new).and_return(virtual_tal_instance)
+    end
+
+    it "calls the mint tal reward service" do
+      subject
+
+      expect(virtual_tal_class).to have_received(:new).with(
+        chain_id: 44787
+      )
+      expect(virtual_tal_instance).to have_received(:call).with(
+        amount: tal_reward, to: user.wallet_id, reason: "in_app_rewards"
       )
     end
   end
@@ -72,9 +94,10 @@ RSpec.describe Quests::RefreshUserQuest do
   let(:talent) { user.talent }
   let(:wallet_id) { SecureRandom.hex }
 
-  let!(:quest) { create :quest, quest_type: quest_type }
+  let!(:quest) { create :quest, quest_type: quest_type, tal_reward: tal_reward }
   let(:quest_type) { "profile_picture" }
   let(:notify) { false }
+  let(:tal_reward) { nil }
 
   context "when the quest was not credited yet" do
     context "when the quest type is profile_picture" do
@@ -197,7 +220,7 @@ RSpec.describe Quests::RefreshUserQuest do
             recipient: user,
             source_id: quest.id,
             type: QuestCompletedNotification,
-            extra_params: {source_type: "Quest", experience_points: quest.experience_points_amount}
+            extra_params: {source_type: "Quest", experience_points: quest.experience_points_amount, tal_reward: quest.tal_reward}
           )
         end
 
@@ -450,6 +473,22 @@ RSpec.describe Quests::RefreshUserQuest do
       context "when the quest was completed" do
         before do
           create :goal, due_date: Date.current, progress: Goal::DOING, user:
+        end
+
+        it_behaves_like "a refresh user quest that creates new records"
+      end
+
+      context "when the quest was not completed" do
+        it_behaves_like "a refresh user quest without creating new records"
+      end
+    end
+
+    context "when the quest type is galxe_verification" do
+      let(:quest_type) { "galxe_verification" }
+
+      context "when the quest was completed" do
+        before do
+          create :user_web3_info, user: user, galxe_passport_token_id: "123456"
         end
 
         it_behaves_like "a refresh user quest that creates new records"

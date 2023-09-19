@@ -10,9 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_11_110223) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_19_131207) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "activities", force: :cascade do |t|
@@ -285,6 +287,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_11_110223) do
     t.index ["user_id"], name: "index_discovery_rows_on_user_id"
   end
 
+  create_table "elections", force: :cascade do |t|
+    t.date "start_date", null: false
+    t.date "voting_start_date", null: false
+    t.date "voting_end_date", null: false
+    t.bigint "organization_id", null: false
+    t.boolean "rewards_distributed", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_elections_on_organization_id"
+  end
+
   create_table "erc20_tokens", force: :cascade do |t|
     t.string "address", null: false
     t.string "name"
@@ -380,7 +393,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_11_110223) do
     t.string "progress"
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.bigint "user_id"
+    t.bigint "election_id"
+    t.boolean "pin", default: false
     t.index ["career_goal_id"], name: "index_goals_on_career_goal_id"
+    t.index ["election_id"], name: "index_goals_on_election_id"
     t.index ["user_id"], name: "index_goals_on_user_id"
   end
 
@@ -594,6 +610,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_11_110223) do
     t.string "quest_type", null: false
     t.boolean "sponsored", default: false
     t.boolean "new", default: true, null: false
+    t.integer "tal_reward", default: 0
     t.index ["quest_type"], name: "index_quests_on_quest_type", unique: true
     t.index ["uuid"], name: "index_quests_on_uuid"
   end
@@ -799,6 +816,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_11_110223) do
     t.index ["user_id"], name: "index_user_tags_on_user_id"
   end
 
+  create_table "user_web3_infos", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "galxe_passport_token_id"
+    t.datetime "web3_refreshed_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_web3_infos_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "username", null: false
     t.string "email"
@@ -818,8 +844,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_11_110223) do
     t.bigint "invite_id"
     t.boolean "tokens_purchased", default: false
     t.boolean "token_purchase_reminder_sent", default: false
-    t.string "theme_preference", default: "light"
     t.boolean "disabled", default: false
+    t.string "theme_preference", default: "light"
     t.boolean "messaging_disabled", default: false
     t.jsonb "notification_preferences", default: {}
     t.string "user_nft_address"
@@ -878,6 +904,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_11_110223) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  create_table "votes", force: :cascade do |t|
+    t.bigint "election_id", null: false
+    t.bigint "candidate_id", null: false
+    t.bigint "voter_id", null: false
+    t.integer "amount", default: 0, null: false
+    t.integer "cost", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["candidate_id"], name: "index_votes_on_candidate_id"
+    t.index ["election_id"], name: "index_votes_on_election_id"
+    t.index ["voter_id"], name: "index_votes_on_voter_id"
+  end
+
   create_table "wallet_activities", force: :cascade do |t|
     t.string "wallet", null: false
     t.datetime "tx_date", precision: nil, null: false
@@ -916,6 +955,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_11_110223) do
   add_foreign_key "connections", "users", column: "connected_user_id"
   add_foreign_key "discovery_rows", "partnerships"
   add_foreign_key "discovery_rows", "users"
+  add_foreign_key "elections", "organizations"
   add_foreign_key "erc20_tokens", "users"
   add_foreign_key "erc721_tokens", "users"
   add_foreign_key "experience_points", "users"
@@ -923,6 +963,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_11_110223) do
   add_foreign_key "experience_reward_claims", "users"
   add_foreign_key "goal_images", "goals"
   add_foreign_key "goals", "career_goals"
+  add_foreign_key "goals", "elections"
   add_foreign_key "goals", "users"
   add_foreign_key "impersonations", "users", column: "impersonated_id"
   add_foreign_key "impersonations", "users", column: "impersonator_id"
@@ -962,5 +1003,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_11_110223) do
   add_foreign_key "user_quests", "users"
   add_foreign_key "user_tags", "tags"
   add_foreign_key "user_tags", "users"
+  add_foreign_key "user_web3_infos", "users"
+  add_foreign_key "votes", "elections"
+  add_foreign_key "votes", "users", column: "candidate_id"
+  add_foreign_key "votes", "users", column: "voter_id"
   add_foreign_key "wallet_activities", "users"
 end

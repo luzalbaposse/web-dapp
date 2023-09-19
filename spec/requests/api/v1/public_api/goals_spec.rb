@@ -27,6 +27,7 @@ RSpec.describe "Goals API" do
       let!(:talent) { create :talent, user: user }
       let!(:goal1) { create(:goal, user: user, title: "goal1", due_date: Time.zone.today) }
       let!(:goal2) { create(:goal, user: user, title: "goal2", due_date: Time.zone.today) }
+      let!(:election) { create(:election, start_date: Time.current - 1.day) }
 
       response "200", "get all user goals", document: false do
         let(:id) { user.username }
@@ -52,11 +53,13 @@ RSpec.describe "Goals API" do
           returned_goals = data["goals"]
           returned_titles = returned_goals.map { |f| f["title"] }
           returned_pagination = data["pagination"]
+          returned_election = data["active_election"]
           aggregate_failures do
             expect(returned_goals.count).to eq 2
             expect(returned_titles).to match_array([goal1.title, goal2.title])
 
             expect(returned_pagination["total"]).to eq 2
+            expect(returned_election).to eq true
           end
         end
       end

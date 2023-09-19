@@ -23,10 +23,6 @@ class UserBlueprint < Blueprinter::Base
     field :is_talent do |user, _options|
       user.talent.present?
     end
-
-    field :visible_digital_collectibles do |user, _options|
-      user.visible_digital_collectibles?
-    end
   end
 
   view :extended do
@@ -54,6 +50,8 @@ class UserBlueprint < Blueprinter::Base
     field :profile_completed do |user, _options|
       user.profile_completed_at.present?
     end
+
+    association :goals, blueprint: GoalBlueprint, view: :normal
   end
 
   view :with_pictures do

@@ -18,6 +18,17 @@ export const GoalTag = ({ state, date }) => {
           borderColor="surfaceHover02"
         />
       );
+    case "pinned":
+      return (
+        <Tag
+          label={"Pinned"}
+          backgroundColor="bg01"
+          textColor="primary02"
+          size="small"
+          leftIcon="pin"
+          borderColor="surfaceHover02"
+        />
+      );
     case "planned":
       return <Tag label="Planned" backgroundColor="warningTint01" textColor="warningText" size="small" />;
     case "accomplished":

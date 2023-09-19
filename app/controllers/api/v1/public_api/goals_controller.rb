@@ -12,8 +12,11 @@ class API::V1::PublicAPI::GoalsController < API::V1::PublicAPI::APIController
       order: {due_date: :desc}
     )
 
+    active_election = Election.active.exists?
+
     response_body = {
-      goals: API::GoalBlueprint.render_as_json(page_goals, view: :normal),
+      goals: API::GoalBlueprint.render_as_json(page_goals, view: :normal, current_user: current_user),
+      active_election: active_election,
       pagination: {
         total: goals.count,
         cursor: pagy.has_more? ? page_goals.last.uuid : nil
@@ -53,7 +56,9 @@ class API::V1::PublicAPI::GoalsController < API::V1::PublicAPI::APIController
   end
 
   def destroy
-    if goal.destroy
+    service = Goals::Destroy.new(goal: goal)
+
+    if service.call
       response_body = {
         goal: API::GoalBlueprint.render_as_json(goal, view: :normal)
       }
@@ -81,6 +86,7 @@ class API::V1::PublicAPI::GoalsController < API::V1::PublicAPI::APIController
       :description,
       :link,
       :progress,
+      :election_selected,
       images: [
         :id,
         image_data: {}

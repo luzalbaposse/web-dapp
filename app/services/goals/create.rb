@@ -10,27 +10,35 @@ module Goals
     end
 
     def call
-      goal = user.goals.new(params.except(:images))
+      raise CreationError if has_takeoff_goal? && params[:election_selected].present?
+
+      goal = user.goals.new(params.except(:images, :election_selected))
 
       parsed_date = params[:due_date].split("-").map(&:to_i)
       goal.due_date = Date.new(parsed_date[2], parsed_date[1], parsed_date[0])
 
-      create_goal_images(goal: goal) if params[:images] && params[:images].length > 0
+      create_goal_images(goal: goal) if params[:images] && params[:images].length > 0 && params[:election_selected].nil?
 
-      raise CreationError unless goal.save
+      ActiveRecord::Base.transaction do
+        raise CreationError unless goal.save
 
-      ActivityIngestJob.perform_later("goal_create", goal_create_message(goal), user.id)
+        add_to_collective(goal) if params[:election_selected]
 
-      refresh_quests
-      update_profile_completeness
-      send_discord_notification(goal) if goal.accomplished?
+        refresh_quests
+        update_profile_completeness
+        send_discord_notification(goal) if goal.accomplished?
 
-      goal
+        goal
+      end
     end
 
     private
 
     attr_reader :user, :params
+
+    def has_takeoff_goal?
+      user.goals.where.not(election_id: nil).exists?
+    end
 
     def goal_create_message(goal)
       if goal.title.present? && goal.title.length > 0
@@ -47,6 +55,10 @@ module Goals
       end
     end
 
+    def add_to_feed(goal)
+      ActivityIngestJob.perform_later("goal_create", goal_create_message(goal), user.id)
+    end
+
     def refresh_quests
       Quests::RefreshUserQuestsJob.perform_later(user.id)
     end
@@ -57,6 +69,21 @@ module Goals
 
     def send_discord_notification(goal)
       Discord::SendAccomplishedGoalNotificationJob.perform_later(goal.id)
+    end
+
+    def send_takeoff_notification(goal)
+      Discord::AppliedToTakeoffNotificationJob.perform_later(goal.id)
+    end
+
+    def add_to_collective(goal)
+      collective = Organization.find_by(slug: "takeoff-istanbul")
+      if collective.active_election.present?
+        collective.memberships.create!(active: true, user: user)
+        goal.goal_images.create!(image_data: collective.banner_data)
+        goal.update!(election: collective.active_election, pin: true)
+      end
+
+      send_takeoff_notification(goal)
     end
   end
 end

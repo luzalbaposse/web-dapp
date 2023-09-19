@@ -67,4 +67,31 @@ RSpec.describe Goals::Create do
       end
     end
   end
+
+  context "when there is an active election" do
+    let(:org) { create(:org_election, slug: "takeoff-istanbul") }
+    let!(:election) { create(:election, start_date: Time.current - 1.day, organization: org) }
+
+    let(:params) do
+      {
+        title: "New Goal",
+        due_date: "01-05-2023",
+        images: [],
+        progress:,
+        election_selected: true
+      }
+    end
+
+    it "pins the goal" do
+      goal = create_goal
+
+      expect(goal.pin).to eq true
+    end
+
+    it "adds the user to the collective" do
+      create_goal
+
+      expect(Membership.where(user: user, organization: org)).to exist
+    end
+  end
 end

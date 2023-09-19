@@ -9,7 +9,7 @@ module Web3Api
 
     class ApiClientRequestError < Error; end
 
-    SUPPORTED_CHAIN_IDS = %w[0x1 0xa4ec 0x89]
+    SUPPORTED_CHAIN_IDS = %w[0x1 0xa4ec 0x89 0x38]
     SUPPORTED_CHAIN_NAMES = %w[celo eth polygon]
 
     CELO_CHAIN = %w[celo 0xa4ec 42220]
@@ -42,6 +42,18 @@ module Web3Api
       response_body = JSON.parse(response.body)
 
       response_body["total_tokens"].to_i
+    end
+
+    def retrieve_wallet_nfts(wallet_address:, chain:, contract_addresses: [])
+      formatted_chain = formatted_chain(chain)
+
+      response = moralis_wallet_nfts_response(wallet_address, formatted_chain, contract_addresses)
+
+      validate_response!(response)
+
+      response_body = JSON.parse(response.body)
+
+      response_body["result"]
     end
 
     private
@@ -85,6 +97,10 @@ module Web3Api
 
       response_body = JSON.parse(response.body)
       response_body["total"]
+    end
+
+    def moralis_wallet_nfts_response(wallet_address, chain, contract_addresses)
+      moralis_api_client.retrieve_wallet_nfts(wallet_address: wallet_address, chain: chain, contract_addresses: contract_addresses)
     end
 
     def moralis_contract_nfts_response(contract_address, chain)

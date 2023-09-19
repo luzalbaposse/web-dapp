@@ -56,6 +56,7 @@ export const QuestDataRow = styled.div`
 export const QuestReward = styled.div`
   display: flex;
   align-items: center;
+  gap: 4px;
 `;
 
 export const RewardTag = styled.div`

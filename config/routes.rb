@@ -67,9 +67,6 @@ Rails.application.routes.draw do
         end
         post "clear_notifications", to: "notifications#mark_all_as_read"
 
-        resources :career_goals, only: [] do
-          resources :goals, only: [:update, :create, :destroy], module: "career_goals"
-        end
         resources :talent, only: [:index, :update] do
           resources :milestones, only: [:create, :update, :destroy], module: "talent"
           resources :tokens, only: [:update], module: "talent"

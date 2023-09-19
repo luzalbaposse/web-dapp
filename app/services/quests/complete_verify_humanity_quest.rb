@@ -27,7 +27,7 @@ module Quests
 
     private
 
-    attr_reader :user, :quest, :params
+    attr_reader :user, :params
 
     def verify_humanity_quest
       Quest.find_by(quest_type: "verify_humanity")

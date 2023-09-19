@@ -21,7 +21,7 @@
       class: TriggerTalentSupportersRefreshJob
       enabled: <%= ENV["ENABLE_THE_GRAPH_JOBS"] %>
     daily_metrics:
-      cron: "1 0 * * *" # runs once every day at 8am
+      cron: "1 0 * * * Europe/Lisbon" # runs once every day at 00h01 at GMT+1
       class: DailyMetricsJob
     refresh_quests_job:
       cron: "0 13 * * *" # Runs once every day at 13:00

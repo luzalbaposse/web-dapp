@@ -2,7 +2,9 @@ class QuestCompletedNotification < BaseNotification
   include ActionView::Helpers::NumberHelper
 
   def body
-    "You have been credited with #{number_with_delimiter(params["experience_points"])} XP."
+    message = "You have been credited with #{number_with_delimiter(params["experience_points"])} XP"
+    message << " and #{params["tal_reward"]} $TAL" if params["tal_reward"]&.positive?
+    message << "."
   end
 
   def source
