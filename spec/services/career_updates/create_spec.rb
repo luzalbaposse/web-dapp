@@ -7,7 +7,7 @@ RSpec.describe CareerUpdates::Create do
   let(:milestone) { create :milestone }
 
   subject(:create_career_update) do
-    described_class.new(sender: sender, message: message, goals: [{id: goal.id}]).call
+    described_class.new(sender: sender, message: message, goals: [{id: goal.uuid}]).call
   end
 
   describe "#call" do
