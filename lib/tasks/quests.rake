@@ -94,7 +94,7 @@ namespace :quests do
         experience_points_amount: 1000
       },
       {
-        title: "Verify Your Identity with Galxe",
+        title: "Verify with Galxe",
         description: "Click to validate your identity with Galxe Passport.",
         quest_type: "galxe_verification",
         experience_points_amount: 1500,

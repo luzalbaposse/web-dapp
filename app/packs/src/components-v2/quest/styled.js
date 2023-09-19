@@ -1,5 +1,5 @@
-import { buildColor } from "@talentprotocol/design-system";
-import styled from "styled-components";
+import { buildColor, mobileStyles } from "@talentprotocol/design-system";
+import styled, { css } from "styled-components";
 
 export const QuestEntry = styled.a`
   outline: none;
@@ -57,6 +57,10 @@ export const QuestReward = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
+
+  ${mobileStyles(css`
+    flex-direction: column;
+  `)}
 `;
 
 export const RewardTag = styled.div`
