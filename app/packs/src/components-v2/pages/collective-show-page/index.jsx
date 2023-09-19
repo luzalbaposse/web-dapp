@@ -9,9 +9,15 @@ import Overview from "./overview";
 import ThemeContainer from "src/contexts/ThemeContext";
 
 const TAB_LIST = ["Members", "Activity"];
+const ELECTION_TAB_LIST = ["Candidates", "Activity"];
 
 const TAB_NAME_TO_INDEX = {
   members: 0,
+  activity: 1
+};
+
+const ELECTION_TAB_NAME_TO_INDEX = {
+  candidates: 0,
   activity: 1
 };
 
@@ -26,19 +32,21 @@ export const CollectiveShowPage = ({ organization }) => {
     if (!currentUser) fetchCurrentUser();
   }, []);
 
+  const tabIndex = collective.election ? ELECTION_TAB_NAME_TO_INDEX : TAB_NAME_TO_INDEX;
+
   useEffect(() => {
     const url = new URL(document.location);
     const tab = url.searchParams.get("tab") || "";
 
-    if (tab) tabState.selectElement(TAB_NAME_TO_INDEX[tab]);
+    if (tab) tabState.selectElement(tabIndex[tab]);
   }, []);
 
   const onClick = index => {
-    const tab = Object.keys(TAB_NAME_TO_INDEX).find(key => TAB_NAME_TO_INDEX[key] === index);
+    const tab = Object.keys(tabIndex).find(key => tabIndex[key] === index);
     const url = new URL(document.location);
     url.searchParams.set("tab", tab);
     history.pushState({}, "", url);
-    tabState.selectElement(TAB_NAME_TO_INDEX[tab]);
+    tabState.selectElement(tabIndex[tab]);
   };
 
   const RenderedTab = useMemo(() => {
@@ -46,7 +54,7 @@ export const CollectiveShowPage = ({ organization }) => {
 
     switch (tabState.selectedIndex) {
       case 0:
-        return <Members currentUser={currentUser} members={collective.users} />;
+        return <Members currentUser={currentUser} members={collective.users} activeElection={collective.election} />;
       case 1:
         return <Activity currentUser={currentUser} organization={collective.slug} />;
     }
@@ -57,7 +65,11 @@ export const CollectiveShowPage = ({ organization }) => {
       <Overview collective={collective} />
       <Divider className="divider" />
       <TabsContainer>
-        <Tabs onClick={onClick} selectedIndex={tabState.selectedIndex} tabList={TAB_LIST} />
+        <Tabs
+          onClick={onClick}
+          selectedIndex={tabState.selectedIndex}
+          tabList={collective.election ? ELECTION_TAB_LIST : TAB_LIST}
+        />
       </TabsContainer>
       {RenderedTab}
     </Container>

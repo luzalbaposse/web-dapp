@@ -1,7 +1,7 @@
 import axios from "axios";
 import { appendCSRFToken, defaultHeaders } from "./utils";
 
-const getGoals = user => axios.get(`/api/v1/goals?id=${user}`);
+const getGoals = user => axios.get(`/api/v1/goals?id=${user}&per_page=20`);
 
 const deleteGoal = (careerGoalId, goalId) => {
   const baseHeaders = defaultHeaders();

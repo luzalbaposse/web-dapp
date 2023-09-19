@@ -25,7 +25,7 @@ module Discord
     end
 
     def content
-      "_#{user.username}_#{" (#{user.legal_first_name})" if user.legal_first_name} just accomplished their goal: **#{goal.title}**. Check out their profile: https://beta.talentprotocol.com/u/#{user.username}"
+      "_#{user.name}_ just accomplished their goal: **#{goal.title}**. Check out their profile: https://beta.talentprotocol.com/u/#{user.username}"
     end
   end
 end

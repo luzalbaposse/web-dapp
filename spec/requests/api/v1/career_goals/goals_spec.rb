@@ -150,4 +150,30 @@ RSpec.describe "Goals", type: :request do
       end
     end
   end
+
+  describe "#destroy" do
+    let!(:goal) { create :goal, career_goal: career_goal, due_date: Date.today }
+    subject(:destroy_goal_request) {
+      delete api_v1_career_goal_goal_path(
+        career_goal_id: career_goal.id,
+        id: goal.id,
+        as: current_user
+      )
+    }
+    let(:election) { create :election }
+
+    it "destroys the goal" do
+      destroy_goal_request
+
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "does not destroy the goal if it is associated with an election" do
+      goal.election = election
+      goal.save!
+
+      destroy_goal_request
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
+  end
 end

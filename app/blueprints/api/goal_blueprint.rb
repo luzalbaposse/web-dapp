@@ -1,11 +1,21 @@
 class API::GoalBlueprint < Blueprinter::Base
   view :normal do
-    fields :title, :description, :link, :progress, :due_date, :created_at
+    fields :title, :description, :link, :progress, :due_date, :created_at, :id, :pin
 
     field :id do |goal, _options|
       goal.uuid
     end
 
     association :goal_images, blueprint: GoalImageBlueprint, view: :normal, name: :images
+
+    field :election_status do |goal, options|
+      goal.election&.status
+    end
+
+    field :election_count do |goal, options|
+      if goal&.election&.present? && options[:current_user]
+        goal.election.votes.where(candidate: options[:current_user]).count
+      end
+    end
   end
 end

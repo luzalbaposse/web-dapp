@@ -1,7 +1,16 @@
 import React, { useCallback } from "react";
 import { toast } from "react-toastify";
 import { ButtonDropdown, Typography, Button } from "@talentprotocol/design-system";
-import { Container, DropDownContainer, GoalImage, GoalInfo, TagsRow } from "./styled";
+import {
+  Container,
+  DropDownContainer,
+  GoalImage,
+  GoalInfo,
+  TagsRow,
+  VoteContainer,
+  VoteDiv,
+  VoteTextContainer
+} from "./styled";
 import { GoalTag } from "./goal-tag";
 import { goalsService } from "src/api";
 import { ToastBody } from "src/components/design_system/toasts";
@@ -35,11 +44,15 @@ export const GoalCard = ({ goal, openAddGoalModal, careerGoalId, isOwner }) => {
     },
     [goal, careerGoalId]
   );
+
+  const disableVoteButton = () => goal.election_status != "voting_active";
+
   return (
     <Container>
       <TagsRow>
         <GoalTag state={goal.progress} />
         <GoalTag state="date" date={new Date(goal.due_date)} />
+        {goal.pin && <GoalTag state={"pinned"} />}
         {isOwner && (
           <DropDownContainer>
             <ButtonDropdown selectOption={selectOption} options={DROPDOWN_OPTIONS} opensOnRight>
@@ -52,11 +65,38 @@ export const GoalCard = ({ goal, openAddGoalModal, careerGoalId, isOwner }) => {
         <Typography specs={{ type: "medium", variant: "p1" }} color="primary01">
           {goal.title}
         </Typography>
-        <Typography specs={{ type: "regular", variant: "p2" }} color="primary03">
+        <Typography specs={{ type: "regular", variant: "p2" }} color="primary03" className="text-white-space-wrap">
           {goal.description}
         </Typography>
       </GoalInfo>
       {!!goal.images?.length && <GoalImage src={goal.images[0].image_url} />}
+      {goal.election_status != null && (
+        <VoteContainer>
+          <Button size="small" hierarchy="secondary" isDisabled={disableVoteButton()}>
+            <VoteTextContainer>
+              <Typography
+                specs={{
+                  variant: "label2",
+                  type: "medium"
+                }}
+                color={disableVoteButton() ? "primaryDisable" : "primary01"}
+              >
+                Vote
+              </Typography>
+              <VoteDiv />
+              <Typography
+                specs={{
+                  variant: "label2",
+                  type: "medium"
+                }}
+                color={disableVoteButton() ? "primaryDisable" : "primary01"}
+              >
+                {goal.election_count}
+              </Typography>
+            </VoteTextContainer>
+          </Button>
+        </VoteContainer>
+      )}
     </Container>
   );
 };

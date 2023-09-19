@@ -24,7 +24,6 @@ export const CollectivesPage = ({}) => {
 
   useEffect(() => {
     const params = new URLSearchParams(document.location.search);
-    params.set("page", 1);
     loadCollectives(params);
   }, []);
 
