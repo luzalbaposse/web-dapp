@@ -1,5 +1,6 @@
 class API::V1::PublicAPI::QuestsController < API::V1::PublicAPI::APIController
   before_action :internal_only, only: [:complete]
+  before_action :authenticated_only, only: [:complete]
 
   def index
     total_quests = Quest.all
@@ -35,16 +36,18 @@ class API::V1::PublicAPI::QuestsController < API::V1::PublicAPI::APIController
 
   def complete
     if quest_params[:quest_type] == "verify_humanity"
-      Quests::CompleteVerifyHumanityQuest.new(user: user, params: required_params.to_h).call
+      Quests::CompleteVerifyHumanityQuest.new(user: current_user, params: required_params.to_h).call
     elsif quest_params[:quest_type] == "create_talent_mate"
-      Quests::RefreshUserQuest.new(user: user, quest: quest).call
+      Quests::RefreshUserQuest.new(user: current_user, quest: quest).call
+    elsif quest_params[:quest_type] == "galxe_verification"
+      Quests::CompleteGalxeVerificationQuest.new(user: current_user).call
     end
 
     response_body = {quest: API::QuestBlueprint.render_as_json(quest, view: :normal)}
     log_request(response_body, :ok)
 
     render json: response_body, status: :ok
-  rescue Quests::CompleteVerifyHumanityQuest::VerificationError => error
+  rescue => error
     response_body = {error: error.message}
     log_request(response_body, :bad_request)
     render json: response_body, status: :bad_request

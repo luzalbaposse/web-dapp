@@ -2,8 +2,6 @@ require "web3_api/api_proxy"
 
 module Web3
   class MintVirtualTal
-    attr_reader :key, :chain_id
-
     REASONS_FOR_TRANSFER = {
       talent_tokens_sold: 3,
       in_app_rewards: 4,
@@ -57,6 +55,8 @@ module Web3
     end
 
     private
+
+    attr_reader :key, :chain_id
 
     def wait_for_tx_to_run(tx_hash)
       # at most wait - 30 seconds

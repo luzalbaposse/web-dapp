@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_14_150912) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_19_131207) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -610,6 +610,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_14_150912) do
     t.string "quest_type", null: false
     t.boolean "sponsored", default: false
     t.boolean "new", default: true, null: false
+    t.integer "tal_reward", default: 0
     t.index ["quest_type"], name: "index_quests_on_quest_type", unique: true
     t.index ["uuid"], name: "index_quests_on_uuid"
   end
@@ -815,6 +816,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_14_150912) do
     t.index ["user_id"], name: "index_user_tags_on_user_id"
   end
 
+  create_table "user_web3_infos", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "galxe_passport_token_id"
+    t.datetime "web3_refreshed_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_web3_infos_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "username", null: false
     t.string "email"
@@ -993,6 +1003,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_14_150912) do
   add_foreign_key "user_quests", "users"
   add_foreign_key "user_tags", "tags"
   add_foreign_key "user_tags", "users"
+  add_foreign_key "user_web3_infos", "users"
   add_foreign_key "votes", "elections"
   add_foreign_key "votes", "users", column: "candidate_id"
   add_foreign_key "votes", "users", column: "voter_id"

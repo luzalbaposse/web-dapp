@@ -34,8 +34,8 @@ namespace :collective do
     # Create election
     puts "Creating election for Takeoff Istanbul"
     election = Election.find_or_initialize_by(organization_id: org.id)
-    election.start_date = Rails.env.production? ? Date.parse("2023-09-18") : Date.parse("2023-09-13")
-    election.voting_start_date = Rails.env.production? ? Date.parse("2023-09-25") : Date.parse("2023-09-13")
+    election.start_date = Rails.env.production? ? Date.parse("2023-09-20") : Date.parse("2023-09-13")
+    election.voting_start_date = Rails.env.production? ? Date.parse("2023-09-26") : Date.parse("2023-09-13")
     election.voting_end_date = Rails.env.production? ? Date.parse("2023-10-06") : Date.parse("2023-09-22")
     election.save!
     puts "Successfully created election for #{org.name}"

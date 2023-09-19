@@ -60,6 +60,7 @@ namespace :quests do
         description: "Validate you are a human using World ID.",
         quest_type: "verify_humanity",
         experience_points_amount: 1000,
+        tal_reward: 10,
         sponsored: true
       },
       {
@@ -88,9 +89,17 @@ namespace :quests do
       },
       {
         title: "Have 1+ Active Goal",
-        description: "Add a new goal, set the status to ‘Doing’ and a due date in the future.",
+        description: "Add a new goal, set the status to 'Doing' and a due date in the future.",
         quest_type: "active_goal",
         experience_points_amount: 1000
+      },
+      {
+        title: "Verify Your Identity with Galxe",
+        description: "Click to validate your identity with Galxe Passport.",
+        quest_type: "galxe_verification",
+        experience_points_amount: 1500,
+        tal_reward: 10,
+        sponsored: true
       }
     ]
 

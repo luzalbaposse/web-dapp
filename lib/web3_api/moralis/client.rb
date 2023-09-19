@@ -13,6 +13,18 @@ module Web3Api
         Faraday.get(url, params, headers)
       end
 
+      def retrieve_wallet_nfts(wallet_address:, chain:, contract_addresses: [])
+        url = "#{BASE_URI}/#{wallet_address}/#{NFTS_URI_PATH}"
+
+        params = {
+          chain: chain
+        }
+
+        params[:token_addresses] = contract_addresses if contract_addresses.any?
+
+        Faraday.get(url, params, headers)
+      end
+
       def retrieve_transactions(address:, start_timestamp:, chain:, end_timestamp: nil)
         url = "#{BASE_URI}/#{address}"
 

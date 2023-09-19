@@ -6,20 +6,31 @@ import { questsService } from "../../../../api";
 
 export const Quests = ({ profile, railsContext }) => {
   const [quests, setQuests] = useState([]);
+  const [refreshQuests, setRefreshQuests] = useState(true);
+
   useEffect(() => {
     if (!profile) return;
+    if (!refreshQuests) return;
+
     questsService
       .getQuests(profile.id, 20, 1)
       .then(({ data }) => {
         setQuests(data.quests.sort(a => (a.completed_at ? 1 : -1)));
+        setRefreshQuests(false);
       })
       .catch(() => {});
-  }, [profile]);
+  }, [profile, refreshQuests]);
 
   const memoizedQuests = useMemo(
     () =>
       quests.map(quest => (
-        <Quest key={quest.title} quest={quest} username={profile.username} railsContext={railsContext} />
+        <Quest
+          key={quest.title}
+          quest={quest}
+          username={profile.username}
+          railsContext={railsContext}
+          setRefreshQuests={setRefreshQuests}
+        />
       )),
     [quests, railsContext]
   );

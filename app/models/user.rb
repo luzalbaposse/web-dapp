@@ -61,6 +61,7 @@ class User < ApplicationRecord
   has_many :user_domains, dependent: :destroy
   has_many :erc20_tokens, dependent: :destroy
   has_many :erc721_tokens, dependent: :destroy
+  has_one :user_web3_info, dependent: :destroy
 
   # Activities
   has_many :origin_activities, class_name: "Activity", foreign_key: "origin_user_id", dependent: :destroy
@@ -197,10 +198,6 @@ class User < ApplicationRecord
     return user_domain.domain if user_domain.present?
 
     wallet_id ? "#{wallet_id[0..10]}..." : ""
-  end
-
-  def visible_digital_collectibles?
-    erc20_tokens.visible.any? || erc721_tokens.visible.any?
   end
 
   def has_unread_messages?

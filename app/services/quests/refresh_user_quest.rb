@@ -37,6 +37,10 @@ module Quests
           credit_invite_points if user.invited
         end
 
+        if quest.tal_reward&.positive?
+          mint_tal_reward
+        end
+
         if notify
           notify_verified_profile if quest.quest_type == "verify_identity"
           create_quest_completed_notification
@@ -84,6 +88,8 @@ module Quests
         invite_three_quest_completed?
       when "active_goal"
         active_goal_quest_completed?
+      when "galxe_verification"
+        galxe_verification_quest_completed?
       else
         false
       end
@@ -163,6 +169,10 @@ module Quests
       user.goals.active.any?
     end
 
+    def galxe_verification_quest_completed?
+      user.user_web3_info&.galxe_passport_token_id.present?
+    end
+
     def notify_verified_profile
       CreateNotification.new.call(
         recipient: user,
@@ -176,7 +186,7 @@ module Quests
         recipient: user,
         type: QuestCompletedNotification,
         source_id: quest.id,
-        extra_params: {source_type: "Quest", experience_points: quest.experience_points_amount}
+        extra_params: {source_type: "Quest", experience_points: quest.experience_points_amount, tal_reward: quest.tal_reward}
       )
     end
 
@@ -186,6 +196,18 @@ module Quests
 
     def credit_invite_points
       ExperiencePoints::CreditInvitePoints.new(invite: user.invited).call
+    end
+
+    def mint_tal_reward
+      chain_id = (ENV["CONTRACTS_ENV"] == "production") ? 137 : 44787
+      service = Web3::MintVirtualTal.new(chain_id: chain_id)
+      tx = nil
+
+      service.call(amount: quest.tal_reward, to: user.wallet_id, reason: "in_app_rewards") do |tx_hash|
+        tx = tx_hash
+      end
+
+      tx
     end
 
     def talent_mate_abi
