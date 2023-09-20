@@ -26,6 +26,9 @@ RSpec.describe "Messages", type: :request do
     end
     let!(:chat_3) { create :chat, sender: current_user, receiver: user_3, last_message_at: 10.days.ago }
 
+    let!(:connection_one) { create :connection, user: current_user, connected_user: user_2, connection_type: "staker" }
+    let!(:connection_two) { create :connection, user: current_user, connected_user: user_1, connection_type: "staker" }
+
     subject(:get_messages) { get messages_path(params: params, as: current_user) }
 
     it "returns a successful response" do
@@ -46,9 +49,7 @@ RSpec.describe "Messages", type: :request do
           "receiver_last_online" => user_2.last_access_at&.iso8601,
           "receiver_messaging_disabled" => user_2.messaging_disabled,
           "receiver_profile_picture_url" => user_2.profile_picture_url,
-          "receiver_ticker" => user_2.talent&.talent_token&.ticker,
           "receiver_username" => user_2.username,
-          "receiver_with_talent" => user_2.talent.present?,
           "unread_messages_count" => chat_2.receiver_unread_messages_count
         },
         {
@@ -59,9 +60,7 @@ RSpec.describe "Messages", type: :request do
           "receiver_last_online" => user_1.last_access_at&.iso8601,
           "receiver_messaging_disabled" => user_1.messaging_disabled,
           "receiver_profile_picture_url" => user_1.profile_picture_url,
-          "receiver_ticker" => user_1.talent&.talent_token&.ticker,
           "receiver_username" => user_1.username,
-          "receiver_with_talent" => user_1.talent.present?,
           "unread_messages_count" => chat_1.sender_unread_messages_count
         },
         {
@@ -72,9 +71,7 @@ RSpec.describe "Messages", type: :request do
           "receiver_last_online" => user_3.last_access_at&.iso8601,
           "receiver_messaging_disabled" => user_3.messaging_disabled,
           "receiver_profile_picture_url" => user_3.profile_picture_url,
-          "receiver_ticker" => user_3.talent&.talent_token&.ticker,
           "receiver_username" => user_3.username,
-          "receiver_with_talent" => user_3.talent.present?,
           "unread_messages_count" => chat_3.sender_unread_messages_count
         }
       ]
@@ -100,9 +97,7 @@ RSpec.describe "Messages", type: :request do
             "receiver_last_online" => user_1.last_access_at&.iso8601,
             "receiver_messaging_disabled" => user_1.messaging_disabled,
             "receiver_profile_picture_url" => user_1.profile_picture_url,
-            "receiver_ticker" => user_1.talent&.talent_token&.ticker,
             "receiver_username" => user_1.username,
-            "receiver_with_talent" => user_1.talent.present?,
             "unread_messages_count" => chat_1.sender_unread_messages_count
           }
         ]
@@ -135,9 +130,7 @@ RSpec.describe "Messages", type: :request do
             "receiver_last_online" => user_2.last_access_at&.iso8601,
             "receiver_messaging_disabled" => user_2.messaging_disabled,
             "receiver_profile_picture_url" => user_2.profile_picture_url,
-            "receiver_ticker" => user_2.talent&.talent_token&.ticker,
             "receiver_username" => user_2.username,
-            "receiver_with_talent" => user_2.talent.present?,
             "unread_messages_count" => chat_2.receiver_unread_messages_count
           },
           {
@@ -148,9 +141,7 @@ RSpec.describe "Messages", type: :request do
             "receiver_last_online" => user_1.last_access_at&.iso8601,
             "receiver_messaging_disabled" => user_1.messaging_disabled,
             "receiver_profile_picture_url" => user_1.profile_picture_url,
-            "receiver_ticker" => user_1.talent&.talent_token&.ticker,
             "receiver_username" => user_1.username,
-            "receiver_with_talent" => user_1.talent.present?,
             "unread_messages_count" => chat_1.sender_unread_messages_count
           },
           {
@@ -161,9 +152,7 @@ RSpec.describe "Messages", type: :request do
             "receiver_last_online" => user_3.last_access_at&.iso8601,
             "receiver_messaging_disabled" => user_3.messaging_disabled,
             "receiver_profile_picture_url" => user_3.profile_picture_url,
-            "receiver_ticker" => user_3.talent&.talent_token&.ticker,
             "receiver_username" => user_3.username,
-            "receiver_with_talent" => user_3.talent.present?,
             "unread_messages_count" => chat_3.sender_unread_messages_count
           },
           {
@@ -174,9 +163,7 @@ RSpec.describe "Messages", type: :request do
             "receiver_last_online" => user_4.last_access_at&.iso8601,
             "receiver_messaging_disabled" => user_4.messaging_disabled,
             "receiver_profile_picture_url" => user_4.profile_picture_url,
-            "receiver_ticker" => user_4.talent&.talent_token&.ticker,
             "receiver_username" => user_4.username,
-            "receiver_with_talent" => user_4.talent.present?,
             "unread_messages_count" => chat_4.sender_unread_messages_count
           }
         ]
@@ -202,19 +189,17 @@ RSpec.describe "Messages", type: :request do
             "receiver_last_online" => user_3.last_access_at&.iso8601,
             "receiver_messaging_disabled" => user_3.messaging_disabled,
             "receiver_profile_picture_url" => user_3.profile_picture_url,
-            "receiver_ticker" => user_3.talent&.talent_token&.ticker,
             "receiver_username" => user_3.username,
-            "receiver_with_talent" => user_3.talent.present?,
             "unread_messages_count" => chat_3.sender_unread_messages_count
           }
         ]
       end
     end
 
-    context "when unread in passed in the params" do
-      let(:params) { {unread: "true"} }
+    context "when connections is passed in the params" do
+      let(:params) { {tab: "connections"} }
 
-      it "returns a list of chats that are unread" do
+      it "returns a list of chats from connections that are unread" do
         get_messages
 
         expect(assigns(:chats)).to eq [
@@ -226,9 +211,7 @@ RSpec.describe "Messages", type: :request do
             "receiver_last_online" => user_2.last_access_at&.iso8601,
             "receiver_messaging_disabled" => user_2.messaging_disabled,
             "receiver_profile_picture_url" => user_2.profile_picture_url,
-            "receiver_ticker" => user_2.talent&.talent_token&.ticker,
             "receiver_username" => user_2.username,
-            "receiver_with_talent" => user_2.talent.present?,
             "unread_messages_count" => chat_2.receiver_unread_messages_count
           },
           {
@@ -239,9 +222,7 @@ RSpec.describe "Messages", type: :request do
             "receiver_last_online" => user_1.last_access_at&.iso8601,
             "receiver_messaging_disabled" => user_1.messaging_disabled,
             "receiver_profile_picture_url" => user_1.profile_picture_url,
-            "receiver_ticker" => user_1.talent&.talent_token&.ticker,
             "receiver_username" => user_1.username,
-            "receiver_with_talent" => user_1.talent.present?,
             "unread_messages_count" => chat_1.sender_unread_messages_count
           }
         ]

@@ -12,7 +12,7 @@ module Messages
 
       chat = upsert_chat(sender, receiver, message)
       message = create_message(chat, sender, receiver, message, sent_to_supporters, career_update)
-      create_notification_for(receiver, sender) if create_notification
+      create_notification_for(receiver, sender) if create_notification && message_from_connection?(sender, receiver)
       broadcast(chat, message)
 
       message
@@ -49,6 +49,10 @@ module Messages
       chat.update!(last_message_at: Time.zone.now, last_message_text: message)
 
       chat
+    end
+
+    def message_from_connection?(sender, receiver)
+      receiver.connected_users.find_by(id: sender.id).present?
     end
 
     def create_notification_for(receiver, sender)

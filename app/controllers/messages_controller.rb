@@ -4,7 +4,15 @@ class MessagesController < ApplicationController
   PER_PAGE = 10
 
   def index
-    chats = Chat.of_user(current_user)
+    chats = Chat.all
+
+    chats = if filter == "connections"
+      chats.with_connections(current_user)
+    elsif filter == "unread"
+      chats.with_connections(current_user, true)
+    else
+      chats.of_user(current_user)
+    end
 
     if user
       user_chat = Chat.between(current_user, user)
@@ -16,23 +24,9 @@ class MessagesController < ApplicationController
         .where("users.username ILIKE :query", query: "#{search_query}%")
     end
 
-    if unread == "true"
-      chats = chats.where(receiver: current_user).where("receiver_unread_messages_count > ?", 0).or(
-        chats.where(sender: current_user).where("sender_unread_messages_count > ?", 0)
-      )
-    end
-
     chats = chats.includes(
-      sender: [
-        {
-          talent: :talent_token
-        }
-      ],
-      receiver: [
-        {
-          talent: :talent_token
-        }
-      ]
+      sender: :talent,
+      receiver: :talent
     )
 
     chats = search_query.present? ? chats.order("users.username ASC, chats.last_message_at DESC") : chats.order("chats.last_message_at DESC")
@@ -164,7 +158,7 @@ class MessagesController < ApplicationController
     params[:q]
   end
 
-  def unread
-    params[:unread]
+  def filter
+    params[:tab]
   end
 end

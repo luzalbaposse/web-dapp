@@ -181,9 +181,9 @@ const Chat = ({ chats, pagination }) => {
   const loadMoreChats = () => {
     const url = new URL(document.location);
     const nextPage = localPagination.currentPage + 1;
-    const unread = url.searchParams.get("unread") || "";
+    const tab = url.searchParams.get("tab") || "connections";
 
-    get(`messages?page=${nextPage}&q=${searchValue}&unread=${unread}`).then(response => {
+    get(`messages?page=${nextPage}&q=${searchValue}&tab=${tab}`).then(response => {
       const newChats = [...localChats, ...response.chats];
       setLocalChats(newChats);
       setLocalPagination(response.pagination);
@@ -199,9 +199,9 @@ const Chat = ({ chats, pagination }) => {
     url.searchParams.set("q", value);
     history.pushState({}, "", url);
     setSearchValue(value);
-    const unread = url.searchParams.get("unread") || "";
+    const tab = url.searchParams.get("tab") || "connections";
 
-    get(`messages?page=1&q=${value}&unread=${unread}`).then(response => {
+    get(`messages?page=1&q=${value}&tab=${tab}`).then(response => {
       setLocalChats(response.chats);
       setLocalPagination(response.pagination);
     });

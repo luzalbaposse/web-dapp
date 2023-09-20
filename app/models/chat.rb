@@ -26,6 +26,16 @@ class Chat < ApplicationRecord
     )
   end
 
+  def self.with_connections(user, unread = false)
+    receiver_chats = Chat.where(receiver: user, sender: user.connected_users)
+    receiver_chats = receiver_chats.where("receiver_unread_messages_count > 0") if unread
+
+    sender_chats = Chat.where(sender: user, receiver: user.connected_users)
+    sender_chats = sender_chats.where("sender_unread_messages_count > 0") if unread
+
+    receiver_chats.or(sender_chats)
+  end
+
   def unread_messages_of(user)
     return sender_unread_messages_count if sender_id == user.id
 

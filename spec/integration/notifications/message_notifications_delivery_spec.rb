@@ -4,6 +4,8 @@ RSpec.describe "Message notifications delivery" do
   let(:sender) { create :user }
   let(:receiver) { create :user }
 
+  let!(:connection) { create :connection, user: receiver, connected_user: sender }
+
   subject(:send_message) do
     Messages::Send.new.call(
       sender: sender,

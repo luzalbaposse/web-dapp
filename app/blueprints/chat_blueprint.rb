@@ -20,14 +20,6 @@ class ChatBlueprint < Blueprinter::Base
       chat.receiver_of(options[:current_user]).username
     end
 
-    field :receiver_ticker do |chat, options|
-      chat.receiver_of(options[:current_user]).talent&.talent_token&.ticker
-    end
-
-    field :receiver_with_talent do |chat, options|
-      chat.receiver_of(options[:current_user]).talent.present?
-    end
-
     field :receiver_last_online do |chat, options|
       chat.receiver_of(options[:current_user]).last_access_at&.iso8601
     end
