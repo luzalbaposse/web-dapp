@@ -50,9 +50,6 @@ export const ProfileHeader = ({ urlData, currentUser, isMobile, railsContext }) 
         menu.push({ value: "Approve", iconColor: "primary01", iconName: "check-chat" });
       }
     }
-    if (currentUser?.username === urlData.profileUsername) {
-      menu.push({ value: "Edit", iconColor: "primary01", iconName: "edit" });
-    }
     return menu;
   }, [currentUser, urlData, localProfile]);
   const onSelectOption = useCallback(
