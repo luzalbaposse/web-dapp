@@ -209,7 +209,7 @@ const EditAboutModal = ({ show, hide, setProfile, username }) => {
             <TextArea
               className="mb-2"
               onChange={e => changeCareerGoalAttribute("pitch", e.target.value)}
-              value={editedTalent.career_goal.pitch || ""}
+              value={editedTalent.career_goal?.pitch || ""}
               rows={3}
               required={true}
               error={validationErrors?.pitch}
