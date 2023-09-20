@@ -54,21 +54,35 @@ RSpec.describe Messages::Send do
     expect(created_message).to eq sender.messaged.first
   end
 
-  it "initializes and calls the create notification service" do
-    send_message
-
-    expect(create_notification_class).to have_received(:new)
-    expect(create_notification_instance).to have_received(:call).with(
-      recipient: receiver,
-      type: MessageReceivedNotification,
-      extra_params: {sender_id: sender.id}
-    )
-  end
-
   it "broadcasts the created message" do
     send_message
 
     expect(action_cable_server).to have_received(:broadcast)
+  end
+
+  context "when the sender belongs to the receiver connected users" do
+    before do
+      create :connection, user: receiver, connected_user: sender, connection_type: "staker"
+    end
+
+    it "initializes and calls the create notification service" do
+      send_message
+
+      expect(create_notification_class).to have_received(:new)
+      expect(create_notification_instance).to have_received(:call).with(
+        recipient: receiver,
+        type: MessageReceivedNotification,
+        extra_params: {sender_id: sender.id}
+      )
+    end
+  end
+
+  context "when the sender does not belong to the receiver connected users" do
+    it "does not initialize the create notification service" do
+      send_message
+
+      expect(create_notification_class).not_to have_received(:new)
+    end
   end
 
   context "when the sender and receiver are the same" do

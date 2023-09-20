@@ -768,6 +768,27 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe "#connected_users" do
+    let(:user) { create :user }
+    let(:connected_user1) { create :user }
+    let(:connected_user2) { create :user }
+    let(:connected_user3) { create :user }
+    let(:connected_user4) { create :user }
+    let(:user5) { create :user }
+
+    before do
+      create :connection, user: user, connected_user: connected_user1, connection_type: "staker"
+      create :connection, user: user, connected_user: connected_user2, connection_type: "subscribing"
+      create :connection, user: user, connected_user: connected_user3, connection_type: "sponsored"
+      create :connection, user: user, connected_user: connected_user4, connection_type: "subscriber"
+      create :connection, user: user5, connected_user: user, connection_type: "subscriber"
+    end
+
+    it "returns the connected users only" do
+      expect(user.connected_users).to match_array([connected_user1, connected_user2, connected_user3, connected_user4])
+    end
+  end
+
   describe "tal_balance?" do
     context "when the user has purchased tokens" do
       before { user.update(tokens_purchased: true) }

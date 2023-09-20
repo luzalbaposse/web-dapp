@@ -76,16 +76,18 @@ const EmptyChats = ({ mode }) => (
   </div>
 );
 
-const tabs = ["All", "Unread"];
-
-const TAB_NAME_TO_INDEX = {
-  false: 0,
-  true: 1
-};
+const tabs = ["Connections", "Unread", "All"];
 
 const TAB_INDEX_TO_NAME = {
-  0: "false",
-  1: "true"
+  0: "Connections",
+  1: "Unread",
+  2: "All"
+};
+
+const TAB_NAME_TO_INDEX = {
+  connections: 0,
+  unread: 1,
+  all: 2
 };
 
 const MessageUserList = ({
@@ -108,13 +110,13 @@ const MessageUserList = ({
 
   const changeTab = index => {
     const url = new URL(document.location);
-    const unread = TAB_INDEX_TO_NAME[index].toLowerCase();
-    url.searchParams.set("unread", unread);
+    const tab = TAB_INDEX_TO_NAME[index].toLowerCase();
+    url.searchParams.set("tab", tab);
     history.pushState({}, "", url);
-    tabState.selectElement(TAB_NAME_TO_INDEX[unread]);
+    tabState.selectElement(index);
     const q = url.searchParams.get("q") || "";
 
-    get(`messages?unread=${unread}&q=${q}`).then(response => {
+    get(`messages?tab=${tab}&q=${q}`).then(response => {
       setChats(response.chats);
       setPagination(response.pagination);
     });
@@ -122,9 +124,9 @@ const MessageUserList = ({
 
   useEffect(() => {
     const url = new URL(document.location);
-    const unread = url.searchParams.get("unread") || "";
-    if (unread) {
-      tabState.selectElement(TAB_NAME_TO_INDEX[unread]);
+    const tab = url.searchParams.get("tab") || "";
+    if (tab) {
+      tabState.selectElement(TAB_NAME_TO_INDEX[tab]);
     }
   }, []);
 

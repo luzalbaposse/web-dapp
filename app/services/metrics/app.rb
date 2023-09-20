@@ -9,7 +9,8 @@ module Metrics
     SEASON_4_END_DATE = Date.new(2023, 12, 31)
 
     def date
-      Date.yesterday
+      # Job is being trigger at GMT+1 date and our db is running in UTC (1 hour difference)
+      Time.current.in_time_zone("Europe/Lisbon").to_date - 1.day
     end
 
     def total_users

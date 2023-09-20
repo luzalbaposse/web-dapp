@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Icon, Spinner, Typography } from "@talentprotocol/design-system";
 import { talentsService } from "src/api";
 import { Container, Divider, SpinnerContainer, EmptyStateContainer } from "./styled";
@@ -7,7 +7,6 @@ import { CurrentRole } from "./current-role";
 import { Tags } from "./tags";
 import { OnTheWeb } from "./on-the-web";
 import { SupportData } from "./support-data";
-import EditAboutModal from "src/components/profile/edit/EditAboutModal";
 
 const isProfileEmpty = aboutData =>
   !(
@@ -18,13 +17,8 @@ const isProfileEmpty = aboutData =>
   );
 
 export const About = ({ currentUser, urlData }) => {
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [aboutData, setAboutData] = useState(null);
   const [supportData, setSupportData] = useState(null);
-
-  const closeEditModal = useCallback(() => {
-    setIsEditModalOpen(false);
-  }, []);
 
   useEffect(() => {
     if (!urlData.profileUsername) return;
@@ -67,14 +61,6 @@ export const About = ({ currentUser, urlData }) => {
       )}
       <Divider />
       <SupportData {...supportData} />
-      <EditAboutModal
-        show={isEditModalOpen}
-        hide={closeEditModal}
-        setProfile={() => {
-          window.location.reload();
-        }}
-        username={urlData.profileUsername}
-      />
     </Container>
   );
 };

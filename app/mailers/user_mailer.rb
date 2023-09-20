@@ -127,7 +127,7 @@ class UserMailer < ApplicationMailer
     user = indifferent_access_params[:recipient]
 
     dynamic_template_data = {
-      career_update: career_update.text,
+      career_update: career_update.text.gsub("\n", "<br>"),
       first_name: sendgrid_name_variable(user),
       link_send_DM: messages_url(user: sender.username),
       update_sender_username: sender.username

@@ -401,6 +401,10 @@ class User < ApplicationRecord
     profile_type_change.who_dunnit
   end
 
+  def connected_users
+    User.where(id: Connection.where(user_id: id).select(:connected_user_id))
+  end
+
   def aggregate_supporters_count
     Connection.where(
       user_id: id,
