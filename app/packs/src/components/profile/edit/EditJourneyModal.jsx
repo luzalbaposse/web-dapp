@@ -120,6 +120,9 @@ const GoalExperience = ({
       changeAttribute("election_selected", true);
       setDueMonth("November");
       setDueYear("2023");
+    } else {
+      changeAttribute("election_selected", true);
+      changeAttribute("title", "");
     }
   };
 
