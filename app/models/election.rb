@@ -8,7 +8,7 @@ class Election < ApplicationRecord
 
   scope :active, -> { where("start_date <= ? AND voting_end_date >= ?", Date.today, Date.today) }
 
-  validate :only_one_active_for_organization
+  validate :only_one_active_for_organization, on: :create
 
   def active?
     start_date <= Date.today && voting_end_date >= Date.today
