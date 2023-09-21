@@ -9,7 +9,8 @@ import {
   TagsRow,
   VoteContainer,
   VoteDiv,
-  VoteTextContainer
+  VoteTextContainer,
+  StyledTypographyLink
 } from "./styled";
 import { GoalTag } from "./goal-tag";
 import { goalsService } from "src/api";
@@ -46,6 +47,14 @@ export const GoalCard = ({ goal, openAddGoalModal, isOwner }) => {
 
   const disableVoteButton = () => goal.election_status != "voting_active";
 
+  const goalTitleWithLink = () => {
+    if (!goal.election_status) {
+      return goal.title;
+    } else {
+      return <StyledTypographyLink href={"/collectives/takeoff-istanbul"}>{goal.title}</StyledTypographyLink>;
+    }
+  };
+
   return (
     <Container>
       <TagsRow>
@@ -62,7 +71,7 @@ export const GoalCard = ({ goal, openAddGoalModal, isOwner }) => {
       </TagsRow>
       <GoalInfo>
         <Typography specs={{ type: "medium", variant: "p1" }} color="primary01">
-          {goal.title}
+          {goalTitleWithLink()}
         </Typography>
         <Typography specs={{ type: "regular", variant: "p2" }} color="primary03" className="text-white-space-wrap">
           {goal.description}
