@@ -53,3 +53,12 @@ export const VoteDiv = styled.div`
   margin-left: 16px;
   margin-right: 12px;
 `;
+
+export const StyledTypographyLink = styled.a`
+  font-weight: 700;
+  outline: none;
+
+  :hover {
+    text-decoration: underline;
+  }
+`;
