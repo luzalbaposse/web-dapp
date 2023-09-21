@@ -156,6 +156,7 @@ RSpec.describe DailyMetricsJob, type: :job do
   let!(:goal_two) { create :goal, career_goal: career_goal_two, due_date: Date.tomorrow, progress: Goal::PLANNED }
   let!(:career_goal_three) { create :career_goal, talent: user_3.talent }
   let!(:goal_three) { create :goal, career_goal: career_goal_three, due_date: Date.yesterday, progress: Goal::DOING }
+  let!(:exp) { create :experience_point, user: user_1, source: user_2, amount: 1051, credited_at: Date.yesterday }
 
   before do
     allow(web3_proxy_class).to receive(:new).and_return(web3_proxy)
@@ -228,6 +229,8 @@ RSpec.describe DailyMetricsJob, type: :job do
       expect(created_daily_metric.total_users_that_sent_messages).to eq 5
       expect(created_daily_metric.total_users_that_received_messages).to eq 2
       expect(created_daily_metric.total_users_with_active_goals).to eq 1
+      expect(created_daily_metric.total_users_created).to eq User.last.id
+      expect(created_daily_metric.total_experience_points).to eq 1051
     end
   end
 
