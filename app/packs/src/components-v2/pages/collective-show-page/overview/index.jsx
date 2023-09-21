@@ -17,11 +17,13 @@ import {
   TagsContainer,
   Title,
   ElectionInfoRow,
-  ElectionInfoContainer
+  ElectionInfoContainer,
+  StyledTypographyLink
 } from "./styled";
 import SocialRow from "src/components/profile/SocialRow";
 import { useWindowDimensionsHook } from "src/utils/window";
 import dayjs from "dayjs";
+import { TAKEOFF_LEARN_MORE } from "src/utils/constants";
 
 const NUMBER_OF_TAGS = 4;
 const NUMBER_OF_TAGS_MOBILE = 1;
@@ -198,6 +200,11 @@ const Overview = ({ collective }) => {
                 <Typography color="primary04" specs={{ type: "regular", variant: "p2" }}>
                   {collective.election.prizePool}
                 </Typography>
+              </ElectionInfoRow>
+              <ElectionInfoRow>
+                <StyledTypographyLink target="_blank" href={TAKEOFF_LEARN_MORE}>
+                  Learn more {">"}
+                </StyledTypographyLink>
               </ElectionInfoRow>
             </ElectionInfoContainer>
           )}
