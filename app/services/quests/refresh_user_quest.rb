@@ -201,13 +201,8 @@ module Quests
     def mint_tal_reward
       chain_id = (ENV["CONTRACTS_ENV"] == "production") ? 137 : 44787
       service = Web3::MintVirtualTal.new(chain_id: chain_id)
-      tx = nil
 
-      service.call(amount: quest.tal_reward, to: user.wallet_id, reason: "in_app_rewards") do |tx_hash|
-        tx = tx_hash
-      end
-
-      tx
+      service.call(amount: 10, to: user.wallet_id, reason: "in_app_rewards")
     end
 
     def talent_mate_abi
