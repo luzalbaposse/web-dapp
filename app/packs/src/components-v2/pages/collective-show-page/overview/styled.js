@@ -139,3 +139,12 @@ export const ElectionInfoRow = styled.div`
   align-items: center;
   gap: 4px;
 `;
+
+export const StyledTypographyLink = styled.a`
+  font-weight: 700;
+  outline: none;
+
+  :hover {
+    text-decoration: underline;
+  }
+`;
