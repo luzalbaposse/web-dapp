@@ -93,7 +93,9 @@ module GoogleDrive
         daily_metric.total_old_users_season_4.to_i,
         daily_metric.total_new_users_season_4.to_i,
         daily_metric.total_organic_users_season_4.to_i,
-        daily_metric.total_referral_users_season_4.to_i
+        daily_metric.total_referral_users_season_4.to_i,
+        daily_metric.total_users_created,
+        daily_metric.total_experience_points
       ]]
     end
 

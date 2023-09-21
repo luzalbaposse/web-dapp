@@ -13,6 +13,10 @@ module Metrics
       Time.current.in_time_zone("Europe/Lisbon").to_date - 1.day
     end
 
+    def total_users_created
+      User.last.id
+    end
+
     def total_users
       User.count
     end
@@ -370,6 +374,10 @@ module Metrics
         .distinct
         .pluck(:talent_id)
         .count
+    end
+
+    def total_experience_points
+      ExperiencePoint.all.sum(&:amount)
     end
   end
 end
