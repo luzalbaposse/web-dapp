@@ -58,7 +58,7 @@ class API::OrganizationBlueprint < Blueprinter::Base
     end
 
     association :users, blueprint: API::UserBlueprint, view: :card, options: {with_vote_count: true} do |organization, _options|
-      organization.users.shuffle(random: Random.new(Date.today.jd))
+      organization.users.shuffle(random: Random.new(DateTime.current.beginning_of_hour.jd))
     end
   end
 end
