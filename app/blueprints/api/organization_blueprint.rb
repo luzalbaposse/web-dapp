@@ -53,12 +53,10 @@ class API::OrganizationBlueprint < Blueprinter::Base
       end
     end
 
-    association :election, blueprint: API::ElectionBlueprint, view: :normal
-
     association :election, blueprint: API::ElectionBlueprint, view: :normal do |organization, _options|
       organization.active_election
     end
 
-    association :users, blueprint: API::UserBlueprint, view: :card
+    association :users, blueprint: API::UserBlueprint, view: :card, options: {with_vote_count: true}
   end
 end

@@ -21,6 +21,12 @@ class API::UserBlueprint < Blueprinter::Base
     field :verified do |user, _options|
       user.talent&.verified?
     end
+
+    field :vote_count do |user, options|
+      if options[:with_vote_count]
+        Vote.where(candidate_id: user.id).sum(&:amount)
+      end
+    end
   end
 
   view :normal do

@@ -78,6 +78,9 @@ Rails.application.routes.draw do
         resources :impersonations, only: [:create, :destroy]
         resources :tags, only: [:index]
         resources :wallet_activities, only: [:index, :create]
+        resources :elections, only: [:index] do
+          post :vote
+        end
       end
     end
   end

@@ -20,7 +20,7 @@
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
     "@react-spring/web": "^9.2.4",
-    "@talentprotocol/design-system": "^0.1.97",
+    "@talentprotocol/design-system": "^0.1.98",
     "@talentprotocol/zustand-wrapper": "^0.0.6",
     "@uauth/js": "^2.4.0",
     "@uauth/web3modal": "^2.4.0",

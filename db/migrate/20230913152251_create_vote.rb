@@ -5,7 +5,7 @@ class CreateVote < ActiveRecord::Migration[7.0]
       t.references :candidate, null: false, foreign_key: {to_table: :users}
       t.references :voter, null: false, foreign_key: {to_table: :users}
       t.integer :amount, null: false, default: 0
-      t.integer :cost, null: false, default: 0
+      t.string :cost, null: false
 
       t.timestamps
     end

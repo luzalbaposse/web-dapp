@@ -9,7 +9,7 @@ import Overview from "./overview";
 import ThemeContainer from "src/contexts/ThemeContext";
 
 const TAB_LIST = ["Members", "Activity"];
-const ELECTION_TAB_LIST = ["Candidates", "Activity"];
+const ELECTION_TAB_LIST = ["Candidates"];
 
 const TAB_NAME_TO_INDEX = {
   members: 0,
@@ -21,7 +21,7 @@ const ELECTION_TAB_NAME_TO_INDEX = {
   activity: 1
 };
 
-export const CollectiveShowPage = ({ organization }) => {
+export const CollectiveShowPage = ({ organization, railsContext }) => {
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
 
   const collective = { ...camelCaseObject(organization) };
@@ -54,7 +54,14 @@ export const CollectiveShowPage = ({ organization }) => {
 
     switch (tabState.selectedIndex) {
       case 0:
-        return <Members currentUser={currentUser} members={collective.users} activeElection={collective.election} />;
+        return (
+          <Members
+            currentUser={currentUser}
+            members={collective.users}
+            activeElection={collective.election}
+            railsContext={railsContext}
+          />
+        );
       case 1:
         return <Activity currentUser={currentUser} organization={collective.slug} />;
     }

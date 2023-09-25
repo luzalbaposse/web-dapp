@@ -1,10 +1,39 @@
-import { Button, TalentCard, Typography } from "@talentprotocol/design-system";
-import React from "react";
+import { Button, TalentCard, Typography, useModal } from "@talentprotocol/design-system";
+import React, { useState } from "react";
 import { CardContainer, Container, VoteTextContainer, VoteDiv } from "./styled";
+import { VotingModal } from "../../voting-modal";
 
-export const Members = ({ members, activeElection }) => {
+export const Members = ({ members, activeElection, railsContext }) => {
+  const modalState = useModal();
+  const [activeMember, setActiveMember] = useState(null);
+
+  const enableVoting = activeElection && activeElection.status === "voting_active";
+
+  const modal = () => {
+    if (enableVoting) {
+      return (
+        <VotingModal
+          member={activeMember}
+          election={activeElection}
+          modalState={modalState}
+          railsContext={railsContext}
+        />
+      );
+    } else {
+      return <></>;
+    }
+  };
+
+  const voteOnMember = (e, member) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setActiveMember(member);
+    modalState.openModal();
+  };
+
   return (
     <>
+      {modal()}
       <Container>
         {members.map(member => (
           <CardContainer key={member.id}>
@@ -17,14 +46,19 @@ export const Members = ({ members, activeElection }) => {
               to={`/u/${member.username}`}
             >
               {!!activeElection && (
-                <Button size="small" hierarchy="secondary" isDisabled={true}>
+                <Button
+                  size="small"
+                  hierarchy="secondary"
+                  isDisabled={!enableVoting}
+                  onClick={e => voteOnMember(e, member)}
+                >
                   <VoteTextContainer>
                     <Typography
                       specs={{
                         variant: "label2",
                         type: "medium"
                       }}
-                      color={"primaryDisable"}
+                      color={enableVoting ? "primary01" : "primaryDisable"}
                     >
                       Vote
                     </Typography>
@@ -34,9 +68,9 @@ export const Members = ({ members, activeElection }) => {
                         variant: "label2",
                         type: "medium"
                       }}
-                      color={"primaryDisable"}
+                      color={enableVoting ? "primary01" : "primaryDisable"}
                     >
-                      {0}
+                      {member.voteCount}
                     </Typography>
                   </VoteTextContainer>
                 </Button>

@@ -9,15 +9,15 @@ module Web3
       @chain_id = chain_id
     end
 
-    def call(amount:, to:, &block)
-      user = User.find_by(wallet_id: to)
+    def call(amount:, from:, &block)
+      user = User.find_by(wallet_id: from)
 
       return if user.nil?
 
       decimals = "1#{"0" * 18}"
       amount_to_charge = amount * decimals.to_i
 
-      tx_hash = client.transact(tal_contract, "adminBurn", to, amount_to_charge, sender_key: key)
+      tx_hash = client.transact(tal_contract, "adminBurn", from, amount_to_charge, sender_key: key)
 
       if tx_hash
         yield(tx_hash) if block
