@@ -8,7 +8,7 @@ module Elections
       @candidate = candidate
       @number_of_votes = number_of_votes
       @chain_id = chain_id
-      @supported_chains = Rails.env.production? ? [137, 42220] : [44787, 80001]
+      @supported_chains = (ENV["CONTRACTS_ENV"] == "production") ? [137, 42220] : [44787, 80001]
       @vote = nil
     end
 
