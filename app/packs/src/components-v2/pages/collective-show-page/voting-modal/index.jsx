@@ -182,6 +182,8 @@ const SuccessStep = ({ member, onCancel }) => (
       </Typography>
       <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
         Congratulations! You have successfully contributed to support {member.name} in the 'Take Off Istanbul' campaign.
+        We're now processing the vote and will be deducting the required $TAL from your wallet. If for some reason we're
+        unable to do so your vote will not count.
       </Typography>
     </InfoContainer>
     <Button hierarchy="primary" size="medium" onClick={onCancel} text="Return" />
