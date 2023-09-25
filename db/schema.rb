@@ -606,9 +606,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_28_233118) do
     t.index ["user_id"], name: "index_profile_page_visitors_on_user_id"
   end
 
+  create_table "quest_experience_points", force: :cascade do |t|
+    t.integer "amount", null: false
+    t.bigint "quest_id", null: false
+    t.string "rule"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["quest_id", "rule"], name: "index_quest_experience_points_on_quest_id_and_rule", unique: true
+    t.index ["quest_id"], name: "index_quest_experience_points_on_quest_id"
+  end
+
   create_table "quests", force: :cascade do |t|
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
-    t.integer "experience_points_amount", null: false
+    t.integer "experience_points_amount"
     t.string "title", null: false
     t.string "description", null: false
     t.datetime "created_at", null: false

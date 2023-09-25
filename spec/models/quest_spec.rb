@@ -4,7 +4,6 @@ RSpec.describe Quest, type: :model do
   subject { build :quest, quest_type: "profile_picture" }
 
   describe "validations" do
-    it { is_expected.to validate_presence_of(:experience_points_amount) }
     it { is_expected.to validate_presence_of(:title) }
     it { is_expected.to validate_presence_of(:description) }
     it { is_expected.to validate_presence_of(:quest_type) }

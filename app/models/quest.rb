@@ -20,9 +20,10 @@ class Quest < ApplicationRecord
   ]
 
   validates :title, :quest_type, uniqueness: true
-  validates :experience_points_amount, :title, :description, :quest_type, presence: true
+  validates :title, :description, :quest_type, presence: true
   validates_inclusion_of :quest_type, in: VALID_QUEST_TYPES
 
+  has_many :quest_experience_points
   has_many :user_quests
 
   def name
