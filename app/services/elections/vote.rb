@@ -38,7 +38,7 @@ module Elections
         @vote.election = election
         @vote.candidate = candidate
         @vote.amount = number_of_votes
-        @vote.cost = cost_of_votes
+        @vote.cost = cost_of_votes.to_s
         @vote.save!
         @vote
       end
