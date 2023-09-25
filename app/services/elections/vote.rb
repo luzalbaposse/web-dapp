@@ -43,21 +43,9 @@ module Elections
         @vote
       end
 
-      service = Web3::BurnVirtualTal.new(chain_id: chain_id)
-      tx = service.call(amount: cost_of_votes, from: voter.wallet_id)
+      DeductTalForVoteJob.perform_later(vote_id: @vote.id, chain_id: chain_id)
 
-      if tx
-        @vote.update!(tx_hash: tx, chain_id: chain_id)
-        {success: true}
-      else
-        @vote.destroy
-        {error: "Unable to deduct from your TAL Balance. Please try again."}
-      end
-    rescue => e
-      if @vote&.persisted?
-        @vote.destroy
-      end
-      raise e
+      {success: true}
     end
 
     private

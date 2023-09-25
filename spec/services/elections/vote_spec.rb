@@ -96,8 +96,6 @@ RSpec.describe Elections::Vote do
       expect(vote.candidate).to eq(candidate)
       expect(vote.amount).to eq(number_of_votes)
       expect(vote.cost).to eq("6000000000000000000")
-      expect(vote.chain_id).to eq(chain_id)
-      expect(vote.tx_hash).to eq("123232")
     end
 
     it "creates a second vote with the correct cost" do
