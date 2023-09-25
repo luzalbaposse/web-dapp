@@ -30,7 +30,7 @@ class API::V1::ElectionsController < ApplicationController
     result = service.call
 
     if result[:success]
-      render json: @election
+      render json: {success: true}
     else
       render json: {error: result[:error]}, status: :unprocessable_entity
     end
