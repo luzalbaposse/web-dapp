@@ -617,6 +617,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_28_233118) do
     t.boolean "sponsored", default: false
     t.boolean "new", default: true, null: false
     t.integer "tal_reward", default: 0
+    t.boolean "streak", default: false, null: false
     t.index ["quest_type"], name: "index_quests_on_quest_type", unique: true
     t.index ["uuid"], name: "index_quests_on_uuid"
   end
