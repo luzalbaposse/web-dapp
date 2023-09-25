@@ -28,8 +28,6 @@ Rails.application.routes.draw do
       mount Shrine.uppy_s3_multipart(:cache) => "/s3/multipart"
     end
 
-    # Collectives
-    resources :collectives, controller: :organizations, only: %i[index show]
     # Talent pages & search
     resources :talent, only: [:index]
     # Portfolio
@@ -86,6 +84,9 @@ Rails.application.routes.draw do
   end
 
   # Public routes
+
+  # Collectives
+  resources :collectives, controller: :organizations, only: %i[index show]
 
   # Auth - Clearance generated routes
   resources :passwords, controller: "passwords", only: [:create]

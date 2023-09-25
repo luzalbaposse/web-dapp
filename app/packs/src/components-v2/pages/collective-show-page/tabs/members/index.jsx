@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { CardContainer, Container, VoteTextContainer, VoteDiv } from "./styled";
 import { VotingModal } from "../../voting-modal";
 
-export const Members = ({ members, activeElection, railsContext }) => {
+export const Members = ({ currentUser, members, activeElection, railsContext }) => {
   const modalState = useModal();
   const [activeMember, setActiveMember] = useState(null);
 
@@ -49,7 +49,7 @@ export const Members = ({ members, activeElection, railsContext }) => {
                 <Button
                   size="small"
                   hierarchy="secondary"
-                  isDisabled={!enableVoting}
+                  isDisabled={!enableVoting || !currentUser}
                   onClick={e => voteOnMember(e, member)}
                 >
                   <VoteTextContainer>
@@ -76,7 +76,13 @@ export const Members = ({ members, activeElection, railsContext }) => {
                 </Button>
               )}
               {!activeElection && (
-                <Button size="small" hierarchy="primary" text="Subscribe" href={`/u/${member.username}`} />
+                <Button
+                  size="small"
+                  hierarchy="primary"
+                  text="Subscribe"
+                  href={`/u/${member.username}`}
+                  isDisabled={!currentUser}
+                />
               )}
             </TalentCard>
           </CardContainer>

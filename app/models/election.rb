@@ -19,7 +19,7 @@ class Election < ApplicationRecord
   end
 
   def applications_only?
-    start_date <= Date.today && voting_start_date >= Date.today
+    start_date <= Date.today && voting_start_date > Date.today
   end
 
   def winners_confirmation_period?

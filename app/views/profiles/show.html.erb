@@ -1,9 +1,9 @@
 <% if current_acting_user.nil? %>
-    <%= react_component("LoggedOutTopBar", props:
-      {
-      }, prerender: false)
-    %>
-  <% end %>
+  <%= react_component("LoggedOutTopBar", props:
+    {
+    }, prerender: false)
+  %>
+<% end %>
 <%= react_component("ProfilePage",
     props: {
     },
