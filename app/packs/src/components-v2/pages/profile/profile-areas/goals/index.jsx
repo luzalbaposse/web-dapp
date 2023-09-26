@@ -106,6 +106,7 @@ export const Goals = ({ urlData, currentUser }) => {
             goal={goal}
             openAddGoalModal={addGoalModalState.openModal}
             isOwner={urlData?.profileUsername === currentUser?.username}
+            username={urlData?.profileUsername}
           />
         ))}
       {data?.goals?.length > 0 &&
@@ -115,6 +116,7 @@ export const Goals = ({ urlData, currentUser }) => {
             goal={goal}
             openAddGoalModal={addGoalModalState.openModal}
             isOwner={urlData?.profileUsername === currentUser?.username}
+            username={urlData?.profileUsername}
           />
         ))}
       {showEmptyState()}

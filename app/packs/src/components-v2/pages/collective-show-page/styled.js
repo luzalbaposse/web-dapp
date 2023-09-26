@@ -34,5 +34,7 @@ export const TabsContainer = styled.div`
 
   ${mobileStyles(css`
     padding: 0 16px;
+    flex-direction: column;
+    gap: 24px;
   `)}
 `;
