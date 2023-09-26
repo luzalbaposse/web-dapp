@@ -50,4 +50,17 @@ namespace :organizations do
       puts "Could not create organization from partnership #{partnership.name} (##{partnership.id}): #{error.message}"
     end
   end
+
+  task airdrop_tal: :environment do
+    excluded_organization = ["talent-protocol", "takeoff-istanbul"]
+    records = User.joins(memberships: :organization)
+      .where.not(wallet_id: ["", nil])
+      .where.not(organizations: {slug: [excluded_organization]})
+      .where("memberships.created_at::date <= ?", Date.new(2023, 9, 25))
+      .distinct
+      .pluck(:username, :wallet_id)
+    records.find_each do |record|
+      Web3::MintVirtualTal.new(chain_id: 137).call(amount: 10, to: record[1], reason: "in_app_rewards")
+    end
+  end
 end
