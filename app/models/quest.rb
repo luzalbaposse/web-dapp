@@ -26,6 +26,10 @@ class Quest < ApplicationRecord
   has_many :quest_experience_points
   has_many :user_quests
 
+  def experience_points_amount
+    quest_experience_points.first&.amount || read_attribute(:experience_points_amount)
+  end
+
   def name
     "Quest: #{title}"
   end
