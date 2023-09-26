@@ -11,7 +11,9 @@ class API::ElectionBlueprint < Blueprinter::Base
     end
 
     field :prize_pool do |election, _options|
-      election.votes.sum(&:cost)
+      cost = 0
+      election.votes.each { |v| cost += v.cost.to_f }
+      cost
     end
   end
 end

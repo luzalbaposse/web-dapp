@@ -9,6 +9,13 @@
   <% end %>
 <% end %>
 
+<% if current_acting_user.nil? %>
+  <%= react_component("LoggedOutTopBar", props:
+    {
+    }, prerender: false)
+  %>
+<% end %>
+
 <main class="main-content">
   <div class="container-grid">
     <%= react_component "CollectiveShowPage", props: { organization: @organization }, prerender: false %>

@@ -7,6 +7,8 @@ module CareerUpdates
     end
 
     def call
+      # Only allow one update per week
+      return if last_career_update_for_user&.created_at&.> Time.current.beginning_of_week
       career_update = create_career_update
       BroadcastCareerUpdateJob.perform_later(career_update_id: career_update.id)
       career_update.reload
@@ -15,6 +17,10 @@ module CareerUpdates
     private
 
     attr_reader :sender, :message, :goals
+
+    def last_career_update_for_user
+      CareerUpdate.where(user: sender).last
+    end
 
     def create_career_update
       ActiveRecord::Base.transaction do

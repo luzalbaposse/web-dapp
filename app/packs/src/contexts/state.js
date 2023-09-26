@@ -71,12 +71,16 @@ const useCareerUpdatesStore = create(set => ({
   // In the future we should put the list of career updates here and not only the one created
   careerUpdates: [],
   createCareerUpdate: async (message, selectedPills) => {
-    const { data } = await careerUpdatesService.sendUpdate(message, selectedPills).catch(err => {
+    const data = await careerUpdatesService.sendUpdate(message, selectedPills).catch(err => {
       console.error(err);
-      toast.error(<ToastBody heading={"Error"} />, { autoClose: 3000 });
+      let errorMessage = "There was an error creating your career update";
+      if (err?.response?.data?.error) {
+        errorMessage = err.response.data.error;
+      }
+      toast.error(<ToastBody heading={"Error"} body={errorMessage} />, { autoClose: 3000 });
     });
 
-    if (data.career_update) {
+    if (data?.career_update) {
       set(state => ({ careerUpdates: [...state.careerUpdates, data.career_update] }));
       toast.success(<ToastBody heading="Success!" body={"Your update was sent to your subscribers."} />, {
         autoClose: 3000

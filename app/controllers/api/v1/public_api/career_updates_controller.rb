@@ -43,13 +43,17 @@ class API::V1::PublicAPI::CareerUpdatesController < API::V1::PublicAPI::APIContr
     )
     career_update = service.call
 
-    response_body = {
-      career_update: API::CareerUpdateBlueprint.render_as_json(career_update, view: :normal)
-    }
+    if career_update
+      response_body = {
+        career_update: API::CareerUpdateBlueprint.render_as_json(career_update, view: :normal)
+      }
 
-    log_request(response_body, :created)
+      log_request(response_body, :created)
 
-    render json: response_body, status: :created
+      render json: response_body, status: :created
+    else
+      render json: {error: "You can only send one update per week."}, status: :unprocessable_entity
+    end
   end
 
   private

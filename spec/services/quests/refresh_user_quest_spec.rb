@@ -130,8 +130,7 @@ RSpec.describe Quests::RefreshUserQuest do
 
       context "when the quest was completed" do
         before do
-          career_goal = create :career_goal, talent: talent
-          create :goal, career_goal: career_goal, due_date: Date.tomorrow
+          create :goal, user: user, due_date: Date.tomorrow
           create :milestone, talent: talent
           create :milestone, talent: talent
         end
@@ -141,9 +140,7 @@ RSpec.describe Quests::RefreshUserQuest do
 
       context "when the quest was not completed" do
         before do
-          # Only two of them
-          career_goal = create :career_goal, talent: talent
-          create :goal, career_goal: career_goal, due_date: Date.tomorrow
+          create :goal, user: user, due_date: Date.tomorrow
           create :milestone, talent: talent
         end
 

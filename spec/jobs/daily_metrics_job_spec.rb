@@ -150,13 +150,10 @@ RSpec.describe DailyMetricsJob, type: :job do
   let!(:message_four) { create(:message, sender: user_4, receiver: user_2, text: "Bye!") }
   let!(:message_five) { create(:message, sender: user_5, receiver: user_2, text: "Hello!") }
   let!(:message_six) { create(:message, sender: user_1, receiver: user_2, text: "Bye!", is_read: true) }
-  let!(:career_goal_one) { create :career_goal, talent: user_1.talent }
-  let!(:goal_one) { create :goal, career_goal: career_goal_one, due_date: Date.tomorrow, progress: Goal::DOING }
-  let!(:career_goal_two) { create :career_goal, talent: user_2.talent }
-  let!(:goal_two) { create :goal, career_goal: career_goal_two, due_date: Date.tomorrow, progress: Goal::PLANNED }
-  let!(:career_goal_three) { create :career_goal, talent: user_3.talent }
-  let!(:goal_three) { create :goal, career_goal: career_goal_three, due_date: Date.yesterday, progress: Goal::DOING }
   let!(:exp) { create :experience_point, user: user_1, source: user_2, amount: 1051, credited_at: Date.yesterday }
+  let!(:goal_one) { create :goal, user: user_1, due_date: Date.tomorrow, progress: Goal::DOING }
+  let!(:goal_two) { create :goal, user: user_2, due_date: Date.tomorrow, progress: Goal::PLANNED }
+  let!(:goal_three) { create :goal, user: user_3, due_date: Date.yesterday, progress: Goal::DOING }
 
   before do
     allow(web3_proxy_class).to receive(:new).and_return(web3_proxy)

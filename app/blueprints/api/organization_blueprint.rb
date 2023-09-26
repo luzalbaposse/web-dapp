@@ -52,13 +52,17 @@ class API::OrganizationBlueprint < Blueprinter::Base
         "election"
       end
     end
+  end
 
-    association :election, blueprint: API::ElectionBlueprint, view: :normal
+  view :with_election do
+    include_view :normal
 
     association :election, blueprint: API::ElectionBlueprint, view: :normal do |organization, _options|
       organization.active_election
     end
 
-    association :users, blueprint: API::UserBlueprint, view: :card
+    association :users, blueprint: API::UserBlueprint, view: :card, options: {with_vote_count: true} do |organization, _options|
+      organization.users.shuffle(random: Random.new(DateTime.current.beginning_of_hour.jd))
+    end
   end
 end

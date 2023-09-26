@@ -24,6 +24,8 @@ import SocialRow from "src/components/profile/SocialRow";
 import { useWindowDimensionsHook } from "src/utils/window";
 import dayjs from "dayjs";
 import { TAKEOFF_LEARN_MORE } from "src/utils/constants";
+import { parseAndCommify } from "src/onchain/utils";
+import { formatUnits } from "viem";
 
 const NUMBER_OF_TAGS = 4;
 const NUMBER_OF_TAGS_MOBILE = 1;
@@ -72,6 +74,11 @@ const Overview = ({ collective }) => {
     const endDate = dayjs(collective.election.votingEndDate);
 
     return `${startDate.format("DD/MMM")} - ${endDate.format("DD/MMM")}`;
+  };
+
+  const formatPrizePool = () => {
+    const prizePool = formatUnits(collective.election.prizePool, 18);
+    return parseAndCommify(prizePool);
   };
 
   return (
@@ -198,7 +205,7 @@ const Overview = ({ collective }) => {
                   Prize Pool
                 </Typography>
                 <Typography color="primary04" specs={{ type: "regular", variant: "p2" }}>
-                  {collective.election.prizePool}
+                  {formatPrizePool()} $TAL
                 </Typography>
               </ElectionInfoRow>
               <ElectionInfoRow>

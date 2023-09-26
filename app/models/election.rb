@@ -19,7 +19,7 @@ class Election < ApplicationRecord
   end
 
   def applications_only?
-    start_date <= Date.today && voting_start_date >= Date.today
+    start_date <= Date.today && voting_start_date > Date.today
   end
 
   def winners_confirmation_period?
@@ -27,20 +27,20 @@ class Election < ApplicationRecord
   end
 
   def election_over?
-    voting_end_ate <= Date.today && rewards_distributed == true
+    voting_end_date <= Date.today && rewards_distributed == true
   end
 
   def status
-    if active?
-      "active"
+    if election_over?
+      "election_over"
     elsif applications_only?
       "applications_only"
     elsif voting_active?
       "voting_active"
     elsif winners_confirmation_period?
       "winners_confirmation_period"
-    elsif election_over?
-      "election_over"
+    elsif active?
+      "active"
     end
   end
 

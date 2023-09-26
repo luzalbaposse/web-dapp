@@ -30,6 +30,7 @@ export const SpinnerContainer = styled.div`
 export const TabsContainer = styled.div`
   display: flex;
   margin-bottom: 16px;
+  justify-content: space-between;
 
   ${mobileStyles(css`
     padding: 0 16px;
