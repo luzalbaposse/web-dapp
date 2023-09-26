@@ -29,7 +29,7 @@ module GoogleDrive
 
       def wallet_addresses_of_users_with_doing_career_goals
         User
-          .joins(talent: {career_goal: :goals})
+          .joins(:goals)
           .where(goals: {progress: Goal::DOING})
           .distinct
           .pluck(:wallet_id)

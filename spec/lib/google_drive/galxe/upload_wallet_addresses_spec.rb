@@ -3,8 +3,7 @@ require "rails_helper"
 
 RSpec.describe GoogleDrive::Galxe::UploadWalletAddresses do
   let(:user_one) { create :user, :with_talent, wallet_id: "123" }
-  let(:career_goal) { create :career_goal, talent: user_one.talent }
-  let!(:goal) { create :goal, career_goal:, progress: Goal::DOING }
+  let!(:goal) { create :goal, user: user_one, progress: Goal::DOING }
 
   let(:user_two) { create :user, :with_talent, wallet_id: "abc" }
   let!(:subscriptions) { create_list :subscription, 4, subscriber: user_two }

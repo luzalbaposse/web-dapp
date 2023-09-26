@@ -47,7 +47,7 @@ module Sendgrid
       def members
         @members ||=
           begin
-            members = User.members.includes(:career_updates, :invites, :tags, :subscriptions, {talent: {career_goal: :goals}}, :wallet_activities)
+            members = User.members.includes(:career_updates, :invites, :tags, :subscriptions, :goals, :talent, :wallet_activities)
             user_ids.present? ? members.where(id: user_ids) : members
           end
       end

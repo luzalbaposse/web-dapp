@@ -623,8 +623,7 @@ RSpec.describe User, type: :model do
         talent.save!
 
         create :milestone, talent: talent
-        career_goal = create :career_goal, talent: talent
-        create :goal, career_goal: career_goal, due_date: Date.tomorrow
+        create :goal, user: user, due_date: Date.tomorrow
 
         tag = create :tag, description: "web3", hidden: false
         user.tags << tag

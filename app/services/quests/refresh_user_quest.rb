@@ -100,7 +100,7 @@ module Quests
     end
 
     def three_journey_entries_quest_completed?
-      journey_count = user.talent&.career_goal&.goals&.count.to_i
+      journey_count = user.goals.count.to_i
       journey_count += user.talent&.milestones&.count.to_i
 
       journey_count >= 3

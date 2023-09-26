@@ -367,12 +367,11 @@ module Metrics
     end
 
     def total_users_with_active_goals
-      CareerGoal
-        .joins(:goals)
-        .where(goals: {progress: Goal::DOING})
+      Goal
+        .where(progress: Goal::DOING)
         .where("goals.due_date >= ?", Date.today)
         .distinct
-        .pluck(:talent_id)
+        .pluck(:user_id)
         .count
     end
 
