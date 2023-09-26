@@ -27,6 +27,12 @@ class API::UserBlueprint < Blueprinter::Base
         Vote.where(candidate_id: user.id).sum(&:amount)
       end
     end
+
+    field :current_user_vote_count do |user, options|
+      if options[:with_vote_count]
+        Vote.where(candidate_id: user.id, voter: options[:current_user]).sum(&:amount)
+      end
+    end
   end
 
   view :normal do

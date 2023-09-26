@@ -52,6 +52,10 @@ class API::OrganizationBlueprint < Blueprinter::Base
         "election"
       end
     end
+  end
+
+  view :with_election do
+    include_view :normal
 
     association :election, blueprint: API::ElectionBlueprint, view: :normal do |organization, _options|
       organization.active_election

@@ -3,7 +3,11 @@ class OrganizationsController < ApplicationController
   end
 
   def show
-    @organization = API::OrganizationBlueprint.render_as_json(organization, view: :normal)
+    @organization = API::OrganizationBlueprint.render_as_json(
+      organization,
+      view: :with_election,
+      current_user: current_user
+    )
   end
 
   private

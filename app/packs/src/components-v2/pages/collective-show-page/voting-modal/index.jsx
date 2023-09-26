@@ -133,7 +133,7 @@ const TransactionStep = ({ member, election, onSuccess, onError, onCancel, setEr
           <ModalValueDescription>
             <ModalValuesRow>
               <Typography specs={{ variant: "p2", type: "regular" }}>Your votes on {member.name}</Typography>
-              <Typography specs={{ variant: "p2", type: "regular" }}>{value}</Typography>
+              <Typography specs={{ variant: "p2", type: "regular" }}>{member.currentUserVoteCount}</Typography>
             </ModalValuesRow>
             <ModalValuesRow>
               <Typography specs={{ variant: "p2", type: "regular" }}>Total Votes on {member.name}</Typography>
