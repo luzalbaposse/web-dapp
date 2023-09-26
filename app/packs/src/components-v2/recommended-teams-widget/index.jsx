@@ -62,10 +62,8 @@ export const RecommendedTeamsWidget = ({ ellipsisAt = 350 }) => {
                 </InfoGroup>
                 {collective.users.length > 0 && (
                   <MembersList
-                    membersImages={collective.users
-                      .filter((user, index) => index < 4)
-                      .map(user => user.profilePictureUrl)}
-                    totalMembers={collective.users.length}
+                    membersImages={collective.users.map(user => user.profilePictureUrl)}
+                    totalMembers={collective.membersCount}
                   />
                 )}
               </InfoColumn>

@@ -18,7 +18,7 @@ import { ToastBody } from "src/components/design_system/toasts";
 
 const DROPDOWN_OPTIONS = [{ value: "Edit goal" }, { value: "Delete goal" }];
 
-export const GoalCard = ({ goal, openAddGoalModal, isOwner }) => {
+export const GoalCard = ({ goal, openAddGoalModal, isOwner, username }) => {
   const selectOption = useCallback(
     ({ value }) => {
       switch (value) {
@@ -80,7 +80,12 @@ export const GoalCard = ({ goal, openAddGoalModal, isOwner }) => {
       {!!goal.images?.length && <GoalImage src={goal.images[0].image_url} />}
       {goal.election_status != null && (
         <VoteContainer>
-          <Button size="small" hierarchy="secondary" isDisabled={disableVoteButton()}>
+          <Button
+            size="small"
+            hierarchy="secondary"
+            isDisabled={disableVoteButton()}
+            onClick={() => window.location.replace(`/collectives/takeoff-istanbul?keyword=${username}`)}
+          >
             <VoteTextContainer>
               <Typography
                 specs={{

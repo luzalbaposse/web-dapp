@@ -25,8 +25,9 @@ const ELECTION_TAB_NAME_TO_INDEX = {
 };
 
 export const CollectiveShowPage = ({ organization, railsContext }) => {
+  const baseUrl = new URL(document.location);
   const { currentUser, fetchCurrentUser } = loggedInUserStore();
-  const [keyword, setKeyword] = useState("");
+  const [keyword, setKeyword] = useState(baseUrl.searchParams.get("keyword") || "");
   const [collectiveUsers, setCollectiveUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [pagination, setPagination] = useState({
@@ -45,8 +46,7 @@ export const CollectiveShowPage = ({ organization, railsContext }) => {
   const tabIndex = collective.election ? ELECTION_TAB_NAME_TO_INDEX : TAB_NAME_TO_INDEX;
 
   useEffect(() => {
-    const url = new URL(document.location);
-    const tab = url.searchParams.get("tab") || "";
+    const tab = baseUrl.searchParams.get("tab") || "";
 
     if (tab) tabState.selectElement(tabIndex[tab]);
   }, []);
@@ -96,9 +96,8 @@ export const CollectiveShowPage = ({ organization, railsContext }) => {
 
   const onClick = index => {
     const tab = Object.keys(tabIndex).find(key => tabIndex[key] === index);
-    const url = new URL(document.location);
-    url.searchParams.set("tab", tab);
-    history.pushState({}, "", url);
+    baseUrl.searchParams.set("tab", tab);
+    history.pushState({}, "", baseUrl);
     tabState.selectElement(tabIndex[tab]);
   };
 
