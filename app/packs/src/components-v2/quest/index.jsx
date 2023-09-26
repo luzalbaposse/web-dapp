@@ -23,7 +23,8 @@ const QUEST_TYPE_MAP = {
   three_token_holders: "/u/__username__#token",
   verify_humanity: "",
   verify_identity: "/u/__username__",
-  galxe_verification: ""
+  galxe_verification: "",
+  takeoff_vote: "/collectives/takeoff-istanbul"
 };
 
 export const Quest = ({ quest, username, railsContext, setRefreshQuests }) => {

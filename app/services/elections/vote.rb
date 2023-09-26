@@ -48,6 +48,7 @@ module Elections
       end
 
       DeductTalForVoteJob.perform_later(vote_id: @vote.id, chain_id: chain_id)
+      refresh_voter_quest
 
       {success: true}
     end
@@ -82,6 +83,11 @@ module Elections
 
     def tal_contract
       Eth::Contract.from_abi(name: "VirtualTAL", address: tal_address, abi: tal_contract_abi["abi"])
+    end
+
+    def refresh_voter_quest
+      quest = Quest.find_by!(quest_type: "takeoff_vote")
+      Quests::RefreshUserQuest.new(user: voter, quest: quest).call
     end
   end
 end

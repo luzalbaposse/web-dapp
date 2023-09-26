@@ -100,6 +100,12 @@ namespace :quests do
         experience_points_amount: 1500,
         tal_reward: 10,
         sponsored: true
+      },
+      {
+        title: "Vote for Take Off Istanbul",
+        description: "Vote on candidates and win a prize if you predict the winner.",
+        quest_type: "takeoff_vote",
+        experience_points_amount: 2000
       }
     ]
 

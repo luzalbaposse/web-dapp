@@ -16,6 +16,7 @@ class Quest < ApplicationRecord
     verify_humanity
     verify_identity
     galxe_verification
+    takeoff_vote
   ]
 
   validates :title, :quest_type, uniqueness: true
