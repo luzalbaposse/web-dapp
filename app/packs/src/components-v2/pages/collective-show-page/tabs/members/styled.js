@@ -1,10 +1,6 @@
 import { mobileStyles, buildColor } from "@talentprotocol/design-system";
 import styled, { css } from "styled-components";
 
-export const CardContainer = styled.div`
-  margin: auto;
-`;
-
 export const Container = styled.div`
   display: grid;
   gap: 24px;
@@ -13,6 +9,11 @@ export const Container = styled.div`
   ${mobileStyles(css`
     grid-template-columns: 1fr;
   `)}
+`;
+
+export const VoteContainer = styled.div`
+  display: flex;
+  justify-content: end;
 `;
 
 export const VoteTextContainer = styled.div`

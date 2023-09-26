@@ -879,7 +879,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_23_091907) do
     t.boolean "is_organization", default: false
     t.integer "experience_points_amount", default: 0, null: false
     t.datetime "profile_completed_at", precision: nil
-    t.datetime "humanity_verified_at", precision: nil
+    t.datetime "humanity_verified_at"
     t.string "humanity_proof"
     t.decimal "profile_completeness", default: "0.0"
     t.datetime "talent_mate_whitelisted_at"
@@ -911,7 +911,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_23_091907) do
     t.bigint "candidate_id", null: false
     t.bigint "voter_id", null: false
     t.integer "amount", default: 0, null: false
-    t.string "cost", null: false
+    t.string "cost", default: "0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "tx_hash"

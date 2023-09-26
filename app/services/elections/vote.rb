@@ -25,13 +25,17 @@ module Elections
       cost_of_votes = 0
 
       ::Vote.transaction do
+        # Lock new votes for the same candidate here
+        # The lock is released at the end of the transaction
+        ActiveRecord::Base.connection.execute("SELECT pg_advisory_xact_lock(#{::Vote::ADVISORY_LOCK_NAMESPACE}, #{candidate.id})")
+
         current_vote_count = election.votes.where(candidate: candidate).sum(&:amount)
 
         number_of_votes.times do |i|
           cost_of_votes += (current_vote_count + i + 1) * decimals.to_i
         end
 
-        return {error: "Insufficient virtual TAL balance. Try a different chain."} if balance < cost_of_votes
+        return {error: "Insufficient virtual TAL balance. Try a different chain."} if !balance || balance < cost_of_votes
 
         @vote = ::Vote.new
         @vote.voter = voter

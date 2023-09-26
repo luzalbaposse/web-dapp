@@ -123,7 +123,7 @@ export const CollectivesPage = ({}) => {
               profileImage={collective.logoUrl}
               tags={tags}
               to={`/collectives/${collective.slug}`}
-              totalMembers={members.length}
+              totalMembers={collective.membersCount}
             />
           );
         })}
@@ -135,7 +135,7 @@ export const CollectivesPage = ({}) => {
               <Button hierarchy="secondary" size="small" text="Load more" onClick={() => loadMoreCollectives()} />
             ) : (
               <Typography color="primary03" specs={{ variant: "p3" }}>
-                You’ve reached the end of the list
+                You've reached the end of the list
               </Typography>
             )}
           </>

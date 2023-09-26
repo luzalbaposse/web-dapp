@@ -79,7 +79,7 @@ class API::V1::UsersController < ApplicationController
   end
 
   def search_params
-    params.permit(:name, :messaging_disabled)
+    params.permit(:name, :messaging_disabled, :collective_slug)
   end
 
   def user_params

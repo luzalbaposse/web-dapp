@@ -54,6 +54,6 @@ export const ERROR_MESSAGES = {
 };
 
 export const TAKEOFF_TERMS_AND_CONDITIONS =
-  "https://www.notion.so/talentprotocol/Terms-and-Conditions-for-Take-Off-Voting-d61c1af32142472e81800f6e4a0521eb?pvs=4";
+  "https://talentprotocol.notion.site/Take-Off-Voting-Terms-Conditions-d61c1af32142472e81800f6e4a0521eb";
 
 export const TAKEOFF_LEARN_MORE = "https://blog.talentprotocol.com/takeoff-istanbul/";

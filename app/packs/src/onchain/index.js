@@ -30,9 +30,14 @@ class OnChain {
   }
 
   connectedAccount() {
-    if (!window.web3Interactor?.isWalletConnected()) return;
-    this.account = window.web3Interactor.wallet.address;
-    return window.web3Interactor.wallet.address;
+    try {
+      if (!window.web3Interactor?.isWalletConnected()) return;
+      this.account = window.web3Interactor.wallet.address;
+      return window.web3Interactor.wallet.address;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
   }
 
   async readFromContract({ abi, address }, functionName, args = []) {

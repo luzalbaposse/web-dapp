@@ -20,9 +20,7 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
   end
 
   def index
-    users = User.all
-    users = users.where("wallet_id IN (:ids) OR username IN (:ids)", ids: filter_params[:ids]) if filter_by_ids?
-
+    users = filtered_users
     pagy, page_users = pagy_uuid_cursor(
       users,
       before: cursor,
@@ -31,7 +29,7 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
     )
 
     response_body = {
-      talents: API::TalentBlueprint.render_as_json(page_users.includes(:talent), view: :normal),
+      talents: API::TalentBlueprint.render_as_json(page_users.includes(:talent), view: index_action_view),
       pagination: {
         total: users.count,
         cursor: pagy.has_more? ? page_users.last.uuid : nil
@@ -223,12 +221,15 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
     @user ||= User.find_by!("wallet_id = :id OR username = :id", id: downcase_id)
   end
 
-  def filter_by_ids?
-    filter_params[:ids].present? && filter_params[:ids].reject(&:blank?).map(&:downcase).any?
+  def filtered_users
+    Users::Search.new(
+      current_user: current_user,
+      search_params: filter_params.to_h
+    ).call
   end
 
   def filter_params
-    params.permit(ids: [])
+    params.permit(:name, :messaging_disabled, :collective_slug, ids: [])
   end
 
   def user_params
@@ -305,5 +306,9 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
       )
       render json: {error: "You don't have access to perform that action"}, status: :unauthorized
     end
+  end
+
+  def index_action_view
+    filter_params.key?(:collective_slug) ? :with_votes : :normal
   end
 end

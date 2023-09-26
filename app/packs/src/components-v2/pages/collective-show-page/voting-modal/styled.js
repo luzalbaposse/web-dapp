@@ -111,3 +111,8 @@ export const InfoContainer = styled.div`
   text-align: center;
   gap: 8px;
 `;
+
+export const ChangeNetworkContainer = styled.div`
+  display: flex;
+  gap: 8px;
+`;

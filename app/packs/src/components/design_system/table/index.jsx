@@ -14,8 +14,8 @@ const Head = ({ children }) => (
 
 const Body = ({ children }) => <tbody>{children}</tbody>;
 
-const Tr = ({ children, onClick, className }) => (
-  <tr className={className} onClick={onClick}>
+const Tr = ({ children, onClick, className, style }) => (
+  <tr className={className} onClick={onClick} style={style}>
     {children}
   </tr>
 );
