@@ -1,6 +1,8 @@
 import React, { useCallback, useMemo, useRef, useState, useEffect } from "react";
 import { useStepExperience } from "src/hooks/use-step-experience";
 import { Modal, Typography, Input, Button, Icon } from "@talentprotocol/design-system";
+import { toast } from "react-toastify";
+import { ToastBody } from "src/components/design_system/toasts";
 import {
   HeaderContainer,
   HeaderText,
@@ -15,12 +17,13 @@ import {
   StyledTypographyLink,
   ModalFooter,
   Container,
-  InfoContainer
+  InfoContainer,
+  ChangeNetworkContainer
 } from "./styled";
 import TalentProfilePicture from "src/components/talent/TalentProfilePicture";
 import Divider from "src/components/design_system/other/Divider";
 import { OnChain } from "src/onchain";
-import { parseAndCommify } from "src/onchain/utils";
+import { parseAndCommify, chainNameToId } from "src/onchain/utils";
 import { formatUnits } from "viem";
 import { post } from "src/utils/requests";
 
@@ -36,8 +39,28 @@ const TransactionStep = ({ member, election, onSuccess, onError, onCancel, setEr
       const newOnChain = new OnChain(railsContext.contractsEnv);
 
       const currentAccount = await newOnChain.connectedAccount();
+
+      if (!currentAccount) {
+        toast.error(
+          <ToastBody
+            heading="Wallet disconnected"
+            body={"Your wallet is disconnected please connect it before voting"}
+          />,
+          {
+            autoClose: 1500
+          }
+        );
+        onCancel();
+      }
       const selectedChainId = await newOnChain.getChainID();
 
+      const recognizedChain = await newOnChain.recognizedChain(selectedChainId);
+
+      if (!recognizedChain) {
+        setError("Unsupported chain.");
+        onError();
+        return;
+      }
       setChainId(selectedChainId);
 
       const availableBalance = await newOnChain.getTALBalance(currentAccount);
@@ -136,7 +159,7 @@ const TransactionStep = ({ member, election, onSuccess, onError, onCancel, setEr
               <Typography specs={{ variant: "p2", type: "regular" }}>{member.currentUserVoteCount}</Typography>
             </ModalValuesRow>
             <ModalValuesRow>
-              <Typography specs={{ variant: "p2", type: "regular" }}>Total Votes on {member.name}</Typography>
+              <Typography specs={{ variant: "p2", type: "regular" }}>Previous Votes on {member.name}</Typography>
               <Typography specs={{ variant: "p2", type: "regular" }}>{member.voteCount}</Typography>
             </ModalValuesRow>
             <ModalValuesRow>
@@ -153,8 +176,14 @@ const TransactionStep = ({ member, election, onSuccess, onError, onCancel, setEr
           <Typography specs={{ variant: "p3", type: "regular" }}>
             The cost of a vote increases linearly with every new vote. The 1st vote in a candidate costs 1 $TAL, the 2nd
             vote costs 2 $TAL, the 3rd vote costs 3 $TAL, and so on. If you don't have any $TAL in your{" "}
-            <StyledTypographyLink href={"/wallet"}>Wallet</StyledTypographyLink>, go earn some in{" "}
-            <StyledTypographyLink href={"/quests"}>Quests</StyledTypographyLink>.
+            <StyledTypographyLink href={"/wallet"} target="_blank">
+              Wallet
+            </StyledTypographyLink>
+            , go earn some in{" "}
+            <StyledTypographyLink href={"/quests"} target="_blank">
+              Quests
+            </StyledTypographyLink>
+            .
           </Typography>
         </ModalDescription>
       </ModalBody>
@@ -190,7 +219,7 @@ const SuccessStep = ({ member, onCancel }) => (
   </Container>
 );
 
-const ErrorStep = ({ error, onCancel }) => {
+const ErrorStep = ({ error, onCancel, railsContext }) => {
   const titleToText = () => {
     switch (error) {
       case "No wallet connected.":
@@ -211,6 +240,18 @@ const ErrorStep = ({ error, onCancel }) => {
         return "Something went wrong. Try again later or reach out to us on Discord if it persists.";
     }
   };
+
+  const networkChange = async chainName => {
+    const chainAPI = new OnChain(railsContext.contractsEnv);
+    const chainId = chainNameToId(chainName, railsContext.contractsEnv);
+    await chainAPI.switchChain(chainId);
+    window.location.reload();
+  };
+
+  const showSwitchChain = () => {
+    return ["Unsupported chain.", "Insufficient virtual TAL balance. Try a different chain."].includes(error);
+  };
+
   return (
     <Container>
       <Icon name="help" size={64} />
@@ -222,7 +263,13 @@ const ErrorStep = ({ error, onCancel }) => {
           {titleToText()}
         </Typography>
       </InfoContainer>
-      <Button hierarchy="primary" size="medium" onClick={onCancel} text="Return" />
+      {showSwitchChain() && (
+        <ChangeNetworkContainer>
+          <Button hierarchy="primary" size="medium" onClick={() => networkChange("Celo")} text="Switch to Celo" />
+          <Button hierarchy="primary" size="medium" onClick={() => networkChange("Polygon")} text="Switch to Polygon" />
+        </ChangeNetworkContainer>
+      )}
+      <Button hierarchy="secondary" size="medium" onClick={onCancel} text="Return" />
     </Container>
   );
 };

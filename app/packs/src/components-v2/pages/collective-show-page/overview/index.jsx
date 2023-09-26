@@ -26,12 +26,13 @@ import dayjs from "dayjs";
 import { TAKEOFF_LEARN_MORE } from "src/utils/constants";
 import { parseAndCommify } from "src/onchain/utils";
 import { formatUnits } from "viem";
+import Tooltip from "src/components/design_system/tooltip";
 
 const NUMBER_OF_TAGS = 4;
 const NUMBER_OF_TAGS_MOBILE = 1;
 const NUMBER_OF_USERS = 4;
 
-const Overview = ({ collective }) => {
+const Overview = ({ collective, members, membersCount }) => {
   const { mobile } = useWindowDimensionsHook();
 
   const mainTag = () => {
@@ -43,8 +44,6 @@ const Overview = ({ collective }) => {
       return "Event";
     }
   };
-  const members = collective.users;
-  const memberCount = members.length;
 
   const memberDescription = (count, hasElection) => {
     if (count > 1) {
@@ -154,7 +153,7 @@ const Overview = ({ collective }) => {
             </LocationContainer>
           )}
           <MembersContainer>
-            {memberCount > 0 && (
+            {membersCount > 0 && (
               <MemberAvatars>
                 {members
                   .filter((user, index) => index < NUMBER_OF_USERS && !!user.profilePictureUrl)
@@ -167,10 +166,10 @@ const Overview = ({ collective }) => {
             )}
             <MemberCount>
               <Typography color="primary01" specs={{ type: "bold", variant: "p2" }}>
-                {memberCount}
+                {membersCount}
               </Typography>{" "}
               <Typography color="primary04" specs={{ variant: "p2" }}>
-                {memberDescription(memberCount, collective.election)}
+                {memberDescription(membersCount, collective.election)}
               </Typography>
             </MemberCount>
           </MembersContainer>
@@ -207,6 +206,15 @@ const Overview = ({ collective }) => {
                 <Typography color="primary04" specs={{ type: "regular", variant: "p2" }}>
                   {formatPrizePool()} $TAL
                 </Typography>
+                <Tooltip
+                  popOverAccessibilityId="prizePool"
+                  placement="top"
+                  body="The $TAL from votes goes into the prize pool that will be distributed back to members who voted on the 5 winners (minus a 10% protocol fee). The prize pool will be distributed proportionally to the number of votes you have in the 5 winners, not proportionally to the amount of $TAL you spent on those votes."
+                >
+                  <div>
+                    <Icon name="information" color="primary04" size={15} />
+                  </div>
+                </Tooltip>
               </ElectionInfoRow>
               <ElectionInfoRow>
                 <StyledTypographyLink target="_blank" href={TAKEOFF_LEARN_MORE}>

@@ -90,6 +90,8 @@ module Quests
         active_goal_quest_completed?
       when "galxe_verification"
         galxe_verification_quest_completed?
+      when "takeoff_vote"
+        takeoff_vote_quest_completed?
       else
         false
       end
@@ -171,6 +173,11 @@ module Quests
 
     def galxe_verification_quest_completed?
       user.user_web3_info&.galxe_passport_token_id.present?
+    end
+
+    def takeoff_vote_quest_completed?
+      take_off_election = Election.find_by!(organization: Organization.find_by!(slug: "takeoff-istanbul"))
+      Vote.where(voter: user, election: take_off_election).any?
     end
 
     def notify_verified_profile

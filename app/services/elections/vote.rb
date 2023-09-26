@@ -25,13 +25,17 @@ module Elections
       cost_of_votes = 0
 
       ::Vote.transaction do
+        # Lock new votes for the same candidate here
+        # The lock is released at the end of the transaction
+        ActiveRecord::Base.connection.execute("SELECT pg_advisory_xact_lock(#{::Vote::ADVISORY_LOCK_NAMESPACE}, #{candidate.id})")
+
         current_vote_count = election.votes.where(candidate: candidate).sum(&:amount)
 
         number_of_votes.times do |i|
           cost_of_votes += (current_vote_count + i + 1) * decimals.to_i
         end
 
-        return {error: "Insufficient virtual TAL balance. Try a different chain."} if balance < cost_of_votes
+        return {error: "Insufficient virtual TAL balance. Try a different chain."} if !balance || balance < cost_of_votes
 
         @vote = ::Vote.new
         @vote.voter = voter
@@ -44,6 +48,7 @@ module Elections
       end
 
       DeductTalForVoteJob.perform_later(vote_id: @vote.id, chain_id: chain_id)
+      refresh_voter_quest
 
       {success: true}
     end
@@ -78,6 +83,11 @@ module Elections
 
     def tal_contract
       Eth::Contract.from_abi(name: "VirtualTAL", address: tal_address, abi: tal_contract_abi["abi"])
+    end
+
+    def refresh_voter_quest
+      quest = Quest.find_by!(quest_type: "takeoff_vote")
+      Quests::RefreshUserQuest.new(user: voter, quest: quest).call
     end
   end
 end

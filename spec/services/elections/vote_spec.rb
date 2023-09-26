@@ -18,6 +18,14 @@ RSpec.describe Elections::Vote do
   let(:chain_id) { 44787 }
   let(:number_of_votes) { 3 }
 
+  let!(:takeoff_vote_quest) { create :quest, quest_type: "takeoff_vote" }
+  let(:refresh_user_quest_class) { Quests::RefreshUserQuest }
+  let(:refresh_user_quest_instance) { instance_double(refresh_user_quest_class, call: true) }
+
+  before do
+    allow(refresh_user_quest_class).to receive(:new).and_return(refresh_user_quest_instance)
+  end
+
   describe "with insufficient data" do
     it "does not create a vote if the voter has no wallet" do
       voter.update!(wallet_id: nil)
@@ -111,6 +119,16 @@ RSpec.describe Elections::Vote do
       vote = Vote.last
 
       expect(vote.cost).to eq("4000000000000000000")
+    end
+
+    it "initializes and calls the refresh user quest service" do
+      vote_on_election
+
+      expect(refresh_user_quest_class).to have_received(:new).with(
+        user: voter,
+        quest: takeoff_vote_quest
+      )
+      expect(refresh_user_quest_instance).to have_received(:call)
     end
   end
 end

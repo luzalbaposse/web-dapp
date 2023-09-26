@@ -4,8 +4,11 @@ RSpec.describe Users::Search do
   subject(:search_users) { described_class.new(current_user: current_user, search_params: search_params).call }
 
   let(:current_user) { create :user, username: "jack" }
+  let!(:collective) { create :org_election, slug: "take-off" }
   let!(:user_1) { create :user, username: "johndoe", messaging_disabled: true }
+  let!(:membership_1) { create :membership, organization: collective, user: user_1 }
   let!(:user_2) { create :user, username: "johny", messaging_disabled: false }
+  let!(:membership_2) { create :membership, organization: collective, user: user_2 }
   let!(:user_3) { create :user, username: "alice", messaging_disabled: false }
   let!(:user_4) { create :user, username: "elon", messaging_disabled: true }
 
@@ -25,6 +28,18 @@ RSpec.describe Users::Search do
     end
 
     it "returns all users with username matching the name" do
+      expect(search_users).to match_array([user_1, user_2])
+    end
+  end
+
+  context "when the collective id passed" do
+    let(:search_params) do
+      {
+        collective_slug: "take-off"
+      }
+    end
+
+    it "returns all users that are part of the collective" do
       expect(search_users).to match_array([user_1, user_2])
     end
   end

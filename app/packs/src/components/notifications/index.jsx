@@ -1,5 +1,6 @@
 import { Dropdown } from "react-bootstrap";
 import { toast } from "react-toastify";
+import { ToastBody } from "src/components/design_system/toasts";
 import { Typography } from "@talentprotocol/design-system";
 import axios from "axios";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -13,7 +14,6 @@ import { Bell, ArrowLeft } from "src/components/icons";
 import { defaultHeaders, appendCSRFToken } from "src/api/utils";
 import { get } from "src/utils/requests";
 import { put, post } from "src/utils/requests";
-import { ToastBody } from "src/components/design_system/toasts";
 import { useWindowDimensionsHook } from "../../utils/window";
 import Button from "src/components/design_system/button";
 import Divider from "src/components/design_system/other/Divider";

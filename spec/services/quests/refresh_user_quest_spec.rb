@@ -495,6 +495,24 @@ RSpec.describe Quests::RefreshUserQuest do
         it_behaves_like "a refresh user quest without creating new records"
       end
     end
+
+    context "when the quest type is galxe_verification" do
+      let(:quest_type) { "takeoff_vote" }
+      let!(:org) { create :org_election, slug: "takeoff-istanbul" }
+      let!(:election) { create :election, organization: org }
+
+      context "when the quest was completed" do
+        before do
+          create :vote, voter: user, election: election
+        end
+
+        it_behaves_like "a refresh user quest that creates new records"
+      end
+
+      context "when the quest was not completed" do
+        it_behaves_like "a refresh user quest without creating new records"
+      end
+    end
   end
 
   context "when the quest was already credited for the user" do

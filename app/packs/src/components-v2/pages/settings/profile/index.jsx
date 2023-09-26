@@ -14,6 +14,7 @@ import { getAuthToken } from "src/api/utils";
 export const ProfileForm = ({ setIsDirty }) => {
   const profileFileInput = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [bioChars, setBioChars] = useState(0);
   useEffect(() => {
     setIsLoading(false);
   }, [setIsLoading]);
@@ -23,6 +24,7 @@ export const ProfileForm = ({ setIsDirty }) => {
   useEffect(() => {
     if (!profile) return;
     setProfilePic({ url: profile.profile_picture_url });
+    setBioChars(profile?.headline?.length);
   }, [profile]);
 
   const updateProfile = useCallback(() => {
@@ -142,6 +144,12 @@ export const ProfileForm = ({ setIsDirty }) => {
     uppyProfile.on("upload", () => {});
   }, [uppyProfile]);
 
+  const changeBio = event => {
+    const value = event.target.value;
+    setBioChars(value.length);
+    setIsDirty(true);
+  };
+
   return (
     <Container>
       <AvatarRow>
@@ -182,14 +190,16 @@ export const ProfileForm = ({ setIsDirty }) => {
       </InfoRow>
       <TextArea
         label="Short Bio"
+        caption={`${bioChars}/70 chars max`}
         placeholder="This is the first thing people read about you after your name. Make it count 💫"
         defaultValue={profile?.profile.headline}
         textAreaRef={refs.headline}
-        onChange={() => setIsDirty(true)}
+        hasError={bioChars > 70}
+        onChange={event => changeBio(event)}
       />
       {!isLoading &&
         createPortal(
-          <Button hierarchy="primary" size="small" text="Save" onClick={updateProfile} />,
+          <Button hierarchy="primary" size="small" text="Save" onClick={updateProfile} isDisabled={bioChars > 70} />,
           document.getElementById("save-button")
         )}
     </Container>

@@ -132,6 +132,14 @@ class API::TalentBlueprint < Blueprinter::Base
     end
   end
 
+  view :with_votes do
+    include_view :normal
+
+    field :vote_count do |user, options|
+      Vote.where(candidate_id: user.id).sum(&:amount)
+    end
+  end
+
   # ------------ temporary views for Profile V1.0 ------------
   view :overview do
     include_view :with_subscribe_status

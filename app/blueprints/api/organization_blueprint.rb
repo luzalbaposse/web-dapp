@@ -20,7 +20,13 @@ class API::OrganizationBlueprint < Blueprinter::Base
       end
     end
 
-    association :users, blueprint: API::UserBlueprint, view: :simple
+    field :members_count do |organization, _options|
+      organization.users.count
+    end
+
+    association :users, blueprint: API::UserBlueprint, view: :simple do |organization, _options|
+      organization.users.limit(5)
+    end
   end
 
   view :normal do
@@ -59,10 +65,6 @@ class API::OrganizationBlueprint < Blueprinter::Base
 
     association :election, blueprint: API::ElectionBlueprint, view: :normal do |organization, _options|
       organization.active_election
-    end
-
-    association :users, blueprint: API::UserBlueprint, view: :card, options: {with_vote_count: true} do |organization, _options|
-      organization.users.shuffle(random: Random.new(DateTime.current.beginning_of_hour.jd))
     end
   end
 end
