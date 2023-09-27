@@ -116,7 +116,11 @@ const TransactionStep = ({ member, updateMember, election, onSuccess, onError, o
     });
 
     if (response.success) {
-      updateMember({ ...member, voteCount: member.voteCount + value });
+      updateMember({
+        ...member,
+        voteCount: member.voteCount + value,
+        currentUserVotesCount: member.currentUserVotesCount + value
+      });
       onSuccess();
     } else {
       setError(response.error);
@@ -140,7 +144,7 @@ const TransactionStep = ({ member, updateMember, election, onSuccess, onError, o
       <ModalBody>
         <ModalInput>
           <ModalInputHeader>
-            <Typography specs={{ variant: "p2", type: "bold" }}>Votes</Typography>
+            <Typography specs={{ variant: "p2", type: "bold" }}>New Votes</Typography>
             <Typography specs={{ variant: "p3", type: "bold" }}>Balance: {talBalance} $TAL</Typography>
           </ModalInputHeader>
           <ModalInputBox>
@@ -156,11 +160,11 @@ const TransactionStep = ({ member, updateMember, election, onSuccess, onError, o
         <ModalDescription>
           <ModalValueDescription>
             <ModalValuesRow>
-              <Typography specs={{ variant: "p2", type: "regular" }}>Your votes on {member.name}</Typography>
-              <Typography specs={{ variant: "p2", type: "regular" }}>{member.currentUserVoteCount}</Typography>
+              <Typography specs={{ variant: "p2", type: "regular" }}>Previous votes from you</Typography>
+              <Typography specs={{ variant: "p2", type: "regular" }}>{member.currentUserVotesCount}</Typography>
             </ModalValuesRow>
             <ModalValuesRow>
-              <Typography specs={{ variant: "p2", type: "regular" }}>Previous Votes on {member.name}</Typography>
+              <Typography specs={{ variant: "p2", type: "regular" }}>Previous votes on {member.name}</Typography>
               <Typography specs={{ variant: "p2", type: "regular" }}>{member.voteCount}</Typography>
             </ModalValuesRow>
             <ModalValuesRow>
