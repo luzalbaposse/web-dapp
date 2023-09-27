@@ -3,6 +3,7 @@ class Notification < ApplicationRecord
 
   IN_APP_TYPES = %w[
     CareerUpdateCreatedNotification
+    ElectionVoteReceivedNotification
     MessageReceivedNotification
     NewSponsorNotification
     QuestCompletedNotification

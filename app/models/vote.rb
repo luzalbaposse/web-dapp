@@ -6,4 +6,8 @@ class Vote < ApplicationRecord
   validates :wallet_id, :cost, presence: true
 
   ADVISORY_LOCK_NAMESPACE = 1
+
+  def name
+    "New votes for #{election.organization.name}"
+  end
 end
