@@ -13,8 +13,8 @@ class API::GoalBlueprint < Blueprinter::Base
     end
 
     field :election_count do |goal, options|
-      if goal&.election&.present? && options[:current_user]
-        goal.election.votes.where(candidate: options[:current_user]).count
+      if goal&.election&.present?
+        goal.election.votes.where(candidate: goal.user).count
       end
     end
   end

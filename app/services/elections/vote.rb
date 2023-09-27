@@ -22,7 +22,7 @@ module Elections
 
       balance = client.call(tal_contract, "getBalance", voter.wallet_id)
       decimals = "1#{"0" * 18}"
-      cost_of_votes = 0
+      cost_of_current_votes = 0
 
       ::Vote.transaction do
         # Lock new votes for the same candidate here
@@ -32,22 +32,23 @@ module Elections
         current_vote_count = election.votes.where(candidate: candidate).sum(&:amount)
 
         number_of_votes.times do |i|
-          cost_of_votes += (current_vote_count + i + 1) * decimals.to_i
+          cost_of_current_votes += (current_vote_count + i + 1) * decimals.to_i
         end
 
-        return {error: "Insufficient virtual TAL balance. Try a different chain."} if !balance || balance < cost_of_votes
+        total_cost_votes = cost_of_current_votes + cost_of_previous_votes
+        return {error: "Insufficient virtual TAL balance. Try a different chain."} if !balance || balance < total_cost_votes
 
         @vote = ::Vote.new
         @vote.voter = voter
         @vote.election = election
         @vote.candidate = candidate
         @vote.amount = number_of_votes
-        @vote.cost = cost_of_votes.to_s
+        @vote.cost = cost_of_current_votes.to_s
+        @vote.wallet_id = voter.wallet_id
         @vote.save!
         @vote
       end
 
-      DeductTalForVoteJob.perform_later(vote_id: @vote.id, chain_id: chain_id)
       refresh_voter_quest
 
       {success: true}
@@ -59,6 +60,10 @@ module Elections
 
     def client
       Eth::Client.create rpc_url
+    end
+
+    def cost_of_previous_votes
+      ::Vote.where(wallet_id: voter.wallet_id).sum { |vote| vote.cost.to_i }
     end
 
     def rpc_url

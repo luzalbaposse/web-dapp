@@ -503,7 +503,7 @@ RSpec.describe Quests::RefreshUserQuest do
 
       context "when the quest was completed" do
         before do
-          create :vote, voter: user, election: election
+          create :vote, voter: user, election: election, wallet_id: user.wallet_id
         end
 
         it_behaves_like "a refresh user quest that creates new records"

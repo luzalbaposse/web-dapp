@@ -52,7 +52,7 @@ export const CollectiveShowPage = ({ organization, railsContext }) => {
   }, []);
 
   useEffect(() => {
-    if (keyword.length > 2 || keyword.length == 0) {
+    if (keyword.length > 1 || keyword.length == 0) {
       fetchCollectiveUsers();
     }
   }, [keyword]);

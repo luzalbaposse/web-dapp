@@ -207,12 +207,12 @@ const SuccessStep = ({ member, onCancel }) => (
     <Icon name="success" />
     <InfoContainer>
       <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
-        Vote submitted Successfully!
+        Vote Submitted!
       </Typography>
       <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
-        Congratulations! You have successfully contributed to support {member.name} in the 'Take Off Istanbul' campaign.
-        We're now processing the vote and will be deducting the required $TAL from your wallet. If for some reason we're
-        unable to do so your vote will not count.
+        Thank you for supporting {member.name} in the 'Take Off Istanbul' campaign. We're now processing your vote and
+        will be deducting the required $TAL from your wallet. This might take a few minutes, depending on how congested
+        the Polygon network is.
       </Typography>
     </InfoContainer>
     <Button hierarchy="primary" size="medium" onClick={onCancel} text="Return" />

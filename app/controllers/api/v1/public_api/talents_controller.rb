@@ -25,7 +25,7 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
       users,
       before: cursor,
       items: per_page,
-      order: {created_at: :desc, uuid: :desc}
+      order: {profile_completeness: :desc, uuid: :desc}
     )
 
     response_body = {

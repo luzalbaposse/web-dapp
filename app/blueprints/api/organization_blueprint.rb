@@ -25,7 +25,7 @@ class API::OrganizationBlueprint < Blueprinter::Base
     end
 
     association :users, blueprint: API::UserBlueprint, view: :simple do |organization, _options|
-      organization.users.limit(5)
+      organization.users.joins(:talent).where.not(talent: {profile_picture_data: nil}).limit(5)
     end
   end
 

@@ -35,6 +35,7 @@ module Users
         Reward.where(user: user).destroy_all
         Membership.where(user: user).destroy_all
         CareerUpdate.where(user: user).destroy_all
+        Vote.where(voter: user).update_all(voter_id: nil)
 
         user
           .destroy!

@@ -209,7 +209,7 @@ const Overview = ({ collective, members, membersCount }) => {
                 <Tooltip
                   popOverAccessibilityId="prizePool"
                   placement="top"
-                  body="The $TAL from votes goes into the prize pool that will be distributed back to members who voted on the 5 winners (minus a 10% protocol fee). The prize pool will be distributed proportionally to the number of votes you have in the 5 winners, not proportionally to the amount of $TAL you spent on those votes."
+                  body="The $TAL from all votes will go into this prize pool. The pool will be distributed back to the users who voted for the winning candidates, after October 8th."
                 >
                   <div>
                     <Icon name="information" color="primary04" size={15} />
