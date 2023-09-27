@@ -22,6 +22,10 @@ class ExperienceReward < ApplicationRecord
     experience_reward_claims.where(user: user).any?
   end
 
+  def merch_code(user)
+    merch_codes.find_by(user: user, assigned: true)&.code
+  end
+
   def give_reward(_user)
     raise NotImplementedError
   end

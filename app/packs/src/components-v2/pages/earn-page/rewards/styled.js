@@ -20,7 +20,7 @@ export const DesktopGrid = styled.div`
     max-width: 1128px;
     margin: auto;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     grid-template-rows: auto;
     gap: 8px;
     column-gap: 24px;
