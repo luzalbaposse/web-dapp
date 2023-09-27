@@ -160,13 +160,29 @@ class API::V1::PublicAPI::APIController < ActionController::Base
     if position.present?
       arel_table = pagy.arel_table
 
-      selected_column = pagy.order.keys.first || :created_at
+      # If the primary sort key is not "created_at"
 
-      select_created_at = arel_table.project(arel_table[selected_column]).where(arel_table[pagy.primary_key].eq(position))
-      select_the_sample_created_at = arel_table[selected_column].eq(select_created_at).and(arel_table[pagy.primary_key].send(pagy.comparation, position))
-      sql_comparation = arel_table[selected_column].send(pagy.comparation, select_created_at).or(select_the_sample_created_at)
+      # Select the primary sort key
+      # pagy.order should be something like:
+      #  [:created_at, :id] or [:foo_column, ..., :created_at, :id]
+      primary_sort_key = pagy.order.keys.detect{ |order_key| ![:created_at, :id].include?(order_key.to_sym) } || :created_at
+
+      select_previous_row = arel_table.project(arel_table[primary_sort_key]).
+        where(arel_table[pagy.primary_key].eq(position))
+
+      sql_comparation = arel_table[primary_sort_key].
+        send(pagy.comparation, select_previous_row).
+        or(
+          arel_table[primary_sort_key].eq(select_previous_row).
+          and(arel_table[pagy.primary_key].send(pagy.comparation, position))
+        )
 
       collection = collection.where(sql_comparation)
+    end
+
+    if pagy.vars[:randomize]
+      seed = 10000000000000000.to_f/(DateTime.current.beginning_of_hour).to_i
+      collection = collection.select("setseed(0.#{seed.to_i}), #{pagy.arel_table.name}.*").order("random()")
     end
 
     pagy.vars[:no_order] ? collection.limit(pagy.items) : collection.reorder(pagy.order).limit(pagy.items)

@@ -33,10 +33,7 @@ module Users
     end
 
     def filter_by_collective(users)
-      # We're doing it this way to avoid duplicates
       users = users.joins(:organizations).where(organizations: {slug: search_params[:collective_slug]})
-      random_users = users.select("setseed(0.#{DateTime.current.beginning_of_hour.to_i}), distinct(users.id)").order("random()")
-      User.where(id: random_users.pluck(:id))
     end
 
     def filter_by_name?

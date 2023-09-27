@@ -21,11 +21,21 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
 
   def index
     users = filtered_users
+
+    pagy_params = {
+      before: cursor,
+      items: per_page
+    }
+    if collective&.active_election
+      pagy_params[:randomize] = true
+      pagy_params[:no_order] = true
+    else
+      pagy_params[:order] = {created_at: :desc, uuid: :desc}
+    end
+
     pagy, page_users = pagy_uuid_cursor(
       users,
-      before: cursor,
-      items: per_page,
-      order: {created_at: :desc, uuid: :desc}
+      pagy_params
     )
 
     response_body = {
@@ -226,6 +236,15 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
       current_user: current_user,
       search_params: filter_params.to_h
     ).call
+  end
+
+  def collective
+    @collective ||= Organization.find_by(slug: filter_params[:collective_slug])
+  end
+
+  def randomized_users(users)
+    seed = 10000000000000000.to_f/(DateTime.current.beginning_of_hour).to_i
+    users.select("setseed(0.#{seed.to_i}), users.*, random() as random")
   end
 
   def filter_params
