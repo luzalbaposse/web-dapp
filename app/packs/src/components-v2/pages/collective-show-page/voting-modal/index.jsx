@@ -27,7 +27,7 @@ import { parseAndCommify, chainNameToId } from "src/onchain/utils";
 import { formatUnits } from "viem";
 import { post } from "src/utils/requests";
 
-const TransactionStep = ({ member, election, onSuccess, onError, onCancel, setError, railsContext }) => {
+const TransactionStep = ({ member, updateMember, election, onSuccess, onError, onCancel, setError, railsContext }) => {
   const inputRef = useRef(1);
   const [value, setValue] = useState(1);
   const [chainId, setChainId] = useState(null);
@@ -96,7 +96,7 @@ const TransactionStep = ({ member, election, onSuccess, onError, onCancel, setEr
 
   const calculateCost = () => {
     // replace with number of votes
-    let cost = member.voteCount;
+    let cost = 0;
     for (let i = 0; i < value; i++) {
       cost += member.voteCount + i + 1;
     }
@@ -116,6 +116,7 @@ const TransactionStep = ({ member, election, onSuccess, onError, onCancel, setEr
     });
 
     if (response.success) {
+      updateMember({ ...member, voteCount: member.voteCount + value });
       onSuccess();
     } else {
       setError(response.error);
@@ -280,7 +281,7 @@ const STEPS = {
   3: ErrorStep
 };
 
-export const VotingModal = ({ modalState, member, election, railsContext }) => {
+export const VotingModal = ({ modalState, member, updateMember, election, railsContext }) => {
   const [error, setError] = useState(null);
   const stepsState = useStepExperience(Object.keys(STEPS).length);
   const StepScreen = useMemo(() => STEPS[stepsState.currentStep], [stepsState.currentStep]);
@@ -305,6 +306,7 @@ export const VotingModal = ({ modalState, member, election, railsContext }) => {
         onError={jumpToError}
         onCancel={closeModal}
         member={member}
+        updateMember={updateMember}
         error={error}
         setError={setError}
         railsContext={railsContext}

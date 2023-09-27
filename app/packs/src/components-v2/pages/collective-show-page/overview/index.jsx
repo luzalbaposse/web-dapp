@@ -201,6 +201,14 @@ const Overview = ({ collective, members, membersCount }) => {
               </ElectionInfoRow>
               <ElectionInfoRow>
                 <Typography color="primary01" specs={{ type: "bold", variant: "p2" }}>
+                  My Votes
+                </Typography>
+                <Typography color="primary04" specs={{ type: "regular", variant: "p2" }}>
+                  {collective.currentUserTotalVotes}
+                </Typography>
+              </ElectionInfoRow>
+              <ElectionInfoRow>
+                <Typography color="primary01" specs={{ type: "bold", variant: "p2" }}>
                   Prize Pool
                 </Typography>
                 <Typography color="primary04" specs={{ type: "regular", variant: "p2" }}>

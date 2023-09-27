@@ -110,6 +110,7 @@ export const CollectiveShowPage = ({ organization, railsContext }) => {
           <Members
             currentUser={currentUser}
             members={collectiveUsers}
+            setMembers={setCollectiveUsers}
             activeElection={collective.election}
             railsContext={railsContext}
             keyword={keyword}

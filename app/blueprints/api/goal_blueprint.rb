@@ -17,5 +17,11 @@ class API::GoalBlueprint < Blueprinter::Base
         goal.election.votes.where(candidate: goal.user).count
       end
     end
+
+    field :current_user_votes_count do |goal, options|
+      if goal&.election&.present? && options[:current_user]
+        goal.election.votes.where(candidate: goal.user, wallet_id: options[:current_user].wallet_id).count
+      end
+    end
   end
 end
