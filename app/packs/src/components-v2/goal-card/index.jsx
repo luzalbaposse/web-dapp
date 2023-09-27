@@ -55,6 +55,17 @@ export const GoalCard = ({ goal, openAddGoalModal, isOwner, username }) => {
     }
   };
 
+  const textColor = () => {
+    if (disableVoteButton()) {
+      return "primaryDisable";
+    }
+    if (goal.current_user_votes_count > 0) {
+      return "bg01";
+    } else {
+      return "primary01";
+    }
+  };
+
   return (
     <Container>
       <TagsRow>
@@ -82,7 +93,7 @@ export const GoalCard = ({ goal, openAddGoalModal, isOwner, username }) => {
         <VoteContainer>
           <Button
             size="small"
-            hierarchy="secondary"
+            hierarchy={goal.current_user_votes_count > 0 ? "primary" : "secondary"}
             isDisabled={disableVoteButton()}
             onClick={() => window.location.replace(`/collectives/takeoff-istanbul?keyword=${username}`)}
           >
@@ -92,17 +103,17 @@ export const GoalCard = ({ goal, openAddGoalModal, isOwner, username }) => {
                   variant: "label2",
                   type: "medium"
                 }}
-                color={disableVoteButton() ? "primaryDisable" : "primary01"}
+                color={textColor()}
               >
                 Vote
               </Typography>
-              <VoteDiv />
+              <VoteDiv color={goal.current_user_votes_count > 0 ? "bg01" : "surfaceHover02"} />
               <Typography
                 specs={{
                   variant: "label2",
                   type: "medium"
                 }}
-                color={disableVoteButton() ? "primaryDisable" : "primary01"}
+                color={textColor()}
               >
                 {goal.election_count}
               </Typography>

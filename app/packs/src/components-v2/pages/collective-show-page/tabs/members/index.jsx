@@ -8,6 +8,7 @@ import Table from "src/components/design_system/table";
 export const Members = ({
   currentUser,
   members,
+  setMembers,
   activeElection,
   railsContext,
   loadMoreUsers,
@@ -27,6 +28,7 @@ export const Members = ({
           election={activeElection}
           modalState={modalState}
           railsContext={railsContext}
+          updateMember={updateMember}
         />
       );
     } else {
@@ -39,6 +41,25 @@ export const Members = ({
     e.stopPropagation();
     setActiveMember(member);
     modalState.openModal();
+  };
+
+  const updateMember = newMember => {
+    const index = members.findIndex(member => member.id === newMember.id);
+
+    const newMembers = [...members.slice(0, index), newMember, ...members.slice(index + 1)];
+
+    setMembers(newMembers);
+  };
+
+  const textColor = member => {
+    if (!enableVoting) {
+      return "primaryDisable";
+    }
+    if (member.currentUserVotesCount > 0) {
+      return "bg01";
+    } else {
+      return "primary01";
+    }
   };
 
   return (
@@ -67,7 +88,7 @@ export const Members = ({
                   {!!activeElection && (
                     <Button
                       size="small"
-                      hierarchy="secondary"
+                      hierarchy={member.currentUserVotesCount > 0 ? "primary" : "secondary"}
                       isDisabled={!enableVoting || !currentUser}
                       onClick={e => voteOnMember(e, member)}
                     >
@@ -77,17 +98,17 @@ export const Members = ({
                             variant: "label2",
                             type: "medium"
                           }}
-                          color={enableVoting ? "primary01" : "primaryDisable"}
+                          color={textColor(member)}
                         >
                           Vote
                         </Typography>
-                        <VoteDiv />
+                        <VoteDiv color={member.currentUserVotesCount > 0 ? "bg01" : "surfaceHover02"} />
                         <Typography
                           specs={{
                             variant: "label2",
                             type: "medium"
                           }}
-                          color={enableVoting ? "primary01" : "primaryDisable"}
+                          color={textColor(member)}
                         >
                           {member.voteCount}
                         </Typography>

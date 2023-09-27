@@ -25,7 +25,7 @@ class API::OrganizationBlueprint < Blueprinter::Base
     end
 
     association :users, blueprint: API::UserBlueprint, view: :simple do |organization, _options|
-      organization.users.limit(5)
+      organization.users.joins(:talent).where.not(talent: {profile_picture_data: nil}).limit(5)
     end
   end
 
@@ -65,6 +65,17 @@ class API::OrganizationBlueprint < Blueprinter::Base
 
     association :election, blueprint: API::ElectionBlueprint, view: :normal do |organization, _options|
       organization.active_election
+    end
+
+    field :current_user_total_votes do |organization, options|
+      election = organization.active_election
+      current_user = options[:current_user]
+
+      if current_user && election
+        Vote.where(voter: current_user.wallet_id, election: election).sum(&:amount)
+      else
+        0
+      end
     end
   end
 end

@@ -73,20 +73,51 @@ RSpec.describe Elections::Vote do
     end
   end
 
+  context "with insufficient balance" do
+    let(:eth_client_class) { Eth::Client }
+    let(:provider) { instance_double(eth_client_class) }
+    let(:eth_contract_class) { Eth::Contract }
+    let(:eth_contract) { instance_double(eth_contract_class) }
+    let(:balance) { 0 }
+
+    before do
+      allow(eth_client_class).to receive(:create).and_return(provider)
+      allow(provider).to receive(:call).and_return(balance)
+      allow(eth_contract_class).to receive(:from_abi).and_return(eth_contract)
+      create :membership, user: candidate, organization: election.organization
+    end
+
+    it "does not create a vote without balance" do
+      result = vote_on_election
+
+      expect(result[:error]).to eq("Insufficient virtual TAL balance. Try a different chain.")
+    end
+
+    context "when there's some balance but the wallet already exceed it" do
+      let(:balance) { 10 }
+
+      before do
+        create :vote, election: election, wallet_id: voter.wallet_id, cost: "10"
+      end
+
+      it "does not create a vote without balance" do
+        result = vote_on_election
+
+        expect(result[:error]).to eq("Insufficient virtual TAL balance. Try a different chain.")
+      end
+    end
+  end
+
   describe "with correct data" do
     let(:eth_client_class) { Eth::Client }
     let(:provider) { instance_double(eth_client_class) }
     let(:eth_contract_class) { Eth::Contract }
     let(:eth_contract) { instance_double(eth_contract_class) }
-    let(:virtual_tal_burn) { Web3::BurnVirtualTal }
-    let(:virtual_tal_instance) { instance_double(virtual_tal_burn) }
 
     before do
       allow(eth_client_class).to receive(:create).and_return(provider)
       allow(provider).to receive(:call).and_return(100000000000000000000)
       allow(eth_contract_class).to receive(:from_abi).and_return(eth_contract)
-      allow(virtual_tal_burn).to receive(:new).and_return(virtual_tal_instance)
-      allow(virtual_tal_instance).to receive(:call).and_return("123232")
       membership = election.organization.memberships.new(active: true, user: candidate)
       membership.save!
     end

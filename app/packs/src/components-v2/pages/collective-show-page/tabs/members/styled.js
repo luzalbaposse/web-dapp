@@ -25,9 +25,12 @@ export const VoteTextContainer = styled.div`
 export const VoteDiv = styled.div`
   width: 1px;
   height: 32px;
-  border-left: 1px solid ${buildColor("surfaceHover02")};
   margin-top: -8px;
   margin-bottom: -8px;
   margin-left: 16px;
   margin-right: 12px;
+
+  ${({ color }) => css`
+    border-left: 1px solid ${buildColor(color)};
+  `}
 `;

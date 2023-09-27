@@ -138,6 +138,17 @@ class API::TalentBlueprint < Blueprinter::Base
     field :vote_count do |user, options|
       Vote.where(candidate_id: user.id).sum(&:amount)
     end
+
+    field :current_user_votes_count do |user, options|
+      election = options[:election]
+      current_user = options[:current_user]
+
+      if current_user && election
+        Vote.where(candidate_id: user.id, wallet_id: current_user.wallet_id, election: election).sum(&:amount)
+      else
+        0
+      end
+    end
   end
 
   # ------------ temporary views for Profile V1.0 ------------

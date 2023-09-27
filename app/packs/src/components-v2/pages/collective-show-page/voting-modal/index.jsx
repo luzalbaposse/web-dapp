@@ -27,7 +27,7 @@ import { parseAndCommify, chainNameToId } from "src/onchain/utils";
 import { formatUnits } from "viem";
 import { post } from "src/utils/requests";
 
-const TransactionStep = ({ member, election, onSuccess, onError, onCancel, setError, railsContext }) => {
+const TransactionStep = ({ member, updateMember, election, onSuccess, onError, onCancel, setError, railsContext }) => {
   const inputRef = useRef(1);
   const [value, setValue] = useState(1);
   const [chainId, setChainId] = useState(null);
@@ -96,7 +96,7 @@ const TransactionStep = ({ member, election, onSuccess, onError, onCancel, setEr
 
   const calculateCost = () => {
     // replace with number of votes
-    let cost = member.voteCount;
+    let cost = 0;
     for (let i = 0; i < value; i++) {
       cost += member.voteCount + i + 1;
     }
@@ -116,6 +116,7 @@ const TransactionStep = ({ member, election, onSuccess, onError, onCancel, setEr
     });
 
     if (response.success) {
+      updateMember({ ...member, voteCount: member.voteCount + value });
       onSuccess();
     } else {
       setError(response.error);
@@ -207,12 +208,12 @@ const SuccessStep = ({ member, onCancel }) => (
     <Icon name="success" />
     <InfoContainer>
       <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
-        Vote submitted Successfully!
+        Vote Submitted!
       </Typography>
       <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
-        Congratulations! You have successfully contributed to support {member.name} in the 'Take Off Istanbul' campaign.
-        We're now processing the vote and will be deducting the required $TAL from your wallet. If for some reason we're
-        unable to do so your vote will not count.
+        Thank you for supporting {member.name} in the 'Take Off Istanbul' campaign. We're now processing your vote and
+        will be deducting the required $TAL from your wallet. This might take a few minutes, depending on how congested
+        the Polygon network is.
       </Typography>
     </InfoContainer>
     <Button hierarchy="primary" size="medium" onClick={onCancel} text="Return" />
@@ -280,7 +281,7 @@ const STEPS = {
   3: ErrorStep
 };
 
-export const VotingModal = ({ modalState, member, election, railsContext }) => {
+export const VotingModal = ({ modalState, member, updateMember, election, railsContext }) => {
   const [error, setError] = useState(null);
   const stepsState = useStepExperience(Object.keys(STEPS).length);
   const StepScreen = useMemo(() => STEPS[stepsState.currentStep], [stepsState.currentStep]);
@@ -305,6 +306,7 @@ export const VotingModal = ({ modalState, member, election, railsContext }) => {
         onError={jumpToError}
         onCancel={closeModal}
         member={member}
+        updateMember={updateMember}
         error={error}
         setError={setError}
         railsContext={railsContext}

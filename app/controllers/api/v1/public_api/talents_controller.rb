@@ -29,7 +29,12 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
     )
 
     response_body = {
-      talents: API::TalentBlueprint.render_as_json(page_users.includes(:talent), view: index_action_view),
+      talents: API::TalentBlueprint.render_as_json(
+        page_users.includes(:talent),
+        view: index_action_view,
+        current_user: current_user,
+        election: collective&.active_election
+      ),
       pagination: {
         total: users.count,
         cursor: pagy.has_more? ? page_users.last.uuid : nil
@@ -230,6 +235,10 @@ class API::V1::PublicAPI::TalentsController < API::V1::PublicAPI::APIController
 
   def filter_params
     params.permit(:name, :messaging_disabled, :collective_slug, ids: [])
+  end
+
+  def collective
+    @collective ||= Organization.find_by(slug: filter_params[:collective_slug])
   end
 
   def user_params
