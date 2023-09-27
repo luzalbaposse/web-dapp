@@ -24,8 +24,6 @@ import SocialRow from "src/components/profile/SocialRow";
 import { useWindowDimensionsHook } from "src/utils/window";
 import dayjs from "dayjs";
 import { TAKEOFF_LEARN_MORE } from "src/utils/constants";
-import { parseAndCommify } from "src/onchain/utils";
-import { formatUnits } from "viem";
 import Tooltip from "src/components/design_system/tooltip";
 
 const NUMBER_OF_TAGS = 4;
@@ -73,16 +71,6 @@ const Overview = ({ collective, members, membersCount }) => {
     const endDate = dayjs(collective.election.votingEndDate);
 
     return `${startDate.format("DD/MMM")} - ${endDate.format("DD/MMM")}`;
-  };
-
-  const formatPrizePool = () => {
-    const prizePool = formatUnits(collective.election.prizePool, 18);
-    return parseAndCommify(prizePool);
-  };
-
-  const formatSpentTal = () => {
-    const spentTal = formatUnits(collective.currentUserTalSpent, 18);
-    return parseAndCommify(spentTal);
   };
 
   return (
@@ -217,7 +205,7 @@ const Overview = ({ collective, members, membersCount }) => {
                   My Votes Cost
                 </Typography>
                 <Typography color="primary04" specs={{ type: "regular", variant: "p2" }}>
-                  {formatSpentTal()} $TAL
+                  {collective.currentUserTalSpent} $TAL
                 </Typography>
               </ElectionInfoRow>
               <ElectionInfoRow>
@@ -225,7 +213,7 @@ const Overview = ({ collective, members, membersCount }) => {
                   Prize Pool
                 </Typography>
                 <Typography color="primary04" specs={{ type: "regular", variant: "p2" }}>
-                  {formatPrizePool()} $TAL
+                  {collective.election.prizePool} $TAL
                 </Typography>
                 <Tooltip
                   popOverAccessibilityId="prizePool"
