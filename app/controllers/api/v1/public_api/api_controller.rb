@@ -158,15 +158,20 @@ class API::V1::PublicAPI::APIController < ActionController::Base
 
   def pagy_uuid_cursor_get_items(collection, pagy, position = nil)
     if position.present?
-      arel_table = pagy.arel_table
+      if pagy.vars[:no_order]
+        index = collection.index(collection.find_by(uuid: position))
+        index ? collection = collection.offset(index + 1) : collection
+      else
+        arel_table = pagy.arel_table
 
-      selected_column = pagy.order.keys.first || :created_at
+        selected_column = pagy.order.keys.first || :created_at
 
-      select_created_at = arel_table.project(arel_table[selected_column]).where(arel_table[pagy.primary_key].eq(position))
-      select_the_sample_created_at = arel_table[selected_column].eq(select_created_at).and(arel_table[pagy.primary_key].send(pagy.comparation, position))
-      sql_comparation = arel_table[selected_column].send(pagy.comparation, select_created_at).or(select_the_sample_created_at)
+        select_created_at = arel_table.project(arel_table[selected_column]).where(arel_table[pagy.primary_key].eq(position))
+        select_the_sample_created_at = arel_table[selected_column].eq(select_created_at).and(arel_table[pagy.primary_key].send(pagy.comparation, position))
+        sql_comparation = arel_table[selected_column].send(pagy.comparation, select_created_at).or(select_the_sample_created_at)
 
-      collection = collection.where(sql_comparation)
+        collection = collection.where(sql_comparation)
+      end
     end
 
     pagy.vars[:no_order] ? collection.limit(pagy.items) : collection.reorder(pagy.order).limit(pagy.items)

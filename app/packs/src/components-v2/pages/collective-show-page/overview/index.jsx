@@ -80,6 +80,11 @@ const Overview = ({ collective, members, membersCount }) => {
     return parseAndCommify(prizePool);
   };
 
+  const formatSpentTal = () => {
+    const spentTal = formatUnits(collective.currentUserTalSpent, 18);
+    return parseAndCommify(spentTal);
+  };
+
   return (
     <div>
       <BannerContainer>
@@ -205,6 +210,14 @@ const Overview = ({ collective, members, membersCount }) => {
                 </Typography>
                 <Typography color="primary04" specs={{ type: "regular", variant: "p2" }}>
                   {collective.currentUserTotalVotes}
+                </Typography>
+              </ElectionInfoRow>
+              <ElectionInfoRow>
+                <Typography color="primary01" specs={{ type: "bold", variant: "p2" }}>
+                  My Votes Cost
+                </Typography>
+                <Typography color="primary04" specs={{ type: "regular", variant: "p2" }}>
+                  {formatSpentTal()} $TAL
                 </Typography>
               </ElectionInfoRow>
               <ElectionInfoRow>

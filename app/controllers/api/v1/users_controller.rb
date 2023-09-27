@@ -99,7 +99,6 @@ class API::V1::UsersController < ApplicationController
 
   def filtered_users
     Users::Search.new(
-      current_user: current_user,
       search_params: search_params.to_h
     ).call
   end

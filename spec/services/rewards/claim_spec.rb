@@ -8,13 +8,7 @@ RSpec.describe Rewards::Claim do
   let!(:talent) { create :talent, user: user, verified: true }
   let(:source) { create :invite }
 
-  let(:virtual_tal_service) { Web3::MintVirtualTal }
-  let(:virtual_tal_instance) { instance_double(virtual_tal_service, call: true) }
   let!(:exp) { create :experience_point, user: user, source: source, amount: 250, credited_at: Date.yesterday, description: "Invite Points" }
-
-  before do
-    allow(virtual_tal_service).to receive(:new).and_return(virtual_tal_instance)
-  end
 
   # add context for each type of reward
   context "when the reward is a small tal" do
@@ -23,14 +17,10 @@ RSpec.describe Rewards::Claim do
     it "claims the small tal reward if there is enough stock and the user has enough points" do
       claim_reward
 
-      expect(virtual_tal_service).to have_received(:new).with(
-        chain_id: 44787
-      )
-
-      expect(virtual_tal_instance).to have_received(:call).with(
+      expect(GiveTalAsRewardJob).to have_been_enqueued.with(
+        chain_id: 44787,
         amount: 500,
-        to: user.wallet_id,
-        reason: "experience_rewards"
+        to: user.wallet_id
       )
     end
   end
@@ -41,14 +31,10 @@ RSpec.describe Rewards::Claim do
     it "claims the medium tal reward if there is enough stock and the user has enough points" do
       claim_reward
 
-      expect(virtual_tal_service).to have_received(:new).with(
-        chain_id: 44787
-      )
-
-      expect(virtual_tal_instance).to have_received(:call).with(
+      expect(GiveTalAsRewardJob).to have_been_enqueued.with(
+        chain_id: 44787,
         amount: 1000,
-        to: user.wallet_id,
-        reason: "experience_rewards"
+        to: user.wallet_id
       )
     end
   end
@@ -59,14 +45,10 @@ RSpec.describe Rewards::Claim do
     it "claims the large tal reward if there is enough stock and the user has enough points" do
       claim_reward
 
-      expect(virtual_tal_service).to have_received(:new).with(
-        chain_id: 44787
-      )
-
-      expect(virtual_tal_instance).to have_received(:call).with(
+      expect(GiveTalAsRewardJob).to have_been_enqueued.with(
+        chain_id: 44787,
         amount: 2000,
-        to: user.wallet_id,
-        reason: "experience_rewards"
+        to: user.wallet_id
       )
     end
   end
@@ -77,14 +59,10 @@ RSpec.describe Rewards::Claim do
     it "claims the large tal reward if there is enough stock and the user has enough points" do
       claim_reward
 
-      expect(virtual_tal_service).to have_received(:new).with(
-        chain_id: 44787
-      )
-
-      expect(virtual_tal_instance).to have_received(:call).with(
+      expect(GiveTalAsRewardJob).to have_been_enqueued.with(
+        chain_id: 44787,
         amount: 10,
-        to: user.wallet_id,
-        reason: "experience_rewards"
+        to: user.wallet_id
       )
     end
   end

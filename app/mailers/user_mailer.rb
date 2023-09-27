@@ -138,4 +138,24 @@ class UserMailer < ApplicationMailer
 
     send_sendgrid_email(dynamic_template_data:, template_id:, to:)
   end
+
+  def send_election_vote_received_email
+    election = Election.find(indifferent_access_params[:election_id])
+    vote = Vote.find(indifferent_access_params[:vote_id])
+    voter = User.find(indifferent_access_params[:source_id])
+    user = indifferent_access_params[:recipient]
+
+    dynamic_template_data = {
+      first_name: sendgrid_name_variable(user),
+      voter_name: voter.name,
+      number_votes: vote.amount,
+      total_vote_count: election.votes.where(candidate: user).sum(:amount),
+      vote_count_url: collective_url(id: election.organization.slug)
+    }
+
+    template_id = "d-d8111d50ecd8457191677ca0a5c40d88"
+    to = user.email
+
+    send_sendgrid_email(dynamic_template_data:, template_id:, to:)
+  end
 end

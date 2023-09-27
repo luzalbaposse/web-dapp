@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Container, DesktopGrid, TitleContainer } from "./styled";
+import { Container, DesktopGrid } from "./styled";
 import { Typography } from "@talentprotocol/design-system";
 import { Quest } from "../../../quest";
 import { questsService } from "../../../../api";
+import { TitleContainer } from "../styled";
 
 export const Quests = ({ profile, railsContext }) => {
   const [quests, setQuests] = useState([]);

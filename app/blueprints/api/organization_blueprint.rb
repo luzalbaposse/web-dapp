@@ -72,7 +72,18 @@ class API::OrganizationBlueprint < Blueprinter::Base
       current_user = options[:current_user]
 
       if current_user && election
-        Vote.where(voter: current_user.wallet_id, election: election).sum(&:amount)
+        Vote.where(wallet_id: current_user.wallet_id, election: election).sum(&:amount)
+      else
+        0
+      end
+    end
+
+    field :current_user_tal_spent do |organization, options|
+      election = organization.active_election
+      current_user = options[:current_user]
+
+      if current_user && election
+        Vote.where(wallet_id: current_user.wallet_id, election: election).sum { |vote| vote.cost.to_i }
       else
         0
       end

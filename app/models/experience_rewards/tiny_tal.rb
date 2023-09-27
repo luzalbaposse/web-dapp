@@ -4,9 +4,9 @@ module ExperienceRewards
       return unless user.talent.verified?
 
       chain_id = (ENV["CONTRACTS_ENV"] == "production") ? 137 : 44787
-      service = Web3::MintVirtualTal.new(chain_id: chain_id)
+      GiveTalAsRewardJob.perform_later(chain_id: chain_id, amount: 10, to: user.wallet_id)
 
-      service.call(amount: 10, to: user.wallet_id, reason: "experience_rewards")
+      true
     end
   end
 end

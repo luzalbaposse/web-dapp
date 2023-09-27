@@ -44,7 +44,6 @@ RSpec.describe "Users", type: :request do
 
         aggregate_failures do
           expect(search_users_class).to have_received(:new).with(
-            current_user: current_user,
             search_params: params
           )
 
@@ -72,7 +71,6 @@ RSpec.describe "Users", type: :request do
 
         aggregate_failures do
           expect(search_users_class).to have_received(:new).with(
-            current_user: current_user,
             search_params: params.symbolize_keys
           )
 

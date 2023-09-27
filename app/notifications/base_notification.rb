@@ -27,7 +27,7 @@ class BaseNotification < Noticed::Base
   end
 
   def source_name
-    @source_name ||=
+    @source_name =
       if source.nil?
         "Anonymous"
       elsif source.display_name.present?

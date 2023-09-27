@@ -9,7 +9,6 @@ module Elections
       @number_of_votes = number_of_votes
       @chain_id = chain_id
       @supported_chains = (ENV["CONTRACTS_ENV"] == "production") ? [137, 42220] : [44787, 80001]
-      @vote = nil
     end
 
     def call
@@ -24,7 +23,7 @@ module Elections
       decimals = "1#{"0" * 18}"
       cost_of_current_votes = 0
 
-      ::Vote.transaction do
+      vote = ::Vote.transaction do
         # Lock new votes for the same candidate here
         # The lock is released at the end of the transaction
         ActiveRecord::Base.connection.execute("SELECT pg_advisory_xact_lock(#{::Vote::ADVISORY_LOCK_NAMESPACE}, #{candidate.id})")
@@ -38,18 +37,19 @@ module Elections
         total_cost_votes = cost_of_current_votes + cost_of_previous_votes
         return {error: "Insufficient virtual TAL balance. Try a different chain."} if !balance || balance < total_cost_votes
 
-        @vote = ::Vote.new
-        @vote.voter = voter
-        @vote.election = election
-        @vote.candidate = candidate
-        @vote.amount = number_of_votes
-        @vote.cost = cost_of_current_votes.to_s
-        @vote.wallet_id = voter.wallet_id
-        @vote.save!
-        @vote
+        vote = ::Vote.new
+        vote.voter = voter
+        vote.election = election
+        vote.candidate = candidate
+        vote.amount = number_of_votes
+        vote.cost = cost_of_current_votes.to_s
+        vote.wallet_id = voter.wallet_id
+        vote.save!
+        vote
       end
 
       refresh_voter_quest
+      notify_candidate(vote)
 
       {success: true}
     end
@@ -93,6 +93,18 @@ module Elections
     def refresh_voter_quest
       quest = Quest.find_by!(quest_type: "takeoff_vote")
       Quests::RefreshUserQuest.new(user: voter, quest: quest).call
+    end
+
+    def notify_candidate(vote)
+      CreateNotification.new.call(
+        extra_params: {
+          vote_id: vote.id,
+          election_id: election.id
+        },
+        recipient: candidate,
+        source_id: voter.id,
+        type: ElectionVoteReceivedNotification
+      )
     end
   end
 end

@@ -65,7 +65,7 @@ export const Quest = ({ quest, username, railsContext, setRefreshQuests }) => {
           ? undefined
           : QUEST_TYPE_MAP[quest.quest_type].replace("__username__", username)
       }
-      target={QUEST_TYPE_MAP[quest.quest_type].includes("http") ? "_blank" : "_self"}
+      target={QUEST_TYPE_MAP[quest.quest_type]?.includes("http") ? "_blank" : "_self"}
       onClick={e => onQuestClick(e)}
     >
       <QuestData>

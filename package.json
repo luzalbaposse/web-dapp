@@ -22,6 +22,7 @@
     "@react-spring/web": "^9.2.4",
     "@talentprotocol/design-system": "^0.1.98",
     "@talentprotocol/zustand-wrapper": "^0.0.6",
+    "@tanstack/react-query": "^4.35.3",
     "@uauth/js": "^2.4.0",
     "@uauth/web3modal": "^2.4.0",
     "@uppy/aws-s3-multipart": "^1.8.18",

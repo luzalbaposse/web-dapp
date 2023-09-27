@@ -113,11 +113,14 @@ RSpec.describe Elections::Vote do
     let(:provider) { instance_double(eth_client_class) }
     let(:eth_contract_class) { Eth::Contract }
     let(:eth_contract) { instance_double(eth_contract_class) }
+    let(:create_notification_class) { CreateNotification }
+    let(:create_notification_instance) { instance_double(create_notification_class, call: true) }
 
     before do
       allow(eth_client_class).to receive(:create).and_return(provider)
       allow(provider).to receive(:call).and_return(100000000000000000000)
       allow(eth_contract_class).to receive(:from_abi).and_return(eth_contract)
+      allow(create_notification_class).to receive(:new).and_return(create_notification_instance)
       membership = election.organization.memberships.new(active: true, user: candidate)
       membership.save!
     end
@@ -160,6 +163,23 @@ RSpec.describe Elections::Vote do
         quest: takeoff_vote_quest
       )
       expect(refresh_user_quest_instance).to have_received(:call)
+    end
+
+    it "initializes and calls the create notification to all subscribers" do
+      vote_on_election
+
+      vote = Vote.last
+
+      expect(create_notification_class).to have_received(:new)
+      expect(create_notification_instance).to have_received(:call).with(
+        extra_params: {
+          vote_id: vote.id,
+          election_id: election.id
+        },
+        recipient: candidate,
+        source_id: voter.id,
+        type: ElectionVoteReceivedNotification
+      )
     end
   end
 end
