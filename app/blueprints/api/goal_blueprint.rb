@@ -14,13 +14,13 @@ class API::GoalBlueprint < Blueprinter::Base
 
     field :election_count do |goal, options|
       if goal&.election&.present?
-        goal.election.votes.where(candidate: goal.user).count
+        goal.election.votes.where(candidate: goal.user).sum(&:amount)
       end
     end
 
     field :current_user_votes_count do |goal, options|
       if goal&.election&.present? && options[:current_user]
-        goal.election.votes.where(candidate: goal.user, wallet_id: options[:current_user].wallet_id).count
+        goal.election.votes.where(candidate: goal.user, wallet_id: options[:current_user].wallet_id).sum(&:amount)
       end
     end
   end
