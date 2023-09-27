@@ -1,9 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Users::Search do
-  subject(:search_users) { described_class.new(current_user: current_user, search_params: search_params).call }
+  subject(:search_users) { described_class.new(search_params: search_params).call }
 
-  let(:current_user) { create :user, username: "jack" }
   let!(:collective) { create :org_election, slug: "take-off" }
   let!(:user_1) { create :user, username: "johndoe", messaging_disabled: true }
   let!(:membership_1) { create :membership, organization: collective, user: user_1 }
