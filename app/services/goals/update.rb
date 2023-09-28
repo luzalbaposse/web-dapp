@@ -15,10 +15,11 @@ module Goals
       goal.due_date = Date.new(parsed_date[2], parsed_date[1], parsed_date[0])
 
       update_goal_images if params[:images] && params[:images].length > 0
+      goal_changed = goal.changed?
 
       raise UpdateError unless goal.save
 
-      ActivityIngestJob.perform_later("goal_update", goal_update_message(goal), goal.user_id)
+      ActivityIngestJob.perform_later("goal_update", goal_update_message(goal), goal.user_id) if goal_changed
       refresh_quests
       send_discord_notification if goal.saved_change_to_progress? && goal.accomplished?
 
