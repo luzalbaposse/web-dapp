@@ -44,6 +44,7 @@ module Elections
         vote.amount = number_of_votes
         vote.cost = cost_of_current_votes.to_s
         vote.wallet_id = voter.wallet_id
+        vote.chain_id = chain_id
         vote.save!
         vote
       end

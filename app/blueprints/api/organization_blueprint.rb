@@ -83,7 +83,7 @@ class API::OrganizationBlueprint < Blueprinter::Base
       current_user = options[:current_user]
 
       if current_user && election
-        Vote.where(wallet_id: current_user.wallet_id, election: election).sum { |vote| vote.cost.to_f } / TalentToken::TAL_DECIMALS
+        Vote.where(wallet_id: current_user.wallet_id, election: election).sum { |vote| vote.cost.to_f / TalentToken::TAL_DECIMALS }
       else
         0
       end

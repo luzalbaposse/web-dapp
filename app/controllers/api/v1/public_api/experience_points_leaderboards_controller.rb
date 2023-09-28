@@ -1,6 +1,6 @@
 class API::V1::PublicAPI::ExperiencePointsLeaderboardsController < API::V1::PublicAPI::APIController
   def index
-    results = leaderboard_results.select("users.*, results.score, row_number() OVER (order by results.score desc) as position")
+    results = leaderboard_results.select("users.*, results.score, results.position")
 
     talent_result = {
       score: 0,

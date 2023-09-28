@@ -12,8 +12,8 @@ class API::ElectionBlueprint < Blueprinter::Base
 
     field :prize_pool do |election, _options|
       cost = 0
-      Election.last.votes.each { |v| cost += v.cost.to_f }
-      cost / TalentToken::TAL_DECIMALS
+      election.votes.each { |v| cost += v.cost.to_f / TalentToken::TAL_DECIMALS }
+      cost
     end
   end
 end
