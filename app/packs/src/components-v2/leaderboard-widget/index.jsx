@@ -9,7 +9,7 @@ export const LeaderboardWidget = ({ user }) => {
   const [leaderboardData, setLeaderboardData] = useState([]);
   useEffect(() => {
     leaderboardService
-      .getExperiencePointsLeaderboard(5)
+      .getExperiencePointsLeaderboard(5, user?.username)
       .then(({ data }) => {
         setLeaderboardData(data.leaderboard);
         setIsLoading(false);
@@ -17,7 +17,7 @@ export const LeaderboardWidget = ({ user }) => {
       .catch(err => {
         console.error(err);
       });
-  }, []);
+  }, [user]);
   return (
     !isLoading && (
       <Container>
