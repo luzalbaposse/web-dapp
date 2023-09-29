@@ -13,7 +13,7 @@ class API::V1::PublicAPI::OrganizationsController < API::V1::PublicAPI::APIContr
     all_organizations = Organization.all.order(priority: :asc, created_at: :desc)
     all_organizations = all_organizations.where("name ILIKE ?", "%#{keyword_param}%") if keyword_param.present?
     all_organizations = all_organizations.where(type: TYPES[type_param]) if type_param.present?
-    all_organizations = all_organizations.where("memberships_count > ?", 3)
+    all_organizations = all_organizations.where("memberships_count > ?", 3).or(all_organizations.where.not(priority: nil))
 
     pagy, organizations = pagy(all_organizations, items: per_page)
 
