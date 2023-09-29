@@ -9,7 +9,7 @@ export const LeaderboardWidget = ({ user }) => {
   const [leaderboardData, setLeaderboardData] = useState([]);
   useEffect(() => {
     leaderboardService
-      .getExperiencePointsLeaderboard(5, user?.username)
+      .getExperiencePointsLeaderboard(5, 1, user?.username)
       .then(({ data }) => {
         setLeaderboardData(data.leaderboard);
         setIsLoading(false);
@@ -26,7 +26,13 @@ export const LeaderboardWidget = ({ user }) => {
             <Typography specs={{ variant: "h5", type: "bold" }} color="primary01">
               Community Leaderboard
             </Typography>
-            <TextLink text="Go to invites" rightIcon="carret" color="primary" size="small" href="/quests?tab=talent" />
+            <TextLink
+              text="Go to leaderboard"
+              rightIcon="carret"
+              color="primary"
+              size="small"
+              href="/quests?tab=leaderboard"
+            />
           </TitleContainer>
         )}
         <ListContainer>

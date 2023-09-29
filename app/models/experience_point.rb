@@ -14,11 +14,14 @@ class ExperiencePoint < ApplicationRecord
       LEFT JOIN (
         SELECT user_id, sum(amount) as score, row_number() OVER (order by sum(amount) desc) as position
         FROM experience_points
+        JOIN users on users.id = experience_points.user_id
         WHERE credited_at BETWEEN '#{start_date}' AND '#{end_date}'
+        AND users.role = 'basic'
         GROUP BY user_id
+        HAVING sum(amount) > 0
       ) results on results.user_id = users.id
     SQL
 
-    User.joins(join).where("users.role = 'basic' AND results.user_id IS NOT NULL AND results.score > 0").order("results.position asc")
+    User.joins(join).where("results.user_id IS NOT NULL").order("results.position asc")
   end
 end
