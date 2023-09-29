@@ -1,14 +1,15 @@
-import { Button, Typography } from "@talentprotocol/design-system";
-import { BottomContainer, Container, UsersContainer } from "./styled";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { leaderboardService } from "../../../../api";
-import { LeaderboardEntry } from "../../../leaderboard-entry";
+import { Button, Typography, Spinner } from "@talentprotocol/design-system";
+import { BottomContainer, Container, UsersContainer } from "./styled";
+import { leaderboardService } from "src/api";
+import { LeaderboardEntry } from "src/components-v2/leaderboard-entry";
 
 const ITEMS_PER_PAGE = 10;
 
 export const Leaderboard = ({ profile }) => {
   const [leaderboardEntries, setLeaderboardEntries] = useState([]);
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
   const [currentUserInfo, setCurrentUserInfo] = useState({ position: undefined, score: undefined });
   const [isEndOfResults, setIsEndOfResults] = useState(false);
 
@@ -20,9 +21,11 @@ export const Leaderboard = ({ profile }) => {
       .then(({ data }) => {
         setLeaderboardEntries(entries => [...entries, ...data.leaderboard.results]);
         setCurrentUserInfo(data.leaderboard.talent_result);
+        setLoading(false);
       })
       .catch(err => {
         setIsEndOfResults(true);
+        setLoading(false);
         console.error(err);
       });
   }, [page, profile]);
@@ -54,15 +57,21 @@ export const Leaderboard = ({ profile }) => {
   }, [profile, currentUserEntry, leaderboardEntries]);
   return (
     <Container>
-      <Typography specs={{ variant: "p2", type: "medium" }} color="primary03" className="ml-3 ml-lg-0">
-        Top members of all-time
-      </Typography>
-      <UsersContainer>{memoEntries}</UsersContainer>
-      <BottomContainer>
-        {leaderboardEntries.length % ITEMS_PER_PAGE === 0 && !isEndOfResults && (
-          <Button onClick={handleLoadMore} hierarchy="secondary" text="Load more" size="medium" />
-        )}
-      </BottomContainer>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <>
+          <Typography specs={{ variant: "p2", type: "medium" }} color="primary03" className="ml-3 ml-lg-0">
+            Top members of all-time
+          </Typography>
+          <UsersContainer>{memoEntries}</UsersContainer>
+          <BottomContainer>
+            {leaderboardEntries.length % ITEMS_PER_PAGE === 0 && !isEndOfResults && (
+              <Button onClick={handleLoadMore} hierarchy="secondary" text="Load more" size="medium" />
+            )}
+          </BottomContainer>
+        </>
+      )}
     </Container>
   );
 };
