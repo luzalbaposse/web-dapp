@@ -5,9 +5,12 @@ class API::V1::TalentController < ApplicationController
   def index
     talents =
       if filter_params[:keyword].present?
-        filter_query = ActiveRecord::Base.sanitize_sql_array(["SIMILARITY(COALESCE(display_name, username), :keyword) >= 0.3", keyword: filter_params[:keyword]])
-        order_query = ActiveRecord::Base.sanitize_sql_array(["SIMILARITY(COALESCE(display_name, username), :keyword) DESC", keyword: filter_params[:keyword]])
-        User.where("profile_completeness >= ?", 0.5).where(filter_query).order(Arel.sql(order_query))
+        filter_query = ActiveRecord::Base.sanitize_sql_array(["SIMILARITY(display_name, :keyword) >= 0.3 OR SIMILARITY(username, :keyword) >= 0.3", keyword: filter_params[:keyword]])
+        select_query = ActiveRecord::Base.sanitize_sql_array(["users.*, (SIMILARITY(display_name, :keyword) + SIMILARITY(username, :keyword)) as similarity", keyword: filter_params[:keyword]])
+        User.where("profile_completeness >= ?", 0.5)
+          .where(filter_query)
+          .select(select_query)
+          .order("similarity DESC")
       else
         User.where("profile_completeness >= ?", 0.5)
       end
