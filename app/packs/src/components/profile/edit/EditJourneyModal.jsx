@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import dayjs from "dayjs";
 import debounce from "lodash/debounce";
 import { toast } from "react-toastify";
@@ -28,10 +28,9 @@ import { useProfileFetcher } from "src/hooks/use-profile-fetcher";
 
 import cx from "classnames";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import { Typography, Switch } from "@talentprotocol/design-system";
-import { StyledTypographyLink, SwitchContainer } from "./styled";
-import { TAKEOFF_TERMS_AND_CONDITIONS } from "src/utils/constants";
-import { goalsService } from "src/api";
+import { Typography, Dropdown, Checkbox } from "@talentprotocol/design-system";
+import { StyledTypographyLink, DropdownContainer } from "./styled";
+import { goalsService, electionsService } from "src/api";
 dayjs.extend(customParseFormat);
 
 const returnYear = date => {
@@ -63,11 +62,14 @@ const GoalExperience = ({
   uppyBanner,
   deleteImage,
   activeElection,
-  performingRequest
+  performingRequest,
+  elections
 }) => {
   const [dueMonth, setDueMonth] = useState(returnMonth(currentJourneyItem.due_date));
   const [dueYear, setDueYear] = useState(returnYear(currentJourneyItem.due_date));
-  const [election_selected, setElectionSelected] = useState(!!currentJourneyItem.electionStatus);
+  const [electionSelected, setElectionSelected] = useState({ value: "" });
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const checkboxRef = useRef(null);
 
   const progressOptions = [
     { value: "planned", title: "Planned" },
@@ -92,6 +94,11 @@ const GoalExperience = ({
     "December"
   ];
 
+  const electionOptions = elections?.map(election => ({
+    value: election.name,
+    type: election.slug
+  }));
+
   const yearOptions = (() => {
     const max = new Date().getFullYear() + 20;
     const min = new Date().getFullYear() - 30;
@@ -111,20 +118,22 @@ const GoalExperience = ({
     }
   }, [dueMonth, dueYear]);
 
-  const toggleTakeoffApplication = event => {
-    setElectionSelected(event.target.checked);
-
-    if (event.target.checked) {
+  const selectTakeoffApplication = election => {
+    if (election) {
+      const thisElection = elections.find(e => e.slug == election.type);
+      setElectionSelected(election);
       changeAttribute("progress", "planned");
-      changeAttribute("title", "Take Off Istanbul");
-      changeAttribute("election_selected", true);
-      setDueMonth("November");
-      setDueYear("2023");
+      changeAttribute("title", election.value);
+      changeAttribute("election_selected", election.type);
+      setDueMonth(dayjs(thisElection.voting_end_date, "YYYY-MM-DD").format("MMMM"));
+      setDueYear(dayjs(thisElection.voting_end_date, "YYYY-MM-DD").format("YYYY"));
     } else {
-      changeAttribute("election_selected", false);
+      changeAttribute("election_selected", null);
       changeAttribute("title", "");
     }
   };
+
+  console.log("elections", elections);
 
   return (
     <>
@@ -143,22 +152,36 @@ const GoalExperience = ({
         }}
       >
         {activeElection && (
-          <SwitchContainer>
-            <div style={{ minWidth: 46 }}>
-              <Switch
-                isChecked={election_selected}
-                state={activeElection && editType === "Add" ? "enabled" : "disabled"}
-                onChange={toggleTakeoffApplication}
-              />
-            </div>
-            <Typography specs={{ variant: "p2", type: "regular" }} className="flex">
-              I'm applying to Take Off Istanbul, and I agree to the{" "}
-              <StyledTypographyLink target="_blank" href={TAKEOFF_TERMS_AND_CONDITIONS}>
-                terms and conditions
-              </StyledTypographyLink>
-              .
-            </Typography>
-          </SwitchContainer>
+          <DropdownContainer>
+            <Dropdown
+              options={electionOptions}
+              selectOption={option => {
+                selectTakeoffApplication(option);
+              }}
+              selectedOption={electionSelected}
+              placeholder="Take Off Scholarships"
+              label="Take Off Scholarships"
+              isDisabled={!activeElection || editType !== "Add"}
+            />
+            {electionSelected.value && (
+              <Checkbox
+                isChecked={termsAccepted}
+                checkboxRef={checkboxRef}
+                onCheckboxClick={() => setTermsAccepted(!termsAccepted)}
+              >
+                <Typography specs={{ variant: "p2", type: "regular" }} className="flex">
+                  I'm applying to {electionSelected.value}, and I agree to the{" "}
+                  <StyledTypographyLink
+                    target="_blank"
+                    href={elections.find(e => e.slug == electionSelected.type)?.terms_and_conditions_url}
+                  >
+                    terms and conditions
+                  </StyledTypographyLink>
+                  .
+                </Typography>
+              </Checkbox>
+            )}
+          </DropdownContainer>
         )}
         <div className="w-100 mb-5">
           <TextInput
@@ -168,7 +191,7 @@ const GoalExperience = ({
             placeholder="Ex: Finding a co-founder for my startup"
             required={true}
             error={validationErrors?.title}
-            disabled={election_selected}
+            disabled={electionSelected.value}
           />
         </div>
         <div className="w-100 mb-5">
@@ -183,7 +206,7 @@ const GoalExperience = ({
             onChange={e => changeAttribute("progress", e.target.value)}
             value={currentJourneyItem.progress}
             placeholder="Please Select"
-            disabled={election_selected}
+            disabled={electionSelected.value}
             className={cx("height-auto", "mr-2", validationErrors?.progress && "border-danger")}
           >
             <option value=""></option>
@@ -196,7 +219,7 @@ const GoalExperience = ({
         </div>
         <div className="w-100 mb-5">
           <TextArea
-            title={election_selected ? "Application Letter" : "Description"}
+            title={electionSelected.value ? "Application Letter" : "Description"}
             onChange={e => changeAttribute("description", e.target.value)}
             value={currentJourneyItem.description}
             maxLength={800}
@@ -216,7 +239,7 @@ const GoalExperience = ({
               onChange={e => setDueMonth(e.target.value)}
               value={dueMonth}
               placeholder="Month"
-              disabled={election_selected}
+              disabled={electionSelected.value}
               className={cx("height-auto", "mr-2", validationErrors?.dueDate && "border-danger")}
             >
               <option value=""></option>
@@ -231,7 +254,7 @@ const GoalExperience = ({
               onChange={e => setDueYear(e.target.value)}
               value={dueYear}
               placeholder="Year"
-              disabled={election_selected}
+              disabled={electionSelected.value}
               className={cx("height-auto", "ml-2", validationErrors?.dueDate && "border-danger")}
             >
               <option value=""></option>
@@ -243,7 +266,7 @@ const GoalExperience = ({
             </Form.Control>
           </div>
         </div>
-        {!election_selected && (
+        {!electionSelected.value && (
           <div className="w-100 mb-5">
             <P2 className="mb-2 text-primary-01" bold text="Media" />
             <FileInput
@@ -297,7 +320,7 @@ const GoalExperience = ({
           <Button disabled={performingRequest} className="mr-2" type="white-ghost" text="Cancel" onClick={hide} />
           <LoadingButton
             loading={performingRequest}
-            disabled={performingRequest}
+            disabled={performingRequest || (electionSelected.value && !termsAccepted)}
             type="primary-default"
             text="Save"
             onClick={editType === "Add" ? saveGoal : updateGoal}
@@ -316,8 +339,7 @@ const EditJourneyModal = ({
   editType,
   setJourneyItem,
   journeyItem = {},
-  username,
-  activeElection
+  username
 }) => {
   const { profile, fetchProfile } = useProfileFetcher();
   useEffect(() => {
@@ -342,6 +364,8 @@ const EditJourneyModal = ({
     electionStatus: journeyItem.election_status
   });
   const [performingRequest, setPerformingRequest] = useState(false);
+  const [elections, setElections] = useState(null);
+  const [activeElection, setActiveElection] = useState(false);
 
   const [validationErrors, setValidationErrors] = useState({
     title: false,
@@ -519,6 +543,15 @@ const EditJourneyModal = ({
     uppyBanner.on("upload", () => {});
   }, [uppyBanner]);
 
+  useEffect(() => {
+    electionsService.getElections().then(res => {
+      if (res.data?.elections?.length > 0) {
+        setActiveElection(true);
+        setElections(res.data?.elections);
+      }
+    });
+  }, []);
+
   const debouncedSaveGoal = debounce(() => saveGoal(), 400);
   const debouncedUpdateGoal = debounce(() => updateGoal(), 400);
   const debouncedDeleteGoal = debounce(() => deleteGoal(), 400);
@@ -549,6 +582,7 @@ const EditJourneyModal = ({
         deleteImage={deleteImage}
         activeElection={activeElection}
         performingRequest={performingRequest}
+        elections={elections}
       />
     </Modal>
   );

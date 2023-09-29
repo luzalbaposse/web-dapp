@@ -22,7 +22,7 @@ module Goals
       ActiveRecord::Base.transaction do
         raise CreationError unless goal.save
 
-        add_to_collective(goal) if params[:election_selected]
+        add_to_collective(goal, params[:election_selected]) if params[:election_selected]
 
         refresh_quests
         update_profile_completeness
@@ -75,8 +75,8 @@ module Goals
       Discord::AppliedToTakeoffNotificationJob.perform_later(goal.id)
     end
 
-    def add_to_collective(goal)
-      collective = Organization.find_by(slug: "takeoff-istanbul")
+    def add_to_collective(goal, collective_selected)
+      collective = Organization.find_by(slug: collective_selected)
       if collective.active_election.present?
         collective.memberships.create!(active: true, user: user)
         goal.goal_images.create!(image_data: collective.banner_data)

@@ -33,9 +33,10 @@ export const GoalImage = styled.img`
   object-fit: cover;
 `;
 
-export const VoteContainer = styled.div`
+export const VoteContainer = styled.a`
   display: flex;
   justify-content: flex-start;
+  width: fit-content;
 `;
 
 export const VoteTextContainer = styled.div`

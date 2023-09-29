@@ -45,18 +45,18 @@ export const GoalCard = ({ goal, openAddGoalModal, isOwner, username }) => {
     [goal]
   );
 
-  const disableVoteButton = () => goal.election_status != "voting_active";
+  const disableVoteButton = goal.election_status != "voting_active";
 
   const goalTitleWithLink = () => {
     if (!goal.election_status) {
       return goal.title;
     } else {
-      return <StyledTypographyLink href={"/collectives/takeoff-istanbul"}>{goal.title}</StyledTypographyLink>;
+      return <StyledTypographyLink href={`/collectives/${goal.election_slug}`}>{goal.title}</StyledTypographyLink>;
     }
   };
 
   const textColor = () => {
-    if (disableVoteButton()) {
+    if (disableVoteButton) {
       return "primaryDisable";
     }
     if (goal.current_user_votes_count > 0) {
@@ -90,12 +90,12 @@ export const GoalCard = ({ goal, openAddGoalModal, isOwner, username }) => {
       </GoalInfo>
       {!!goal.images?.length && <GoalImage src={goal.images[0].image_url} />}
       {goal.election_status != null && (
-        <VoteContainer>
+        <VoteContainer href={`/collectives/${goal.election_slug}?keyword=${username}`}>
           <Button
             size="small"
             hierarchy={goal.current_user_votes_count > 0 ? "primary" : "secondary"}
-            isDisabled={disableVoteButton()}
-            onClick={() => window.location.replace(`/collectives/takeoff-istanbul?keyword=${username}`)}
+            isDisabled={disableVoteButton}
+            onClick={() => null}
           >
             <VoteTextContainer>
               <Typography

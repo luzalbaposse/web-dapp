@@ -2,7 +2,7 @@ import React from "react";
 import { noop } from "lodash";
 import EditJourneyModal from "src/components/profile/edit/EditJourneyModal";
 
-export const AddGoalModal = ({ modalState, closeModal, talent, activeElection }) => {
+export const AddGoalModal = ({ modalState, closeModal, talent }) => {
   return (
     modalState.isOpen && (
       <EditJourneyModal
@@ -19,7 +19,6 @@ export const AddGoalModal = ({ modalState, closeModal, talent, activeElection })
             window.location.reload();
           }, 1000)
         }
-        activeElection={activeElection}
       />
     )
   );

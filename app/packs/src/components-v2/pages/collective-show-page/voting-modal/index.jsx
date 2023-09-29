@@ -215,7 +215,7 @@ const TransactionStep = ({ member, updateMember, election, onSuccess, onError, o
   );
 };
 
-const SuccessStep = ({ member, onCancel }) => (
+const SuccessStep = ({ member, onCancel, election }) => (
   <Container>
     <Icon name="success" />
     <InfoContainer>
@@ -223,7 +223,7 @@ const SuccessStep = ({ member, onCancel }) => (
         Vote Submitted!
       </Typography>
       <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
-        Thank you for supporting {member.name} for a 'Take Off Istanbul' scholarship. We processed your vote and will be
+        Thank you for supporting {member.name} in the '{election.name}' scholarship. We processed your vote and will be
         deducting $TAL from your virtual wallet in the end of the voting period.
       </Typography>
     </InfoContainer>
@@ -231,7 +231,7 @@ const SuccessStep = ({ member, onCancel }) => (
   </Container>
 );
 
-const ErrorStep = ({ error, onCancel, railsContext }) => {
+const ErrorStep = ({ error, onCancel, railsContext, election }) => {
   const titleToText = () => {
     switch (error) {
       case "No wallet connected.":
@@ -245,7 +245,7 @@ const ErrorStep = ({ error, onCancel, railsContext }) => {
       case "Unsupported chain.":
         return "We currently only allow you to use Celo & Polygon to vote. Please choose one of these chains before voting.";
       case "You cannot vote for someone who is not a candidate.":
-        return "This member is not yet a candidate to the Take Off Istanbul campaign.";
+        return `This member is not yet a candidate to the ${election.name} campaign.`;
       case "Insufficient virtual TAL balance. Try a different chain.":
         return "Your TAL balance is not sufficient for the vote you are trying to cast. Perhaps you meant to use a different chain to vote? We support Celo & Polygon.";
       default:

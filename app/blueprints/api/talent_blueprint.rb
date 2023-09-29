@@ -136,7 +136,9 @@ class API::TalentBlueprint < Blueprinter::Base
     include_view :normal
 
     field :vote_count do |user, options|
-      Vote.where(candidate_id: user.id).sum(&:amount)
+      election = options[:election]
+
+      election ? Vote.where(candidate_id: user.id, election: election).sum(&:amount) : 0
     end
 
     field :current_user_votes_count do |user, options|

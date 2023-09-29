@@ -64,7 +64,7 @@ module Elections
     end
 
     def cost_of_previous_votes
-      ::Vote.where(wallet_id: voter.wallet_id).sum { |vote| vote.cost.to_i }
+      ::Vote.where(wallet_id: voter.wallet_id, election: election).sum { |vote| vote.cost.to_i }
     end
 
     def rpc_url

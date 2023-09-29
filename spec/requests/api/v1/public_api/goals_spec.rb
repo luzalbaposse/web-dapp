@@ -53,13 +53,11 @@ RSpec.describe "Goals API" do
           returned_goals = data["goals"]
           returned_titles = returned_goals.map { |f| f["title"] }
           returned_pagination = data["pagination"]
-          returned_election = data["active_election"]
           aggregate_failures do
             expect(returned_goals.count).to eq 2
             expect(returned_titles).to match_array([goal1.title, goal2.title])
 
             expect(returned_pagination["total"]).to eq 2
-            expect(returned_election).to eq true
           end
         end
       end

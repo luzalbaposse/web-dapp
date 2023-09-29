@@ -23,7 +23,6 @@ import {
 import SocialRow from "src/components/profile/SocialRow";
 import { useWindowDimensionsHook } from "src/utils/window";
 import dayjs from "dayjs";
-import { TAKEOFF_LEARN_MORE } from "src/utils/constants";
 import Tooltip from "src/components/design_system/tooltip";
 
 const NUMBER_OF_TAGS = 4;
@@ -226,7 +225,7 @@ const Overview = ({ collective, members, membersCount }) => {
                 </Tooltip>
               </ElectionInfoRow>
               <ElectionInfoRow>
-                <StyledTypographyLink target="_blank" href={TAKEOFF_LEARN_MORE}>
+                <StyledTypographyLink target="_blank" href={collective.election.learnMoreUrl}>
                   Learn more {">"}
                 </StyledTypographyLink>
               </ElectionInfoRow>
