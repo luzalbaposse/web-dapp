@@ -41,7 +41,7 @@ export const Leaderboard = ({ profile }) => {
         {leaderboardEntries.map((entry, i) => (
           <LeaderboardEntry key={i} position={i + 1} entry={entry} profile={profile} />
         ))}
-        {!leaderboardEntries.some(user => user?.id === currentUserEntry?.id) && (
+        {currentUserEntry.position && !leaderboardEntries.some(user => user?.id === currentUserEntry?.id) && (
           <LeaderboardEntry
             key={profile?.id}
             position={currentUserEntry.position}
