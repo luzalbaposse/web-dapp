@@ -16,9 +16,11 @@ class API::V1::PublicAPI::ExperiencePointsLeaderboardsController < API::V1::Publ
       }
     end
 
+    @pagy, results = pagy(results, items: per_page)
+
     response_body = {
       leaderboard: {
-        results: API::TalentBlueprint.render_as_json(results.limit(per_page).includes(talent: :talent_token), view: :leaderboard),
+        results: API::TalentBlueprint.render_as_json(results.includes(talent: :talent_token), view: :leaderboard),
         talent_result: talent_result
       }
     }

@@ -149,6 +149,38 @@ class API::TalentBlueprint < Blueprinter::Base
         0
       end
     end
+
+    field :current_user_votes_cost_on_celo do |user, options|
+      election = options[:election]
+      current_user = options[:current_user]
+
+      if current_user && election
+        Vote.where(
+          candidate_id: user.id,
+          wallet_id: current_user.wallet_id,
+          election: election,
+          chain_id: [44787, 42220]
+        ).sum(&:cost)
+      else
+        0
+      end
+    end
+
+    field :current_user_votes_cost_on_polygon do |user, options|
+      election = options[:election]
+      current_user = options[:current_user]
+
+      if current_user && election
+        Vote.where(
+          candidate_id: user.id,
+          wallet_id: current_user.wallet_id,
+          election: election,
+          chain_id: [80001, 137]
+        ).sum(&:cost)
+      else
+        0
+      end
+    end
   end
 
   # ------------ temporary views for Profile V1.0 ------------

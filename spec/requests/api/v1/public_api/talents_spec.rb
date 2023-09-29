@@ -12,11 +12,13 @@ RSpec.describe "Talents API" do
       consumes "application/json"
       produces "application/json"
       parameter name: "ids[]", in: :query, schema: {type: :array, items: {type: "string"}}, description: "List of wallet addresses or usernames"
+      parameter name: :collective_slug, in: :query, type: :string, description: "The collective slug"
       parameter name: :cursor, in: :query, type: :string, description: "The cursor to fetch the next page"
       parameter name: "X-API-KEY", in: :header, type: :string, description: "Your Talent Protocol API key"
 
       let(:cursor) { nil }
       let(:"ids[]") { nil }
+      let(:collective_slug) { nil }
 
       let!(:user_1) { create :user, :with_talent_token }
       let!(:user_2) { create :user, :with_talent_token }
@@ -55,7 +57,16 @@ RSpec.describe "Talents API" do
       end
 
       response "200", "get all talents with filter", document: false do
+        let(:collective_slug) { "org" }
         let(:"ids[]") { [user_1.username, user_2.username] }
+        let(:organization) { create :community, slug: collective_slug }
+
+        before do
+          create :membership, user: user_1, organization: organization
+          create :membership, user: user_2, organization: organization
+          create :membership, user: user_3, organization: organization
+          create :membership, user: user_4, organization: organization
+        end
 
         schema type: :object,
           properties: {

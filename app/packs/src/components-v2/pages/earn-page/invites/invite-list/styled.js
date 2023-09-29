@@ -5,14 +5,13 @@ export const Container = styled.section`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-top: 8px;
   padding: 16px;
 
   ${desktopStyles(css`
     width: 1128px;
     max-width: 1128px;
     margin: auto;
-    padding: 52px 0 0;
+    padding: 24px 0 0;
   `)}
 `;
 

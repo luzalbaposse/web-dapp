@@ -65,7 +65,15 @@ const TransactionStep = ({ member, updateMember, election, onSuccess, onError, o
 
       const availableBalance = await newOnChain.getTALBalance(currentAccount);
       const formatedUnitsTALBalance = formatUnits(availableBalance, 18);
-      const available = parseAndCommify(formatedUnitsTALBalance);
+      let formatedUnitsVotesCost = "0";
+      if (selectedChainId == 80001 || selectedChainId == 137) {
+        formatedUnitsVotesCost = formatUnits(member.currentUserVotesCostOnPolygon, 18);
+      } else if (selectedChainId == 44787 || selectedChainId == 42220) {
+        formatedUnitsVotesCost = formatUnits(member.currentUserVotesCostOnCelo, 18);
+      }
+      const realTALBalance = parseInt(formatedUnitsTALBalance) - parseInt(formatedUnitsVotesCost);
+      const available = parseAndCommify(realTALBalance.toString());
+
       setTalBalance(available);
     } catch (e) {
       console.log(e);
@@ -215,9 +223,8 @@ const SuccessStep = ({ member, onCancel }) => (
         Vote Submitted!
       </Typography>
       <Typography specs={{ variant: "p2", type: "regular" }} color="primary03">
-        Thank you for supporting {member.name} in the 'Take Off Istanbul' campaign. We're now processing your vote and
-        will be deducting the required $TAL from your wallet. This might take a few minutes, depending on how congested
-        the Polygon network is.
+        Thank you for supporting {member.name} for a 'Take Off Istanbul' scholarship. We processed your vote and will be
+        deducting $TAL from your virtual wallet in the end of the voting period.
       </Typography>
     </InfoContainer>
     <Button hierarchy="primary" size="medium" onClick={onCancel} text="Return" />
@@ -304,7 +311,11 @@ export const VotingModal = ({ modalState, member, updateMember, election, railsC
   }, [stepsState.jumpToStep]);
 
   return (
-    <Modal title="Confirm your vote" isOpen={modalState.isOpen} closeModal={closeModal}>
+    <Modal
+      title={stepsState.currentStep === 2 ? "" : "Confirm your vote"}
+      isOpen={modalState.isOpen}
+      closeModal={closeModal}
+    >
       <StepScreen
         onSuccess={jumpToSuccess}
         onError={jumpToError}

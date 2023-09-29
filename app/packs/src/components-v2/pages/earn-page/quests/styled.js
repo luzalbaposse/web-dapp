@@ -2,7 +2,7 @@ import { desktopStyles, mobileStyles } from "@talentprotocol/design-system";
 import styled, { css } from "styled-components";
 
 export const Container = styled.section`
-  padding: 24px 16px 0;
+  padding: 0px 16px 0;
   display: flex;
   flex-direction: column;
   gap: 8px;

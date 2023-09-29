@@ -7,8 +7,12 @@ import { Container, DesktopGrid } from "./styled";
 import { useQuery } from "@tanstack/react-query";
 
 export const Rewards = ({ profile }) => {
-  const { data: rewards, refetch } = useQuery(["experienceRewards"], () => rewardsService.getRewards(), {
-    select: data => data.rewards
+  const { data: rewards, refetch } = useQuery({
+    queryKey: ["experienceRewards"],
+    queryFn: async () => {
+      const { data } = await rewardsService.getRewards();
+      return data.rewards;
+    }
   });
 
   const memoizedRewards = useMemo(

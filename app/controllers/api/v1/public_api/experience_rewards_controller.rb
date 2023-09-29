@@ -13,10 +13,8 @@ class API::V1::PublicAPI::ExperienceRewardsController < API::V1::PublicAPI::APIC
     service = Rewards::Claim.new(user: current_user, reward: reward)
     result = service.call
 
-    if result
-      render json: {claim: result}, status: :ok
-    else
-      render json: {error: "Reward has been claimed already or is out of stock"}, status: :conflict
-    end
+    render json: {claim: result}, status: :ok
+  rescue Rewards::Claim::Error => e
+    render json: {error: e.message}, status: :conflict
   end
 end
