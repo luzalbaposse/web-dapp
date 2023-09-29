@@ -1,11 +1,7 @@
 import axios from "axios";
 
-const getRewards = () => {
-  return axios.get(`api/v1/experience_rewards`).then(res => res.data);
-};
-const claimReward = rewardId => {
-  return axios.post(`/api/v1/experience_rewards/${rewardId}/claim`).then(res => res.data);
-};
+const getRewards = () => axios.get(`api/v1/experience_rewards`);
+const claimReward = rewardId => axios.post(`/api/v1/experience_rewards/${rewardId}/claim`);
 
 export const rewardsService = {
   getRewards,

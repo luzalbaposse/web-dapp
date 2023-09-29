@@ -137,7 +137,7 @@ RSpec.describe "Experience Rewards API" do
           data = JSON.parse(response.body)
 
           aggregate_failures do
-            expect(data["error"]).to eq "Reward has been claimed already or is out of stock"
+            expect(data["error"]).to eq "Reward is currently out of stock."
           end
         end
       end
@@ -157,7 +157,7 @@ RSpec.describe "Experience Rewards API" do
           data = JSON.parse(response.body)
 
           aggregate_failures do
-            expect(data["error"]).to eq "Reward has been claimed already or is out of stock"
+            expect(data["error"]).to eq "You don't have enough experience points."
           end
         end
       end

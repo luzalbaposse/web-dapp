@@ -16,10 +16,14 @@ export const RewardCard = ({ reward, profile, refetch }) => {
   const [promoCode, setPromoCode] = useState(reward.merch_code || undefined);
 
   const claimReward = useMutation(rewardId => rewardsService.claimReward(rewardId), {
-    onError: e =>
+    onError: e => {
       toast.error(
-        <ToastBody heading="Reward claim failed" body={"An error occured while trying to claim reward: " + e.message} />
-      ),
+        <ToastBody
+          heading="Reward claim failed"
+          body={`An error occured while trying to claim a reward: ${e.response.data?.error || e.message}`}
+        />
+      );
+    },
     onSettled: () => refetch(),
     onSuccess: data => {
       setPromoCode(data.claim);
@@ -31,6 +35,14 @@ export const RewardCard = ({ reward, profile, refetch }) => {
     if (isSoldOut || isClaimed || !hasEnoughXp) return;
     claimReward.mutate(reward.uuid);
   };
+
+  const buttonText = isClaimed
+    ? "Reward claimed"
+    : isSoldOut
+    ? "Sold Out"
+    : !profile.verified
+    ? "Verify your identity to claim"
+    : "Claim your Reward";
 
   return (
     <>
@@ -65,8 +77,8 @@ export const RewardCard = ({ reward, profile, refetch }) => {
             />
           ) : (
             <Button
-              text={isClaimed ? "Reward claimed" : isSoldOut ? "Sold Out" : "Claim your Reward"}
-              isDisabled={isSoldOut || !hasEnoughXp}
+              text={buttonText}
+              isDisabled={isSoldOut || !hasEnoughXp || !profile.verified}
               hierarchy="primary"
               size="large"
               isStretched
