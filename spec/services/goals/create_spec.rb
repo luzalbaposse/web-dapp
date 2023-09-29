@@ -78,7 +78,7 @@ RSpec.describe Goals::Create do
         due_date: "01-05-2023",
         images: [],
         progress:,
-        election_selected: true
+        election_selected: "takeoff-istanbul"
       }
     end
 

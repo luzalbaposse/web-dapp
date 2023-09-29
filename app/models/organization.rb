@@ -11,6 +11,7 @@ class Organization < ApplicationRecord
   has_many :users, through: :memberships
   has_many :elections, dependent: :destroy
 
+  validates :priority, uniqueness: true, allow_nil: true
   validates :discord,
     :github,
     :linkedin,

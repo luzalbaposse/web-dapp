@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_27_110453) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_28_233118) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -297,6 +297,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_27_110453) do
     t.boolean "rewards_distributed", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "terms_and_conditions_url"
+    t.string "learn_more_url"
     t.index ["organization_id"], name: "index_elections_on_organization_id"
   end
 
@@ -553,6 +555,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_27_110453) do
     t.string "telegram"
     t.string "twitter"
     t.integer "memberships_count", default: 0, null: false
+    t.integer "priority"
+    t.index ["priority"], name: "index_organizations_on_priority", unique: true
   end
 
   create_table "partnerships", force: :cascade do |t|

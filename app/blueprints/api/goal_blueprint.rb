@@ -12,6 +12,10 @@ class API::GoalBlueprint < Blueprinter::Base
       goal.election&.status
     end
 
+    field :election_slug do |goal, options|
+      goal.election&.organization&.slug
+    end
+
     field :election_count do |goal, options|
       if goal&.election&.present?
         goal.election.votes.where(candidate: goal.user).sum(&:amount)

@@ -20,7 +20,7 @@ export const LeaderboardEntry = ({ position, entry, profile }) => {
       </LeftContent>
       <ExperienceTag>
         <Icon name="flash" size={12} />
-        <Typography specs={{ variant: "label3", type: "medium" }}>{entry.score}</Typography>
+        <Typography specs={{ variant: "label3", type: "medium" }}>{entry.score.toLocaleString()}</Typography>
       </ExperienceTag>
     </LeaderboardUserContainer>
   );

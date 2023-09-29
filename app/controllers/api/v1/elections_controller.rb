@@ -9,7 +9,7 @@ class API::V1::ElectionsController < ApplicationController
 
     render(
       json: {
-        notifications: elections,
+        elections: elections,
         pagination: {
           currentPage: pagy.page,
           lastPage: pagy.last

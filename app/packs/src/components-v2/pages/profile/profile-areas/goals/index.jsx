@@ -14,7 +14,7 @@ import { AddGoalModal } from "./add-goal-modal";
 import { useAddGoalModalState } from "./add-goal-modal/hooks/use-add-goal-modal";
 
 export const Goals = ({ urlData, currentUser }) => {
-  const [data, setData] = useState({ goals: [], isLoading: true, activeElection: false, pinned_goals: [] });
+  const [data, setData] = useState({ goals: [], isLoading: true, pinned_goals: [] });
   const addGoalModalState = useAddGoalModalState();
 
   useEffect(() => {
@@ -29,11 +29,10 @@ export const Goals = ({ urlData, currentUser }) => {
           setData({
             goals: all_goals,
             isLoading: false,
-            activeElection: data.active_election,
             pinned_goals: pinned_goals
           });
         } else {
-          setData({ goals: data.goals, isLoading: false, activeElection: data.active_election });
+          setData({ goals: data.goals, isLoading: false });
         }
       })
       .catch(err => {
@@ -120,11 +119,7 @@ export const Goals = ({ urlData, currentUser }) => {
           />
         ))}
       {showEmptyState()}
-      <AddGoalModal
-        {...addGoalModalState}
-        talent={{ id: currentUser?.talent_id }}
-        activeElection={data.activeElection}
-      />
+      <AddGoalModal {...addGoalModalState} talent={{ id: currentUser?.talent_id }} />
     </Container>
   );
 };

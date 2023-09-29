@@ -52,8 +52,3 @@ export const ERROR_MESSAGES = {
   ticker_reserved: "talent token with this symbol already exists",
   action_canceled: "User denied transaction signature"
 };
-
-export const TAKEOFF_TERMS_AND_CONDITIONS =
-  "https://talentprotocol.notion.site/Take-Off-Voting-Terms-Conditions-d61c1af32142472e81800f6e4a0521eb";
-
-export const TAKEOFF_LEARN_MORE = "https://blog.talentprotocol.com/takeoff-istanbul/";
