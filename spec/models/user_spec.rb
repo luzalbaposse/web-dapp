@@ -652,7 +652,7 @@ RSpec.describe User, type: :model do
 
     context "when some fields are missing" do
       it "returns the missing fields" do
-        expect(user.missing_profile_fields).to eq ["profile_picture", "occupation", "headline", "career_goal", "milestone", "tag", "social_link", "verified"]
+        expect(user.missing_profile_fields).to eq ["profile_picture", "headline", "career_goal", "milestone", "tag", "social_link", "verified"]
       end
 
       it "returns false for profile completeness" do

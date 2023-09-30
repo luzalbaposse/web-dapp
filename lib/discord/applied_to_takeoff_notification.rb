@@ -7,7 +7,7 @@ module Discord
     def call
       return unless goal.election.present?
       return unless user.present?
-      return unless organization.present? && organization.slug == "takeoff-istanbul"
+      return unless organization.present?
 
       Faraday
         .post(
@@ -30,7 +30,7 @@ module Discord
     end
 
     def content
-      "_#{user.name}_ just applied to Take Off Istanbul! Check out their profile and their application: https://beta.talentprotocol.com/u/#{user.username}"
+      "_#{user.name}_ just applied to #{organization.name}! Check out their profile and their application: https://beta.talentprotocol.com/u/#{user.username}"
     end
   end
 end

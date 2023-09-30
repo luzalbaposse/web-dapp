@@ -93,5 +93,28 @@ RSpec.describe Goals::Create do
 
       expect(Membership.where(user: user, organization: org)).to exist
     end
+
+    context "when the user has a goal from other collective" do
+      before do
+        new_org = create :org_election, slug: "eth-lisbon", name: "ETH Lisbon"
+        create :goal, user: user, election_id: create(:election, organization: new_org).id
+      end
+
+      it "adds the user to the collective" do
+        create_goal
+
+        expect(Membership.where(user: user, organization: org)).to exist
+      end
+    end
+
+    context "when the user already has a take off goal" do
+      before do
+        create :goal, user: user, election_id: election.id
+      end
+
+      it "raises an error" do
+        expect { create_goal }.to raise_error(described_class::CreationError)
+      end
+    end
   end
 end

@@ -22,7 +22,7 @@ RSpec.describe Discord::AppliedToTakeoffNotification do
       expect(
         a_request(:post, ENV["DISCORD_TAKEOFF_APPLICATIONS_WEBHOOK_URL"])
           .with(
-            body: {content: "_John_ just applied to Take Off Istanbul! Check out their profile and their application: https://beta.talentprotocol.com/u/john"},
+            body: {content: "_John_ just applied to #{organization.name}! Check out their profile and their application: https://beta.talentprotocol.com/u/john"},
             headers: {"Content-Type": "application/json"}
           )
       )
