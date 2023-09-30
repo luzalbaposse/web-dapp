@@ -10,7 +10,7 @@ module Goals
     end
 
     def call
-      raise CreationError if has_takeoff_goal? && params[:election_selected].present?
+      raise CreationError if has_election_goal? && params[:election_selected].present?
 
       goal = user.goals.new(params.except(:images, :election_selected))
 
@@ -22,7 +22,7 @@ module Goals
       ActiveRecord::Base.transaction do
         raise CreationError unless goal.save
 
-        add_to_collective(goal, params[:election_selected]) if params[:election_selected]
+        add_to_collective(goal) if collective
 
         refresh_quests
         update_profile_completeness
@@ -36,8 +36,16 @@ module Goals
 
     attr_reader :user, :params
 
-    def has_takeoff_goal?
-      user.goals.where.not(election_id: nil).exists?
+    def has_election_goal?
+      active_election && user.goals.where(election_id: active_election.id).exists?
+    end
+
+    def collective
+      @collective ||= Organization.find_by(slug: params[:election_selected])
+    end
+
+    def active_election
+      @active_election ||= collective&.active_election
     end
 
     def goal_create_message(goal)
@@ -71,19 +79,18 @@ module Goals
       Discord::SendAccomplishedGoalNotificationJob.perform_later(goal.id)
     end
 
-    def send_takeoff_notification(goal)
+    def send_election_notification(goal)
       Discord::AppliedToTakeoffNotificationJob.perform_later(goal.id)
     end
 
-    def add_to_collective(goal, collective_selected)
-      collective = Organization.find_by(slug: collective_selected)
-      if collective.active_election.present?
+    def add_to_collective(goal)
+      if active_election
         collective.memberships.create!(active: true, user: user)
         goal.goal_images.create!(image_data: collective.banner_data)
-        goal.update!(election: collective.active_election, pin: true)
+        goal.update!(election: active_election, pin: true)
       end
 
-      send_takeoff_notification(goal)
+      send_election_notification(goal)
     end
   end
 end

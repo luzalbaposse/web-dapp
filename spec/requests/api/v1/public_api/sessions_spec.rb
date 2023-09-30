@@ -42,7 +42,6 @@ RSpec.describe "Sessions" do
               %w[
                 display_name
                 profile_picture
-                occupation
                 headline
                 career_goal
                 milestone
