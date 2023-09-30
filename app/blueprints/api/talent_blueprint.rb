@@ -162,7 +162,7 @@ class API::TalentBlueprint < Blueprinter::Base
           wallet_id: current_user.wallet_id,
           election: election,
           chain_id: [44787, 42220]
-        ).sum(&:cost)
+        ).sum { |vote| vote.cost.to_f }
       else
         0
       end
@@ -178,7 +178,7 @@ class API::TalentBlueprint < Blueprinter::Base
           wallet_id: current_user.wallet_id,
           election: election,
           chain_id: [80001, 137]
-        ).sum(&:cost)
+        ).sum { |vote| vote.cost.to_f }
       else
         0
       end
