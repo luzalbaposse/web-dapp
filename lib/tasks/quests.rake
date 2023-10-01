@@ -123,6 +123,13 @@ namespace :quests do
         quest_type: "takeoff_vote",
         experience_points_amount: 2000,
         experience_points: [{amount: 2000}]
+      },
+      {
+        title: "Monthly Update Streak",
+        description: "Send at least one update every 30 days and get bonus points every quarter and every year.",
+        quest_type: "monthly_update",
+        experience_points: [{amount: 2000, rule: "quarterly"}, {amount: 4000, rule: "yearly"}],
+        streak: true
       }
     ]
 

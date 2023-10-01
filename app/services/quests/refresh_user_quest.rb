@@ -19,17 +19,18 @@ module Quests
 
       ActiveRecord::Base.transaction do
         UserQuest.create!(
-          user: user,
-          quest: quest,
-          completed_at: completed_at,
-          credited_experience_points_amount: quest.experience_points_amount
+          completed_at:,
+          credited_experience_points_amount: experience_point_amount,
+          quest:,
+          user:
         )
+
         ExperiencePoints::Create.new(
-          user: user,
-          amount: quest.experience_points_amount,
-          source: quest,
+          amount: experience_point_amount,
           credited_at: completed_at,
-          description: "Completed #{quest.title}"
+          description: "Completed #{quest.title}",
+          source: quest,
+          user:
         ).call
 
         if quest.quest_type == "verify_identity"
@@ -37,9 +38,7 @@ module Quests
           credit_invite_points if user.invited
         end
 
-        if quest.tal_reward&.positive?
-          mint_tal_reward
-        end
+        mint_tal_reward if quest.tal_reward&.positive?
 
         if notify
           notify_verified_profile if quest.quest_type == "verify_identity"
@@ -53,7 +52,7 @@ module Quests
     attr_reader :user, :quest, :notify
 
     def already_credited?
-      UserQuest.where(user: user, quest: quest).any?
+      !quest.streak? && UserQuest.where(quest:, user:).any?
     end
 
     def quest_completed?
@@ -92,6 +91,8 @@ module Quests
         galxe_verification_quest_completed?
       when "takeoff_vote"
         takeoff_vote_quest_completed?
+      when "monthly_update"
+        monthly_update_quest_completed?
       else
         false
       end
@@ -180,6 +181,19 @@ module Quests
       Vote.where(voter: user, election: take_off_election).any?
     end
 
+    def monthly_update_quest_completed?
+      return false if monthly_update_streak_count.zero?
+
+      user_quests = UserQuest.where(quest:, user:)
+      return false if user_quests.where("DATE(created_at) >= ?", Date.today.beginning_of_month).any?
+
+      (monthly_update_streak_count % 3).zero?
+    end
+
+    def monthly_update_streak_count
+      @monthly_update_streak_count ||= CalculateMonthlyUpdateStreakCount.new(user:).call
+    end
+
     def notify_verified_profile
       CreateNotification.new.call(
         recipient: user,
@@ -193,7 +207,7 @@ module Quests
         recipient: user,
         type: QuestCompletedNotification,
         source_id: quest.id,
-        extra_params: {source_type: "Quest", experience_points: quest.experience_points_amount, tal_reward: quest.tal_reward}
+        extra_params: {source_type: "Quest", experience_points: experience_point_amount, tal_reward: quest.tal_reward}
       )
     end
 
@@ -226,6 +240,18 @@ module Quests
 
     def polygon_client
       @polygon_client ||= Eth::Client.create "https://polygon-rpc.com"
+    end
+
+    def experience_point_amount
+      return quest.experience_points_amount unless quest.streak?
+
+      case quest.quest_type
+      when "monthly_update"
+        rule = (monthly_update_streak_count % 12).zero? ? "yearly" : "quarterly"
+        quest.quest_experience_points.find_by(rule:)&.amount || 0
+      else
+        0
+      end
     end
   end
 end

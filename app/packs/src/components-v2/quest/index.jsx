@@ -1,6 +1,7 @@
 import React from "react";
 import { QuestData, QuestDataRow, QuestEntry, QuestReward, RewardTag } from "./styled";
 import { Icon, Tag, Typography } from "@talentprotocol/design-system";
+import { MonthlyUpdateQuest } from "./monthly-update-quest";
 import { VerifyHumanityQuest } from "./verify-humanity-quest";
 import { questsService } from "src/api";
 import { toast } from "react-toastify";
@@ -13,31 +14,37 @@ const QUEST_TYPE_MAP = {
   connect_wallet: "",
   create_talent_mate: "https://mates.talentprotocol.com/",
   five_subscribers: "/quests?tab=invites",
+  galxe_verification: "",
   invite_three: "?tab=invites",
+  monthly_update: "/home",
   profile_picture: "/u/__username__",
   send_career_update: "/home",
   sponsor_talent: "/talent",
   supporting_three: "/talent",
+  takeoff_vote: "/collectives/takeoff-istanbul",
   three_journey_entries: "/u/__username__#journey",
   three_talent_subscribe: "/talent",
   three_token_holders: "/u/__username__#token",
   verify_humanity: "",
-  verify_identity: "/u/__username__",
-  galxe_verification: "",
-  takeoff_vote: "/collectives/takeoff-istanbul"
+  verify_identity: "/u/__username__"
 };
 
 export const Quest = ({ quest, username, railsContext, setRefreshQuests }) => {
-  if (quest.quest_type == "verify_humanity") {
+  if (quest.quest_type === "monthly_update") {
+    return <MonthlyUpdateQuest quest={quest} username={username} />;
+  }
+
+  if (quest.quest_type === "verify_humanity") {
     return <VerifyHumanityQuest quest={quest} username={username} railsContext={railsContext} />;
   }
-  if (quest.quest_type == "verify_identity") {
+
+  if (quest.quest_type === "verify_identity") {
     return <></>;
     // return <VerifyQuest quest={quest} username={username} railsContext={railsContext} />;
   }
 
   const onQuestClick = event => {
-    if (quest.quest_type == "galxe_verification" && !quest.completed_at) {
+    if (quest.quest_type === "galxe_verification" && !quest.completed_at) {
       event.preventDefault();
 
       questsService

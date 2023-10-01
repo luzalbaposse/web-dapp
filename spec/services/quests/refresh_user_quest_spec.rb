@@ -30,10 +30,10 @@ RSpec.shared_examples "a refresh user quest that creates new records" do
         expect(user_quest.quest).to eq quest
         expect(user_quest.user).to eq user
         expect(user_quest.completed_at).to eq Time.current
-        expect(user_quest.credited_experience_points_amount).to eq quest.experience_points_amount
+        expect(user_quest.credited_experience_points_amount).to eq experience_point_amount
 
         expect(participation_point.source).to eq quest
-        expect(participation_point.amount).to eq quest.experience_points_amount
+        expect(participation_point.amount).to eq experience_point_amount
         expect(participation_point.credited_at).to eq Time.current
         expect(participation_point.description).to eq "Completed #{quest.title}"
       end
@@ -57,7 +57,11 @@ RSpec.shared_examples "a refresh user quest that creates new records" do
         recipient: user,
         source_id: quest.id,
         type: QuestCompletedNotification,
-        extra_params: {source_type: "Quest", experience_points: quest.experience_points_amount, tal_reward: quest.tal_reward}
+        extra_params: {
+          experience_points: experience_point_amount,
+          source_type: "Quest",
+          tal_reward: quest.tal_reward
+        }
       )
     end
   end
@@ -88,18 +92,24 @@ end
 RSpec.describe Quests::RefreshUserQuest do
   include ActiveJob::TestHelper
 
-  subject(:refresh_user_quest) { described_class.new(quest: quest, user: user, notify: notify).call }
+  subject(:refresh_user_quest) { described_class.new(quest:, user:, notify:).call }
 
-  let(:user) { create :user, :with_talent, wallet_id: wallet_id }
+  let(:user) { create :user, :with_talent, wallet_id: }
   let(:talent) { user.talent }
   let(:wallet_id) { SecureRandom.hex }
 
-  let!(:quest) { create :quest, quest_type: quest_type, tal_reward: tal_reward }
+  let!(:quest) { create :quest, quest_type:, streak:, tal_reward: }
   let(:quest_type) { "profile_picture" }
-  let(:notify) { false }
+  let(:streak) { false }
   let(:tal_reward) { nil }
+  let!(:quest_experience_point) { create :quest_experience_point, quest:, rule: }
+  let(:rule) { nil }
+
+  let(:notify) { false }
 
   context "when the quest was not credited yet" do
+    let(:experience_point_amount) { quest.experience_points_amount }
+
     context "when the quest type is profile_picture" do
       let(:quest_type) { "profile_picture" }
 
@@ -513,11 +523,51 @@ RSpec.describe Quests::RefreshUserQuest do
         it_behaves_like "a refresh user quest without creating new records"
       end
     end
+
+    context "when the quest type is monthly_update" do
+      let(:quest_type) { "monthly_update" }
+      let(:rule) { "quarterly" }
+      let(:streak) { true }
+
+      let(:calculate_monthly_update_streak_count_class) { Quests::CalculateMonthlyUpdateStreakCount }
+
+      let(:calculate_monthly_update_streak_count) do
+        instance_double(calculate_monthly_update_streak_count_class, call: count)
+      end
+
+      before do
+        allow(calculate_monthly_update_streak_count_class)
+          .to receive(:new)
+          .and_return(calculate_monthly_update_streak_count)
+
+        create :quest_experience_point, amount: 2750, quest:, rule: "yearly"
+      end
+
+      context "when the quest was completed (quarterly)" do
+        let(:count) { 6 }
+        let(:experience_point_amount) { quest_experience_point.amount }
+
+        it_behaves_like "a refresh user quest that creates new records"
+      end
+
+      fcontext "when the quest was completed (yearly)" do
+        let(:count) { 12 }
+        let(:experience_point_amount) { 2750 }
+
+        it_behaves_like "a refresh user quest that creates new records"
+      end
+
+      context "when the quest was not completed" do
+        let(:count) { 0 }
+
+        it_behaves_like "a refresh user quest without creating new records"
+      end
+    end
   end
 
   context "when the quest was already credited for the user" do
     before do
-      create :user_quest, quest: quest, user: user
+      create :user_quest, quest:, user:
     end
 
     it_behaves_like "a refresh user quest without creating new records"

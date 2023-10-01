@@ -5,18 +5,19 @@ class Quest < ApplicationRecord
     connect_wallet
     create_talent_mate
     five_subscribers
+    galxe_verification
     invite_three
+    monthly_update
     profile_picture
     send_career_update
     sponsor_talent
     supporting_three
+    takeoff_vote
     three_journey_entries
     three_talent_subscribe
     three_token_holders
     verify_humanity
     verify_identity
-    galxe_verification
-    takeoff_vote
   ]
 
   validates :title, :quest_type, uniqueness: true

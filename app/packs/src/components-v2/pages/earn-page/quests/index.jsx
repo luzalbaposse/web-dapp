@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Container, DesktopGrid } from "./styled";
 import { Typography } from "@talentprotocol/design-system";
+import React, { useEffect, useMemo, useState } from "react";
+import { Container, DesktopGrid, DesktopStreakGrid } from "./styled";
 import { Quest } from "../../../quest";
 import { questsService } from "../../../../api";
 import { TitleContainer } from "../styled";
@@ -24,17 +24,36 @@ export const Quests = ({ profile, railsContext }) => {
 
   const memoizedQuests = useMemo(
     () =>
-      quests.map(quest => (
-        <Quest
-          key={quest.title}
-          quest={quest}
-          username={profile.username}
-          railsContext={railsContext}
-          setRefreshQuests={setRefreshQuests}
-        />
-      )),
+      quests
+        .filter(quest => !quest.streak)
+        .map(quest => (
+          <Quest
+            key={quest.title}
+            quest={quest}
+            username={profile.username}
+            railsContext={railsContext}
+            setRefreshQuests={setRefreshQuests}
+          />
+        )),
     [quests, railsContext]
   );
+
+  const memoizedQuestStreaks = useMemo(
+    () =>
+      quests
+        .filter(quest => quest.streak)
+        .map(quest => (
+          <Quest
+            key={quest.title}
+            quest={quest}
+            railsContext={railsContext}
+            setRefreshQuests={setRefreshQuests}
+            username={profile.username}
+          />
+        )),
+    [quests, railsContext]
+  );
+
   return (
     <Container>
       {!!quests.length && (
@@ -48,6 +67,7 @@ export const Quests = ({ profile, railsContext }) => {
               Talent Protocol community and earn rewards.
             </Typography>
           </TitleContainer>
+          <DesktopStreakGrid>{memoizedQuestStreaks}</DesktopStreakGrid>
           <DesktopGrid>{memoizedQuests}</DesktopGrid>
         </>
       )}

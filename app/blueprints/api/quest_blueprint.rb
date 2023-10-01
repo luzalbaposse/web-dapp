@@ -6,5 +6,10 @@ class API::QuestBlueprint < Blueprinter::Base
     field :completed_at do |quest, _options|
       quest.respond_to?(:completed_at) ? quest.completed_at : nil
     end
+
+    association :quest_experience_points,
+      blueprint: API::QuestExperiencePointBlueprint,
+      name: :experience_points,
+      view: :normal
   end
 end

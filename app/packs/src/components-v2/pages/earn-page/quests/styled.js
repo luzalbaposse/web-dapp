@@ -26,3 +26,15 @@ export const DesktopGrid = styled.div`
     column-gap: 24px;
   `)}
 `;
+
+export const DesktopStreakGrid = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  ${desktopStyles(css`
+    margin: auto;
+    max-width: 1128px;
+    width: 1128px;
+  `)}
+`;
