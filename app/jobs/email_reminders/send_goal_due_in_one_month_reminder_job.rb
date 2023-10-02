@@ -5,7 +5,7 @@ module EmailReminders
     def perform
       Goal.due_in_one_month.find_each do |goal|
         UserMailer
-          .with(goal: goal, user: goal.career_goal.talent.user)
+          .with(goal: goal, user: goal.user)
           .send_goal_due_in_one_month_reminder_email
           .deliver_later
       end

@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe EmailReminders::SendGoalDeadlineReminderJob, type: :job do
   include ActiveJob::TestHelper
 
-  let(:goal) { create :goal, due_date: Date.current, progress: Goal::DOING }
-  let!(:user) { create :user, talent: goal.career_goal.talent }
+  let!(:goal) { create :goal, due_date: Date.current, progress: Goal::DOING, user: user }
+  let!(:user) { create :user }
 
   describe "#perform" do
     subject(:send_goal_deadline_reminder_email) { described_class.perform_now }
