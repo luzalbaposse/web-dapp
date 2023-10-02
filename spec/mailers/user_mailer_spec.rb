@@ -198,4 +198,13 @@ RSpec.describe UserMailer, type: :mailer do
 
     it_behaves_like "a SendGrid email"
   end
+
+  describe "send legacy account reactivation email" do
+    let(:mail) { described_class.with(user:).send_legacy_account_reactivation_email }
+
+    let(:dynamic_template_data) { {first_name: user.username} }
+    let(:template_id) { "d-48b22d9e4027411bb16d5a231d28b2c5" }
+
+    it_behaves_like "a SendGrid email"
+  end
 end

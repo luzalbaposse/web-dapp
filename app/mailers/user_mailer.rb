@@ -158,4 +158,14 @@ class UserMailer < ApplicationMailer
 
     send_sendgrid_email(dynamic_template_data:, template_id:, to:)
   end
+
+  def send_legacy_account_reactivation_email
+    user = indifferent_access_params[:user]
+
+    dynamic_template_data = {first_name: sendgrid_name_variable(user)}
+    template_id = "d-48b22d9e4027411bb16d5a231d28b2c5"
+    to = user.email
+
+    send_sendgrid_email(dynamic_template_data:, template_id:, to:)
+  end
 end
