@@ -55,7 +55,7 @@ module Sendgrid
       end
 
       def raise_error(response)
-        raise BadResponse.new("Bad response: #{response.body}")
+        raise BadResponse.new("Bad response status: #{response.status_code} - body: #{response.body.inspect}")
       end
     end
   end

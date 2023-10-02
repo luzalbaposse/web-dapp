@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe EmailReminders::SendGoalDueInOneMonthReminderJob, type: :job do
   include ActiveJob::TestHelper
 
-  let(:goal) { create :goal, due_date: 30.days.after, progress: Goal::DOING }
-  let!(:user) { create :user, talent: goal.career_goal.talent }
+  let!(:goal) { create :goal, due_date: 30.days.after, progress: Goal::DOING, user: user }
+  let!(:user) { create :user }
 
   describe "#perform" do
     it "enqueues a job to send a reminder email to users with goals that are due in one month" do
