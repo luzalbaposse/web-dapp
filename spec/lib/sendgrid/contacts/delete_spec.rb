@@ -48,11 +48,15 @@ RSpec.describe Sendgrid::Contacts::Delete do
     allow(sendgrid_api_class).to receive(:new).and_return(sendgrid_api)
 
     allow(sendgrid_client)
-      .to receive_message_chain(:marketing, :contacts, :delete)
+      .to receive_message_chain(:marketing, :contacts)
+      .and_return(sendgrid_client)
+
+    allow(sendgrid_client)
+      .to receive(:delete)
       .and_return(sendgrid_contacts_delete_response)
 
     allow(sendgrid_client)
-      .to receive_message_chain(:marketing, :contacts, :search, :emails, :post)
+      .to receive_message_chain(:search, :emails, :post)
       .and_return(sendgrid_contacts_search_response)
   end
 
@@ -73,6 +77,16 @@ RSpec.describe Sendgrid::Contacts::Delete do
         .with(query_params: {ids: "987zyx, 123abc"})
 
       subject.call
+    end
+
+    context "when the response status code is 404 when fetching contact ids" do
+      let(:sendgrid_contacts_search_response_status_code) { "404" }
+
+      it "does not make a request to delete contacts from SendGrid" do
+        expect(sendgrid_client).not_to receive(:delete)
+
+        subject.call
+      end
     end
 
     context "when the response status code is not 202 when deleting contacts" do

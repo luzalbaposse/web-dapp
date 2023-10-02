@@ -24,6 +24,8 @@ module Sendgrid
       def delete_contacts!
         emails.each_slice(100) do |email_slice|
           contact_ids = fetch_contact_ids(email_slice)
+          next unless contact_ids.present?
+
           ids = ids(contact_ids, email_slice)
           next unless ids.present?
 
@@ -49,6 +51,7 @@ module Sendgrid
 
       def fetch_contact_ids(email_slice)
         response = contacts_endpoint.search.emails.post(request_body: {emails: email_slice})
+        return if response.status_code == "404"
         raise_error(response) unless response.status_code == "200"
 
         JSON.parse(response.body)["result"]
