@@ -3,12 +3,12 @@ class Message < ApplicationRecord
 
   # TODO make it mandatory after running migrations
   belongs_to :chat, optional: true
-
+class Message < ApplicationRecord
   belongs_to :career_update, optional: true
 
   belongs_to :sender, class_name: "User"
   belongs_to :receiver, class_name: "User"
-
+  attribute :type, :string # This will allow us to filter messages by type
   scope :unread, -> { where(is_read: false) }
 
   def sender_chat_id
