@@ -91,11 +91,7 @@ class API::UserBlueprint < Blueprinter::Base
     end
 
     association :goals, blueprint: API::GoalBlueprint, view: :normal do |user, _options|
-      if user.talent.career_goal.present?
-        user.talent.career_goal.goals
-      else
-        []
-      end
+      user.goals
     end
   end
 end
