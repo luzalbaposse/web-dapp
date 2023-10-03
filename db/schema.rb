@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_28_233118) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_03_122402) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -617,6 +617,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_28_233118) do
     t.boolean "sponsored", default: false
     t.boolean "new", default: true, null: false
     t.integer "tal_reward", default: 0
+    t.boolean "hidden", default: false
     t.index ["quest_type"], name: "index_quests_on_quest_type", unique: true
     t.index ["uuid"], name: "index_quests_on_uuid"
   end

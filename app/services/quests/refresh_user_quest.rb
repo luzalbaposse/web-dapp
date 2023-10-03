@@ -12,6 +12,7 @@ module Quests
 
     def call
       return if already_credited?
+      return if quest.hidden?
 
       return unless quest_completed?
 

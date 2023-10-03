@@ -7,7 +7,7 @@ module Quests
     end
 
     def call
-      Quest.find_each do |quest|
+      Quest.visible.find_each do |quest|
         RefreshUserQuest.new(user: user, quest: quest, notify: notify).call
       end
     end

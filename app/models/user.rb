@@ -265,7 +265,6 @@ class User < ApplicationRecord
     fields = []
     fields << "display_name" unless display_name
     fields << "profile_picture" unless profile_picture_url
-    fields << "occupation" unless talent.occupation
     fields << "headline" unless talent.headline
     fields << "career_goal" unless goals.any?
     fields << "milestone" unless talent.milestones.any?

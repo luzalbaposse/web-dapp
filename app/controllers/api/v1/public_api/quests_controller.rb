@@ -2,9 +2,9 @@ class API::V1::PublicAPI::QuestsController < API::V1::PublicAPI::APIController
   before_action :internal_only, only: [:complete]
 
   def index
-    total_quests = Quest.all
+    visible_quests = Quest.visible
     if user
-      total_quests = total_quests.joins(
+      visible_quests = visible_quests.joins(
         "
           LEFT JOIN user_quests on user_quests.quest_id = quests.id
           AND user_quests.user_id = #{user.id}
@@ -13,7 +13,7 @@ class API::V1::PublicAPI::QuestsController < API::V1::PublicAPI::APIController
     end
 
     pagy, quests = pagy_uuid_cursor(
-      total_quests,
+      visible_quests,
       before: cursor,
       items: per_page,
       order: {experience_points_amount: :asc, uuid: :desc}
@@ -24,7 +24,7 @@ class API::V1::PublicAPI::QuestsController < API::V1::PublicAPI::APIController
     response_body = {
       quests: API::QuestBlueprint.render_as_json(quests, view: :normal),
       pagination: {
-        total: total_quests.count,
+        total: visible_quests.count,
         cursor: pagy.has_more? ? quests.last.uuid : nil
       }
     }
